@@ -6,40 +6,44 @@
 
 html {
 	font-family: 'Montserrat', sans-serif;
-	color: #222;
+	color: var(--color5);
 	font-size: 10px;
-	--loginStatus: none;
+	--loginStatus: block;
 	--iconPosition: -3.5rem;
-	--navBcg: rgba(0, 0, 0, 0.65);
-	--itemBcg: rgba(0, 0, 0, 0.3);
 	--bRadius: 20px;
-	--defaultColor: #ffa500;
+
+	--itemBcg: rgba(0, 0, 0, 0.3);
+	--navBcg: rgba(249, 231, 159, 0.65);
+	--bcgColor: var(--color1);
+	--mainTekstColor: var(--color5);
+	--headerColor: var(--color2);
+	--iconsColor: var(--color2);
+
+	--color1: #f9f5f0;
+	--color2: rgb(160, 214, 212);
+	--color3: #b3e5fc;
+	--color4: rgb(249, 231, 159);
+	--color5: #003366;
+	--color6: #012b54;
 	--shadowAlpha1: 0.3;
 	--shadowAlpha2: 0.22;
-	--shadowColor1: rgba(255, 165, 0, 0.3);
-	--shadowColor2: rgba(255, 165, 0, 0.22);
+	--shadowColor1: var(--color5);
+	--shadowColor2: var(--color6);
 	--activeBoxShadow: var(--shadowColor1) 0px 19px 38px, var(--shadowColor2) 0px 15px 12px;
 	--activeTxtShadow: 0px 0px 6px rgba(0, 0, 0, 0.25);
-}
-input {
-	outline: none;
-	border: none;
-	cursor: auto;
-	background-color: whitesmoke;
 }
 
 body {
 	min-height: 120vh;
-	background-color: whitesmoke;
+	background-color: var(--color1);
 }
 
-img {
-	top: 2rem;
-	left: 4rem;
+.burger {
 }
 
 .nav {
-	width: 100%;
+	width: 70%;
+	height: 100%;
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -47,26 +51,34 @@ img {
 	text-transform: uppercase;
 	letter-spacing: 1px;
 	box-shadow: var(--activeBoxShadow);
-	border-bottom-left-radius: var(--bRadius);
+	border-top-right-radius: var(--bRadius);
 	border-bottom-right-radius: var(--bRadius);
 	z-index: 2;
 }
+.nav .x {
+	position: absolute;
+	top: 2rem;
+	right: 1rem;
+}
+
 .nav ul {
 	margin: 0 0 0 auto;
 	display: flex;
-	justify-content: right;
+	flex-direction: column;
 	list-style: none;
 }
 
 .nav ul li {
 	position: relative;
 	min-width: 50px;
-	text-align: center;
+	text-align: left;
 	overflow: hidden;
 }
+.nav ul li:nth-of-type(1) {
+	margin-top: 5rem;
+}
 
-a,
-.wrench {
+a {
 	display: block;
 	cursor: pointer;
 	height: 6rem;
@@ -74,9 +86,9 @@ a,
 	line-height: 6rem;
 	font-size: 2rem;
 	text-decoration: none;
-	color: whitesmoke;
-	transition: 0.2s ease-in-out;
+	color: var(--color5);
 }
+
 .nav a::after {
 	content: '';
 	width: calc(100% - var(--iconPosition));
@@ -94,6 +106,7 @@ a,
 	margin-right: 1.5rem;
 	left: var(--iconPosition);
 	/* vertical-align: 2px; */
+	color: var(--iconsColor);
 	font-size: 2.2rem;
 }
 
@@ -105,55 +118,13 @@ li:hover {
 	left: 0;
 }
 
-.nav .wrench {
-	width: 50px;
-	padding: 0;
-	transition: 0.3s ease-in-out;
-	overflow: visible;
-}
-
-.colorSettingsList {
-	max-height: 0;
-	width: 80px;
-	position: absolute;
-	top: 100%;
-	left: -33%;
-	background-color: var(--itemBcg);
-	overflow: hidden;
-	transition: 0.3s ease-in-out;
-
-	display: flex;
-	flex-direction: column;
-	align-items: flex-end;
-}
-.wrench:hover .colorSettingsList {
-	max-height: 6rem;
-}
-.settings {
-	line-height: 4rem;
-	margin: 0 auto;
-}
-.settings input {
-	width: 30px;
-	border: none;
-	outline: none;
-	background-color: transparent;
-}
-.nav .wrench i {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	margin: 0;
-}
-
 header {
 	max-width: 2560px;
 	margin: 0 auto;
 	position: relative;
 	padding-bottom: 5vh;
 	min-height: 95vh;
-	background-image: url(../bg.jpg);
+	background-image: url(../IMG_8186.JPG);
 	background-attachment: fixed;
 	background-position: top;
 	background-repeat: no-repeat;
@@ -167,25 +138,8 @@ header > * {
 	position: absolute;
 }
 
-.walletDisplay div {
-	padding-top: 2rem;
-	font-size: 2.5rem;
-}
-.walletDisplay h2 + div i {
-	margin-right: 1rem;
-}
-
-.walletDisplay .fa-coins {
-	color: var(--defaultColor);
-}
-
-.walletDisplay .walletValue {
-	margin-left: 2rem;
-	font-weight: 700;
-	color: var(--defaultColor);
-}
-
-header > h1 {
+header > h1,
+header > h2 {
 	top: 50%;
 	padding: 1rem;
 	background-color: var(--itemBcg);
@@ -194,7 +148,10 @@ header > h1 {
 	text-transform: uppercase;
 	font-size: 5rem;
 	letter-spacing: 1px;
-	color: whitesmoke;
+	color: var();
+}
+header > h2 {
+	font-size: 2rem;
 }
 button {
 	bottom: 15vh;
@@ -227,80 +184,10 @@ section p {
 	line-height: 150%;
 	text-indent: 2rem;
 }
-a {
-	cursor: pointer;
-	color: white;
-	text-decoration: none;
-	text-align: center;
-	transition: 0.3s ease-in-out;
-}
-a.active {
-	color: var(--defaultColor);
-	text-shadow: var(--activeTxtShadow);
-}
-.loginBox a,
-h3 a {
-	border-bottom: 1px solid var(--defaultColor);
-	height: 4.5rem;
-}
 
-.loginDepended {
-	display: var(--loginStatus);
-}
-
-@media (max-width: 915px) and (orientation: landscape) {
-	header h1 {
-		font-size: 2.6rem;
-	}
-	header button {
-		bottom: 3rem;
-		right: 4rem;
-		font-size: 2rem;
-	}
-}
-@media (max-width: 533px) and (orientation: landscape) {
-	header h1 {
-		font-size: 2rem;
-	}
-	header button {
-		border-width: 2px;
-		bottom: 3rem;
-		right: 4rem;
-		font-size: 1.5rem;
-	}
-	section p {
-		font-size: 1.2rem;
-	}
-}
-@media (max-width: 430px) and (orientation: portrait) {
-	header h1 {
-		top: 35%;
-		padding: 2rem 6rem;
-		font-size: 3rem;
-		line-height: 180%;
-	}
-	header button {
-		width: 80%;
-		right: 10%;
-		font-size: 1.8rem;
-	}
-	section p {
-		font-size: 1.2rem;
-	}
-}
-@media (max-width: 375px) and (orientation: portrait) {
-	header h1 {
-		top: 35%;
-		padding: 2rem 6rem;
-		font-size: 3rem;
-		line-height: 180%;
-	}
-	header button {
-		width: 80%;
-		right: 10%;
-		font-size: 1.8rem;
-	}
-	section p {
-		font-size: 1.2rem;
-	}
+input {
+	outline: none;
+	border: none;
+	cursor: auto;
+	background-color: whitesmoke;
 }
