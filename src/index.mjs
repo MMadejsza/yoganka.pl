@@ -4,7 +4,6 @@ import session from 'express-session';
 import {} from 'module';
 import path, {dirname} from 'path';
 import {fileURLToPath} from 'url';
-import DatabaseService from './services/database.service.mjs';
 
 /* Create express instance */
 const app = express();
@@ -38,14 +37,8 @@ app.use(
 	}),
 );
 
-// Integrate Pug with Express
-app.set('view engine', 'pug');
-
 // Serve assets from 'static' folder
 app.use(express.static('static'));
-
-const db = await DatabaseService.connect();
-const {conn} = db;
 
 // Landing route
 app.get('/', (req, res) => {
