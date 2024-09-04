@@ -1,24 +1,32 @@
 {
-  "name": "myproject",
+  "name": "yoganka.pl",
   "version": "1.0.0",
-  "description": "",
+  "description": "Youga instructor-school website created based on SE and SAD uni projects",
   "main": "index.js",
   "scripts": {
     "start": "node index.mjs",
     "dev": "nodemon -e pug,js,mjs,css --exec node index.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MMadejsza/yoganka.pl.git"
+  },
+  "author": "Maciej Madejsza",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MMadejsza/yoganka.pl/issues"
+  },
+  "homepage": "https://github.com/MMadejsza/yoganka.pl#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
-    "myproject": "file:",
     "mysql2": "^3.1.2",
-    "pug": "^3.0.2"
+    "pug": "^3.0.2",
+    "yoganka.pl": "file:"
   },
   "devDependencies": {
-    "nodemon": "^2.0.20"
+    "nodemon": "^3.1.4"
   }
 }
