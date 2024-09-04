@@ -12,23 +12,24 @@ html {
 	--iconPosition: -3.5rem;
 	--bRadius: 20px;
 
-	--itemBcg: rgba(0, 0, 0, 0.3);
-	--navBcg: rgba(249, 231, 159, 0.65);
+	--itemBcg: rgba(255, 182, 0, 0.75);
+	--navBcg: rgba(249, 231, 159, 0.75);
 	--bcgColor: var(--color1);
-	--mainTekstColor: var(--color5);
+	--mainTekstColor: var(--color1);
 	--headerColor: var(--color2);
-	--iconsColor: var(--color2);
+	--iconsColor: var(--color7);
 
-	--color1: #f9f5f0;
+	--color1: rgb(249, 245, 240);
 	--color2: rgb(160, 214, 212);
-	--color3: #b3e5fc;
+	--color3: rgb(179, 229, 252);
 	--color4: rgb(249, 231, 159);
 	--color5: #003366;
 	--color6: #012b54;
+	--color7: rgb(255, 182, 0);
 	--shadowAlpha1: 0.3;
 	--shadowAlpha2: 0.22;
-	--shadowColor1: var(--color5);
-	--shadowColor2: var(--color6);
+	--shadowColor1: lightgrey;
+	--shadowColor2: var(--color3);
 	--activeBoxShadow: var(--shadowColor1) 0px 19px 38px, var(--shadowColor2) 0px 15px 12px;
 	--activeTxtShadow: 0px 0px 6px rgba(0, 0, 0, 0.25);
 }
@@ -36,9 +37,52 @@ html {
 body {
 	min-height: 120vh;
 	background-color: var(--color1);
+	font-family: 'Poppins', sans-serif;
+	font-weight: 400;
 }
 
 .burger {
+	top: 3rem;
+	right: 3rem;
+	width: 30px;
+	height: 25px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	cursor: pointer;
+	position: absolute;
+	z-index: 1;
+}
+
+.bar {
+	width: 100%;
+	height: 4px;
+	background-color: var(--iconsColor);
+	transition: all 0.3s ease-in-out;
+	border-radius: 2px;
+}
+
+/* Initial state */
+.top-bar {
+	transform-origin: center;
+}
+
+.bottom-bar {
+	transform-origin: center;
+}
+
+/* Active state */
+.burger.active .top-bar {
+	transform: translateY(calc(25px / 2 - 4px / 2)) rotate(45deg);
+}
+
+.burger.active .middle-bar {
+	transform: translateX(-100%);
+	opacity: 0;
+}
+
+.burger.active .bottom-bar {
+	transform: translateY(calc(-25px / 2 + 4px / 2)) rotate(-45deg);
 }
 
 .nav {
@@ -46,7 +90,7 @@ body {
 	height: 100%;
 	position: fixed;
 	top: 0;
-	left: 0;
+	left: -100%;
 	background-color: var(--navBcg);
 	text-transform: uppercase;
 	letter-spacing: 1px;
@@ -54,7 +98,12 @@ body {
 	border-top-right-radius: var(--bRadius);
 	border-bottom-right-radius: var(--bRadius);
 	z-index: 2;
+	transition: all 0.5s ease-in-out;
 }
+.burger.active + .nav {
+	left: 0;
+}
+
 .nav .x {
 	position: absolute;
 	top: 2rem;
@@ -119,11 +168,11 @@ li:hover {
 }
 
 header {
-	max-width: 2560px;
+	max-width: 1920px;
 	margin: 0 auto;
 	position: relative;
 	padding-bottom: 5vh;
-	min-height: 95vh;
+	min-height: 87vh;
 	background-image: url(../IMG_8186.JPG);
 	background-attachment: fixed;
 	background-position: top;
@@ -132,27 +181,26 @@ header {
 
 	border-bottom-left-radius: var(--bRadius);
 	border-bottom-right-radius: var(--bRadius);
-	box-shadow: var(--activeBoxShadow);
-}
-header > * {
-	position: absolute;
+	box-shadow: rgba(249, 245, 240, 0.5) 0px -50px 36px -28px inset;
 }
 
-header > h1,
-header > h2 {
+header > .title {
+	position: absolute;
 	top: 50%;
+	width: 100%;
 	padding: 1rem;
 	background-color: var(--itemBcg);
-	width: 100%;
 	text-align: center;
 	text-transform: uppercase;
-	font-size: 5rem;
+	font-size: 2rem;
 	letter-spacing: 1px;
-	color: var();
+	color: var(--mainTekstColor);
 }
-header > h2 {
+
+header h2 {
 	font-size: 2rem;
 }
+
 button {
 	bottom: 15vh;
 	right: 8rem;

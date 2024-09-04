@@ -49,14 +49,24 @@
 			href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
 			rel="stylesheet" />
 		<link
+			href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+			rel="stylesheet" />
+		<link
 			rel="stylesheet"
 			type="text/css"
 			href="../static/css/style.css" />
 	</head>
 	<body>
+		<div
+			class="burger"
+			id="burger"
+			onclick="toggleMenu()">
+			<div class="bar top-bar"></div>
+			<div class="bar middle-bar"></div>
+			<div class="bar bottom-bar"></div>
+		</div>
 		<nav class="nav">
 			<ul>
-				<div class="x"><i class="fa-solid fa-x"></i></div>
 				<li>
 					<a
 						class="active"
@@ -84,12 +94,10 @@
 
 		<div class="topImageHeader">
 			<header>
-				<h1>Yoganka</h1>
-				<h2>Body Healing</h2>
-				<p>joł joł</p>
-				<button class="accessBtn">
-					<a href="/login">Access it!</a>
-				</button>
+				<div class="title">
+					<h1>Yoganka</h1>
+					<h2>Body Healing</h2>
+				</div>
 			</header>
 			<section>
 				<p>tekst</p>
