@@ -13,14 +13,15 @@ html {
 	--bRadius: 15px;
 
 	--itemBcg: rgba(177, 226, 232, 0.85);
-	--navBcg: rgba(249, 231, 159, 0.85);
+	--navBcg: rgba(252, 251, 236, 0.85);
 	--bcgColor: var(--color1);
 	--mainTekstColor: var(--color1);
 	--headerColor: var(--color2);
 	--iconsColor: var(--color7);
 	--color0: rgb(177, 226, 232);
-	--color1: rgb(249, 245, 240);
+	--color1: rgb(252, 251, 236);
 	--color2: rgb(160, 214, 212);
+	--color8: rgb(249, 245, 240);
 	--color3: rgb(179, 229, 252);
 	--color4: rgb(249, 231, 159);
 	--color5: #003366;
@@ -31,16 +32,31 @@ html {
 	--shadowColor1: var(--color0);
 	--shadowColor2: var(--color3);
 	--transitiveBoxShadow: var(--color0) 0px -50px 36px -28px inset;
-	--activeTxtShadow: 0px 0px 6px rgba(0, 0, 0, 0.25);
+	--boxShadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+	--sectionShadow: rgba(33, 35, 38, 0.1) 0px 10px 10px -10px;
 }
 
 body {
-	min-height: 120vh;
-	background-color: var(--color1);
+	margin: 0 auto;
+	min-height: 300vh;
+	max-width: 360px;
+	background-color: whitesmoke;
 	font-family: 'EB Garamond', serif;
 	font-weight: 400;
+	text-align: center;
 }
-header {
+section:not(:first-of-type),
+nav {
+	padding: 0 1rem 2rem;
+
+	box-shadow: var(--sectionShadow);
+	border-bottom-left-radius: var(--bRadius);
+	border-bottom-right-radius: var(--bRadius);
+}
+.topImageHeader {
+	text-transform: uppercase;
+}
+.topImageHeader > header {
 	max-width: 640px;
 	margin: 0 auto;
 	position: relative;
@@ -50,10 +66,8 @@ header {
 	background-position: top left -21vw;
 	background-repeat: no-repeat;
 	background-size: auto 600px;
-	border-bottom-left-radius: var(--bRadius);
-	border-bottom-right-radius: var(--bRadius);
+
 	box-shadow: var(--transitiveBoxShadow);
-	text-align: center;
 }
 .titleBar {
 	position: absolute;
@@ -62,7 +76,6 @@ header {
 	padding: 1rem;
 	background-color: var(--itemBcg);
 	font-family: 'Gravitas One', serif;
-	text-transform: uppercase;
 	font-size: 1.5rem;
 	letter-spacing: 2px;
 	color: var(--mainTekstColor);
@@ -75,14 +88,16 @@ header {
 	text-align: left;
 	font-size: 2rem;
 }
-
 .headerMotto {
-	margin-top: -15px;
+	margin-top: -10px;
+	padding: 0.5rem;
+	background-color: var(--color0);
 	border-bottom-left-radius: var(--bRadius);
 	border-bottom-right-radius: var(--bRadius);
-	background-color: var(--color0);
-	line-height: 10rem;
 	font-size: 1.5rem;
+	font-weight: 400;
+	line-height: 10rem;
+	color: var(--color1);
 	text-align: center;
 }
 .burger {
@@ -135,8 +150,6 @@ header {
 	text-transform: uppercase;
 	letter-spacing: 1px;
 	box-shadow: var(--activeBoxShadow);
-	border-top-right-radius: var(--bRadius);
-	border-bottom-right-radius: var(--bRadius);
 	z-index: 2;
 	transition: all 0.5s ease-in-out;
 }
@@ -210,6 +223,69 @@ li:hover {
 .nav a:hover:not(.active)::after {
 	left: 0;
 }
+.sectionHeader {
+	line-height: 6rem;
+	padding: 1rem 0.5rem;
+	font-size: 3rem;
+	text-transform: uppercase;
+}
+.about {
+	font-size: 1.5rem;
+	background-color: var(--color8);
+}
+.about img {
+	display: block;
+	width: 100%;
+	max-width: 640px;
+	height: auto;
+	box-shadow: var(--boxShadow);
+}
+.about aside {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+.about aside ~ aside img {
+	display: block;
+	max-width: 50vw;
+	margin: 1.8rem;
+}
+.about aside ~ aside img:last-child {
+	box-shadow: none;
+}
+.about h2 {
+	margin: 2.8rem 0 1rem 0;
+	font-size: 2.2rem;
+	font-weight: 500;
+}
+.about h3 {
+	margin: 1rem 0;
+	font-size: 1.8rem;
+	font-weight: 500;
+}
+
+.partners {
+	background-color: var(--color2);
+}
+.partners img {
+	display: block;
+	width: 40vw;
+	max-height: 40vw;
+	filter: grayscale(1);
+}
+.partners .partners_gallery {
+	display: grid;
+	grid-template-columns: minmax(auto, 40vw) minmax(auto, 40vw);
+	grid-auto-rows: minmax(auto, 40vw);
+	place-content: center;
+	place-items: center;
+	grid-gap: 1rem;
+}
+.partners .partners_gallery img {
+	max-width: 100%;
+}
+
 button {
 	bottom: 15vh;
 	right: 8rem;
@@ -229,17 +305,6 @@ button:hover {
 	color: var(--defaultColor);
 	background-color: rgba(0, 0, 0, 0.5);
 	box-shadow: var(--activeBoxShadow);
-}
-section {
-	max-width: 1560px;
-	width: 65%;
-	margin: 10vh auto 0;
-}
-section p {
-	font-size: 1.8rem;
-	text-align: center;
-	line-height: 150%;
-	text-indent: 2rem;
 }
 
 input {
