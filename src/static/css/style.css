@@ -10,15 +10,15 @@ html {
 	font-size: 10px;
 	--loginStatus: block;
 	--iconPosition: -3.5rem;
-	--bRadius: 20px;
+	--bRadius: 15px;
 
-	--itemBcg: rgba(255, 182, 0, 0.75);
-	--navBcg: rgba(249, 231, 159, 0.75);
+	--itemBcg: rgba(177, 226, 232, 0.85);
+	--navBcg: rgba(249, 231, 159, 0.85);
 	--bcgColor: var(--color1);
 	--mainTekstColor: var(--color1);
 	--headerColor: var(--color2);
 	--iconsColor: var(--color7);
-
+	--color0: rgb(177, 226, 232);
 	--color1: rgb(249, 245, 240);
 	--color2: rgb(160, 214, 212);
 	--color3: rgb(179, 229, 252);
@@ -28,19 +28,63 @@ html {
 	--color7: rgb(255, 182, 0);
 	--shadowAlpha1: 0.3;
 	--shadowAlpha2: 0.22;
-	--shadowColor1: lightgrey;
+	--shadowColor1: var(--color0);
 	--shadowColor2: var(--color3);
-	--activeBoxShadow: var(--shadowColor1) 0px 19px 38px, var(--shadowColor2) 0px 15px 12px;
+	--transitiveBoxShadow: var(--color0) 0px -50px 36px -28px inset;
 	--activeTxtShadow: 0px 0px 6px rgba(0, 0, 0, 0.25);
 }
 
 body {
 	min-height: 120vh;
 	background-color: var(--color1);
-	font-family: 'Poppins', sans-serif;
+	font-family: 'EB Garamond', serif;
 	font-weight: 400;
 }
+header {
+	max-width: 640px;
+	margin: 0 auto;
+	position: relative;
+	height: 600px;
+	background-image: url(../header_576.jpg);
+	background-attachment: fixed;
+	background-position: top left -21vw;
+	background-repeat: no-repeat;
+	background-size: auto 600px;
+	border-bottom-left-radius: var(--bRadius);
+	border-bottom-right-radius: var(--bRadius);
+	box-shadow: var(--transitiveBoxShadow);
+	text-align: center;
+}
+.titleBar {
+	position: absolute;
+	top: 15%;
+	width: 100%;
+	padding: 1rem;
+	background-color: var(--itemBcg);
+	font-family: 'Gravitas One', serif;
+	text-transform: uppercase;
+	font-size: 1.5rem;
+	letter-spacing: 2px;
+	color: var(--mainTekstColor);
+	box-shadow: var(--activeBoxShadow);
+}
+.titleBar > .headerSubtitle {
+	text-transform: none;
+	font-family: 'Caveat', cursive;
+	font-weight: lighter;
+	text-align: left;
+	font-size: 2rem;
+}
 
+.headerMotto {
+	margin-top: -15px;
+	border-bottom-left-radius: var(--bRadius);
+	border-bottom-right-radius: var(--bRadius);
+	background-color: var(--color0);
+	line-height: 10rem;
+	font-size: 1.5rem;
+	text-align: center;
+}
 .burger {
 	top: 3rem;
 	right: 3rem;
@@ -50,10 +94,9 @@ body {
 	flex-direction: column;
 	justify-content: space-between;
 	cursor: pointer;
-	position: absolute;
+	position: fixed;
 	z-index: 1;
 }
-
 .bar {
 	width: 100%;
 	height: 4px;
@@ -61,30 +104,27 @@ body {
 	transition: all 0.3s ease-in-out;
 	border-radius: 2px;
 }
-
 /* Initial state */
 .top-bar {
 	transform-origin: center;
 }
-
 .bottom-bar {
 	transform-origin: center;
 }
-
 /* Active state */
 .burger.active .top-bar {
 	transform: translateY(calc(25px / 2 - 4px / 2)) rotate(45deg);
 }
-
 .burger.active .middle-bar {
 	transform: translateX(-100%);
 	opacity: 0;
 }
-
 .burger.active .bottom-bar {
 	transform: translateY(calc(-25px / 2 + 4px / 2)) rotate(-45deg);
 }
-
+.burger.active + .nav {
+	left: 0;
+}
 .nav {
 	width: 70%;
 	height: 100%;
@@ -100,23 +140,30 @@ body {
 	z-index: 2;
 	transition: all 0.5s ease-in-out;
 }
-.burger.active + .nav {
-	left: 0;
+.logo {
+	width: 50%;
+	height: 6rem;
+	margin: 1rem 2rem;
+	text-align: center;
+	border: 1px solid black;
+	z-index: 1;
 }
-
+.topImageHeader > .logo {
+	top: 1rem;
+	left: 0;
+	position: absolute;
+}
 .nav .x {
 	position: absolute;
 	top: 2rem;
 	right: 1rem;
 }
-
 .nav ul {
 	margin: 0 0 0 auto;
 	display: flex;
 	flex-direction: column;
 	list-style: none;
 }
-
 .nav ul li {
 	position: relative;
 	min-width: 50px;
@@ -124,9 +171,8 @@ body {
 	overflow: hidden;
 }
 .nav ul li:nth-of-type(1) {
-	margin-top: 5rem;
+	margin-top: 3rem;
 }
-
 a {
 	display: block;
 	cursor: pointer;
@@ -137,7 +183,6 @@ a {
 	text-decoration: none;
 	color: var(--color5);
 }
-
 .nav a::after {
 	content: '';
 	width: calc(100% - var(--iconPosition));
@@ -149,8 +194,8 @@ a {
 	transition: 0.2s ease-in-out;
 	z-index: 1;
 }
-
 .nav ul i {
+	width: 28.5px;
 	display: inline-block;
 	margin-right: 1.5rem;
 	left: var(--iconPosition);
@@ -158,7 +203,6 @@ a {
 	color: var(--iconsColor);
 	font-size: 2.2rem;
 }
-
 a:hover,
 li:hover {
 	color: var(--defaultColor);
@@ -166,41 +210,6 @@ li:hover {
 .nav a:hover:not(.active)::after {
 	left: 0;
 }
-
-header {
-	max-width: 1920px;
-	margin: 0 auto;
-	position: relative;
-	padding-bottom: 5vh;
-	min-height: 87vh;
-	background-image: url(../IMG_8186.JPG);
-	background-attachment: fixed;
-	background-position: top;
-	background-repeat: no-repeat;
-	background-size: cover;
-
-	border-bottom-left-radius: var(--bRadius);
-	border-bottom-right-radius: var(--bRadius);
-	box-shadow: rgba(249, 245, 240, 0.5) 0px -50px 36px -28px inset;
-}
-
-header > .title {
-	position: absolute;
-	top: 50%;
-	width: 100%;
-	padding: 1rem;
-	background-color: var(--itemBcg);
-	text-align: center;
-	text-transform: uppercase;
-	font-size: 2rem;
-	letter-spacing: 1px;
-	color: var(--mainTekstColor);
-}
-
-header h2 {
-	font-size: 2rem;
-}
-
 button {
 	bottom: 15vh;
 	right: 8rem;
