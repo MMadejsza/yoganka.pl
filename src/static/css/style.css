@@ -58,7 +58,6 @@ nav {
 	padding: 0 1rem 2rem;
 	box-shadow: var(--sectionShadow);
 }
-
 .topImageHeader {
 	grid-area: header;
 	max-height: var(--headerSize);
@@ -68,6 +67,7 @@ nav {
 	background-position: top center;
 	background-repeat: no-repeat;
 	background-size: auto var(--headerImgSize);
+	overflow: hidden;
 
 	display: grid;
 	grid-template-columns: repeat(5, minmax(auto, 1fr));
@@ -122,7 +122,6 @@ nav > .logo {
 	font-size: 3rem;
 	line-height: 3rem;
 }
-
 .headerMotto {
 	grid-area: motto;
 	background-color: var(--color0);
@@ -256,6 +255,22 @@ li:hover {
 	grid-area: about;
 	font-size: 1.5rem;
 	background-color: var(--color8);
+
+	display: grid;
+	grid-template-columns: minmax(auto, 1fr);
+	grid-template-rows: repeat(7, auto);
+	place-items: center;
+	grid-template-areas:
+		'header'
+		'portrait'
+		'h2'
+		'ryt'
+		'h3'
+		'article'
+		'alliance';
+}
+.about .sectionHeader {
+	grid-area: header;
 }
 .about img {
 	display: block;
@@ -264,29 +279,37 @@ li:hover {
 	height: auto;
 	box-shadow: var(--boxShadow);
 }
-.about aside {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
+.about_portrait {
+	grid-area: portrait;
 }
 .about aside ~ aside img {
 	display: block;
 	max-width: 50vw;
 	margin: 1.8rem;
 }
-.about aside ~ aside img:last-child {
+.about .ryt {
+	grid-area: ryt;
+}
+.about .alliance img {
+	grid-area: alliance;
 	box-shadow: none;
 }
 .about h2 {
+	grid-area: h2;
+
 	margin: 2.8rem 0 1rem 0;
 	font-size: 2.2rem;
 	font-weight: 500;
 }
 .about h3 {
+	grid-area: h3;
+
 	margin: 1rem 0;
 	font-size: 1.8rem;
 	font-weight: 500;
+}
+.about p {
+	grid-area: article;
 }
 .partners {
 	grid-area: partners;
