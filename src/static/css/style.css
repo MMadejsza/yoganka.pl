@@ -42,11 +42,10 @@ html {
 
 body {
 	margin: 0 auto;
-	max-width: 360px;
 	background-color: whitesmoke;
 
 	display: grid;
-	grid-template-columns: repeat(5, minmax(auto, 1fr));
+	grid-template-columns: repeat(auto-fit, minmax(300px, 360px));
 	grid-template-rows: repeat(3, auto);
 	grid-template-areas:
 		'header header header header header '
@@ -103,22 +102,24 @@ nav > .logo {
 }
 .topImageHeader > header {
 	grid-area: title;
-}
-.titleBar {
 	max-height: 8rem;
 	padding: 0.5rem 1rem;
 	background-color: var(--itemBcg);
 	font-family: 'Gravitas One', serif;
 	font-size: 2rem;
 	letter-spacing: 2px;
+	text-align: left;
 	color: var(--mainTekstColor);
-	box-shadow: var(--activeBoxShadow);
+}
+.titleBar {
+	margin: 0 auto;
+	width: 335px;
+	/* box-shadow: var(--activeBoxShadow); */
 }
 .titleBar > .headerSubtitle {
 	text-transform: none;
 	font-family: 'Caveat', cursive;
 	font-weight: lighter;
-	text-align: left;
 	font-size: 3rem;
 	line-height: 3rem;
 }
@@ -323,7 +324,7 @@ li:hover {
 }
 .partners .partners_gallery {
 	display: grid;
-	grid-template-columns: minmax(auto, 40vw) minmax(auto, 40vw);
+	grid-template-columns: repeat(auto-fit, minmax(100px, 144px));
 	grid-auto-rows: minmax(auto, 40vw);
 	place-content: center;
 	place-items: center;
