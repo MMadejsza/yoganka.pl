@@ -432,13 +432,15 @@ footer {
 	line-height: 3rem;
 	color: white;
 }
-.footer a:nth-last-of-type(1) {
+.footer a {
 	font-size: 1.5rem;
 	line-height: 1.5rem;
 	text-decoration: underline;
 }
-.company-details {
+.footer .company-details,
+.footer .company-details a {
 	font-size: 1.9rem;
+	line-height: 150%;
 }
 .footer .socials {
 	max-width: 80vh;
@@ -448,9 +450,10 @@ footer {
 	align-items: center;
 }
 
-.footer .socials i {
-	width: 28.5px;
-	font-size: 2.2rem;
+.footer .socials a {
+	width: 2.4rem;
+	font-size: 2.4rem;
+	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 button {
