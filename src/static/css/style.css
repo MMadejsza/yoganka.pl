@@ -33,6 +33,7 @@ html {
 	--sectionShadow: rgba(0, 0, 0, 0.35) 8px 52px -19px inset;
 	--headerImgSize: 500px;
 	--headerSize: calc(var(--headerImgSize) + 8rem);
+
 	font-family: 'EB Garamond', serif;
 	font-weight: 400;
 	font-size: 10px;
@@ -46,16 +47,27 @@ body {
 
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(300px, 360px));
-	grid-template-rows: repeat(3, auto);
+	grid-template-rows: repeat(4, auto);
 	grid-template-areas:
 		'header header header header header '
 		'about about about about about'
+		'offer offer offer offer offer'
 		'partners partners partners partners partners';
+}
+img {
+	display: block;
+	max-width: 100%;
 }
 section:not(:first-of-type),
 nav {
 	padding: 0 1rem 2rem;
 	box-shadow: var(--sectionShadow);
+}
+section:nth-child(odd) {
+	background-color: var(--color2);
+}
+header {
+	text-align: center;
 }
 .topImageHeader {
 	grid-area: header;
@@ -246,7 +258,8 @@ li:hover {
 .nav a:hover:not(.active)::after {
 	left: 0;
 }
-.sectionHeader {
+.sectionHeader,
+.offerType_header {
 	line-height: 6rem;
 	padding: 1rem 0.5rem;
 	font-size: 3rem;
@@ -312,9 +325,52 @@ li:hover {
 .about p {
 	grid-area: article;
 }
+
+.offer {
+	grid-area: offer;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+	align-items: center;
+
+	min-height: 120vh;
+}
+.offerType {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 350px));
+	grid-gap: 1.5rem;
+}
+.offerType_header {
+	font-size: 2.5rem;
+	line-height: 2.5rem;
+}
+.offerType_item {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+
+	padding: 1.5rem 1rem;
+	min-height: 55vh;
+	background-color: rgba(252, 251, 236, 0.75);
+	border-radius: var(--bRadius);
+	overflow: hidden;
+}
+.offerType_item .pic {
+	max-width: 80%;
+	border-radius: var(--bRadius);
+}
+.offerType_item h3 {
+	font-size: 2.2rem;
+	font-weight: 500;
+}
+.offerType_item h4 {
+	font-size: 1.9rem;
+	font-weight: 400;
+}
+
 .partners {
 	grid-area: partners;
-	background-color: var(--color2);
 }
 .partners img {
 	display: block;
@@ -323,6 +379,10 @@ li:hover {
 	filter: grayscale(1);
 }
 .partners .partners_gallery {
+	background-color: rgba(160, 214, 212, 0.4);
+	border-radius: var(--bRadius);
+	padding: 1.5rem 1rem;
+
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(100px, 144px));
 	grid-auto-rows: minmax(auto, 40vw);
