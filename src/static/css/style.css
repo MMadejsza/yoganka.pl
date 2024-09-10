@@ -15,15 +15,16 @@ html {
 	--mainTekstColor: var(--color1);
 	--headerColor: var(--color2);
 	--iconsColor: var(--color7);
+	--test: 249, 231, 159;
 	--color0: rgb(177, 226, 232);
 	--color1: rgb(252, 251, 236);
 	--color2: rgb(160, 214, 212);
-	--color8: rgb(249, 245, 240);
 	--color3: rgb(179, 229, 252);
 	--color4: rgb(249, 231, 159);
 	--color5: #003366;
 	--color6: #012b54;
 	--color7: rgb(255, 182, 0);
+	--color8: rgb(249, 245, 240);
 	--shadowAlpha1: 0.3;
 	--shadowAlpha2: 0.22;
 	--shadowColor1: var(--color0);
@@ -48,11 +49,12 @@ body {
 
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(300px, 360px));
-	grid-template-rows: repeat(5, auto);
+	grid-template-rows: repeat(6, auto);
 	grid-template-areas:
 		'header header header header header '
 		'about about about about about'
 		'offer offer offer offer offer'
+		'cert cert cert cert cert'
 		'partners partners partners partners partners'
 		'footer footer footer footer footer';
 }
@@ -335,7 +337,7 @@ li:hover {
 	grid-area: offer;
 
 	display: grid;
-	grid-template-columns: 1fr;
+	grid-template-columns: repeat(auto-fit, minmax(300px, 450px));
 	place-items: center;
 	grid-gap: 1.5rem;
 	overflow: visible;
@@ -388,6 +390,45 @@ li:hover {
 .offerType_item h4 {
 	font-size: 1.9rem;
 	font-weight: 400;
+}
+
+.certificates {
+	grid-area: cert;
+}
+.certificates .certificates_gallery {
+	background-color: rgba(var(--test), 0.4);
+	border-radius: var(--bRadius);
+	padding: 1.5rem 1rem;
+
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+	grid-gap: 1.5rem;
+	place-content: center;
+	place-items: center;
+}
+.certificates .offerType_item {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+	align-items: center;
+
+	width: 100%;
+	min-height: 300px;
+	padding: 1.5rem 1rem;
+	background-color: rgba(252, 251, 236, 0.75);
+	border-radius: var(--bRadius);
+	overflow: hidden;
+}
+.offerType_item p {
+	font-size: 1.9rem;
+}
+.offerType_item .certificate-type {
+	font-weight: 600;
+}
+.certificates .img {
+	display: block;
+	max-width: 80%;
+	max-height: 100%;
 }
 
 .partners {
@@ -459,6 +500,7 @@ footer {
 .footer .socials a {
 	width: 2.4rem;
 	font-size: 2.4rem;
+	color: var(--navBcg);
 	text-shadow: var(--activeTextIconsShadow);
 }
 
