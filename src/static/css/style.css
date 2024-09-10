@@ -31,6 +31,7 @@ html {
 	--transitiveBoxShadow: var(--color0) 0px 25px 52px 78px;
 	--boxShadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 	--sectionShadow: rgba(0, 0, 0, 0.35) 8px 52px -19px inset;
+	--activeTextIconsShadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 	--headerImgSize: 500px;
 	--headerSize: calc(var(--headerImgSize) + 8rem);
 
@@ -442,6 +443,11 @@ footer {
 	font-size: 1.9rem;
 	line-height: 150%;
 }
+.footer .company-details a {
+	font-size: 1.9rem;
+	line-height: 150%;
+	text-shadow: var(--activeTextIconsShadow);
+}
 .footer .socials {
 	max-width: 80vh;
 
@@ -453,7 +459,7 @@ footer {
 .footer .socials a {
 	width: 2.4rem;
 	font-size: 2.4rem;
-	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+	text-shadow: var(--activeTextIconsShadow);
 }
 
 button {
