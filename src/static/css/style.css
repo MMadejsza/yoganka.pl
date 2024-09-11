@@ -30,8 +30,8 @@ html {
 	--shadowColor1: var(--color0);
 	--shadowColor2: var(--color3);
 	--transitiveBoxShadow: var(--color0) 0px 25px 52px 78px;
-	--boxShadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 	--sectionShadow: rgba(0, 0, 0, 0.35) 8px 52px -19px inset;
+	--boxShadow: 2px 8px 10px rgba(149, 157, 165, 0.2);
 	--activeTextIconsShadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 	--headerImgSize: 500px;
 	--headerSize: calc(var(--headerImgSize) + 8rem);
@@ -378,6 +378,10 @@ li:hover {
 	background-color: rgba(252, 251, 236, 0.75);
 	border-radius: var(--bRadius);
 	overflow: hidden;
+	box-shadow: var(--boxShadow);
+}
+.certificates .tile {
+	box-shadow: none;
 }
 
 .tile .tile_desc {
@@ -393,7 +397,7 @@ li:hover {
 	min-height: 500px;
 }
 .tile.long {
-	min-height: 820px;
+	min-height: 730px;
 }
 
 .tile .pic {
