@@ -367,7 +367,7 @@ li:hover {
 	font-size: 2.5rem;
 	line-height: 2.5rem;
 }
-.offerType_item {
+.tile {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-evenly;
@@ -380,31 +380,31 @@ li:hover {
 	overflow: hidden;
 }
 
-.offerType_item .offer_desc {
+.tile .tile_desc {
 	font-size: 1.5rem;
 }
-.offerType_item ul {
+.tile ul {
 	max-width: 60%;
 	list-style: none;
 	font-size: 1.5rem;
 	/* text-align: left; */
 }
-.offerType_item.camp {
+.tile.camp {
 	min-height: 500px;
 }
-.offerType_item.long {
+.tile.long {
 	min-height: 820px;
 }
 
-.offerType_item .pic {
+.tile .pic {
 	max-width: 80%;
 	border-radius: var(--bRadius);
 }
-.offerType_item h3 {
+.tile h3 {
 	font-size: 2.2rem;
 	font-weight: 500;
 }
-.offerType_item h4 {
+.tile h4 {
 	font-size: 1.9rem;
 	font-weight: 400;
 }
@@ -423,7 +423,7 @@ li:hover {
 	place-content: center;
 	place-items: center;
 }
-.certificates .offerType_item {
+.certificates .tile {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-evenly;
@@ -436,10 +436,10 @@ li:hover {
 	border-radius: var(--bRadius);
 	overflow: hidden;
 }
-.offerType_item p {
+.tile p {
 	font-size: 1.9rem;
 }
-.offerType_item .certificate-type {
+.tile .certificate-type {
 	font-weight: 600;
 }
 .certificates .img {
