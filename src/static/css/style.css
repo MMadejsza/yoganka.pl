@@ -374,7 +374,7 @@ li:hover {
 	align-items: center;
 
 	padding: 1.5rem 1rem;
-	min-height: 500px;
+	min-height: 400px;
 	background-color: rgba(252, 251, 236, 0.75);
 	border-radius: var(--bRadius);
 	overflow: hidden;
@@ -382,6 +382,18 @@ li:hover {
 
 .offerType_item .offer_desc {
 	font-size: 1.5rem;
+}
+.offerType_item ul {
+	max-width: 60%;
+	list-style: none;
+	font-size: 1.5rem;
+	/* text-align: left; */
+}
+.offerType_item.camp {
+	min-height: 500px;
+}
+.offerType_item.long {
+	min-height: 820px;
 }
 
 .offerType_item .pic {
