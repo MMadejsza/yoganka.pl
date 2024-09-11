@@ -57,6 +57,7 @@ body {
 		'cert cert cert cert cert'
 		'partners partners partners partners partners'
 		'footer footer footer footer footer';
+	overflow: hidden;
 }
 img {
 	display: block;
@@ -368,6 +369,8 @@ li:hover {
 	line-height: 2.5rem;
 }
 .tile {
+	position: relative;
+
 	display: flex;
 	flex-direction: column;
 	justify-content: space-evenly;
@@ -400,7 +403,7 @@ li:hover {
 	min-height: 730px;
 }
 
-.tile .pic {
+.pic {
 	max-width: 80%;
 	border-radius: var(--bRadius);
 }
@@ -411,6 +414,27 @@ li:hover {
 .tile h4 {
 	font-size: 1.9rem;
 	font-weight: 400;
+}
+
+.modal {
+	display: block;
+	z-index: 2;
+	position: fixed;
+	top: 50vh;
+	left: 50vw;
+	transform: translate(-50%, -50%);
+	max-width: 90vw;
+	min-width: 320px;
+	min-height: 500px;
+	max-height: 85vh;
+	overflow-y: auto;
+
+	background-color: var(--navBcg);
+	border-radius: var(--bRadius);
+	padding: 1.5rem 1rem;
+}
+.modal_answer .price {
+	color: #6b8e23;
 }
 
 .certificates {
