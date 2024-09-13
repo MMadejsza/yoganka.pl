@@ -1,10 +1,10 @@
-function toggleMenu() {
-	const hamburger = document.getElementById('burger');
-	hamburger.classList.toggle('active');
-}
-
+const hamburger = document.getElementById('burger');
 const campTiles = document.querySelectorAll('.tile.camp');
 const body = document.body;
+
+function toggleMenu() {
+	hamburger.classList.toggle('active');
+}
 
 const showModal = (event) => {
 	const tile = event.currentTarget;
@@ -12,6 +12,7 @@ const showModal = (event) => {
 	body.classList.toggle('stopScroll');
 	if (targetModal) {
 		targetModal.classList.add('active');
+		hamburger.classList.toggle('hidden');
 		targetModal.scrollTop = 0;
 	}
 };
@@ -22,6 +23,7 @@ const closeModal = (event) => {
 	const modal = btn.closest('.modal');
 	if (modal) {
 		modal.classList.remove('active');
+		hamburger.classList.toggle('hidden');
 	}
 	body.classList.toggle('stopScroll');
 };

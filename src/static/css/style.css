@@ -575,9 +575,6 @@ li:hover {
 	box-shadow: var(--boxShadow);
 }
 
-.active {
-	display: block;
-}
 .certificates {
 	grid-area: cert;
 }
@@ -695,4 +692,10 @@ input {
 	border: none;
 	cursor: auto;
 	background-color: whitesmoke;
+}
+.active {
+	display: block;
+}
+.hidden {
+	display: none;
 }
