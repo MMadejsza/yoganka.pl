@@ -532,25 +532,10 @@ li:hover {
 	align-items: center;
 	flex-flow: row wrap;
 }
-.modal footer a:last-child {
-	position: relative;
-	margin-top: 1rem;
-	padding: 0;
-	width: 4rem;
-	height: 4rem;
-	font-size: 3rem;
-}
-.modal footer a:last-child i {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	margin: 0;
-	transform: translate(-50%, -50%);
-}
 
-.modal a {
+.modal footer a {
 	display: block;
-	width: 125px;
+	min-width: 125px;
 	height: 5rem;
 	margin: 0;
 	padding: 0.5rem 1rem;
@@ -568,11 +553,28 @@ li:hover {
 	transition: 0.3s ease-in-out;
 	overflow: hidden;
 }
-.modal a:hover {
+.modal footer a:last-child {
+	position: relative;
+	margin-top: 1rem;
+	padding: 0;
+	min-width: 4rem;
+	height: 4rem;
+	font-size: 3rem;
+}
+
+.modal footer a:last-child i {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: 0;
+	transform: translate(-50%, -50%);
+}
+.modal footer a:hover {
 	color: var(--defaultColor);
 	background-color: rgba(0, 0, 0, 0.5);
 	box-shadow: var(--boxShadow);
 }
+
 .active {
 	display: block;
 }
