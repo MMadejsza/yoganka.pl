@@ -8,8 +8,6 @@ document.addEventListener('DOMContentLoaded', function () {
 		hamburger.classList.toggle('active');
 	};
 
-	hamburger.addEventListener('click', () => toggleMenu());
-
 	const showModal = (event) => {
 		const tile = event.currentTarget;
 		const targetModal = tile.querySelector('.modal');
@@ -32,24 +30,23 @@ document.addEventListener('DOMContentLoaded', function () {
 		}
 	};
 
-	campTiles.forEach((camp) => {
-		camp.addEventListener('click', showModal);
-		const closeButton = camp.querySelector('.btn_close');
-		if (closeButton) {
-			closeButton.addEventListener('click', closeModal);
-		}
-	});
+	const whatsappTemplates = () => {
+		const enter = '%0A';
+		const phoneNumber = '48792891607';
+		const msgKaszuby = `Hej! Mam pytanie odnośnie wyjazdu na Kaszuby w październiku :)\n\nTu [imię] [Nazwisko]`;
+		const msgWarmia = `Hej! Mam pytanie odnośnie wyjazdu na Warmię w listopadzie :)\n\nTu [imię] [Nazwisko]`;
+		const msgContact = `Hej! Piszę do Ciebie ze stronki yoganka.pl :)\n\nTu [imię] [Nazwisko]`;
 
-	const enter = '%0A';
-	const phoneNumber = '48792891607';
-	const messageKaszuby = `Hej! Mam pytanie odnośnie wyjazdu na Kaszuby w październiku :)\n\nTu [imię] [Nazwisko]`;
-	const messageWarmia = `Hej! Mam pytanie odnośnie wyjazdu na Warmię w listopadzie :)\n\nTu [imię] [Nazwisko]`;
+		const linkKaszuby = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(msgKaszuby)}`;
+		const linkWarmia = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(msgWarmia)}`;
+		const linkContact = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(msgContact)}`;
 
-	const linkKaszuby = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(messageKaszuby)}`;
-	const linkWarmia = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(messageWarmia)}`;
+		document.getElementById('whatsapp-kaszuby').href = linkKaszuby;
+		document.getElementById('whatsapp-warmia').href = linkWarmia;
+		document.getElementById('whatsapp-contact').href = linkContact;
+	};
 
-	document.getElementById('whatsapp-kaszuby').href = linkKaszuby;
-	document.getElementById('whatsapp-warmia').href = linkWarmia;
+	hamburger.addEventListener('click', () => toggleMenu());
 
 	menuLinks.forEach((link) => {
 		link.addEventListener('click', (event) => {
@@ -67,4 +64,14 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 		});
 	});
+
+	campTiles.forEach((camp) => {
+		camp.addEventListener('click', showModal);
+		const closeButton = camp.querySelector('.btn_close');
+		if (closeButton) {
+			closeButton.addEventListener('click', closeModal);
+		}
+	});
+
+	whatsappTemplates();
 });
