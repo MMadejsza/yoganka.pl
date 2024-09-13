@@ -188,14 +188,14 @@ nav > .logo {
 }
 /* Active state */
 .burger.active .top-bar {
-	transform: translateY(calc(25px / 2 - 4px / 2)) rotate(45deg);
+	transform: translateY(calc(9px / 2 - 4px / 2)) rotate(45deg);
 }
 .burger.active .middle-bar {
 	transform: translateX(-100%);
 	opacity: 0;
 }
 .burger.active .bottom-bar {
-	transform: translateY(calc(-25px / 2 + 4px / 2)) rotate(-45deg);
+	transform: translateY(calc(-15px / 2 + 4px / 2)) rotate(-45deg);
 }
 .burger.active + .nav {
 	left: 0;
