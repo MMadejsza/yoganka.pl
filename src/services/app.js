@@ -4,10 +4,10 @@ document.addEventListener('DOMContentLoaded', function () {
 	const hamburger = document.getElementById('burger');
 	const campTiles = document.querySelectorAll('.tile.camp');
 
+	// functions
 	const toggleMenu = () => {
 		hamburger.classList.toggle('active');
 	};
-
 	const showModal = (event) => {
 		const tile = event.currentTarget;
 		const targetModal = tile.querySelector('.modal');
@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function () {
 			targetModal.scrollTop = 0;
 		}
 	};
-
 	const closeModal = (event) => {
 		event.stopPropagation(); // Zapobiega zamknięciu modala przez kliknięcie elementu `.tile.camp`
 		const btn = event.currentTarget;
@@ -29,7 +28,6 @@ document.addEventListener('DOMContentLoaded', function () {
 			body.classList.toggle('stopScroll');
 		}
 	};
-
 	const whatsappTemplates = () => {
 		const enter = '%0A';
 		const phoneNumber = '48792891607';
@@ -46,8 +44,8 @@ document.addEventListener('DOMContentLoaded', function () {
 		document.getElementById('whatsapp-contact').href = linkContact;
 	};
 
+	// application
 	hamburger.addEventListener('click', () => toggleMenu());
-
 	menuLinks.forEach((link) => {
 		link.addEventListener('click', (event) => {
 			// Pobierz atrybut href z klikniętego linku
@@ -64,7 +62,6 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 		});
 	});
-
 	campTiles.forEach((camp) => {
 		camp.addEventListener('click', showModal);
 		const closeButton = camp.querySelector('.btn_close');
@@ -72,6 +69,5 @@ document.addEventListener('DOMContentLoaded', function () {
 			closeButton.addEventListener('click', closeModal);
 		}
 	});
-
 	whatsappTemplates();
 });
