@@ -170,7 +170,7 @@ nav > .logo {
 	justify-content: space-between;
 	cursor: pointer;
 	position: fixed;
-	z-index: 1;
+	z-index: 4;
 }
 .bar {
 	width: 100%;
@@ -198,7 +198,7 @@ nav > .logo {
 	transform: translateY(calc(-15px / 2 + 4px / 2)) rotate(-45deg);
 }
 .burger.active + .nav {
-	left: 0;
+	right: 0;
 }
 
 .nav {
@@ -206,13 +206,13 @@ nav > .logo {
 	height: 100%;
 	position: fixed;
 	top: 0;
-	left: -100%;
+	right: -100%;
 	background-color: rgba(var(--navBcg), 0.85);
 	text-transform: uppercase;
 	letter-spacing: 1px;
 	box-shadow: var(--activeBoxShadow);
-	border-top-right-radius: var(--bRadius);
-	border-bottom-right-radius: var(--bRadius);
+	border-top-left-radius: var(--bRadius);
+	border-bottom-left-radius: var(--bRadius);
 	z-index: 2;
 	transition: all 0.5s ease-in-out;
 }
