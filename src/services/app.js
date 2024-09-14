@@ -70,4 +70,6 @@ document.addEventListener('DOMContentLoaded', function () {
 		}
 	});
 	whatsappTemplates();
+
+	const generateTile = () => {};
 });
