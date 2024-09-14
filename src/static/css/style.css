@@ -240,7 +240,7 @@ a {
 	display: block;
 	cursor: pointer;
 	height: 6rem;
-	margin: 0 2rem;
+	/* margin: 0 2rem; */
 	line-height: 6rem;
 	font-size: 2.2rem;
 	text-decoration: none;
@@ -525,7 +525,6 @@ li:hover {
 
 .modal footer {
 	padding-bottom: 0;
-	max-height: 10rem;
 	max-width: 300px;
 
 	display: flex;
@@ -534,12 +533,12 @@ li:hover {
 	justify-items: center;
 	align-content: space-between;
 	flex-flow: row wrap;
+	gap: 1rem;
 }
 
 .modal footer a {
 	display: block;
 	height: 5rem;
-	margin: 0 0.5rem;
 	padding: 0.5rem 1rem;
 	color: white;
 	text-align: center;
@@ -557,7 +556,6 @@ li:hover {
 }
 .modal footer a:last-child {
 	position: relative;
-	margin: 1rem;
 	padding: 0;
 	min-width: 4rem;
 	height: 4rem;
@@ -727,4 +725,44 @@ input {
 	.partners .partners_gallery {
 		grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 	}
+}
+@media (min-width: 480px) {
+	html {
+		--headerImgSize: 600px;
+		font-size: 12px;
+	}
+	.titleBar {
+		width: 460px;
+		font-size: 2.3rem;
+	}
+	.offerType {
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	}
+	.tile {
+		min-height: 475px;
+	}
+	.tile.camp {
+		min-height: 560px;
+	}
+	.modal footer {
+		max-width: 90%;
+	}
+	.certificates .tile {
+		min-height: 405px;
+	}
+	.partners .partners_gallery {
+		grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+	}
+}
+@media (min-width: 600px) {
+	/* portrait tablets, portrait iPad, e-readers (Nook/Kindle), landscape 800x480 phones (Android) */
+}
+@media (min-width: 801px) {
+	/* tablet, landscape iPad, lo-res laptops ands desktops */
+}
+@media (min-width: 1025px) {
+	/* big landscape tablets, laptops, and desktops */
+}
+@media (min-width: 1281px) {
+	/* hi-res laptops and desktops */
 }
