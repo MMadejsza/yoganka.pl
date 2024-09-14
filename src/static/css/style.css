@@ -116,6 +116,7 @@ header {
 
 	width: 40vw;
 	height: 10vw;
+	max-height: 75px;
 	line-height: 10vw;
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 2rem;
@@ -123,9 +124,7 @@ header {
 	border: 1px solid black;
 }
 nav > .logo {
-	position: relative;
-	top: 15px;
-	left: 20px;
+	max-width: 80%;
 }
 .topImageHeader > header {
 	grid-area: title;
@@ -134,13 +133,16 @@ nav > .logo {
 }
 .titleBar {
 	margin: 0 auto;
-	width: 335px;
-	max-height: 8rem;
+	width: max-content;
 	font-family: 'Gravitas One', serif;
 	font-size: 2rem;
 	letter-spacing: 2px;
 	text-align: left;
 	color: var(--mainTekstColor);
+
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
 .titleBar > .headerSubtitle {
 	text-transform: none;
@@ -202,27 +204,28 @@ nav > .logo {
 }
 
 .nav {
-	width: 70%;
-	height: 100%;
 	position: fixed;
 	top: 0;
 	right: -100%;
-	background-color: rgba(var(--navBcg), 0.85);
+	width: max-content;
+	height: 100%;
+	padding: 2rem;
 	text-transform: uppercase;
 	letter-spacing: 1px;
-	box-shadow: var(--activeBoxShadow);
 	border-top-left-radius: var(--bRadius);
 	border-bottom-left-radius: var(--bRadius);
-	z-index: 2;
+	box-shadow: var(--activeBoxShadow);
+	background-color: rgba(var(--navBcg), 0.85);
 	transition: all 0.5s ease-in-out;
+	z-index: 2;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 2rem;
 }
-.nav .x {
-	position: absolute;
-	top: 2rem;
-	right: 1rem;
-}
+
 .nav ul {
-	margin: 0 0 0 auto;
 	display: flex;
 	flex-direction: column;
 	list-style: none;
@@ -232,9 +235,6 @@ nav > .logo {
 	min-width: 50px;
 	text-align: left;
 	overflow: hidden;
-}
-.nav ul li:nth-of-type(1) {
-	margin-top: 3rem;
 }
 a {
 	display: block;
@@ -286,7 +286,7 @@ li:hover {
 	background-color: var(--color8);
 
 	display: grid;
-	grid-template-columns: minmax(auto, 1fr);
+	grid-template-columns: minmax(300px, 1fr);
 	grid-template-rows: repeat(7, auto);
 	place-items: center;
 	grid-template-areas:
@@ -297,6 +297,7 @@ li:hover {
 		'h3'
 		'article'
 		'alliance';
+	gap: 1.5rem;
 }
 .about .sectionHeader {
 	grid-area: header;
@@ -308,13 +309,18 @@ li:hover {
 	height: auto;
 	box-shadow: var(--boxShadow);
 }
+.about aside {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
 .about_portrait {
 	grid-area: portrait;
+	margin: -1rem 0 1rem;
 }
 .about aside ~ aside img {
 	display: block;
 	max-width: 60vw;
-	margin: 1.8rem;
 }
 .about .ryt {
 	grid-area: ryt;
@@ -326,14 +332,12 @@ li:hover {
 .about h2 {
 	grid-area: h2;
 
-	margin: 2.8rem 0 1rem 0;
 	font-size: 2.5rem;
 	font-weight: 500;
 }
 .about h3 {
 	grid-area: h3;
 
-	margin: 1rem 0;
 	font-size: 2.3rem;
 	font-weight: 500;
 }
@@ -345,12 +349,19 @@ li:hover {
 	grid-area: offer;
 
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-	place-items: center;
+	grid-template-columns: repeat(2, minmax(150px, 1fr));
+	grid-template-areas:
+		'title title'
+		'wyjazdy wyjazdy'
+		'zajecia zajecia'
+		'wydarzenia wydarzenia'
+		'supy supy';
+	justify-items: center;
 	grid-gap: 1.5rem;
 	overflow: visible;
 }
 .offer .sectionHeader {
+	grid-area: title;
 	position: relative;
 	width: 100%;
 }
@@ -369,8 +380,28 @@ li:hover {
 .offerType {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	justify-items: center;
 	grid-gap: 1.5rem;
 }
+.offerType#wyjazdy {
+	grid-area: wyjazdy;
+}
+.offerType#zajecia {
+	grid-area: zajecia;
+}
+.offerType#events {
+	grid-area: supy;
+}
+.offerType.events {
+	grid-area: wydarzenia;
+}
+
+.offerType#events,
+.offerType.events {
+	display: grid;
+	grid-template-columns: minmax(300px, 1fr);
+}
+
 .offerType_header {
 	font-size: 3rem;
 	line-height: 3rem;
@@ -380,7 +411,6 @@ li:hover {
 
 	display: flex;
 	flex-direction: column;
-	justify-content: space-evenly;
 	align-items: center;
 	gap: 1rem;
 
@@ -400,13 +430,10 @@ li:hover {
 .tile .tile-ul {
 	max-width: 60%;
 	font-size: 1.7rem;
-	/* text-align: left; */
 }
 .tile.camp {
-	min-height: 500px;
 }
 .tile.long {
-	min-height: 730px;
 }
 
 .pic {
@@ -585,19 +612,22 @@ li:hover {
 	padding: 1.5rem 1rem;
 
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+	grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+	grid-auto-flow: dense;
 	grid-gap: 1.5rem;
 	place-content: center;
-	place-items: center;
+	justify-items: center;
+	align-items: start;
 }
+
 .certificates .tile {
 	display: flex;
 	flex-direction: column;
-	justify-content: space-evenly;
+	/* justify-content: space-evenly; */
 	align-items: center;
 
 	width: 100%;
-	min-height: 300px;
+	/* min-height: 300px; */
 	padding: 1.5rem 1rem;
 	background-color: rgba(252, 251, 236, 0.75);
 	border-radius: var(--bRadius);
@@ -632,16 +662,20 @@ li:hover {
 
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(150px, 150px));
-	grid-auto-rows: minmax(auto, 40vw);
 	place-content: center;
 	place-items: center;
 	grid-gap: 1rem;
+}
+.partners_gallery div {
+	aspect-ratio: 1 /1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 body > footer {
 	grid-area: footer;
 	min-height: 300px;
-	max-height: 40vh;
 	padding: 1rem 1rem 2rem;
 	background-color: var(--color2);
 	font-size: 1.7rem;
@@ -651,24 +685,14 @@ body > footer {
 	flex-direction: column;
 	justify-content: space-evenly;
 	align-items: center;
+	gap: 1rem;
 }
-.footer .titleBar {
-	font-size: 1.5rem;
-}
+
 .footer a {
 	height: auto;
-	line-height: 3rem;
 	color: white;
-}
-.footer a {
 	font-size: 1.5rem;
-	line-height: 1.5rem;
 	text-decoration: underline;
-}
-.footer .company-details,
-.footer .company-details a {
-	font-size: 1.9rem;
-	line-height: 150%;
 }
 .footer .company-details a {
 	font-size: 2.2rem;
@@ -676,15 +700,13 @@ body > footer {
 	text-shadow: var(--activeTextIconsShadow);
 }
 .footer .socials {
-	max-width: 80vh;
-
 	display: flex;
 	justify-content: space-evenly;
 	align-items: center;
+	gap: 3rem;
 }
 
 .footer .socials a {
-	width: 2.4rem;
 	font-size: 2.4rem;
 	color: rgba(var(--navBcg), 0.85);
 	text-shadow: var(--activeTextIconsShadow);
@@ -711,47 +733,111 @@ input {
 		--headerImgSize: 500px;
 		font-size: 10px;
 	}
-	.offerType {
-		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-	}
-	.certificates .tile {
-		min-height: 370px;
-	}
 	.partners .partners_gallery {
 		grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 	}
 }
 @media (min-width: 480px) {
 	html {
-		--headerImgSize: 600px;
+		--headerImgSize: 640px;
 		font-size: 12px;
 	}
 	.titleBar {
-		width: 460px;
 		font-size: 2.3rem;
-	}
-	.offerType {
-		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 	}
 	.modal footer {
 		max-width: 75%;
 	}
-	.certificates .tile {
-		min-height: 430px;
+	.footer .socials {
+		gap: 4rem;
 	}
-	.partners .partners_gallery {
-		grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+	.footer .socials a {
+		font-size: 3rem;
 	}
 }
-@media (min-width: 600px) {
+@media (min-width: 640px) {
 	/* portrait tablets, portrait iPad, e-readers (Nook/Kindle), landscape 800x480 phones (Android) */
+	html {
+		--headerImgSize: 800px;
+		font-size: 13px;
+	}
+	body > section:not(:first-of-type),
+	nav,
+	footer {
+		padding: 0 2rem 2rem;
+	}
+	nav .logo {
+		max-width: 310px;
+	}
+	.about {
+		grid-template-columns: minmax(300px, 1fr) minmax(300px, 1fr);
+		grid-template-areas:
+			'header header'
+			'portrait portrait'
+			'h2 h2'
+			'h3 h3'
+			'article article'
+			'ryt alliance';
+	}
+	.about_portrait {
+		max-width: 70%;
+	}
+	.about aside ~ aside img {
+		max-width: 80%;
+		object-fit: contain;
+	}
+	.sectionHeader,
+	.offerType_header {
+		grid-column: 1 /-1;
+	}
+	.offerType#events,
+	.offerType.events {
+		display: grid;
+		grid-template-columns: minmax(300px, 400px);
+	}
+	.modal footer {
+		max-width: 75%;
+	}
+	.footer .socials a {
+		font-size: 4rem;
+	}
 }
-@media (min-width: 801px) {
+@media (min-width: 800px) {
 	/* tablet, landscape iPad, lo-res laptops ands desktops */
+	html {
+		--headerImgSize: 1080px;
+		font-size: 15px;
+	}
+	.titleBar {
+		height: 11rem;
+		font-size: 3rem;
+		letter-spacing: 3px;
+	}
+	.headerMotto {
+		font-size: 2.5rem;
+	}
+	.about {
+		gap: 2.5rem 1.5rem;
+	}
+	.offer {
+		grid-template-areas:
+			'title title'
+			'wyjazdy wyjazdy'
+			'zajecia zajecia'
+			'wydarzenia supy';
+	}
+	.offerType {
+		grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+	}
+	.offerType#events,
+	.offerType.events {
+		display: grid;
+		grid-template-columns: minmax(300px, 1fr);
+	}
 }
-@media (min-width: 1025px) {
+@media (min-width: 1024px) {
 	/* big landscape tablets, laptops, and desktops */
 }
-@media (min-width: 1281px) {
+@media (min-width: 1280px) {
 	/* hi-res laptops and desktops */
 }
