@@ -163,8 +163,8 @@ nav > .logo {
 .burger {
 	top: 2rem;
 	right: 2rem;
-	width: 30px;
-	height: 25px;
+	width: 3.5rem;
+	height: 3rem;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
