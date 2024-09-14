@@ -38,7 +38,7 @@ html {
 
 	font-family: 'EB Garamond', serif;
 	font-weight: 400;
-	font-size: 10px;
+	font-size: 8.5px;
 	text-align: center;
 	color: var(--color5);
 }
@@ -395,11 +395,11 @@ li:hover {
 }
 
 .tile .tile_desc {
-	font-size: 1.5rem;
+	font-size: 1.8rem;
 }
 .tile .tile-ul {
 	max-width: 60%;
-	font-size: 1.5rem;
+	font-size: 1.7rem;
 	/* text-align: left; */
 }
 .tile.camp {
@@ -643,7 +643,7 @@ body > footer {
 	max-height: 40vh;
 	padding: 1rem 1rem 2rem;
 	background-color: var(--color2);
-	font-size: 1.5rem;
+	font-size: 1.7rem;
 	color: white;
 
 	display: flex;
@@ -670,7 +670,7 @@ body > footer {
 	line-height: 150%;
 }
 .footer .company-details a {
-	font-size: 1.9rem;
+	font-size: 2.2rem;
 	line-height: 150%;
 	text-shadow: var(--activeTextIconsShadow);
 }
@@ -687,6 +687,9 @@ body > footer {
 	font-size: 2.4rem;
 	color: rgba(var(--navBcg), 0.85);
 	text-shadow: var(--activeTextIconsShadow);
+}
+.footer .legal {
+	font-size: 1.9rem;
 }
 
 input {
