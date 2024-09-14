@@ -33,7 +33,7 @@ html {
 	--sectionShadow: rgba(0, 0, 0, 0.35) 8px 52px -19px inset;
 	--boxShadow: 2px 8px 10px rgba(149, 157, 165, 0.2);
 	--activeTextIconsShadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-	--headerImgSize: 500px;
+	--headerImgSize: 460px;
 	--headerSize: calc(var(--headerImgSize) + 8rem);
 
 	font-family: 'EB Garamond', serif;
@@ -429,7 +429,7 @@ li:hover {
 	top: 50vh;
 	left: 50vw;
 	transform: translate(-50%, -50%);
-	max-width: 95vw;
+	width: 95vw;
 	min-height: 500px;
 	max-height: 85vh;
 	overflow-y: auto;
@@ -639,7 +639,8 @@ li:hover {
 
 body > footer {
 	grid-area: footer;
-	min-height: 40vh;
+	min-height: 300px;
+	max-height: 40vh;
 	padding: 1rem 1rem 2rem;
 	background-color: var(--color2);
 	font-size: 1.5rem;
@@ -701,7 +702,8 @@ input {
 	display: none;
 }
 
-@media (max-width: 359px) {
-	selector {
+@media (min-width: 360px) {
+	html {
+		--headerImgSize: 500px;
 	}
 }
