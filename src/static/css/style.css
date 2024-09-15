@@ -273,8 +273,7 @@ li:hover {
 .nav a:hover:not(.active)::after {
 	left: 0;
 }
-.sectionHeader,
-.offerType_header {
+.sectionHeader {
 	line-height: 6rem;
 	padding: 1rem 0.5rem;
 	font-size: 4rem;
@@ -400,11 +399,13 @@ li:hover {
 .offerType.events {
 	display: grid;
 	grid-template-columns: minmax(300px, 1fr);
+	grid-template-rows: 100px;
 }
 
 .offerType_header {
 	font-size: 3rem;
-	line-height: 3rem;
+	line-height: 6rem;
+	text-transform: uppercase;
 }
 .tile {
 	position: relative;
@@ -734,7 +735,10 @@ input {
 		font-size: 10px;
 	}
 	.partners .partners_gallery {
-		grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+		grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+	}
+	.footer .legal {
+		font-size: 1.8rem;
 	}
 }
 @media (min-width: 480px) {
@@ -798,6 +802,9 @@ input {
 	.modal footer {
 		max-width: 75%;
 	}
+	.certificates .certificates_gallery {
+		grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+	}
 	.footer .socials a {
 		font-size: 4rem;
 	}
@@ -833,6 +840,9 @@ input {
 	.offerType.events {
 		display: grid;
 		grid-template-columns: minmax(300px, 1fr);
+	}
+	.certificates .certificates_gallery {
+		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 	}
 }
 @media (min-width: 1024px) {
