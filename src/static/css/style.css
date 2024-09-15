@@ -399,7 +399,7 @@ li:hover {
 .offerType.events {
 	display: grid;
 	grid-template-columns: minmax(300px, 1fr);
-	grid-template-rows: 100px;
+	grid-template-rows: 6rem;
 }
 
 .offerType_header {
@@ -485,7 +485,6 @@ li:hover {
 	width: 80%;
 }
 .modal .modal_list {
-	min-width: 100%;
 	font-size: 2rem;
 }
 
@@ -503,9 +502,7 @@ li:hover {
 	align-content: start;
 	flex-wrap: wrap;
 	text-align: left;
-}
-
-.modal .at-glance {
+	gap: 1rem;
 }
 
 .modal i {
@@ -585,7 +582,7 @@ li:hover {
 .modal footer a:last-child {
 	position: relative;
 	padding: 0;
-	margin: 0 2rem;
+	margin: 0 4rem;
 	min-width: 4rem;
 	height: 4rem;
 	font-size: 3rem;
@@ -799,7 +796,46 @@ input {
 		display: grid;
 		grid-template-columns: minmax(300px, 400px);
 	}
+	.modal_offer {
+		gap: 2rem 1.5rem;
+		grid-auto-flow: column dense;
+	}
+	.modal i {
+		margin-right: 1.5rem;
+	}
+	.modal .pic {
+		grid-column: 1;
+		margin: 0;
+		place-self: center;
+	}
+	.modal header {
+		width: 100%;
+	}
+	.modal_desc {
+		grid-column: 1 /-1;
+	}
+	.modal_included,
+	.modal_excluded,
+	.modal_optional,
+	.modal_free-time {
+		align-self: self-start;
+	}
+	.modal_included {
+		grid-column: 1;
+		grid-row: span 2;
+	}
+	.modal_free-time {
+		justify-self: center;
+		grid-row: 5;
+		grid-column: 1 / -1;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
 	.modal footer {
+		grid-column: 1 /-1;
+		grid-row: 6;
 		max-width: 75%;
 	}
 	.certificates .certificates_gallery {
