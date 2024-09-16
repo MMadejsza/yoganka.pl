@@ -356,7 +356,7 @@ li:hover {
 		'wydarzenia wydarzenia'
 		'supy supy';
 	justify-items: center;
-	grid-gap: 1.5rem;
+	grid-gap: 0.5rem;
 	overflow: visible;
 }
 .offer .sectionHeader {
@@ -725,6 +725,9 @@ input {
 	html {
 		--headerImgSize: 500px;
 		font-size: 10px;
+	}
+	.offer {
+		grid-gap: 1.5rem;
 	}
 	.headerMotto {
 		letter-spacing: 0px;
