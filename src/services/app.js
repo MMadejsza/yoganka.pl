@@ -8,14 +8,19 @@ document.addEventListener('DOMContentLoaded', function () {
 	const toggleMenu = () => {
 		hamburger.classList.toggle('active');
 	};
+	let scrollFlag = 0;
 	const showModal = (event) => {
+		event.stopPropagation();
 		const tile = event.currentTarget;
 		const targetModal = tile.querySelector('.modal');
 		if (targetModal) {
-			body.classList.toggle('stopScroll');
-			targetModal.classList.add('active');
-			hamburger.classList.toggle('hidden');
-			targetModal.scrollTop = 0;
+			body.classList.add('stopScroll');
+			targetModal.classList.add('visible');
+			hamburger.classList.add('hidden');
+			if (scrollFlag) {
+				targetModal.scrollTop = 0;
+			}
+			scrollFlag = 0;
 		}
 	};
 	const closeModal = (event) => {
@@ -23,9 +28,10 @@ document.addEventListener('DOMContentLoaded', function () {
 		const btn = event.currentTarget;
 		const modal = btn.closest('.modal');
 		if (modal) {
-			modal.classList.remove('active');
-			hamburger.classList.toggle('hidden');
-			body.classList.toggle('stopScroll');
+			modal.classList.remove('visible');
+			hamburger.classList.remove('hidden');
+			body.classList.remove('stopScroll');
+			scrollFlag = 1;
 		}
 	};
 	const whatsappTemplates = () => {
