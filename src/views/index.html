@@ -6,7 +6,7 @@
 		<title>Yoganka</title>
 		<meta
 			name="viewport"
-			content="width=device-width, initial-scale=1.0" />
+			content="width=device-width, initial-scale=1" />
 		<!-- Website description for SEO -->
 		<meta
 			name="description"
@@ -57,689 +57,701 @@
 			href="../static/css/style.css" />
 	</head>
 	<body>
-		<section class="topImageHeader">
-			<div class="logo">Logo</div>
-			<header>
-				<div class="titleBar">
-					<h1 class="headerTitle">Body Healing</h1>
-					<h2 class="headerSubtitle">by madejszka</h2>
-				</div>
-			</header>
-			<div class="headerMotto">
-				<h3>joga | slow life | mindfulness</h3>
+		<div class="wrapper">
+			<div
+				class="burger"
+				id="burger"
+				onclick="toggleMenu()">
+				<div class="bar top-bar"></div>
+				<div class="bar middle-bar"></div>
+				<div class="bar bottom-bar"></div>
 			</div>
-		</section>
-
-		<div
-			class="burger"
-			id="burger"
-			onclick="toggleMenu()">
-			<div class="bar top-bar"></div>
-			<div class="bar middle-bar"></div>
-			<div class="bar bottom-bar"></div>
-		</div>
-		<nav class="nav">
-			<div class="logo">Logo</div>
-			<ul>
-				<!-- <li>
-					<a
-						class="active"
-						href="#">
-						<i class="fas fa-home"></i>Home</a
-					>
-				</li> -->
-				<li class="">
-					<a href=".certificates"> <i class="fa-solid fa-certificate"></i>Certyfikaty</a>
-				</li>
-				<li class="">
-					<a href="#events"> <i class="fas fa-calendar-check"></i>Eventy</a>
-				</li>
-				<li class="">
-					<a href="#wyjazdy"> <i class="fas fa-cloud-moon"></i>Wyjazdy</a>
-				</li>
-				<li>
-					<a href="#zajecia"> <i class="far fa-clock"></i>Zajęcia</a>
-				</li>
-				<li>
-					<a href=".company-details"><i class="fa-solid fa-circle-info"></i>Kontakt</a>
-				</li>
-			</ul>
-		</nav>
-
-		<section class="about">
-			<header class="sectionHeader">O mnie</header>
-			<aside class="about_portrait">
-				<img
-					src="../static//img/about/about_profile.jpg"
-					loading="lazy"
-					alt="Yoganka z profilu" />
-			</aside>
-			<h2>CZEŚĆ! Tu YOGANKA !</h2>
-			<aside class="ryt">
-				<img
-					src="../static/img/about/about_ryt.jpg"
-					loading="lazy"
-					alt="Autoryzowany nauczyciel jogi" />
-			</aside>
-			<aside class="alliance">
-				<img
-					src="../static/img/about/about_YA-Logo.jpg"
-					loading="lazy"
-					alt="Logo federacji jogi" />
-			</aside>
-			<h3>Cieszę się, że tu jesteś. Rozgość się.</h3>
-			<p>
-				Jestem nauczycielką w nurcie vinyasa oraz hatha. Moje zajęcia najczęściej prowadzę w
-				rytmie slow flow vinyasa. Moje ciało często woła o relaks, stąd przekonanie również
-				do jogi yin. Pierwszy raz stanęłam na macie 18 lat temu. W jodze najpiękniejsze są
-				powroty.
-			</p>
-		</section>
-
-		<section class="offer">
-			<header class="sectionHeader">
-				Pokuś się na...
-				<hr class="lineShadow" />
-			</header>
-			<article
-				class="offerType"
-				id="wyjazdy">
-				<header class="offerType_header">Wyjazdy</header>
-				<div class="tile camp">
+			<nav class="nav">
+				<div class="logo">Logo</div>
+				<ul>
+					<!-- <li>
+						<a
+							class="active"
+							href="#">
+							<i class="fas fa-home"></i>Home</a
+						>
+					</li> -->
+					<li class="">
+						<a href=".certificates">
+							<i class="fa-solid fa-certificate"></i>Certyfikaty</a
+						>
+					</li>
+					<li class="">
+						<a href="#events"> <i class="fas fa-calendar-check"></i>Eventy</a>
+					</li>
+					<li class="">
+						<a href="#wyjazdy"> <i class="fas fa-cloud-moon"></i>Wyjazdy</a>
+					</li>
+					<li>
+						<a href="#zajecia"> <i class="far fa-clock"></i>Zajęcia</a>
+					</li>
+					<li>
+						<a href=".company-details"
+							><i class="fa-solid fa-circle-info"></i>Kontakt</a
+						>
+					</li>
+				</ul>
+			</nav>
+			<section class="topImageHeader">
+				<div class="logo">Logo</div>
+				<header>
+					<div class="titleBar">
+						<h1 class="headerTitle">Body Healing</h1>
+						<h2 class="headerSubtitle">by madejszka</h2>
+					</div>
+				</header>
+				<div class="headerMotto">
+					<h3>joga | slow life | mindfulness</h3>
+				</div>
+			</section>
+			<section class="about">
+				<header class="sectionHeader">O mnie</header>
+				<aside class="about_portrait">
 					<img
-						class="pic"
-						src="../static/img/offer/camp_kaszuby.jpg"
-						loading="lazy" />
-					<h3>Kojenie Zmysłów - joga, aromaterapia i spa</h3>
-					<h3>11-13/10/2024</h3>
-					<h4>Kaszuby</h4>
-					<p class="tile_desc">
-						Zabieram Cię do urokliwego domku, otulonego drewnem, gdzie schowamy się w
-						ulubionych skarpetkach, za dużych sweterkach i będziemy kocykować przy
-						kominku i pić ciepłe naparki !
-					</p>
-					<div class="modal">
-						<!-- <h3 class="modal_h3"><i class="fa-solid fa-map-location-dot"></i>Gdzie?</h3>
-						<p class="modal_answer">Kaszuby</p>
-						<h3 class="modal_h3"><i class="fa-solid fa-bed"></i>Zakwaterowanie?</h3>
-						<p class="modal_answer">Dworek Krępkowice</p>
-						<h3 class="modal_h3">
-							<i class="fa-solid fa-people-group"></i>Ilość miejsc?
-						</h3>
-						<p class="modal_answer">12</p>
-						<h3 class="modal_h3"><i class="fa-solid fa-tag"></i>Cena?</h3>
-						<p class="modal_answer">
-							<span class="price"><i class="fa-solid fa-tag"></i>1200zł</span>
+						src="../static//img/about/about_profile.jpg"
+						loading="lazy"
+						alt="Yoganka z profilu" />
+				</aside>
+				<h2>CZEŚĆ! Tu YOGANKA !</h2>
+				<aside class="ryt">
+					<img
+						src="../static/img/about/about_ryt.jpg"
+						loading="lazy"
+						alt="Autoryzowany nauczyciel jogi" />
+				</aside>
+				<aside class="alliance">
+					<img
+						src="../static/img/about/about_YA-Logo.jpg"
+						loading="lazy"
+						alt="Logo federacji jogi" />
+				</aside>
+				<h3>Cieszę się, że tu jesteś. Rozgość się.</h3>
+				<p>
+					Jestem nauczycielką w nurcie vinyasa oraz hatha. Moje zajęcia najczęściej
+					prowadzę w rytmie slow flow vinyasa. Moje ciało często woła o relaks, stąd
+					przekonanie również do jogi yin. Pierwszy raz stanęłam na macie 18 lat temu. W
+					jodze najpiękniejsze są powroty.
+				</p>
+			</section>
+			<section class="offer">
+				<header class="sectionHeader">
+					Pokuś się na...
+					<hr class="lineShadow" />
+				</header>
+				<article
+					class="offerType"
+					id="wyjazdy">
+					<header class="offerType_header">Wyjazdy</header>
+					<div class="tile camp">
+						<img
+							class="pic"
+							src="../static/img/offer/camp_kaszuby.jpg"
+							loading="lazy" />
+						<h3>Kojenie Zmysłów - joga, aromaterapia i spa</h3>
+						<h3>11-13/10/2024</h3>
+						<h4>Kaszuby</h4>
+						<p class="tile_desc">
+							Zabieram Cię do urokliwego domku, otulonego drewnem, gdzie schowamy się
+							w ulubionych skarpetkach, za dużych sweterkach i będziemy kocykować przy
+							kominku i pić ciepłe naparki !
 						</p>
-
-						<h3 class="modal_h3"><i class="fa-solid fa-list-check"></i>Plan:</h3>
-						<h4>Piątek:</h4> -->
-						<div class="modal_offer">
-							<img
-								src="../static/img/offer/camp_kaszuby.jpg"
-								loading="lazy"
-								class="pic" />
-							<header>
-								<ul class="modal_list at-glance">
-									<li class="modal_li modal_answer">
-										<i class="fa-solid fa-location-dot"></i>Kaszuby
-									</li>
-									<li class="modal_li modal_answer">
-										<i class="fa-solid fa-bed"></i>Dworek Krępkowice
-									</li>
-									<li class="modal_li modal_answer">
-										<i class="fa-solid fa-people-group"></i>12
-									</li>
-									<li class="modal_li modal_answer">
-										<span class="price"
-											><i class="fa-solid fa-tag"></i>1200zł</span
-										>
-									</li>
-								</ul>
-							</header>
-							<section class="modal_desc">
-								<h3 class="modal_h3">
-									<i class="fa-solid fa-list-check"></i>Plan:
-								</h3>
-								<h4>Piątek:</h4>
-								<ul class="modal_list">
-									<li class="modal_li">16:00 - przyjazd, spacerki</li>
-									<li class="modal_li">18:00 - joga łagodna, relaksująca</li>
-									<li class="modal_li">19:00 - wspólna kolacja</li>
-									<li class="modal_li">
-										21:00 - pielęgnacja z naturalnymi kosmetykami / sauna /
-										balia, kobiece rozmowy
-									</li>
-								</ul>
-								<h4>Sobota:</h4>
-								<ul class="modal_list">
-									<li class="modal_li">
-										8:00 - ziołowy napar dla porannych ptaszków
-									</li>
-									<li class="modal_li">8:30 - energetyczna joga slow flow</li>
-									<li class="modal_li">9:30 - niespieszne śniadanko</li>
-									<li class="modal_li">CZAS WOLNY</li>
-									<li class="modal_li">14:30 - wspólny obiad</li>
-									<li class="modal_li">
-										16:00 - aromaterapia (warsztat świec bubble, wosków na bazie
-										olejków + wykład)
-									</li>
-									<li class="modal_li">19:00 - uczta przy kolacji</li>
-									<li class="modal_li">
-										20:30 - joga + krąg przy kominku, rozmowy
-									</li>
-								</ul>
-								<h4>Niedziela:</h4>
-								<ul class="modal_list">
-									<li class="modali_li">
-										8:30 - ziołowy napar dla porannych ptaszków
-									</li>
-									<li class="modali_li">9:00 - joga slow flow</li>
-									<li class="modali_li">10:00 - nieśpieszne śniadanie</li>
-									<li class="modali_li">CZAS WOLNY</li>
-									<li class="modali_li">13:00 - lunch i pożegnanie</li>
-								</ul>
-							</section>
-							<section class="modal_included">
-								<h3 class="modal_h3">W cenie:</h3>
-								<ul class="modal_list">
-									<li class="modal_li">
-										<i class="fa-solid fa-check"></i>4x joga (slow flow, hatha,
-										nidra)
-									</li>
-									<li class="modal_li">
-										<i class="fa-solid fa-check"></i>Warsztat świec i wosków
-									</li>
-									<li class="modal_li">
-										<i class="fa-solid fa-check"></i>Pobyt z wyżywieniem
-									</li>
-									<li class="modal_li">
-										<i class="fa-solid fa-check"></i>Upominek
-									</li>
-									<li class="modal_li">
-										<i class="fa-solid fa-check"></i>Rytuał pielęgnacyjny twarzy
-									</li>
-									<li class="modal_li"><i class="fa-solid fa-check"></i>Krąg</li>
-									<li class="modal_li">
-										<i class="fa-solid fa-check"></i>Kawa / Herbata / Napary
-										24/h
-									</li>
-								</ul>
-							</section>
-							<section class="modal_excluded">
-								<h3 class="modal_h3">We własnym zakresie:</h3>
-								<ul class="modal_list">
-									<li class="modal_li">
-										<i class="fa-regular fa-hand-point-right"></i>Dojazd
-									</li>
-									<li class="modal_li">
-										<i class="fa-regular fa-hand-point-right"></i>Ubezpieczenie
-									</li>
-								</ul>
-							</section>
-							<section class="modal_optional">
-								<h3 class="modal_h3">Rozszerz ofertę:</h3>
-								<ul class="modal_list">
-									<li class="modal_li">
-										<i class="fa-solid fa-plus"></i>Masaż (misami)
-									</li>
-									<li class="modal_li">
-										<i class="fa-solid fa-plus"></i>Sauny i balii
-									</li>
-								</ul>
-							</section>
-							<section class="modal_free-time">
-								<h3 class="modal_h3">Czas wolny:</h3>
-								<ul class="modal_list">
-									<li class="modal_li">
-										<i class="fa-solid fa-check"></i>Kocyk, spacerki, naparki
-									</li>
-									<li class="modal_li">
-										<i class="fa-solid fa-plus"></i>Masaże misami
-									</li>
-									<li class="modal_li"><i class="fa-solid fa-plus"></i>Balia</li>
-									<li class="modal_li"><i class="fa-solid fa-plus"></i>Sauna</li>
-								</ul>
-							</section>
-							<footer class="modal_user-action">
-								<a
-									href="https://forms.gle/kYN6VpfP3aV1b9yB8"
-									class="btn_sign-up"
-									target="_blank"
-									>Zapisz się!</a
-								>
-								<a
-									href="#"
-									id="whatsapp-kaszuby"
-									class="btn_ask-for-info"
-									target="_blank"
-									>Zapytaj</a
-								>
-								<a class="btn_close"><i class="fa-solid fa-xmark"></i></a>
-							</footer>
+						<div class="modal">
+							<!-- <h3 class="modal_h3"><i class="fa-solid fa-map-location-dot"></i>Gdzie?</h3>
+							<p class="modal_answer">Kaszuby</p>
+							<h3 class="modal_h3"><i class="fa-solid fa-bed"></i>Zakwaterowanie?</h3>
+							<p class="modal_answer">Dworek Krępkowice</p>
+							<h3 class="modal_h3">
+								<i class="fa-solid fa-people-group"></i>Ilość miejsc?
+							</h3>
+							<p class="modal_answer">12</p>
+							<h3 class="modal_h3"><i class="fa-solid fa-tag"></i>Cena?</h3>
+							<p class="modal_answer">
+								<span class="price"><i class="fa-solid fa-tag"></i>1200zł</span>
+							</p>
+							<h3 class="modal_h3"><i class="fa-solid fa-list-check"></i>Plan:</h3>
+							<h4>Piątek:</h4> -->
+							<div class="modal_offer">
+								<img
+									src="../static/img/offer/camp_kaszuby.jpg"
+									loading="lazy"
+									class="pic" />
+								<header>
+									<ul class="modal_list at-glance">
+										<li class="modal_li modal_answer">
+											<i class="fa-solid fa-location-dot"></i>Kaszuby
+										</li>
+										<li class="modal_li modal_answer">
+											<i class="fa-solid fa-bed"></i>Dworek Krępkowice
+										</li>
+										<li class="modal_li modal_answer">
+											<i class="fa-solid fa-people-group"></i>12
+										</li>
+										<li class="modal_li modal_answer">
+											<span class="price"
+												><i class="fa-solid fa-tag"></i>1200zł</span
+											>
+										</li>
+									</ul>
+								</header>
+								<section class="modal_desc">
+									<h3 class="modal_h3">
+										<i class="fa-solid fa-list-check"></i>Plan:
+									</h3>
+									<h4>Piątek:</h4>
+									<ul class="modal_list">
+										<li class="modal_li">16:00 - przyjazd, spacerki</li>
+										<li class="modal_li">18:00 - joga łagodna, relaksująca</li>
+										<li class="modal_li">19:00 - wspólna kolacja</li>
+										<li class="modal_li">
+											21:00 - pielęgnacja z naturalnymi kosmetykami / sauna /
+											balia, kobiece rozmowy
+										</li>
+									</ul>
+									<h4>Sobota:</h4>
+									<ul class="modal_list">
+										<li class="modal_li">
+											8:00 - ziołowy napar dla porannych ptaszków
+										</li>
+										<li class="modal_li">8:30 - energetyczna joga slow flow</li>
+										<li class="modal_li">9:30 - niespieszne śniadanko</li>
+										<li class="modal_li">CZAS WOLNY</li>
+										<li class="modal_li">14:30 - wspólny obiad</li>
+										<li class="modal_li">
+											16:00 - aromaterapia (warsztat świec bubble, wosków na
+											bazie olejków + wykład)
+										</li>
+										<li class="modal_li">19:00 - uczta przy kolacji</li>
+										<li class="modal_li">
+											20:30 - joga + krąg przy kominku, rozmowy
+										</li>
+									</ul>
+									<h4>Niedziela:</h4>
+									<ul class="modal_list">
+										<li class="modali_li">
+											8:30 - ziołowy napar dla porannych ptaszków
+										</li>
+										<li class="modali_li">9:00 - joga slow flow</li>
+										<li class="modali_li">10:00 - nieśpieszne śniadanie</li>
+										<li class="modali_li">CZAS WOLNY</li>
+										<li class="modali_li">13:00 - lunch i pożegnanie</li>
+									</ul>
+								</section>
+								<section class="modal_included">
+									<h3 class="modal_h3">W cenie:</h3>
+									<ul class="modal_list">
+										<li class="modal_li">
+											<i class="fa-solid fa-check"></i>4x joga (slow flow,
+											hatha, nidra)
+										</li>
+										<li class="modal_li">
+											<i class="fa-solid fa-check"></i>Warsztat świec i wosków
+										</li>
+										<li class="modal_li">
+											<i class="fa-solid fa-check"></i>Pobyt z wyżywieniem
+										</li>
+										<li class="modal_li">
+											<i class="fa-solid fa-check"></i>Upominek
+										</li>
+										<li class="modal_li">
+											<i class="fa-solid fa-check"></i>Rytuał pielęgnacyjny
+											twarzy
+										</li>
+										<li class="modal_li">
+											<i class="fa-solid fa-check"></i>Krąg
+										</li>
+										<li class="modal_li">
+											<i class="fa-solid fa-check"></i>Kawa / Herbata / Napary
+											24/h
+										</li>
+									</ul>
+								</section>
+								<section class="modal_excluded">
+									<h3 class="modal_h3">We własnym zakresie:</h3>
+									<ul class="modal_list">
+										<li class="modal_li">
+											<i class="fa-regular fa-hand-point-right"></i>Dojazd
+										</li>
+										<li class="modal_li">
+											<i class="fa-regular fa-hand-point-right"></i
+											>Ubezpieczenie
+										</li>
+									</ul>
+								</section>
+								<section class="modal_optional">
+									<h3 class="modal_h3">Rozszerz ofertę:</h3>
+									<ul class="modal_list">
+										<li class="modal_li">
+											<i class="fa-solid fa-plus"></i>Masaż (misami)
+										</li>
+										<li class="modal_li">
+											<i class="fa-solid fa-plus"></i>Sauny i balii
+										</li>
+									</ul>
+								</section>
+								<section class="modal_free-time">
+									<h3 class="modal_h3">Czas wolny:</h3>
+									<ul class="modal_list">
+										<li class="modal_li">
+											<i class="fa-solid fa-check"></i>Kocyk, spacerki,
+											naparki
+										</li>
+										<li class="modal_li">
+											<i class="fa-solid fa-plus"></i>Masaże misami
+										</li>
+										<li class="modal_li">
+											<i class="fa-solid fa-plus"></i>Balia
+										</li>
+										<li class="modal_li">
+											<i class="fa-solid fa-plus"></i>Sauna
+										</li>
+									</ul>
+								</section>
+								<footer class="modal_user-action">
+									<a
+										href="https://forms.gle/kYN6VpfP3aV1b9yB8"
+										class="btn_sign-up"
+										target="_blank"
+										>Zapisz się!</a
+									>
+									<a
+										href="#"
+										id="whatsapp-kaszuby"
+										class="btn_ask-for-info"
+										target="_blank"
+										>Zapytaj</a
+									>
+									<a class="btn_close"><i class="fa-solid fa-xmark"></i></a>
+								</footer>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="tile camp long">
-					<div class="pic">
-						<img
-							src="../static/img/offer/camp_warmia.jpg"
-							loading="lazy" />
-					</div>
-					<h3>Comfy Retreat - joga, malowanie intuicyjne, gongi i spa</h3>
-					<h3>08-11/11/2024</h3>
-					<h4>Warmia</h4>
-					<p class="tile_desc">
-						Otulimy się ciepłym kominkiem, zdrowymi naparami i pysznym jedzeniem!
-						Zabierz swój ulubiony dres, za duży sweterek i ciepłe skarpetki, po prostu
-						Twoje ulubione jesienne atrybuty! Nie zabraknie czasu na książkę pod
-						kocykiem, ale też uziemiających aktywności:
-						<!-- </p>
-					<ul class="tile-ul">
-						<li>Praktyka jogi</li>
-						<li>Medytacja</li>
-						<li>Techniki oddechowe</li>
-						<li>MALOWANIE INTUICYJNE PRZY MISACH I GONGACH zagra cudowna Aga Topp</li>
-						<li>Masaż kobido</li>
-						<li>Masaże misami tybetańskimi</li>
-						<li>Spa: sauna z balią i</li>
-						<li>Wiele więcej...</li>
-					</ul> -->
-					</p>
-
-					<div class="modal">
-						<div class="modal_offer">
+					<div class="tile camp long">
+						<div class="pic">
 							<img
 								src="../static/img/offer/camp_warmia.jpg"
-								loading="lazy"
-								class="pic" />
-							<header>
-								<ul class="modal_list at-glance">
-									<li class="modal_li modal_answer">
-										<i class="fa-solid fa-location-dot"></i>Warmia
-									</li>
-									<li class="modal_li modal_answer">
-										<i class="fa-solid fa-bed"></i>Witramowo 32
-									</li>
-									<li class="modal_li modal_answer">
-										<i class="fa-solid fa-people-group"></i>18
-									</li>
-									<li class="modal_li modal_answer">
-										<span class="price"
-											><i class="fa-solid fa-tag"></i>1200zł</span
-										>
-									</li>
-								</ul>
-							</header>
-							<section class="modal_desc">
-								<h3 class="modal_h3">
-									<i class="fa-solid fa-list-check"></i>Plan:
-								</h3>
-								<h4>Piątek:</h4>
-								<ul class="modal_list">
-									<li class="modal_li">16:00 - Przyjazd + spacerki</li>
-									<li class="modal_li">18:00 - Obiadokolacja</li>
-									<li class="modal_li">20:00 - Joga</li>
-									<li class="modal_li">21:00 - Kominek/Naparki/Relaks</li>
-								</ul>
-								<h4>Sobota:</h4>
-								<ul class="modal_list">
-									<li class="modal_li">8:30 - Joga Slow Flow Vinyasa</li>
-									<li class="modal_li">9:30 - Niespieszne Śniadanko</li>
-									<li class="modal_li">CZAS WOLNY</li>
-									<li class="modal_li">14:00 - Obiad + Słodkości + Czas Wolny</li>
-									<li class="modal_li">
-										16:00 - Malowanie intuicyjne przy koncercie mis i gongów
-									</li>
-									<li class="modal_li">18:30 - Uczta przy kolacji</li>
-									<li class="modal_li">20:00 - Sauna/balia/rozmowy/film</li>
-								</ul>
-								<h4>Niedziela:</h4>
-								<ul class="modal_list">
-									<li class="modali_li">8:30 - Joga Slow Flow Vinyasa</li>
-									<li class="modali_li">9:30 - Niespieszne Śniadanko</li>
-									<li class="modali_li">CZAS WOLNY</li>
-									<li class="modali_li">
-										14:00 - obiad + słodkości + czas wolny
-									</li>
-									<li class="modali_li">17:00 - Joga Jin</li>
-									<li class="modali_li">18:30 - Kolacja</li>
-									<li class="modali_li">20.00 - Rozmowy w kręgu</li>
-								</ul>
-								<h4>Poniedziałek:</h4>
-								<ul class="modal_list">
-									<li class="modali_li">8:30 - Joga Slow Flow Vinyasa</li>
-									<li class="modali_li">9:30 - Niespieszne Śniadanko</li>
-									<li class="modali_li">CZAS WOLNY</li>
-									<li class="modali_li">13:00 - Lunch i powrót do domu</li>
-								</ul>
-							</section>
-							<section class="modal_included">
-								<h3 class="modal_h3">W cenie:</h3>
-								<ul class="modal_list">
-									<li class="modal_li">
-										<i class="fa-solid fa-check"></i>4x joga (slow flow, hatha,
-										nidra)
-									</li>
-									<li class="modal_li">
-										<i class="fa-solid fa-check"></i>Warsztat świec i wosków
-									</li>
-									<li class="modal_li">
-										<i class="fa-solid fa-check"></i>Pobyt z wyżywieniem
-									</li>
-									<li class="modal_li">
-										<i class="fa-solid fa-check"></i>Upominek
-									</li>
-									<li class="modal_li">
-										<i class="fa-solid fa-check"></i>Rytuał pielęgnacyjny twarzy
-									</li>
-									<li class="modal_li"><i class="fa-solid fa-check"></i>Krąg</li>
-									<li class="modal_li">
-										<i class="fa-solid fa-check"></i>Kawa/Herbata/Napary 24/h
-									</li>
-								</ul>
-							</section>
-							<section class="modal_excluded">
-								<h3 class="modal_h3">We własnym zakresie:</h3>
-								<ul class="modal_list">
-									<li class="modal_li">
-										<i class="fa-regular fa-hand-point-right"></i>Dojazd
-									</li>
-									<li class="modal_li">
-										<i class="fa-regular fa-hand-point-right"></i>Ubezpieczenie
-									</li>
-								</ul>
-							</section>
-							<section class="modal_optional">
-								<h3 class="modal_h3">Rozszerz ofertę:</h3>
-								<ul class="modal_list">
-									<li class="modal_li">
-										<i class="fa-solid fa-plus"></i>Masaż (misami)
-									</li>
-									<li class="modal_li">
-										<i class="fa-solid fa-plus"></i>Sauny i balii
-									</li>
-								</ul>
-							</section>
-							<section class="modal_free-time">
-								<h3 class="modal_h3">Czas wolny:</h3>
-								<ul class="modal_list">
-									<li class="modal_li">
-										<i class="fa-solid fa-check"></i>Kocyk, spacerki, naparki
-									</li>
-									<li class="modal_li">
-										<i class="fa-regular fa-hand-point-right"></i>Wioska
-										garncarska + warsztaty
-									</li>
-									<li class="modal_li">
-										<i class="fa-solid fa-plus"></i>Masaże Kobido/misami
-									</li>
-								</ul>
-							</section>
-							<footer class="modal_user-action">
-								<a
-									href="https://forms.gle/ag6SSBy9zqrxwCRcA"
-									class="btn_sign-up"
-									target="_blank"
-									>Zapisz się!</a
-								>
-								<a
-									href="#"
-									id="whatsapp-warmia"
-									class="btn_ask-for-info"
-									target="_blank"
-									>Zapytaj</a
-								>
-								<a class="btn_close"><i class="fa-solid fa-xmark"></i></a>
-							</footer>
+								loading="lazy" />
+						</div>
+						<h3>Comfy Retreat - joga, malowanie intuicyjne, gongi i spa</h3>
+						<h3>08-11/11/2024</h3>
+						<h4>Warmia</h4>
+						<p class="tile_desc">
+							Otulimy się ciepłym kominkiem, zdrowymi naparami i pysznym jedzeniem!
+							Zabierz swój ulubiony dres, za duży sweterek i ciepłe skarpetki, po
+							prostu Twoje ulubione jesienne atrybuty! Nie zabraknie czasu na książkę
+							pod kocykiem, ale też uziemiających aktywności:
+							<!-- </p>
+						<ul class="tile-ul">
+							<li>Praktyka jogi</li>
+							<li>Medytacja</li>
+							<li>Techniki oddechowe</li>
+							<li>MALOWANIE INTUICYJNE PRZY MISACH I GONGACH zagra cudowna Aga Topp</li>
+							<li>Masaż kobido</li>
+							<li>Masaże misami tybetańskimi</li>
+							<li>Spa: sauna z balią i</li>
+							<li>Wiele więcej...</li>
+						</ul> -->
+						</p>
+						<div class="modal">
+							<div class="modal_offer">
+								<img
+									src="../static/img/offer/camp_warmia.jpg"
+									loading="lazy"
+									class="pic" />
+								<header>
+									<ul class="modal_list at-glance">
+										<li class="modal_li modal_answer">
+											<i class="fa-solid fa-location-dot"></i>Warmia
+										</li>
+										<li class="modal_li modal_answer">
+											<i class="fa-solid fa-bed"></i>Witramowo 32
+										</li>
+										<li class="modal_li modal_answer">
+											<i class="fa-solid fa-people-group"></i>18
+										</li>
+										<li class="modal_li modal_answer">
+											<span class="price"
+												><i class="fa-solid fa-tag"></i>1200zł</span
+											>
+										</li>
+									</ul>
+								</header>
+								<section class="modal_desc">
+									<h3 class="modal_h3">
+										<i class="fa-solid fa-list-check"></i>Plan:
+									</h3>
+									<h4>Piątek:</h4>
+									<ul class="modal_list">
+										<li class="modal_li">16:00 - Przyjazd + spacerki</li>
+										<li class="modal_li">18:00 - Obiadokolacja</li>
+										<li class="modal_li">20:00 - Joga</li>
+										<li class="modal_li">21:00 - Kominek/Naparki/Relaks</li>
+									</ul>
+									<h4>Sobota:</h4>
+									<ul class="modal_list">
+										<li class="modal_li">8:30 - Joga Slow Flow Vinyasa</li>
+										<li class="modal_li">9:30 - Niespieszne Śniadanko</li>
+										<li class="modal_li">CZAS WOLNY</li>
+										<li class="modal_li">
+											14:00 - Obiad + Słodkości + Czas Wolny
+										</li>
+										<li class="modal_li">
+											16:00 - Malowanie intuicyjne przy koncercie mis i gongów
+										</li>
+										<li class="modal_li">18:30 - Uczta przy kolacji</li>
+										<li class="modal_li">20:00 - Sauna/balia/rozmowy/film</li>
+									</ul>
+									<h4>Niedziela:</h4>
+									<ul class="modal_list">
+										<li class="modali_li">8:30 - Joga Slow Flow Vinyasa</li>
+										<li class="modali_li">9:30 - Niespieszne Śniadanko</li>
+										<li class="modali_li">CZAS WOLNY</li>
+										<li class="modali_li">
+											14:00 - obiad + słodkości + czas wolny
+										</li>
+										<li class="modali_li">17:00 - Joga Jin</li>
+										<li class="modali_li">18:30 - Kolacja</li>
+										<li class="modali_li">20.00 - Rozmowy w kręgu</li>
+									</ul>
+									<h4>Poniedziałek:</h4>
+									<ul class="modal_list">
+										<li class="modali_li">8:30 - Joga Slow Flow Vinyasa</li>
+										<li class="modali_li">9:30 - Niespieszne Śniadanko</li>
+										<li class="modali_li">CZAS WOLNY</li>
+										<li class="modali_li">13:00 - Lunch i powrót do domu</li>
+									</ul>
+								</section>
+								<section class="modal_included">
+									<h3 class="modal_h3">W cenie:</h3>
+									<ul class="modal_list">
+										<li class="modal_li">
+											<i class="fa-solid fa-check"></i>4x joga (slow flow,
+											hatha, nidra)
+										</li>
+										<li class="modal_li">
+											<i class="fa-solid fa-check"></i>Warsztat świec i wosków
+										</li>
+										<li class="modal_li">
+											<i class="fa-solid fa-check"></i>Pobyt z wyżywieniem
+										</li>
+										<li class="modal_li">
+											<i class="fa-solid fa-check"></i>Upominek
+										</li>
+										<li class="modal_li">
+											<i class="fa-solid fa-check"></i>Rytuał pielęgnacyjny
+											twarzy
+										</li>
+										<li class="modal_li">
+											<i class="fa-solid fa-check"></i>Krąg
+										</li>
+										<li class="modal_li">
+											<i class="fa-solid fa-check"></i>Kawa/Herbata/Napary
+											24/h
+										</li>
+									</ul>
+								</section>
+								<section class="modal_excluded">
+									<h3 class="modal_h3">We własnym zakresie:</h3>
+									<ul class="modal_list">
+										<li class="modal_li">
+											<i class="fa-regular fa-hand-point-right"></i>Dojazd
+										</li>
+										<li class="modal_li">
+											<i class="fa-regular fa-hand-point-right"></i
+											>Ubezpieczenie
+										</li>
+									</ul>
+								</section>
+								<section class="modal_optional">
+									<h3 class="modal_h3">Rozszerz ofertę:</h3>
+									<ul class="modal_list">
+										<li class="modal_li">
+											<i class="fa-solid fa-plus"></i>Masaż (misami)
+										</li>
+										<li class="modal_li">
+											<i class="fa-solid fa-plus"></i>Sauny i balii
+										</li>
+									</ul>
+								</section>
+								<section class="modal_free-time">
+									<h3 class="modal_h3">Czas wolny:</h3>
+									<ul class="modal_list">
+										<li class="modal_li">
+											<i class="fa-solid fa-check"></i>Kocyk, spacerki,
+											naparki
+										</li>
+										<li class="modal_li">
+											<i class="fa-regular fa-hand-point-right"></i>Wioska
+											garncarska + warsztaty
+										</li>
+										<li class="modal_li">
+											<i class="fa-solid fa-plus"></i>Masaże Kobido/misami
+										</li>
+									</ul>
+								</section>
+								<footer class="modal_user-action">
+									<a
+										href="https://forms.gle/ag6SSBy9zqrxwCRcA"
+										class="btn_sign-up"
+										target="_blank"
+										>Zapisz się!</a
+									>
+									<a
+										href="#"
+										id="whatsapp-warmia"
+										class="btn_ask-for-info"
+										target="_blank"
+										>Zapytaj</a
+									>
+									<a class="btn_close"><i class="fa-solid fa-xmark"></i></a>
+								</footer>
+							</div>
 						</div>
 					</div>
-				</div>
-			</article>
-			<article
-				class="offerType"
-				id="zajecia">
-				<header class="offerType_header">Zajęcia</header>
-				<div class="tile">
-					<img
-						class="pic"
-						src="../static/img/offer/offer_individual.png"
-						loading="lazy" />
-					<h3>Indywidualne</h3>
-					<h4>Ty, joga i ja...</h4>
-				</div>
-				<div class="tile">
-					<img
-						src="../static/img/offer/offer_group.png"
-						class="pic"
-						loading="lazy" />
-					<h3>Regularne - grupowe</h3>
-					<h4>Sieć ZdroFit</h4>
-				</div>
-			</article>
-			<article
-				class="offerType"
-				id="events">
-				<header class="offerType_header">Joga na supach</header>
-				<div class="tile">
-					<img
-						class="pic"
-						src="../static/img/offer/offer_sup.png"
-						loading="lazy" />
-					<h3>Nie bój się zmoczyć...</h3>
-					<h4>Extra mobilizacja mięśni głębokich i stabilizujących</h4>
-				</div>
-			</article>
-			<article class="offerType events">
-				<header class="offerType_header">Wydarzenia</header>
-				<div class="tile">
-					<img
-						class="pic"
-						src="../static/img/offer/events_gongi.png"
-						loading="lazy" />
-					<h3>YOGA & SOUND</h3>
-					<h4>Moon Ceremony</h4>
-				</div>
-			</article>
-		</section>
-
-		<section class="certificates">
-			<header class="sectionHeader">Certyfikaty</header>
-			<article class="certificates_gallery">
-				<div class="tile">
-					<img
-						class="pic"
-						src="../static/img/about/about_ryt.jpg"
-						loading="lazy" />
-					<h3><strong class="certificate-name">RYT200 Bali</strong></h3>
-					<p class="certificate-school">House of OM</p>
-					<p class="certificate-duration">200h</p>
-					<p><strong class="certificate-type">Vinyasa & Hatha</strong></p>
-				</div>
-				<div class="tile">
-					<img
-						class="pic"
-						src="../static/img/offer/offer_individual.png"
-						loading="lazy" />
-					<h3><strong class="certificate-name">Instruktor Hatha Jogi</strong></h3>
-					<p class="certificate-school">prof. Szopa</p>
-					<p class="certificate-duration">150h</p>
-					<p><strong class="certificate-type">Hatha</strong></p>
-				</div>
-
-				<div class="tile">
-					<img
-						class="pic"
-						src="../static/img/offer/offer_individual.png"
-						loading="lazy" />
-					<h3>
-						<strong class="certificate-name">Warsztat pozycji odwróconych</strong>
-					</h3>
-					<p class="certificate-school">Joga Park</p>
-					<p class="certificate-duration">15h</p>
-					<p><strong class="certificate-type"></strong></p>
-				</div>
-
-				<div class="tile">
-					<img
-						class="pic"
-						src="../static/img/offer/offer_individual.png"
-						loading="lazy" />
-					<h3>
-						<strong class="certificate-name">Warsztat sekwencji</strong>
-					</h3>
-					<p class="certificate-school">Daga Joga</p>
-					<p class="certificate-duration">15h</p>
-					<p><strong class="certificate-type">Sequences</strong></p>
-				</div>
-
-				<div class="tile">
-					<img
-						class="pic"
-						src="../static/img/offer/offer_individual.png"
-						loading="lazy" />
-					<h3>
-						<strong class="certificate-name">Asana stabilna i wygodna</strong>
-					</h3>
-					<p class="certificate-school">SMU YOGA</p>
-					<p class="certificate-duration">15h</p>
-					<p><strong class="certificate-type">Asana</strong></p>
-				</div>
-				<div class="tile">
-					<img
-						class="pic"
-						src="../static/img/offer/offer_individual.png"
-						loading="lazy" />
-					<h3>
-						<strong class="certificate-name">Mobility & Flexibility</strong>
-					</h3>
-					<p class="certificate-school">Bartosz Kuc</p>
-					<p class="certificate-duration">16h</p>
-					<p><strong class="certificate-type">Health</strong></p>
-				</div>
-				<div class="tile">
-					<img
-						class="pic"
-						src="../static/img/offer/offer_individual.png"
-						loading="lazy" />
-					<h3>
-						<strong class="certificate-name">Warsztaty jogowe</strong>
-					</h3>
-					<p class="certificate-school">Dominika Płachecka</p>
-					<p class="certificate-duration">15h</p>
-				</div>
-				<div class="tile">
-					<img
-						class="pic"
-						src="../static/img/offer/offer_individual.png"
-						loading="lazy" />
-					<h3>
-						<strong class="certificate-name">Neuro Joga</strong>
-					</h3>
-					<p class="certificate-school">Celest Pereira</p>
-					<p class="certificate-duration">15h</p>
-					<p><strong class="certificate-type">Neuro Joga</strong></p>
-				</div>
-			</article>
-		</section>
-		<section class="partners">
-			<header class="sectionHeader">Współpraca</header>
-			<article class="partners_gallery">
-				<div>
-					<img
-						src="../static/img/partners/partners_logo_yoga_flow.png"
-						loading="lazy" />
-				</div>
-				<div>
-					<img
-						src="../static/img/partners/partners_logo_klekotki_spa.png"
-						loading="lazy" />
-				</div>
-				<div>
-					<img
-						src="../static/img/partners/partners_logo_aioli.png"
-						loading="lazy" />
-				</div>
-				<div>
-					<img
-						src="../static/img/partners/partners_logo_tomy_gdansk.png"
-						loading="lazy" />
-				</div>
-				<div>
-					<img
-						src="../static/img/partners/partners_logo_yacht.png"
-						loading="lazy" />
-				</div>
-				<div>
-					<img
-						src="../static/img/partners/partners_logo_natu_handmade.png"
-						loading="lazy" />
-				</div>
-				<div>
-					<img
-						src="../static/img/partners/partners_logo_yoga_aliance.png"
-						loading="lazy" />
-				</div>
-				<div class="">
-					<img
-						src="../static/img/partners/partners_logo_mis_yoga.png"
-						loading="lazy" />
-				</div>
-			</article>
-		</section>
-		<footer class="footer">
-			<div class="logo">Logo</div>
-			<div class="company-details">
-				<p>Gdańsk, Polska</p>
-				<a href="tel:+48792891607">+48 792 891 607</a>
-				<a href="mailto:aniamadejsza@gmail.com">aniamadejsza@gmail.com</a>
-				<p>NIP 777777777777</p>
-			</div>
-
-			<div class="socials">
-				<a
-					href="https://www.instagram.com/yoganka_bodyhealing/"
-					target="_blank"
-					title="Instagram Fanpage">
-					<div class="social">
-						<i class="fa-brands fa-instagram"></i>
+				</article>
+				<article
+					class="offerType"
+					id="zajecia">
+					<header class="offerType_header">Zajęcia</header>
+					<div class="tile">
+						<img
+							class="pic"
+							src="../static/img/offer/offer_individual.png"
+							loading="lazy" />
+						<h3>Indywidualne</h3>
+						<h4>Ty, joga i ja...</h4>
 					</div>
-				</a>
-				<a
-					href="https://www.facebook.com/profile.php?id=100094192084948"
-					target="_blank"
-					title="Facebook Fanpage">
-					<div class="social">
-						<i class="fa-brands fa-square-facebook"></i>
+					<div class="tile">
+						<img
+							src="../static/img/offer/offer_group.png"
+							class="pic"
+							loading="lazy" />
+						<h3>Regularne - grupowe</h3>
+						<h4>Sieć ZdroFit</h4>
 					</div>
-				</a>
-				<a
-					href="#"
-					id="whatsapp-contact"
-					target="_blank"
-					title="Whatsapp Direct Message Link">
-					<div class="social">
-						<div class="whatsapp"><i class="fab fa-whatsapp"></i></div>
+				</article>
+				<article
+					class="offerType"
+					id="events">
+					<header class="offerType_header">Joga na supach</header>
+					<div class="tile">
+						<img
+							class="pic"
+							src="../static/img/offer/offer_sup.png"
+							loading="lazy" />
+						<h3>Nie bój się zmoczyć...</h3>
+						<h4>Extra mobilizacja mięśni głębokich i stabilizujących</h4>
 					</div>
-				</a>
-			</div>
-			<div class="legal">Regulamin | Polityka prywatności | Pliki cookie</div>
-			<div class="credit">
-				<a
-					href="https://bit.ly/MaciejMadejszaProjects"
-					target="_blank"
-					title="Developer's Contact">
-					<div class="credits">&copy Maciej Madejsza</div>
-				</a>
-			</div>
-		</footer>
-
-		<!-- Scripts -->
-		<script
-			src="https://kit.fontawesome.com/4622d99ad4.js"
-			crossorigin="anonymous"></script>
-		<script
-			type="application/javascript"
-			src="../services/app.js"></script>
+				</article>
+				<article class="offerType events">
+					<header class="offerType_header">Wydarzenia</header>
+					<div class="tile">
+						<img
+							class="pic"
+							src="../static/img/offer/events_gongi.png"
+							loading="lazy" />
+						<h3>YOGA & SOUND</h3>
+						<h4>Moon Ceremony</h4>
+					</div>
+				</article>
+			</section>
+			<section class="certificates">
+				<header class="sectionHeader">Certyfikaty</header>
+				<article class="certificates_gallery">
+					<div class="tile">
+						<img
+							class="pic"
+							src="../static/img/about/about_ryt.jpg"
+							loading="lazy" />
+						<h3><strong class="certificate-name">RYT200 Bali</strong></h3>
+						<p class="certificate-school">House of OM</p>
+						<p class="certificate-duration">200h</p>
+						<p><strong class="certificate-type">Vinyasa & Hatha</strong></p>
+					</div>
+					<div class="tile">
+						<img
+							class="pic"
+							src="../static/img/offer/offer_individual.png"
+							loading="lazy" />
+						<h3><strong class="certificate-name">Instruktor Hatha Jogi</strong></h3>
+						<p class="certificate-school">prof. Szopa</p>
+						<p class="certificate-duration">150h</p>
+						<p><strong class="certificate-type">Hatha</strong></p>
+					</div>
+					<div class="tile">
+						<img
+							class="pic"
+							src="../static/img/offer/offer_individual.png"
+							loading="lazy" />
+						<h3>
+							<strong class="certificate-name">Warsztat pozycji odwróconych</strong>
+						</h3>
+						<p class="certificate-school">Joga Park</p>
+						<p class="certificate-duration">15h</p>
+						<p><strong class="certificate-type"></strong></p>
+					</div>
+					<div class="tile">
+						<img
+							class="pic"
+							src="../static/img/offer/offer_individual.png"
+							loading="lazy" />
+						<h3>
+							<strong class="certificate-name">Warsztat sekwencji</strong>
+						</h3>
+						<p class="certificate-school">Daga Joga</p>
+						<p class="certificate-duration">15h</p>
+						<p><strong class="certificate-type">Sequences</strong></p>
+					</div>
+					<div class="tile">
+						<img
+							class="pic"
+							src="../static/img/offer/offer_individual.png"
+							loading="lazy" />
+						<h3>
+							<strong class="certificate-name">Asana stabilna i wygodna</strong>
+						</h3>
+						<p class="certificate-school">SMU YOGA</p>
+						<p class="certificate-duration">15h</p>
+						<p><strong class="certificate-type">Asana</strong></p>
+					</div>
+					<div class="tile">
+						<img
+							class="pic"
+							src="../static/img/offer/offer_individual.png"
+							loading="lazy" />
+						<h3>
+							<strong class="certificate-name">Mobility & Flexibility</strong>
+						</h3>
+						<p class="certificate-school">Bartosz Kuc</p>
+						<p class="certificate-duration">16h</p>
+						<p><strong class="certificate-type">Health</strong></p>
+					</div>
+					<div class="tile">
+						<img
+							class="pic"
+							src="../static/img/offer/offer_individual.png"
+							loading="lazy" />
+						<h3>
+							<strong class="certificate-name">Warsztaty jogowe</strong>
+						</h3>
+						<p class="certificate-school">Dominika Płachecka</p>
+						<p class="certificate-duration">15h</p>
+					</div>
+					<div class="tile">
+						<img
+							class="pic"
+							src="../static/img/offer/offer_individual.png"
+							loading="lazy" />
+						<h3>
+							<strong class="certificate-name">Neuro Joga</strong>
+						</h3>
+						<p class="certificate-school">Celest Pereira</p>
+						<p class="certificate-duration">15h</p>
+						<p><strong class="certificate-type">Neuro Joga</strong></p>
+					</div>
+				</article>
+			</section>
+			<section class="partners">
+				<header class="sectionHeader">Współpraca</header>
+				<article class="partners_gallery">
+					<div>
+						<img
+							src="../static/img/partners/partners_logo_yoga_flow.png"
+							loading="lazy" />
+					</div>
+					<div>
+						<img
+							src="../static/img/partners/partners_logo_klekotki_spa.png"
+							loading="lazy" />
+					</div>
+					<div>
+						<img
+							src="../static/img/partners/partners_logo_aioli.png"
+							loading="lazy" />
+					</div>
+					<div>
+						<img
+							src="../static/img/partners/partners_logo_tomy_gdansk.png"
+							loading="lazy" />
+					</div>
+					<div>
+						<img
+							src="../static/img/partners/partners_logo_yacht.png"
+							loading="lazy" />
+					</div>
+					<div>
+						<img
+							src="../static/img/partners/partners_logo_natu_handmade.png"
+							loading="lazy" />
+					</div>
+					<div>
+						<img
+							src="../static/img/partners/partners_logo_yoga_aliance.png"
+							loading="lazy" />
+					</div>
+					<div class="">
+						<img
+							src="../static/img/partners/partners_logo_mis_yoga.png"
+							loading="lazy" />
+					</div>
+				</article>
+			</section>
+			<footer class="footer">
+				<div class="logo">Logo</div>
+				<div class="company-details">
+					<p>Gdańsk, Polska</p>
+					<a href="tel:+48792891607">+48 792 891 607</a>
+					<a href="mailto:aniamadejsza@gmail.com">aniamadejsza@gmail.com</a>
+					<p>NIP 777777777777</p>
+				</div>
+				<div class="socials">
+					<a
+						href="https://www.instagram.com/yoganka_bodyhealing/"
+						target="_blank"
+						title="Instagram Fanpage">
+						<div class="social">
+							<i class="fa-brands fa-instagram"></i>
+						</div>
+					</a>
+					<a
+						href="https://www.facebook.com/profile.php?id=100094192084948"
+						target="_blank"
+						title="Facebook Fanpage">
+						<div class="social">
+							<i class="fa-brands fa-square-facebook"></i>
+						</div>
+					</a>
+					<a
+						href="#"
+						id="whatsapp-contact"
+						target="_blank"
+						title="Whatsapp Direct Message Link">
+						<div class="social">
+							<div class="whatsapp"><i class="fab fa-whatsapp"></i></div>
+						</div>
+					</a>
+				</div>
+				<div class="legal">Regulamin | Polityka prywatności | Pliki cookie</div>
+				<div class="credit">
+					<a
+						href="https://bit.ly/MaciejMadejszaProjects"
+						target="_blank"
+						title="Developer's Contact">
+						<div class="credits">&copy Maciej Madejsza</div>
+					</a>
+				</div>
+			</footer>
+			<!-- Scripts -->
+			<script
+				src="https://kit.fontawesome.com/4622d99ad4.js"
+				crossorigin="anonymous"></script>
+			<script
+				type="application/javascript"
+				src="../services/app.js"></script>
+		</div>
 	</body>
 </html>
