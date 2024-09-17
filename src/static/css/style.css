@@ -72,7 +72,6 @@ img {
 	max-width: 100%;
 }
 .wrapper > section:not(:first-of-type),
-nav,
 footer {
 	padding: 0 1rem 2rem;
 	box-shadow: var(--sectionShadow);
@@ -210,7 +209,6 @@ nav > .logo {
 	right: -100%;
 	width: max-content;
 	height: 100%;
-	padding: 2rem;
 	text-transform: uppercase;
 	letter-spacing: 1px;
 	border-top-left-radius: var(--bRadius);
@@ -241,7 +239,7 @@ a {
 	display: block;
 	cursor: pointer;
 	height: 6rem;
-	/* margin: 0 2rem; */
+	margin: 0 2rem;
 	line-height: 6rem;
 	font-size: 2.2rem;
 	text-decoration: none;
@@ -692,6 +690,24 @@ a {
 	color: rgba(var(--navBcg), 0.85);
 	text-shadow: var(--activeTextIconsShadow);
 }
+.social {
+	position: relative;
+}
+.qr {
+	position: absolute;
+	width: 0;
+	top: 25px;
+	right: 0;
+	opacity: 0;
+	transition: 0.4s ease-in-out;
+}
+.footer a:hover .social .qr {
+	width: 180px;
+	top: -65px;
+
+	right: -190px;
+	opacity: 1;
+}
 .footer .legal {
 	font-size: 1.9rem;
 }
@@ -762,7 +778,6 @@ input {
 		font-size: 13px;
 	}
 	.wrapper > section:not(:first-of-type),
-	nav,
 	footer {
 		padding: 0 2rem 2rem;
 	}
@@ -947,7 +962,6 @@ input {
 		left: 0;
 		width: 100%;
 		height: auto;
-		padding: 1rem;
 
 		border-radius: 0;
 		border-bottom-left-radius: var(--bRadius);
@@ -962,13 +976,16 @@ input {
 		gap: 2rem;
 	}
 	a {
-		height: 3rem;
-		line-height: 3rem;
+		height: 6rem;
+		margin: 0;
+		padding: 0 1rem;
+		line-height: 6rem;
 		font-size: 1.8rem;
 		transition: 0.2s ease-in-out;
 	}
-	a:hover {
+	nav a:hover {
 		text-shadow: var(--activeTextIconsShadow);
+		background-color: rgba(0, 0, 0, 0.1);
 	}
 	.topImageHeader {
 		margin-top: 5rem;
@@ -1161,7 +1178,7 @@ input {
 			'. . . . .  .  . '
 			'. logo details details details  socials  . '
 			'. logo details details details  socials  . '
-			'legal legal legal legal legal legal legal '
+			'. logo legal legal legal socials . '
 			'. . . credit . . . ';
 		gap: 2rem 1rem;
 	}
@@ -1200,6 +1217,8 @@ input {
 	.footer .socials a {
 		text-shadow: none;
 	}
+	.qr {
+	}
 	.footer .socials a:hover {
 		text-shadow: var(--activeTextIconsShadow);
 	}
@@ -1207,6 +1226,9 @@ input {
 		grid-area: credit;
 	}
 }
-@media (min-width: 1280px) {
+@media (min-width: 1920px) {
 	/* hi-res laptops and desktops */
+	.wrapper {
+		max-width: 1200px;
+	}
 }
