@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		const phoneNumber = '48792891607';
 		const msgKaszuby = `Hej! Mam pytanie odnośnie wyjazdu na Kaszuby w październiku :)\n\nTu [imię] [Nazwisko]`;
 		const msgWarmia = `Hej! Mam pytanie odnośnie wyjazdu na Warmię w listopadzie :)\n\nTu [imię] [Nazwisko]`;
-		const msgContact = `Hej! Piszę do Ciebie ze stronki yoganka.pl :)\n\nTu [imię] [Nazwisko]`;
+		const msgContact = `Hej! Piszę do Ciebie z yoganka.pl :)\n\nTu [imię] [Nazwisko]`;
 
 		const linkKaszuby = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(msgKaszuby)}`;
 		const linkWarmia = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(msgWarmia)}`;

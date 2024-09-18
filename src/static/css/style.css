@@ -701,13 +701,11 @@ a {
 	opacity: 0;
 	transition: 0.4s ease-in-out;
 }
-.footer a:hover .social .qr {
-	width: 180px;
-	top: -65px;
-
-	right: -190px;
-	opacity: 1;
+.qr img {
+	transition: 0.4s ease-in-out;
+	border-radius: var(--bRadius);
 }
+
 .footer .legal {
 	font-size: 1.9rem;
 }
@@ -1217,7 +1215,16 @@ input {
 	.footer .socials a {
 		text-shadow: none;
 	}
-	.qr {
+	.footer a:hover .social .qr {
+		display: block;
+		width: 160px;
+		top: -50px;
+		right: -192px;
+
+		opacity: 1;
+	}
+	.footer a:hover .social .qr img {
+		box-shadow: var(--activeBoxShadow);
 	}
 	.footer .socials a:hover {
 		text-shadow: var(--activeTextIconsShadow);
