@@ -823,7 +823,7 @@ input {
 		font-size: 4rem;
 	}
 }
-@media (min-width: 800px) {
+@media (min-width: 768px) {
 	/* tablet, landscape iPad, lo-res laptops ands desktops */
 	html {
 		--headerImgSize: 1080px;
@@ -847,7 +847,7 @@ input {
 			'wydarzenia wydarzenia';
 	}
 	.offerType {
-		grid-template-columns: repeat(auto-fit, minmax(365px, 1fr));
+		grid-template-columns: repeat(auto-fit, minmax(345px, 1fr));
 	}
 	.offerType.events {
 		display: grid;
