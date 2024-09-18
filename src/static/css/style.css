@@ -122,7 +122,7 @@ header {
 	border: 1px solid black;
 }
 nav > .logo {
-	max-width: 80%;
+	display: none;
 }
 .topImageHeader > header {
 	grid-area: title;
@@ -224,6 +224,8 @@ nav > .logo {
 	display: flex;
 	flex-direction: column;
 	list-style: none;
+
+	margin-top: 3.5rem;
 }
 .nav ul li {
 	position: relative;
@@ -1015,10 +1017,14 @@ input {
 		flex-direction: row;
 		justify-content: space-evenly;
 	}
+	nav > .logo {
+		display: block;
+	}
 	.nav ul {
 		flex-direction: row;
 		width: max-content;
 		gap: 2rem;
+		margin: 0;
 	}
 	a {
 		height: 6rem;
@@ -1111,82 +1117,6 @@ input {
 		max-width: 900px;
 		padding: 1.5rem 2.5rem;
 	}
-	/*
-	.modal .pic {
-		grid-column: 1 / 4;
-		min-width: auto;
-		max-width: 350px;
-	}
-	.modal_offer header {
-		grid-column: span 2;
-		width: max-content;
-	}
-	.modal_offer .modal_list.at-glance {
-		margin: 0;
-	}
-	.modal_desc {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-		grid-template-areas:
-			'h h'
-			'd1 d2'
-			'd1p d2p'
-			'd3 d4'
-			'd3p d4p';
-		gap: 1.5rem;
-	}
-	.modal_desc .modal_h3 {
-		grid-area: h;
-		margin: 0;
-	}
-	.modal_desc h4 {
-		margin: 0;
-	}
-	.modal_desc .modal_list {
-		justify-content: flex-start;
-	}
-	.modal_desc h4:nth-of-type(1) {
-		grid-area: d1;
-	}
-	.modal_desc h4:nth-of-type(2) {
-		grid-area: d2;
-	}
-	.modal_desc h4:nth-of-type(3) {
-		grid-area: d3;
-	}
-	.modal_desc h4:nth-of-type(4) {
-		grid-area: d4;
-	}
-	.modal_desc .modal_list:nth-of-type(1) {
-		grid-area: d1p;
-	}
-	.modal_desc .modal_list:nth-of-type(2) {
-		grid-area: d2p;
-	}
-	.modal_desc .modal_list:nth-of-type(3) {
-		grid-area: d3p;
-	}
-	.modal_desc .modal_list:nth-of-type(4) {
-		grid-area: d4p;
-	}
-	.modal .modal_included {
-		grid-column: span 2;
-	}
-	.modal .modal_excluded {
-		grid-column: 3;
-	}
-	.modal .modal_optional {
-		grid-column: span 2;
-	}
-	.modal .modal_excluded {
-		grid-column: span 2;
-	}
-	.modal .modal_free-time {
-		grid-column: span 4;
-	}
-	.modal footer {
-		gap: 3rem;
-	} */
 	.modal footer a:hover {
 		box-shadow: var(--activeBoxShadow);
 	}
