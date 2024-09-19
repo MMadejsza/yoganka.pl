@@ -206,7 +206,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			questionTemplate: `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${this.frontTitle}"\n\nTu [imię] [Nazwisko]`,
 		},
 	};
-	class tile {
+	class Tile {
 		constructor(givenEventBody) {
 			this.extraClass = givenEventBody.extraClass;
 			this.img = givenEventBody.img;
@@ -228,7 +228,6 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 			return element;
 		};
-
 		generateTile = () => {
 			// Create separate tags
 			const tile = createEl('div', {class: 'tile camp'});
@@ -285,7 +284,6 @@ document.addEventListener('DOMContentLoaded', function () {
 			sectionIncluded.appendChild(sectionIncludedList);
 			return sectionIncluded;
 		};
-
 		generateTileModal = () => {
 			const modalOffer = this.createEl('div', {class: 'modal_offer'});
 			//@ img
@@ -411,6 +409,10 @@ document.addEventListener('DOMContentLoaded', function () {
 				target: '_blank',
 			});
 			footerBtnAsk.innerText = 'Zapytaj';
+			footer.append(footerBtnSignUp, footerBtnAsk);
+			modalOffer.appendChild(footer);
 		};
 	}
+
+	const kaszubyTile = new Tile(kaszubyCamp);
 });
