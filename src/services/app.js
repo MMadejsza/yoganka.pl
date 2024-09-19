@@ -411,6 +411,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			footerBtnAsk.innerText = 'Zapytaj';
 			footer.append(footerBtnSignUp, footerBtnAsk);
 			modalOffer.appendChild(footer);
+			return modalOffer;
 		};
 	}
 
