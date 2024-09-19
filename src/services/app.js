@@ -231,6 +231,10 @@ document.addEventListener('DOMContentLoaded', function () {
 		generateTile = () => {
 			// Create separate tags
 			const tile = createEl('div', {class: 'tile camp'});
+			if (this.extraClass) {
+				tile.classList.Add(this.extraClass);
+			}
+
 			const img = createEl('img', {
 				class: 'pic',
 				src: `../static/img/offer/${this.img}`,
@@ -416,4 +420,5 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 
 	const kaszubyTile = new Tile(kaszubyCamp);
+	kaszubyTile.generateTile();
 });
