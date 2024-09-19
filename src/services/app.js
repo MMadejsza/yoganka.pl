@@ -210,10 +210,10 @@ document.addEventListener('DOMContentLoaded', function () {
 		constructor(givenEventBody) {
 			this.extraClass = givenEventBody.extraClass;
 			this.img = givenEventBody.img;
-			this.frontTitle = givenEventBody.frontTitle;
-			this.frontDate = givenEventBody.frontDate;
-			this.frontLocation = givenEventBody.frontLocation;
-			this.frontDesc = givenEventBody.frontDesc;
+			this.frontTitle = givenEventBody.front.frontTitle;
+			this.frontDate = givenEventBody.front.frontDate;
+			this.frontLocation = givenEventBody.front.frontLocation;
+			this.frontDesc = givenEventBody.front.frontDesc;
 			this.modal = givenEventBody.modal;
 		}
 
@@ -231,7 +231,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		generateTile = () => {
 			// Create separate tags
-			const tile = createEl('div', {class: 'tile, camp'});
+			const tile = createEl('div', {class: 'tile camp'});
 			const img = createEl('img', {
 				class: 'pic',
 				src: `../static/img/offer/${this.img}`,
@@ -252,6 +252,12 @@ document.addEventListener('DOMContentLoaded', function () {
 			// Add modal if exists
 			if (this.modal) {
 				const modal = createEl('div', {class: 'modal'});
+				const X = createEl('div', {class: 'x'});
+				const Xa = createEl('a', {class: 'btn_close'});
+				const Xai = createEl('i', {class: 'fa-solid fa-xmark'});
+				Xa.appendChild(Xai);
+				X.appendChild(Xa);
+
 				const modalBody = generateTileModal();
 				modal.appendChild(modalBody);
 				tile.appendChild(modal);
@@ -261,8 +267,35 @@ document.addEventListener('DOMContentLoaded', function () {
 			return tile;
 		};
 		generateTileModal = () => {
-			const X = createEl('div', {class: 'x'});
-			// const X = createEl('div', {class: 'x'});
+			const modalOffer = this.createEl('div', {class: 'modal_offer'});
+			// img
+			const img = createEl('img', {
+				class: 'pic',
+				src: `../static/img/offer/${this.img}`,
+				loading: 'lazy',
+			});
+			modalOffer.appendChild(img);
+
+			// header
+			const header = createEl('header');
+			const ul = this.createEl('div', {class: 'modal_list at-glance'});
+			const icons = [
+				'fa-solid fa-location-dot',
+				'fa-solid fa-bed',
+				'fa-solid fa-people-group',
+				'fa-solid fa-tag',
+			];
+			this.modal.glance.forEach(text, (index) => {
+				const li = this.createEl('li', {class: 'modal_li modal_answer'});
+				const icon = this.createEl('li', {
+					class: icons[index] ? icons[index] : 'fa-solid fa-check',
+				});
+				li.append(icon, text);
+				ul.appendChild(li);
+			});
+			header.appendChild(ul);
+
+			// section modal_desc
 		};
 	}
 });
