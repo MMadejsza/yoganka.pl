@@ -8,32 +8,6 @@ document.addEventListener('DOMContentLoaded', function () {
 	const toggleMenu = () => {
 		hamburger.classList.toggle('active');
 	};
-	let scrollFlag = 0;
-	const showModal = (event) => {
-		event.stopPropagation();
-		const tile = event.currentTarget;
-		const targetModal = tile.querySelector('.modal');
-		if (targetModal) {
-			body.classList.add('stopScroll');
-			targetModal.classList.add('visible');
-			hamburger.classList.add('hidden');
-			if (scrollFlag) {
-				targetModal.scrollTop = 0;
-			}
-			scrollFlag = 0;
-		}
-	};
-	const closeModal = (event) => {
-		event.stopPropagation(); // Zapobiega zamknięciu modala przez kliknięcie elementu `.tile.camp`
-		const btn = event.currentTarget;
-		const modal = btn.closest('.modal');
-		if (modal) {
-			modal.classList.remove('visible');
-			hamburger.classList.remove('hidden');
-			body.classList.remove('stopScroll');
-			scrollFlag = 1;
-		}
-	};
 	const whatsappTemplates = () => {
 		const enter = '%0A';
 		const phoneNumber = '48792891607';
@@ -45,8 +19,8 @@ document.addEventListener('DOMContentLoaded', function () {
 		const linkWarmia = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(msgWarmia)}`;
 		const linkContact = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(msgContact)}`;
 
-		document.getElementById('whatsapp-kaszuby').href = linkKaszuby;
-		document.getElementById('whatsapp-warmia').href = linkWarmia;
+		// document.getElementById('whatsapp-kaszuby').href = linkKaszuby;
+		// document.getElementById('whatsapp-warmia').href = linkWarmia;
 		document.getElementById('whatsapp-contact').href = linkContact;
 	};
 
@@ -67,13 +41,6 @@ document.addEventListener('DOMContentLoaded', function () {
 				targetSection.scrollIntoView({behavior: 'smooth'});
 			}
 		});
-	});
-	campTiles.forEach((camp) => {
-		camp.addEventListener('click', showModal);
-		const closeButton = camp.querySelector('.btn_close');
-		if (closeButton) {
-			closeButton.addEventListener('click', closeModal);
-		}
 	});
 	whatsappTemplates();
 
@@ -134,7 +101,9 @@ document.addEventListener('DOMContentLoaded', function () {
 				{status: 'optional', activity: 'Sauna'},
 			],
 			form: 'https://forms.gle/kYN6VpfP3aV1b9yB8',
-			questionTemplate: `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${this.frontTitle}"\n\nTu [imię] [Nazwisko]`,
+			questionTemplate(subject) {
+				return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
+			},
 		},
 	};
 	const warmiaCamp = {
@@ -203,10 +172,13 @@ document.addEventListener('DOMContentLoaded', function () {
 				{status: 'available', activity: 'Wioska garncarska + Warsztaty'},
 			],
 			form: 'https://forms.gle/ag6SSBy9zqrxwCRcA',
-			questionTemplate: `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${this.frontTitle}"\n\nTu [imię] [Nazwisko]`,
+			questionTemplate(subject) {
+				return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
+			},
 		},
 	};
 	class Tile {
+		scrollFlag = 0;
 		constructor(givenEventBody) {
 			this.extraClass = givenEventBody.extraClass;
 			this.img = givenEventBody.img;
@@ -216,7 +188,6 @@ document.addEventListener('DOMContentLoaded', function () {
 			this.frontDesc = givenEventBody.front.frontDesc;
 			this.modal = givenEventBody.modal;
 		}
-
 		// Util function for creating elements with possible multiple attributes
 		createEl = (el, attributes) => {
 			const element = document.createElement(el);
@@ -228,40 +199,66 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 			return element;
 		};
+		showModal = (event) => {
+			event.stopPropagation();
+			const tile = event.currentTarget;
+			const targetModal = tile.querySelector('.modal');
+			if (targetModal) {
+				body.classList.add('stopScroll');
+				targetModal.classList.add('visible');
+				hamburger.classList.add('hidden');
+				if (scrollFlag) {
+					targetModal.scrollTop = 0;
+				}
+				scrollFlag = 0;
+			}
+		};
+		closeModal = (event) => {
+			event.stopPropagation(); // Zapobiega zamknięciu modala przez kliknięcie elementu `.tile.camp`
+			const btn = event.currentTarget;
+			const modal = btn.closest('.modal');
+			if (modal) {
+				modal.classList.remove('visible');
+				hamburger.classList.remove('hidden');
+				body.classList.remove('stopScroll');
+				scrollFlag = 1;
+			}
+		};
 		generateTile = () => {
 			// Create separate tags
-			const tile = createEl('div', {class: 'tile camp'});
+			const tile = this.createEl('div', {class: 'tile camp'});
+			tile.addEventListener('click', this.showModal);
 			if (this.extraClass) {
-				tile.classList.Add(this.extraClass);
+				tile.classList.add(this.extraClass);
 			}
-
-			const img = createEl('img', {
+			const img = this.createEl('img', {
 				class: 'pic',
 				src: `../static/img/offer/${this.img}`,
 				loading: 'lazy',
 			});
-			const frontTitle = createEl('h3');
-			frontTitle.innerText = this.front.frontTitle;
-			const frontDate = createEl('h3');
-			frontDate.innerText = this.front.frontDate;
-			const frontLocation = createEl('h4');
-			frontLocation.innerText = this.front.frontLocation;
-			const frontDesc = createEl('p', {class: 'tile_desc'});
-			frontDesc.innerText = this.front.frontDesc;
+			const frontTitle = this.createEl('h3');
+			frontTitle.innerText = this.frontTitle;
+			const frontDate = this.createEl('h3');
+			frontDate.innerText = this.frontDate;
+			const frontLocation = this.createEl('h4');
+			frontLocation.innerText = this.frontLocation;
+			const frontDesc = this.createEl('p', {class: 'tile_desc'});
+			frontDesc.innerText = this.frontDesc;
 
 			// Append those tags
 			tile.append(img, frontTitle, frontDate, frontLocation, frontDesc);
 
 			// Add modal if exists
 			if (this.modal) {
-				const modal = createEl('div', {class: 'modal'});
-				const X = createEl('div', {class: 'x'});
-				const Xa = createEl('a', {class: 'btn_close'});
-				const Xai = createEl('i', {class: 'fa-solid fa-xmark'});
+				const modal = this.createEl('div', {class: 'modal'});
+				const X = this.createEl('div', {class: 'x'});
+				X.addEventListener('click', this.closeModal);
+				const Xa = this.createEl('a', {class: 'btn_close'});
+				const Xai = this.createEl('i', {class: 'fa-solid fa-xmark'});
 				Xa.appendChild(Xai);
 				X.appendChild(Xa);
-
-				const modalBody = generateTileModal();
+				modal.appendChild(X);
+				const modalBody = this.generateTileModal();
 				modal.appendChild(modalBody);
 				tile.appendChild(modal);
 			}
@@ -291,7 +288,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		generateTileModal = () => {
 			const modalOffer = this.createEl('div', {class: 'modal_offer'});
 			//@ img
-			const img = createEl('img', {
+			const img = this.createEl('img', {
 				class: 'pic',
 				src: `../static/img/offer/${this.img}`,
 				loading: 'lazy',
@@ -299,7 +296,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			modalOffer.appendChild(img);
 
 			//@ header
-			const header = createEl('header');
+			const header = this.createEl('header');
 			const ul = this.createEl('div', {class: 'modal_list at-glance'});
 			const icons = [
 				'fa-solid fa-location-dot',
@@ -307,7 +304,7 @@ document.addEventListener('DOMContentLoaded', function () {
 				'fa-solid fa-people-group',
 				'fa-solid fa-tag',
 			];
-			this.modal.glance.forEach(text, (index) => {
+			this.modal.glance.forEach((text, index) => {
 				const li = this.createEl('li', {class: 'modal_li modal_answer'});
 				const icon = this.createEl('i', {
 					class: icons[index] ? icons[index] : 'fa-solid fa-check',
@@ -325,7 +322,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			sectionDescHeader.append(sectionDescHeaderI, 'Plan:');
 			sectionDesc.appendChild(sectionDescHeader);
 
-			this.modal.plan.forEach.forEach((campDay) => {
+			this.modal.plan.forEach((campDay) => {
 				const dayHeader = this.createEl('h4');
 				dayHeader.innerText = campDay.day + ':';
 				const dayPlan = this.createEl('ul', {class: 'modal_list'});
@@ -344,7 +341,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			modalOffer.appendChild(sectionDesc);
 
 			//@ section modal_included
-			const sectionIncluded = tileModalChecklistClassic(
+			const sectionIncluded = this.tileModalChecklistClassic(
 				'included',
 				'W cenie:',
 				'fa-solid fa-check',
@@ -352,7 +349,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			);
 			modalOffer.appendChild(sectionIncluded);
 			//@ section modal_excluded
-			const sectionExcluded = tileModalChecklistClassic(
+			const sectionExcluded = this.tileModalChecklistClassic(
 				'excluded',
 				'We własnym zakresie:',
 				'fa-regular fa-hand-point-right',
@@ -360,7 +357,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			);
 			modalOffer.appendChild(sectionExcluded);
 			//@ section modal_optional
-			const sectionOptional = tileModalChecklistClassic(
+			const sectionOptional = this.tileModalChecklistClassic(
 				'optional',
 				'W cenie',
 				'fa-solid fa-plus',
@@ -396,18 +393,18 @@ document.addEventListener('DOMContentLoaded', function () {
 			modalOffer.appendChild(sectionFreeTime);
 
 			// @ footer modal_user-action
-			const footer = createEl('footer', {
+			const footer = this.createEl('footer', {
 				class: 'modal_user-action',
 			});
-			const footerBtnSignUp = createEl('a', {
+			const footerBtnSignUp = this.createEl('a', {
 				href: this.modal.form,
 				class: 'btn_sign-up',
 				target: '_blank',
 			});
 			footerBtnSignUp.innerText = 'Zapisz się';
-			const footerBtnAsk = createEl('a', {
+			const footerBtnAsk = this.createEl('a', {
 				href: `https://wa.me/${48792891607}?text=${encodeURIComponent(
-					this.modal.questionTemplate,
+					this.modal.questionTemplate(this.frontTitle),
 				)}`,
 				class: 'btn_ask-for-info',
 				target: '_blank',
@@ -420,5 +417,8 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 
 	const kaszubyTile = new Tile(kaszubyCamp);
-	kaszubyTile.generateTile();
+	const warmiaTile = new Tile(warmiaCamp);
+	const wyjazdy = document.querySelector('#wyjazdy');
+	wyjazdy.appendChild(kaszubyTile.generateTile());
+	wyjazdy.appendChild(warmiaTile.generateTile());
 });
