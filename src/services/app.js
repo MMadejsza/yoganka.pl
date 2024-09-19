@@ -80,10 +80,12 @@ document.addEventListener('DOMContentLoaded', function () {
 	const kaszubyCamp = {
 		extraClass: '',
 		img: 'camp_kaszuby.jpg',
-		frontTitle: `Kojenie Zmysłów - joga, aromaterapia i spa`,
-		frontDate: `11-13/10/2024`,
-		frontLocation: `Kaszuby`,
-		frontDesc: `Zabieram Cię do urokliwego domku, otulonego drewnem, gdzie schowamy się	w ulubionych skarpetkach, za dużych sweterkach i będziemy kocykować przy kominku i pić ciepłe naparki!`,
+		front: {
+			frontTitle: `Kojenie Zmysłów - joga, aromaterapia i spa`,
+			frontDate: `11-13/10/2024`,
+			frontLocation: `Kaszuby`,
+			frontDesc: `Zabieram Cię do urokliwego domku, otulonego drewnem, gdzie schowamy się	w ulubionych skarpetkach, za dużych sweterkach i będziemy kocykować przy kominku i pić ciepłe naparki!`,
+		},
 		modal: {
 			imgModal: this.img,
 			glance: ['Kaszuby', 'Dworek Krępkowice', 12, 1200],
@@ -138,11 +140,13 @@ document.addEventListener('DOMContentLoaded', function () {
 	const warmiaCamp = {
 		extraClass: 'long',
 		img: 'camp_warmia.jpg',
-		frontTitle: 'Comfy Retreat - joga, malowanie intuicyjne, gongi i spa',
-		frontDate: '08-11/11/2024',
-		frontLocation: 'Warmia',
-		frontDesc:
-			'Otulimy się ciepłym kominkiem, zdrowymi naparami i pysznym jedzeniem! Zabierz swój ulubiony dres, za duży sweterek i ciepłe skarpetki, po prostu Twoje ulubione jesienne atrybuty! Nie zabraknie czasu na książkę pod kocykiem, ale też uziemiających aktywności.',
+		front: {
+			frontTitle: 'Comfy Retreat - joga, malowanie intuicyjne, gongi i spa',
+			frontDate: '08-11/11/2024',
+			frontLocation: 'Warmia',
+			frontDesc:
+				'Otulimy się ciepłym kominkiem, zdrowymi naparami i pysznym jedzeniem! Zabierz swój ulubiony dres, za duży sweterek i ciepłe skarpetki, po prostu Twoje ulubione jesienne atrybuty! Nie zabraknie czasu na książkę pod kocykiem, ale też uziemiających aktywności.',
+		},
 		modal: {
 			imgModal: 'camp_warmia.jpg',
 			glance: ['Warmia', 'Witramowo 32', 18, 1200],
@@ -226,6 +230,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		};
 
 		generateTile = () => {
+			// Create separate tags
 			const tile = createEl('div', {class: 'tile, camp'});
 			const img = createEl('img', {
 				class: 'pic',
@@ -233,20 +238,31 @@ document.addEventListener('DOMContentLoaded', function () {
 				loading: 'lazy',
 			});
 			const frontTitle = createEl('h3');
-			frontTitle.inneText = this.frontTitle;
+			frontTitle.inneText = this.front.frontTitle;
 			const frontDate = createEl('h3');
-			frontDate.inneText = this.frontDate;
+			frontDate.inneText = this.front.frontDate;
 			const frontLocation = createEl('h4');
-			frontLocation.inneText = this.frontLocation;
+			frontLocation.inneText = this.front.frontLocation;
 			const frontDesc = createEl('p', {class: 'tile_desc'});
-			frontDesc.inneText = this.frontDesc;
-			const modal = createEl('div', {class: 'modal'});
-			const modalBody = generateTileModal();
+			frontDesc.inneText = this.front.frontDesc;
 
-			// składaj od tyłu
+			// Append those tags
+			tile.append(img, frontTitle, frontDate, frontLocation, frontDesc);
 
+			// Add modal if exists
+			if (this.modal) {
+				const modal = createEl('div', {class: 'modal'});
+				const modalBody = generateTileModal();
+				modal.appendChild(modalBody);
+				tile.appendChild(modal);
+			}
+
+			// Return complete tile
 			return tile;
 		};
-		generateTileModal = () => {};
+		generateTileModal = () => {
+			const X = createEl('div', {class: 'x'});
+			// const X = createEl('div', {class: 'x'});
+		};
 	}
 });
