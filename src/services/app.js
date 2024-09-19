@@ -238,13 +238,13 @@ document.addEventListener('DOMContentLoaded', function () {
 				loading: 'lazy',
 			});
 			const frontTitle = createEl('h3');
-			frontTitle.inneText = this.front.frontTitle;
+			frontTitle.innerText = this.front.frontTitle;
 			const frontDate = createEl('h3');
-			frontDate.inneText = this.front.frontDate;
+			frontDate.innerText = this.front.frontDate;
 			const frontLocation = createEl('h4');
-			frontLocation.inneText = this.front.frontLocation;
+			frontLocation.innerText = this.front.frontLocation;
 			const frontDesc = createEl('p', {class: 'tile_desc'});
-			frontDesc.inneText = this.front.frontDesc;
+			frontDesc.innerText = this.front.frontDesc;
 
 			// Append those tags
 			tile.append(img, frontTitle, frontDate, frontLocation, frontDesc);
@@ -266,9 +266,29 @@ document.addEventListener('DOMContentLoaded', function () {
 			// Return complete tile
 			return tile;
 		};
+		tileModalChecklistClassic = (type, title, icon, listClass) => {
+			// create list general container
+			const sectionIncluded = this.createEl('section', {class: listClass});
+			// create list general container header
+			const sectionIncludedHeader = this.createEl('h3', {class: 'modal_h3'});
+			sectionIncludedHeader.innerText = title;
+			sectionIncluded.appendChild(sectionIncludedHeader);
+			// create list container
+			const sectionIncludedList = this.createEl('ul', {class: 'modal_list'});
+			// create list items
+			this.modal[type].forEach((item) => {
+				const li = this.createEl('li', {class: 'modal_li'});
+				const includedIcon = this.createEl('i', {class: icon});
+				li.append(includedIcon, item);
+				sectionIncludedList.appendChild(li);
+			});
+			sectionIncluded.appendChild(sectionIncludedList);
+			return sectionIncluded;
+		};
+
 		generateTileModal = () => {
 			const modalOffer = this.createEl('div', {class: 'modal_offer'});
-			// img
+			//@ img
 			const img = createEl('img', {
 				class: 'pic',
 				src: `../static/img/offer/${this.img}`,
@@ -276,7 +296,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			});
 			modalOffer.appendChild(img);
 
-			// header
+			//@ header
 			const header = createEl('header');
 			const ul = this.createEl('div', {class: 'modal_list at-glance'});
 			const icons = [
@@ -287,15 +307,110 @@ document.addEventListener('DOMContentLoaded', function () {
 			];
 			this.modal.glance.forEach(text, (index) => {
 				const li = this.createEl('li', {class: 'modal_li modal_answer'});
-				const icon = this.createEl('li', {
+				const icon = this.createEl('i', {
 					class: icons[index] ? icons[index] : 'fa-solid fa-check',
 				});
 				li.append(icon, text);
 				ul.appendChild(li);
 			});
 			header.appendChild(ul);
+			modalOffer.appendChild(header);
 
-			// section modal_desc
+			//@ section modal_desc
+			const sectionDesc = this.createEl('section', {class: 'modal_desc'});
+			const sectionDescHeader = this.createEl('h3', {class: 'modal_h3'});
+			const sectionDescHeaderI = this.createEl('i', {class: 'fa-solid fa-list-check'});
+			sectionDescHeader.append(sectionDescHeaderI, 'Plan:');
+			sectionDesc.appendChild(sectionDescHeader);
+
+			this.modal.plan.forEach.forEach((campDay) => {
+				const dayHeader = this.createEl('h4');
+				dayHeader.innerText = campDay.day + ':';
+				const dayPlan = this.createEl('ul', {class: 'modal_list'});
+				// get day keys
+				const keys = Object.keys(campDay);
+				// start from 2nd
+				for (let i = 1; i < keys.length; i++) {
+					const time = keys[i];
+					const activity = campDay[time];
+					const li = this.createEl('li', {class: 'modal_li'});
+					li.append(`${time} - ${activity}`);
+					dayPlan.appendChild(li);
+				}
+				sectionDesc.append(dayHeader, dayPlan);
+			});
+			modalOffer.appendChild(sectionDesc);
+
+			//@ section modal_included
+			const sectionIncluded = tileModalChecklistClassic(
+				'included',
+				'W cenie:',
+				'fa-solid fa-check',
+				'modal_included',
+			);
+			modalOffer.appendChild(sectionIncluded);
+			//@ section modal_excluded
+			const sectionExcluded = tileModalChecklistClassic(
+				'excluded',
+				'We własnym zakresie:',
+				'fa-regular fa-hand-point-right',
+				'modal_excluded',
+			);
+			modalOffer.appendChild(sectionExcluded);
+			//@ section modal_optional
+			const sectionOptional = tileModalChecklistClassic(
+				'optional',
+				'W cenie',
+				'fa-solid fa-plus',
+				'modal_optional',
+			);
+			modalOffer.appendChild(sectionOptional);
+
+			//@ section modal_free-time
+			// create list general container
+			const sectionFreeTime = this.createEl('section', {class: 'modal_free-time'});
+			// create list general container header
+			const sectionFreeTimeHeader = this.createEl('h3', {class: 'modal_h3'});
+			sectionFreeTimeHeader.innerText = 'Czas wolny:';
+			sectionFreeTime.appendChild(sectionFreeTimeHeader);
+			// create list container
+			const sectionFreeTimeList = this.createEl('ul', {class: 'modal_list'});
+			// create list items
+			const freeTimeList = this.modal.freeTime;
+			freeTimeList.forEach((item) => {
+				const li = this.createEl('li', {class: 'modal_li'});
+				let iconClass = 'fa-solid fa-check';
+				if (item.status != 'free') {
+					iconClass =
+						item.status == 'optional'
+							? 'fa-solid fa-plus'
+							: 'fa-regular fa-hand-point-right';
+				}
+				const icon = this.createEl('i', {class: iconClass});
+				li.append(icon, item.activity);
+				sectionFreeTimeList.appendChild(li);
+			});
+			sectionFreeTime.append(sectionFreeTimeList);
+			modalOffer.appendChild(sectionFreeTime);
+
+			// @ footer modal_user-action
+			const footer = createEl('footer', {
+				class: 'modal_user-action',
+			});
+			const footerBtnSignUp = createEl('a', {
+				href: this.modal.form,
+				class: 'btn_sign-up',
+				target: '_blank',
+			});
+			footerBtnSignUp.innerText = 'Zapisz się';
+			const footerBtnAsk = createEl('a', {
+				href: `https://wa.me/${48792891607}?text=${encodeURIComponent(
+					this.modal.questionTemplate,
+				)}`,
+				class: 'btn_ask-for-info',
+				target: '_blank',
+			});
+			footerBtnAsk.innerText = 'Zapytaj';
 		};
 	}
 });
