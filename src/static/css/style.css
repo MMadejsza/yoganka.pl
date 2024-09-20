@@ -1214,6 +1214,7 @@ input {
 		height: 20vw;
 	}
 	.wrapper > footer {
+		font-size: 1.9rem;
 		display: grid;
 		grid-template-columns: repeat(7, minmax(100px, 1fr));
 		grid-template-areas:
@@ -1236,7 +1237,7 @@ input {
 		justify-content: space-around;
 	}
 	.footer .company-details a {
-		font-size: 2rem;
+		font-size: 2.2rem;
 		text-shadow: none;
 	}
 	.footer .company-details a:hover {
