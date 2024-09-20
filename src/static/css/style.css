@@ -656,6 +656,12 @@ a {
 	max-height: 100%;
 	object-fit: contain;
 	filter: grayscale(1);
+	transition: 0.4s ease-in-out;
+}
+.partners_gallery div:hover img {
+	cursor: pointer;
+	transform: translateY(-25%) scale(1.15);
+	box-shadow: var(--activeBoxShadow);
 }
 .partners_gallery div:last-child {
 	margin-right: 2.5rem;
@@ -1009,6 +1015,7 @@ input {
 		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 	}
 	.partners .partners_gallery {
+		gap: 4rem;
 		animation: 20s slide infinite linear;
 	}
 	.wrapper > .footer {
