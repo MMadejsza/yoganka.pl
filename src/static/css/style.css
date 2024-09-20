@@ -641,7 +641,7 @@ a {
 	gap: 2rem;
 	animation: 15s slide infinite linear;
 }
-.partners_gallery div {
+.partners_gallery a {
 	width: 55vw;
 	height: 55vw;
 	max-width: 225px;
@@ -658,12 +658,12 @@ a {
 	filter: grayscale(1);
 	transition: 0.4s ease-in-out;
 }
-.partners_gallery div:hover img {
+.partners_gallery a:hover img {
 	cursor: pointer;
 	transform: translateY(-25%) scale(1.15);
 	box-shadow: var(--activeBoxShadow);
 }
-.partners_gallery div:last-child {
+.partners_gallery a:last-child {
 	margin-right: 2.5rem;
 }
 @keyframes slide {
@@ -870,7 +870,7 @@ input {
 	.certificates .certificates_gallery {
 		grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
 	}
-	.partners_gallery div {
+	.partners_gallery a {
 		width: 40vw;
 		height: 40vw;
 	}
@@ -1041,7 +1041,7 @@ input {
 	.modal_desc {
 		grid-template-columns: repeat(2, minmax(300px, 1fr));
 	}
-	.partners_gallery div {
+	.partners_gallery a {
 		width: 40vw;
 		height: 40vw;
 	}
@@ -1209,7 +1209,7 @@ input {
 	.certificates .certificates_gallery .tile:nth-last-child(3) {
 		grid-column: 2;
 	}
-	.partners_gallery div {
+	.partners_gallery a {
 		width: 20vw;
 		height: 20vw;
 	}
@@ -1286,7 +1286,7 @@ input {
 	.modal {
 		max-width: 1200px;
 	}
-	.partners_gallery div {
+	.partners_gallery a {
 		width: 30vw;
 		height: 30vw;
 	}
