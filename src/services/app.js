@@ -464,4 +464,8 @@ document.addEventListener('DOMContentLoaded', function () {
 	activeCamps.forEach((camp) => {
 		wyjazdy.appendChild(new Tile(camp).generateTile());
 	});
+
+	// duplicate partners gallery
+	// const copy = document.querySelector('.partners_gallery').cloneNode(true);
+	// document.querySelector('.gallery-slide').appendChild(copy);
 });
