@@ -646,6 +646,7 @@ a {
 	height: 55vw;
 	max-width: 225px;
 	max-height: 225px;
+	padding: 0;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -658,7 +659,7 @@ a {
 	filter: grayscale(1);
 	transition: 0.4s ease-in-out;
 }
-.partners_gallery a:hover img {
+.partners_gallery a:hover {
 	cursor: pointer;
 	transform: translateY(-25%) scale(1.15);
 	box-shadow: var(--activeBoxShadow);
@@ -1171,6 +1172,8 @@ input {
 		margin: 0;
 	}
 	.tile.camp:hover {
+		transform: translateY(-5%) scale(1.05);
+
 		box-shadow: var(--activeBoxShadow);
 		cursor: pointer;
 	}
