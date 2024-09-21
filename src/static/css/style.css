@@ -757,6 +757,7 @@ a {
 	border-radius: 50%;
 	background-color: rgba(var(--popUpBtn), 0.7);
 	box-shadow: var(--activeTextIconsShadow);
+	transition: 0.3s ease-in-out;
 }
 .footer a.pop-up-btn:hover {
 	transform: translateY(-25%) scale(1.15);
