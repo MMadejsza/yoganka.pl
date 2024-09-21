@@ -16,6 +16,7 @@ html {
 	--headerColor: var(--color2);
 	--iconsColor: var(--color7);
 	--test: 249, 231, 159;
+	--popUpBtn: 160, 214, 212;
 	--color0: rgb(177, 226, 232);
 	--color1: rgb(252, 251, 236);
 	--color2: rgb(160, 214, 212);
@@ -730,6 +731,72 @@ a {
 .footer .legal {
 	font-size: 1.9rem;
 }
+.footer .pop-ups {
+	position: fixed;
+	bottom: 1.5rem;
+	right: 1rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 1.5rem;
+}
+.footer a.pop-up-btn {
+	position: relative;
+	display: block;
+	width: 6rem;
+	height: 6rem;
+	line-height: 6rem;
+	font-size: 3rem;
+	max-width: 100px;
+	max-height: 100px;
+	padding: 0;
+	margin: 0;
+	text-decoration: none;
+	color: white;
+	border-radius: 50%;
+	background-color: rgba(var(--popUpBtn), 0.7);
+	box-shadow: var(--activeTextIconsShadow);
+}
+.footer a.pop-up-btn:hover {
+	transform: translateY(-25%) scale(1.15);
+	border: 1px solid #bbb;
+	box-shadow: var(--activeBoxShadow);
+}
+.footer a.pop-up-btn .cookie-pop-up {
+	position: absolute;
+	top: 0;
+	right: -100vw;
+	width: max-content;
+	height: 6rem;
+	padding-left: 0.5rem;
+	border: 1px solid black;
+	border-radius: 50px;
+	box-shadow: var(--activeBoxShadow);
+	transition: 0.3s ease-in-out;
+	opacity: 0;
+	font-size: 1.5rem;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 2rem;
+}
+.cookie-pop-up .cookie-x i {
+	font-size: 3rem;
+	line-height: 7rem;
+	margin-right: 2rem;
+	color: white;
+}
+.footer a.cookies.pop-up-btn:focus .cookie-pop-up {
+	right: 0%;
+	background-color: rgba(var(--popUpBtn), 1);
+	opacity: 1;
+}
+.footer a.cookies.pop-up-btn:focus i.fa-cookie-bite {
+	opacity: 0;
+}
+
 input {
 	outline: none;
 	border: none;
@@ -765,9 +832,16 @@ input {
 		width: 50vw;
 		height: 50vw;
 	}
-
 	.footer .legal {
 		font-size: 1.8rem;
+	}
+	.footer .pop-ups {
+		bottom: 1.5rem;
+		right: 1.5rem;
+		gap: 1rem;
+	}
+	.footer a.pop-up-btn .cookie-pop-up {
+		font-size: 1.4rem;
 	}
 }
 @media (min-width: 480px) {
@@ -786,6 +860,10 @@ input {
 	}
 	.footer .socials a {
 		font-size: 3rem;
+	}
+	.footer a.pop-up-btn .cookie-pop-up {
+		font-size: 1.7rem;
+		padding-left: 2rem;
 	}
 }
 @media (min-width: 640px) {
@@ -1034,6 +1112,18 @@ input {
 	.wrapper > .footer .credit a {
 		line-height: 100%;
 	}
+	.footer .pop-ups {
+		gap: 1.5rem;
+	}
+	.footer a.pop-up-btn {
+		width: 6.6rem;
+		height: 6.6rem;
+		line-height: 6.6rem;
+	}
+	.footer a.pop-up-btn .cookie-pop-up {
+		height: 6.6rem;
+		font-size: 2rem;
+	}
 }
 @media (min-width: 1024px) {
 	.modal_offer {
@@ -1051,6 +1141,20 @@ input {
 	}
 	.partners .gallery-slide:after {
 		width: 7vw;
+	}
+	.footer .pop-ups {
+		right: 2rem;
+		gap: 1.8rem;
+	}
+	.footer a.pop-up-btn {
+		width: 7rem;
+		height: 7rem;
+		line-height: 7rem;
+		font-size: 3.5rem;
+	}
+	.footer a.pop-up-btn .cookie-pop-up {
+		height: 7rem;
+		font-size: 2.5rem;
 	}
 }
 @media (orientation: landscape) and (min-width: 1024px) {

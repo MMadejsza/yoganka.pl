@@ -465,7 +465,11 @@ document.addEventListener('DOMContentLoaded', function () {
 		wyjazdy.appendChild(new Tile(camp).generateTile());
 	});
 
-	// duplicate partners gallery
-	// const copy = document.querySelector('.partners_gallery').cloneNode(true);
-	// document.querySelector('.gallery-slide').appendChild(copy);
+	// cookies x btn
+
+	document.querySelector('.cookie-x').addEventListener('click', (e) => {
+		const parent = e.target.closest('.pop-up-btn.cookies');
+		parent.style.display = 'none';
+		console.log(parent);
+	});
 });

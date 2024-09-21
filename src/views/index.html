@@ -55,6 +55,23 @@
 			rel="stylesheet"
 			type="text/css"
 			href="../static/css/style.css" />
+		<!-- MailerLite Universal -->
+		<script>
+			(function (w, d, e, u, f, l, n) {
+				(w[f] =
+					w[f] ||
+					function () {
+						(w[f].q = w[f].q || []).push(arguments);
+					}),
+					(l = d.createElement(e)),
+					(l.async = 1),
+					(l.src = u),
+					(n = d.getElementsByTagName(e)[0]),
+					n.parentNode.insertBefore(l, n);
+			})(window, document, 'script', 'https://assets.mailerlite.com/js/universal.js', 'ml');
+			ml('account', '1112068');
+		</script>
+		<!-- End MailerLite Universal -->
 	</head>
 	<body>
 		<div class="wrapper">
@@ -456,7 +473,7 @@
 						</div>
 					</a>
 				</div>
-				<div class="legal">Regulamin | Polityka prywatności | Pliki cookie</div>
+				<div class="legal">Regulamin | Polityka prywatności</div>
 				<div class="credit">
 					<a
 						href="https://bit.ly/MaciejMadejszaProjects"
@@ -464,6 +481,22 @@
 						title="Developer's Contact">
 						<div class="credits">&copy Maciej Madejsza</div>
 					</a>
+				</div>
+				<div class="pop-ups">
+					<a
+						class="ml-onclick-form pop-up-btn"
+						href="javascript:void(0)"
+						onclick="ml('show', 'kCCUU8', true)"
+						><i class="fas fa-gift"></i
+					></a>
+					<a
+						class="pop-up-btn cookies"
+						href="#"
+						><i class="fas fa-cookie-bite"></i>
+						<div class="cookie-pop-up">
+							<div class="cookie-msg">Używamy tylko niezbędnych plików cookie.</div>
+							<div class="cookie-x"><i class="fas fa-times"></i></div></div
+					></a>
 				</div>
 			</footer>
 			<!-- Scripts -->
