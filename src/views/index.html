@@ -76,34 +76,50 @@
 	<body>
 		<div class="wrapper">
 			<div
-				class="burger"
+				class="wrapper__burger burger"
 				id="burger"
 				onclick="toggleMenu()">
-				<div class="bar top-bar"></div>
-				<div class="bar middle-bar"></div>
-				<div class="bar bottom-bar"></div>
+				<div class="burger__bar burger__bar--top"></div>
+				<div class="burger__bar burger__bar--middle"></div>
+				<div class="burger__bar burger__bar--bottom"></div>
 			</div>
 			<nav class="nav">
-				<div class="logo">Logo</div>
-				<ul>
-					<li class="">
-						<a href=".certificates">
-							<i class="fa-solid fa-certificate"></i>Certyfikaty</a
-						>
+				<div class="nav__logo">Logo</div>
+				<ul class="nav__list">
+					<li class="nav__item">
+						<a
+							class="nav__link"
+							href=".certificates">
+							<i class="fa-solid fa-certificate nav__icon"></i>Certyfikaty
+						</a>
 					</li>
-					<li class="">
-						<a href=".events"> <i class="fas fa-calendar-check"></i>Wydarzenia</a>
+					<li class="nav__item">
+						<a
+							class="nav__link"
+							href=".events">
+							<i class="fas fa-calendar-check nav__icon"></i>Wydarzenia
+						</a>
 					</li>
-					<li class="">
-						<a href="#wyjazdy"> <i class="fas fa-cloud-moon"></i>Wyjazdy</a>
+					<li class="nav__item">
+						<a
+							class="nav__link"
+							href="#wyjazdy">
+							<i class="fas fa-cloud-moon nav__icon"></i>Wyjazdy
+						</a>
 					</li>
-					<li>
-						<a href="#zajecia"> <i class="far fa-clock"></i>Zajęcia</a>
+					<li class="nav__item">
+						<a
+							class="nav__link"
+							href="#zajecia">
+							<i class="far fa-clock nav__icon"></i>Zajęcia
+						</a>
 					</li>
-					<li>
-						<a href=".company-details"
-							><i class="fa-solid fa-circle-info"></i>Kontakt</a
-						>
+					<li class="nav__item">
+						<a
+							class="nav__link"
+							href=".company-details">
+							<i class="fa-solid fa-circle-info nav__icon"></i>Kontakt
+						</a>
 					</li>
 				</ul>
 			</nav>
