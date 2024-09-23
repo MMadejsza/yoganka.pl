@@ -222,7 +222,7 @@ class Tile {
 			// call to build main modal body
 			const modalBody = this.generateTileModal();
 			modal.appendChild(modalBody);
-			tile.appendChild(modal);
+			document.body.appendChild(modal);
 
 			// add listeners for opening and closing
 			tile.addEventListener('click', (e) => {
@@ -281,7 +281,9 @@ class Tile {
 	};
 	generateTileModal = () => {
 		// create main container
-		const modalOffer = this.createEl('div', {class: 'modal_offer'});
+		const modalOffer = this.createEl('div', {
+			class: `modal_offer `,
+		});
 		//@ img
 		// create img
 		const img = this.createEl('img', {
@@ -323,7 +325,9 @@ class Tile {
 		// create modal plan for camp
 		//@ section modal_desc
 		// create main container
-		const sectionDesc = this.createEl('section', {class: 'modal_desc'});
+		const sectionDesc = this.createEl('section', {
+			class: `modal_desc ${this.extraClass ? this.extraClass : ''}`,
+		});
 		// create header container h3
 		const sectionDescHeader = this.createEl('h3', {class: 'modal_h3'});
 		// create icon

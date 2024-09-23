@@ -171,7 +171,8 @@ section:nth-child(even) {
 	color: var(--iconsColor);
 	font-size: 2.2rem;
 }
-.topImageHeader {
+
+.top-image-header {
 	grid-area: header;
 	max-height: var(--headerSize);
 	text-transform: uppercase;
@@ -197,15 +198,15 @@ section:nth-child(even) {
 		'. . . . .'
 		'motto motto motto motto motto';
 }
-.topImageHeader > header {
+
+.top-image-header__header {
 	grid-area: title;
 	padding: 0.5rem 1rem;
 	background-color: var(--itemBcg);
-}
-header {
 	text-align: center;
 }
-.header__logo {
+
+.top-image-header__logo {
 	grid-area: logo;
 	place-self: center;
 
@@ -217,7 +218,8 @@ header {
 	font-weight: 600;
 	border: 1px solid black;
 }
-.titleBar {
+
+.top-image-header__title-bar {
 	margin: 0 auto;
 	width: max-content;
 	font-family: 'Gravitas One', serif;
@@ -230,14 +232,16 @@ header {
 	flex-direction: column;
 	justify-content: center;
 }
-.titleBar > .headerSubtitle {
+
+.top-image-header__subtitle {
 	text-transform: none;
 	font-family: 'Caveat', cursive;
 	font-weight: lighter;
 	font-size: 3rem;
 	line-height: 3rem;
 }
-.headerMotto {
+
+.top-image-header__motto {
 	grid-area: motto;
 	background-color: var(--color0);
 	font-size: 1.7rem;
@@ -248,6 +252,7 @@ header {
 	overflow: visible;
 	box-shadow: var(--transitiveBoxShadow);
 }
+
 .sectionHeader {
 	line-height: 6rem;
 	padding: 1rem 0.5rem;
@@ -828,11 +833,11 @@ input {
 		--headerImgSize: 500px;
 		font-size: 10px;
 	}
+	.top-image-header__motto {
+		letter-spacing: 0px;
+	}
 	.offer {
 		grid-gap: 1.5rem;
-	}
-	.headerMotto {
-		letter-spacing: 0px;
 	}
 	.partners_gallery div {
 		width: 50vw;
@@ -855,10 +860,10 @@ input {
 		--headerImgSize: 640px;
 		font-size: 12px;
 	}
-	.titleBar {
+	.top-image-header__title-bar {
 		font-size: 2.3rem;
 	}
-	.headerMotto {
+	.top-image-header__motto {
 		letter-spacing: 1px;
 	}
 	.footer .socials {
@@ -882,7 +887,7 @@ input {
 	footer {
 		padding: 0 2rem 2rem;
 	}
-	nav .logo {
+	.nav__logo {
 		max-width: 310px;
 	}
 	.about {
@@ -975,12 +980,12 @@ input {
 	html {
 		--headerImgSize: 1080px;
 	}
-	.titleBar {
+	.top-image-header__title-bar {
 		height: 11rem;
 		font-size: 3rem;
 		letter-spacing: 3px;
 	}
-	.headerMotto {
+	.top-image-header__motto {
 		font-size: 2.5rem;
 	}
 	.about {
@@ -1035,7 +1040,7 @@ input {
 			'd3p d2p';
 		gap: 1.5rem;
 	}
-	.long .modal_desc {
+	.long.modal_desc {
 		grid-template-areas:
 			'h h'
 			'd1 d2'
@@ -1186,7 +1191,7 @@ input {
 	.burger {
 		display: none;
 	}
-	.logo {
+	.nav__logo {
 		width: 20vw;
 		max-height: 3rem;
 	}
@@ -1204,28 +1209,28 @@ input {
 		flex-direction: row;
 		justify-content: space-evenly;
 	}
-	nav > .logo {
+	.nav__logo {
 		display: block;
 	}
-	.nav ul {
+	.nav__list {
 		flex-direction: row;
 		width: max-content;
 		gap: 2rem;
 		margin: 0;
 	}
-	a {
+	.nav__link {
 		height: 6rem;
 		margin: 0;
 		padding: 0 1rem;
-		font-size: 1.3rem;
+		font-size: 2rem;
 		line-height: 6rem;
 		transition: 0.2s ease-in-out;
 	}
-	nav a:hover {
+	.nav__link:hover {
 		text-shadow: var(--activeTextIconsShadow);
 		background-color: rgba(0, 0, 0, 0.1);
 	}
-	.topImageHeader {
+	.top-image-header {
 		margin-top: 5rem;
 		max-height: 60vh;
 		grid-template-areas:
@@ -1242,18 +1247,18 @@ input {
 		background-image: none;
 		background-color: var(--bcgColor);
 	}
-	.topImageHeader header {
+	.top-image-header__header {
 		width: 100%;
 	}
-	.titleBar {
+	.top-image-header__titleBar {
 		width: max-content;
 		font-size: 4rem;
 		letter-spacing: 6px;
 	}
-	.topImageHeader .logo {
+	.top-image-header__logo {
 		display: none;
 	}
-	.headerMotto {
+	.top-image-header__motto {
 		font-size: 1.6rem;
 		color: black;
 		font-weight: lighter;
