@@ -1040,7 +1040,7 @@ input {
 			'd3p d2p';
 		gap: 1.5rem;
 	}
-	.long.modal_desc {
+	.modal_desc.long {
 		grid-template-areas:
 			'h h'
 			'd1 d2'
@@ -1192,6 +1192,7 @@ input {
 		display: none;
 	}
 	.nav__logo {
+		display: block;
 		width: 20vw;
 		max-height: 3rem;
 	}
@@ -1208,9 +1209,6 @@ input {
 
 		flex-direction: row;
 		justify-content: space-evenly;
-	}
-	.nav__logo {
-		display: block;
 	}
 	.nav__list {
 		flex-direction: row;
@@ -1287,10 +1285,9 @@ input {
 		margin: 0;
 	}
 	.tile.camp:hover {
-		transform: translateY(-5%) scale(1.05);
-
-		box-shadow: var(--activeBoxShadow);
 		cursor: pointer;
+		box-shadow: var(--activeBoxShadow);
+		transform: translateY(-5%) scale(1.05);
 	}
 	.offer {
 		grid-template-columns: repeat(4, minmax(150px, 1fr));
