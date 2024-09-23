@@ -1,0 +1,166 @@
+<div class="wrapper"></div>
+    <div
+        class="wrapper__burger burger"
+        id="burger"
+        onclick="toggleMenu()">
+        <div class="burger__bar burger__bar--top"></div>
+        <div class="burger__bar burger__bar--middle"></div>
+        <div class="burger__bar burger__bar--bottom"></div>
+    </div>
+    <nav class="nav">
+        <div class="nav__logo">Logo</div>
+        <ul class="nav__list">
+            <li class="nav__item">
+                <a class="nav__link" href=".certificates">
+                    <i class="fa-solid fa-certificate"></i>Certyfikaty
+                </a>
+            </li>
+            <li class="nav__item">
+                <a class="nav__link" href=".events">
+                    <i class="fas fa-calendar-check"></i>Wydarzenia
+                </a>
+            </li>
+            <li class="nav__item">
+                <a class="nav__link" href="#wyjazdy">
+                    <i class="fas fa-cloud-moon"></i>Wyjazdy
+                </a>
+            </li>
+            <li class="nav__item">
+                <a class="nav__link" href="#zajecia">
+                    <i class="far fa-clock"></i>Zajęcia
+                </a>
+            </li>
+            <li class="nav__item">
+                <a class="nav__link" href=".company-details">
+                    <i class="fa-solid fa-circle-info"></i>Kontakt
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <section class="top-image-header">
+        <div class="top-image-header__logo">Logo</div>
+        <header class="top-image-header__header">
+            <div class="top-image-header__title-bar">
+                <h1 class="top-image-header__title">Body Healing</h1>
+                <h2 class="top-image-header__subtitle">by madejszka</h2>
+            </div>
+        </header>
+        <div class="top-image-header__motto">
+            <h3>joga | slow life | mindfulness</h3>
+        </div>
+    </section>
+    <section class="about">
+        <header class="about__header section-header">O mnie</header>
+        <aside class="about__portrait">
+            <img
+                src="../static//img/about/about_profile.jpg"
+                loading="lazy"
+                alt="Yoganka z profilu" />
+        </aside>
+        <h2 class="about__heading">CZEŚĆ! Tu YOGANKA !</h2>
+        <aside class="about__ryt">
+            <img
+                src="../static/img/about/about_ryt.jpg"
+                loading="lazy"
+                alt="Autoryzowany nauczyciel jogi" />
+        </aside>
+        <aside class="about__alliance">
+            <img
+                src="../static/img/about/about_YA-Logo.jpg"
+                loading="lazy"
+                alt="Logo federacji jogi" />
+        </aside>
+        <h3 class="about__greeting">Cieszę się, że tu jesteś. Rozgość się.</h3>
+        <p class="about__description">
+            Jestem nauczycielką w nurcie vinyasa oraz hatha. Moje zajęcia najczęściej prowadzę w rytmie slow flow vinyasa. Moje ciało często woła o relaks, stąd przekonanie również do jogi yin. Pierwszy raz stanęłam na macie 18 lat temu. W jodze najpiękniejsze są powroty.
+        </p>
+    </section>
+    <section class="offer">
+        <header class="offer__header section-header">
+            Pokuś się na...
+            <hr class="offer__line line-shadow" />
+        </header>
+        <article class="offer__type" id="wyjazdy">
+            <header class="offer__type-header">Wyjazdy</header>
+        </article>
+        <article class="offer__type" id="zajecia">
+            <header class="offer__type-header">Zajęcia</header>
+            <div class="offer__tile">
+                <img class="offer__pic" src="../static/img/offer/offer_individual.png" loading="lazy" />
+                <h3 class="offer__tile-title">Indywidualne</h3>
+                <p class="offer__tile-desc">Ty, joga i ja...</p>
+            </div>
+            <div class="offer__tile">
+                <img class="offer__pic" src="../static/img/offer/offer_group.png" loading="lazy" />
+                <h3 class="offer__tile-title">Regularne - grupowe</h3>
+                <p class="offer__tile-desc">Sieć ZdroFit</p>
+            </div>
+            <div class="offer__tile">
+                <img class="offer__pic" src="../static/img/offer/offer_sup.png" loading="lazy" />
+                <h3 class="offer__tile-title">Joga na supach</h3>
+                <p class="offer__tile-desc">
+                    Nie bój się zmoczyć... Extra mobilizacja mięśni głębokich i stabilizujących
+                </p>
+            </div>
+        </article>
+
+        <article class="offer__type offer__type--events">
+            <header class="offer__type-header">Wydarzenia</header>
+            <div class="offer__tile">
+                <img class="offer__pic" src="../static/img/offer/events_gongi.png" loading="lazy" />
+                <h3 class="offer__tile-title">YOGA & SOUND</h3>
+                <p class="offer__tile-desc">Moon Ceremony</p>
+            </div>
+        </article>
+    </section>
+    <section class="certificates">
+        <header class="certificates__header section-header">Certyfikaty</header>
+        <article class="certificates__gallery">
+            <div class="certificates__tile">
+                <img class="certificates__pic" src="../static/img/about/about_ryt.jpg" loading="lazy" />
+                <h3><strong class="certificates__name">RYT200 Bali</strong></h3>
+                <p class="certificates__school">House of OM</p>
+                <p class="certificates__duration">200h</p>
+                <p><strong class="certificates__type">Vinyasa & Hatha</strong></p>
+            </div>
+            <div class="certificates__tile">
+                <img class="certificates__pic" src="../static/img/offer/offer_individual.png" loading="lazy" />
+                <h3><strong class="certificates__name">Instruktor Hatha Jogi</strong></h3>
+                <p class="certificates__school">prof. Szopa</p>
+                <p class="certificates__duration">150h</p>
+                <p><strong class="certificates__type">Hatha</strong></p>
+            </div>
+        </article>
+    </section>
+    <footer class="footer">
+        <div class="footer__logo">Logo</div>
+        <div class="footer__company-details">
+            <p>Gdańsk, Polska</p>
+            <a href="tel:+48792891607">+48 792 891 607</a>
+            <a href="mailto:aniamadejsza@gmail.com">aniamadejsza@gmail.com</a>
+            <p>NIP 777777777777</p>
+        </div>
+        <div class="footer__socials">
+            <a
+                class="footer__social"
+                href="https://www.instagram.com/yoganka_bodyhealing/"
+                target="_blank"
+                title="Instagram Fanpage">
+                <i class="fa-brands fa-instagram"></i>
+                <div class="footer__social-qr">
+                    <img src="../static/qrinsta.png" />
+                </div>
+            </a>
+            <a
+                class="footer__social"
+                href="https://www.facebook.com/profile.php?id=100094192084948"
+                target="_blank"
+                title="Facebook Fanpage">
+                <i class="fa-brands fa-square-facebook"></i>
+                <div class="footer__social-qr">
+                    <img src="../static/qrfb.png" />
+                </div>
+            </a>
+        </div>
+    </footer>
+</div>
