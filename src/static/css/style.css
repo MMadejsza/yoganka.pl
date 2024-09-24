@@ -51,6 +51,10 @@ body {
 ul {
 	list-style: none;
 }
+img {
+	display: block;
+	max-width: 100%;
+}
 .wrapper {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -253,7 +257,7 @@ section:nth-child(even) {
 	box-shadow: var(--transitiveBoxShadow);
 }
 
-.sectionHeader {
+.section-header {
 	line-height: 6rem;
 	padding: 1rem 0.5rem;
 	font-size: 4rem;
@@ -277,53 +281,46 @@ section:nth-child(even) {
 		'alliance';
 	gap: 1.5rem;
 }
-.about .sectionHeader {
+.about__header {
 	grid-area: header;
 }
-img {
-	display: block;
-	max-width: 100%;
-}
-.about img {
-	display: block;
-	width: 100%;
-	max-width: 640px;
-	height: auto;
-	box-shadow: var(--boxShadow);
-}
-.about aside {
+.about__portrait,
+.about__ryt,
+.about__alliance {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 }
-.about_portrait {
-	grid-area: portrait;
-	margin: -1rem 0 1rem;
-}
-.about aside ~ aside img {
-	display: block;
+.about__alliance,
+.about__ryt {
 	max-width: 60vw;
 }
-.about .ryt {
+.about__portrait {
+	grid-area: portrait;
+	max-width: 640px;
+	margin: -1rem 0 1rem;
+	box-shadow: var(--boxShadow);
+}
+.about__ryt {
 	grid-area: ryt;
 }
-.about .alliance img {
+.about__alliance {
 	grid-area: alliance;
 	box-shadow: none;
 }
-.about h2 {
+.about__heading {
 	grid-area: h2;
 
 	font-size: 2.5rem;
 	font-weight: 500;
 }
-.about h3 {
+.about__greeting {
 	grid-area: h3;
 
 	font-size: 2.3rem;
 	font-weight: 500;
 }
-.about p {
+.about__description {
 	grid-area: article;
 }
 .offer {
@@ -900,14 +897,14 @@ input {
 			'article article'
 			'ryt alliance';
 	}
-	.about_portrait {
+	.about__portrait {
 		max-width: 70%;
 	}
-	.about aside ~ aside img {
+	.about__alliance,
+	.about__ryt {
 		max-width: 55%;
-		object-fit: contain;
 	}
-	.sectionHeader,
+	.section--header,
 	.offerType_header {
 		grid-column: 1 /-1;
 	}
@@ -1263,7 +1260,7 @@ input {
 		box-shadow: none;
 		background-color: transparent;
 	}
-	.wrapper section.about {
+	.about {
 		grid-template-columns: repeat(4, minmax(200px, 1fr));
 		grid-template-areas:
 			'header header header header'
@@ -1271,16 +1268,15 @@ input {
 			'h3 h3 portrait portrait'
 			'article article portrait portrait'
 			'ryt alliance portrait portrait';
-		/* padding: 0 4rem; */
 	}
-	.wrapper section.about h2,
-	.wrapper section.about h3,
-	.wrapper section.about p {
+	.about__heading,
+	.about__greeting,
+	.about__description {
 		justify-self: left;
 		text-align: left;
 		padding-left: 2rem;
 	}
-	.about_portrait {
+	.about__portrait {
 		max-width: 90%;
 		margin: 0;
 	}
@@ -1411,5 +1407,5 @@ input {
 	}
 }
 
-/* toen for mailerLite api */
+/* token for mailerLite api */
 /* eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiN2MwMjI0ODk1MDJmZjlmN2U5ZTE0YzBlZGU3MzZhOTcxNWY5MmZmYjJjMzg4ZTFkNDQwZGY2OTJhYjA4NDMxM2RhMWFlZmFkNjNiNzI2YjQiLCJpYXQiOjE3MjY5NDczNzguMDc0NTg1LCJuYmYiOjE3MjY5NDczNzguMDc0NTg5LCJleHAiOjQ4ODI2MjA5NzguMDcwOTg2LCJzdWIiOiIxMTIyMjcxIiwic2NvcGVzIjpbXX0.Tg4KquQhT9UfsBJX0AeMqVgmj1uVrgfONTP3JlTHht3x7J96DB6Xm_n7qu7GNtopw3R5IAhdr8Q7_DUl4AEw1zKuCHdKC7tG504dbAw4aPw7RiMStUgdHwfhhlGciEQ-6MmxtkecAlJJsnUohu-048TctwCZDIfysOxZ1w4bBuNcXrqUDUnLFPC8LvgR19GBs2doBnZGvr2f9h8eTCJug9n5dQ4f6LWOfxTi_NLa-h2ES-ANUflp5gYtAtvemubvQa0OYrOJB5YV2xN0FcH1zeCWrVS4UWYbnCVwGg0_Kh06JRX3K3KlkMXBt-Y9ZWt3NeOcCzJ5eWhBlpgehK81KUDNpQOpIFg2JSNnxisRTl5HK8DDRlZZekKWz1e4pVoVTgeOh25vNGPXGhwJjI1fLOUGd_mDMJNqAKlRrlR_0oS2-obt_GkkD0RQRuwbip91jK6I6srp6XeoXAFG51ojKKexfa_5L4Ho7TTXAK2ApCjjO2oKEncb_JcHZwYFBLRAKZtqB1jbXb64iQqjma3qVcVHtmy8-96gn4C5ClbtSZ76V0VMamC2M_CmCs4K5dYEfC6USgFmMdO9K_rwFXZcQp1wmvavO1X-mzBX8gBwBTh12pqJCNqRiV65F2opZM6UOfCSVLGP79B4Is3uA29wwtDgfn57OVd9qFrrPO_EuXg */
