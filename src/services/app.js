@@ -191,7 +191,7 @@ class Tile {
 			tile.classList.add(this.extraClass);
 		}
 		const img = this.createEl('img', {
-			class: 'pic',
+			class: 'tile__img pic',
 			src: `../static/img/offer/${this.img}`,
 			loading: 'lazy',
 		});
@@ -287,7 +287,7 @@ class Tile {
 		//@ img
 		// create img
 		const img = this.createEl('img', {
-			class: 'pic',
+			class: 'tile__img pic',
 			src: `../static/img/offer/${this.img}`,
 			loading: 'lazy',
 		});
