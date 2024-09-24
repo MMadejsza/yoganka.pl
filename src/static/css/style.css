@@ -698,7 +698,7 @@ input {
 		transform: translate(-100%);
 	}
 }
-.wrapper > footer {
+.footer {
 	grid-area: footer;
 	min-height: 300px;
 	padding: 1rem 1rem 2rem;
@@ -712,7 +712,7 @@ input {
 	align-items: center;
 	gap: 1rem;
 }
-.footer a {
+footer a {
 	height: auto;
 	color: white;
 	font-size: 1.5rem;
