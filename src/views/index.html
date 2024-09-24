@@ -437,77 +437,110 @@
 				</div>
 			</section>
 			<footer class="footer">
-				<div class="logo">Logo</div>
-				<div class="company-details">
-					<p>Gdańsk, Polska</p>
-					<a href="tel:+48792891607">+48 792 891 607</a>
-					<a href="mailto:aniamadejsza@gmail.com">aniamadejsza@gmail.com</a>
-					<p>NIP 777777777777</p>
-				</div>
-				<div class="socials">
+				<div class="footer__logo">Logo</div>
+
+				<div class="footer__company-details">
+					<p class="footer__company-location">Gdańsk, Polska</p>
 					<a
+						class="footer__company-phone"
+						href="tel:+48792891607"
+						>+48 792 891 607</a
+					>
+					<a
+						class="footer__company-email"
+						href="mailto:aniamadejsza@gmail.com"
+						>aniamadejsza@gmail.com</a
+					>
+					<p class="footer__company-nip">NIP 777777777777</p>
+				</div>
+
+				<div class="footer__socials">
+					<a
+						class="footer__social-link footer__social-link--instagram"
 						href="https://www.instagram.com/yoganka_bodyhealing/"
 						target="_blank"
 						title="Instagram Fanpage">
-						<div class="social">
-							<i class="fa-brands fa-instagram"></i>
-							<div class="qr">
-								<img src="../static/qrinsta.png" />
+						<div class="footer__social">
+							<i class="footer__social-icon fa-brands fa-instagram"></i>
+							<div class="footer__qr">
+								<img
+									class="footer__qr-image"
+									src="../static/qrinsta.png"
+									alt="Instagram QR Code" />
 							</div>
 						</div>
 					</a>
+
 					<a
+						class="footer__social-link footer__social-link--facebook"
 						href="https://www.facebook.com/profile.php?id=100094192084948"
 						target="_blank"
 						title="Facebook Fanpage">
-						<div class="social">
-							<i class="fa-brands fa-square-facebook"></i>
-							<div class="qr">
-								<img src="../static/qrfb.png" />
+						<div class="footer__social">
+							<i class="footer__social-icon fa-brands fa-square-facebook"></i>
+							<div class="footer__qr">
+								<img
+									class="footer__qr-image"
+									src="../static/qrfb.png"
+									alt="Facebook QR Code" />
 							</div>
 						</div>
 					</a>
+
 					<a
+						class="footer__social-link footer__social-link--whatsapp"
 						href="#"
 						id="whatsapp-contact"
 						target="_blank"
 						title="Napisz!">
-						<div class="social">
-							<div class="whatsapp">
-								<i class="fab fa-whatsapp"></i>
-								<div class="qr">
-									<img src="../static/qrwa.png" />
-								</div>
+						<div class="footer__social">
+							<i class="footer__social-icon fab fa-whatsapp"></i>
+							<div class="footer__qr">
+								<img
+									class="footer__qr-image"
+									src="../static/qrwa.png"
+									alt="WhatsApp QR Code" />
 							</div>
 						</div>
 					</a>
 				</div>
-				<div class="legal">Regulamin | Polityka prywatności</div>
-				<div class="credit">
+
+				<div class="footer__legal">Regulamin | Polityka prywatności</div>
+
+				<div class="footer__credit">
 					<a
+						class="footer__credit-link"
 						href="https://bit.ly/MaciejMadejszaProjects"
 						target="_blank"
 						title="Developer's Contact">
-						<div class="credits">&copy Maciej Madejsza</div>
+						<div class="footer__credits">&copy Maciej Madejsza</div>
 					</a>
 				</div>
-				<div class="pop-ups">
+
+				<div class="footer__pop-ups">
 					<a
-						class="ml-onclick-form pop-up-btn"
+						class="footer__pop-up-btn footer__pop-up-btn--gift ml-onclick-form"
 						href="javascript:void(0)"
-						onclick="ml('show', 'jiW5Nb', true)"
-						><i class="fas fa-gift"></i
-					></a>
+						onclick="ml('show', 'jiW5Nb', true)">
+						<i class="footer__pop-up-icon fas fa-gift"></i>
+					</a>
+
 					<a
-						class="pop-up-btn cookies"
-						href="#"
-						><i class="fas fa-cookie-bite"></i>
-						<div class="cookie-pop-up">
-							<div class="cookie-msg">Używamy tylko niezbędnych plików cookie.</div>
-							<div class="cookie-x"><i class="fas fa-times"></i></div></div
-					></a>
+						class="footer__pop-up-btn footer__pop-up-btn--cookies"
+						href="#">
+						<i class="footer__pop-up-icon fas fa-cookie-bite"></i>
+						<div class="footer__cookie-pop-up">
+							<div class="footer__cookie-msg">
+								Używamy tylko niezbędnych plików cookie.
+							</div>
+							<div class="footer__cookie-close">
+								<i class="fas fa-times footer__cookie-close-icon"></i>
+							</div>
+						</div>
+					</a>
 				</div>
 			</footer>
+
 			<!-- Scripts -->
 			<script
 				src="https://kit.fontawesome.com/4622d99ad4.js"

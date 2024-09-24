@@ -470,9 +470,8 @@ document.addEventListener('DOMContentLoaded', function () {
 	});
 
 	// cookies x btn
-
-	document.querySelector('.cookie-x').addEventListener('click', (e) => {
-		const parent = e.target.closest('.pop-up-btn.cookies');
+	document.querySelector('.footer__cookie-close').addEventListener('click', (e) => {
+		const parent = e.target.closest('.footer__pop-up-btn--cookies');
 		parent.style.opacity = 0;
 		setTimeout(() => {
 			parent.style.display = 'none';
