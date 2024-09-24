@@ -38,6 +38,7 @@ html {
 	--activeTextIconsShadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 	--headerImgSize: 460px;
 	--headerSize: calc(var(--headerImgSize) + 8rem);
+	--baseTransition: 0.3s ease-in-out;
 
 	font-family: 'EB Garamond', serif;
 	font-weight: 400;
@@ -55,6 +56,9 @@ ul {
 img {
 	display: block;
 	max-width: 100%;
+}
+a {
+	transition: var(--baseTransition);
 }
 .tile__img {
 	max-width: 80%;
@@ -105,17 +109,17 @@ input {
 	cursor: auto;
 	background-color: whitesmoke;
 }
-.active {
+div.active {
 	display: block;
 }
-.visible {
+div.visible {
 	/* display: block; */
 	opacity: 1;
 	width: 95vw;
 	min-height: 500px;
 	max-height: 85vh;
 }
-.hidden {
+div.hidden {
 	display: none;
 }
 /** COMMON BLOCKS END*/
@@ -626,13 +630,13 @@ input {
 	grid-area: partners;
 	overflow: hidden;
 }
-.partners .gallery-slide {
+.partners__gallery-slide {
 	display: flex;
 	align-items: center;
 	position: relative;
 }
-.partners .gallery-slide:before,
-.partners .gallery-slide:after {
+.partners__gallery-slide:before,
+.partners__gallery-slide:after {
 	position: absolute;
 	top: 0;
 	width: 10vw;
@@ -641,19 +645,18 @@ input {
 	content: '';
 	z-index: 2;
 }
-.partners .gallery-slide:before {
+.partners__gallery-slide:before {
 	left: -1rem;
 	background: linear-gradient(to left, rgba(0, 0, 0, 0), var(--color2));
 }
-.partners .gallery-slide:after {
+.partners__gallery-slide:after {
 	right: -1rem;
 	background: linear-gradient(to right, rgba(0, 0, 0, 0), var(--color2));
 }
-
-.partners .gallery-slide:hover .partners_gallery {
+.partners__gallery-slide:hover .partners__gallery {
 	animation-play-state: paused;
 }
-.partners .partners_gallery {
+.partners__gallery {
 	background-color: rgba(160, 214, 212, 0.4);
 	border-radius: var(--bRadius);
 
@@ -663,7 +666,7 @@ input {
 	gap: 2rem;
 	animation: 15s slide infinite linear;
 }
-.partners_gallery a {
+.partners__link {
 	width: 55vw;
 	height: 55vw;
 	max-width: 225px;
@@ -673,7 +676,7 @@ input {
 	justify-content: center;
 	align-items: center;
 }
-.partners img {
+.partners__image {
 	display: block;
 	max-width: 100%;
 	max-height: 100%;
@@ -681,12 +684,7 @@ input {
 	filter: grayscale(1);
 	transition: 0.4s ease-in-out;
 }
-.partners_gallery a:hover {
-	cursor: pointer;
-	transform: translateY(-25%) scale(1.15);
-	box-shadow: var(--activeBoxShadow);
-}
-.partners_gallery a:last-child {
+.partners__link:last-child {
 	margin-right: 2.5rem;
 }
 @keyframes slide {
@@ -836,7 +834,7 @@ i.footer__cookie-close-icon {
 	.offer {
 		grid-gap: 1.5rem;
 	}
-	.partners_gallery div {
+	.partners__image {
 		width: 50vw;
 		height: 50vw;
 	}
@@ -957,14 +955,14 @@ i.footer__cookie-close-icon {
 	.certificates__gallery {
 		grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
 	}
-	.partners_gallery a {
+	.partners__link {
 		width: 40vw;
 		height: 40vw;
 	}
-	.partners .gallery-slide:before {
+	.partners__gallery-slide:before {
 		left: -2rem;
 	}
-	.partners .gallery-slide:after {
+	.partners__gallery-slide:after {
 		right: -2rem;
 	}
 	.footer__social-link {
@@ -1100,9 +1098,14 @@ i.footer__cookie-close-icon {
 	.certificates__gallery {
 		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 	}
-	.partners .partners_gallery {
+	.partners__gallery {
 		gap: 4rem;
 		animation: 20s slide infinite linear;
+	}
+	.partners__link:hover {
+		cursor: pointer;
+		transform: translateY(-25%) scale(1.15);
+		box-shadow: var(--activeBoxShadow);
 	}
 	.footer {
 		flex-flow: row wrap;
@@ -1139,14 +1142,14 @@ i.footer__cookie-close-icon {
 	.modal_desc {
 		grid-template-columns: repeat(2, minmax(300px, 1fr));
 	}
-	.partners_gallery a {
+	.partners__link {
 		width: 40vw;
 		height: 40vw;
 	}
-	.partners .gallery-slide:before {
+	.partners__gallery-slide:before {
 		width: 7vw;
 	}
-	.partners .gallery-slide:after {
+	.partners__gallery-slide:after {
 		width: 7vw;
 	}
 	.footer__pop-ups {
@@ -1319,7 +1322,7 @@ i.footer__cookie-close-icon {
 	.certificates__tile:nth-last-child(3) {
 		grid-column: 2;
 	}
-	.partners_gallery a {
+	.partners__link {
 		width: 20vw;
 		height: 20vw;
 	}
@@ -1345,7 +1348,6 @@ i.footer__cookie-close-icon {
 	}
 	.footer__company-details a {
 		font-size: 2.2rem;
-		text-shadow: none;
 	}
 	.footer__company-details a:hover {
 		font-size: 2.2rem;
@@ -1394,14 +1396,14 @@ i.footer__cookie-close-icon {
 	.modal {
 		max-width: 1200px;
 	}
-	.partners_gallery a {
+	.partners__link {
 		width: 30vw;
 		height: 30vw;
 	}
-	.partners .gallery-slide:before {
+	.partners__gallery-slide:before {
 		width: 5vw;
 	}
-	.partners .gallery-slide:after {
+	.partners__gallery-slide:after {
 		width: 5vw;
 	}
 }
