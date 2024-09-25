@@ -10,7 +10,7 @@ html {
 	--iconPosition: -3.5rem;
 	--bRadius: 15px;
 
-	--itemBcg: rgba(177, 226, 232, 0.85);
+	/* --itemBcg: rgba(177, 226, 232, 0.85);
 	--navBcg: 252, 251, 236;
 	--bcgColor: var(--color1);
 	--mainTekstColor: var(--color1);
@@ -26,19 +26,23 @@ html {
 	--color5: #003366;
 	--color6: #012b54;
 	--color7: rgb(255, 182, 0);
-	--color8: #f9f5f0;
+	--color8: #f9f5f0; 
+	--tileBcg: x;*/
 	--shadowAlpha1: 0.3;
 	--shadowAlpha2: 0.22;
 	--shadowColor1: var(--color0);
 	--shadowColor2: var(--color3);
-	--transitiveBoxShadow: var(--color0) 0px 25px 52px 78px;
+	/* --transitiveBoxShadow: #bcb8a0 0px -50px 89px 0px; */
+	/* --transitiveBoxShadow: #f3ac21 0px -50px 89px 0px; */
+	--transitiveBoxShadow: #e0cfb6 0px -50px 89px 0px;
 	--sectionShadow: rgba(0, 0, 0, 0.35) 8px 52px -19px inset;
 	--boxShadow: 2px 8px 10px rgba(149, 157, 165, 0.2);
 	--activeBoxShadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
 	--activeTextIconsShadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-	--headerImgSize: 460px;
-	--headerSize: calc(var(--headerImgSize) + 8rem);
+	/* --headerImgSize: 460px; */
+	--headerHeight: 95vh;
 	--baseTransition: 0.3s ease-in-out;
+	--wrapper-width: 100%;
 
 	font-family: 'EB Garamond', serif;
 	font-weight: 400;
@@ -77,6 +81,7 @@ a {
 	font-size: 1.9rem;
 }
 .wrapper {
+	max-width: var(--wrapper-width);
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 	grid-template-rows: repeat(6, auto);
@@ -88,6 +93,7 @@ a {
 		'partners partners partners partners partners'
 		'footer footer footer footer footer';
 	hyphens: auto;
+	overflow: hidden;
 }
 .stopScroll {
 	overflow: hidden;
@@ -220,7 +226,7 @@ div.hidden {
 
 .top-image-header {
 	grid-area: header;
-	max-height: var(--headerSize);
+	height: var(--headerHeight);
 	text-transform: uppercase;
 	background-image: url(../img/_header_576.jpg);
 	background-attachment: fixed;
@@ -243,6 +249,7 @@ div.hidden {
 		'. . . . .'
 		'. . . . .'
 		'motto motto motto motto motto';
+	border: 1px solid black;
 }
 
 .top-image-header__header {
@@ -609,7 +616,7 @@ div.hidden {
 .certificates__tile {
 	width: 100%;
 	padding: 1.5rem 1rem;
-	background-color: rgba(252, 251, 236, 0.75);
+	background-color: var(--tileBcg);
 	border-radius: var(--bRadius);
 	box-shadow: none;
 	overflow: hidden;
@@ -1171,10 +1178,10 @@ i.footer__cookie-close-icon {
 	/* big landscape tablets, laptops, and desktops */
 	html {
 		--headerImgSize: 1080px;
+		--wrapper-width: 1000px;
 		font-size: 10px;
 	}
 	.wrapper {
-		max-width: 1000px;
 		margin: 0 auto;
 		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 		grid-template-rows: repeat(7, auto);
@@ -1228,19 +1235,21 @@ i.footer__cookie-close-icon {
 		background-color: rgba(0, 0, 0, 0.1);
 	}
 	.top-image-header {
-		margin-top: 5rem;
-		max-height: 60vh;
+		/* position: relative; */
+		margin-top: 8rem;
+		grid-template-columns: repeat(6, minmax(auto, 1fr));
 		grid-template-areas:
-			'logo logo logo . .'
-			'title title title title title'
-			'. . . . .'
-			'. . . . .'
-			'. . . . .'
-			'. . . . .'
-			'motto motto motto . .'
-			'. . . . .'
-			'. . . . .'
-			'. . . . .';
+			'logo logo logo . . .'
+			'title title title title title .'
+			'motto motto motto . . .'
+			'. desc desc desc img img'
+			'. desc desc desc img img'
+			'. desc desc desc img img'
+			'. desc desc desc img img'
+			'. desc desc desc img img'
+			'. . . . . .'
+			'. . . . . . ';
+		grid-gap: 2rem;
 		background-image: none;
 		background-color: var(--bcgColor);
 	}
@@ -1262,7 +1271,45 @@ i.footer__cookie-close-icon {
 		box-shadow: none;
 		background-color: transparent;
 	}
-	.about {
+	.top-image-header__about {
+		grid-area: desc;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		gap: 2.5rem;
+		padding: 3rem;
+
+		backdrop-filter: blur(4px);
+		box-shadow: 0 0 15px 10px rgba(95, 95, 95, 0.4);
+		border-radius: var(--bRadius);
+	}
+	.top-image-header__greeting {
+		font-weight: normal;
+		font-size: 3rem;
+	}
+	.top-image-header__paragraph {
+		font-size: 2.2rem;
+		text-transform: none;
+	}
+	.top-image-header__paragraph strong {
+		font-weight: normal;
+	}
+	.top-image-header__img--portrait {
+		grid-area: img;
+		max-height: 100%;
+		border-radius: var(--bRadius);
+		filter: grayscale(0.5);
+	}
+	.top-image-header__video {
+		position: absolute;
+		top: 32vh;
+		width: var(--wrapper-width);
+		/* width: 100%; */
+		box-shadow: var(--transitiveBoxShadow);
+		z-index: -1;
+	}
+	/* .about {
 		grid-template-columns: repeat(4, minmax(200px, 1fr));
 		grid-template-areas:
 			'header header header header'
@@ -1270,14 +1317,14 @@ i.footer__cookie-close-icon {
 			'h3 h3 portrait portrait'
 			'article article portrait portrait'
 			'ryt alliance portrait portrait';
-	}
-	.about__heading,
+	} */
+	/* .about__heading,
 	.about__greeting,
 	.about__description {
 		justify-self: left;
 		text-align: left;
 		padding-left: 2rem;
-	}
+	} */
 	.about__portrait {
 		max-width: 90%;
 		margin: 0;
@@ -1387,8 +1434,8 @@ i.footer__cookie-close-icon {
 }
 @media (min-width: 1280px) {
 	/* hi-res laptops and desktops */
-	.wrapper {
-		max-width: 1200px;
+	html {
+		--wrapper-width: 1200px;
 	}
 	a {
 		font-size: 1.8rem;

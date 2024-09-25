@@ -469,6 +469,8 @@ document.addEventListener('DOMContentLoaded', function () {
 		wyjazdy.appendChild(new Tile(camp).generateTile());
 	});
 
+	const video = document.querySelector('.top-image-header__video');
+	video.playbackRate = 0.8; // Spowolnienie wideo o połowę
 	// cookies x btn
 	document.querySelector('.footer__cookie-close').addEventListener('click', (e) => {
 		const parent = e.target.closest('.footer__pop-up-btn--cookies');
