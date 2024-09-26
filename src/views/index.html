@@ -51,26 +51,13 @@
 		<link
 			href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Gravitas+One&display=swap"
 			rel="stylesheet" />
+
+		<!-- MailerLite Universal -->
+
 		<link
 			rel="stylesheet"
 			type="text/css"
 			href="../static/css/style.css" />
-		<!-- MailerLite Universal -->
-		<script>
-			(function (w, d, e, u, f, l, n) {
-				(w[f] =
-					w[f] ||
-					function () {
-						(w[f].q = w[f].q || []).push(arguments);
-					}),
-					(l = d.createElement(e)),
-					(l.async = 1),
-					(l.src = u),
-					(n = d.getElementsByTagName(e)[0]),
-					n.parentNode.insertBefore(l, n);
-			})(window, document, 'script', 'https://assets.mailerlite.com/js/universal.js', 'ml');
-			ml('account', '1112086');
-		</script>
 		<!-- End MailerLite Universal -->
 	</head>
 	<body>
@@ -117,7 +104,7 @@
 					<li class="nav__item">
 						<a
 							class="nav__link"
-							href=".company-details">
+							href=".footer__company-details">
 							<i class="fa-solid fa-circle-info nav__icon"></i>Kontakt
 						</a>
 					</li>
@@ -218,27 +205,10 @@
 					</div>
 				</article>
 
-				<article class="offerType events">
+				<article
+					class="offerType events"
+					id="wydarzenia">
 					<header class="offerType_header">Wydarzenia</header>
-					<div class="tile clickable">
-						<img
-							class="tile__img pic"
-							src="../static/img/offer/events_gongi.png"
-							loading="lazy" />
-						<h3>YOGA & SOUND</h3>
-						<p>Moon Ceremony</p>
-					</div>
-					<div class="tile clickable">
-						<img
-							class="tile__img pic"
-							src="../static/img/offer/offer_sup.png"
-							loading="lazy" />
-						<h3>Yoga na supach</h3>
-						<p>
-							Nie bój się zmoczyć... Extra mobilizacja mięśni głębokich i
-							stabilizujących
-						</p>
-					</div>
 				</article>
 			</section>
 			<section class="certificates">
@@ -614,7 +584,7 @@
 						class="footer__pop-up-btn footer__pop-up-btn--cookies"
 						href="#">
 						<i class="footer__pop-up-icon fas fa-cookie-bite"></i>
-						<div class="footer__cookie-pop-up">
+						<div class="footer__cookie-pop-up clickable">
 							<div class="footer__cookie-msg">
 								Używamy tylko niezbędnych plików cookie.
 							</div>
@@ -627,6 +597,27 @@
 			</footer>
 
 			<!-- Scripts -->
+			<script>
+				(function (w, d, e, u, f, l, n) {
+					(w[f] =
+						w[f] ||
+						function () {
+							(w[f].q = w[f].q || []).push(arguments);
+						}),
+						(l = d.createElement(e)),
+						(l.async = 1),
+						(l.src = u),
+						(n = d.getElementsByTagName(e)[0]),
+						n.parentNode.insertBefore(l, n);
+				})(
+					window,
+					document,
+					'script',
+					'https://assets.mailerlite.com/js/universal.js',
+					'ml',
+				);
+				ml('account', '1112086');
+			</script>
 			<script
 				src="https://kit.fontawesome.com/4622d99ad4.js"
 				crossorigin="anonymous"></script>

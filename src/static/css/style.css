@@ -149,14 +149,14 @@ input {
 }
 /* Active state */
 .burger.active .burger__bar--top {
-	transform: translateY(calc(9px / 2 - 4px / 2)) rotate(45deg);
+	transform: translateY(calc(10px / 2 - -10px / 2)) rotate(45deg);
 }
 .burger.active .burger__bar--middle {
 	transform: translateX(-100%);
 	opacity: 0;
 }
 .burger.active .burger__bar--bottom {
-	transform: translateY(calc(-15px / 2 + 4px / 2)) rotate(-45deg);
+	transform: translateY(calc(-29px / 2 + 4px / 2)) rotate(-45deg);
 }
 .burger.active + .nav {
 	right: 0;
@@ -213,13 +213,11 @@ input {
 }
 .top-image-header {
 	grid-area: header;
-	max-height: var(--headerSize);
 	text-transform: uppercase;
-	background-image: url(../img/_header_576.jpg);
+	background-image: url(../img/_header_face.jpg);
 	background-attachment: fixed;
-	background-position: top center;
 	background-repeat: no-repeat;
-	background-size: auto var(--headerImgSize);
+	background-size: cover;
 	overflow: hidden;
 
 	display: grid;
@@ -480,9 +478,10 @@ input {
 }
 .modal_offer {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
 	grid-gap: 2.5rem;
 	place-items: center;
+	border-radius: var(--bRadius);
 }
 .modal_offer .modal_list {
 	display: flex;
@@ -518,6 +517,12 @@ input {
 }
 .modal_desc {
 	text-align: left;
+	font-size: 2rem;
+}
+.modal .modal_desc--event {
+	text-align: center;
+	font-size: 2.1rem;
+	padding: 0 2rem;
 }
 .modal .modal_h3 {
 	font-size: 2.5rem;
@@ -534,6 +539,10 @@ input {
 	text-align: center;
 	text-decoration: underline;
 	margin: 1rem 0;
+}
+.modal_li {
+	display: flex;
+	gap: 2rem;
 }
 .modal footer {
 	padding-bottom: 0;
@@ -791,7 +800,6 @@ footer a {
 	width: max-content;
 	height: 6rem;
 	padding-left: 0.5rem;
-	border: 1px solid black;
 	border-radius: 50px;
 	box-shadow: var(--activeBoxShadow);
 	transition: 0.3s ease-in-out;
@@ -812,7 +820,7 @@ i.footer__cookie-close-icon {
 }
 .footer__pop-up-btn--cookies:focus .footer__cookie-pop-up {
 	right: 0%;
-	background-color: rgba(var(--popUpBtn), 1);
+	background-color: rgba(var(--popUpBtn), 0.95);
 	opacity: 1;
 }
 .footer__pop-up-btn--cookies:focus .fa-cookie-bite {
@@ -826,7 +834,7 @@ div.visible {
 	/* display: block; */
 	opacity: 1;
 	width: 95vw;
-	min-height: 500px;
+	min-height: max-content;
 	max-height: 85vh;
 }
 div.hidden {
@@ -838,6 +846,9 @@ div.hidden {
 	html {
 		--headerImgSize: 500px;
 		font-size: 9px;
+	}
+	.top-image-header {
+		background-position-y: -2vh;
 	}
 	.top-image-header__motto {
 		letter-spacing: 0px;
@@ -893,10 +904,18 @@ div.hidden {
 	footer {
 		padding: 0 2rem 2rem;
 	}
+	.burger.active .burger__bar--top {
+		transform: translateY(calc(33px / 2)) rotate(45deg);
+	}
+	.burger.active .burger__bar--bottom {
+		transform: translateY(calc(-36px / 2)) rotate(-45deg);
+	}
 	.nav__logo {
 		max-width: 310px;
 	}
-
+	.top-image-header {
+		background-position-y: 30%;
+	}
 	.section--header,
 	.offerType_header {
 		grid-column: 1 /-1;
@@ -944,7 +963,6 @@ div.hidden {
 	}
 	.modal footer {
 		grid-column: 1 /-1;
-		grid-row: 6;
 		/* max-width: 75%; */
 	}
 	.certificates__gallery {
@@ -1001,10 +1019,10 @@ div.hidden {
 	}
 	.offerType.events {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+		width: 100%;
+		grid-template-columns: repeat(auto-fit, minmax(345px, 1fr));
 	}
 	.offerType.events .tile {
-		grid-column: span 2;
 		max-width: 500px;
 	}
 	.modal {
@@ -1020,6 +1038,10 @@ div.hidden {
 		min-width: auto;
 		max-width: 350px;
 	}
+	.modal_offer.event *,
+	.modal_offer.event .modal_included {
+		grid-column: 1 /-1;
+	}
 	.modal_offer header {
 		grid-column: span 3;
 		width: max-content;
@@ -1027,6 +1049,7 @@ div.hidden {
 	.modal_offer .modal_list.at-glance {
 		margin: 0;
 	}
+
 	.modal_desc {
 		display: grid;
 		grid-template-columns: repeat(2, minmax(300px, 360px));
@@ -1081,20 +1104,23 @@ div.hidden {
 		grid-area: d4p;
 	}
 	.modal .modal_included {
-		grid-column: span 2;
+		grid-column: span 3;
 	}
 	.modal .modal_excluded {
-		grid-column: 3;
+		grid-column: -1 / -4;
 	}
 	.modal .modal_optional {
-		grid-column: span 2;
+		grid-column: -1 / -4;
 	}
 	.modal .modal_excluded {
-		grid-column: span 2;
+		grid-column: -1 / -4;
 	}
 	.modal .modal_free-time {
-		grid-column: span 4;
+		grid-column: 1 / -1;
 		grid-row: auto;
+	}
+	.modal_attention-note {
+		grid-column: 1 / -1;
 	}
 	.modal footer {
 		gap: 3rem;
@@ -1286,7 +1312,7 @@ div.hidden {
 		max-width: 90%;
 		margin: 0;
 	}
-	.tile.camp:hover {
+	.tile.clickable:hover {
 		cursor: pointer;
 		box-shadow: var(--activeBoxShadow);
 		transform: translateY(-5%) scale(1.05);

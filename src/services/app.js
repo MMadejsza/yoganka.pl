@@ -1,11 +1,12 @@
 // Created camps so far
 const kaszubyCamp = {
+	type: `camp`,
 	extraClass: '',
-	img: 'camp_kaszuby.png',
+	img: '../static/img/offer/camp_kaszuby.png',
 	front: {
 		frontTitle: `Kojenie Zmysłów
 		Yoga | Aromaterapia | SPA`,
-		frontDate: `11-13/10/2024`,
+		frontDate: [`11-13/10/2024`],
 		frontLocation: `Kaszuby`,
 		frontDesc: `Zabieram Cię do urokliwego domku, otulonego drewnem, gdzie schowamy się w ulubionych skarpetkach, za dużych sweterkach i będziemy kocykować przy kominku i pić ciepłe naparki!`,
 	},
@@ -68,13 +69,14 @@ const kaszubyCamp = {
 	},
 };
 const warmiaCamp = {
+	type: `camp`,
 	extraClass: 'long',
-	img: 'camp_warmia.png',
+	img: '../static/img/offer/camp_warmia.png',
 	front: {
 		frontTitle: `Comfy Retreat
 		Yoga | Malowanie Intuicyjne | Gongi
 		SPA`,
-		frontDate: '08-11/11/2024',
+		frontDate: ['08-11/11/2024'],
 		frontLocation: 'Warmia',
 		frontDesc: `Otulimy się ciepłym kominkiem, zdrowymi naparami i pysznym jedzeniem! Zabierz swój ulubiony dres, za duży sweterek i ciepłe skarpetki, po prostu Twoje ulubione, jesienne atrybuty!
 
@@ -141,12 +143,64 @@ const warmiaCamp = {
 		},
 	},
 };
+// Created active classes so far
+const yogaAndSound = {
+	type: `event`,
+	extraClass: 'event',
+	img: '../static/img/offer/events_gongi.png',
+	front: {
+		frontTitle: `YOGA & SOUND
+		Moon Ceremony`,
+		frontDate: [`Data wkrótce...`],
+		frontLocation: `Plaża Trójmiasto`,
+		frontDesc: `Comiesięczne spotkania przy pełni księżyca, gongami wprowadzające Cię w relaksujący trans.
+		Więcej...`,
+	},
+	modal: {
+		imgModal: this.img,
+		fullDesc: `To comiesięczne spotkania przy pełni księżyca. W okresie letnim wydarzenie jest organizowane na plaży, natomiast w sezonie jesienno-zimowym przenosimy się na przytulne sale na terenie Trójmiasta.`,
+		program: [
+			`Sesja yogi przy dźwiękach mis i gongów (koncert w wykonaniu Agnieszki Topp)`,
+			`Savanasa z opaską na oczach nasączona aromatycznymi olejkami`,
+			`Zdrowy napar naszego przepisu`,
+			`Rozmowy w kręgu`,
+			`Upominek naszego autorstwa`,
+			`Maty od partnera Miś Yoga`,
+		],
+		form: 'https://forms.gle/kYN6VpfP3aV1b9yB8',
+		questionTemplate(subject) {
+			return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
+		},
+	},
+};
+const yogaNaSupach = {
+	type: `event`,
+	extraClass: 'event',
+	img: '../static/img/offer/offer_sup.png',
+	front: {
+		frontTitle: `Yoga na Supach`,
+		frontDate: [`(Sezon Letni)`],
+		frontLocation: `Plaża Trójmiasto`,
+		frontDesc: `Nie bój się zmoczyć... Extra mobilizacja mięśni głębokich i stabilizujących
+		Więcej...`,
+	},
+	modal: {
+		imgModal: this.img,
+		fullDesc: `Latem zapraszam do wodnego studio jogi. Otwarta przestrzeń z  nieskończonym oknem na naturę stanowi doskonałą propozycję na ciepłe dni. Deska SUP zamiast maty, promienie słońca, letni podmuch wiatru i szum drzew dodadzą Twojej praktyce lekkości. Poprawisz balans, wzmocnisz mięśnie posturalne, zrelaksujesz się czując delikatne muskanie fal. Zobacz fotorelację z sezonu 2023 oraz 2024. Zajęcia odbywały się na jeziorze oraz w Zatoce Gdańskiej (Brzeźno).`,
+		form: 'https://forms.gle/kYN6VpfP3aV1b9yB8',
+		questionTemplate(subject) {
+			return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
+		},
+	},
+};
+
 // class tile template
 class Tile {
 	scrollFlag = 1;
 
 	// constructor destructuring template camp offer
 	constructor(givenEventBody) {
+		this.type = givenEventBody.type;
 		this.extraClass = givenEventBody.extraClass;
 		this.img = givenEventBody.img;
 		this.frontTitle = givenEventBody.front.frontTitle;
@@ -194,28 +248,36 @@ class Tile {
 	};
 	// main function generating and returning tile
 	generateTile = () => {
+		function appendEl(parent, ...args) {
+			args.forEach((el) => parent.appendChild(el));
+		}
 		// Create separate tags
-		const tile = this.createEl('div', {class: 'tile camp clickable'});
+		const tile = this.createEl('div', {class: 'tile clickable'});
 		// If for example "long" class required what triggers different grid layout
 		if (this.extraClass) {
 			tile.classList.add(this.extraClass);
 		}
 		const img = this.createEl('img', {
 			class: 'tile__img pic',
-			src: `../static/img/offer/${this.img}`,
+			src: `${this.img}`,
 			loading: 'lazy',
 		});
+
 		const frontTitle = this.createEl('h3');
 		frontTitle.innerText = this.frontTitle;
-		const frontDate = this.createEl('h3');
-		frontDate.innerText = this.frontDate;
+		const frontDates = [];
+		this.frontDate.forEach((el) => {
+			const frontDate = this.createEl('h3');
+			frontDate.innerText = el;
+			frontDates.push(frontDate);
+		});
 		const frontLocation = this.createEl('h4');
 		frontLocation.innerText = this.frontLocation;
 		const frontDesc = this.createEl('p', {class: 'tile_desc'});
 		frontDesc.innerText = this.frontDesc;
 
 		// Append those tags
-		tile.append(img, frontTitle, frontDate, frontLocation, frontDesc);
+		appendEl(tile, img, frontTitle, ...frontDates, frontLocation, frontDesc);
 
 		// Add modal if exists
 		if (this.modal) {
@@ -229,8 +291,13 @@ class Tile {
 			X.appendChild(Xa);
 			modal.appendChild(X);
 
+			let modalBody;
 			// call to build main modal body
-			const modalBody = this.generateTileModal();
+			if (this.type == 'camp') {
+				modalBody = this.generateTileModalCamp();
+			} else if (this.type == 'event') {
+				modalBody = this.generateTileModalEvent();
+			}
 			modal.appendChild(modalBody);
 			document.body.appendChild(modal);
 
@@ -289,7 +356,7 @@ class Tile {
 		section.appendChild(sectionList);
 		return section;
 	};
-	generateTileModal = () => {
+	generateTileModalCamp = () => {
 		// create main container
 		const modalOffer = this.createEl('div', {
 			class: `modal_offer `,
@@ -298,12 +365,11 @@ class Tile {
 		// create img
 		const img = this.createEl('img', {
 			class: 'tile__img pic',
-			src: `../static/img/offer/${this.img}`,
+			src: `${this.img}`,
 			loading: 'lazy',
 		});
 		modalOffer.appendChild(img);
 
-		// create header
 		//@ header
 		const header = this.createEl('header');
 		const ul = this.createEl('div', {class: 'modal_list at-glance'});
@@ -358,9 +424,11 @@ class Tile {
 			// start from 2nd one to avoid days name
 			for (let i = 1; i < keys.length; i++) {
 				const time = keys[i];
+				const timeContainer = this.createEl('div');
+				timeContainer.innerText = time;
 				const activity = campDay[time];
 				const li = this.createEl('li', {class: 'modal_li'});
-				li.append(`${time} - ${activity}`);
+				li.append(timeContainer, activity);
 				dayPlan.appendChild(li);
 			}
 			sectionDesc.append(dayHeader, dayPlan);
@@ -439,16 +507,89 @@ class Tile {
 		// return complete modal body
 		return modalOffer;
 	};
+	generateTileModalEvent = () => {
+		// create main container
+		const modalOffer = this.createEl('div', {
+			class: `modal_offer ${this.extraClass}`,
+		});
+		//@ img
+		// create img
+		const img = this.createEl('img', {
+			class: 'tile__img pic',
+			src: `${this.img}`,
+			loading: 'lazy',
+		});
+		modalOffer.appendChild(img);
+
+		//@ header
+		// create modal plan for camp
+		//@ section modal_desc
+		// create main container
+		const sectionDesc = this.createEl('section', {
+			class: `modal_desc--event ${this.extraClass ? this.extraClass : ''}`,
+		});
+		// create header container h3
+		const sectionDescHeader = this.createEl('h3', {class: 'modal_h3'});
+		// create icon
+		// const sectionDescHeaderI = this.createEl('i', {class: 'fa-solid fa-list-check'});
+		// populate header with icon and text
+		sectionDescHeader.append('W skrócie:');
+		// append ready section header
+		sectionDesc.appendChild(sectionDescHeader);
+		sectionDesc.append(this.modal.fullDesc);
+		modalOffer.appendChild(sectionDesc);
+
+		//@ section modal_included
+		// create section for what's included using util function and custom parameters
+		if (this.modal.program) {
+			const sectionIncluded = this.tileModalChecklistClassic(
+				'program',
+				'W programie:',
+				'fa-solid fa-check',
+				'modal_included',
+			);
+			modalOffer.appendChild(sectionIncluded);
+		}
+		// create a footer with 2 buttons to cause and action
+		// @ footer modal_user-action
+		const footer = this.createEl('footer', {
+			class: 'modal_user-action',
+		});
+		// use address  from camps dataset
+		const footerBtnSignUp = this.createEl('a', {
+			href: this.modal.form,
+			class: 'btn_sign-up',
+			target: '_blank',
+		});
+		// use message from camps dataset
+		footerBtnSignUp.innerText = 'Zapisz się';
+		const footerBtnAsk = this.createEl('a', {
+			href: `https://wa.me/${48792891607}?text=${encodeURIComponent(
+				this.modal.questionTemplate(this.frontTitle),
+			)}`,
+			class: 'btn_ask-for-info',
+			target: '_blank',
+		});
+		footerBtnAsk.innerText = 'Zapytaj';
+		footer.append(footerBtnSignUp, footerBtnAsk);
+		modalOffer.appendChild(footer);
+
+		// return complete modal body
+		return modalOffer;
+	};
 }
 
 // list of active camps to sign for
 const activeCamps = [kaszubyCamp, warmiaCamp];
+// list of active camps to sign for
+const activeEvents = [yogaAndSound, yogaNaSupach];
 
 // do when DOM loaded
 document.addEventListener('DOMContentLoaded', function () {
 	const menuLinks = document.querySelectorAll('ul li a');
 	const hamburger = document.getElementById('burger');
 	const wyjazdy = document.querySelector('#wyjazdy');
+	const wydarzenia = document.querySelector('#wydarzenia');
 
 	const toggleMenu = () => {
 		hamburger.classList.toggle('active');
@@ -482,17 +623,40 @@ document.addEventListener('DOMContentLoaded', function () {
 	});
 
 	whatsappTemplates();
+
 	// generate offered camps for website
 	activeCamps.forEach((camp) => {
 		wyjazdy.appendChild(new Tile(camp).generateTile());
 	});
+	activeEvents.forEach((event) => {
+		wydarzenia.appendChild(new Tile(event).generateTile());
+	});
 
-	// cookies x btn
+	// cookies
+	document
+		.querySelector('.footer__pop-up-btn--cookies')
+		.addEventListener('click', (e) => e.preventDefault());
 	document.querySelector('.footer__cookie-close').addEventListener('click', (e) => {
 		const parent = e.target.closest('.footer__pop-up-btn--cookies');
 		parent.style.opacity = 0;
 		setTimeout(() => {
 			parent.style.display = 'none';
 		}, 800);
+	});
+	// newsletter close
+	document.querySelector('.footer__pop-up-btn--gift').addEventListener('click', (e) => {
+		if (e.target.parentNode.classList.contains('footer__pop-up-btn--gift')) {
+			e.target.style.opacity = 0;
+			e.target.parentNode.style.opacity = 0;
+			setTimeout(() => {
+				e.target.parentNode.remove();
+				e.target.remove();
+			}, 800);
+		} else {
+			e.target.style.opacity = 0;
+			setTimeout(() => {
+				e.target.remove();
+			}, 800);
+		}
 	});
 });
