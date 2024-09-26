@@ -360,6 +360,7 @@ div.hidden {
 	justify-content: center;
 	align-items: center;
 	gap: 1.5rem;
+	padding: 1rem;
 }
 .about__heading {
 	grid-area: h2;
@@ -982,7 +983,6 @@ i.footer__cookie-close-icon {
 	}
 	.about__content {
 		font-size: 1.7rem;
-		padding: 1rem;
 	}
 	.offer {
 		grid-template-areas:
