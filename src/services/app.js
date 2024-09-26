@@ -1,12 +1,13 @@
 // Created camps so far
 const kaszubyCamp = {
 	extraClass: '',
-	img: 'camp_kaszuby.jpg',
+	img: 'camp_kaszuby.png',
 	front: {
-		frontTitle: `Kojenie Zmysłów - joga, aromaterapia i spa`,
+		frontTitle: `Kojenie Zmysłów
+		Yoga | Aromaterapia | SPA`,
 		frontDate: `11-13/10/2024`,
 		frontLocation: `Kaszuby`,
-		frontDesc: `Zabieram Cię do urokliwego domku, otulonego drewnem, gdzie schowamy się	w ulubionych skarpetkach, za dużych sweterkach i będziemy kocykować przy kominku i pić ciepłe naparki!`,
+		frontDesc: `Zabieram Cię do urokliwego domku, otulonego drewnem, gdzie schowamy się w ulubionych skarpetkach, za dużych sweterkach i będziemy kocykować przy kominku i pić ciepłe naparki!`,
 	},
 	modal: {
 		imgModal: this.img,
@@ -15,30 +16,32 @@ const kaszubyCamp = {
 			{
 				'day': 'Piątek',
 				'16:00': 'Przyjazd, Spacerki',
-				'18:00': 'Joga łagodna, relaksująca',
+				'18:00': 'Yoga łagodna, relaksująca',
 				'19:00': 'Wspólna kolacja',
 				'21:00': `Pielęgnacja z naturalnymi kosmetykami / sauna / balia, kobiece rozmowy`,
 			},
 			{
 				'day': 'Sobota',
-				'08:30': 'Przyjazd, Spacerki',
-				'09:30': 'Joga łagodna, relaksująca',
+				'08:00': 'Ziołowy napar dla porannych ptaszków',
+				'08:30': 'Energetyczna Yoga Slow Flow',
+				'09:30': 'Nieśpieszne śniadanko',
 				'CZAS WOLNY': '',
-				'16:00': 'aromaterapia (warsztat świec bubble, wosków na bazie olejków + wykład)',
+				'14:30': 'Yoga łagodna, relaksująca',
+				'16:00': 'Aromaterapia (warsztat świec bubble, wosków na bazie olejków + wykład)',
 				'19:00': 'Uczta przy kolacji',
-				'20:30': 'Joga + krąg przy kominku, rozmowy',
+				'20:30': 'Yoga + krąg przy kominku, rozmowy',
 			},
 			{
 				'day': 'Niedziela',
 				'08:30': 'Ziołowy napar dla porannych ptaszków',
-				'09:00': 'Joga Slow Flow',
+				'09:00': 'Yoga Slow Flow',
 				'10:00': 'Nieśpieszne śniadanie',
 				'CZAS WOLNY': '',
 				'13:00': 'Lunch i pożegnanie',
 			},
 		],
 		included: [
-			'4x Joga (Slow Flow, Hatha, Nidra)',
+			'4x Yoga (Slow Flow, Hatha, Nidra)',
 			'Warsztat świec i wosków',
 			'Rytuał Pielęgnacyjny Twarzy',
 			'Krąg',
@@ -47,7 +50,11 @@ const kaszubyCamp = {
 			'Kawa / Herbata / Napary 24/h',
 		],
 		excluded: ['Dojazd', 'Ubezpieczenie'],
-		optional: ['Masaż Misami', 'Sauny i Balii'],
+		optional: [
+			'Masaż Misami Tybetańskimi 120zł',
+			'Masaż Kobido 30zł',
+			'Sauny i Balii (oferta wkrótce)',
+		],
 		freeTime: [
 			{status: 'free', activity: 'Kocyk, spacerki, naparki'},
 			{status: 'optional', activity: 'Masaże misami'},
@@ -62,13 +69,16 @@ const kaszubyCamp = {
 };
 const warmiaCamp = {
 	extraClass: 'long',
-	img: 'camp_warmia.jpg',
+	img: 'camp_warmia.png',
 	front: {
-		frontTitle: 'Comfy Retreat - joga, malowanie intuicyjne, gongi i spa',
+		frontTitle: `Comfy Retreat
+		Yoga | Malowanie Intuicyjne | Gongi
+		SPA`,
 		frontDate: '08-11/11/2024',
 		frontLocation: 'Warmia',
-		frontDesc:
-			'Otulimy się ciepłym kominkiem, zdrowymi naparami i pysznym jedzeniem! Zabierz swój ulubiony dres, za duży sweterek i ciepłe skarpetki, po prostu Twoje ulubione jesienne atrybuty! Nie zabraknie czasu na książkę pod kocykiem, ale też uziemiających aktywności.',
+		frontDesc: `Otulimy się ciepłym kominkiem, zdrowymi naparami i pysznym jedzeniem! Zabierz swój ulubiony dres, za duży sweterek i ciepłe skarpetki, po prostu Twoje ulubione, jesienne atrybuty!
+
+		Nie zabraknie czasu na książkę pod kocykiem, ale też uziemiających aktywności.`,
 	},
 	modal: {
 		imgModal: 'camp_warmia.jpg',
@@ -78,12 +88,12 @@ const warmiaCamp = {
 				'day': 'Piątek',
 				'16:00': 'Przyjazd, Spacerki',
 				'18:00': 'Obiadokolacja',
-				'20:00': 'Joga',
+				'20:00': 'Yoga',
 				'21:00': `Kominek/Naparki/Relaks`,
 			},
 			{
 				'day': 'Sobota',
-				'08:30': 'Joga Slow Flow Vinyasa',
+				'08:30': 'Yoga Slow Flow Vinyasa',
 				'09:30': 'Nieśpieszne Śniadanko',
 				'CZAS WOLNY': '',
 				'14:00': 'Obiad + Słodkości',
@@ -93,24 +103,24 @@ const warmiaCamp = {
 			},
 			{
 				'day': 'Niedziela',
-				'08:30': 'Joga Slow Flow Vinyasa',
+				'08:30': 'Yoga Slow Flow Vinyasa',
 				'09:30': 'Nieśpieszne Śniadanko',
 				'CZAS WOLNY': '',
 				'14:00': 'Obiad + Słodkości',
-				'17:00': 'Joga Jin',
+				'17:00': 'Yoga Jin',
 				'18:30': 'Kolacja',
 				'20:00': 'Rozmowy w Kręgu',
 			},
 			{
 				'day': 'Poniedziałek',
-				'08:30': 'Joga Slow Flow Vinyasa',
+				'08:30': 'Yoga Slow Flow Vinyasa',
 				'09:30': 'Nieśpieszne Śniadanko',
 				'CZAS WOLNY': '',
 				'13:00': 'Lunch i pożegnanie',
 			},
 		],
 		included: [
-			'4x Joga (Slow Flow, Hatha, Nidra)',
+			'4x Yoga (Slow Flow, Hatha, Nidra)',
 			'Warsztat świec i wosków',
 			'Rytuał Pielęgnacyjny Twarzy',
 			'Krąg',
@@ -185,7 +195,7 @@ class Tile {
 	// main function generating and returning tile
 	generateTile = () => {
 		// Create separate tags
-		const tile = this.createEl('div', {class: 'tile camp'});
+		const tile = this.createEl('div', {class: 'tile camp clickable'});
 		// If for example "long" class required what triggers different grid layout
 		if (this.extraClass) {
 			tile.classList.add(this.extraClass);
@@ -379,7 +389,7 @@ class Tile {
 		// create section for what's optional to buy
 		const sectionOptional = this.tileModalChecklistClassic(
 			'optional',
-			'W cenie',
+			'Opcje:',
 			'fa-solid fa-plus',
 			'modal_optional',
 		);
@@ -393,7 +403,15 @@ class Tile {
 			'modal_free-time',
 		);
 		modalOffer.appendChild(sectionFreeTime);
-
+		//@ attention
+		// create a footer with 2 buttons to cause and action
+		// @ footer modal_user-action
+		const attentionNote = this.createEl('h2', {
+			class: 'modal_attention-note',
+		});
+		attentionNote.innerText =
+			'Miejsce gwarantowane jest wpłatą bezzwrotnego zadatku w kwocie 500 zł';
+		modalOffer.appendChild(attentionNote);
 		// create a footer with 2 buttons to cause and action
 		// @ footer modal_user-action
 		const footer = this.createEl('footer', {
