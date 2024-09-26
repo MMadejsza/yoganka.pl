@@ -87,7 +87,6 @@ a {
 		'cert cert cert cert cert'
 		'partners partners partners partners partners'
 		'footer footer footer footer footer';
-	hyphens: auto;
 }
 .stopScroll {
 	overflow: hidden;
@@ -316,46 +315,51 @@ div.hidden {
 	grid-template-areas:
 		'header'
 		'portrait'
-		'h2'
-		'ryt'
-		'h3'
-		'article'
-		'alliance';
-	gap: 1.5rem;
+		'content';
+	gap: 2rem;
 }
 .about__header {
 	grid-area: header;
 }
+.about__img {
+	grid-area: portrait;
+	position: relative;
+	width: 90%;
+	max-width: 70%;
+	background-color: transparent;
+	border-radius: var(--bRadius);
+	box-shadow: var(--boxShadow);
+	overflow: hidden;
+}
+.about__img--portrait {
+	width: 100%;
+	max-width: 640px;
+}
+.about__certificates {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	max-width: 60%;
+	height: 12%;
+	background-color: rgba(255, 255, 255, 0.7);
+	border-top-left-radius: var(--bRadius);
+	border-bottom-right-radius: var(--bRadius);
+	overflow: hidden;
+
+	display: flex;
+	justify-content: right;
+}
+.about__certificates img {
+	max-height: 100%;
+}
 .about__content {
+	grid-area: content;
+
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	gap: 1.5rem;
-}
-.about__portrait,
-.about__ryt,
-.about__alliance {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-.about__alliance,
-.about__ryt {
-	max-width: 60vw;
-}
-.about__portrait {
-	grid-area: portrait;
-	max-width: 640px;
-	margin: -1rem 0 1rem;
-	box-shadow: var(--boxShadow);
-}
-.about__ryt {
-	grid-area: ryt;
-}
-.about__alliance {
-	grid-area: alliance;
-	box-shadow: none;
 }
 .about__heading {
 	grid-area: h2;
@@ -827,7 +831,7 @@ i.footer__cookie-close-icon {
 @media (min-width: 360px) {
 	html {
 		--headerImgSize: 500px;
-		font-size: 10px;
+		font-size: 9px;
 	}
 	.top-image-header__motto {
 		letter-spacing: 0px;
@@ -886,23 +890,7 @@ i.footer__cookie-close-icon {
 	.nav__logo {
 		max-width: 310px;
 	}
-	.about {
-		grid-template-columns: minmax(300px, 1fr) minmax(300px, 1fr);
-		grid-template-areas:
-			'header header'
-			'portrait portrait'
-			'h2 h2'
-			'h3 h3'
-			'article article'
-			'ryt alliance';
-	}
-	.about__portrait {
-		max-width: 70%;
-	}
-	.about__alliance,
-	.about__ryt {
-		max-width: 55%;
-	}
+
 	.section--header,
 	.offerType_header {
 		grid-column: 1 /-1;
@@ -985,6 +973,16 @@ i.footer__cookie-close-icon {
 	}
 	.about {
 		gap: 2.5rem 1.5rem;
+	}
+	.about__img {
+		max-width: 640px;
+	}
+	.about__heading {
+		font-size: 3rem;
+	}
+	.about__content {
+		font-size: 1.7rem;
+		padding: 1rem;
 	}
 	.offer {
 		grid-template-areas:
