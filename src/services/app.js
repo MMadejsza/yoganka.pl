@@ -577,6 +577,86 @@ class Tile {
 		// return complete modal body
 		return modalOffer;
 	};
+	generateSlider = (relativePath, imgArray) => {
+		const glide = this.createEl('div', {class: 'glide'});
+		const glideTrack = this.createEl('div', {'class': 'glide_track', 'data-glide-el': 'track'});
+		const glideSlides = this.createEl('ul', {
+			'class': 'glide__slides',
+			'data-glide-el': 'track',
+		});
+		const screenWidth = window.innerWidth;
+		let resolution;
+		// Użycie switch do obsługi różnych zakresów rozdzielczości
+		switch (true) {
+			case screenWidth <= 480:
+				resolution = 480;
+				break;
+			case screenWidth > 480 && screenWidth <= 768:
+				resolution = 768;
+
+				break;
+			case screenWidth > 768 && screenWidth <= 1024:
+				resolution = 1024;
+				break;
+			case screenWidth > 1024 && screenWidth <= 1280:
+				resolution = 1200;
+				break;
+			case screenWidth > 1280:
+				resolution = 1600;
+				break;
+			default:
+				console.log('Nieznana rozdzielczość');
+				break;
+		}
+		imgArray.forEach((imgName) => {
+			const glideSlideLi = this.createEl('li', {class: 'glide__slide'});
+			const image = this.createEl('img', {
+				class: 'tile__img certificates__pic',
+				src: `${relativePath}/${imgName}_${resolution}`,
+				loading: 'lazy',
+			});
+			glideSlideLi.appendChild(image);
+			glideSlides.appendChild(glideSlideLi);
+		});
+		glideTrack.appendChild(glideSlides);
+
+		const glideBullets = this.createEl('div', {
+			'class': 'glide__bullets',
+			'data-glide-el': 'controls[nav]',
+		});
+		for (let i = 0; i < imgArray.length; i++) {
+			const glideBullet = this.createEl('button', {
+				'class': 'glide__bullet',
+				'data-glide-dir': `=${i}`,
+			});
+			glideBullets.appendChild(glideBullet);
+		}
+		glide.appendChild(glideTrack);
+		glide.appendChild(glideBullets);
+
+		const glideArrows = this.createEl('div', {
+			'class': 'glide__arrows',
+			'data-glide-el': `controls`,
+		});
+		const glideArrowLeft = this.createEl('button', {
+			'class': 'glide__arrow glide__arrow--left',
+			'data-glide-dir': `<`,
+		});
+		const iconArrowLeft = this.createEl('i', {
+			class: 'fa-solid fa-chevron-left',
+		});
+		glideArrowLeft.appendChild(iconArrowLeft);
+		const glideArrowRight = this.createEl('button', {
+			'class': 'glide__arrow glide__arrow--right',
+			'data-glide-dir': `>`,
+		});
+		const iconArrowRight = this.createEl('i', {
+			class: 'fa-solid fa-chevron-left',
+		});
+		glideArrowRight.appendChild(iconArrowRight);
+		glideArrows.append(glideArrowLeft, glideArrowRight);
+		glide.appendChild(glideArrows);
+	};
 }
 
 // list of active camps to sign for
@@ -662,11 +742,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	const glide = new Glide('.glide', {
 		type: 'carousel',
-		startAt: 0,
+		// startAt: 0,
 		perView: 3,
 		focusAt: 'center',
-		autoplay: 2200,
-		// animationDuration: 1000,
+		gap: 20,
+		// autoplay: 2200,
+		animationDuration: 800,
 	});
 
 	glide.on('run', () => {

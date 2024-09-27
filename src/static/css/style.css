@@ -839,16 +839,43 @@ div.visible {
 div.hidden {
 	display: none;
 }
+.glide {
+	border: 1px solid red;
+	padding-bottom: 3rem;
+}
+.glide__track {
+	border: 1px solid blue;
+}
+.glide__slides {
+	align-items: stretch;
+	border: 1px solid green;
+}
+.glide__slide {
+	border-radius: var(--bRadius);
+}
+
+.glide__bullets {
+	bottom: 1rem;
+}
 .glide__bullet {
 	width: 1rem;
 	height: 1rem;
-	background-color: rgba(255, 0, 0, 0.5);
+	background-color: var(--color2);
 }
 .glide__bullet--active {
-	background-color: rgba(255, 0, 0, 1);
+	background-color: var(--iconsColor);
 }
 .glide__arrow {
-	background-color: rgba(255, 0, 0, 0.5);
+	padding: 1rem 1.5rem;
+	font-size: 3rem;
+	color: var(--iconsColor);
+	border-radius: var(--bRadius);
+}
+.glide__arrow--left {
+	left: 1rem;
+}
+.glide__arrow--right {
+	right: 1rem;
 }
 /*! FOOTER END*/
 /*! MEDIA */
