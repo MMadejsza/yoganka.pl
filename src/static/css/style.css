@@ -840,15 +840,16 @@ div.hidden {
 	display: none;
 }
 .glide {
-	border: 1px solid red;
+	grid-column: span 6;
+	/* border: 1px solid red; */
 	padding-bottom: 3rem;
 }
 .glide__track {
-	border: 1px solid blue;
+	/* border: 1px solid blue; */
 }
 .glide__slides {
 	align-items: stretch;
-	border: 1px solid green;
+	/* border: 1px solid green; */
 }
 .glide__slide {
 	border-radius: var(--bRadius);

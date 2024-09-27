@@ -3,6 +3,8 @@ const kaszubyCamp = {
 	type: `camp`,
 	extraClass: '',
 	img: '../static/img/offer/camp_kaszuby.png',
+	path: '../static/img/offer/camp_kaszuby',
+	fileName: `camp_kaszuby`,
 	front: {
 		frontTitle: `Kojenie Zmysłów
 		Yoga | Aromaterapia | SPA`,
@@ -72,6 +74,8 @@ const warmiaCamp = {
 	type: `camp`,
 	extraClass: 'long',
 	img: '../static/img/offer/camp_warmia.png',
+	path: '../static/img/offer/camp_kaszuby',
+	fileName: `camp_kaszuby`,
 	front: {
 		frontTitle: `Comfy Retreat
 		Yoga | Malowanie Intuicyjne | Gongi
@@ -203,6 +207,8 @@ class Tile {
 		this.type = givenEventBody.type;
 		this.extraClass = givenEventBody.extraClass;
 		this.img = givenEventBody.img;
+		this.path = givenEventBody.path;
+		this.fileName = givenEventBody.fileName;
 		this.frontTitle = givenEventBody.front.frontTitle;
 		this.frontDate = givenEventBody.front.frontDate;
 		this.frontLocation = givenEventBody.front.frontLocation;
@@ -310,6 +316,16 @@ class Tile {
 				e.stopPropagation();
 				this.closeModal(modal);
 			});
+
+			// new Glide('.glide2', {
+			// 	type: 'carousel',
+			// 	// startAt: 0,
+			// 	perView: 1,
+			// 	focusAt: 'center',
+			// 	gap: 20,
+			// 	// autoplay: 2200,
+			// 	animationDuration: 800,
+			// }).mount();
 		}
 
 		// Return complete tile
@@ -363,6 +379,7 @@ class Tile {
 		});
 		//@ img
 		// create img
+		// const img = this.generateGallerySlider(this.path, this.fileName, 5);
 		const img = this.createEl('img', {
 			class: 'tile__img pic',
 			src: `${this.img}`,
@@ -503,7 +520,6 @@ class Tile {
 		footerBtnAsk.innerText = 'Zapytaj';
 		footer.append(footerBtnSignUp, footerBtnAsk);
 		modalOffer.appendChild(footer);
-
 		// return complete modal body
 		return modalOffer;
 	};
@@ -577,12 +593,14 @@ class Tile {
 		// return complete modal body
 		return modalOffer;
 	};
-	generateSlider = (relativePath, imgArray) => {
-		const glide = this.createEl('div', {class: 'glide'});
-		const glideTrack = this.createEl('div', {'class': 'glide_track', 'data-glide-el': 'track'});
-		const glideSlides = this.createEl('ul', {
-			'class': 'glide__slides',
+	generateGallerySlider = (relativePath, imgName, imgsNumber) => {
+		const glide = this.createEl('div', {class: 'glide2 glide'});
+		const glideTrack = this.createEl('div', {
+			'class': 'glide__track',
 			'data-glide-el': 'track',
+		});
+		const glideSlides = this.createEl('ul', {
+			class: 'glide__slides',
 		});
 		const screenWidth = window.innerWidth;
 		let resolution;
@@ -593,7 +611,6 @@ class Tile {
 				break;
 			case screenWidth > 480 && screenWidth <= 768:
 				resolution = 768;
-
 				break;
 			case screenWidth > 768 && screenWidth <= 1024:
 				resolution = 1024;
@@ -608,23 +625,23 @@ class Tile {
 				console.log('Nieznana rozdzielczość');
 				break;
 		}
-		imgArray.forEach((imgName) => {
+		for (let i = 1; i <= imgsNumber; i++) {
 			const glideSlideLi = this.createEl('li', {class: 'glide__slide'});
 			const image = this.createEl('img', {
-				class: 'tile__img certificates__pic',
-				src: `${relativePath}/${imgName}_${resolution}`,
+				class: '',
+				src: `${relativePath}/${resolution}_${imgName}_${i}.png`,
 				loading: 'lazy',
 			});
 			glideSlideLi.appendChild(image);
 			glideSlides.appendChild(glideSlideLi);
-		});
+		}
 		glideTrack.appendChild(glideSlides);
 
 		const glideBullets = this.createEl('div', {
 			'class': 'glide__bullets',
 			'data-glide-el': 'controls[nav]',
 		});
-		for (let i = 0; i < imgArray.length; i++) {
+		for (let i = 1; i <= imgsNumber; i++) {
 			const glideBullet = this.createEl('button', {
 				'class': 'glide__bullet',
 				'data-glide-dir': `=${i}`,
@@ -651,11 +668,12 @@ class Tile {
 			'data-glide-dir': `>`,
 		});
 		const iconArrowRight = this.createEl('i', {
-			class: 'fa-solid fa-chevron-left',
+			class: 'fa-solid fa-chevron-right',
 		});
 		glideArrowRight.appendChild(iconArrowRight);
 		glideArrows.append(glideArrowLeft, glideArrowRight);
 		glide.appendChild(glideArrows);
+		return glide;
 	};
 }
 
@@ -740,10 +758,33 @@ document.addEventListener('DOMContentLoaded', function () {
 		}
 	});
 
+	const screenWidth = window.innerWidth;
+	let picsPerView;
+	// Użycie switch do obsługi różnych zakresów rozdzielczości
+	switch (true) {
+		case screenWidth <= 360:
+			picsPerView = 1;
+			break;
+		case screenWidth <= 480:
+			picsPerView = 2;
+			break;
+		case screenWidth > 480 && screenWidth <= 768:
+			picsPerView = 3;
+			break;
+		case screenWidth > 768 && screenWidth < 1024:
+			picsPerView = 3;
+			break;
+		case screenWidth >= 1024 && screenWidth <= 1280:
+			picsPerView = 4;
+			break;
+		default:
+			console.log('Nieznana rozdzielczość');
+			break;
+	}
 	const glide = new Glide('.glide', {
 		type: 'carousel',
 		// startAt: 0,
-		perView: 3,
+		perView: picsPerView,
 		focusAt: 'center',
 		gap: 20,
 		// autoplay: 2200,
