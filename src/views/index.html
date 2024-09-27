@@ -19,7 +19,7 @@
 			content="Yoga Ania Madejsza, bodyhealing, yoganka, joga na supie Trójmiasto, joga z gongami Trójmiasto, joga na supie Gdańsk, joga z gongami Gdańsk, profesjonalna instruktorka jogi, certyfikaty jogi Bali, joga pomorskie wyjazdy, zajęcia jogi dla firm Polska, trendy joga 2024, joga dla zdrowia, relaksacja joga, sesje jogi z gongami, joga na wodzie Trójmiasto, wyjazdy jogowe Pomorze, joga na supie certyfikaty, najlepsza joga w Trójmieście, profesjonalna joga Polska" />
 
 		<!-- FAVICONS info -->
-		<link
+		<!-- <link
 			rel="apple-touch-icon"
 			sizes="180x180"
 			href="favicon_io/apple-touch-icon.png" />
@@ -35,7 +35,7 @@
 			href="favicon_io/favicon-16x16.png" />
 		<link
 			rel="manifest"
-			href="favicon_io/site.webmanifest" />
+			href="favicon_io/site.webmanifest" /> -->
 
 		<!-- Outside styling and links info -->
 		<link
@@ -52,7 +52,15 @@
 			href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Gravitas+One&display=swap"
 			rel="stylesheet" />
 
-		<!-- MailerLite Universal -->
+		<!-- Required Core Stylesheet -->
+		<link
+			rel="stylesheet"
+			href="../node_modules/@glidejs/glide/dist/css/glide.core.min.css" />
+
+		<!-- Optional Theme Stylesheet -->
+		<link
+			rel="stylesheet"
+			href="../node_modules/@glidejs/glide/dist/css/glide.theme.min.css" />
 
 		<link
 			rel="stylesheet"
@@ -212,99 +220,164 @@
 			</section>
 			<section class="certificates">
 				<header class="certificates__header section-header">Certyfikaty</header>
-				<article class="certificates__gallery">
-					<div class="certificates__tile tile">
-						<img
-							class="tile__img certificates__pic"
-							src="../static/img/about/about_ryt.jpg"
-							loading="lazy" />
-						<h3><strong class="certificates__name">RYT200 Bali</strong></h3>
-						<p class="certificates__school">House of OM</p>
-						<p class="certificates__duration">200h</p>
-						<p class="certificates__type"><strong>Vinyasa & Hatha</strong></p>
+				<!-- <article class="certificates__gallery"> -->
+				<div class="glide">
+					<div
+						class="glide__track"
+						data-glide-el="track">
+						<ul class="glide__slides">
+							<li class="glide__slide">
+								<div class="certificates__tile tile">
+									<img
+										class="tile__img certificates__pic"
+										src="../static/img/about/about_ryt.jpg"
+										loading="lazy" />
+									<h3><strong class="certificates__name">RYT200 Bali</strong></h3>
+									<p class="certificates__school">House of OM</p>
+									<p class="certificates__duration">200h</p>
+									<p class="certificates__type">
+										<strong>Vinyasa & Hatha</strong>
+									</p>
+								</div>
+							</li>
+							<li class="glide__slide">
+								<div class="tile certificates__tile">
+									<img
+										class="tile__img certificates__pic"
+										src="../static/img/offer/offer_individual.png"
+										loading="lazy" />
+									<h3>
+										<strong class="certificates__name"
+											>Instruktor Hatha Jogi</strong
+										>
+									</h3>
+									<p class="certificates__school">prof. Szopa</p>
+									<p class="certificates__duration">150h</p>
+									<p class="certificates__type"><strong>Hatha</strong></p>
+								</div>
+							</li>
+							<li class="glide__slide">
+								<div class="tile certificates__tile">
+									<img
+										class="tile__img certificates__pic"
+										src="../static/img/offer/offer_individual.png"
+										loading="lazy" />
+									<h3>
+										<strong class="certificates__name"
+											>Warsztat pozycji odwróconych</strong
+										>
+									</h3>
+									<p class="certificates__school">Joga Park</p>
+									<p class="certificates__duration">15h</p>
+									<p class="certificates__type"><strong></strong></p>
+								</div>
+							</li>
+							<li class="glide__slide">
+								<div class="tile certificates__tile">
+									<img
+										class="tile__img certificates__pic"
+										src="../static/img/offer/offer_individual.png"
+										loading="lazy" />
+									<h3>
+										<strong class="certificates__name"
+											>Warsztat sekwencji</strong
+										>
+									</h3>
+									<p class="certificates__school">Daga Yoga</p>
+									<p class="certificates__duration">15h</p>
+									<p class="certificates__type"><strong>Sequences</strong></p>
+								</div>
+							</li>
+							<li class="glide__slide">
+								<div class="tile certificates__tile">
+									<img
+										class="tile__img certificates__pic"
+										src="../static/img/offer/offer_individual.png"
+										loading="lazy" />
+									<h3>
+										<strong class="certificates__name"
+											>Asana stabilna i wygodna</strong
+										>
+									</h3>
+									<p class="certificates__school">SMU YOGA</p>
+									<p class="certificates__duration">15h</p>
+									<p class="certificates__type"><strong>Asana</strong></p>
+								</div>
+							</li>
+							<li class="glide__slide">
+								<div class="tile certificates__tile">
+									<img
+										class="tile__img certificates__pic"
+										src="../static/img/offer/offer_individual.png"
+										loading="lazy" />
+									<h3>
+										<strong class="certificates__name"
+											>Mobility & Flexibility</strong
+										>
+									</h3>
+									<p class="certificates__school">Bartosz Kuc</p>
+									<p class="certificates__duration">16h</p>
+									<p class="certificates__type"><strong>Health</strong></p>
+								</div>
+							</li>
+							<li class="glide__slide">
+								<div class="tile certificates__tile">
+									<img
+										class="certificates__pic"
+										src="../static/img/offer/offer_individual.png"
+										loading="lazy" />
+									<h3>
+										<strong class="certificates__name">Warsztaty jogowe</strong>
+									</h3>
+									<p class="certificates__school">Dominika Płachecka</p>
+									<p class="certificates__duration">15h</p>
+								</div>
+							</li>
+							<li class="glide__slide">
+								<div class="tile certificates__tile">
+									<img
+										class="tile__img certificates__pic"
+										src="../static/img/offer/offer_individual.png"
+										loading="lazy" />
+									<h3>
+										<strong class="certificates__name">Neuro Yoga</strong>
+									</h3>
+									<p class="certificates__school">Celest Pereira</p>
+									<p class="certificates__duration">15h</p>
+									<p class="certificates__type"><strong>Neuro Yoga</strong></p>
+								</div>
+							</li>
+						</ul>
 					</div>
-					<div class="tile certificates__tile">
-						<img
-							class="tile__img certificates__pic"
-							src="../static/img/offer/offer_individual.png"
-							loading="lazy" />
-						<h3><strong class="certificates__name">Instruktor Hatha Jogi</strong></h3>
-						<p class="certificates__school">prof. Szopa</p>
-						<p class="certificates__duration">150h</p>
-						<p class="certificates__type"><strong>Hatha</strong></p>
+					<div
+						class="glide__bullets"
+						data-glide-el="controls[nav]">
+						<button
+							class="glide__bullet"
+							data-glide-dir="=0"></button>
+						<button
+							class="glide__bullet"
+							data-glide-dir="=1"></button>
+						<button
+							class="glide__bullet"
+							data-glide-dir="=2"></button>
 					</div>
-					<div class="tile certificates__tile">
-						<img
-							class="tile__img certificates__pic"
-							src="../static/img/offer/offer_individual.png"
-							loading="lazy" />
-						<h3>
-							<strong class="certificates__name">Warsztat pozycji odwróconych</strong>
-						</h3>
-						<p class="certificates__school">Joga Park</p>
-						<p class="certificates__duration">15h</p>
-						<p class="certificates__type"><strong></strong></p>
+					<div
+						class="glide__arrows"
+						data-glide-el="controls">
+						<button
+							class="glide__arrow glide__arrow--left"
+							data-glide-dir="<">
+							prev
+						</button>
+						<button
+							class="glide__arrow glide__arrow--right"
+							data-glide-dir=">">
+							next
+						</button>
 					</div>
-					<div class="tile certificates__tile">
-						<img
-							class="tile__img certificates__pic"
-							src="../static/img/offer/offer_individual.png"
-							loading="lazy" />
-						<h3>
-							<strong class="certificates__name">Warsztat sekwencji</strong>
-						</h3>
-						<p class="certificates__school">Daga Yoga</p>
-						<p class="certificates__duration">15h</p>
-						<p class="certificates__type"><strong>Sequences</strong></p>
-					</div>
-					<div class="tile certificates__tile">
-						<img
-							class="tile__img certificates__pic"
-							src="../static/img/offer/offer_individual.png"
-							loading="lazy" />
-						<h3>
-							<strong class="certificates__name">Asana stabilna i wygodna</strong>
-						</h3>
-						<p class="certificates__school">SMU YOGA</p>
-						<p class="certificates__duration">15h</p>
-						<p class="certificates__type"><strong>Asana</strong></p>
-					</div>
-					<div class="tile certificates__tile">
-						<img
-							class="tile__img certificates__pic"
-							src="../static/img/offer/offer_individual.png"
-							loading="lazy" />
-						<h3>
-							<strong class="certificates__name">Mobility & Flexibility</strong>
-						</h3>
-						<p class="certificates__school">Bartosz Kuc</p>
-						<p class="certificates__duration">16h</p>
-						<p class="certificates__type"><strong>Health</strong></p>
-					</div>
-					<div class="tile certificates__tile">
-						<img
-							class="certificates__pic"
-							src="../static/img/offer/offer_individual.png"
-							loading="lazy" />
-						<h3>
-							<strong class="certificates__name">Warsztaty jogowe</strong>
-						</h3>
-						<p class="certificates__school">Dominika Płachecka</p>
-						<p class="certificates__duration">15h</p>
-					</div>
-					<div class="tile certificates__tile">
-						<img
-							class="tile__img certificates__pic"
-							src="../static/img/offer/offer_individual.png"
-							loading="lazy" />
-						<h3>
-							<strong class="certificates__name">Neuro Yoga</strong>
-						</h3>
-						<p class="certificates__school">Celest Pereira</p>
-						<p class="certificates__duration">15h</p>
-						<p class="certificates__type"><strong>Neuro Yoga</strong></p>
-					</div>
-				</article>
+				</div>
+				<!-- </article> -->
 			</section>
 			<section class="partners">
 				<header class="partners__header section-header">Współpraca</header>
@@ -594,7 +667,71 @@
 					</a>
 				</div>
 			</footer>
-
+			<div class="glide">
+				<div
+					class="glide__track"
+					data-glide-el="track">
+					<ul class="glide__slides">
+						<li class="glide__slide">
+							<img
+								src="../static/img/offer/camp_warmia.png"
+								loading="lazy" />
+						</li>
+						<li class="glide__slide">
+							<img
+								src="../static/img/offer/camp_kaszuby.png"
+								loading="lazy" />
+						</li>
+						<li class="glide__slide">
+							<img
+								src="../static/img/offer/offer-1-2-1.jpg"
+								loading="lazy" />
+						</li>
+					</ul>
+				</div>
+				<div
+					class="glide__bullets"
+					data-glide-el="controls[nav]">
+					<button
+						class="glide__bullet"
+						data-glide-dir="=0"></button>
+					<button
+						class="glide__bullet"
+						data-glide-dir="=1"></button>
+					<button
+						class="glide__bullet"
+						data-glide-dir="=2"></button>
+					<button
+						class="glide__bullet"
+						data-glide-dir="=3"></button>
+					<button
+						class="glide__bullet"
+						data-glide-dir="=4"></button>
+					<button
+						class="glide__bullet"
+						data-glide-dir="=5"></button>
+					<button
+						class="glide__bullet"
+						data-glide-dir="=6"></button>
+					<button
+						class="glide__bullet"
+						data-glide-dir="=7"></button>
+				</div>
+				<div
+					class="glide__arrows"
+					data-glide-el="controls">
+					<button
+						class="glide__arrow glide__arrow--left"
+						data-glide-dir="<">
+						prev
+					</button>
+					<button
+						class="glide__arrow glide__arrow--right"
+						data-glide-dir=">">
+						next
+					</button>
+				</div>
+			</div>
 			<!-- Scripts -->
 			<script>
 				(function (w, d, e, u, f, l, n) {
@@ -620,6 +757,7 @@
 			<script
 				src="https://kit.fontawesome.com/4622d99ad4.js"
 				crossorigin="anonymous"></script>
+			<script src="../node_modules/@glidejs/glide/dist/glide.min.js"></script>
 			<script
 				type="application/javascript"
 				src="../services/app.js"></script>

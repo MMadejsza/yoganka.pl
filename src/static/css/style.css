@@ -86,7 +86,6 @@ a {
 .wrapper {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-	grid-template-rows: repeat(6, auto);
 	grid-template-areas:
 		'header header header header header '
 		'about about about about about'
@@ -839,6 +838,17 @@ div.visible {
 }
 div.hidden {
 	display: none;
+}
+.glide__bullet {
+	width: 1rem;
+	height: 1rem;
+	background-color: rgba(255, 0, 0, 0.5);
+}
+.glide__bullet--active {
+	background-color: rgba(255, 0, 0, 1);
+}
+.glide__arrow {
+	background-color: rgba(255, 0, 0, 0.5);
 }
 /*! FOOTER END*/
 /*! MEDIA */

@@ -659,4 +659,19 @@ document.addEventListener('DOMContentLoaded', function () {
 			}, 800);
 		}
 	});
+
+	const glide = new Glide('.glide', {
+		type: 'carousel',
+		startAt: 0,
+		perView: 3,
+		focusAt: 'center',
+		autoplay: 2200,
+		// animationDuration: 1000,
+	});
+
+	glide.on('run', () => {
+		const activeElement = document.querySelector('.glide__slide--active');
+	});
+
+	glide.mount();
 });
