@@ -212,6 +212,7 @@ input {
 }
 .top-image-header {
 	grid-area: header;
+	max-height: 100vh;
 	text-transform: uppercase;
 	background-image: url(../img/_header_face.jpg);
 	background-attachment: fixed;
@@ -708,6 +709,7 @@ input {
 	background-color: var(--color2);
 	font-size: 1.7rem;
 	color: white;
+	border: 1px solid black;
 
 	display: flex;
 	flex-direction: column;
@@ -877,6 +879,9 @@ div.hidden {
 }
 .glide__arrow--right {
 	right: 1rem;
+}
+.blur {
+	backdrop-filter: blur(10px);
 }
 /*! FOOTER END*/
 /*! MEDIA */

@@ -7,10 +7,11 @@ const kaszubyCamp = {
 	fileName: `camp_kaszuby`,
 	front: {
 		frontTitle: `Kojenie Zmysłów
-		Yoga | Aromaterapia | SPA`,
+		Yoga | Aromaterapia | SPA | SkinCare`,
 		frontDate: [`11-13/10/2024`],
 		frontLocation: `Kaszuby`,
-		frontDesc: `Zabieram Cię do urokliwego domku, otulonego drewnem, gdzie schowamy się w ulubionych skarpetkach, za dużych sweterkach i będziemy kocykować przy kominku i pić ciepłe naparki!`,
+		// frontDesc: `Zabieram Cię do urokliwego domku, otulonego drewnem, gdzie schowamy się w ulubionych skarpetkach, za dużych sweterkach i będziemy kocykować przy kominku i pić ciepłe naparki!`,
+		frontDesc: ``,
 	},
 	modal: {
 		imgModal: this.img,
@@ -78,13 +79,13 @@ const warmiaCamp = {
 	fileName: `camp_kaszuby`,
 	front: {
 		frontTitle: `Comfy Retreat
-		Yoga | Malowanie Intuicyjne | Gongi
-		SPA`,
+		Yoga | Malowanie | SPA | Misy i Gongi `,
 		frontDate: ['08-11/11/2024'],
 		frontLocation: 'Warmia',
-		frontDesc: `Otulimy się ciepłym kominkiem, zdrowymi naparami i pysznym jedzeniem! Zabierz swój ulubiony dres, za duży sweterek i ciepłe skarpetki, po prostu Twoje ulubione, jesienne atrybuty!
+		// frontDesc: `Otulimy się ciepłym kominkiem, zdrowymi naparami i pysznym jedzeniem! Zabierz swój ulubiony dres, za duży sweterek i ciepłe skarpetki, po prostu Twoje ulubione, jesienne atrybuty!
 
-		Nie zabraknie czasu na książkę pod kocykiem, ale też uziemiających aktywności.`,
+		// Nie zabraknie czasu na książkę pod kocykiem, ale też uziemiających aktywności.`,
+		frontDesc: ``,
 	},
 	modal: {
 		imgModal: 'camp_warmia.jpg',
@@ -787,7 +788,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		perView: picsPerView,
 		focusAt: 'center',
 		gap: 20,
-		// autoplay: 2200,
+		autoplay: 2200,
 		animationDuration: 800,
 	});
 
