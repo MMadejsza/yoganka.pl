@@ -10,12 +10,11 @@ const kaszubyCamp = {
 		Yoga | Aromaterapia | SPA | SkinCare`,
 		frontDate: [`11-13/10/2024`],
 		frontLocation: `Kaszuby`,
-		// frontDesc: `Zabieram Cię do urokliwego domku, otulonego drewnem, gdzie schowamy się w ulubionych skarpetkach, za dużych sweterkach i będziemy kocykować przy kominku i pić ciepłe naparki!`,
-		frontDesc: ``,
 	},
 	modal: {
 		imgModal: this.img,
-		glance: ['Kaszuby', 'Dworek Krępkowice', 12, 1200],
+		glance: [/*'Kaszuby',*/ 'Dworek Krępkowice', '12', '1200zł'],
+		fullDesc: `Zabieram Cię do urokliwego domku, otulonego drewnem, gdzie schowamy się w ulubionych skarpetkach, za dużych sweterkach i będziemy kocykować przy kominku i pić ciepłe naparki!`,
 		plan: [
 			{
 				'day': 'Piątek',
@@ -82,14 +81,13 @@ const warmiaCamp = {
 		Yoga | Malowanie | SPA | Misy i Gongi `,
 		frontDate: ['08-11/11/2024'],
 		frontLocation: 'Warmia',
-		// frontDesc: `Otulimy się ciepłym kominkiem, zdrowymi naparami i pysznym jedzeniem! Zabierz swój ulubiony dres, za duży sweterek i ciepłe skarpetki, po prostu Twoje ulubione, jesienne atrybuty!
-
-		// Nie zabraknie czasu na książkę pod kocykiem, ale też uziemiających aktywności.`,
-		frontDesc: ``,
 	},
 	modal: {
 		imgModal: 'camp_warmia.jpg',
-		glance: ['Warmia', 'Witramowo 32', 18, 1200],
+		glance: [/*'Warmia',*/ 'Witramowo 32', '18', '1200zł'],
+		fullDesc: `Otulimy się ciepłym kominkiem, zdrowymi naparami i pysznym jedzeniem! Zabierz swój ulubiony dres, za duży sweterek i ciepłe skarpetki, po prostu Twoje ulubione, jesienne atrybuty!
+
+		Nie zabraknie czasu na książkę pod kocykiem, ale też uziemiających aktywności.`,
 		plan: [
 			{
 				'day': 'Piątek',
@@ -232,7 +230,8 @@ class Tile {
 	};
 
 	// event listener to open modal
-	showModal = (modal) => {
+	showModal = () => {
+		const modal = document.querySelector('.modal');
 		// add classlist to modal
 		modal.classList.add('visible');
 		// "give status" to Dom to not scroll the entire page
@@ -244,57 +243,34 @@ class Tile {
 		}
 	};
 	// event listener to close modal
-	closeModal = (modal) => {
+	closeModal = () => {
+		const modal = document.querySelector('.modal__overlay');
 		// remove classlist from modal
-		modal.classList.remove('visible');
+		modal.remove();
 		// "give status" to Dom to not scroll the entire page
 		this.hamburger.classList.remove('hidden');
 		this.body.classList.remove('stopScroll');
 		// allow scroll - update status
 		this.scrollFlag = 1;
 	};
-	// main function generating and returning tile
-	generateTile = () => {
-		function appendEl(parent, ...args) {
-			args.forEach((el) => parent.appendChild(el));
-		}
-		// Create separate tags
-		const tile = this.createEl('div', {class: 'tile clickable'});
-		// If for example "long" class required what triggers different grid layout
-		if (this.extraClass) {
-			tile.classList.add(this.extraClass);
-		}
-		const img = this.createEl('img', {
-			class: 'tile__img pic',
-			src: `${this.img}`,
-			loading: 'lazy',
-		});
-
-		const frontTitle = this.createEl('h3');
-		frontTitle.innerText = this.frontTitle;
-		const frontDates = [];
-		this.frontDate.forEach((el) => {
-			const frontDate = this.createEl('h3');
-			frontDate.innerText = el;
-			frontDates.push(frontDate);
-		});
-		const frontLocation = this.createEl('h4');
-		frontLocation.innerText = this.frontLocation;
-		const frontDesc = this.createEl('p', {class: 'tile_desc'});
-		frontDesc.innerText = this.frontDesc;
-
-		// Append those tags
-		appendEl(tile, img, frontTitle, ...frontDates, frontLocation, frontDesc);
-
+	appendModal = () => {
 		// Add modal if exists
 		if (this.modal) {
+			// create body overlay
+			const overlay = this.createEl('div', {
+				class: `modal__overlay`,
+			});
 			// create its main container
 			const modal = this.createEl('div', {class: 'modal'});
 			// create its close btn
-			const X = this.createEl('div', {class: 'x'});
-			const Xa = this.createEl('a', {class: 'btn_close'});
-			const Xai = this.createEl('i', {class: 'fa-solid fa-xmark'});
+			const X = this.createEl('div', {class: 'modal__x-btn'});
+			const Xa = this.createEl('a', {class: 'modal__close-btn'});
+			const Xai = this.createEl('i', {class: 'fa-solid fa-xmark modal__icon'});
 			Xa.appendChild(Xai);
+			X.addEventListener('click', (e) => {
+				e.stopPropagation();
+				this.closeModal();
+			});
 			X.appendChild(Xa);
 			modal.appendChild(X);
 
@@ -306,46 +282,80 @@ class Tile {
 				modalBody = this.generateTileModalEvent();
 			}
 			modal.appendChild(modalBody);
-			document.body.appendChild(modal);
-
-			// add listeners for opening and closing
-			tile.addEventListener('click', (e) => {
-				e.stopPropagation();
-				this.showModal(modal);
-			});
-			X.addEventListener('click', (e) => {
-				e.stopPropagation();
-				this.closeModal(modal);
-			});
-
-			// new Glide('.glide2', {
-			// 	type: 'carousel',
-			// 	// startAt: 0,
-			// 	perView: 1,
-			// 	focusAt: 'center',
-			// 	gap: 20,
-			// 	// autoplay: 2200,
-			// 	animationDuration: 800,
-			// }).mount();
+			overlay.append(modal);
+			document.body.appendChild(overlay);
+			return overlay;
 		}
+	};
+	// main function generating and returning tile
+	generateTile = () => {
+		function appendEl(parent, ...args) {
+			args.forEach((el) => parent.appendChild(el));
+		}
+		// Create separate tags
+		const tile = this.createEl('div', {class: 'tile clickable'});
+		// If for example "long" class required what triggers different grid layout
+		if (this.extraClass) {
+			tile.classList.add(`tile--${this.extraClass}`);
+		}
+		const img = this.createEl('img', {
+			class: 'tile__img',
+			src: `${this.img}`,
+			loading: 'lazy',
+		});
 
+		const frontTitle = this.createEl('h3', {class: 'tile__title'});
+		frontTitle.innerText = this.frontTitle;
+		const frontDates = [];
+		this.frontDate.forEach((el) => {
+			const frontDate = this.createEl('h3', {class: 'tile__date'});
+			frontDate.innerText = el;
+			frontDates.push(frontDate);
+		});
+		const frontLocation = this.createEl('h4', {class: 'tile__location'});
+		frontLocation.innerText = this.frontLocation;
+		const frontDesc = this.createEl('p', {class: 'tile__desc'});
+		frontDesc.innerText = this.frontDesc;
+
+		// Append those tags
+		appendEl(tile, img, frontTitle, ...frontDates, frontLocation, frontDesc);
+
+		// add listeners for opening and closing
+		tile.addEventListener('click', (e) => {
+			e.stopPropagation();
+			this.appendModal();
+			setTimeout(() => {
+				this.showModal();
+			}, 50);
+		});
+
+		// new Glide('.glide2', {
+		// 	type: 'carousel',
+		// 	// startAt: 0,
+		// 	perView: 1,
+		// 	focusAt: 'center',
+		// 	gap: 20,
+		// 	// autoplay: 2200,
+		// 	animationDuration: 800,
+		// }).mount();
 		// Return complete tile
 		return tile;
 	};
+
 	// util function for modal body to simplify the code. Generates small sections with lists on the bottom
 	tileModalChecklistClassic = (type, title, icon, listClass) => {
 		// create list general container
 		const section = this.createEl('section', {class: listClass});
 		// create list general container header
-		const sectionHeader = this.createEl('h3', {class: 'modal_h3'});
+		const sectionHeader = this.createEl('h3', {class: 'modal-checklist__title'});
 		sectionHeader.innerText = title;
 		section.appendChild(sectionHeader);
 		// create list container
-		const sectionList = this.createEl('ul', {class: 'modal_list'});
+		const sectionList = this.createEl('ul', {class: 'modal-checklist__list'});
 		// create list items
 		this.modal[type].forEach((item) => {
 			// create li
-			const li = this.createEl('li', {class: 'modal_li'});
+			const li = this.createEl('li', {class: 'modal-checklist__li'});
 			// assign icon parameter
 			let iconClass = icon;
 			// check if iterates after simple array or array of objects which is for //#Free-Time only
@@ -354,8 +364,8 @@ class Tile {
 				if (item.status != 'free') {
 					iconClass =
 						item.status == 'optional'
-							? 'fa-solid fa-plus'
-							: 'fa-regular fa-hand-point-right';
+							? 'fa-solid fa-plus modal__icon'
+							: 'fa-regular fa-hand-point-right modal__icon';
 				}
 				// create chosen icon
 				const chosenIcon = this.createEl('i', {class: iconClass});
@@ -376,7 +386,7 @@ class Tile {
 	generateTileModalCamp = () => {
 		// create main container
 		const modalOffer = this.createEl('div', {
-			class: `modal_offer `,
+			class: `modal__modal-body modal__modal-body--offer `,
 		});
 		//@ img
 		// create img
@@ -388,9 +398,23 @@ class Tile {
 		});
 		modalOffer.appendChild(img);
 
-		//@ header
-		const header = this.createEl('header');
-		const ul = this.createEl('div', {class: 'modal_list at-glance'});
+		//@ section modal_full-desc
+		// create main container
+		const sectionFullDesc = this.createEl('section', {
+			class: `modal__full-desc modal__full-desc--${this.extraClass ? this.extraClass : ''}`,
+		});
+		const fullDescContent = this.createEl('p', {class: 'modal__full-desc-content'});
+		fullDescContent.innerText = this.modal.fullDesc;
+		sectionFullDesc.append(fullDescContent);
+		modalOffer.append(sectionFullDesc);
+
+		//@ glance
+		const glance = this.createEl('header', {class: 'modal__header'});
+		// create header container h3
+		const glanceHeader = this.createEl('h3', {class: 'modal__title'});
+		glanceHeader.innerText = 'W skrócie:';
+		glance.appendChild(glanceHeader);
+		const ul = this.createEl('ul', {class: 'modal__list modal__list--at-glance'});
 		// point list of icons to include in order
 		const icons = [
 			'fa-solid fa-location-dot',
@@ -401,10 +425,12 @@ class Tile {
 		// iterate after modal's "at glance" part
 		this.modal.glance.forEach((text, index) => {
 			// create li
-			const li = this.createEl('li', {class: 'modal_li modal_answer'});
+			const li = this.createEl('li', {class: 'modal__li modal__li--at-glance'});
 			// create icon choosing the right one in order
 			const icon = this.createEl('i', {
-				class: icons[index] ? icons[index] : 'fa-solid fa-check',
+				class: icons[index]
+					? icons[index] + ' modal__icon'
+					: 'fa-solid fa-check modal__icon',
 			});
 			// append icon + text from glance array
 			li.append(icon, text);
@@ -412,31 +438,33 @@ class Tile {
 			ul.appendChild(li);
 		});
 		// append list in header
-		header.appendChild(ul);
+		glance.appendChild(ul);
 		// append complete header
-		modalOffer.appendChild(header);
+		modalOffer.appendChild(glance);
 
 		// create modal plan for camp
 		//@ section modal_desc
 		// create main container
 		const sectionDesc = this.createEl('section', {
-			class: `modal_desc ${this.extraClass ? this.extraClass : ''}`,
+			class: `modal__desc modal__desc--${this.extraClass ? this.extraClass : ''}`,
 		});
 		// create header container h3
-		const sectionDescHeader = this.createEl('h3', {class: 'modal_h3'});
+		const sectionDescHeader = this.createEl('h3', {class: 'modal__title'});
 		// create icon
-		const sectionDescHeaderI = this.createEl('i', {class: 'fa-solid fa-list-check'});
+		// const sectionDescHeaderI = this.createEl('i', {
+		// 	class: 'fa-solid fa-list-check modal__icon',
+		// });
 		// populate header with icon and text
-		sectionDescHeader.append(sectionDescHeaderI, 'Plan:');
+		sectionDescHeader.append(/*sectionDescHeaderI,*/ 'Plan:');
 		// append ready section header
 		sectionDesc.appendChild(sectionDescHeader);
 		// iterate after array of days objects
 		this.modal.plan.forEach((campDay) => {
 			// create days header
-			const dayHeader = this.createEl('h4');
+			const dayHeader = this.createEl('h4', {class: 'modal__title--day'});
 			dayHeader.innerText = campDay.day + ':';
 			// create container for day's list of activities
-			const dayPlan = this.createEl('ul', {class: 'modal_list'});
+			const dayPlan = this.createEl('ul', {class: 'modal__list'});
 			// get day object keys
 			const keys = Object.keys(campDay);
 			// start from 2nd one to avoid days name
@@ -445,7 +473,7 @@ class Tile {
 				const timeContainer = this.createEl('div');
 				timeContainer.innerText = time;
 				const activity = campDay[time];
-				const li = this.createEl('li', {class: 'modal_li'});
+				const li = this.createEl('li', {class: 'modal__li'});
 				li.append(timeContainer, activity);
 				dayPlan.appendChild(li);
 			}
@@ -458,8 +486,8 @@ class Tile {
 		const sectionIncluded = this.tileModalChecklistClassic(
 			'included',
 			'W cenie:',
-			'fa-solid fa-check',
-			'modal_included',
+			'fa-solid fa-check modal__icon modal-checklist__icon',
+			'modal-checklist modal-checklist--included',
 		);
 		modalOffer.appendChild(sectionIncluded);
 		//@ section modal_excluded
@@ -467,8 +495,8 @@ class Tile {
 		const sectionExcluded = this.tileModalChecklistClassic(
 			'excluded',
 			'We własnym zakresie:',
-			'fa-regular fa-hand-point-right',
-			'modal_excluded',
+			'fa-regular fa-hand-point-right modal__icon modal-checklist__icon',
+			'modal-checklist modal-checklist--excluded',
 		);
 		modalOffer.appendChild(sectionExcluded);
 		//@ section modal_optional
@@ -476,8 +504,8 @@ class Tile {
 		const sectionOptional = this.tileModalChecklistClassic(
 			'optional',
 			'Opcje:',
-			'fa-solid fa-plus',
-			'modal_optional',
+			'fa-solid fa-plus modal__icon modal-checklist__icon',
+			'modal-checklist modal-checklist--optional',
 		);
 		modalOffer.appendChild(sectionOptional);
 		//@ section modal_free-time
@@ -485,15 +513,15 @@ class Tile {
 		const sectionFreeTime = this.tileModalChecklistClassic(
 			'freeTime',
 			'W Czasie Wolnym:',
-			'fa-solid fa-check',
-			'modal_free-time',
+			'fa-solid fa-check modal__icon modal-checklist__icon',
+			'modal-checklist modal-checklist--free-time',
 		);
 		modalOffer.appendChild(sectionFreeTime);
 		//@ attention
 		// create a footer with 2 buttons to cause and action
 		// @ footer modal_user-action
 		const attentionNote = this.createEl('h2', {
-			class: 'modal_attention-note',
+			class: 'modal__attention-note',
 		});
 		attentionNote.innerText =
 			'Miejsce gwarantowane jest wpłatą bezzwrotnego zadatku w kwocie 500 zł';
@@ -501,12 +529,12 @@ class Tile {
 		// create a footer with 2 buttons to cause and action
 		// @ footer modal_user-action
 		const footer = this.createEl('footer', {
-			class: 'modal_user-action',
+			class: 'modal__user-action',
 		});
 		// use address  from camps dataset
 		const footerBtnSignUp = this.createEl('a', {
 			href: this.modal.form,
-			class: 'btn_sign-up',
+			class: 'modal__sign-up',
 			target: '_blank',
 		});
 		// use message from camps dataset
@@ -515,7 +543,7 @@ class Tile {
 			href: `https://wa.me/${48792891607}?text=${encodeURIComponent(
 				this.modal.questionTemplate(this.frontTitle),
 			)}`,
-			class: 'btn_ask-for-info',
+			class: 'modal__ask-for-info',
 			target: '_blank',
 		});
 		footerBtnAsk.innerText = 'Zapytaj';
@@ -527,12 +555,12 @@ class Tile {
 	generateTileModalEvent = () => {
 		// create main container
 		const modalOffer = this.createEl('div', {
-			class: `modal_offer ${this.extraClass}`,
+			class: `modal__modal-body modal__modal-body--offer modal__modal-body--event`,
 		});
 		//@ img
 		// create img
 		const img = this.createEl('img', {
-			class: 'tile__img pic',
+			class: 'tile__img tile__img--event-modal',
 			src: `${this.img}`,
 			loading: 'lazy',
 		});
@@ -543,17 +571,21 @@ class Tile {
 		//@ section modal_desc
 		// create main container
 		const sectionDesc = this.createEl('section', {
-			class: `modal_desc--event ${this.extraClass ? this.extraClass : ''}`,
+			class: `modal__desc modal__desc--${this.type} ${
+				this.extraClass ? this.extraClass : ''
+			}`,
 		});
 		// create header container h3
-		const sectionDescHeader = this.createEl('h3', {class: 'modal_h3'});
+		const sectionDescHeader = this.createEl('h3', {class: 'modal__title'});
 		// create icon
-		// const sectionDescHeaderI = this.createEl('i', {class: 'fa-solid fa-list-check'});
 		// populate header with icon and text
 		sectionDescHeader.append('W skrócie:');
 		// append ready section header
 		sectionDesc.appendChild(sectionDescHeader);
-		sectionDesc.append(this.modal.fullDesc);
+		// create desc
+		const sectionDescContent = this.createEl('p', {class: 'modal__paragraph'});
+		sectionDescContent.innerText = this.modal.fullDesc;
+		sectionDesc.append(sectionDescContent);
 		modalOffer.appendChild(sectionDesc);
 
 		//@ section modal_included
@@ -562,20 +594,20 @@ class Tile {
 			const sectionIncluded = this.tileModalChecklistClassic(
 				'program',
 				'W programie:',
-				'fa-solid fa-check',
-				'modal_included',
+				'fa-solid fa-check modal__icon modal-checklist__icon',
+				'modal-checklist modal-checklist--included modal-checklist--event',
 			);
 			modalOffer.appendChild(sectionIncluded);
 		}
 		// create a footer with 2 buttons to cause and action
 		// @ footer modal_user-action
 		const footer = this.createEl('footer', {
-			class: 'modal_user-action',
+			class: 'modal__user-action',
 		});
 		// use address  from camps dataset
 		const footerBtnSignUp = this.createEl('a', {
 			href: this.modal.form,
-			class: 'btn_sign-up',
+			class: 'modal__sign-up',
 			target: '_blank',
 		});
 		// use message from camps dataset
@@ -584,7 +616,7 @@ class Tile {
 			href: `https://wa.me/${48792891607}?text=${encodeURIComponent(
 				this.modal.questionTemplate(this.frontTitle),
 			)}`,
-			class: 'btn_ask-for-info',
+			class: 'modal__ask-for-info',
 			target: '_blank',
 		});
 		footerBtnAsk.innerText = 'Zapytaj';

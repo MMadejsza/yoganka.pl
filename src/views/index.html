@@ -62,6 +62,10 @@
 			rel="stylesheet"
 			href="../node_modules/@glidejs/glide/dist/css/glide.theme.min.css" />
 
+		<script
+			src="https://kit.fontawesome.com/4622d99ad4.js"
+			crossorigin="anonymous"></script>
+
 		<link
 			rel="stylesheet"
 			type="text/css"
@@ -79,7 +83,7 @@
 			</div>
 			<nav class="nav">
 				<div class="nav__logo">Logo</div>
-				<ul class="nav__list">					
+				<ul class="nav__list">
 					<li class="nav__item">
 						<a
 							class="nav__link"
@@ -94,14 +98,14 @@
 							<i class="fas fa-cloud-moon nav__icon"></i>Wyjazdy
 						</a>
 					</li>
-					<li class="nav__item"></li>
+					<li class="nav__item">
 						<a
 							class="nav__link"
 							href=".events">
 							<i class="fas fa-calendar-check nav__icon"></i>Wydarzenia
 						</a>
 					</li>
-					
+
 					<li class="nav__item">
 						<a
 							class="nav__link"
@@ -173,54 +177,46 @@
 				</article>
 			</section>
 			<section class="offer">
-				<header class="sectionHeader">
+				<header class="offer__section-header section-header">
 					Pokuś się na...
-					<hr class="lineShadow" />
+					<hr class="offer__lineShadow" />
 				</header>
 				<article
-					class="offerType"
+					class="offer-type"
 					id="wyjazdy">
-					<header class="offerType_header">Wyjazdy Slow Flow</header>
+					<header class="offer-type__header">Wyjazdy Slow Flow</header>
 				</article>
 				<article
-					class="offerType"
+					class="offer-type"
 					id="zajecia">
-					<header class="offerType_header">Zajęcia</header>
-					<!-- <div class="tile">
-						<img
-							class="tile__img pic"
-							src="..\static\img\offer\offer_1-2-1.jpg"
-							loading="lazy" />
-						<h3>Indywidualne</h3>
-						<p class="tile_desc">Ty, yoga i ja...</p>
-					</div> -->
+					<header class="offer-type__header">Zajęcia</header>
 					<div class="tile">
 						<img
 							src="../static/img/offer/offer_group.png"
 							class="tile__img pic"
 							loading="lazy" />
-						<h3>Grupowe i Indywidualne</h3>
+						<h3 class="tile__title">Grupowe i Indywidualne</h3>
 					</div>
 					<div class="tile">
 						<img
 							class="tile__img pic"
 							src="../static/img/offer/offer_commercial.jpg"
 							loading="lazy" />
-						<h3>Joga dla firm</h3>
-						<p>Spokój | Relaks | Integracja</p>
-						<p>Specjalnie dla Twojego zespołu!</p>
+						<h3 class="tile__title">Joga dla firm</h3>
+						<p class="tile__desc">Spokój | Relaks | Integracja</p>
+						<p class="tile__desc">Specjalnie dla Twojego zespołu!</p>
 					</div>
 				</article>
 
 				<article
-					class="offerType events"
+					class="offer-type offer-type--events"
 					id="wydarzenia">
-					<header class="offerType_header">Wydarzenia</header>
+					<header class="offer-type__header">Wydarzenia</header>
 				</article>
 			</section>
 			<section class="certificates">
 				<header class="certificates__header section-header">Certyfikaty</header>
-				<!-- <article class="certificates__gallery"> -->
+
 				<div class="glide">
 					<div
 						class="glide__track"
@@ -228,10 +224,6 @@
 						<ul class="glide__slides">
 							<li class="glide__slide">
 								<div class="certificates__tile tile">
-									<!-- <img
-										class="tile__img certificates__pic"
-										src="../static/img/about/about_ryt.jpg"
-										loading="lazy" /> -->
 									<h3><strong class="certificates__name">RYT200 Bali</strong></h3>
 									<p class="certificates__school">House of OM</p>
 									<p class="certificates__duration">200h</p>
@@ -242,10 +234,6 @@
 							</li>
 							<li class="glide__slide">
 								<div class="tile certificates__tile">
-									<!-- <img
-										class="tile__img certificates__pic"
-										src="../static/img/offer/offer_individual.png"
-										loading="lazy" /> -->
 									<h3>
 										<strong class="certificates__name"
 											>Instruktor Hatha Jogi</strong
@@ -258,10 +246,6 @@
 							</li>
 							<li class="glide__slide">
 								<div class="tile certificates__tile">
-									<!-- <img
-										class="tile__img certificates__pic"
-										src="../static/img/offer/offer_individual.png"
-										loading="lazy" /> -->
 									<h3>
 										<strong class="certificates__name"
 											>Warsztat sekwencji</strong
@@ -273,10 +257,6 @@
 							</li>
 							<li class="glide__slide">
 								<div class="tile certificates__tile">
-									<!-- <img
-										class="tile__img certificates__pic"
-										src="../static/img/offer/offer_individual.png"
-										loading="lazy" /> -->
 									<h3>
 										<strong class="certificates__name"
 											>Asana stabilna i wygodna</strong
@@ -288,10 +268,6 @@
 							</li>
 							<li class="glide__slide">
 								<div class="tile certificates__tile">
-									<!-- <img
-										class="tile__img certificates__pic"
-										src="../static/img/offer/offer_individual.png"
-										loading="lazy" /> -->
 									<h3>
 										<strong class="certificates__name"
 											>Mobility & Flexibility</strong
@@ -304,10 +280,6 @@
 
 							<li class="glide__slide">
 								<div class="tile certificates__tile">
-									<!-- <img
-										class="tile__img certificates__pic"
-										src="../static/img/offer/offer_individual.png"
-										loading="lazy" /> -->
 									<h3>
 										<strong class="certificates__name">Neuro Yoga</strong>
 									</h3>
@@ -317,10 +289,6 @@
 							</li>
 							<li class="glide__slide">
 								<div class="tile certificates__tile">
-									<!-- <img
-										class="tile__img certificates__pic"
-										src="../static/img/offer/offer_individual.png"
-										loading="lazy" /> -->
 									<h3>
 										<strong class="certificates__name"
 											>Warsztat pozycji odwróconych</strong
@@ -372,7 +340,6 @@
 						</button>
 					</div>
 				</div>
-				<!-- </article> -->
 			</section>
 			<section class="partners">
 				<header class="partners__header section-header">Współpraca</header>
@@ -685,9 +652,6 @@
 				);
 				ml('account', '1112086');
 			</script>
-			<script
-				src="https://kit.fontawesome.com/4622d99ad4.js"
-				crossorigin="anonymous"></script>
 			<script src="../node_modules/@glidejs/glide/dist/glide.min.js"></script>
 			<script
 				type="application/javascript"
