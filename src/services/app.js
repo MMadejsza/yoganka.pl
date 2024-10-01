@@ -6,65 +6,88 @@ const kaszubyCamp = {
 	path: '../static/img/offer/camp_kaszuby',
 	fileName: `camp_kaszuby`,
 	front: {
-		frontTitle: `Kojenie Zmysłów
+		nazwaWyjazdu: `Kojenie Zmysłów
 		Yoga | Aromaterapia | SPA | SkinCare`,
-		frontDate: [`11-13/10/2024`],
-		frontLocation: `Kaszuby`,
+		listaDat: [`11-13/10/2024`],
+		rejon: `Kaszuby`,
 	},
 	modal: {
 		imgModal: this.img,
-		glance: [/*'Kaszuby',*/ 'Dworek Krępkowice', '12', '1200zł'],
-		fullDesc: `Zabieram Cię do urokliwego domku, otulonego drewnem, gdzie schowamy się w ulubionych skarpetkach, za dużych sweterkach i będziemy kocykować przy kominku i pić ciepłe naparki!`,
-		plan: [
-			{
-				'day': 'Piątek',
-				'16:00': 'Przyjazd, Spacerki',
-				'18:00': 'Yoga łagodna, relaksująca',
-				'19:00': 'Wspólna kolacja',
-				'21:00': `Pielęgnacja z naturalnymi kosmetykami / sauna / balia, kobiece rozmowy`,
-			},
-			{
-				'day': 'Sobota',
-				'08:00': 'Ziołowy napar dla porannych ptaszków',
-				'08:30': 'Energetyczna Yoga Slow Flow',
-				'09:30': 'Nieśpieszne śniadanko',
-				'CZAS WOLNY': '',
-				'14:30': 'Yoga łagodna, relaksująca',
-				'16:00': 'Aromaterapia (warsztat świec bubble, wosków na bazie olejków + wykład)',
-				'19:00': 'Uczta przy kolacji',
-				'20:30': 'Yoga + krąg przy kominku, rozmowy',
-			},
-			{
-				'day': 'Niedziela',
-				'08:30': 'Ziołowy napar dla porannych ptaszków',
-				'09:00': 'Yoga Slow Flow',
-				'10:00': 'Nieśpieszne śniadanie',
-				'CZAS WOLNY': '',
-				'13:00': 'Lunch i pożegnanie',
-			},
-		],
-		included: [
-			'4x Yoga (Slow Flow, Hatha, Nidra)',
-			'Warsztat świec i wosków',
-			'Rytuał Pielęgnacyjny Twarzy',
-			'Krąg',
-			'Upominek',
-			'Pobyt z Wyżywieniem',
-			'Kawa / Herbata / Napary 24/h',
-		],
-		excluded: ['Dojazd', 'Ubezpieczenie'],
-		optional: [
-			'Masaż Misami Tybetańskimi 120zł',
-			'Masaż Kobido 30zł',
-			'Sauny i Balii (oferta wkrótce)',
-		],
-		freeTime: [
-			{status: 'free', activity: 'Kocyk, spacerki, naparki'},
-			{status: 'optional', activity: 'Masaże misami'},
-			{status: 'optional', activity: 'Balia'},
-			{status: 'optional', activity: 'Sauna'},
-		],
-		form: 'https://forms.gle/kYN6VpfP3aV1b9yB8',
+		opis: `Zabieram Cię do urokliwego domku, otulonego drewnem, gdzie schowamy się w ulubionych skarpetach, za dużych sweterkach i ukoimy nasze zmysły. Nie zabraknie jesiennej klasyki, czyli odpoczynku przy kominku z kubkiem aromatycznego naparu.`,
+		krotkieInfo: {
+			naglowek: 'W skrócie:',
+			nocleg: 'Dworek Krępkowice',
+			liczbaMiejsc: '12',
+			cena: '1200zł',
+		},
+		plan: {
+			naglowek: 'Plan:',
+			tresc: [
+				{
+					'naglowekDnia': 'Piątek:',
+					'16:00': 'Przyjazd, Spacery po okolicy',
+					'18:00': 'Joga łagodna, relaksująca',
+					'19:00': 'Zmysł smaku: wspólna kolacja',
+					'21:00': `Zmysł dotyku: Skincare, czyli pielęgnacja twarzy połączona z relaksującym seansem w saunie oraz kąpielą w  balii `,
+				},
+				{
+					'naglowekDnia': 'Sobota:',
+					'08:00': 'Ziołowy napar dla porannych ptaszków (dla chętnych)',
+					'08:30': 'Zmysł równowagi: energetyczna Joga Slow Flow',
+					'09:30': 'Nieśpieszne śniadanko',
+					'CZAS WOLNY': '',
+					'14:30': 'Obiad wegetariański',
+					'16:00': 'Zmysł węchu: aromaterapia, warsztat świec bubble, wosków + wykład',
+					'19:00': 'Uczta przy kolacji',
+					'20:30': 'Joga, zmysł słuchu: krąg przy kominku',
+				},
+
+				{
+					'naglowekDnia': 'Niedziela:',
+					'08:30': `Zmysł propriocepcji*:				
+				Joga Slow Flow`,
+					'09:30': 'Nieśpieszne śniadanie',
+					'CZAS WOLNY': '',
+					'13:00': 'Lunch i pożegnanie',
+					'*': 'zmysł czucia głębokiego, ciała w przestrzeni',
+				},
+			],
+		},
+		wCenie: {
+			naglowek: 'W Cenie:',
+			tresc: [
+				'4 praktyki jogi (Slow Flow, Hatha, Nidra)',
+				'Warsztat świec i wosków',
+				'Skin care',
+				'Krąg',
+				'Upominek',
+				'Pobyt z Wyżywieniem',
+				'Kawa / Herbata / Napary 24/h',
+			],
+		},
+		pozaCena: {
+			naglowek: 'We własnym zakresie:',
+			tresc: ['Dojazd', 'Ubezpieczenie'],
+		},
+		extraPlatneOpcje: {
+			naglowek: 'Poszerz Slow Menu:',
+			tresc: ['Masaż Kobido 200zł/1h', 'Masaż Misami Tybetańskimi koszt na miejscu 120zł'],
+		},
+		czasWolny: {
+			naglowek: 'W Czasie Wolnym:',
+			//(notka: statusy to free/optional/available o różnych ikonach)
+			tresc: [
+				{
+					status: 'free',
+					aktywnosc: 'Kocykowanie, leśne spacery, pogaduchy, zdrowe napary',
+				},
+				{status: 'optional', aktywnosc: 'Masaż Misami'},
+				{status: 'optional', aktywnosc: 'Masaż Kobido'},
+			],
+		},
+		uwaga: `Miejsce gwarantowane jest wpłatą bezzwrotnego zadatku w kwocie 500 zł`,
+		// dodaj tresć btns
+		linkFormularza: 'https://forms.gle/kYN6VpfP3aV1b9yB8',
 		questionTemplate(subject) {
 			return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
 		},
@@ -77,70 +100,94 @@ const warmiaCamp = {
 	path: '../static/img/offer/camp_kaszuby',
 	fileName: `camp_kaszuby`,
 	front: {
-		frontTitle: `Comfy Retreat
+		nazwaWyjazdu: `Comfy Retreat
 		Yoga | Malowanie | SPA | Misy i Gongi `,
-		frontDate: ['08-11/11/2024'],
-		frontLocation: 'Warmia',
+		listaDat: ['08-11/11/2024'],
+		rejon: 'Warmia',
 	},
 	modal: {
 		imgModal: 'camp_warmia.jpg',
-		glance: [/*'Warmia',*/ 'Witramowo 32', '18', '1200zł'],
-		fullDesc: `Otulimy się ciepłym kominkiem, zdrowymi naparami i pysznym jedzeniem! Zabierz swój ulubiony dres, za duży sweterek i ciepłe skarpetki, po prostu Twoje ulubione, jesienne atrybuty!
-
-		Nie zabraknie czasu na książkę pod kocykiem, ale też uziemiających aktywności.`,
-		plan: [
-			{
-				'day': 'Piątek',
-				'16:00': 'Przyjazd, Spacerki',
-				'18:00': 'Obiadokolacja',
-				'20:00': 'Yoga',
-				'21:00': `Kominek/Naparki/Relaks`,
-			},
-			{
-				'day': 'Sobota',
-				'08:30': 'Yoga Slow Flow Vinyasa',
-				'09:30': 'Nieśpieszne Śniadanko',
-				'CZAS WOLNY': '',
-				'14:00': 'Obiad + Słodkości',
-				'16:00': 'Malowanie intuicyjne przy koncercie mis i gongów',
-				'18:30': 'Uczta przy kolacji',
-				'20:00': 'Sauna/Balia/Rozmowy/Film',
-			},
-			{
-				'day': 'Niedziela',
-				'08:30': 'Yoga Slow Flow Vinyasa',
-				'09:30': 'Nieśpieszne Śniadanko',
-				'CZAS WOLNY': '',
-				'14:00': 'Obiad + Słodkości',
-				'17:00': 'Yoga Jin',
-				'18:30': 'Kolacja',
-				'20:00': 'Rozmowy w Kręgu',
-			},
-			{
-				'day': 'Poniedziałek',
-				'08:30': 'Yoga Slow Flow Vinyasa',
-				'09:30': 'Nieśpieszne Śniadanko',
-				'CZAS WOLNY': '',
-				'13:00': 'Lunch i pożegnanie',
-			},
-		],
-		included: [
-			'4x Yoga (Slow Flow, Hatha, Nidra)',
-			'Warsztat świec i wosków',
-			'Rytuał Pielęgnacyjny Twarzy',
-			'Krąg',
-			'Upominek',
-			'Pobyt z Wyżywieniem',
-			'Kawa / Herbata / Napary 24/h',
-		],
-		excluded: ['Dojazd', 'Ubezpieczenie'],
-		optional: ['Masaż Misami', 'Sauny i Balii'],
-		freeTime: [
-			{status: 'free', activity: 'Kocyk, spacerki, naparki'},
-			{status: 'optional', activity: 'Masaże Kobido/Misami'},
-			{status: 'available', activity: 'Wioska garncarska + Warsztaty'},
-		],
-		form: 'https://forms.gle/ag6SSBy9zqrxwCRcA',
+		opis: `Tym razem jesienna odsłona uwielbianego przez was Witramowa. Oferta na długi weekend listopadowy. Zapraszam na 4 dni wypełnione jesiennym zapachem, ciepłem kominka i smakiem kultowej kuchni Agi i Piotra.  
+		
+		W slow menu oczywiście joga, malowanie intuicyjne z koncertem mis i gongów.`,
+		krotkieInfo: {
+			naglowek: 'W skrócie:',
+			nocleg: 'Witramowo 32',
+			liczbaMiejsc: '18',
+			cena: '1600zł',
+		},
+		plan: {
+			naglowek: 'Plan:',
+			tresc: [
+				{
+					'naglowekDnia': 'Piątek:',
+					'16:00': 'Zakwaterowanie, spacery po okolicy',
+					'18:00': 'Pyszna obiadokolacja',
+					'20:00': 'Joga wieczorna',
+					'21:00': `Wieczór przy kominku: rozmowy, napary`,
+				},
+				{
+					'naglowekDnia': 'Sobota:',
+					'08:30': 'Joga Slow Flow',
+					'09:30': 'Nieśpieszne śniadanie',
+					'CZAS WOLNY': '',
+					'14:00': 'Obiad + słodkości',
+					'16:00': 'Malowanie intuicyjne przy koncercie mis i gongów',
+					'18:30': 'Uczta przy kolacji',
+					'20:00': 'Czas wspólny - sauna/balia/film',
+				},
+				{
+					'naglowekDnia': 'Niedziela:',
+					'08:30': 'Joga Slow Flow Vinyasa',
+					'09:30': 'Nieśpieszne śniadanko',
+					'CZAS WOLNY': '',
+					'14:00': 'Obiad + słodkości',
+					'17:00': 'Joga yin',
+					'18:30': 'Kolacja',
+					'20:00': 'Rozmowy w Kręgu',
+				},
+				{
+					'naglowekDnia': 'Poniedziałek:',
+					'08:30': 'Joga Slow Flow Vinyasa',
+					'09:30': 'Nieśpieszne Śniadanko',
+					'CZAS WOLNY': '',
+					'13:00': 'Lunch i pożegnanie',
+				},
+			],
+		},
+		wCenie: {
+			naglowek: 'W Cenie:',
+			tresc: [
+				'5 praktyk jogi',
+				'Koncert mis i gongów',
+				'Malowanie intuicyjne',
+				'Krąg',
+				'Upominek',
+				'Pobyt z Wyżywieniem',
+				'Kawa / Herbata / Napary 24/h',
+			],
+		},
+		pozaCena: {
+			naglowek: 'We własnym zakresie:',
+			tresc: ['Dojazd', 'Ubezpieczenie'],
+		},
+		extraPlatneOpcje: {
+			naglowek: 'Poszerz Slow Menu:',
+			tresc: ['Masaż Misami', 'Sauna i Balia'],
+		},
+		czasWolny: {
+			naglowek: 'W Czasie Wolnym:',
+			tresc: [
+				{
+					status: 'free',
+					aktywnosc: 'Spacery leśne, sauna, rozmowy, jesienne leniuchowanie, masaże',
+				},
+				{status: 'optional', aktywnosc: 'Masaże Kobido/Misami'},
+				{status: 'available', aktywnosc: 'Wioska garncarska + Warsztaty'},
+			],
+		},
+		uwaga: `Miejsce gwarantowane jest wpłatą bezzwrotnego zadatku w kwocie 500 zł`,
+		linkFormularza: 'https://forms.gle/ag6SSBy9zqrxwCRcA',
 		questionTemplate(subject) {
 			return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
 		},
@@ -152,28 +199,31 @@ const yogaAndSound = {
 	extraClass: 'event',
 	img: '../static/img/offer/events_gongi.png',
 	front: {
-		frontTitle: `YOGA & SOUND
+		nazwaWyjazdu: `YOGA & SOUND
 		Moon Ceremony`,
-		frontDate: [`Data wkrótce...`],
-		frontLocation: `Plaża Trójmiasto`,
-		frontDesc: `Comiesięczne spotkania przy pełni księżyca, gongami wprowadzające Cię w relaksujący trans.
-		Więcej...`,
+		listaDat: [`Data wkrótce...`],
+		rejon: `Plaża Trójmiasto`,
+		krotkiOpis: `Comiesięczne spotkania przy pełni księżyca, gongami wprowadzające Cię w relaksujący trans.`,
 	},
 	modal: {
 		imgModal: this.img,
-		fullDesc: `To comiesięczne spotkania przy pełni księżyca. W okresie letnim wydarzenie jest organizowane na plaży, natomiast w sezonie jesienno-zimowym przenosimy się na przytulne sale na terenie Trójmiasta.`,
-		program: [
-			`Sesja yogi przy dźwiękach mis i gongów (koncert w wykonaniu Agnieszki Topp)`,
-			`Savanasa z opaską na oczach nasączona aromatycznymi olejkami`,
-			`Zdrowy napar naszego przepisu`,
-			`Rozmowy w kręgu`,
-			`Upominek naszego autorstwa`,
-			`Maty od partnera Miś Yoga`,
-		],
-		form: 'https://forms.gle/kYN6VpfP3aV1b9yB8',
-		questionTemplate(subject) {
-			return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
+		tytulOpisu: 'W skrócie:',
+		pelnyOpis: `To comiesięczne spotkania przy pełni księżyca. W okresie letnim wydarzenie jest organizowane na plaży, natomiast w sezonie jesienno-zimowym przenosimy się na przytulne sale na terenie Trójmiasta.`,
+		program: {
+			naglowek: 'W programie:',
+			tresc: [
+				`Sesja yogi przy dźwiękach mis i gongów (koncert w wykonaniu Agnieszki Topp)`,
+				`Savanasa z opaską na oczach nasączona aromatycznymi olejkami`,
+				`Zdrowy napar naszego przepisu`,
+				`Rozmowy w kręgu`,
+				`Upominek naszego autorstwa`,
+				`Maty od partnera Miś Yoga`,
+			],
 		},
+		linkFormularza: 'https://forms.gle/kYN6VpfP3aV1b9yB8',
+		// questionTemplate(subject) {
+		// 	return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
+		// },
 	},
 };
 const yogaNaSupach = {
@@ -181,19 +231,19 @@ const yogaNaSupach = {
 	extraClass: 'event',
 	img: '../static/img/offer/offer_sup.png',
 	front: {
-		frontTitle: `Yoga na Supach`,
-		frontDate: [`(Sezon Letni)`],
-		frontLocation: `Plaża Trójmiasto`,
-		frontDesc: `Nie bój się zmoczyć... Extra mobilizacja mięśni głębokich i stabilizujących
-		Więcej...`,
+		nazwaWyjazdu: `Yoga na Supach`,
+		listaDat: [`(Sezon Letni)`],
+		rejon: `Plaża Trójmiasto`,
+		krotkiOpis: `Nie bój się zmoczyć... Extra mobilizacja mięśni głębokich i stabilizujących`,
 	},
 	modal: {
 		imgModal: this.img,
-		fullDesc: `Latem zapraszam do wodnego studio jogi. Otwarta przestrzeń z  nieskończonym oknem na naturę stanowi doskonałą propozycję na ciepłe dni. Deska SUP zamiast maty, promienie słońca, letni podmuch wiatru i szum drzew dodadzą Twojej praktyce lekkości. Poprawisz balans, wzmocnisz mięśnie posturalne, zrelaksujesz się czując delikatne muskanie fal. Zobacz fotorelację z sezonu 2023 oraz 2024. Zajęcia odbywały się na jeziorze oraz w Zatoce Gdańskiej (Brzeźno).`,
-		form: 'https://forms.gle/kYN6VpfP3aV1b9yB8',
-		questionTemplate(subject) {
-			return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
-		},
+		tytulOpisu: 'W skrócie:',
+		pelnyOpis: `Latem zapraszam do wodnego studio jogi. Otwarta przestrzeń z  nieskończonym oknem na naturę stanowi doskonałą propozycję na ciepłe dni. Deska SUP zamiast maty, promienie słońca, letni podmuch wiatru i szum drzew dodadzą Twojej praktyce lekkości. Poprawisz balans, wzmocnisz mięśnie posturalne, zrelaksujesz się czując delikatne muskanie fal. Zobacz fotorelację z sezonu 2023 oraz 2024. Zajęcia odbywały się na jeziorze oraz w Zatoce Gdańskiej (Brzeźno).`,
+		linkFormularza: 'https://forms.gle/kYN6VpfP3aV1b9yB8',
+		// questionTemplate(subject) {
+		// 	return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
+		// },
 	},
 };
 
@@ -208,10 +258,10 @@ class Tile {
 		this.img = givenEventBody.img;
 		this.path = givenEventBody.path;
 		this.fileName = givenEventBody.fileName;
-		this.frontTitle = givenEventBody.front.frontTitle;
-		this.frontDate = givenEventBody.front.frontDate;
-		this.frontLocation = givenEventBody.front.frontLocation;
-		this.frontDesc = givenEventBody.front.frontDesc;
+		this.frontTitle = givenEventBody.front.nazwaWyjazdu;
+		this.frontDate = givenEventBody.front.listaDat;
+		this.frontLocation = givenEventBody.front.rejon;
+		this.frontDesc = givenEventBody.front.krotkiOpis;
 		this.modal = givenEventBody.modal;
 		this.hamburger = document.getElementById('burger');
 		this.body = document.body;
@@ -303,7 +353,6 @@ class Tile {
 			src: `${this.img}`,
 			loading: 'lazy',
 		});
-
 		const frontTitle = this.createEl('h3', {class: 'tile__title'});
 		frontTitle.innerText = this.frontTitle;
 		const frontDates = [];
@@ -314,19 +363,20 @@ class Tile {
 		});
 		const frontLocation = this.createEl('h4', {class: 'tile__location'});
 		frontLocation.innerText = this.frontLocation;
-		// const frontDesc = this.createEl('p', {class: 'tile__desc'});
-		// frontDesc.innerText = this.frontDesc;
 
 		// Append those tags
 		appendEl(tile, img, frontTitle, ...frontDates, frontLocation);
+		if (this.frontDesc) {
+			const frontDesc = this.createEl('p', {class: 'tile__desc'});
+			frontDesc.innerText = this.frontDesc;
+			tile.appendChild(frontDesc);
+		}
 
 		// add listeners for opening and closing
 		tile.addEventListener('click', (e) => {
 			e.stopPropagation();
 			const thisModal = this.appendModal();
 			const thisGlide = thisModal.querySelector('.glide--comp');
-			// setTimeout(() => {
-			// }, 50);
 			setTimeout(() => {
 				this.showModal();
 			}, 50);
@@ -347,17 +397,18 @@ class Tile {
 	};
 
 	// util function for modal body to simplify the code. Generates small sections with lists on the bottom
-	tileModalChecklistClassic = (type, title, icon, listClass) => {
+	tileModalChecklistClassic = (checklistName, icon, listClass) => {
+		const content = this.modal[checklistName];
 		// create list general container
 		const section = this.createEl('section', {class: listClass});
 		// create list general container header
 		const sectionHeader = this.createEl('h3', {class: 'modal-checklist__title'});
-		sectionHeader.innerText = title;
+		sectionHeader.innerText = content.naglowek;
 		section.appendChild(sectionHeader);
 		// create list container
 		const sectionList = this.createEl('ul', {class: 'modal-checklist__list'});
 		// create list items
-		this.modal[type].forEach((item) => {
+		content.tresc.forEach((item) => {
 			// create li
 			const li = this.createEl('li', {class: 'modal-checklist__li'});
 			// assign icon parameter
@@ -374,7 +425,7 @@ class Tile {
 				// create chosen icon
 				const chosenIcon = this.createEl('i', {class: iconClass});
 				// append it
-				li.append(chosenIcon, item.activity);
+				li.append(chosenIcon, item.aktywnosc);
 			} else {
 				// create standard icon
 				const includedIcon = this.createEl('i', {class: icon});
@@ -410,7 +461,7 @@ class Tile {
 			class: `modal__full-desc modal__full-desc--${this.extraClass ? this.extraClass : ''}`,
 		});
 		const fullDescContent = this.createEl('p', {class: 'modal__full-desc-content'});
-		fullDescContent.innerText = this.modal.fullDesc;
+		fullDescContent.innerText = this.modal.opis;
 		sectionFullDesc.append(fullDescContent);
 		modalOffer.append(sectionFullDesc);
 
@@ -418,7 +469,7 @@ class Tile {
 		const glance = this.createEl('header', {class: 'modal__header'});
 		// create header container h3
 		const glanceHeader = this.createEl('h3', {class: 'modal__title'});
-		glanceHeader.innerText = 'W skrócie:';
+		glanceHeader.innerText = this.modal.krotkieInfo.naglowek;
 		glance.appendChild(glanceHeader);
 		const ul = this.createEl('ul', {class: 'modal__list modal__list--at-glance'});
 		// point list of icons to include in order
@@ -429,19 +480,22 @@ class Tile {
 			'fa-solid fa-tag',
 		];
 		// iterate after modal's "at glance" part
-		this.modal.glance.forEach((text, index) => {
-			// create li
-			const li = this.createEl('li', {class: 'modal__li modal__li--at-glance'});
-			// create icon choosing the right one in order
-			const icon = this.createEl('i', {
-				class: icons[index]
-					? icons[index] + ' modal__icon'
-					: 'fa-solid fa-check modal__icon',
-			});
-			// append icon + text from glance array
-			li.append(icon, text);
-			// append li
-			ul.appendChild(li);
+		Object.entries(this.modal.krotkieInfo).forEach(([info, text], index) => {
+			// omit title:
+			if (index > 0) {
+				// create li
+				const li = this.createEl('li', {class: 'modal__li modal__li--at-glance'});
+				// create icon choosing the right one in order
+				const icon = this.createEl('i', {
+					class: icons[index]
+						? icons[index] + ' modal__icon'
+						: 'fa-solid fa-check modal__icon',
+				});
+				// append icon + text from glance array
+				li.append(icon, text);
+				// append li
+				ul.appendChild(li);
+			}
 		});
 		// append list in header
 		glance.appendChild(ul);
@@ -461,14 +515,14 @@ class Tile {
 		// 	class: 'fa-solid fa-list-check modal__icon',
 		// });
 		// populate header with icon and text
-		sectionDescHeader.append(/*sectionDescHeaderI,*/ 'Plan:');
+		sectionDescHeader.append(/*sectionDescHeaderI,*/ this.modal.plan.naglowek);
 		// append ready section header
 		sectionDesc.appendChild(sectionDescHeader);
 		// iterate after array of days objects
-		this.modal.plan.forEach((campDay) => {
+		this.modal.plan.tresc.forEach((campDay) => {
 			// create days header
 			const dayHeader = this.createEl('h4', {class: 'modal__title--day'});
-			dayHeader.innerText = campDay.day + ':';
+			dayHeader.innerText = campDay.naglowekDnia;
 			// create container for day's list of activities
 			const dayPlan = this.createEl('ul', {class: 'modal__list'});
 			// get day object keys
@@ -478,7 +532,8 @@ class Tile {
 				const time = keys[i];
 				const timeContainer = this.createEl('div');
 				timeContainer.innerText = time;
-				const activity = campDay[time];
+				const activity = this.createEl('div');
+				activity.innerText = campDay[time];
 				const li = this.createEl('li', {class: 'modal__li'});
 				li.append(timeContainer, activity);
 				dayPlan.appendChild(li);
@@ -490,8 +545,7 @@ class Tile {
 		//@ section modal_included
 		// create section for what's included using util function and custom parameters
 		const sectionIncluded = this.tileModalChecklistClassic(
-			'included',
-			'W cenie:',
+			'wCenie',
 			'fa-solid fa-check modal__icon modal-checklist__icon',
 			'modal-checklist modal-checklist--included',
 		);
@@ -499,8 +553,7 @@ class Tile {
 		//@ section modal_excluded
 		// create section for what's excluded
 		const sectionExcluded = this.tileModalChecklistClassic(
-			'excluded',
-			'We własnym zakresie:',
+			'pozaCena',
 			'fa-regular fa-hand-point-right modal__icon modal-checklist__icon',
 			'modal-checklist modal-checklist--excluded',
 		);
@@ -508,8 +561,7 @@ class Tile {
 		//@ section modal_optional
 		// create section for what's optional to buy
 		const sectionOptional = this.tileModalChecklistClassic(
-			'optional',
-			'Opcje:',
+			'extraPlatneOpcje',
 			'fa-solid fa-plus modal__icon modal-checklist__icon',
 			'modal-checklist modal-checklist--optional',
 		);
@@ -517,8 +569,7 @@ class Tile {
 		//@ section modal_free-time
 		// create section for what's possible to do in free time
 		const sectionFreeTime = this.tileModalChecklistClassic(
-			'freeTime',
-			'W Czasie Wolnym:',
+			'czasWolny',
 			'fa-solid fa-check modal__icon modal-checklist__icon',
 			'modal-checklist modal-checklist--free-time',
 		);
@@ -529,22 +580,15 @@ class Tile {
 		const attentionNote = this.createEl('h2', {
 			class: 'modal__attention-note',
 		});
-		attentionNote.innerText =
-			'Miejsce gwarantowane jest wpłatą bezzwrotnego zadatku w kwocie 500 zł';
+		attentionNote.innerText = this.modal.uwaga;
 		modalOffer.appendChild(attentionNote);
 		// create a footer with 2 buttons to cause and action
 		// @ footer modal_user-action
 		const footer = this.createEl('footer', {
 			class: 'modal__user-action',
 		});
-		// use address  from camps dataset
-		const footerBtnSignUp = this.createEl('a', {
-			href: this.modal.form,
-			class: 'modal__btn modal__sign-up',
-			target: '_blank',
-		});
+
 		// use message from camps dataset
-		footerBtnSignUp.innerText = 'Zapisz się';
 		const footerBtnAsk = this.createEl('a', {
 			href: `https://wa.me/${48792891607}?text=${encodeURIComponent(
 				this.modal.questionTemplate(this.frontTitle),
@@ -553,7 +597,15 @@ class Tile {
 			target: '_blank',
 		});
 		footerBtnAsk.innerText = 'Zapytaj';
-		footer.append(footerBtnSignUp, footerBtnAsk);
+
+		// use address  from camps dataset
+		const footerBtnSignUp = this.createEl('a', {
+			href: this.modal.form,
+			class: 'modal__btn modal__sign-up',
+			target: '_blank',
+		});
+		footerBtnSignUp.innerText = 'Dołącz!';
+		footer.append(footerBtnAsk, footerBtnSignUp);
 		modalOffer.appendChild(footer);
 		// return complete modal body
 		return modalOffer;
@@ -585,12 +637,12 @@ class Tile {
 		const sectionDescHeader = this.createEl('h3', {class: 'modal__title'});
 		// create icon
 		// populate header with icon and text
-		sectionDescHeader.append('W skrócie:');
+		sectionDescHeader.innerText = this.modal.tytulOpisu;
 		// append ready section header
 		sectionDesc.appendChild(sectionDescHeader);
 		// create desc
 		const sectionDescContent = this.createEl('p', {class: 'modal__paragraph'});
-		sectionDescContent.innerText = this.modal.fullDesc;
+		sectionDescContent.innerText = this.modal.pelnyOpis;
 		sectionDesc.append(sectionDescContent);
 		modalOffer.appendChild(sectionDesc);
 
@@ -599,7 +651,6 @@ class Tile {
 		if (this.modal.program) {
 			const sectionIncluded = this.tileModalChecklistClassic(
 				'program',
-				'W programie:',
 				'fa-solid fa-check modal__icon modal-checklist__icon',
 				'modal-checklist modal-checklist--included modal-checklist--event',
 			);
@@ -612,21 +663,21 @@ class Tile {
 		});
 		// use address  from camps dataset
 		const footerBtnSignUp = this.createEl('a', {
-			href: this.modal.form,
+			href: this.modal.linkFormularza,
 			class: 'modal__btn modal__sign-up',
 			target: '_blank',
 		});
 		// use message from camps dataset
-		footerBtnSignUp.innerText = 'Zapisz się';
-		const footerBtnAsk = this.createEl('a', {
-			href: `https://wa.me/${48792891607}?text=${encodeURIComponent(
-				this.modal.questionTemplate(this.frontTitle),
-			)}`,
-			class: 'modal__btn modal__ask-for-info',
-			target: '_blank',
-		});
-		footerBtnAsk.innerText = 'Zapytaj';
-		footer.append(footerBtnSignUp, footerBtnAsk);
+		footerBtnSignUp.innerText = 'Dołącz!';
+		// const footerBtnAsk = this.createEl('a', {
+		// 	href: `https://wa.me/${48792891607}?text=${encodeURIComponent(
+		// 		this.modal.questionTemplate(this.frontTitle),
+		// 	)}`,
+		// 	class: 'modal__btn modal__ask-for-info',
+		// 	target: '_blank',
+		// });
+		// footerBtnAsk.innerText = 'Zapytaj';
+		footer.append(footerBtnSignUp);
 		modalOffer.appendChild(footer);
 
 		// return complete modal body

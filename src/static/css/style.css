@@ -444,6 +444,7 @@ input {
 	height: 300vh;
 	/* background-color: red; */
 	backdrop-filter: blur(10px);
+	z-index: 200;
 }
 .modal {
 	display: block;
@@ -459,7 +460,7 @@ input {
 	border-radius: var(--bRadius);
 	box-shadow: var(--activeTextIconsShadow);
 	opacity: 0;
-	z-index: 2;
+	z-index: 200;
 	transition: 0.4s ease-in-out;
 }
 .modal__icon {
@@ -880,6 +881,7 @@ div.hidden {
 }
 .glide__slides {
 	height: 100%;
+	align-items: center;
 	justify-content: space-around;
 }
 .glide__slide {
