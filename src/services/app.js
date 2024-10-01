@@ -314,11 +314,11 @@ class Tile {
 		});
 		const frontLocation = this.createEl('h4', {class: 'tile__location'});
 		frontLocation.innerText = this.frontLocation;
-		const frontDesc = this.createEl('p', {class: 'tile__desc'});
-		frontDesc.innerText = this.frontDesc;
+		// const frontDesc = this.createEl('p', {class: 'tile__desc'});
+		// frontDesc.innerText = this.frontDesc;
 
 		// Append those tags
-		appendEl(tile, img, frontTitle, ...frontDates, frontLocation, frontDesc);
+		appendEl(tile, img, frontTitle, ...frontDates, frontLocation);
 
 		// add listeners for opening and closing
 		tile.addEventListener('click', (e) => {
@@ -534,7 +534,7 @@ class Tile {
 		// use address  from camps dataset
 		const footerBtnSignUp = this.createEl('a', {
 			href: this.modal.form,
-			class: 'modal__sign-up',
+			class: 'modal__btn modal__sign-up',
 			target: '_blank',
 		});
 		// use message from camps dataset
@@ -543,7 +543,7 @@ class Tile {
 			href: `https://wa.me/${48792891607}?text=${encodeURIComponent(
 				this.modal.questionTemplate(this.frontTitle),
 			)}`,
-			class: 'modal__ask-for-info',
+			class: 'modal__btn modal__ask-for-info',
 			target: '_blank',
 		});
 		footerBtnAsk.innerText = 'Zapytaj';
@@ -607,7 +607,7 @@ class Tile {
 		// use address  from camps dataset
 		const footerBtnSignUp = this.createEl('a', {
 			href: this.modal.form,
-			class: 'modal__sign-up',
+			class: 'modal__btn modal__sign-up',
 			target: '_blank',
 		});
 		// use message from camps dataset
@@ -616,7 +616,7 @@ class Tile {
 			href: `https://wa.me/${48792891607}?text=${encodeURIComponent(
 				this.modal.questionTemplate(this.frontTitle),
 			)}`,
-			class: 'modal__ask-for-info',
+			class: 'modal__btn modal__ask-for-info',
 			target: '_blank',
 		});
 		footerBtnAsk.innerText = 'Zapytaj';

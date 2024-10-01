@@ -101,7 +101,7 @@
 					<li class="nav__item">
 						<a
 							class="nav__link"
-							href=".events">
+							href=".offer-type--events">
 							<i class="fas fa-calendar-check nav__icon"></i>Wydarzenia
 						</a>
 					</li>
@@ -116,7 +116,7 @@
 					<li class="nav__item">
 						<a
 							class="nav__link"
-							href=".footer__company-details">
+							href=".footer__socials">
 							<i class="fa-solid fa-circle-info nav__icon"></i>Kontakt
 						</a>
 					</li>
@@ -196,6 +196,11 @@
 							class="tile__img pic"
 							loading="lazy" />
 						<h3 class="tile__title">Grupowe i Indywidualne</h3>
+						<a
+							href="#footer__socials"
+							class="tile__btn tile__btn--general-contact"
+							>Skontaktuj się</a
+						>
 					</div>
 					<div class="tile">
 						<img
@@ -203,11 +208,14 @@
 							src="../static/img/offer/offer_commercial.jpg"
 							loading="lazy" />
 						<h3 class="tile__title">Joga dla firm</h3>
-						<p class="tile__desc">Spokój | Relaks | Integracja</p>
-						<p class="tile__desc">Specjalnie dla Twojego zespołu!</p>
+						<a
+							href="mailto:yoganka.gdansk@gmail.com"
+							class="tile__btn tile__btn--bussiness-mail"
+							target="_blank"
+							>Poproś o ofertę</a
+						>
 					</div>
 				</article>
-
 				<article
 					class="offer-type offer-type--events"
 					id="wydarzenia">
@@ -528,7 +536,7 @@
 			<footer class="footer">
 				<div class="footer__logo">Logo</div>
 
-				<div class="footer__company-details">
+				<!-- <div class="footer__company-details">
 					<p class="footer__company-location">Gdańsk, Polska</p>
 					<a
 						class="footer__company-phone"
@@ -541,9 +549,11 @@
 						>yoganka.gdansk@gmail.com</a
 					>
 					<p class="footer__company-nip">NIP 777777777777</p>
-				</div>
+				</div> -->
 
-				<div class="footer__socials">
+				<div
+					class="footer__socials"
+					id="footer__socials">
 					<a
 						class="footer__social-link footer__social-link--instagram"
 						href="https://www.instagram.com/yoganka_bodyhealing/"
@@ -576,6 +586,38 @@
 						</div>
 					</a>
 
+					<a
+						class="footer__social-link footer__social-link--phone"
+						href="tel:+48792891607"
+						id="phone-contact"
+						target="_blank"
+						title="Zadzwoń">
+						<div class="footer__social">
+							<i class="footer__social-icon fa-solid fa-phone"></i>
+							<div class="footer__qr">
+								<img
+									class="footer__qr-image"
+									src="../static/qrwa.png"
+									alt="Phone QR Code" />
+							</div>
+						</div>
+					</a>
+					<a
+						class="footer__social-link footer__social-link--mail"
+						href="mailto:yoganka.gdansk@gmail.com"
+						id="mail-contact"
+						target="_blank"
+						title="Wyślij maila">
+						<div class="footer__social">
+							<i class="footer__social-icon fa-solid fa-envelope"></i>
+							<div class="footer__qr">
+								<img
+									class="footer__qr-image"
+									src="../static/qrwa.png"
+									alt="Mail QR Code" />
+							</div>
+						</div>
+					</a>
 					<a
 						class="footer__social-link footer__social-link--whatsapp"
 						href="#"
