@@ -323,22 +323,26 @@ class Tile {
 		// add listeners for opening and closing
 		tile.addEventListener('click', (e) => {
 			e.stopPropagation();
-			this.appendModal();
+			const thisModal = this.appendModal();
+			const thisGlide = thisModal.querySelector('.glide--comp');
+			// setTimeout(() => {
+			// }, 50);
 			setTimeout(() => {
 				this.showModal();
 			}, 50);
+			setTimeout(() => {
+				new Glide(thisGlide, {
+					type: 'carousel',
+					// focusAt: 'center',
+					// perView: 3,
+					startAt: 0,
+					gap: 20,
+					// autoplay: 2200,
+					animationDuration: 800,
+				}).mount();
+			}, 500);
 		});
 
-		// new Glide('.glide2', {
-		// 	type: 'carousel',
-		// 	// startAt: 0,
-		// 	perView: 1,
-		// 	focusAt: 'center',
-		// 	gap: 20,
-		// 	// autoplay: 2200,
-		// 	animationDuration: 800,
-		// }).mount();
-		// Return complete tile
 		return tile;
 	};
 
@@ -390,12 +394,14 @@ class Tile {
 		});
 		//@ img
 		// create img
-		// const img = this.generateGallerySlider(this.path, this.fileName, 5);
-		const img = this.createEl('img', {
-			class: 'tile__img pic',
-			src: `${this.img}`,
-			loading: 'lazy',
-		});
+		// const img = this.createEl('img', {
+		// 	class: 'tile__img pic',
+		// 	src: `${this.img}`,
+		// 	loading: 'lazy',
+		// });
+		// modalOffer.appendChild(img);
+
+		const img = this.generateGallerySlider(this.path, this.fileName, 5);
 		modalOffer.appendChild(img);
 
 		//@ section modal_full-desc
@@ -627,7 +633,8 @@ class Tile {
 		return modalOffer;
 	};
 	generateGallerySlider = (relativePath, imgName, imgsNumber) => {
-		const glide = this.createEl('div', {class: 'glide2 glide'});
+		// const glideContainer = this.createEl('div', {class: 'glide-container'});
+		const glide = this.createEl('div', {class: 'glide glide--comp'});
 		const glideTrack = this.createEl('div', {
 			'class': 'glide__track',
 			'data-glide-el': 'track',
@@ -659,9 +666,11 @@ class Tile {
 				break;
 		}
 		for (let i = 1; i <= imgsNumber; i++) {
-			const glideSlideLi = this.createEl('li', {class: 'glide__slide'});
+			const glideSlideLi = this.createEl('li', {
+				class: 'glide__slide',
+			});
 			const image = this.createEl('img', {
-				class: '',
+				class: 'tile__img tile__img--modal-slider',
 				src: `${relativePath}/${resolution}_${imgName}_${i}.png`,
 				loading: 'lazy',
 			});
@@ -706,6 +715,10 @@ class Tile {
 		glideArrowRight.appendChild(iconArrowRight);
 		glideArrows.append(glideArrowLeft, glideArrowRight);
 		glide.appendChild(glideArrows);
+		// glideContainer.appendChild(glide);
+
+		// return glideContainer;
+
 		return glide;
 	};
 }

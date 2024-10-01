@@ -7,6 +7,7 @@
 /*! COMMON BLOCKS */
 html {
 	scroll-behavior: smooth;
+	--modalGalleryWidth: 100%;
 	--loginStatus: block;
 	--iconPosition: -3.5rem;
 	--bRadius: 15px;
@@ -474,6 +475,7 @@ input {
 	top: 3rem;
 	right: 2rem;
 	transform: translate(-50%, -50%);
+	z-index: 10;
 }
 .modal__close-btn {
 	font-size: 3rem;
@@ -488,6 +490,7 @@ input {
 } */
 .modal__modal-body {
 	display: grid;
+	width: 100%;
 	grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
 	/* justify-items: center; */
 	grid-gap: 2.5rem;
@@ -495,7 +498,7 @@ input {
 	border-radius: var(--bRadius);
 }
 .modal__modal-body--offer {
-	max-height: 77vh;
+	max-height: 89vh;
 	padding-bottom: 1rem;
 	overflow-y: auto;
 }
@@ -575,8 +578,8 @@ input {
 	display: block;
 	min-width: 125px;
 	padding: 0.5rem 1rem;
-	font-size: 2rem;
-	line-height: 4rem;
+	font-size: 1.5rem;
+	line-height: 2.5rem;
 	font-weight: bold;
 	text-transform: uppercase;
 	color: var(--iconsColor);
@@ -599,7 +602,7 @@ input {
 	place-self: center;
 	max-width: 100%;
 	min-width: 175px;
-	aspect-ratio: 1 / 1;
+	/* aspect-ratio: 1 / 1; */
 	padding: 1.5rem 1rem;
 	background-color: rgba(252, 251, 236, 0.75);
 	border-radius: var(--bRadius);
@@ -850,7 +853,7 @@ div.visible {
 	opacity: 1;
 	width: 95vw;
 	min-height: max-content;
-	max-height: 85vh;
+	max-height: 92vh;
 }
 div.hidden {
 	display: none;
@@ -859,20 +862,37 @@ div.hidden {
 	backdrop-filter: blur(10px);
 }
 .glide {
-	grid-column: span 6;
-	/* border: 1px solid red; */
+	grid-column: 1 / -1;
 	padding-bottom: 3rem;
 }
-.glide__track {
-	/* border: 1px solid blue; */
+.glide-container {
+	grid-column: 1 / -1;
+	min-width: 100%;
+	display: grid;
+	grid-template-columns: 100%;
+}
+.glide--comp {
+	min-height: 33vh;
+}
+.glide--comp .glide__track {
+	border-radius: var(--bRadius);
+	/* border: 1px solid red; */
 }
 .glide__slides {
-	align-items: center;
+	height: 100%;
+	justify-content: space-around;
 }
 .glide__slide {
-	max-width: 100%;
 	border-radius: var(--bRadius);
+	/* border: 1px solid black; */
 	display: grid;
+}
+.tile__img--modal-slider {
+	place-self: center;
+	aspect-ratio: auto;
+	max-width: 100%;
+	max-height: 45vh;
+	margin: 0;
 }
 .glide__bullets {
 	bottom: 1rem;
