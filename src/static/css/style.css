@@ -823,12 +823,12 @@ i.footer__cookie-close-icon {
 .footer__pop-up-btn--cookies:focus .fa-cookie-bite {
 	opacity: 0;
 }
-.clickable {
+.clickable:not(.footer__pop-ups *) {
 	box-shadow: var(--activeBoxShadow), rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
 		rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
 	position: relative;
 }
-.clickable::after {
+.clickable:not(.footer__pop-ups *)::after {
 	content: 'Więcej...';
 	position: absolute;
 	bottom: 0;
