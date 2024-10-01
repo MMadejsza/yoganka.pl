@@ -589,14 +589,14 @@ class Tile {
 		});
 
 		// use message from camps dataset
-		const footerBtnAsk = this.createEl('a', {
-			href: `https://wa.me/${48792891607}?text=${encodeURIComponent(
-				this.modal.questionTemplate(this.frontTitle),
-			)}`,
-			class: 'modal__btn modal__ask-for-info',
-			target: '_blank',
-		});
-		footerBtnAsk.innerText = 'Zapytaj';
+		// const footerBtnAsk = this.createEl('a', {
+		// 	href: `https://wa.me/${48792891607}?text=${encodeURIComponent(
+		// 		this.modal.questionTemplate(this.frontTitle),
+		// 	)}`,
+		// 	class: 'modal__btn modal__ask-for-info',
+		// 	target: '_blank',
+		// });
+		// footerBtnAsk.innerText = 'Zapytaj';
 
 		// use address  from camps dataset
 		const footerBtnSignUp = this.createEl('a', {
@@ -605,7 +605,7 @@ class Tile {
 			target: '_blank',
 		});
 		footerBtnSignUp.innerText = 'Dołącz!';
-		footer.append(footerBtnAsk, footerBtnSignUp);
+		footer.append(footerBtnSignUp);
 		modalOffer.appendChild(footer);
 		// return complete modal body
 		return modalOffer;
