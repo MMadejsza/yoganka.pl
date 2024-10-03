@@ -7,45 +7,45 @@ const kaszubyCamp = {
 	fileName: `camp_kaszuby`,
 	front: {
 		nazwaWyjazdu: `Kojenie Zmysłów
-		Yoga | Aromaterapia | SPA | SkinCare`,
+	   Joga | Aromaterapia | SPA | SkinCare`,
 		listaDat: [`11-13/10/2024`],
 		rejon: `Kaszuby`,
 	},
 	modal: {
 		imgModal: this.img,
-		opis: `Zabieram Cię do urokliwego domku, otulonego drewnem, gdzie schowamy się w ulubionych skarpetach, za dużych sweterkach i ukoimy nasze zmysły. Nie zabraknie jesiennej klasyki, czyli odpoczynku przy kominku z kubkiem aromatycznego naparu.`,
+		opis: `Zabieram Cię do urokliwego domku, otulonego drewnem, gdzie schowamy się w ulubionych skarpetach, ciepłych swetrach i ukoimy nasze zmysły. Nie zabraknie jesiennej klasyki, czyli odpoczynku przy kominku z kubkiem aromatycznego naparu.`,
 		krotkieInfo: {
 			naglowek: 'W skrócie:',
 			nocleg: 'Dworek Krępkowice',
-			liczbaMiejsc: '12',
+			liczbaMiejsc: '10',
 			cena: '1200zł',
+			dojazd: 'we własnym zakresie',
 		},
 		plan: {
-			naglowek: 'Plan:',
+			naglowek: 'Slow menu:',
 			tresc: [
 				{
 					'naglowekDnia': 'Piątek:',
 					'16:00': 'Przyjazd, Spacery po okolicy',
 					'18:00': 'Joga łagodna, relaksująca',
 					'19:00': 'Zmysł smaku: wspólna kolacja',
-					'21:00': `Zmysł dotyku: Skincare, czyli pielęgnacja twarzy połączona z relaksującym seansem w saunie oraz kąpielą w  balii `,
+					'21:00': `Zmysł dotyku: Skincare, czyli pielęgnacja twarzy, rozmowy przy kominku`,
 				},
 				{
 					'naglowekDnia': 'Sobota:',
 					'08:00': 'Ziołowy napar dla porannych ptaszków (dla chętnych)',
 					'08:30': 'Zmysł równowagi: energetyczna Joga Slow Flow',
-					'09:30': 'Nieśpieszne śniadanko',
+					'09:30': 'Niespieszne śniadanie',
 					'CZAS WOLNY': '',
 					'14:30': 'Obiad wegetariański',
 					'16:00': 'Zmysł węchu: aromaterapia, warsztat świec bubble, wosków + wykład',
 					'19:00': 'Uczta przy kolacji',
 					'20:30': 'Joga, zmysł słuchu: krąg przy kominku',
 				},
-
 				{
 					'naglowekDnia': 'Niedziela:',
-					'08:30': `Zmysł propriocepcji*:				
-				Joga Slow Flow`,
+					'08:30': `Zmysł propriocepcji*:                            	          	
+												   Joga Slow Flow`,
 					'09:30': 'Nieśpieszne śniadanie',
 					'CZAS WOLNY': '',
 					'13:00': 'Lunch i pożegnanie',
@@ -71,21 +71,18 @@ const kaszubyCamp = {
 		},
 		extraPlatneOpcje: {
 			naglowek: 'Poszerz Slow Menu:',
-			tresc: ['Masaż Kobido 200zł/1h', 'Masaż Misami Tybetańskimi koszt na miejscu 120zł'],
+			tresc: ['Masaż Kobido 200zł/1h', 'Masaż Misami Tybetańskimi koszt na miejscu 150 zł'],
 		},
 		czasWolny: {
 			naglowek: 'W Czasie Wolnym:',
 			//(notka: statusy to free/optional/available o różnych ikonach)
 			tresc: [
-				{
-					status: 'free',
-					aktywnosc: 'Kocykowanie, leśne spacery, pogaduchy, zdrowe napary',
-				},
-				{status: 'optional', aktywnosc: 'Masaż Misami'},
-				{status: 'optional', aktywnosc: 'Masaż Kobido'},
+				{status: 'free', aktywnosc: 'Kocyk, leśne spacery, pogaduchy, zdrowe napary'},
+				{status: 'optional', aktywnosc: 'Masaż Misami lub Kobido'},
+				{status: 'optional', aktywnosc: 'Sauna z balią'},
 			],
 		},
-		uwaga: `Miejsce gwarantowane jest wpłatą bezzwrotnego zadatku w kwocie 500 zł`,
+		uwaga: `Zaserwuj sobie spokój i zdrowszą siebie. Wypełnij poniższe zgłoszenie`,
 		// dodaj tresć btns
 		linkFormularza: 'https://forms.gle/kYN6VpfP3aV1b9yB8',
 		questionTemplate(subject) {
@@ -100,56 +97,55 @@ const warmiaCamp = {
 	path: '../static/img/offer/camp_kaszuby',
 	fileName: `camp_kaszuby`,
 	front: {
-		nazwaWyjazdu: `Comfy Retreat
-		Yoga | Malowanie | SPA | Misy i Gongi `,
-		listaDat: ['08-11/11/2024'],
-		rejon: 'Warmia',
+		nazwaWyjazdu: `Comfy slow weekend
+          	Joga | Malowanie | SPA | Misy i gongi`,
+		listaDat: [`08-11.11.2024`],
+		rejon: `Warmia`,
 	},
 	modal: {
-		imgModal: 'camp_warmia.jpg',
-		opis: `Tym razem jesienna odsłona uwielbianego przez was Witramowa. Oferta na długi weekend listopadowy. Zapraszam na 4 dni wypełnione jesiennym zapachem, ciepłem kominka i smakiem kultowej kuchni Agi i Piotra.  
-		
-		W slow menu oczywiście joga, malowanie intuicyjne z koncertem mis i gongów.`,
+		imgModal: this.img,
+		opis: `Tym razem jesienna odsłona uwielbianego przez was Witramowa. Oferta na długi weekend listopadowy. Zapraszam na 4 dni wypełnione jesiennym zapachem, ciepłem kominka i smakiem kultowej kuchni Agi i Piotra.`,
 		krotkieInfo: {
 			naglowek: 'W skrócie:',
 			nocleg: 'Witramowo 32',
-			liczbaMiejsc: '18',
+			liczbaMiejsc: '12',
 			cena: '1600zł',
+			dojazd: 'we własnym zakresie',
 		},
 		plan: {
-			naglowek: 'Plan:',
+			naglowek: 'Slow menu:',
 			tresc: [
 				{
 					'naglowekDnia': 'Piątek:',
-					'16:00': 'Zakwaterowanie, spacery po okolicy',
+					'16:00': 'Przyjazd, Spacery po okolicy',
 					'18:00': 'Pyszna obiadokolacja',
-					'20:00': 'Joga wieczorna',
+					'19:00': 'Joga wieczorna',
 					'21:00': `Wieczór przy kominku: rozmowy, napary`,
 				},
 				{
 					'naglowekDnia': 'Sobota:',
 					'08:30': 'Joga Slow Flow',
-					'09:30': 'Nieśpieszne śniadanie',
+					'09:30': 'Niespieszne śniadanie',
 					'CZAS WOLNY': '',
-					'14:00': 'Obiad + słodkości',
+					'14:00': 'Obiad + słodki poczęstunek',
 					'16:00': 'Malowanie intuicyjne przy koncercie mis i gongów',
 					'18:30': 'Uczta przy kolacji',
 					'20:00': 'Czas wspólny - sauna/balia/film',
 				},
 				{
 					'naglowekDnia': 'Niedziela:',
-					'08:30': 'Joga Slow Flow Vinyasa',
-					'09:30': 'Nieśpieszne śniadanko',
+					'08:30': `Joga energetyczna slow flow`,
+					'09:30': 'Niespieszne śniadanie',
 					'CZAS WOLNY': '',
-					'14:00': 'Obiad + słodkości',
+					'14:30': 'Obiad i słodki poczęstunek',
 					'17:00': 'Joga yin',
 					'18:30': 'Kolacja',
-					'20:00': 'Rozmowy w Kręgu',
+					'20:00': 'Rozmowy w kręgu',
 				},
 				{
 					'naglowekDnia': 'Poniedziałek:',
-					'08:30': 'Joga Slow Flow Vinyasa',
-					'09:30': 'Nieśpieszne Śniadanko',
+					'08:30': `Joga Slow Flow`,
+					'09:30': 'Niespieszne śniadanie',
 					'CZAS WOLNY': '',
 					'13:00': 'Lunch i pożegnanie',
 				},
@@ -158,9 +154,9 @@ const warmiaCamp = {
 		wCenie: {
 			naglowek: 'W Cenie:',
 			tresc: [
-				'5 praktyk jogi',
-				'Koncert mis i gongów',
+				'6 praktyk jogi',
 				'Malowanie intuicyjne',
+				'Koncert mis i gongów',
 				'Krąg',
 				'Upominek',
 				'Pobyt z Wyżywieniem',
@@ -173,21 +169,23 @@ const warmiaCamp = {
 		},
 		extraPlatneOpcje: {
 			naglowek: 'Poszerz Slow Menu:',
-			tresc: ['Masaż Misami', 'Sauna i Balia'],
+			tresc: [
+				'Masaż Kobido 30zł/30min',
+				'Masaż Misami Tybetańskimi 120 zł/45min',
+				'Sauna z balią',
+			],
 		},
 		czasWolny: {
 			naglowek: 'W Czasie Wolnym:',
+			//(notka: statusy to free/optional/available o różnych ikonach)
 			tresc: [
-				{
-					status: 'free',
-					aktywnosc: 'Spacery leśne, sauna, rozmowy, jesienne leniuchowanie, masaże',
-				},
-				{status: 'optional', aktywnosc: 'Masaże Kobido/Misami'},
-				{status: 'available', aktywnosc: 'Wioska garncarska + Warsztaty'},
+				{status: 'free', aktywnosc: 'Kocyk, leśne spacery, pogaduchy, zdrowe napary'},
+				{status: 'optional', aktywnosc: 'Masaż Misami lub Kobido'},
+				{status: 'optional', aktywnosc: 'Sauna z balią'},
 			],
 		},
-		uwaga: `Miejsce gwarantowane jest wpłatą bezzwrotnego zadatku w kwocie 500 zł`,
-		linkFormularza: 'https://forms.gle/ag6SSBy9zqrxwCRcA',
+		uwaga: `Zaserwuj sobie spokój i zdrowszą siebie. Wypełnij poniższe zgłoszenie`,
+		linkFormularza: 'https://forms.gle/6Ri5sqnXgUQGSRNT9',
 		questionTemplate(subject) {
 			return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
 		},
@@ -201,22 +199,23 @@ const yogaAndSound = {
 	front: {
 		nazwaWyjazdu: `YOGA & SOUND
 		Moon Ceremony`,
-		listaDat: [`Data wkrótce...`],
-		rejon: `Plaża Trójmiasto`,
-		krotkiOpis: `Comiesięczne spotkania przy pełni księżyca, gongami wprowadzające Cię w relaksujący trans.`,
+		listaDat: [`20.10.2024 godz.18.00`],
+		rejon: `WellMe, Gdańsk Oliwa`,
+		krotkiOpis: `Spotkania przy pełni księżyca, czyli joga przy dźwiękach mis i gongów, które wprowadzą Cię w relaksującą podróż.`,
 	},
 	modal: {
 		imgModal: this.img,
 		tytulOpisu: 'W skrócie:',
-		pelnyOpis: `To comiesięczne spotkania przy pełni księżyca. W okresie letnim wydarzenie jest organizowane na plaży, natomiast w sezonie jesienno-zimowym przenosimy się na przytulne sale na terenie Trójmiasta.`,
+		pelnyOpis: `Takiego spotkania w trójmieście jeszcze nie było. Joga, księżyc, misy i gongi łączą siły.  Poczuj ich dobroczynną moc, pozwól sobie na regenerację,oczyść głowę. Twoje ciało będzie wdzięczne za taki relaks.
+ Latem spotykamy się na plaży, w sezonie jesienno-zimowym przenosimy się na przytulne sale na terenie całego Trójmiasta.`,
 		program: {
-			naglowek: 'W programie:',
+			naglowek: 'Relaks menu:',
 			tresc: [
-				`Sesja yogi przy dźwiękach mis i gongów (koncert w wykonaniu Agnieszki Topp)`,
-				`Savanasa z opaską na oczach nasączona aromatycznymi olejkami`,
+				`Joga przy dźwiękach mis i gongów ( Agnieszka Topp)`,
+				`Relaks  z opaską na oczach nasączona aromatycznymi olejkami`,
 				`Zdrowy napar naszego przepisu`,
-				`Rozmowy w kręgu`,
-				`Upominek naszego autorstwa`,
+				`Insporujące rozmowy w kręgu`,
+				`Upominek`,
 				`Maty od partnera Miś Yoga`,
 			],
 		},

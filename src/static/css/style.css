@@ -115,7 +115,7 @@ input {
 	justify-content: space-between;
 	cursor: pointer;
 	position: fixed;
-	z-index: 4;
+	z-index: 7;
 }
 .burger__bar {
 	width: 100%;
@@ -158,7 +158,7 @@ input {
 	box-shadow: var(--activeBoxShadow);
 	background-color: rgba(var(--navBcg), 0.85);
 	transition: all 0.5s ease-in-out;
-	z-index: 2;
+	z-index: 6;
 
 	display: flex;
 	flex-direction: column;
@@ -364,6 +364,9 @@ input {
 	margin-bottom: 1.5rem;
 	border-radius: var(--bRadius);
 }
+.tile__img--event-modal {
+	max-width: 50%;
+}
 .tile__title,
 .tile__date {
 	font-size: 2.2rem;
@@ -388,8 +391,7 @@ input {
 		'title title'
 		'wyjazdy wyjazdy'
 		'zajecia zajecia'
-		'wydarzenia wydarzenia'
-		'supy supy';
+		'wydarzenia wydarzenia';
 	justify-items: center;
 	grid-gap: 0.5rem;
 	overflow: visible;
@@ -416,6 +418,7 @@ input {
 	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 	grid-template-rows: 5rem;
 	justify-items: center;
+	justify-content: center;
 	grid-gap: 1.5rem;
 }
 .offer-type__header {
@@ -444,7 +447,7 @@ input {
 	height: 300vh;
 	/* background-color: red; */
 	backdrop-filter: blur(10px);
-	z-index: 200;
+	z-index: 8;
 }
 .modal {
 	display: block;
@@ -460,7 +463,7 @@ input {
 	border-radius: var(--bRadius);
 	box-shadow: var(--activeTextIconsShadow);
 	opacity: 0;
-	z-index: 200;
+	z-index: 8;
 	transition: 0.4s ease-in-out;
 }
 .modal__icon {
@@ -476,7 +479,7 @@ input {
 	top: 3rem;
 	right: 2rem;
 	transform: translate(-50%, -50%);
-	z-index: 10;
+	z-index: 9;
 }
 .modal__close-btn {
 	font-size: 3rem;
@@ -503,6 +506,7 @@ input {
 	padding-bottom: 1rem;
 	overflow-y: auto;
 }
+
 /* .modal__header {
 	place-self: center;
 	width: 80%;
@@ -1334,10 +1338,9 @@ div.hidden {
 		margin: 0;
 	}
 	.nav__link {
-		height: 6rem;
 		margin: 0;
 		padding: 0 1rem;
-		font-size: 2rem;
+		font-size: 1.3rem;
 		line-height: 6rem;
 		transition: 0.2s ease-in-out;
 	}
@@ -1410,15 +1413,15 @@ div.hidden {
 		grid-template-areas:
 			'title title title title'
 			'wyjazdy wyjazdy zajecia zajecia'
-			'wydarzenia wydarzenia supy supy';
+			'wydarzenia wydarzenia wydarzenia wydarzenia';
 	}
 	.offer-type {
 		grid-template-columns: repeat(auto-fit, minmax(225px, 1fr));
 		align-items: stretch;
 	}
 	.offer-type--events {
+		grid-template-columns: repeat(auto-fill, minmax(350px, 425px));
 		grid-area: wydarzenia;
-		grid-column: 2 / 4;
 	}
 	.modal {
 		max-width: 900px;
@@ -1507,6 +1510,9 @@ div.hidden {
 	/* hi-res laptops and desktops */
 	.wrapper {
 		max-width: 1200px;
+	}
+	.nav__link {
+		font-size: 2rem;
 	}
 	.modal {
 		max-width: 1200px;
