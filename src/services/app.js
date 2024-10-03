@@ -562,12 +562,12 @@ class Tile {
 		modalOffer.appendChild(sectionIncluded);
 		//@ section modal_excluded
 		// create section for what's excluded
-		const sectionExcluded = this.tileModalChecklistClassic(
-			'pozaCena',
-			'fa-regular fa-hand-point-right modal__icon modal-checklist__icon',
-			'modal-checklist modal-checklist--excluded',
-		);
-		modalOffer.appendChild(sectionExcluded);
+		// const sectionExcluded = this.tileModalChecklistClassic(
+		// 	'pozaCena',
+		// 	'fa-regular fa-hand-point-right modal__icon modal-checklist__icon',
+		// 	'modal-checklist modal-checklist--excluded',
+		// );
+		// modalOffer.appendChild(sectionExcluded);
 		//@ section modal_optional
 		// create section for what's optional to buy
 		const sectionOptional = this.tileModalChecklistClassic(
