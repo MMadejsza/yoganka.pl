@@ -21,6 +21,7 @@ html {
 	--accentBackgroundForRGBA: 28, 121, 147;
 	--accentText: rgb(255, 255, 255);
 	--nav: rgb(246, 224, 200);
+	--navForRGBA: 246, 224, 200;
 	--bcgBlurLinear: linear-gradient(rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)) center/100% 80%,
 		linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.06)) top/100% 20%,
 		linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.06)) bottom/100% 20%;
@@ -154,7 +155,7 @@ footer {
 	border-top-left-radius: var(--bRadius);
 	border-bottom-left-radius: var(--bRadius);
 	box-shadow: var(--activeBoxShadow);
-	background-color: rgba(var(--nav), 0.85);
+	background-color: rgba(var(--navForRGBA), 0.85);
 	transition: all 0.5s ease-in-out;
 	z-index: 6;
 

@@ -385,7 +385,7 @@ class Tile {
 				new Glide(thisGlide, {
 					type: 'carousel',
 					focusAt: 'center',
-					perView: 5,
+					perView: 2,
 					startAt: 0,
 					gap: 20,
 					// autoplay: 2200,
@@ -396,13 +396,7 @@ class Tile {
 							perView: 1,
 						},
 						480: {
-							perView: 2,
-						},
-						1024: {
-							perView: 3,
-						},
-						1280: {
-							perView: 4,
+							perView: 1,
 						},
 					},
 				}).mount();
@@ -709,29 +703,29 @@ class Tile {
 		const glideSlides = this.createEl('ul', {
 			class: 'glide__slides',
 		});
-		const screenWidth = window.innerWidth;
-		let resolution;
-		// Użycie switch do obsługi różnych zakresów rozdzielczości
-		switch (true) {
-			case screenWidth <= 480:
-				resolution = 480;
-				break;
-			case screenWidth > 480 && screenWidth <= 768:
-				resolution = 768;
-				break;
-			case screenWidth > 768 && screenWidth <= 1024:
-				resolution = 1024;
-				break;
-			case screenWidth > 1024 && screenWidth <= 1280:
-				resolution = 1024;
-				break;
-			case screenWidth > 1280:
-				resolution = 1024;
-				break;
-			default:
-				console.log('Nieznana rozdzielczość');
-				break;
-		}
+		// const screenWidth = window.innerWidth;
+		// let resolution;
+		// // Użycie switch do obsługi różnych zakresów rozdzielczości
+		// switch (true) {
+		// 	case screenWidth <= 480:
+		// 		resolution = 480;
+		// 		break;
+		// 	case screenWidth > 480 && screenWidth <= 768:
+		// 		resolution = 768;
+		// 		break;
+		// 	case screenWidth > 768 && screenWidth <= 1024:
+		// 		resolution = 1024;
+		// 		break;
+		// 	case screenWidth > 1024 && screenWidth <= 1280:
+		// 		resolution = 1024;
+		// 		break;
+		// 	case screenWidth > 1280:
+		// 		resolution = 1024;
+		// 		break;
+		// 	default:
+		// 		console.log('Nieznana rozdzielczość');
+		// 		break;
+		// }
 		for (let i = 0; i <= imgsNumber; i++) {
 			const glideSlideLi = this.createEl('li', {
 				class: 'glide__slide',
@@ -746,13 +740,18 @@ class Tile {
 				class: 'tile__img tile__img--modal-slider',
 				src: `${relativePath}/480_${imgName}_${imgNo}.png`,
 				srcset: `
-				../static/img/offer/camp_kaszuby/320_${imgName}_${imgNo}.jpg 480w,
-   				../static/img/offer/camp_kaszuby/480_${imgName}_${imgNo}.jpg 768w,
-   				../static/img/offer/camp_kaszuby/768_${imgName}_${imgNo}.jpg 1024w,
-    			../static/img/offer/camp_kaszuby/1024_${imgName}_${imgNo}.jpg 1400w,
-				../static/img/offer/camp_kaszuby/1200_${imgName}_${imgNo}.jpg 1600w
+				${relativePath}/320_${imgName}_${imgNo}.jpg 480w,
+   				${relativePath}/480_${imgName}_${imgNo}.jpg 768w,
+   				${relativePath}/768_${imgName}_${imgNo}.jpg 1024w,
+    			${relativePath}/1024_${imgName}_${imgNo}.jpg 1400w,
+				${relativePath}/1200_${imgName}_${imgNo}.jpg 1600w
 				`,
 				sizes: `
+				(max-width: 320px) 95vw,
+        		(max-width: 360px) 90vw,
+        		(max-width: 768px) 55vw,
+        		(max-width: 1024px) and (orientation: portrait) 50vw,
+        		100vw
 				`,
 				loading: 'lazy',
 				alt: 'Galeria Wyjazdu',
