@@ -14,13 +14,15 @@ const kaszubyCamp = {
 	modal: {
 		imgModal: this.img,
 		opis: `Zabieram Cię do urokliwego domku, otulonego drewnem, gdzie schowamy się w ulubionych skarpetach, ciepłych swetrach i ukoimy nasze zmysły. Nie zabraknie jesiennej klasyki, czyli odpoczynku przy kominku z kubkiem aromatycznego naparu.`,
+
 		krotkieInfo: {
 			naglowek: 'W skrócie:',
 			nocleg: 'Dworek Krępkowice',
 			liczbaMiejsc: '10',
 			cena: '1200zł',
-			dojazd: 'we własnym zakresie',
+			// dojazd: 'we własnym zakresie',
 		},
+
 		plan: {
 			naglowek: 'Slow menu:',
 			tresc: [
@@ -110,7 +112,7 @@ const warmiaCamp = {
 			nocleg: 'Witramowo 32',
 			liczbaMiejsc: '12',
 			cena: '1600zł',
-			dojazd: 'we własnym zakresie',
+			// dojazd: 'we własnym zakresie',
 		},
 		plan: {
 			naglowek: 'Slow menu:',
@@ -730,14 +732,30 @@ class Tile {
 				console.log('Nieznana rozdzielczość');
 				break;
 		}
-		for (let i = 1; i <= imgsNumber; i++) {
+		for (let i = 0; i <= imgsNumber; i++) {
 			const glideSlideLi = this.createEl('li', {
 				class: 'glide__slide',
 			});
+			const imgNo = i + 1;
+			// const image = this.createEl('img', {
+			// 	class: 'tile__img tile__img--modal-slider',
+			// 	src: `${relativePath}/${resolution}_${imgName}_${i}.png`,
+			// 	loading: 'lazy',
+			// });
 			const image = this.createEl('img', {
 				class: 'tile__img tile__img--modal-slider',
-				src: `${relativePath}/${resolution}_${imgName}_${i}.png`,
+				src: `${relativePath}/480_${imgName}_${imgNo}.png`,
+				srcset: `
+				../static/img/offer/camp_kaszuby/320_${imgName}_${imgNo}.jpg 480w,
+   				../static/img/offer/camp_kaszuby/480_${imgName}_${imgNo}.jpg 768w,
+   				../static/img/offer/camp_kaszuby/768_${imgName}_${imgNo}.jpg 1024w,
+    			../static/img/offer/camp_kaszuby/1024_${imgName}_${imgNo}.jpg 1400w,
+				../static/img/offer/camp_kaszuby/1200_${imgName}_${imgNo}.jpg 1600w
+				`,
+				sizes: `
+				`,
 				loading: 'lazy',
+				alt: 'Galeria Wyjazdu',
 			});
 			glideSlideLi.appendChild(image);
 			glideSlides.appendChild(glideSlideLi);
