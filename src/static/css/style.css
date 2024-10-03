@@ -1384,10 +1384,10 @@ div.hidden {
 		grid-template-columns: repeat(4, minmax(200px, 1fr));
 		grid-template-areas:
 			'header header header header'
-			'h2 h2 portrait portrait'
-			'h3 h3 portrait portrait'
-			'article article portrait portrait'
-			'ryt alliance portrait portrait';
+			'content content portrait portrait'
+			'content content portrait portrait'
+			'content content portrait portrait'
+			'content content portrait portrait';
 	}
 	.about__heading,
 	.about__greeting,
