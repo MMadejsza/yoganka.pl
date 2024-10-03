@@ -94,8 +94,8 @@ const warmiaCamp = {
 	type: `camp`,
 	extraClass: 'long',
 	img: '../static/img/offer/camp_warmia.png',
-	path: '../static/img/offer/camp_kaszuby',
-	fileName: `camp_kaszuby`,
+	path: '../static/img/offer/camp_warmia',
+	fileName: `camp_warmia`,
 	front: {
 		nazwaWyjazdu: `Comfy slow weekend
           	Joga | Malowanie | SPA | Misy i gongi`,
