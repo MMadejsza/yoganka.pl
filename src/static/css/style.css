@@ -887,7 +887,8 @@ div.hidden {
 .glide__slide {
 	border-radius: var(--bRadius);
 	/* border: 1px solid black; */
-	display: grid;
+	display: flex;
+	justify-content: center;
 }
 .tile__img--modal-slider {
 	place-self: center;
@@ -1423,7 +1424,7 @@ div.hidden {
 		max-width: 900px;
 		padding: 1.5rem 2.5rem;
 	}
-	.modal footer a:hover {
+	.modal__btn:hover {
 		box-shadow: var(--activeBoxShadow);
 	}
 	.certificates__gallery {
@@ -1507,11 +1508,9 @@ div.hidden {
 	.wrapper {
 		max-width: 1200px;
 	}
-	a {
-		font-size: 1.8rem;
-	}
 	.modal {
 		max-width: 1200px;
+		padding: 1.5rem 4rem;
 	}
 	.partners__link {
 		width: 30vw;

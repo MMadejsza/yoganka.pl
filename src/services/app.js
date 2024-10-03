@@ -855,37 +855,26 @@ document.addEventListener('DOMContentLoaded', function () {
 		}
 	});
 
-	const screenWidth = window.innerWidth;
-	let picsPerView;
-	// Użycie switch do obsługi różnych zakresów rozdzielczości
-	switch (true) {
-		case screenWidth <= 360:
-			picsPerView = 1;
-			break;
-		case screenWidth <= 480:
-			picsPerView = 2;
-			break;
-		case screenWidth > 480 && screenWidth <= 768:
-			picsPerView = 3;
-			break;
-		case screenWidth > 768 && screenWidth < 1024:
-			picsPerView = 3;
-			break;
-		case screenWidth >= 1024 && screenWidth <= 1280:
-			picsPerView = 4;
-			break;
-		default:
-			console.log('Nieznana rozdzielczość');
-			break;
-	}
 	const glide = new Glide('.glide', {
 		type: 'carousel',
 		// startAt: 0,
-		perView: picsPerView,
+		perView: 5,
 		focusAt: 'center',
 		gap: 20,
 		autoplay: 2200,
 		animationDuration: 800,
+		breakpoints: {
+			// <=
+			360: {
+				perView: 1,
+			},
+			480: {
+				perView: 2,
+			},
+			1024: {
+				perView: 3,
+			},
+		},
 	});
 
 	glide.on('run', () => {
