@@ -383,12 +383,27 @@ class Tile {
 			setTimeout(() => {
 				new Glide(thisGlide, {
 					type: 'carousel',
-					// focusAt: 'center',
-					// perView: 3,
+					focusAt: 'center',
+					perView: 5,
 					startAt: 0,
 					gap: 20,
 					// autoplay: 2200,
 					animationDuration: 800,
+					breakpoints: {
+						// <=
+						360: {
+							perView: 1,
+						},
+						480: {
+							perView: 2,
+						},
+						1024: {
+							perView: 3,
+						},
+						1280: {
+							perView: 4,
+						},
+					},
 				}).mount();
 			}, 500);
 		});
@@ -707,10 +722,10 @@ class Tile {
 				resolution = 1024;
 				break;
 			case screenWidth > 1024 && screenWidth <= 1280:
-				resolution = 1200;
+				resolution = 1024;
 				break;
 			case screenWidth > 1280:
-				resolution = 1600;
+				resolution = 1024;
 				break;
 			default:
 				console.log('Nieznana rozdzielczość');
