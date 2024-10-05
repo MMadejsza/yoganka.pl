@@ -1291,7 +1291,7 @@ div.hidden {
 		font-size: 2.5rem;
 	}
 }
-@media (orientation: landscape) and (min-width: 1024px) {
+@media (orientation: landscape) and (min-width: 1025px) {
 	/* big landscape tablets, laptops, and desktops */
 	html {
 		--headerImgSize: 1080px;
