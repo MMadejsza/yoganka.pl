@@ -93,7 +93,7 @@ footer {
 /* section:nth-child(even) {
 	background-color: rgba(0, 0, 0, 0.02);
 } */
-*/ input {
+* input {
 	outline: none;
 	border: none;
 	cursor: auto;

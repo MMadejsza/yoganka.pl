@@ -221,7 +221,7 @@ const yogaAndSound = {
 				`Maty od partnera Miś Yoga`,
 			],
 		},
-		linkFormularza: 'https://forms.gle/kYN6VpfP3aV1b9yB8',
+		linkFormularza: 'https://forms.gle/fcFCL8HMqWBmEn7P7  ',
 		// questionTemplate(subject) {
 		// 	return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
 		// },
