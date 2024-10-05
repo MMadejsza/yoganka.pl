@@ -1351,48 +1351,74 @@ div.hidden {
 		background-color: rgba(0, 0, 0, 0.1);
 	}
 	.top-image-header {
-		margin-top: 5rem;
-		max-height: 60vh;
+		margin-top: 4rem;
+		max-height: 725px;
 		grid-template-areas:
-			'logo logo logo . .'
+			'. . . . .'
 			'title title title title title'
 			'. . . . .'
 			'. . . . .'
 			'. . . . .'
 			'. . . . .'
-			'motto motto motto . .'
 			'. . . . .'
 			'. . . . .'
-			'. . . . .';
+			'. . . . .'
+			'motto motto motto . .';
 		background-image: none;
-		background-color: var(--base);
+		/* background-color: var(--base); */
 	}
 	.top-image-header__header {
 		width: 100%;
 	}
-	.top-image-header__titleBar {
+	.top-image-header__title-bar {
 		width: max-content;
-		font-size: 4rem;
+		font-size: 6rem;
 		letter-spacing: 6px;
 	}
 	.top-image-header__logo {
 		display: none;
 	}
 	.top-image-header__motto {
-		font-size: 1.6rem;
+		font-size: 2.4rem;
 		color: var(--tileTitle);
 		font-weight: lighter;
 		box-shadow: none;
 		background-color: transparent;
 	}
+	.top-image-header__video-container {
+		position: absolute;
+		top: 6rem;
+		left: 50%;
+		transform: translateX(-50%);
+		max-width: 1280px;
+
+		z-index: -1;
+		box-shadow: var(--transitiveBoxShadow);
+	}
+	.top-image-header__video {
+		object-fit: cover;
+		filter: opacity(0.75);
+	}
 	.about {
-		grid-template-columns: repeat(4, minmax(200px, 1fr));
+		grid-template-columns: repeat(5, minmax(200px, 1fr));
 		grid-template-areas:
-			'header header header header'
-			'content content portrait portrait'
-			'content content portrait portrait'
-			'content content portrait portrait'
-			'content content portrait portrait';
+			'. .  . portrait  portrait'
+			'. .  . portrait  portrait'
+			'content content  content portrait portrait'
+			'content content  content portrait portrait'
+			'content content  content portrait portrait'
+			'content content  content portrait portrait'
+			'. .  . portrait portrait';
+		position: absolute;
+		top: 4rem;
+		max-width: 1200px;
+		min-height: 725px;
+	}
+	.about__header {
+		display: none;
+	}
+	.about__content {
+		font-size: 2.2rem;
 	}
 	.about__heading,
 	.about__greeting,
@@ -1401,9 +1427,28 @@ div.hidden {
 		text-align: left;
 		padding-left: 2rem;
 	}
-	.about__portrait {
-		max-width: 90%;
-		margin: 0;
+	.about__heading {
+		display: none;
+	}
+	.about__img {
+		position: relative;
+		z-index: -1;
+		height: 41vw;
+		width: 29vw;
+		max-width: 440px;
+		max-height: 650px;
+		background-image: url('../img/header/header--profile.jpg');
+		background-size: cover;
+		background-position-x: center;
+		background-repeat: no-repeat;
+	}
+	.about__img--portrait {
+		display: none;
+		/* max-width: 90%;
+		margin: 0; */
+	}
+	.about__certificates {
+		display: none;
 	}
 	.tile.clickable:hover {
 		cursor: pointer;
