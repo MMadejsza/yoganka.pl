@@ -1408,6 +1408,12 @@ div.hidden {
 	.about__header {
 		display: none;
 	}
+	.about__content {
+		background-color: rgba(0, 0, 0, 0.18);
+		backdrop-filter: blur(4px);
+		box-shadow: 0 0 15px 10px rgba(95, 95, 95, 0.4);
+		border-radius: var(--bRadius);
+	}
 	.about__heading,
 	.about__greeting,
 	.about__description {
