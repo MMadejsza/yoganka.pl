@@ -1291,7 +1291,7 @@ div.hidden {
 		font-size: 2.5rem;
 	}
 }
-@media (orientation: landscape) and (min-width: 1024px) {
+@media (orientation: landscape) and (min-width: 1025px) {
 	/* big landscape tablets, laptops, and desktops */
 	html {
 		--headerImgSize: 1080px;
@@ -1351,8 +1351,8 @@ div.hidden {
 		background-color: rgba(0, 0, 0, 0.1);
 	}
 	.top-image-header {
-		margin-top: 5rem;
-		max-height: 60vh;
+		/* margin-top: 5rem; */
+		height: 90vh;
 		grid-template-areas:
 			'logo logo logo . .'
 			'title title title title title'
@@ -1365,7 +1365,7 @@ div.hidden {
 			'. . . . .'
 			'. . . . .';
 		background-image: none;
-		background-color: var(--base);
+		/* background-color: var(--base); */
 	}
 	.top-image-header__header {
 		width: 100%;
@@ -1385,6 +1385,15 @@ div.hidden {
 		box-shadow: none;
 		background-color: transparent;
 	}
+	.top-image-header__video {
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 100%;
+		/* width: 100%; */
+		box-shadow: var(--transitiveBoxShadow);
+		z-index: -1;
+	}
 	.about {
 		grid-template-columns: repeat(4, minmax(200px, 1fr));
 		grid-template-areas:
@@ -1393,6 +1402,17 @@ div.hidden {
 			'content content portrait portrait'
 			'content content portrait portrait'
 			'content content portrait portrait';
+		position: absolute;
+		top: 6rem;
+	}
+	.about__header {
+		display: none;
+	}
+	.about__content {
+		background-color: rgba(0, 0, 0, 0.18);
+		backdrop-filter: blur(4px);
+		box-shadow: 0 0 15px 10px rgba(95, 95, 95, 0.4);
+		border-radius: var(--bRadius);
 	}
 	.about__heading,
 	.about__greeting,
@@ -1402,8 +1422,11 @@ div.hidden {
 		padding-left: 2rem;
 	}
 	.about__portrait {
-		max-width: 90%;
+		max-width: 450px;
 		margin: 0;
+	}
+	.about__img {
+		max-width: 70%;
 	}
 	.tile.clickable:hover {
 		cursor: pointer;
