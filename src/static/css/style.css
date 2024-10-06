@@ -17,7 +17,7 @@ html {
 	--tileTitle: rgb(77, 52, 16);
 	--tileText: rgb(30, 27, 24);
 	--tileTextMuted: rgb(78, 69, 59);
-	--accentBackground: rgb(28, 121, 147);
+	--accentBackground: #1c7993;
 	--accentBackgroundForRGBA: 28, 121, 147;
 	--accentText: rgb(255, 255, 255);
 	--nav: rgb(246, 224, 200);
@@ -121,7 +121,7 @@ footer {
 	width: 100%;
 	height: 4px;
 	background-color: var(--accentBackground);
-	transition: all 0.3s ease-in-out;
+	transition: var(--baseTransition);
 	border-radius: 2px;
 }
 /* Initial state */
@@ -157,7 +157,7 @@ footer {
 	border-bottom-left-radius: var(--bRadius);
 	box-shadow: var(--activeBoxShadow);
 	background-color: rgba(var(--navForRGBA), 0.85);
-	transition: all 0.5s ease-in-out;
+	transition: var(--baseTransition);
 	z-index: 6;
 
 	display: flex;
@@ -185,15 +185,16 @@ footer {
 	line-height: 6rem;
 	font-size: 2.2rem;
 	text-decoration: none;
-	color: var(--tileText);
+	color: var(--tileTextMuted);
 }
 .nav__icon {
 	width: 28.5px;
 	display: inline-block;
 	margin-right: 1.5rem;
 	left: var(--iconPosition);
-	color: var(--accentBackground);
+	color: var(--tileTitle);
 	font-size: 2.2rem;
+	transition: var(--baseTransition);
 }
 .top-image-header {
 	grid-area: header;
@@ -353,7 +354,7 @@ footer {
 	border-radius: var(--bRadius);
 	overflow: hidden;
 	box-shadow: var(--boxShadow);
-	transition: 0.3s ease-in-out;
+	transition: var(--baseTransition);
 }
 .tile__img {
 	place-self: center;
@@ -468,7 +469,7 @@ footer {
 	box-shadow: var(--activeTextIconsShadow);
 	opacity: 0;
 	z-index: 8;
-	transition: 0.4s ease-in-out;
+	transition: var(--baseTransition);
 }
 .modal__icon {
 	min-width: 3.5rem;
@@ -588,7 +589,7 @@ footer {
 	border-radius: var(--bRadius);
 	box-shadow: var(--activeTextIconsShadow);
 	cursor: pointer;
-	transition: 0.3s ease-in-out;
+	transition: var(--baseTransition);
 	overflow: hidden;
 }
 .tile__btn {
@@ -681,7 +682,7 @@ footer {
 	max-height: 100%;
 	object-fit: contain;
 	filter: grayscale(1);
-	transition: 0.4s ease-in-out;
+	transition: var(--baseTransition);
 }
 .partners__link:last-child {
 	margin-right: 2.5rem;
@@ -701,9 +702,9 @@ footer {
 	grid-area: footer;
 	min-height: 300px;
 	padding: 1rem 1rem 2rem;
-	background-color: var(--tile);
+	background-color: var(--nav);
 	font-size: 1.7rem;
-	color: var(--tileTitle);
+	color: var(--tileTextMuted);
 	box-shadow: var(--tileShadow);
 	border-top-left-radius: var(--bRadius);
 	border-top-right-radius: var(--bRadius);
@@ -746,10 +747,10 @@ footer a {
 	top: 25px;
 	right: 0;
 	opacity: 0;
-	transition: 0.4s ease-in-out;
+	transition: var(--baseTransition);
 }
 .footer__qr-image {
-	transition: 0.4s ease-in-out;
+	transition: var(--baseTransition);
 	border-radius: var(--bRadius);
 }
 .footer__legal {
@@ -766,7 +767,7 @@ footer a {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	transition: 0.3s ease-in-out;
+	transition: var(--baseTransition);
 	gap: 1.5rem;
 }
 .footer__pop-up-btn {
@@ -785,7 +786,7 @@ footer a {
 	border-radius: 50%;
 	background-color: rgba(var(--accentBackgroundForRGBA), 0.7);
 	box-shadow: var(--activeTextIconsShadow);
-	transition: 0.3s ease-in-out;
+	transition: var(--baseTransition);
 }
 .footer__pop-up-btn:hover {
 	transform: translateY(-25%) scale(1.15);
@@ -801,7 +802,7 @@ footer a {
 	padding-left: 0.5rem;
 	border-radius: 50px;
 	box-shadow: var(--activeBoxShadow);
-	transition: 0.3s ease-in-out;
+	transition: var(--baseTransition);
 	opacity: 0;
 	font-size: 1.5rem;
 
@@ -1344,11 +1345,17 @@ div.hidden {
 		padding: 0 1rem;
 		font-size: 1.3rem;
 		line-height: 6rem;
-		transition: 0.2s ease-in-out;
+		transition: var(--baseTransition);
+		color: var(--tileTitle);
 	}
 	.nav__link:hover {
 		text-shadow: var(--activeTextIconsShadow);
 		background-color: rgba(0, 0, 0, 0.1);
+		color: var(--accentBackground);
+	}
+	.nav__link:hover,
+	.nav__link:hover .nav__icon {
+		color: var(--accentBackground);
 	}
 	.top-image-header {
 		/* margin-top: 5rem; */
@@ -1495,6 +1502,7 @@ div.hidden {
 	}
 	.footer__company-details a {
 		font-size: 2.2rem;
+		color: var(--tileTitle);
 	}
 	.footer__company-details a:hover {
 		font-size: 2.2rem;
