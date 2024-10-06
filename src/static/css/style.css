@@ -192,7 +192,7 @@ footer {
 	display: inline-block;
 	margin-right: 1.5rem;
 	left: var(--iconPosition);
-	color: var(--tileTitle);
+	color: var(--accentBackground);
 	font-size: 2.2rem;
 	transition: var(--baseTransition);
 }
@@ -1346,6 +1346,9 @@ div.hidden {
 		font-size: 1.3rem;
 		line-height: 6rem;
 		transition: var(--baseTransition);
+		color: var(--tileTitle);
+	}
+	.nav__icon {
 		color: var(--tileTitle);
 	}
 	.nav__link:hover {
