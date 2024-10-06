@@ -9,18 +9,18 @@ html {
 	--iconPosition: -3.5rem;
 	--bRadius: 25px;
 
-	--base: rgb(255, 248, 244);
+	--base: #fff8f4;
 	--baseForRGBA: 255, 248, 244;
-	--baseText: rgb(30, 27, 24);
-	--tile: rgb(245, 236, 230);
+	--baseText: #1e1b18;
+	--tile: #f5ece5;
 	--tileForRGBA: 245, 236, 230;
-	--tileTitle: rgb(77, 52, 16);
-	--tileText: rgb(30, 27, 24);
-	--tileTextMuted: rgb(78, 69, 59);
+	--tileTitle: #4d3410;
+	--tileText: #1e1b18;
+	--tileTextMuted: #4e453b;
 	--accentBackground: #1c7993;
 	--accentBackgroundForRGBA: 28, 121, 147;
-	--accentText: rgb(255, 255, 255);
-	--nav: rgb(246, 224, 200);
+	--accentText: #ffffff;
+	--nav: #f6e0c8;
 	--navForRGBA: 246, 224, 200;
 	--bcgBlurLinear: linear-gradient(rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)) center/100% 80%,
 		linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.06)) top/100% 20%,
@@ -155,7 +155,7 @@ footer {
 	letter-spacing: 1px;
 	border-top-left-radius: var(--bRadius);
 	border-bottom-left-radius: var(--bRadius);
-	box-shadow: var(--activeBoxShadow);
+	box-shadow: var(--activeBoxShadow), var(--tileShadow);
 	background-color: rgba(var(--navForRGBA), 0.85);
 	transition: var(--baseTransition);
 	z-index: 6;
@@ -702,7 +702,7 @@ footer {
 	grid-area: footer;
 	min-height: 300px;
 	padding: 1rem 1rem 2rem;
-	background-color: var(--nav);
+	background-color: rgba(var(--navForRGBA), 0.85);
 	font-size: 1.7rem;
 	color: var(--tileTextMuted);
 	box-shadow: var(--tileShadow);
