@@ -199,7 +199,7 @@ const yogaAndSound = {
 	extraClass: 'event',
 	imgPath: '../static/img/offer/events/yoga&sound/front',
 	galleryPath: '../static/img/offer/events/yoga&sound/gallery',
-	fileName: `events_gongi`,
+	fileName: `ys`,
 	front: {
 		nazwaWyjazdu: `YOGA & SOUND
 		Moon Ceremony`,
