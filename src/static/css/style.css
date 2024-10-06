@@ -61,6 +61,7 @@ img {
 	max-width: 100%;
 }
 a {
+	color: inherit;
 	transition: var(--baseTransition);
 }
 .section-header {
@@ -191,7 +192,7 @@ footer {
 	display: inline-block;
 	margin-right: 1.5rem;
 	left: var(--iconPosition);
-	color: var(--tileTitle);
+	color: var(--accentBackground);
 	font-size: 2.2rem;
 }
 .top-image-header {
@@ -715,10 +716,8 @@ footer {
 }
 footer a {
 	height: auto;
-	color: var(--base);
 	font-size: 1.5rem;
 	text-decoration: underline;
-	text-shadow: var(--activeTextIconsShadow);
 }
 .footer__company-details {
 	display: flex;
@@ -739,6 +738,7 @@ footer a {
 .footer__social-link {
 	position: relative;
 	font-size: 3.5rem;
+	text-shadow: var(--activeTextIconsShadow);
 }
 .footer__qr {
 	position: absolute;
@@ -1454,11 +1454,12 @@ div.hidden {
 		display: grid;
 		grid-template-columns: repeat(7, minmax(100px, 1fr));
 		grid-template-areas:
-			'. . . . .  .  . '
-			'. logo details details details  socials  . '
-			'. logo details details details  socials  . '
-			'. logo legal legal legal socials . '
+			'logo logo logo logo details details details '
+			'logo logo logo logo details details details '
+			'socials socials socials socials details details details '
+			'socials socials socials socials legal legal legal '
 			'. . . credit . . . ';
+		place-items: center;
 		gap: 2rem 1rem;
 	}
 	.footer__logo {
@@ -1474,7 +1475,6 @@ div.hidden {
 	}
 	.footer__company-details a:hover {
 		font-size: 2.2rem;
-		line-height: 300%;
 		text-shadow: var(--activeTextIconsShadow);
 	}
 	.footer__legal {
@@ -1482,24 +1482,26 @@ div.hidden {
 	}
 	.footer__socials {
 		grid-area: socials;
-		flex-direction: column;
-		gap: 1.5rem;
 		text-shadow: none;
 		overflow: visible;
 	}
 	.footer__social-link {
-		text-shadow: none;
+		color: var(--accentBackground);
 	}
 	.footer__social-link:hover {
 		text-shadow: var(--activeTextIconsShadow);
 	}
+	.footer__qr {
+		left: 50%;
+		transform: translateX(-50%);
+	}
 	.footer__social-link:hover .footer__qr {
 		display: block;
 		width: 160px;
-		top: -50px;
-		right: -192px;
+		top: -185px;
 
 		opacity: 1;
+		transition: var(--baseTransition);
 	}
 	.footer__social-link:hover .footer__qr-image {
 		box-shadow: var(--activeBoxShadow);
