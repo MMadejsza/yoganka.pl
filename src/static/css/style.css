@@ -269,6 +269,9 @@ footer {
 	overflow: visible;
 	box-shadow: var(--transitiveBoxShadow);
 }
+.top-image-header__video {
+	display: none;
+}
 /*! NAV  END*/
 /*! ABOUT */
 .about {
@@ -740,6 +743,7 @@ footer a {
 	position: relative;
 	font-size: 3.5rem;
 	text-shadow: var(--activeTextIconsShadow);
+	color: var(--accentBackground);
 }
 .footer__qr {
 	position: absolute;
@@ -1106,6 +1110,7 @@ div.hidden {
 			'wydarzenia wydarzenia';
 	}
 	.offer-type {
+		width: 100%;
 		grid-template-columns: repeat(auto-fit, minmax(345px, 1fr));
 		grid-gap: 2.5rem 2rem;
 	}
@@ -1518,9 +1523,6 @@ div.hidden {
 		grid-area: socials;
 		text-shadow: none;
 		overflow: visible;
-	}
-	.footer__social-link {
-		color: var(--accentBackground);
 	}
 	.footer__social-link:hover {
 		text-shadow: var(--activeTextIconsShadow);

@@ -2,8 +2,8 @@
 const kaszubyCamp = {
 	type: `camp`,
 	extraClass: '',
-	img: '../static/img/offer/camp_kaszuby.png',
-	path: '../static/img/offer/camp_kaszuby',
+	imgPath: '../static/img/offer/camps/camp_kaszuby/front',
+	galleryPath: '../static/img/offer/camps/camp_kaszuby/gallery',
 	fileName: `camp_kaszuby`,
 	front: {
 		nazwaWyjazdu: `Kojenie Zmysłów
@@ -95,8 +95,8 @@ const kaszubyCamp = {
 const warmiaCamp = {
 	type: `camp`,
 	extraClass: 'long',
-	img: '../static/img/offer/camp_warmia.png',
-	path: '../static/img/offer/camp_warmia',
+	imgPath: '../static/img/offer/camps/camp_warmia/front',
+	galleryPath: '../static/img/offer/camps/camp_warmia/gallery',
 	fileName: `camp_warmia`,
 	front: {
 		nazwaWyjazdu: `Comfy slow weekend
@@ -197,7 +197,9 @@ const warmiaCamp = {
 const yogaAndSound = {
 	type: `event`,
 	extraClass: 'event',
-	img: '../static/img/offer/events_gongi.png',
+	imgPath: '../static/img/offer/events/yoga&sound/front',
+	galleryPath: '../static/img/offer/events/yoga&sound/gallery',
+	fileName: `events_gongi`,
 	front: {
 		nazwaWyjazdu: `YOGA & SOUND
 		Moon Ceremony`,
@@ -230,7 +232,9 @@ const yogaAndSound = {
 const yogaNaSupach = {
 	type: `event`,
 	extraClass: 'event',
-	img: '../static/img/offer/offer_sup.png',
+	imgPath: '../static/img/offer/events/sup/front',
+	galleryPath: '../static/img/offer/events/sup/gallery',
+	fileName: `sup`,
 	front: {
 		nazwaWyjazdu: `Yoga na Supach`,
 		listaDat: [`(Sezon Letni)`],
@@ -256,8 +260,8 @@ class Tile {
 	constructor(givenEventBody) {
 		this.type = givenEventBody.type;
 		this.extraClass = givenEventBody.extraClass;
-		this.img = givenEventBody.img;
-		this.path = givenEventBody.path;
+		this.imgPath = givenEventBody.imgPath;
+		this.galleryPath = givenEventBody.galleryPath;
 		this.fileName = givenEventBody.fileName;
 		this.frontTitle = givenEventBody.front.nazwaWyjazdu;
 		this.frontDate = givenEventBody.front.listaDat;
@@ -351,7 +355,16 @@ class Tile {
 		}
 		const img = this.createEl('img', {
 			class: 'tile__img',
-			src: `${this.img}`,
+			srcset: `
+					${this.imgPath}/320_${this.fileName}_0.jpg 320w,
+					${this.imgPath}/480_${this.fileName}_0.jpg 480w,
+					`,
+			sizes: `
+					(max-width: 640px) 320px,
+					(max-width: 768px) 480px,
+					480px
+					`,
+			src: `${this.imgPath}/480_${this.fileName}_0.jpg`,
 			loading: 'lazy',
 		});
 		const frontTitle = this.createEl('h3', {class: 'tile__title'});
@@ -454,15 +467,7 @@ class Tile {
 			class: `modal__modal-body modal__modal-body--offer `,
 		});
 		//@ img
-		// create img
-		// const img = this.createEl('img', {
-		// 	class: 'tile__img pic',
-		// 	src: `${this.img}`,
-		// 	loading: 'lazy',
-		// });
-		// modalOffer.appendChild(img);
-
-		const img = this.generateGallerySlider(this.path, this.fileName, 5);
+		const img = this.generateGallerySlider(this.galleryPath, this.fileName, 5);
 		modalOffer.appendChild(img);
 
 		//@ section modal_full-desc
@@ -627,9 +632,23 @@ class Tile {
 		});
 		//@ img
 		// create img
+		// const img = this.createEl('img', {
+		// 	class: 'tile__img tile__img--event-modal',
+		// 	src: `${this.img}`,
+		// 	loading: 'lazy',
+		// });
 		const img = this.createEl('img', {
-			class: 'tile__img tile__img--event-modal',
-			src: `${this.img}`,
+			class: 'tile__img',
+			srcset: `
+					${this.imgPath}/320_${this.fileName}_0.jpg 320w,
+					${this.imgPath}/480_${this.fileName}_0.jpg 480w,
+					`,
+			sizes: `
+					(max-width: 640px) 320px,
+					(max-width: 768px) 480px,
+					480px
+					`,
+			src: `${this.imgPath}/480_${this.fileName}_0.jpg`,
 			loading: 'lazy',
 		});
 		modalOffer.appendChild(img);
@@ -740,19 +759,18 @@ class Tile {
 				class: 'tile__img tile__img--modal-slider',
 				src: `${relativePath}/480_${imgName}_${imgNo}.png`,
 				srcset: `
-				${relativePath}/320_${imgName}_${imgNo}.jpg 480w,
-   				${relativePath}/480_${imgName}_${imgNo}.jpg 768w,
-   				${relativePath}/768_${imgName}_${imgNo}.jpg 1024w,
-    			${relativePath}/1024_${imgName}_${imgNo}.jpg 1400w,
-				${relativePath}/1200_${imgName}_${imgNo}.jpg 1600w
-				`,
+						${relativePath}/320_${imgName}_${imgNo}.jpg 480w,
+						${relativePath}/480_${imgName}_${imgNo}.jpg 768w,
+						${relativePath}/768_${imgName}_${imgNo}.jpg 1024w,
+						${relativePath}/1024_${imgName}_${imgNo}.jpg 1400w,
+						${relativePath}/1200_${imgName}_${imgNo}.jpg 1600w
+						`,
 				sizes: `
-				(max-width: 320px) 95vw,
-        		(max-width: 360px) 90vw,
-        		(max-width: 768px) 55vw,
-        		(max-width: 1024px) and (orientation: portrait) 50vw,
-        		100vw
-				`,
+						(max-width: 768px) 480px,
+						(max-width: 1024px) and (orientation: portrait) 1024px,
+						(max-width: 1200px) 1400px,
+						1600px
+						`,
 				loading: 'lazy',
 				alt: 'Galeria Wyjazdu',
 			});

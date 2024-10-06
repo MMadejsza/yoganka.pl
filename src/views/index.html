@@ -206,8 +206,16 @@
 					<header class="offer-type__header">Zajęcia</header>
 					<div class="tile">
 						<img
-							src="../static/img/offer/offer_group.png"
-							class="tile__img pic"
+							class="tile__img"
+							srcset="
+								../static/img/offer/regular/individual_and_group/front/320_group_0.jpg 320w,
+								../static/img/offer/regular/individual_and_group/front/480_group_0.jpg 480w
+							"
+							sizes="
+							(max-width: 640px) 320px,
+							(max-width: 768px) 480px,
+							480px"
+							src="../static/img/offer/regular/individual_and_group/front/480_group_0.jpg"
 							loading="lazy" />
 						<h3 class="tile__title">Grupowe i Indywidualne</h3>
 						<a
@@ -218,9 +226,17 @@
 					</div>
 					<div class="tile">
 						<img
-							class="tile__img pic"
-							src="../static/img/offer/offer_commercial.jpg"
-							loading="lazy" />
+							class="tile__img"
+							srcset="
+								../static/img/offer/regular/commercial/front/320_commercial_0.jpg 320w,
+								../static/img/offer/regular/commercial/front/480_commercial_0.jpg 480w
+							"
+							sizes="
+								(max-width: 640px) 320px,
+								(max-width: 768px) 480px,
+								480px"
+							loading="lazy"
+							src="../static/img/offer/regular/comercial/front/480_commercial_1.jpg" />
 						<h3 class="tile__title">Joga dla firm</h3>
 						<a
 							href="mailto:yoganka.gdansk@gmail.com"
