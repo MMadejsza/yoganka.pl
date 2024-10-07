@@ -1238,8 +1238,8 @@ div.hidden {
 	}
 	.partners__link:hover {
 		cursor: pointer;
-		transform: translateY(-25%) scale(1.15);
-		box-shadow: var(--activeBoxShadow);
+		transform: translateY(-10%) scale(1.15);
+		box-shadow: var(--tileShadow);
 	}
 	.footer {
 		flex-flow: row wrap;
