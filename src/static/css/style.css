@@ -675,6 +675,7 @@ footer {
 	max-width: 225px;
 	max-height: 225px;
 	padding: 0;
+	border-radius: var(--bRadius);
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -1377,27 +1378,27 @@ div.hidden {
 		color: var(--accentBackground);
 	}
 	.top-image-header {
-		/* margin-top: 5rem; */
+		margin-top: 5rem;
 		height: 90vh;
 		grid-template-areas:
-			'logo logo logo . .'
 			'title title title title title'
 			'. . . . .'
 			'. . . . .'
 			'. . . . .'
 			'. . . . .'
-			'motto motto motto . .'
 			'. . . . .'
 			'. . . . .'
-			'. . . . .';
+			'. . . . .'
+			'. . . . .'
+			'motto motto motto . .';
 		background-image: none;
-		/* background-color: var(--base); */
 	}
 	.top-image-header__header {
 		width: 100%;
 	}
-	.top-image-header__titleBar {
+	.top-image-header__title-bar {
 		width: max-content;
+		height: 13rem;
 		font-size: 4rem;
 		letter-spacing: 6px;
 	}
@@ -1416,29 +1417,25 @@ div.hidden {
 		left: 0;
 		top: 0;
 		width: 100%;
-		/* width: 100%; */
 		box-shadow: var(--transitiveBoxShadow);
 		z-index: -1;
 	}
 	.about {
-		grid-template-columns: repeat(4, minmax(200px, 1fr));
-		grid-template-areas:
-			'header header header header'
-			'content content portrait portrait'
-			'content content portrait portrait'
-			'content content portrait portrait'
-			'content content portrait portrait';
 		position: absolute;
-		top: 6rem;
+		z-index: -1;
+		max-width: 1000px;
+		top: 60%;
+		transform: translateY(-50%);
+		height: 90vh;
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
 	}
 	.about__header {
 		display: none;
 	}
 	.about__content {
-		background-color: rgba(0, 0, 0, 0.18);
-		backdrop-filter: blur(4px);
-		box-shadow: 0 0 15px 10px rgba(95, 95, 95, 0.4);
-		border-radius: var(--bRadius);
+		max-width: 50%;
 	}
 	.about__heading,
 	.about__greeting,
@@ -1447,12 +1444,18 @@ div.hidden {
 		text-align: left;
 		padding-left: 2rem;
 	}
-	.about__portrait {
-		max-width: 450px;
-		margin: 0;
+	.about__img--portrait {
+		display: none;
 	}
 	.about__img {
-		max-width: 70%;
+		order: 2;
+		background: url('../img/header/header--profile-4.jpg');
+		width: 35%;
+		height: 70%;
+		background-repeat: no-repeat;
+		background-size: cover;
+		background-position: center;
+		background-attachment: fixed;
 	}
 	.tile.clickable:hover {
 		cursor: pointer;
@@ -1460,6 +1463,7 @@ div.hidden {
 		transform: translateY(-5%) scale(1.05);
 	}
 	.offer {
+		margin-top: -3rem;
 		grid-template-columns: repeat(4, minmax(150px, 1fr));
 		grid-template-areas:
 			'title title title title'
@@ -1559,11 +1563,16 @@ div.hidden {
 }
 @media (min-width: 1280px) {
 	/* hi-res laptops and desktops */
-	.wrapper {
+	.wrapper,
+	.about {
 		max-width: 1200px;
 	}
 	.nav__link {
 		font-size: 2rem;
+	}
+	.about__img {
+		width: 31%;
+		height: 78%;
 	}
 	.modal {
 		max-width: 1200px;
