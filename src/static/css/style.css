@@ -879,7 +879,7 @@ div.hidden {
 }
 .glide {
 	grid-column: 1 / -1;
-	padding-bottom: 3rem;
+	padding: 2rem 0 3rem;
 }
 .glide-container {
 	grid-column: 1 / -1;
