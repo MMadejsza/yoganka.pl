@@ -395,24 +395,26 @@ class Tile {
 				this.showModal();
 			}, 50);
 			setTimeout(() => {
-				new Glide(thisGlide, {
-					type: 'carousel',
-					focusAt: 'center',
-					perView: 2,
-					startAt: 0,
-					gap: 20,
-					// autoplay: 2200,
-					animationDuration: 800,
-					breakpoints: {
-						// <=
-						360: {
-							perView: 1,
+				if (thisGlide) {
+					new Glide(thisGlide, {
+						type: 'carousel',
+						focusAt: 'center',
+						perView: 2,
+						startAt: 0,
+						gap: 20,
+						// autoplay: 2200,
+						animationDuration: 800,
+						breakpoints: {
+							// <=
+							360: {
+								perView: 1,
+							},
+							480: {
+								perView: 1,
+							},
 						},
-						480: {
-							perView: 1,
-						},
-					},
-				}).mount();
+					}).mount();
+				}
 			}, 500);
 		});
 
@@ -631,12 +633,6 @@ class Tile {
 			class: `modal__modal-body modal__modal-body--offer modal__modal-body--event`,
 		});
 		//@ img
-		// create img
-		// const img = this.createEl('img', {
-		// 	class: 'tile__img tile__img--event-modal',
-		// 	src: `${this.img}`,
-		// 	loading: 'lazy',
-		// });
 		const img = this.createEl('img', {
 			class: 'tile__img',
 			srcset: `
@@ -722,39 +718,11 @@ class Tile {
 		const glideSlides = this.createEl('ul', {
 			class: 'glide__slides',
 		});
-		// const screenWidth = window.innerWidth;
-		// let resolution;
-		// // Użycie switch do obsługi różnych zakresów rozdzielczości
-		// switch (true) {
-		// 	case screenWidth <= 480:
-		// 		resolution = 480;
-		// 		break;
-		// 	case screenWidth > 480 && screenWidth <= 768:
-		// 		resolution = 768;
-		// 		break;
-		// 	case screenWidth > 768 && screenWidth <= 1024:
-		// 		resolution = 1024;
-		// 		break;
-		// 	case screenWidth > 1024 && screenWidth <= 1280:
-		// 		resolution = 1024;
-		// 		break;
-		// 	case screenWidth > 1280:
-		// 		resolution = 1024;
-		// 		break;
-		// 	default:
-		// 		console.log('Nieznana rozdzielczość');
-		// 		break;
-		// }
 		for (let i = 0; i <= imgsNumber; i++) {
 			const glideSlideLi = this.createEl('li', {
 				class: 'glide__slide',
 			});
 			const imgNo = i + 1;
-			// const image = this.createEl('img', {
-			// 	class: 'tile__img tile__img--modal-slider',
-			// 	src: `${relativePath}/${resolution}_${imgName}_${i}.png`,
-			// 	loading: 'lazy',
-			// });
 			const image = this.createEl('img', {
 				class: 'tile__img tile__img--modal-slider',
 				src: `${relativePath}/480_${imgName}_${imgNo}.png`,
@@ -815,9 +783,6 @@ class Tile {
 		glideArrowRight.appendChild(iconArrowRight);
 		glideArrows.append(glideArrowLeft, glideArrowRight);
 		glide.appendChild(glideArrows);
-		// glideContainer.appendChild(glide);
-
-		// return glideContainer;
 
 		return glide;
 	};
@@ -876,7 +841,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		wydarzenia.appendChild(new Tile(event).generateTile());
 	});
 
-	// cookies
+	// cookies elements
 	document
 		.querySelector('.footer__pop-up-btn--cookies')
 		.addEventListener('click', (e) => e.preventDefault());
@@ -924,10 +889,6 @@ document.addEventListener('DOMContentLoaded', function () {
 				perView: 3,
 			},
 		},
-	});
-
-	glide.on('run', () => {
-		const activeElement = document.querySelector('.glide__slide--active');
 	});
 
 	glide.mount();
