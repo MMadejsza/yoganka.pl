@@ -198,7 +198,7 @@ const yogaAndSound = {
 	type: `event`,
 	extraClass: 'event',
 	imgPath: '../static/img/offer/events/yoga&sound/front',
-	galleryPath: '../static/img/offer/events/yoga&sound/gallery',
+	galleryPath: '../static/img/offer/events/yoga&sound/front',
 	fileName: `ys`,
 	front: {
 		nazwaWyjazdu: `YOGA & SOUND
@@ -233,7 +233,7 @@ const yogaNaSupach = {
 	type: `event`,
 	extraClass: 'event',
 	imgPath: '../static/img/offer/events/sup/front',
-	galleryPath: '../static/img/offer/events/sup/gallery',
+	galleryPath: '../static/img/offer/events/sup/front',
 	fileName: `sup`,
 	front: {
 		nazwaWyjazdu: `Yoga na Supach`,
@@ -549,7 +549,7 @@ class Tile {
 		glance.appendChild(ul);
 		// append complete header
 		modalOffer.appendChild(glance);
-
+		//@ section modal_plan
 		// create modal plan for camp
 		//@ section modal_desc
 		// create main container
@@ -664,6 +664,8 @@ class Tile {
 			loading: 'lazy',
 		});
 		modalOffer.appendChild(img);
+		// const img = this.generateGallerySlider(this.galleryPath, this.fileName, 1);
+		modalOffer.appendChild(img);
 
 		//@ header
 		// create modal plan for camp
@@ -704,8 +706,6 @@ class Tile {
 		});
 		// use address  from camps dataset
 		this.generateModalBtns(footer, ['sign']);
-
-		footer.append(footerBtnSignUp);
 		modalOffer.appendChild(footer);
 
 		// return complete modal body
@@ -722,9 +722,6 @@ class Tile {
 			class: 'glide__slides',
 		});
 		for (let i = 0; i <= imgsNumber; i++) {
-			const glideSlideLi = this.createEl('li', {
-				class: 'glide__slide',
-			});
 			const imgNo = i + 1;
 			const image = this.createEl('img', {
 				class: 'tile__img tile__img--modal-slider',
@@ -744,6 +741,9 @@ class Tile {
 						`,
 				loading: 'lazy',
 				alt: 'Galeria Wyjazdu',
+			});
+			const glideSlideLi = this.createEl('li', {
+				class: 'glide__slide',
 			});
 			glideSlideLi.appendChild(image);
 			glideSlides.appendChild(glideSlideLi);
