@@ -1574,6 +1574,12 @@ div.hidden {
 		width: 31%;
 		height: 78%;
 	}
+	.offer {
+		grid-gap: 3.5rem 3rem;
+	}
+	.offer-type {
+		grid-gap: 2.5rem 3rem;
+	}
 	.modal {
 		max-width: 1200px;
 		padding: 1.5rem 4rem;
