@@ -1232,13 +1232,17 @@ div.hidden {
 	.certificates__gallery {
 		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 	}
+	/* to bump up specificity */
+	.wrapper section.partners {
+		padding-bottom: 6rem;
+	}
 	.partners__gallery {
 		gap: 4rem;
 		animation: 20s slide infinite linear;
 	}
 	.partners__link:hover {
 		cursor: pointer;
-		transform: translateY(-10%) scale(1.15);
+		transform: translateY(-18%) scale(1.1);
 		box-shadow: var(--tileShadow);
 	}
 	.footer {
