@@ -342,6 +342,37 @@ class Tile {
 			return overlay;
 		}
 	};
+	generateModalBtns = (root, typesArr) => {
+		typesArr.forEach((type) => {
+			switch (type) {
+				case 'sign':
+					// use address  from camps dataset
+					const footerBtnSignUp = this.createEl('a', {
+						href: this.modal.linkFormularza,
+						class: 'modal__btn modal__sign-up',
+						target: '_blank',
+					});
+					footerBtnSignUp.innerText = 'Dołącz!';
+					root.append(footerBtnSignUp);
+					break;
+				case 'ask':
+					const modalQuestion = this.modal.questionTemplate(this.frontTitle);
+					const footerBtnAsk = this.createEl('a', {
+						href: `https://wa.me/${48792891607}?text=${encodeURIComponent(
+							modalQuestion ? modalQuestion : '',
+						)}`,
+						class: 'modal__btn modal__ask-for-info',
+						target: '_blank',
+					});
+					footerBtnAsk.innerText = 'Zapytaj';
+					root.append(footerBtnAsk);
+					break;
+				default:
+					console.log('No modalBtn type');
+					break;
+			}
+		});
+	};
 	// main function generating and returning tile
 	generateTile = () => {
 		function appendEl(parent, ...args) {
@@ -605,24 +636,9 @@ class Tile {
 			class: 'modal__user-action',
 		});
 
-		// use message from camps dataset
-		// const footerBtnAsk = this.createEl('a', {
-		// 	href: `https://wa.me/${48792891607}?text=${encodeURIComponent(
-		// 		this.modal.questionTemplate(this.frontTitle),
-		// 	)}`,
-		// 	class: 'modal__btn modal__ask-for-info',
-		// 	target: '_blank',
-		// });
-		// footerBtnAsk.innerText = 'Zapytaj';
-
 		// use address  from camps dataset
-		const footerBtnSignUp = this.createEl('a', {
-			href: this.modal.form,
-			class: 'modal__btn modal__sign-up',
-			target: '_blank',
-		});
-		footerBtnSignUp.innerText = 'Dołącz!';
-		footer.append(footerBtnSignUp);
+		this.generateModalBtns(footer, ['sign']);
+
 		modalOffer.appendChild(footer);
 		// return complete modal body
 		return modalOffer;
@@ -687,21 +703,8 @@ class Tile {
 			class: 'modal__user-action',
 		});
 		// use address  from camps dataset
-		const footerBtnSignUp = this.createEl('a', {
-			href: this.modal.linkFormularza,
-			class: 'modal__btn modal__sign-up',
-			target: '_blank',
-		});
-		// use message from camps dataset
-		footerBtnSignUp.innerText = 'Dołącz!';
-		// const footerBtnAsk = this.createEl('a', {
-		// 	href: `https://wa.me/${48792891607}?text=${encodeURIComponent(
-		// 		this.modal.questionTemplate(this.frontTitle),
-		// 	)}`,
-		// 	class: 'modal__btn modal__ask-for-info',
-		// 	target: '_blank',
-		// });
-		// footerBtnAsk.innerText = 'Zapytaj';
+		this.generateModalBtns(footer, ['sign']);
+
 		footer.append(footerBtnSignUp);
 		modalOffer.appendChild(footer);
 
