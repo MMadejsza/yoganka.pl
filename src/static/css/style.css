@@ -1025,7 +1025,7 @@ div.hidden {
 	.modal__modal-body--event {
 		grid-template-columns: auto;
 	}
-	.modal .pic {
+	.modal .tile__img {
 		grid-column: 1 / -1;
 		margin: 0;
 	}
