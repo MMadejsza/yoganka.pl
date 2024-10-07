@@ -844,8 +844,7 @@ i.footer__cookie-close-icon {
 	opacity: 0;
 }
 .clickable:not(.footer__pop-ups *) {
-	box-shadow: var(--activeBoxShadow), rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
-		rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+	box-shadow: var(--activeBoxShadow);
 	position: relative;
 }
 .clickable:not(.footer__pop-ups *)::after {
@@ -1472,7 +1471,7 @@ div.hidden {
 	}
 	.tile.clickable:hover {
 		cursor: pointer;
-		box-shadow: var(--activeBoxShadow);
+		box-shadow: var(--tileShadow);
 		transform: translateY(-5%) scale(1.05);
 	}
 	.offer {
