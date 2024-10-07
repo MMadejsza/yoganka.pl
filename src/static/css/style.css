@@ -600,6 +600,7 @@ footer {
 /*! OFFER END*/
 /*! CERTIFICATES*/
 .certificates {
+	position: relative;
 	grid-area: cert;
 }
 .certificates__tile {
@@ -640,8 +641,10 @@ footer {
 	align-items: center;
 	position: relative;
 }
-.partners__gallery-slide:before,
-.partners__gallery-slide:after {
+.partners__gallery-slide::before,
+.partners__gallery-slide::after,
+.glide::before,
+.glide::after {
 	position: absolute;
 	top: 0;
 	width: 10vw;
@@ -649,13 +652,21 @@ footer {
 	content: '';
 	z-index: 2;
 }
-.partners__gallery-slide:before {
+.partners__gallery-slide::before,
+.glide::before {
 	left: -1rem;
 	background: linear-gradient(to left, rgba(0, 0, 0, 0), var(--base));
 }
-.partners__gallery-slide:after {
+.modal .glide::before {
+	background: linear-gradient(to left, rgba(0, 0, 0, 0), var(--tile));
+}
+.partners__gallery-slide::after,
+.glide::after {
 	right: -1rem;
 	background: linear-gradient(to right, rgba(0, 0, 0, 0), var(--base));
+}
+.modal .glide::after {
+	background: linear-gradient(to right, rgba(0, 0, 0, 0), var(--tile));
 }
 .partners__gallery-slide:hover .partners__gallery {
 	animation-play-state: paused;
@@ -774,6 +785,7 @@ footer a {
 	align-items: center;
 	transition: var(--baseTransition);
 	gap: 1.5rem;
+	z-index: 10;
 }
 .footer__pop-up-btn {
 	position: relative;
@@ -925,6 +937,7 @@ div.hidden {
 	font-size: 3rem;
 	color: var(--accentBackground);
 	border-radius: var(--bRadius);
+	z-index: 5;
 }
 .glide__arrow--left {
 	left: 1rem;
