@@ -308,7 +308,7 @@ footer {
 	position: absolute;
 	bottom: 0;
 	right: 0;
-	max-width: calc(60% + 1rem);
+	max-width: calc(75% + 1rem);
 	height: 12%;
 	background-color: var(--base);
 	border-top-left-radius: var(--bRadius);
@@ -895,6 +895,7 @@ div.hidden {
 	/* border: 1px solid red; */
 }
 .glide__track {
+	background-color: rgba(var(--navForRGBA), 0.55);
 	overflow: visible;
 	overflow-x: hidden;
 }
