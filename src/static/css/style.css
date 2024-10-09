@@ -1513,7 +1513,7 @@ div.hidden {
 		align-items: stretch;
 	}
 	.offer-type--events {
-		grid-template-columns: repeat(auto-fill, minmax(350px, 425px));
+		grid-template-columns: repeat(auto-fill, minmax(275px, 1fr));
 		grid-area: wydarzenia;
 	}
 	.modal {

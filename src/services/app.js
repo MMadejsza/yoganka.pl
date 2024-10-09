@@ -828,7 +828,7 @@ class Tile {
 // list of active camps to sign for
 const activeCamps = [kaszubyCamp, warmiaCamp];
 // list of active camps to sign for
-const activeEvents = [yogaAndSound, yogaNaSupach, hotYoga];
+const activeEvents = [hotYoga, yogaAndSound, yogaNaSupach];
 
 // do when DOM loaded
 document.addEventListener('DOMContentLoaded', function () {
