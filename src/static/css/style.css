@@ -858,7 +858,7 @@ i.footer__cookie-close-icon {
 	opacity: 0;
 }
 .clickable:not(.footer__pop-ups *) {
-	box-shadow: var(--activeBoxShadow);
+	box-shadow: var(--tileShadow);
 	position: relative;
 }
 .clickable:not(.footer__pop-ups *)::after {
