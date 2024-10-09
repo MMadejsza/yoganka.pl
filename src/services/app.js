@@ -4,6 +4,7 @@ const kaszubyCamp = {
 	extraClass: '',
 	imgPath: '../static/img/offer/camps/camp_kaszuby/front',
 	galleryPath: '../static/img/offer/camps/camp_kaszuby/gallery',
+	gallerySize: 12,
 	fileName: `camp_kaszuby`,
 	front: {
 		nazwaWyjazdu: `Kojenie Zmysłów
@@ -97,6 +98,7 @@ const warmiaCamp = {
 	extraClass: 'long',
 	imgPath: '../static/img/offer/camps/camp_warmia/front',
 	galleryPath: '../static/img/offer/camps/camp_warmia/gallery',
+	gallerySize: 12,
 	fileName: `camp_warmia`,
 	front: {
 		nazwaWyjazdu: `Comfy slow weekend
@@ -262,6 +264,7 @@ class Tile {
 		this.extraClass = givenEventBody.extraClass;
 		this.imgPath = givenEventBody.imgPath;
 		this.galleryPath = givenEventBody.galleryPath;
+		this.gallerySize = givenEventBody.gallerySize;
 		this.fileName = givenEventBody.fileName;
 		this.frontTitle = givenEventBody.front.nazwaWyjazdu;
 		this.frontDate = givenEventBody.front.listaDat;
@@ -500,7 +503,7 @@ class Tile {
 			class: `modal__modal-body modal__modal-body--offer `,
 		});
 		//@ img
-		const img = this.generateGallerySlider(this.galleryPath, this.fileName, 5);
+		const img = this.generateGallerySlider(this.galleryPath, this.fileName, this.gallerySize);
 		modalOffer.appendChild(img);
 
 		//@ section modal_full-desc
@@ -721,8 +724,8 @@ class Tile {
 		const glideSlides = this.createEl('ul', {
 			class: 'glide__slides',
 		});
-		for (let i = 0; i <= imgsNumber; i++) {
-			const imgNo = i + 1;
+		for (let i = 1; i <= imgsNumber; i++) {
+			const imgNo = i;
 			const image = this.createEl('img', {
 				class: 'tile__img tile__img--modal-slider',
 				src: `${relativePath}/480_${imgName}_${imgNo}.png`,
