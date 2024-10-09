@@ -206,7 +206,7 @@ footer {
 	grid-area: header;
 	max-height: 100vh;
 	text-transform: uppercase;
-	background-image: url(../img/_header_face.jpg);
+	background-image: url(../img/header/480_header_portrait.jpg);
 	background-attachment: fixed;
 	background-repeat: no-repeat;
 	background-size: cover;
@@ -362,6 +362,7 @@ footer {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	justify-content: space-between;
 	gap: 2rem;
 
 	padding: 2.5rem 1rem;
@@ -999,6 +1000,9 @@ div.hidden {
 		--headerImgSize: 640px;
 		font-size: 12px;
 	}
+	.top-image-header {
+		background-image: url(../img/header/768_header_portrait.jpg);
+	}
 	.top-image-header__title-bar {
 		font-size: 2.3rem;
 	}
@@ -1110,6 +1114,9 @@ div.hidden {
 	html {
 		--headerImgSize: 1080px;
 	}
+	.top-image-header {
+		background-image: url(../img/header/1024_header_portrait.jpg);
+	}
 	.top-image-header__title-bar {
 		height: 11rem;
 		font-size: 3rem;
@@ -1145,7 +1152,7 @@ div.hidden {
 	.offer-type--events {
 		display: grid;
 		width: 100%;
-		grid-template-columns: repeat(auto-fit, minmax(345px, 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
 	}
 	.offer-type--events .tile {
 		max-width: 500px;

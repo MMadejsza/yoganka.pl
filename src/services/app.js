@@ -239,7 +239,7 @@ const yogaNaSupach = {
 	fileName: `sup`,
 	front: {
 		nazwaWyjazdu: `Yoga na Supach`,
-		listaDat: [`(Sezon Letni)`],
+		listaDat: [`Latem`],
 		rejon: `Plaża Trójmiasto`,
 		krotkiOpis: `Nie bój się zmoczyć... Extra mobilizacja mięśni głębokich i stabilizujących`,
 	},
@@ -248,6 +248,37 @@ const yogaNaSupach = {
 		tytulOpisu: 'W skrócie:',
 		pelnyOpis: `Latem zapraszam do wodnego studio jogi. Otwarta przestrzeń z  nieskończonym oknem na naturę stanowi doskonałą propozycję na ciepłe dni. Deska SUP zamiast maty, promienie słońca, letni podmuch wiatru i szum drzew dodadzą Twojej praktyce lekkości. Poprawisz balans, wzmocnisz mięśnie posturalne, zrelaksujesz się czując delikatne muskanie fal. Zobacz fotorelację z sezonu 2023 oraz 2024. Zajęcia odbywały się na jeziorze oraz w Zatoce Gdańskiej (Brzeźno).`,
 		linkFormularza: 'https://forms.gle/kYN6VpfP3aV1b9yB8',
+		// questionTemplate(subject) {
+		// 	return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
+		// },
+	},
+};
+const hotYoga = {
+	type: `event`,
+	extraClass: 'event',
+	imgPath: '../static/img/offer/events/hot_yoga/front',
+	galleryPath: '../static/img/offer/events/hot_yoga/front',
+	fileName: `hot_yoga`,
+	front: {
+		nazwaWyjazdu: `HOT YOGA`,
+		listaDat: [`19.10.2024 g.11.00`],
+		rejon: `Limitless by autopay, Sopot`,
+		krotkiOpis: `Unikatowa praktyka hot yogi w saunie. Cena: 89zł`,
+	},
+	modal: {
+		imgModal: this.img,
+		tytulOpisu: 'W skrócie:',
+		pelnyOpis: ` Podwyższona temperatura w saunie umożliwi dostęp do głębszego rozluźnienia i większej elastyczności ciała. Podrzegamy saunę do 36 stopni. Przećwiczysz specjalnie dobrane pozycje siedzące i leżące, które łatwo zastosujesz w życiu codziennym. Na zakończenie czeka Cię sesja relaksacyjna i seans saunowy prowadzony przez saunomistrza, z dobranymi na jesienną porę olejkami zwiększającymi odporność organizmu i spokój umysłu`,
+		program: {
+			naglowek: 'Relaks menu:',
+			tresc: [
+				`Joga w saunie`,
+				`Aromaterapia`,
+				`Kojący widok z sauny na morze`,
+				`Napar Imbirowy`,
+			],
+		},
+		linkFormularza: 'https://www.facebook.com/events/945794327582158',
 		// questionTemplate(subject) {
 		// 	return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
 		// },
@@ -797,7 +828,7 @@ class Tile {
 // list of active camps to sign for
 const activeCamps = [kaszubyCamp, warmiaCamp];
 // list of active camps to sign for
-const activeEvents = [yogaAndSound, yogaNaSupach];
+const activeEvents = [yogaAndSound, yogaNaSupach, hotYoga];
 
 // do when DOM loaded
 document.addEventListener('DOMContentLoaded', function () {
