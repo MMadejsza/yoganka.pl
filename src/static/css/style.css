@@ -1,3 +1,9 @@
+@font-face {
+	font-family: 'yoganka';
+	src: url('../fonts/BLUDHAVEN.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
 * {
 	margin: 0;
 	padding: 0;
@@ -241,7 +247,7 @@ footer {
 .top-image-header__title-bar {
 	margin: 0 auto;
 	width: max-content;
-	font-family: 'Kalnia', serif;
+	font-family: 'yoganka', serif;
 	font-size: 2rem;
 	letter-spacing: 2px;
 	text-align: left;
@@ -715,7 +721,7 @@ footer {
 /*! FOOTER*/
 .footer {
 	grid-area: footer;
-	min-height: 300px;
+	/* min-height: 300px; */
 	padding: 1rem 1rem 2rem;
 	background-color: rgba(var(--navForRGBA), 0.85);
 	font-size: 1.7rem;
@@ -754,9 +760,9 @@ footer a {
 .footer__social-link {
 	position: relative;
 	font-size: 3.5rem;
-	text-shadow: var(--activeTextIconsShadow);
 	color: var(--accentBackground);
 }
+
 .footer__qr {
 	position: absolute;
 	width: 0;
@@ -1526,10 +1532,10 @@ div.hidden {
 		display: grid;
 		grid-template-columns: repeat(7, minmax(100px, 1fr));
 		grid-template-areas:
-			'logo logo logo logo details details details '
-			'logo logo logo logo details details details '
 			'socials socials socials socials details details details '
-			'socials socials socials socials legal legal legal '
+			'socials socials socials socials details details details '
+			'socials socials socials socials details details details '
+			'socials socials socials socials details details details '
 			'. . . credit . . . ';
 		place-items: center;
 		gap: 2rem 1rem;
