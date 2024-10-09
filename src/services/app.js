@@ -203,15 +203,15 @@ const yogaAndSound = {
 	front: {
 		nazwaWyjazdu: `YOGA & SOUND
 		Moon Ceremony`,
-		listaDat: [`20.10.2024 godz.18.00`],
-		rejon: `WellMe, Gdańsk Oliwa`,
+		listaDat: [`Latem`],
+		rejon: `Plaże Trójmiasta`,
 		krotkiOpis: `Spotkania przy pełni księżyca, czyli joga przy dźwiękach mis i gongów, które wprowadzą Cię w relaksującą podróż.`,
 	},
 	modal: {
 		imgModal: this.img,
 		tytulOpisu: 'W skrócie:',
 		pelnyOpis: `Takiego spotkania w trójmieście jeszcze nie było. Joga, księżyc, misy i gongi łączą siły.  Poczuj ich dobroczynną moc, pozwól sobie na regenerację,oczyść głowę. Twoje ciało będzie wdzięczne za taki relaks.
- Latem spotykamy się na plaży, w sezonie jesienno-zimowym przenosimy się na przytulne sale na terenie całego Trójmiasta.`,
+ Latem spotykamy się na plaży, w sezonie jesienno-zimowym przenosimy się na przytulne sale na terenie całego Trójmiasta. W formularzu zgłoszenia znajdziesz informacje o sposobie płatności.`,
 		program: {
 			naglowek: 'Relaks menu:',
 			tresc: [
@@ -223,7 +223,7 @@ const yogaAndSound = {
 				`Maty od partnera Miś Yoga`,
 			],
 		},
-		linkFormularza: 'https://forms.gle/fcFCL8HMqWBmEn7P7  ',
+		linkFormularza: 'https://forms.gle/kYN6VpfP3aV1b9yB8',
 		// questionTemplate(subject) {
 		// 	return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
 		// },

@@ -241,7 +241,7 @@ footer {
 .top-image-header__title-bar {
 	margin: 0 auto;
 	width: max-content;
-	font-family: 'Gravitas One', serif;
+	font-family: 'Kalnia', serif;
 	font-size: 2rem;
 	letter-spacing: 2px;
 	text-align: left;
@@ -895,9 +895,11 @@ div.hidden {
 	/* border: 1px solid red; */
 }
 .glide__track {
-	background-color: rgba(var(--navForRGBA), 0.55);
 	overflow: visible;
 	overflow-x: hidden;
+}
+.certificates .glide__track {
+	background-color: rgba(var(--navForRGBA), 0.55);
 }
 .glide__slides {
 	height: 100%;
