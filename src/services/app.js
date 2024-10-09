@@ -2,8 +2,8 @@
 const kaszubyCamp = {
 	type: `camp`,
 	extraClass: '',
-	imgPath: 'src/static/img/offer/camps/camp_kaszuby/front',
-	galleryPath: 'src/static/img/offer/camps/camp_kaszuby/gallery',
+	imgPath: '../static/img/offer/camps/camp_kaszuby/front',
+	galleryPath: '../static/img/offer/camps/camp_kaszuby/gallery',
 	gallerySize: 12,
 	fileName: `camp_kaszuby`,
 	front: {
@@ -96,8 +96,8 @@ const kaszubyCamp = {
 const warmiaCamp = {
 	type: `camp`,
 	extraClass: 'long',
-	imgPath: 'src/static/img/offer/camps/camp_warmia/front',
-	galleryPath: 'src/static/img/offer/camps/camp_warmia/gallery',
+	imgPath: '../static/img/offer/camps/camp_warmia/front',
+	galleryPath: '../static/img/offer/camps/camp_warmia/gallery',
 	gallerySize: 12,
 	fileName: `camp_warmia`,
 	front: {
@@ -199,8 +199,8 @@ const warmiaCamp = {
 const yogaAndSound = {
 	type: `event`,
 	extraClass: 'event',
-	imgPath: 'src/static/img/offer/events/yoga&sound/front',
-	galleryPath: 'src/static/img/offer/events/yoga&sound/front',
+	imgPath: '../static/img/offer/events/yoga&sound/front',
+	galleryPath: '../static/img/offer/events/yoga&sound/front',
 	fileName: `ys`,
 	front: {
 		nazwaWyjazdu: `YOGA & SOUND
@@ -234,8 +234,8 @@ const yogaAndSound = {
 const yogaNaSupach = {
 	type: `event`,
 	extraClass: 'event',
-	imgPath: 'src/static/img/offer/events/sup/front',
-	galleryPath: 'src/static/img/offer/events/sup/front',
+	imgPath: '../static/img/offer/events/sup/front',
+	galleryPath: '../static/img/offer/events/sup/front',
 	fileName: `sup`,
 	front: {
 		nazwaWyjazdu: `Yoga na Supach`,
@@ -256,8 +256,8 @@ const yogaNaSupach = {
 const hotYoga = {
 	type: `event`,
 	extraClass: 'event',
-	imgPath: 'src/static/img/offer/events/hot_yoga/front',
-	galleryPath: 'src/static/img/offer/events/hot_yoga/front',
+	imgPath: '../static/img/offer/events/hot_yoga/front',
+	galleryPath: '../static/img/offer/events/hot_yoga/front',
 	fileName: `hot_yoga`,
 	front: {
 		nazwaWyjazdu: `HOT YOGA`,
