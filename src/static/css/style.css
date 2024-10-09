@@ -204,6 +204,7 @@ i.nav__icon {
 }
 .top-image-header {
 	grid-area: header;
+	width: 100%;
 	max-height: 100vh;
 	text-transform: uppercase;
 	background-image: url(../img/header/480_header_portrait.jpg);
@@ -1114,6 +1115,26 @@ div.hidden {
 	html {
 		--headerImgSize: 1080px;
 	}
+	.nav__link:hover {
+		position: relative;
+		z-index: 2;
+		text-shadow: var(--activeTextIconsShadow);
+		/* background-color: rgba(0, 0, 0, 0.05); */
+
+		color: var(--accentBackground);
+	}
+	.nav__item {
+		transition: var(--baseTransition);
+	}
+	.nav__item:hover {
+		transform: scale(1.05) translateY(0.5rem);
+		border-bottom-left-radius: var(--bRadius);
+		border-bottom-right-radius: var(--bRadius);
+	}
+	.nav__link:hover,
+	.nav__link:hover i.nav__icon {
+		color: var(--accentBackground);
+	}
 	.top-image-header {
 		background-image: url(../img/header/1024_header_portrait.jpg);
 	}
@@ -1130,6 +1151,11 @@ div.hidden {
 	}
 	.about__img {
 		max-width: 640px;
+	}
+	.tile.clickable:hover {
+		cursor: pointer;
+		box-shadow: var(--tileShadow);
+		transform: translateY(-5%) scale(1.05);
 	}
 	.about__heading {
 		font-size: 3rem;
@@ -1159,6 +1185,9 @@ div.hidden {
 	}
 	.modal {
 		max-width: 95vw;
+	}
+	.modal__btn:hover {
+		box-shadow: var(--activeBoxShadow);
 	}
 	.modal__modal-body {
 		grid-template-columns: repeat(6, minmax(65px, 1fr));
@@ -1275,6 +1304,10 @@ div.hidden {
 	.footer__logo {
 		flex-basis: 100%;
 	}
+	.footer__company-details a:hover {
+		font-size: 2.2rem;
+		text-shadow: var(--activeTextIconsShadow);
+	}
 	.footer__legal,
 	.footer__credit {
 		flex-basis: 100%;
@@ -1293,6 +1326,24 @@ div.hidden {
 	.footer__cookie-pop-up {
 		height: 6.6rem;
 		font-size: 2rem;
+	}
+	.footer__social-link:hover {
+		text-shadow: var(--activeTextIconsShadow);
+	}
+	.footer__qr {
+		left: 50%;
+		transform: translateX(-50%);
+	}
+	.footer__social-link:hover .footer__qr {
+		display: block;
+		width: 160px;
+		top: -185px;
+
+		opacity: 1;
+		transition: var(--baseTransition);
+	}
+	.footer__social-link:hover .footer__qr-image {
+		box-shadow: var(--activeBoxShadow);
 	}
 }
 @media (min-width: 1024px) {
@@ -1395,26 +1446,7 @@ div.hidden {
 	i.nav__icon {
 		color: var(--tileTitle);
 	}
-	.nav__link:hover {
-		position: relative;
-		z-index: 2;
-		text-shadow: var(--activeTextIconsShadow);
-		/* background-color: rgba(0, 0, 0, 0.05); */
 
-		color: var(--accentBackground);
-	}
-	.nav__item {
-		transition: var(--baseTransition);
-	}
-	.nav__item:hover {
-		transform: scale(1.05) translateY(0.5rem);
-		border-bottom-left-radius: var(--bRadius);
-		border-bottom-right-radius: var(--bRadius);
-	}
-	.nav__link:hover,
-	.nav__link:hover i.nav__icon {
-		color: var(--accentBackground);
-	}
 	.top-image-header {
 		margin-top: 5rem;
 		height: 90vh;
@@ -1495,11 +1527,7 @@ div.hidden {
 		background-position: center;
 		background-attachment: fixed;
 	}
-	.tile.clickable:hover {
-		cursor: pointer;
-		box-shadow: var(--tileShadow);
-		transform: translateY(-5%) scale(1.05);
-	}
+
 	.offer {
 		margin-top: -3rem;
 		grid-template-columns: repeat(4, minmax(150px, 1fr));
@@ -1520,9 +1548,7 @@ div.hidden {
 		max-width: 900px;
 		padding: 1.5rem 2.5rem;
 	}
-	.modal__btn:hover {
-		box-shadow: var(--activeBoxShadow);
-	}
+
 	.certificates__gallery {
 		grid-template-columns: repeat(5, minmax(150px, 1fr));
 		padding: 2.5rem 15rem;
@@ -1565,10 +1591,7 @@ div.hidden {
 		font-size: 2.2rem;
 		color: var(--tileTitle);
 	}
-	.footer__company-details a:hover {
-		font-size: 2.2rem;
-		text-shadow: var(--activeTextIconsShadow);
-	}
+
 	.footer__legal {
 		grid-area: legal;
 	}
@@ -1577,24 +1600,7 @@ div.hidden {
 		text-shadow: none;
 		overflow: visible;
 	}
-	.footer__social-link:hover {
-		text-shadow: var(--activeTextIconsShadow);
-	}
-	.footer__qr {
-		left: 50%;
-		transform: translateX(-50%);
-	}
-	.footer__social-link:hover .footer__qr {
-		display: block;
-		width: 160px;
-		top: -185px;
 
-		opacity: 1;
-		transition: var(--baseTransition);
-	}
-	.footer__social-link:hover .footer__qr-image {
-		box-shadow: var(--activeBoxShadow);
-	}
 	.footer__credit {
 		grid-area: credit;
 	}
