@@ -193,7 +193,7 @@ footer {
 	text-decoration: none;
 	color: var(--tileTextMuted);
 }
-.nav__icon {
+i.nav__icon {
 	width: 28.5px;
 	display: inline-block;
 	margin-right: 1.5rem;
@@ -487,7 +487,7 @@ footer {
 	z-index: 8;
 	transition: var(--baseTransition);
 }
-.modal__icon {
+i.modal__icon {
 	min-width: 3.5rem;
 	height: 3.5rem;
 	line-height: 3.5rem;
@@ -559,7 +559,7 @@ footer {
 .modal__li--at-glance {
 	font-size: 2.5rem;
 }
-.modal-checklist__icon {
+i.modal-checklist__icon {
 	font-size: 2.2rem;
 }
 .modal__full-desc {
@@ -1392,7 +1392,7 @@ div.hidden {
 		transition: var(--baseTransition);
 		color: var(--tileTitle);
 	}
-	.nav__icon {
+	i.nav__icon {
 		color: var(--tileTitle);
 	}
 	.nav__link:hover {
@@ -1412,7 +1412,7 @@ div.hidden {
 		border-bottom-right-radius: var(--bRadius);
 	}
 	.nav__link:hover,
-	.nav__link:hover .nav__icon {
+	.nav__link:hover i.nav__icon {
 		color: var(--accentBackground);
 	}
 	.top-image-header {
