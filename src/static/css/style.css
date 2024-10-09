@@ -348,6 +348,12 @@ footer {
 .about__description {
 	grid-area: article;
 }
+.about__signature {
+	align-self: flex-end;
+	margin-right: 1rem;
+	font-family: 'Birthstone Bounce', cursive;
+	font-size: 3rem;
+}
 /*! ABOUT  END*/
 /*! TILE */
 .tile {
