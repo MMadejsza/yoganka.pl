@@ -46,7 +46,7 @@ html {
 	--activeTextIconsShadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 	--headerImgSize: 460px;
 	--headerSize: calc(var(--headerImgSize) + 8rem);
-	--baseTransition: 0.3s ease-in-out;
+	--baseTransition: 0.4s ease-in-out;
 
 	scroll-behavior: smooth;
 	font-family: 'EB Garamond', serif;
@@ -226,6 +226,7 @@ i.nav__icon {
 		'. . . . .'
 		'. . . . .'
 		'motto motto motto motto motto';
+	transition: var(--baseTransition);
 }
 .top-image-header__header {
 	grid-area: title;
