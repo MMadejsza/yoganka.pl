@@ -520,7 +520,7 @@ i.modal__icon {
 	border-radius: var(--bRadius);
 }
 .modal__modal-body--offer {
-	max-height: 89vh;
+	max-height: 89dvh;
 	padding-bottom: 1rem;
 	overflow-y: auto;
 }
