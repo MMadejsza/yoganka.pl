@@ -522,6 +522,7 @@ i.modal__icon {
 	max-height: 89dvh;
 	padding-bottom: 1rem;
 	overflow-y: auto;
+	overflow-x: hidden;
 }
 .modal__modal-body--offer section:nth-child(even) {
 	background: radial-gradient(circle at center, rgba(0, 0, 0, 0.06) 70%, rgba(0, 0, 0, 0) 100%);
@@ -748,6 +749,7 @@ footer a {
 	text-decoration: underline;
 }
 .footer__company-details {
+	margin-top: 1.5rem;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-evenly;
