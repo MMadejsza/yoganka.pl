@@ -1472,6 +1472,7 @@ div.hidden {
 			'. . . . .'
 			'motto motto motto . .';
 		background-image: none;
+		min-height: 675px;
 	}
 	.top-image-header__header {
 		width: 100%;
