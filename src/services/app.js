@@ -830,12 +830,27 @@ const activeCamps = [kaszubyCamp, warmiaCamp];
 // list of active camps to sign for
 const activeEvents = [hotYoga, yogaAndSound, yogaNaSupach];
 
+// fix top bcg image size
+function adjustImgHeight() {
+	// catch bcg
+	const bcgImg = document.querySelector('.top-image-header');
+	// catch initially computed height
+	let elHeight = window.getComputedStyle(bcgImg).height;
+	console.log(elHeight);
+	// make this height fixed to not be subject to vh
+	bcgImg.style.height = elHeight;
+}
 // do when DOM loaded
 document.addEventListener('DOMContentLoaded', function () {
 	const menuLinks = document.querySelectorAll('ul li a');
 	const hamburger = document.getElementById('burger');
 	const wyjazdy = document.querySelector('#wyjazdy');
 	const wydarzenia = document.querySelector('#wydarzenia');
+
+	// set headers bcg height
+	window.addEventListener('resize', adjustImgHeight);
+	window.addEventListener('orientationchange', adjustImgHeight);
+	adjustImgHeight();
 
 	const toggleMenu = () => {
 		hamburger.classList.toggle('active');

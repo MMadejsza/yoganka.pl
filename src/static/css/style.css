@@ -204,7 +204,7 @@ i.nav__icon {
 }
 .top-image-header {
 	grid-area: header;
-	max-height: 95dvh;
+	max-height: 95svh;
 	text-transform: uppercase;
 	background-image: url(../img/header/480_header_portrait.jpg);
 	background-attachment: fixed;
