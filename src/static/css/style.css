@@ -969,9 +969,9 @@ div.hidden {
 		--headerImgSize: 500px;
 		font-size: 9px;
 	}
-	.top-image-header {
+	/* .top-image-header {
 		background-position-y: -2vh;
-	}
+	} */
 	.top-image-header__motto {
 		letter-spacing: 0px;
 	}
@@ -1041,9 +1041,9 @@ div.hidden {
 	.nav__logo {
 		max-width: 310px;
 	}
-	.top-image-header {
+	/* .top-image-header {
 		background-position-y: 30%;
-	}
+	} */
 	.section--header,
 	.offer-type__header {
 		grid-column: 1 /-1;
