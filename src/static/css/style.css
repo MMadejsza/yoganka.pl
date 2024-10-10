@@ -162,7 +162,7 @@ footer {
 	border-top-left-radius: var(--bRadius);
 	border-bottom-left-radius: var(--bRadius);
 	box-shadow: var(--activeBoxShadow), var(--tileShadow);
-	background-color: rgba(var(--navForRGBA), 0.85);
+	background-color: var(--nav);
 	transition: var(--baseTransition);
 	z-index: 6;
 
@@ -204,17 +204,19 @@ i.nav__icon {
 }
 .top-image-header {
 	grid-area: header;
-	height: 98svh;
+	height: 98vh;
 	text-transform: uppercase;
 	background-image: url(../img/header/480_header_portrait.jpg);
 	background-attachment: fixed;
 	background-repeat: no-repeat;
 	background-size: cover;
+	/*! próba rozwiązania ios */
+	background-position: top left;
 	overflow: hidden;
 
 	display: grid;
 	grid-template-columns: repeat(5, minmax(auto, 1fr));
-	/* grid-template-rows: 6rem repeat(8, 1fr) 8rem; */
+	grid-template-rows: 6rem repeat(8, 1fr) 8rem;
 	grid-template-areas:
 		'logo logo logo . .'
 		'title title title title title'
@@ -373,6 +375,9 @@ i.nav__icon {
 	overflow: hidden;
 	box-shadow: var(--boxShadow);
 	transition: var(--baseTransition);
+}
+.tile--event{
+	justify-content: inherit;
 }
 .tile__img {
 	place-self: center;
@@ -1499,7 +1504,9 @@ div.hidden {
 		position: absolute;
 		z-index: -1;
 		max-width: 1000px;
-		top: 60%;
+		/* top: 60%; */
+		top: 0;
+		margin-top: 450px;
 		transform: translateY(-50%);
 		height: 90vh;
 		display: flex;
@@ -1620,7 +1627,7 @@ div.hidden {
 		font-size: 2rem;
 	}
 	.about__img {
-		width: 31%;
+		width: 31%; 
 		height: 78%;
 	}
 	.offer {
