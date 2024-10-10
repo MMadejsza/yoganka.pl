@@ -204,7 +204,7 @@ i.nav__icon {
 }
 .top-image-header {
 	grid-area: header;
-	max-height: 100dvh;
+	max-height: 95dvh;
 	text-transform: uppercase;
 	background-image: url(../img/header/480_header_portrait.jpg);
 	background-attachment: fixed;
@@ -473,8 +473,8 @@ i.nav__icon {
 .modal {
 	display: block;
 	position: fixed;
-	top: 50vh;
-	left: 50vw;
+	top: 50dvh;
+	left: 50dvw;
 	transform: translate(-50%, -50%);
 	width: 0vw;
 	min-height: 0px;
@@ -514,7 +514,6 @@ i.modal__icon {
 	display: grid;
 	width: 100%;
 	grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
-	/* justify-items: center; */
 	grid-gap: 2.5rem;
 
 	border-radius: var(--bRadius);
