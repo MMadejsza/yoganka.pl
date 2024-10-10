@@ -125,28 +125,21 @@
 				<div class="top-image-header__motto">
 					<h3>yoga | slow life | mindfulness</h3>
 				</div>
-				<video
-					class="top-image-header__video"
-					autoplay
-					muted
-					preload
-					loop>
-					<source
-						src="src/static/img/header/sea2.mp4"
-						type="video/mp4" />
-					<source
-						src="movie.ogg"
-						type="video/ogg" />
-					Your browser does not support the video tag.
-				</video>
 			</section>
 			<section class="about">
 				<header class="about__header section-header">O mnie</header>
 				<aside class="about__img">
 					<img
 						class="about__img--portrait"
-						src="src/static/img/header/header--profile-4
-						.jpg"
+						srcset="
+							src/static/img/about/320_about_profile.jpg 320w,
+							src/static/img/about/600_about_profile.jpg 600w
+						"
+						sizes="
+							(max-width: 640px) 320px,
+							(max-width: 1024px) 600px,
+							320px"
+						src="src/static/img/about/320_about_profile.jpg"
 						loading="lazy"
 						alt="Yoganka - w pozycji na plaży" />
 					<div class="about__certificates">

@@ -315,8 +315,9 @@ i.nav__icon {
 	position: absolute;
 	bottom: 0;
 	right: 0;
-	max-width: calc(75% + 1rem);
+	min-width: 70%;
 	height: 12%;
+	padding: 0 0.5rem;
 	background-color: var(--base);
 	border-top-left-radius: var(--bRadius);
 	border-bottom-right-radius: var(--bRadius);
@@ -1044,6 +1045,9 @@ div.hidden {
 	/* .top-image-header {
 		background-position-y: 30%;
 	} */
+	.about__certificates {
+		min-width: 65%;
+	}
 	.section--header,
 	.offer-type__header {
 		grid-column: 1 /-1;
@@ -1520,7 +1524,7 @@ div.hidden {
 	}
 	.about__img {
 		order: 2;
-		background: url('../img/header/header--profile-4.jpg');
+		background: url('../img/about/600_about_profile.jpg');
 		width: 35%;
 		height: 70%;
 		background-repeat: no-repeat;
