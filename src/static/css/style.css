@@ -204,7 +204,7 @@ i.nav__icon {
 }
 .top-image-header {
 	grid-area: header;
-	min-height: 98svh;
+	height: 98svh;
 	text-transform: uppercase;
 	background-image: url(../img/header/480_header_portrait.jpg);
 	background-attachment: fixed;
@@ -1450,7 +1450,7 @@ div.hidden {
 
 	.top-image-header {
 		margin-top: 5rem;
-		height: 90vh;
+		height: 90svh;
 		grid-template-areas:
 			'title title title title title'
 			'. . . . .'
