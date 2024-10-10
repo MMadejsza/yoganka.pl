@@ -445,7 +445,7 @@ i.nav__icon {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 	grid-template-rows: 5rem;
-	justify-items: center;
+	/* justify-items: center; */
 	justify-content: center;
 	grid-gap: 2.5rem 1.5rem;
 }
@@ -1625,6 +1625,9 @@ div.hidden {
 	}
 	.nav__link {
 		font-size: 2rem;
+	}
+	.about{
+		margin-top: 500px;
 	}
 	.about__img {
 		width: 31%; 
