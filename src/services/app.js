@@ -848,9 +848,9 @@ document.addEventListener('DOMContentLoaded', function () {
 	const wydarzenia = document.querySelector('#wydarzenia');
 
 	// set headers bcg height
-	window.addEventListener('resize', adjustImgHeight);
-	window.addEventListener('orientationchange', adjustImgHeight);
-	adjustImgHeight();
+	// window.addEventListener('resize', adjustImgHeight);
+	// window.addEventListener('orientationchange', adjustImgHeight);
+	// adjustImgHeight();
 
 	const toggleMenu = () => {
 		hamburger.classList.toggle('active');
