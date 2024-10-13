@@ -1357,6 +1357,16 @@ div.hidden {
 		box-shadow: var(--activeBoxShadow);
 	}
 }
+@media (min-width: 800px) {
+	.offer-type--events {
+		grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+	}
+	.offer-type--events .tile:nth-last-of-type(1) {
+		justify-self: auto;
+		grid-column: auto;
+		width: auto;
+	}
+}
 @media (min-width: 1024px) {
 	.modal__modal-body {
 		grid-template-columns: repeat(6, minmax(125px, 1fr));
@@ -1373,11 +1383,7 @@ div.hidden {
 	.modal__desc {
 		grid-template-columns: repeat(2, minmax(300px, 1fr));
 	}
-	.offer-type--events .tile:nth-last-of-type(1) {
-		justify-self: auto;
-		grid-column: auto;
-		width: auto;
-	}
+
 	.partners__link {
 		width: 40vw;
 		height: 40vw;
