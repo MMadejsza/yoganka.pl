@@ -847,11 +847,11 @@ document.addEventListener('DOMContentLoaded', function () {
 	const wyjazdy = document.querySelector('#wyjazdy');
 	const wydarzenia = document.querySelector('#wydarzenia');
 
-	// set headers bcg height
-	// window.addEventListener('resize', adjustImgHeight);
-	// window.addEventListener('orientationchange', adjustImgHeight);
-	// adjustImgHeight();
-
+	// if visited on iOS, remove nor supported backgroundAttachment fixed
+	if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+		const header = document.querySelector('.top-image-header');
+		header.style.backgroundAttachment = 'scroll';
+	}
 	const toggleMenu = () => {
 		hamburger.classList.toggle('active');
 	};
@@ -899,9 +899,9 @@ document.addEventListener('DOMContentLoaded', function () {
 	const cookiePopup = document.querySelector('.footer__cookie-pop-up');
 	cookieCircleBtn.addEventListener('click', (e) => {
 		e.preventDefault();
-		cookiePopup.style.right = '0%';  
-        cookiePopup.style.backgroundColor = 'rgba(var(--accentBackgroundForRGBA), 0.95)';
-        cookiePopup.style.opacity = '1';
+		cookiePopup.style.right = '0%';
+		cookiePopup.style.backgroundColor = 'rgba(var(--accentBackgroundForRGBA), 0.95)';
+		cookiePopup.style.opacity = '1';
 		cookiePopup.style.visibility = 'visible';
 	});
 	cookieCircleBtnX.addEventListener('click', (e) => {
