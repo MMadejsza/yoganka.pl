@@ -905,7 +905,6 @@ document.addEventListener('DOMContentLoaded', function () {
 		cookiePopup.style.visibility = 'visible';
 	});
 	cookieCircleBtnX.addEventListener('click', (e) => {
-		// const parent = e.target.closest('.footer__pop-up-btn--cookies');
 		cookieCircleBtn.style.opacity = 0;
 		cookiePopup.style.opacity = 0;
 

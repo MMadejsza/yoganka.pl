@@ -88,6 +88,7 @@ a {
 		'partners partners partners partners partners'
 		'footer footer footer footer footer';
 	gap: 2.2rem 0;
+	-webkit-overflow-scrolling: touch;
 }
 .stopScroll {
 	overflow: hidden;
@@ -204,7 +205,7 @@ i.nav__icon {
 }
 .top-image-header {
 	grid-area: header;
-	height: 98vh;
+	height: 100svh;
 	text-transform: uppercase;
 	background-image: url(../img/header/480_header_portrait.jpg);
 	background-attachment: fixed;
@@ -277,9 +278,6 @@ i.nav__icon {
 	color: var(--tileTitle);
 	overflow: visible;
 	box-shadow: var(--transitiveBoxShadow);
-}
-.top-image-header__video {
-	display: none;
 }
 /*! NAV  END*/
 /*! ABOUT */
