@@ -899,12 +899,15 @@ document.addEventListener('DOMContentLoaded', function () {
 	const cookiePopup = document.querySelector('.footer__cookie-pop-up');
 	cookieCircleBtn.addEventListener('click', (e) => {
 		e.preventDefault();
-		cookiePopup.style.opacity = 1;
+		cookiePopup.style.right = '0%';  
+        cookiePopup.style.backgroundColor = 'rgba(var(--accentBackgroundForRGBA), 0.95)';
+        cookiePopup.style.opacity = '1';
 		cookiePopup.style.visibility = 'visible';
 	});
 	cookieCircleBtnX.addEventListener('click', (e) => {
 		// const parent = e.target.closest('.footer__pop-up-btn--cookies');
 		cookieCircleBtn.style.opacity = 0;
+		cookiePopup.style.opacity = 0;
 
 		setTimeout(() => {
 			cookiePopup.style.visibility = 'hidden';
