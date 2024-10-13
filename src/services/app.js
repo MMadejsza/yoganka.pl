@@ -894,14 +894,21 @@ document.addEventListener('DOMContentLoaded', function () {
 	});
 
 	// cookies elements
-	document
-		.querySelector('.footer__pop-up-btn--cookies')
-		.addEventListener('click', (e) => e.preventDefault());
-	document.querySelector('.footer__cookie-close').addEventListener('click', (e) => {
-		const parent = e.target.closest('.footer__pop-up-btn--cookies');
-		parent.style.opacity = 0;
+	const cookieCircleBtn = document.querySelector('.footer__pop-up-btn--cookies');
+	const cookieCircleBtnX = document.querySelector('.footer__cookie-close');
+	const cookiePopup = document.querySelector('.footer__cookie-pop-up');
+	cookieCircleBtn.addEventListener('click', (e) => {
+		e.preventDefault();
+		cookiePopup.style.opacity = 1;
+		cookiePopup.style.visibility = 'visible';
+	});
+	cookieCircleBtnX.addEventListener('click', (e) => {
+		// const parent = e.target.closest('.footer__pop-up-btn--cookies');
+		cookieCircleBtn.style.opacity = 0;
+
 		setTimeout(() => {
-			parent.style.display = 'none';
+			cookiePopup.style.visibility = 'hidden';
+			cookieCircleBtn.style.display = 'none';
 		}, 800);
 	});
 	// newsletter close
