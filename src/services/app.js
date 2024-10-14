@@ -102,18 +102,19 @@ const warmiaCamp = {
 	fileName: `camp_warmia`,
 	front: {
 		nazwaWyjazdu: `Comfy slow weekend
-          	Joga | Malowanie | SPA | Misy i gongi`,
+	   Joga | Malowanie | SPA | Misy\u00A0i\u00A0gongi`,
 		listaDat: [`08-11.11.2024`],
 		rejon: `Warmia`,
 	},
+
 	modal: {
 		imgModal: this.img,
-		opis: `Tym razem jesienna odsłona uwielbianego przez was Witramowa. Oferta na długi weekend listopadowy. Zapraszam na 4 dni wypełnione jesiennym zapachem, ciepłem kominka i smakiem kultowej kuchni Agi i Piotra.`,
+		opis: `Siostrzana energia, otulający zapach jesieni, atmosfera zrozumienia. Ten retreat to coś więcej niż odpoczynek, to 4-dniowa podróż do siebie. Jeśli marzysz o takim wyjeździe, ale nie masz z kim pojechać, to chcę Cię uspokoić, że poznasz na miejscu fantastyczne kobiety. Oferuję szeroki wachlarz wspólnych zajęć.`,
 		krotkieInfo: {
-			naglowek: 'W skrócie:',
+			naglowek: '',
 			nocleg: 'Witramowo 32',
-			liczbaMiejsc: '12',
-			cena: '1600zł',
+			// liczbaMiejsc: '',
+			cena: '1550zł',
 			// dojazd: 'we własnym zakresie',
 		},
 		plan: {
@@ -121,10 +122,10 @@ const warmiaCamp = {
 			tresc: [
 				{
 					'naglowekDnia': 'Piątek:',
-					'16:00': 'Przyjazd, Spacery po okolicy',
-					'18:00': 'Pyszna obiadokolacja',
-					'19:00': 'Joga wieczorna',
-					'21:00': `Wieczór przy kominku: rozmowy, napary`,
+					'16:00': 'Zakwaterowanie',
+					'18:00': 'Joga Yin',
+					'19:00': 'Kolacja',
+					'21:00': `Ciepła balia pod gwiazdami`,
 				},
 				{
 					'naglowekDnia': 'Sobota:',
@@ -132,9 +133,9 @@ const warmiaCamp = {
 					'09:30': 'Niespieszne śniadanie',
 					'CZAS WOLNY': '',
 					'14:00': 'Obiad + słodki poczęstunek',
-					'16:00': 'Malowanie intuicyjne przy koncercie mis i gongów',
+					'16:00': 'Malowanie intuicyjne przy dźwiękach mis i gongów',
 					'18:30': 'Uczta przy kolacji',
-					'20:00': 'Czas wspólny - sauna/balia/film',
+					'20:00': 'Rozmowy przy kominku/pogaduchy/film',
 				},
 				{
 					'naglowekDnia': 'Niedziela:',
@@ -144,39 +145,36 @@ const warmiaCamp = {
 					'14:30': 'Obiad i słodki poczęstunek',
 					'17:00': 'Joga yin',
 					'18:30': 'Kolacja',
-					'20:00': 'Rozmowy w kręgu',
+					'20:00': 'Rozmowy w kręgu z użyciem kart rozwojowych',
 				},
 				{
 					'naglowekDnia': 'Poniedziałek:',
 					'08:30': `Joga Slow Flow`,
 					'09:30': 'Niespieszne śniadanie',
 					'CZAS WOLNY': '',
-					'13:00': 'Lunch i pożegnanie',
+					'13:00': 'Lunch i powrót do domu',
 				},
 			],
 		},
+
 		wCenie: {
 			naglowek: 'W Cenie:',
 			tresc: [
 				'6 praktyk jogi',
 				'Malowanie intuicyjne',
 				'Koncert mis i gongów',
-				'Krąg',
-				'Upominek',
+				'Balia',
 				'Pobyt z Wyżywieniem',
 				'Kawa / Herbata / Napary 24/h',
 			],
 		},
-		pozaCena: {
-			naglowek: 'We własnym zakresie:',
-			tresc: ['Dojazd', 'Ubezpieczenie'],
-		},
+
 		extraPlatneOpcje: {
 			naglowek: 'Poszerz Slow Menu:',
 			tresc: [
 				'Masaż Kobido 30zł/30min',
 				'Masaż Misami Tybetańskimi 120 zł/45min',
-				'Sauna z balią',
+				'Sauna (jeszcze w budowie)',
 			],
 		},
 		czasWolny: {
@@ -184,11 +182,11 @@ const warmiaCamp = {
 			//(notka: statusy to free/optional/available o różnych ikonach)
 			tresc: [
 				{status: 'free', aktywnosc: 'Kocyk, leśne spacery, pogaduchy, zdrowe napary'},
-				{status: 'optional', aktywnosc: 'Masaż Misami lub Kobido'},
-				{status: 'optional', aktywnosc: 'Sauna z balią'},
+				{status: 'optional', aktywnosc: 'Masaż Misami oraz Kobido'},
+				{status: 'optional', aktywnosc: 'Sauna'},
 			],
 		},
-		uwaga: `Zaserwuj sobie spokój i zdrowszą siebie. Wypełnij poniższe zgłoszenie`,
+		uwaga: `Zaserwuj sobie spokój i zdrowszą siebie.`,
 		linkFormularza: 'https://forms.gle/6Ri5sqnXgUQGSRNT9',
 		questionTemplate(subject) {
 			return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
@@ -203,26 +201,24 @@ const yogaAndSound = {
 	galleryPath: 'src/static/img/offer/events/yoga&sound/front',
 	fileName: `ys`,
 	front: {
-		nazwaWyjazdu: `YOGA & SOUND
-		Moon Ceremony`,
+		nazwaWyjazdu: `YOGA\u00A0&\u00A0SOUND
+		Moon\u00A0Ceremony`,
 		listaDat: [`Latem`],
-		rejon: `Plaże Trójmiasta`,
-		krotkiOpis: `Spotkania przy pełni księżyca, czyli joga przy dźwiękach mis i gongów, które wprowadzą Cię w relaksującą podróż.`,
+		rejon: `Plaże w Gdańsku`,
+		krotkiOpis: `Joga na\u00A0plaży przy pełni księżyca z\u00A0dźwiękami mis i\u00A0gongów w\u00A0tle, które wprowadzą Cię w\u00A0relaksującą podróż.`,
 	},
 	modal: {
 		imgModal: this.img,
-		tytulOpisu: 'W skrócie:',
-		pelnyOpis: `Takiego spotkania w trójmieście jeszcze nie było. Joga, księżyc, misy i gongi łączą siły.  Poczuj ich dobroczynną moc, pozwól sobie na regenerację,oczyść głowę. Twoje ciało będzie wdzięczne za taki relaks.
- Latem spotykamy się na plaży, w sezonie jesienno-zimowym przenosimy się na przytulne sale na terenie całego Trójmiasta. W formularzu zgłoszenia znajdziesz informacje o sposobie płatności.`,
+		tytulOpisu: 'O spotkaniu:',
+		pelnyOpis: `Takiego wydarzenia w\u00A0Trójmieście nie\u00A0było. Dźwięki mis\u00A0i\u00A0gongów tworzą kojącą atmosferę, pomagając w\u00A0głębszym relaksie i medytacji. Pod rozgwieżdżonym niebem, wśród szumu fal, każda asana staje się bardziej intymna i\u00A0energetyzująca. Bliskość natury i\u00A0moc pełni księżyca dodają praktyce niezwykłej mocy uzdrawiającej. To idealna okazja, by odprężyć ciało, wyciszyć umysł i\u00A0połączyć się z\u00A0otaczającą cię przyrodą.`,
 		program: {
 			naglowek: 'Relaks menu:',
 			tresc: [
-				`Joga przy dźwiękach mis i gongów ( Agnieszka Topp)`,
-				`Relaks  z opaską na oczach nasączona aromatycznymi olejkami`,
+				`Joga przy dźwiękach mis\u00A0i\u00A0gongów (gra Agnieszka\u00A0Topp)`,
+				`Relaks z\u00A0opaską na\u00A0oczach nasączona aromatycznymi olejkami`,
 				`Zdrowy napar naszego przepisu`,
-				`Insporujące rozmowy w kręgu`,
+				`Inspirujące rozmowy w\u00A0kręgu`,
 				`Upominek`,
-				`Maty od partnera Miś Yoga`,
 			],
 		},
 		linkFormularza: 'https://forms.gle/kYN6VpfP3aV1b9yB8',
@@ -238,19 +234,15 @@ const yogaNaSupach = {
 	galleryPath: 'src/static/img/offer/events/sup/front',
 	fileName: `sup`,
 	front: {
-		nazwaWyjazdu: `Yoga na Supach`,
+		nazwaWyjazdu: `Sup yoga`,
 		listaDat: [`Latem`],
-		rejon: `Plaża Trójmiasto`,
-		krotkiOpis: `Nie bój się zmoczyć... Extra mobilizacja mięśni głębokich i stabilizujących`,
+		rejon: `Zatoka Gdańska /\u00A0Jezioro Wysockie`,
+		krotkiOpis: `Praktyka jogi na\u00A0wodzie, czyli prawdziwe zen\u00A0nature.`,
 	},
 	modal: {
 		imgModal: this.img,
-		tytulOpisu: 'W skrócie:',
-		pelnyOpis: `Latem zapraszam do wodnego studio jogi. Otwarta przestrzeń z  nieskończonym oknem na naturę stanowi doskonałą propozycję na ciepłe dni. Deska SUP zamiast maty, promienie słońca, letni podmuch wiatru i szum drzew dodadzą Twojej praktyce lekkości. Poprawisz balans, wzmocnisz mięśnie posturalne, zrelaksujesz się czując delikatne muskanie fal. Zobacz fotorelację z sezonu 2023 oraz 2024. Zajęcia odbywały się na jeziorze oraz w Zatoce Gdańskiej (Brzeźno).`,
-		linkFormularza: 'https://forms.gle/kYN6VpfP3aV1b9yB8',
-		// questionTemplate(subject) {
-		// 	return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
-		// },
+		tytulOpisu: 'O zajęciach:',
+		pelnyOpis: `Zapraszam do\u00A0wodnego studia jogi. Zamieniamy matę na\u00A0deskę SUP. Poprawisz balans, wzmocnisz mięśnie posturalne. Otwarta przestrzeń z\u00A0nieskończonym oknem na\u00A0naturę stanowi doskonałą propozycję na\u00A0ciepłe dni. Czy jest coś wspanialszego od\u00A0jogi na\u00A0powietrzu? Promienie słońca, letni podmuch wiatru i\u00A0szum drzew dopełnią Twoją praktykę.`,
 	},
 };
 const hotYoga = {
@@ -262,19 +254,19 @@ const hotYoga = {
 	front: {
 		nazwaWyjazdu: `HOT YOGA`,
 		listaDat: [`19.10.2024 g.11.00`],
-		rejon: `Limitless by autopay, Sopot`,
-		krotkiOpis: `Unikatowa praktyka hot yogi w saunie. Cena: 89zł`,
+		rejon: `Limitless\u00A0by\u00A0autopay, Sopot`,
+		krotkiOpis: `Unikatowa praktyka hot\u00A0yogi w\u00A0saunie`,
 	},
 	modal: {
 		imgModal: this.img,
-		tytulOpisu: 'W skrócie:',
-		pelnyOpis: ` Podwyższona temperatura w saunie umożliwi dostęp do głębszego rozluźnienia i większej elastyczności ciała. Podrzegamy saunę do 36 stopni. Przećwiczysz specjalnie dobrane pozycje siedzące i leżące, które łatwo zastosujesz w życiu codziennym. Na zakończenie czeka Cię sesja relaksacyjna i seans saunowy prowadzony przez saunomistrza, z dobranymi na jesienną porę olejkami zwiększającymi odporność organizmu i spokój umysłu`,
+		tytulOpisu: 'O spotkaniu:',
+		pelnyOpis: `Podwyższona temperatura w\u00A0saunie umożliwi dostęp do\u00A0głębszego rozluźnienia i\u00A0większej elastyczności ciała. Podrzegamy saunę do\u00A036\u00A0stopni. Przećwiczysz specjalnie dobrane pozycje siedzące i\u00A0leżące, które\u00A0łatwo zastosujesz w\u00A0życiu codziennym. Na\u00A0zakończenie czeka Cię sesja relaksacyjna i\u00A0seans saunowy prowadzony przez saunomistrza, z\u00A0dobranymi na\u00A0jesienną porę olejkami zwiększającymi odporność organizmu i\u00A0spokój umysłu.`,
 		program: {
 			naglowek: 'Relaks menu:',
 			tresc: [
 				`Joga w saunie`,
 				`Aromaterapia`,
-				`Kojący widok z sauny na morze`,
+				`Kojący widok z\u00A0sauny na\u00A0morze`,
 				`Napar Imbirowy`,
 			],
 		},
@@ -555,22 +547,24 @@ class Tile {
 		glance.appendChild(glanceHeader);
 		const ul = this.createEl('ul', {class: 'modal__list modal__list--at-glance'});
 		// point list of icons to include in order
-		const icons = [
-			'fa-solid fa-location-dot',
-			'fa-solid fa-bed',
-			'fa-solid fa-people-group',
-			'fa-solid fa-tag',
-		];
+		const icons = {
+			rejon: 'fa-solid fa-location-dot',
+			nocleg: 'fa-solid fa-bed',
+			liczbaMiejsc: 'fa-solid fa-people-group',
+			cena: 'fa-solid fa-tag',
+		};
 		// iterate after modal's "at glance" part
 		Object.entries(this.modal.krotkieInfo).forEach(([info, text], index) => {
+			const rowName = info;
 			// omit title:
 			if (index > 0) {
 				// create li
 				const li = this.createEl('li', {class: 'modal__li modal__li--at-glance'});
 				// create icon choosing the right one in order
+				console.log(icons[rowName]);
 				const icon = this.createEl('i', {
-					class: icons[index]
-						? icons[index] + ' modal__icon'
+					class: icons[rowName]
+						? icons[rowName] + ' modal__icon'
 						: 'fa-solid fa-check modal__icon',
 				});
 				// append icon + text from glance array
@@ -632,7 +626,7 @@ class Tile {
 			'modal-checklist modal-checklist--included',
 		);
 		modalOffer.appendChild(sectionIncluded);
-		//@ section modal_excluded
+		// section modal_excluded
 		// create section for what's excluded
 		// const sectionExcluded = this.tileModalChecklistClassic(
 		// 	'pozaCena',
