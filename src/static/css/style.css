@@ -89,7 +89,6 @@ a {
 		'partners partners partners partners partners'
 		'footer footer footer footer footer';
 	gap: 2.2rem 0;
-	overflow: hidden;
 	-webkit-overflow-scrolling: touch;
 }
 .stopScroll {
@@ -618,6 +617,7 @@ i.modal-checklist__icon {
 .certificates {
 	position: relative;
 	grid-area: cert;
+	overflow: hidden;
 }
 .certificates__tile {
 	place-self: center;
@@ -1367,7 +1367,7 @@ div.hidden {
 		width: auto;
 	}
 }
-@media (min-width: 1024px) {
+@media (min-width: 960px) {
 	.modal__modal-body {
 		grid-template-columns: repeat(6, minmax(125px, 1fr));
 	}
@@ -1409,7 +1409,7 @@ div.hidden {
 		font-size: 2.5rem;
 	}
 }
-@media (orientation: landscape) and (min-width: 1025px) {
+@media (min-width: 1025px) {
 	/* big landscape tablets, laptops, and desktops */
 	html {
 		--headerImgSize: 1080px;
@@ -1468,10 +1468,10 @@ div.hidden {
 	i.nav__icon {
 		color: var(--tileTitle);
 	}
-
 	.top-image-header {
 		margin-top: 5rem;
 		height: 90svh;
+		max-height: 750px;
 		grid-template-areas:
 			'title title title title title'
 			'. . . . .'
@@ -1505,14 +1505,6 @@ div.hidden {
 		box-shadow: none;
 		background-color: transparent;
 	}
-	.top-image-header__video {
-		position: absolute;
-		left: 0;
-		top: 0;
-		width: 100%;
-		box-shadow: var(--transitiveBoxShadow);
-		z-index: -1;
-	}
 	.about {
 		position: absolute;
 		z-index: -1;
@@ -1522,6 +1514,7 @@ div.hidden {
 		margin-top: 450px;
 		transform: translateY(-50%);
 		height: 90vh;
+		max-height: 750px;
 		display: flex;
 		justify-content: space-around;
 		align-items: center;
