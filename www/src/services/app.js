@@ -101,20 +101,20 @@ const warmiaCamp = {
 	gallerySize: 12,
 	fileName: `camp_warmia`,
 	front: {
-		nazwaWyjazdu: `Comfy slow weekend
+		nazwaWyjazdu: `Comfy Slow Weekend
 	   Joga | Malowanie | SPA | Misy\u00A0i\u00A0gongi`,
-		listaDat: [`08-11.11.2024`],
+		listaDat: [`08-11/11/2024`],
 		rejon: `Warmia`,
 	},
 
 	modal: {
 		imgModal: this.img,
-		opis: `Siostrzana energia, otulający zapach jesieni, atmosfera zrozumienia. Ten retreat to coś więcej niż odpoczynek, to 4-dniowa podróż do siebie. Jeśli marzysz o takim wyjeździe, ale nie masz z kim pojechać, to chcę Cię uspokoić, że poznasz na miejscu fantastyczne kobiety. Oferuję szeroki wachlarz wspólnych zajęć.`,
+		opis: `Siostrzana energia, otulający zapach jesieni, atmosfera zrozumienia. Ten\u00A0retreat to\u00A0coś więcej niż odpoczynek, to\u00A04-dniowa podróż do\u00A0siebie. Jeśli marzysz o\u00A0takim wyjeździe, ale\u00A0nie\u00A0masz z\u00A0kim pojechać, to\u00A0chcę Cię uspokoić, że\u00A0poznasz na\u00A0miejscu fantastyczne kobiety. Oferuję szeroki wachlarz wspólnych zajęć.`,
 		krotkieInfo: {
 			naglowek: '',
 			nocleg: 'Witramowo 32',
 			// liczbaMiejsc: '',
-			cena: '1550zł',
+			cena: '1590zł',
 			// dojazd: 'we własnym zakresie',
 		},
 		plan: {
@@ -151,6 +151,7 @@ const warmiaCamp = {
 					'naglowekDnia': 'Poniedziałek:',
 					'08:30': `Joga Slow Flow`,
 					'09:30': 'Niespieszne śniadanie',
+					'11:00': 'Warsztat: handmade termoforki ziołowe',
 					'CZAS WOLNY': '',
 					'13:00': 'Lunch i powrót do domu',
 				},
@@ -163,6 +164,7 @@ const warmiaCamp = {
 				'6 praktyk jogi',
 				'Malowanie intuicyjne',
 				'Koncert mis i gongów',
+				'Termofor ziołowy',
 				'Balia',
 				'Pobyt z Wyżywieniem',
 				'Kawa / Herbata / Napary 24/h',
@@ -820,7 +822,15 @@ class Tile {
 }
 
 // list of active camps to sign for
-const activeCamps = [kaszubyCamp, warmiaCamp];
+const activeCamps = [warmiaCamp,kaszubyCamp ]
+// .sort((x, y) => {
+// 	console.log(new Date(x.front.listaDat[0]));
+// 	console.log(new Date(y.front.listaDat[0]));
+// 	console.log(`${x.front.listaDat[0]} > ${y.front.listaDat[0]}: ${x.front.listaDat[0] > y.front.listaDat[0]}`);
+
+// 	return new Date(x.front.listaDat[0]) - new Date(y.front.listaDat[0]);
+// });
+
 // list of active camps to sign for
 const activeEvents = [hotYoga, yogaAndSound, yogaNaSupach];
 
