@@ -1,9 +1,10 @@
+const htmlToImgsPath = 'imgs'
 // Created camps so far
 const kaszubyCamp = {
 	type: `camp`,
 	extraClass: '',
-	imgPath: 'src/static/img/offer/camps/camp_kaszuby/front',
-	galleryPath: 'src/static/img/offer/camps/camp_kaszuby/gallery',
+	imgPath: `${htmlToImgsPath}/offer/camps/camp_kaszuby/front`,
+	galleryPath: `${htmlToImgsPath}/offer/camps/camp_kaszuby/gallery`,
 	gallerySize: 12,
 	fileName: `camp_kaszuby`,
 	front: {
@@ -13,7 +14,7 @@ const kaszubyCamp = {
 		rejon: `Kaszuby`,
 	},
 	modal: {
-		imgModal: this.img,
+		// imgModal: this.imgPath,
 		opis: `Zabieram Cię do urokliwego domku, otulonego drewnem, gdzie schowamy się w ulubionych skarpetach, ciepłych swetrach i ukoimy nasze zmysły. Nie zabraknie jesiennej klasyki, czyli odpoczynku przy kominku z kubkiem aromatycznego naparu.`,
 
 		krotkieInfo: {
@@ -96,8 +97,8 @@ const kaszubyCamp = {
 const warmiaCamp = {
 	type: `camp`,
 	extraClass: 'long',
-	imgPath: 'src/static/img/offer/camps/camp_warmia/front',
-	galleryPath: 'src/static/img/offer/camps/camp_warmia/gallery',
+	imgPath: `${htmlToImgsPath}/offer/camps/camp_warmia/front`,
+	galleryPath: `${htmlToImgsPath}/offer/camps/camp_warmia/gallery`,
 	gallerySize: 12,
 	fileName: `camp_warmia`,
 	front: {
@@ -108,7 +109,7 @@ const warmiaCamp = {
 	},
 
 	modal: {
-		imgModal: this.img,
+		// imgModal: this.imgPath,
 		opis: `Siostrzana energia, otulający zapach jesieni, atmosfera zrozumienia. Ten retreat to coś więcej niż odpoczynek, to 4-dniowa podróż do siebie. Jeśli marzysz o takim wyjeździe, ale nie masz z kim pojechać, to chcę Cię uspokoić, że poznasz na miejscu fantastyczne kobiety. Oferuję szeroki wachlarz wspólnych zajęć.`,
 		krotkieInfo: {
 			naglowek: '',
@@ -197,8 +198,8 @@ const warmiaCamp = {
 const yogaAndSound = {
 	type: `event`,
 	extraClass: 'event',
-	imgPath: 'src/static/img/offer/events/yoga&sound/front',
-	galleryPath: 'src/static/img/offer/events/yoga&sound/front',
+	imgPath: `${htmlToImgsPath}/offer/events/yoga&sound/front`,
+	galleryPath: `${htmlToImgsPath}/offer/events/yoga&sound/front`,
 	fileName: `ys`,
 	front: {
 		nazwaWyjazdu: `YOGA\u00A0&\u00A0SOUND
@@ -208,7 +209,7 @@ const yogaAndSound = {
 		krotkiOpis: `Joga na\u00A0plaży przy pełni księżyca z\u00A0dźwiękami mis i\u00A0gongów w\u00A0tle, które wprowadzą Cię w\u00A0relaksującą podróż.`,
 	},
 	modal: {
-		imgModal: this.img,
+		// imgModal: this.imgPath,
 		tytulOpisu: 'O spotkaniu:',
 		pelnyOpis: `Takiego wydarzenia w\u00A0Trójmieście nie\u00A0było. Dźwięki mis\u00A0i\u00A0gongów tworzą kojącą atmosferę, pomagając w\u00A0głębszym relaksie i medytacji. Pod rozgwieżdżonym niebem, wśród szumu fal, każda asana staje się bardziej intymna i\u00A0energetyzująca. Bliskość natury i\u00A0moc pełni księżyca dodają praktyce niezwykłej mocy uzdrawiającej. To idealna okazja, by odprężyć ciało, wyciszyć umysł i\u00A0połączyć się z\u00A0otaczającą cię przyrodą.`,
 		program: {
@@ -230,8 +231,8 @@ const yogaAndSound = {
 const yogaNaSupach = {
 	type: `event`,
 	extraClass: 'event',
-	imgPath: 'src/static/img/offer/events/sup/front',
-	galleryPath: 'src/static/img/offer/events/sup/front',
+	imgPath: `${htmlToImgsPath}/offer/events/sup/front`,
+	galleryPath: `${htmlToImgsPath}/offer/events/sup/front`,
 	fileName: `sup`,
 	front: {
 		nazwaWyjazdu: `Sup yoga`,
@@ -240,7 +241,7 @@ const yogaNaSupach = {
 		krotkiOpis: `Praktyka jogi na\u00A0wodzie, czyli prawdziwe zen\u00A0nature.`,
 	},
 	modal: {
-		imgModal: this.img,
+		// imgModal: this.imgPath,
 		tytulOpisu: 'O zajęciach:',
 		pelnyOpis: `Zapraszam do\u00A0wodnego studia jogi. Zamieniamy matę na\u00A0deskę SUP. Poprawisz balans, wzmocnisz mięśnie posturalne. Otwarta przestrzeń z\u00A0nieskończonym oknem na\u00A0naturę stanowi doskonałą propozycję na\u00A0ciepłe dni. Czy jest coś wspanialszego od\u00A0jogi na\u00A0powietrzu? Promienie słońca, letni podmuch wiatru i\u00A0szum drzew dopełnią Twoją praktykę.`,
 	},
@@ -248,8 +249,8 @@ const yogaNaSupach = {
 const hotYoga = {
 	type: `event`,
 	extraClass: 'event',
-	imgPath: 'src/static/img/offer/events/hot_yoga/front',
-	galleryPath: 'src/static/img/offer/events/hot_yoga/front',
+	imgPath: `${htmlToImgsPath}/offer/events/hot_yoga/front`,
+	galleryPath: `${htmlToImgsPath}/offer/events/hot_yoga/front`,
 	fileName: `hot_yoga`,
 	front: {
 		nazwaWyjazdu: `HOT YOGA`,
@@ -258,7 +259,7 @@ const hotYoga = {
 		krotkiOpis: `Unikatowa praktyka hot\u00A0yogi w\u00A0saunie`,
 	},
 	modal: {
-		imgModal: this.img,
+		// imgModal: this.imgPath,
 		tytulOpisu: 'O spotkaniu:',
 		pelnyOpis: `Podwyższona temperatura w\u00A0saunie umożliwi dostęp do\u00A0głębszego rozluźnienia i\u00A0większej elastyczności ciała. Podrzegamy saunę do\u00A036\u00A0stopni. Przećwiczysz specjalnie dobrane pozycje siedzące i\u00A0leżące, które\u00A0łatwo zastosujesz w\u00A0życiu codziennym. Na\u00A0zakończenie czeka Cię sesja relaksacyjna i\u00A0seans saunowy prowadzony przez saunomistrza, z\u00A0dobranymi na\u00A0jesienną porę olejkami zwiększającymi odporność organizmu i\u00A0spokój umysłu.`,
 		program: {
@@ -561,7 +562,6 @@ class Tile {
 				// create li
 				const li = this.createEl('li', {class: 'modal__li modal__li--at-glance'});
 				// create icon choosing the right one in order
-				console.log(icons[rowName]);
 				const icon = this.createEl('i', {
 					class: icons[rowName]
 						? icons[rowName] + ' modal__icon'

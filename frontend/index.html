@@ -1,6 +1,19 @@
 <!DOCTYPE html>
 <html lang="pl">
 	<head>
+		<!-- Google tag (gtag.js) -->
+		<script
+			async
+			src="https://www.googletagmanager.com/gtag/js?id=G-4Y3BF25B6P"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() {
+				dataLayer.push(arguments);
+			}
+			gtag('js', new Date());
+
+			gtag('config', 'G-4Y3BF25B6P');
+		</script>
 		<!-- Meta tags -->
 		<meta charset="UTF-8" />
 		<title>Yoganka</title>
@@ -10,7 +23,7 @@
 		<!-- Website description for SEO -->
 		<meta
 			name="description"
-			content="Profesjonalna instruktorka jogi oferująca wyjątkowe zajęcia w Trójmieście oraz wyjazdy pomorskie. Specjalizuję się w trendach jogi na supie oraz sesjach z gongami, korzystając z certyfikatów zdobytych na Bali. Moje usługi są dostępne dla klientów z całej Polski, zapewniając wysoką jakość i unikalne doświadczenia. Zapisz się na zajęcia, które przyniosą Ci harmonię i równowagę." />
+			content="Profesjonalna instruktorka jogi oferująca wyjątkowe zajęcia w Trójmieście, wyjazdy z jogą oraz warsztaty jogi dzieki certyfikatom zdobytym na Bali. Specjalizuje się również w jodze na supie oraz sesjach mindfulness. usługi są dostępne dla klientów z całej Polski, zapewniając wysoką jakość i unikalne doświadczenia. Zapisz się na zajęcia, które przyniosą Ci harmonię i równowagę." />
 		<meta
 			name="author"
 			content="MMadejsza" />
@@ -52,17 +65,17 @@
 		<!-- Required Core Stylesheet -->
 		<link
 			rel="stylesheet"
-			href="../services/glide/dist/css/glide.core.min.css" />
+			href="../src/services/glide/dist/css/glide.core.min.css" />
 
 		<!-- Optional Theme Stylesheet -->
 		<link
 			rel="stylesheet"
-			href="../services/glide/dist/css/glide.theme.min.css" />
+			href="../src/services/glide/dist/css/glide.theme.min.css" />
 
 		<link
 			rel="stylesheet"
 			type="text/css"
-			href="../static/css/style.css" />
+			href="../src/main.css" />
 	</head>
 	<body>
 		<div class="wrapper">
@@ -115,7 +128,7 @@
 				</ul>
 			</nav>
 			<section class="top-image-header">
-				<div class="top-image-header__logo">Logo</div>
+				<!-- <div class="top-image-header__logo">Logo</div> -->
 				<header class="top-image-header__header">
 					<div class="top-image-header__title-bar">
 						<h1 class="top-image-header__title">Body Healing</h1>
@@ -125,39 +138,32 @@
 				<div class="top-image-header__motto">
 					<h3>yoga | slow life | mindfulness</h3>
 				</div>
-				<video
-					class="top-image-header__video"
-					autoplay
-					muted
-					preload
-					loop>
-					<source
-						src="../static/img/header/sea2.mp4"
-						type="video/mp4" />
-					<source
-						src="movie.ogg"
-						type="video/ogg" />
-					Your browser does not support the video tag.
-				</video>
 			</section>
 			<section class="about">
 				<header class="about__header section-header">O mnie</header>
 				<aside class="about__img">
 					<img
 						class="about__img--portrait"
-						src="../static/img/header/header--profile-4
-						.jpg"
+						srcset="
+							imgs/about/320_about_profile.jpg 320w,
+							imgs/about/600_about_profile.jpg 600w
+						"
+						sizes="
+							(max-width: 640px) 320px,
+							(max-width: 1024px) 600px,
+							320px"
+						src="imgs/about/320_about_profile.jpg"
 						loading="lazy"
 						alt="Yoganka - w pozycji na plaży" />
 					<div class="about__certificates">
 						<img
-							src="../static/img/about/about_YA-Logo.png"
+							src="imgs/about/about_YA-Logo.png"
 							class="about__img--alliance"
 							loading="lazy"
 							alt="Logo federacji yogi" />
 						<img
 							class="about__img--ryt"
-							src="../static/img/about/about_ryt.png"
+							src="imgs/about/about_ryt.png"
 							loading="lazy"
 							alt="Autoryzowany nauczyciel jogi" />
 					</div>
@@ -165,21 +171,25 @@
 				<article class="about__content">
 					<h2 class="about__heading">cześć!</h2>
 					<p class="about__description">
-						Cieszę się, że tu jesteś. Rozgość się u mnie, najlepiej z filiżanką
-						aromatycznego naparu i zostań ze mną na dłużej.
+						Cieszę się, że&nbsp;tu jesteś. Rozgość się u&nbsp;mnie, najlepiej
+						z&nbsp;filiżanką aromatycznego naparu i&nbsp;zostań ze&nbsp;mną
+						na&nbsp;dłużej.
 					</p>
 					<p class="about__description">
-						Nazywam się Ania, jestem certyfikowaną nauczycielką jogi w nurcie vinyasa
-						oraz hatha. Moje zajęcia najczęściej prowadzę w stylu slow flow, czyli asany
-						tworzą spójny układ, a ruch synchronizuje się z rytmem oddechu. Taki rodzaj
-						jogi daje mi poczucie wolności i miękkości w ciele.
+						Nazywam się&nbsp;Ania, jestem certyfikowaną nauczycielką jogi w&nbsp;nurcie
+						vinyasa oraz&nbsp;hatha. Moje zajęcia najczęściej prowadzę w&nbsp;stylu
+						slow&nbsp;flow, czyli asany tworząc spójny układ, a&nbsp;ruch synchronizuje
+						się z&nbsp;rytmem oddechu. Taki rodzaj jogi daje&nbsp;mi poczucie wolności
+						i&nbsp;miękkości w&nbsp;ciele.
 					</p>
 					<p class="about__description">
-						W moim slow menu znajdziesz jogę dla firm, wydarzenia jednodniowe oraz slow
-						wyjazdy, które ukoją i zregenerują Twój układ nerwowy przynosząc Ci ulgę na
-						długi czas. Z uważnością dobieram miejsca i układam program sprawiając, że
-						moje warsztaty to holistyczne podejście do zdrowszej i spokojniejszej
-						Ciebie. Do zobaczenia na macie!
+						W moim slow&nbsp;menu znajdziesz jogę dla firm, wydarzenia jednodniowe oraz
+						slow&nbsp;wyjazdy, które ukoją i&nbsp;zregenerują Twój układ nerwowy
+						przynosząc Ci ulgę na&nbsp;długi czas. Z&nbsp;uważnością dobieram miejsca
+						i&nbsp;układam program sprawiając, że&nbsp;moje warsztaty to holistyczne
+						podejście do zdrowszej i&nbsp;spokojniejszej Ciebie.
+						<br />
+						Do zobaczenia na macie!
 					</p>
 					<p class="about__signature">Anna Madejsza</p>
 				</article>
@@ -198,14 +208,14 @@
 						<img
 							class="tile__img"
 							srcset="
-								../static/img/offer/regular/individual_and_group/front/320_group_0.jpg 320w,
-								../static/img/offer/regular/individual_and_group/front/480_group_0.jpg 480w
+								imgs/offer/regular/individual_and_group/front/320_group_0.jpg 320w,
+								imgs/offer/regular/individual_and_group/front/480_group_0.jpg 480w
 							"
 							sizes="
 							(max-width: 640px) 320px,
 							(max-width: 768px) 480px,
 							480px"
-							src="../static/img/offer/regular/individual_and_group/front/480_group_0.jpg"
+							src="imgs/offer/regular/individual_and_group/front/480_group_0.jpg"
 							loading="lazy" />
 						<h3 class="tile__title">Grupowe i Indywidualne</h3>
 						<a
@@ -218,18 +228,18 @@
 						<img
 							class="tile__img"
 							srcset="
-								../static/img/offer/regular/commercial/front/320_commercial_0.jpg 320w,
-								../static/img/offer/regular/commercial/front/480_commercial_0.jpg 480w
+								imgs/offer/regular/commercial/front/320_commercial_0.jpg 320w,
+								imgs/offer/regular/commercial/front/480_commercial_0.jpg 480w
 							"
 							sizes="
 								(max-width: 640px) 320px,
 								(max-width: 768px) 480px,
 								480px"
 							loading="lazy"
-							src="../static/img/offer/regular/comercial/front/480_commercial_1.jpg" />
+							src="imgs/offer/regular/comercial/front/480_commercial_1.jpg" />
 						<h3 class="tile__title">Joga dla firm</h3>
 						<a
-							href="mailto:yoganka.gdansk@gmail.com"
+							href="mailto:kontakt@yoganka.pl"
 							class="tile__btn tile__btn--bussiness-mail"
 							target="_blank"
 							>Poproś o ofertę</a
@@ -256,7 +266,7 @@
 									<p class="certificates__school">House of OM</p>
 									<p class="certificates__duration">200h</p>
 									<p class="certificates__type">
-										<strong>Vinyasa & Hatha</strong>
+										<strong>Vinyasa &amp; Hatha</strong>
 									</p>
 								</div>
 							</li>
@@ -298,7 +308,7 @@
 								<div class="tile certificates__tile">
 									<h3>
 										<strong class="certificates__name"
-											>Mobility & Flexibility</strong
+											>Mobility &amp; Flexibility</strong
 										>
 									</h3>
 									<p class="certificates__school">Bartosz Kuc</p>
@@ -379,7 +389,7 @@
 							target="_blank"
 							class="partners__link">
 							<img
-								src="../static/img/partners/partners_logo_yoga_flow.png"
+								src="imgs/partners/partners_logo_yoga_flow.png"
 								loading="lazy"
 								alt="Yoga Flow Logo"
 								class="partners__image" />
@@ -390,7 +400,7 @@
 							target="_blank"
 							class="partners__link">
 							<img
-								src="../static/img/partners/partners_logo_klekotki_spa.png"
+								src="imgs/partners/partners_logo_klekotki_spa.png"
 								loading="lazy"
 								alt="Klekotki SPA Logo"
 								class="partners__image" />
@@ -401,7 +411,7 @@
 							target="_blank"
 							class="partners__link">
 							<img
-								src="../static/img/partners/partners_logo_aioli.png"
+								src="imgs/partners/partners_logo_aioli.png"
 								loading="lazy"
 								alt="Aioli Logo"
 								class="partners__image" />
@@ -412,7 +422,7 @@
 							target="_blank"
 							class="partners__link">
 							<img
-								src="../static/img/partners/partners_logo_tomy_gdansk.png"
+								src="imgs/partners/partners_logo_tomy_gdansk.png"
 								loading="lazy"
 								alt="To My Kawiarnia Gdańsk Logo"
 								class="partners__image" />
@@ -423,7 +433,7 @@
 							target="_blank"
 							class="partners__link">
 							<img
-								src="../static/img/partners/partners_logo_yacht.png"
+								src="imgs/partners/partners_logo_yacht.png"
 								loading="lazy"
 								alt="Yacht Club Logo"
 								class="partners__image" />
@@ -434,7 +444,7 @@
 							target="_blank"
 							class="partners__link">
 							<img
-								src="../static/img/partners/partners_logo_natu_handmade.png"
+								src="imgs/partners/partners_logo_natu_handmade.png"
 								loading="lazy"
 								alt="Natu Handmade Logo"
 								class="partners__image" />
@@ -445,7 +455,7 @@
 							target="_blank"
 							class="partners__link">
 							<img
-								src="../static/img/partners/partners_logo_yoga_aliance.png"
+								src="imgs/partners/partners_logo_yoga_aliance.png"
 								loading="lazy"
 								alt="Yoga Alliance Logo"
 								class="partners__image" />
@@ -456,7 +466,7 @@
 							target="_blank"
 							class="partners__link">
 							<img
-								src="../static/img/partners/partners_logo_mis_yoga.png"
+								src="imgs/partners/partners_logo_mis_yoga.png"
 								loading="lazy"
 								alt="Mis Yoga Logo"
 								class="partners__image" />
@@ -468,7 +478,7 @@
 							target="_blank"
 							class="partners__link">
 							<img
-								src="../static/img/partners/partners_logo_yoga_flow.png"
+								src="imgs/partners/partners_logo_yoga_flow.png"
 								loading="lazy"
 								alt="Yoga Flow Logo"
 								class="partners__image" />
@@ -479,7 +489,7 @@
 							target="_blank"
 							class="partners__link">
 							<img
-								src="../static/img/partners/partners_logo_klekotki_spa.png"
+								src="imgs/partners/partners_logo_klekotki_spa.png"
 								loading="lazy"
 								alt="Klekotki SPA Logo"
 								class="partners__image" />
@@ -490,7 +500,7 @@
 							target="_blank"
 							class="partners__link">
 							<img
-								src="../static/img/partners/partners_logo_aioli.png"
+								src="imgs/partners/partners_logo_aioli.png"
 								loading="lazy"
 								alt="Aioli Logo"
 								class="partners__image" />
@@ -501,7 +511,7 @@
 							target="_blank"
 							class="partners__link">
 							<img
-								src="../static/img/partners/partners_logo_tomy_gdansk.png"
+								src="imgs/partners/partners_logo_tomy_gdansk.png"
 								loading="lazy"
 								alt="To My Kawiarnia Gdańsk Logo"
 								class="partners__image" />
@@ -512,7 +522,7 @@
 							target="_blank"
 							class="partners__link">
 							<img
-								src="../static/img/partners/partners_logo_yacht.png"
+								src="imgs/partners/partners_logo_yacht.png"
 								loading="lazy"
 								alt="Yacht Club Logo"
 								class="partners__image" />
@@ -523,7 +533,7 @@
 							target="_blank"
 							class="partners__link">
 							<img
-								src="../static/img/partners/partners_logo_natu_handmade.png"
+								src="imgs/partners/partners_logo_natu_handmade.png"
 								loading="lazy"
 								alt="Natu Handmade Logo"
 								class="partners__image" />
@@ -534,7 +544,7 @@
 							target="_blank"
 							class="partners__link">
 							<img
-								src="../static/img/partners/partners_logo_yoga_aliance.png"
+								src="imgs/partners/partners_logo_yoga_aliance.png"
 								loading="lazy"
 								alt="Yoga Alliance Logo"
 								class="partners__image" />
@@ -545,7 +555,7 @@
 							target="_blank"
 							class="partners__link">
 							<img
-								src="../static/img/partners/partners_logo_mis_yoga.png"
+								src="imgs/partners/partners_logo_mis_yoga.png"
 								loading="lazy"
 								alt="Mis Yoga Logo"
 								class="partners__image" />
@@ -557,6 +567,7 @@
 				<!-- <div class="footer__logo">Logo</div> -->
 
 				<div class="footer__company-details">
+					<p class="footer__company-location">BodyHealing Anna Madejsza</p>
 					<p class="footer__company-location">Gdańsk, Polska</p>
 					<a
 						class="footer__company-phone"
@@ -566,11 +577,11 @@
 					>
 					<a
 						class="footer__company-email"
-						href="mailto:aniamadejsza@gmail.com"
+						href="mailto:kontakt@yoganka.pl"
 						title="Wyślij maila"
-						>yoganka.gdansk@gmail.com</a
+						>kontakt@yoganka.pl</a
 					>
-					<p class="footer__company-nip">NIP 777777777777</p>
+					<p class="footer__company-nip">NIP 9532546276</p>
 				</div>
 
 				<div
@@ -586,7 +597,7 @@
 							<div class="footer__qr">
 								<img
 									class="footer__qr-image"
-									src="../static/qrinsta.png"
+									src="imgs/qrs/qrinsta.png"
 									alt="Instagram QR Code" />
 							</div>
 						</div>
@@ -602,7 +613,7 @@
 							<div class="footer__qr">
 								<img
 									class="footer__qr-image"
-									src="../static/qrfb.png"
+									src="imgs/qrs/qrfb.png"
 									alt="Facebook QR Code" />
 							</div>
 						</div>
@@ -619,14 +630,14 @@
 							<div class="footer__qr">
 								<img
 									class="footer__qr-image"
-									src="../static/qrphone.png"
+									src="imgs/qrs/qrphone.png"
 									alt="Phone QR Code" />
 							</div>
 						</div>
 					</a>
 					<a
 						class="footer__social-link footer__social-link--mail"
-						href="mailto:yoganka.gdansk@gmail.com?&body=Hej! Piszę do Ciebie z yoganka.pl"
+						href="mailto:kontakt@yoganka.pl?&body=Hej! Piszę do Ciebie z yoganka.pl"
 						id="mail-contact"
 						target="_blank"
 						title="Wyślij maila">
@@ -635,7 +646,7 @@
 							<div class="footer__qr">
 								<img
 									class="footer__qr-image"
-									src="../static/qrmail.png"
+									src="imgs/qrs/qrmail.png"
 									alt="Mail QR Code" />
 							</div>
 						</div>
@@ -651,7 +662,7 @@
 							<div class="footer__qr">
 								<img
 									class="footer__qr-image"
-									src="../static/qrwa.png"
+									src="imgs/qrs/qrwa.png"
 									alt="WhatsApp QR Code" />
 							</div>
 						</div>
@@ -666,11 +677,13 @@
 						href="https://bit.ly/MaciejMadejszaProjects"
 						target="_blank"
 						title="Developer's Contact">
-						<div class="footer__credits">&copy 2024 Maciej Madejsza</div>
+						<div class="footer__credits">&copy;&nbsp;2024&nbsp;Maciej&nbsp;Madejsza</div>
 					</a>
 				</div>
 
-				<div class="footer__pop-ups">
+				<div
+					class="footer__pop-ups"
+					tabindex="0">
 					<a
 						class="footer__pop-up-btn footer__pop-up-btn--gift ml-onclick-form"
 						href="javascript:void(0)"
@@ -719,10 +732,10 @@
 				);
 				ml('account', '1112086');
 			</script>
-			<script src="../services/glide/dist/glide.min.js"></script>
+			<script src="../src/services/glide/dist/glide.min.js"></script>
 			<script
-				type="application/javascript"
-				src="../services/app.js"></script>
+				type="module"
+				src="/src/index.js"></script>
 		</div>
 	</body>
 </html>

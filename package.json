@@ -1,11 +1,10 @@
 {
   "name": "yoganka.pl",
   "version": "1.0.0",
-  "description": "Youga instructor-school website created based on SE and SAD uni projects",
+  "description": "Yoga instructor-school website created based on SE and SAD uni projects",
   "main": "index.js",
   "scripts": {
     "start": "node index.mjs",
-    "dev": "nodemon -e pug,js,mjs,css --exec node index.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
