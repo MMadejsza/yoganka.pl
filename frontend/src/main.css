@@ -208,7 +208,7 @@ i.nav__icon {
 	grid-area: header;
 	height: 100svh;
 	text-transform: uppercase;
-	background-image: url(../public/imgs/header/480_header_portrait.jpg);
+	background-image: url(/imgs/header/480_header_portrait.jpg);
 	background-attachment: fixed;
 	background-repeat: no-repeat;
 	background-size: cover;
@@ -1004,7 +1004,7 @@ div.hidden {
 		font-size: 12px;
 	}
 	.top-image-header {
-		background-image: url(../public/imgs/header/768_header_portrait.jpg);
+		background-image: url(/imgs/header/768_header_portrait.jpg);
 	}
 	.top-image-header__title-bar {
 		font-size: 2.3rem;
@@ -1141,7 +1141,7 @@ div.hidden {
 		color: var(--accentBackground);
 	}
 	.top-image-header {
-		background-image: url(../public/imgs/header/1024_header_portrait.jpg);
+		background-image: url(/imgs/header/1024_header_portrait.jpg);
 	}
 	.top-image-header__title-bar {
 		height: 11rem;
@@ -1537,7 +1537,7 @@ div.hidden {
 	}
 	.about__img {
 		order: 2;
-		background: url('../public/imgs/about/600_about_profile.jpg');
+		background: url('/imgs/about/600_about_profile.jpg');
 		width: 35%;
 		height: 70%;
 		background-repeat: no-repeat;
