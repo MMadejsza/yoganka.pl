@@ -4,6 +4,7 @@ node_modules/
 # Ignore Vite build directory
 dist/
 www/
+www-before_bundler_(old)/
 
 # Logs and error reports
 npm-debug.log*
