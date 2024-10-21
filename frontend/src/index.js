@@ -1,3 +1,5 @@
+import Glide from '@glidejs/glide';
+
 const htmlToImgsPath = '/imgs'
 // Created camps so far
 const kaszubyCamp = {

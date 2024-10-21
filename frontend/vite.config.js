@@ -23,4 +23,7 @@ export default defineConfig({
 			'@': '/src', // alias @ for routes staring from 'src'
 		},
 	},
+	optimizeDeps: {
+		include: ['glide'], // add glide to bundling
+	  },
 });
