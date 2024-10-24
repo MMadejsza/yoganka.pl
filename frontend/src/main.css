@@ -107,9 +107,6 @@ footer {
 }
 /*! COMMON BLOCKS END*/
 /*! NAV */
-.nav__logo {
-	margin-top: -3rem;
-}
 .burger {
 	top: 2rem;
 	right: 2rem;
@@ -169,6 +166,9 @@ footer {
 	flex-direction: column;
 	align-items: center;
 }
+.nav__logo {
+	margin-top: -3rem;
+}
 .nav__list {
 	display: flex;
 	flex-direction: column;
@@ -218,8 +218,8 @@ i.nav__icon {
 	grid-template-areas:
 		'. . . . .'
 		'title title title title title'
-		'. . . logo logo'
-		'. . . logo logo'
+		'. . logo logo logo'
+		'. . logo logo logo'
 		'. . . . .'
 		'. . . . .'
 		'. . . . .'
@@ -235,6 +235,7 @@ i.nav__icon {
 }
 .top-image-header__logo {
 	grid-area: logo;
+	place-self: center;
 	transform: translateY(-50%);
 
 	width: 40vw;
@@ -243,7 +244,6 @@ i.nav__icon {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 2rem;
 	font-weight: 600;
-	/* border: 1px solid black; */
 }
 .top-image-header__title-bar {
 	margin: 0 auto;
