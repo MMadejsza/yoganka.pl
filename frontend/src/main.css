@@ -111,7 +111,7 @@ footer {
 /*! COMMON BLOCKS END*/
 /*! NAV */
 .nav__logo {
-	display: none;
+	margin-top: -3rem;
 }
 .burger {
 	top: 2rem;
@@ -171,7 +171,6 @@ footer {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	gap: 2rem;
 }
 .nav__list {
 	display: flex;
@@ -1432,10 +1431,8 @@ div.hidden {
 	.burger {
 		display: none;
 	}
-	.nav__logo {
-		display: block;
-		width: 20vw;
-		max-height: 3rem;
+	.nav__logo-container {
+		display: none;
 	}
 	.nav {
 		grid-area: nav;
