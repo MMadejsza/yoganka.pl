@@ -216,10 +216,10 @@ i.nav__icon {
 	grid-template-columns: repeat(5, minmax(auto, 1fr));
 	grid-template-rows: 6rem repeat(8, 1fr) 8rem;
 	grid-template-areas:
-		'logo logo logo . .'
+		'. . . . .'
 		'title title title title title'
-		'. . . . .'
-		'. . . . .'
+		'. . . logo logo'
+		'. . . logo logo'
 		'. . . . .'
 		'. . . . .'
 		'. . . . .'
@@ -235,7 +235,7 @@ i.nav__icon {
 }
 .top-image-header__logo {
 	grid-area: logo;
-	place-self: center;
+	transform: translateY(-50%);
 
 	width: 40vw;
 	height: 10vw;
@@ -243,7 +243,7 @@ i.nav__icon {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 2rem;
 	font-weight: 600;
-	border: 1px solid black;
+	/* border: 1px solid black; */
 }
 .top-image-header__title-bar {
 	margin: 0 auto;
@@ -731,7 +731,7 @@ i.modal-checklist__icon {
 .footer {
 	grid-area: footer;
 	/* min-height: 300px; */
-	padding: 1rem 1rem 2rem;
+	padding: 0rem 1rem 2rem 1rem;
 	background-color: rgba(var(--navForRGBA), 0.85);
 	font-size: 1.7rem;
 	color: var(--tileTextMuted);
@@ -745,13 +745,16 @@ i.modal-checklist__icon {
 	align-items: center;
 	gap: 1rem;
 }
+.footer__logo {
+	max-width: 45vw;
+	margin-bottom: -3rem;
+}
 footer a {
 	height: auto;
 	font-size: 1.5rem;
 	text-decoration: underline;
 }
 .footer__company-details {
-	margin-top: 1.5rem;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-evenly;
