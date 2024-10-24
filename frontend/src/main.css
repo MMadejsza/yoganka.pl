@@ -1041,12 +1041,6 @@ div.hidden {
 	.burger.active .burger__bar--bottom {
 		transform: translateY(calc(-36px / 2)) rotate(-45deg);
 	}
-	.nav__logo {
-		max-width: 310px;
-	}
-	/* .top-image-header {
-		background-position-y: 30%;
-	} */
 	.about__certificates {
 		min-width: 65%;
 	}
