@@ -1312,11 +1312,16 @@ div.hidden {
 	.footer {
 		flex-flow: row wrap;
 		align-content: space-evenly;
+		justify-content: center;
 		row-gap: 2rem;
 	}
 	.footer__logo {
-		flex-basis: 100%;
+		max-width: 35vw;
+		margin-bottom: 0;
 	}
+	/* .footer__company-details {
+		width: 50%;
+	} */
 	.footer__company-details a:hover {
 		font-size: 2.2rem;
 		text-shadow: var(--activeTextIconsShadow);
@@ -1586,23 +1591,28 @@ div.hidden {
 	}
 	.footer {
 		font-size: 1.9rem;
-		display: grid;
+		/* display: grid;
 		grid-template-columns: repeat(7, minmax(100px, 1fr));
 		grid-template-areas:
-			'socials socials socials socials details details details '
-			'socials socials socials socials details details details '
-			'socials socials socials socials details details details '
-			'socials socials socials socials details details details '
+			'socials socials socials logo logo details details '
+			'socials socials socials logo logo details details '
+			'socials socials socials logo logo details details '
+			'socials socials socials logo logo details details '
 			'. . . credit . . . ';
-		place-items: center;
-		gap: 2rem 1rem;
+		place-items: center; */
+		display: flex;
+		justify-content: space-evenly;
+		align-items: center;
+		row-gap: 1rem;
 	}
-	.footer__logo {
+	.footer__logo-container {
+		width: 215px;
 		grid-area: logo;
-		width: 100%;
-		max-height: 100%;
+		display: grid;
+		place-items: center;
 	}
 	.footer__company-details {
+		width: 215px;
 		grid-area: details;
 	}
 	.footer__company-details a {
@@ -1614,6 +1624,8 @@ div.hidden {
 		grid-area: legal;
 	}
 	.footer__socials {
+		width: 215px;
+		order: -1;
 		grid-area: socials;
 		text-shadow: none;
 		overflow: visible;
