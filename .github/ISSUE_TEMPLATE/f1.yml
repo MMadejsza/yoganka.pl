@@ -1,28 +1,33 @@
 name: Task / Bussiness Requirement Form
 description: Feature/Change Proposition template for BodyHealing
-title: "[Bug]: "
+title: ""
 labels: ["yoganka", "Feature"]
-projects: "MMadejsza/projects/7"
+projects: ["MMadejsza/7"]
 assignees:
   - MMadejsza
-body:     
-  - type: input
-    id: contact
-    attributes:
-      label: Contact Details
-      description: How can we get in touch with you if we need more info?
-      placeholder: ex. email@example.com
-    validations:
-      required: false
+body:
   - type: textarea
-    id: what-happened
+    id: desc
     attributes:
-      label: What happened?
-      description: Also tell us, what did you expect to happen?
-      placeholder: Tell us what you see!
-      value: "A bug happened!"
+      label: 📝 Task Description
+      description: Clearly define what you think about.
+      placeholder: "Here!"
     validations:
       required: true
+  - type: textarea
+    id: expectations
+    attributes:
+      label: 📌 Expectations Bullet Points
+      description: List starting from "-" what it is supposed to be (shortlist).
+      placeholder: "Here!"
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: 📂 Additional Notes
+      description: Add any additional notes, screenshots links, or examples to clarify the task requirements.
+      placeholder: "Here!" 
   - type: dropdown
     id: version
     attributes:
@@ -44,17 +49,3 @@ body:
         - Chrome
         - Safari
         - Microsoft Edge
-  - type: textarea
-    id: logs
-    attributes:
-      label: Relevant log output
-      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
-      render: shell
-  - type: checkboxes
-    id: terms
-    attributes:
-      label: Code of Conduct
-      description: By submitting this issue, you agree to follow our [Code of Conduct](https://example.com). 
-      options:
-        - label: I agree to follow this project's Code of Conduct
-          required: true
