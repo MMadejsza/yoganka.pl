@@ -1,8 +1,5 @@
 ## Bussiness requirements/tasks templates
-### ASAP:
-[ASAP Task](https://github.com/MMadejsza/yoganka.pl/issues/new?template=task_template.yml)
-### Moderate:
-
-### Non-specified in time:
+[Create Task](https://github.com/MMadejsza/yoganka.pl/issues/new?template=task_template.yml)
 
 ## Bugs / Errors:
+[Report Bug](https://github.com/MMadejsza/yoganka.pl/issues/new?template=bug_template.yml)
