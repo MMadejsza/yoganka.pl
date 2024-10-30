@@ -1,8 +1,8 @@
 ---
-name: Task / Requirement
-about: Template for task/requirement issues in the GitHub Project
-title: "[Task] Brief description of the task"
-labels: task, requirement
+name: Bussiness Requirement
+about: Template for BodyHealing
+title: [Brief description of the task]
+labels: yoganka
 assignees: 'MMadejsza'
 ---
 
