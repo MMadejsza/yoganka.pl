@@ -1,4 +1,4 @@
-name: Bug Report
+ame: Bug Report
 description: Bug Report template for BodyHealing
 title: "[Bug]"
 labels: ["yoganka", "bug"]
@@ -36,10 +36,7 @@ body:
         - Safari
         - Firefox
         - Microsoft Edge
-      default: 0
-      validations:
-        required: true
-        
+      default: 0  
   - type: textarea
     id: notes
     attributes:
