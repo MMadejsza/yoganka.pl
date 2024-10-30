@@ -28,9 +28,9 @@ body:
       description: Any other notes or context that may help.
       placeholder: "Optional additional notes."
       value: |
-        - [ ] Labeled?
-        - [ ] Prioritized and scaled in projects?
-        - [ ] Milestone?
-        - [ ] Files provided?
+        - Labeled?
+        - Prioritized and scaled in projects?
+        - Milestone?
+        - Files provided?
 
       
