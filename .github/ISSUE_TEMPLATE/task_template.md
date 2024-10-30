@@ -3,10 +3,11 @@ name: Bussiness Requirement
 about: Template for BodyHealing
 labels: yoganka
 priority: B0
-project: 'Yoganka.pl_Workflow'
+project: '7'
 assignees: 'MMadejsza'
 ---
 - Above "preview" tab shows how your message will look like. [Delete]
+- yo can write in polish
 - Content to edit ONLY in square brackets [change] - "preview will help to understand, if something wrong - click previous link again
 - first use is always ackward
 
