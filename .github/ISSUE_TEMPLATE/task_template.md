@@ -1,30 +1,31 @@
 ---
 name: Bussiness Requirement
 about: Template for BodyHealing
-title: [Brief description of the task]
 labels: yoganka
+priority: B0
 assignees: 'MMadejsza'
 ---
 
+### 📆 Timeline / Due Date
+- **Estimated Start Date**: `yyyy-mm-dd` [Maciej's section - leave it blank]
+- **Due Date**: `yyyy-mm-dd`
+  
 ### 📝 Task Summary
-- **Objective**: Clearly define what needs to be achieved.
+- [Clearly define what needs to be achieved]
+- Above "preview" tab shows how your message will look like.
 
-### 📌 Requirements & Acceptance Criteria
-- [ ] List specific requirements or acceptance criteria
-- [ ] Detail what conditions must be met for the task to be considered complete
-- [ ] Include any relevant metrics or measurable outcomes
+### 📌 Expectations Bullet Points
+- [ ] [List specific requirements or acceptance criteria]
+- [ ] [Detail what conditions must be met for the task to be considered complete]
+- [ ] [Include any relevant metrics or measurable outcomes]
 
 ### 🔗 Related Links / Resources
-- [Project Board](https://github.com/yourusername/yourprojectname/projects) – Link to relevant project board
-- [Reference Documentation](https://example.com) – Documentation or other resources
-
-### 📋 Steps / Tasks
-1. Step-by-step list of subtasks or steps to complete the requirement.
-2. Each step should be clear and concise.
-
-### 📆 Timeline / Due Date
-- **Estimated Start Date**: `yyyy-mm-dd`
-- **Due Date**: `yyyy-mm-dd`
+- [miro] (link) - short message?
+- [label](link-content) – Documentation or other resources
 
 ### 📂 Additional Notes
 - Add any additional notes, screenshots, or examples to clarify the task requirements.
+- 
+### 📋 Steps / Tasks
+[Maciej's section - leave it blank]
+
