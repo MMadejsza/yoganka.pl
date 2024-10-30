@@ -31,12 +31,12 @@ body:
   - type: dropdown
     id: priority
     attributes:
-      label: How urgent it is?
+      label: 📆 How urgent it is?
       description: For example, it's important strategically like for upcoming events or it's just "Would be nice to have"?
       options:
-        - ASAP
-        - 1-2 weeks
-        - Non-specified in time
+        - 💥 ASAP
+        - ☝️ 1-2 weeks
+        - 🕐 Non-specified in time
       default: 2
     validations:
       required: true
