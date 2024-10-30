@@ -1,6 +1,6 @@
 name: Task / Bussiness Requirement Form
 description: Feature/Change Proposition template for BodyHealing
-title: '[Task]'
+title: 
 labels: ["yoganka", "Feature"]
 projects: ["MMadejsza/7"]
 assignees:
@@ -29,23 +29,14 @@ body:
       description: Add any additional notes, screenshots links, or examples to clarify the task requirements.
       placeholder: "Here!" 
   - type: dropdown
-    id: version
+    id: priority
     attributes:
-      label: Version
-      description: What version of our software are you running?
+      label: How urgent it is?
+      description: Fo example is it important strategically like for upcoming events or Is it "Would be nice to have"?
       options:
-        - 1.0.2 (Default)
-        - 1.0.3 (Edge)
-      default: 0
+        - ASAP
+        - 1-2 weeks
+        - Non-specified in time
+      default: 2
     validations:
       required: true
-  - type: dropdown
-    id: browsers
-    attributes:
-      label: What browsers are you seeing the problem on?
-      multiple: true
-      options:
-        - Firefox
-        - Chrome
-        - Safari
-        - Microsoft Edge
