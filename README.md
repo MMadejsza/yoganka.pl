@@ -1,4 +1,4 @@
-## Bussiness requirements/tasks templates
+## Bussiness requirements/tasks
 [Create Task](https://github.com/MMadejsza/yoganka.pl/issues/new?template=task_template.yml&labels=yoganka,Feature)
 
 ## Bugs / Errors:
