@@ -1,10 +1,9 @@
 name: Bug Report
 description: Bug Report template for BodyHealing
-title: "[Bug]"
+title: "[Bug - short name]"
 labels: [yoganka, bug]
 projects: ["MMadejsza/Yoganka.pl_Workflow"]
-assignees:
-  - MMadejsza
+assignees: MMadejsza
 body:
   - type: textarea
     id: desc
@@ -29,7 +28,7 @@ body:
   - type: dropdown
     id: browsers
     attributes:
-      label: What browsers are you seeing the problem on?
+      label: 🎯 What browsers are you seeing the problem on?
       multiple: true
       options:
         - Chrome
