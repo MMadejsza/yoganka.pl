@@ -1,7 +1,7 @@
 name: Bug Report
 description: Bug Report template for BodyHealing
 title: "[Bug]"
-labels: ["yoganka", "bug"]
+labels: [yoganka, bug]
 projects: ["MMadejsza/Yoganka.pl_Workflow"]
 assignees:
   - MMadejsza
