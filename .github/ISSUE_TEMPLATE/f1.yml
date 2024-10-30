@@ -5,11 +5,7 @@ labels: "yoganka, Feature"
 projects: "MMadejsza/projects/7"
 assignees:
   - MMadejsza
-body:
-  - type: markdown
-    attributes:
-      value: |
-     
+body:     
   - type: input
     id: contact
     attributes:
