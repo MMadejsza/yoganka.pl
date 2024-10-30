@@ -33,6 +33,15 @@ body:
         - 🕐 Non-specified in time
     validations:
       required: true
+  - type: checkboxes
+    attributes:
+      label: Have you uploaded all necessary media/files to Google Disk?
+      description: Upload all needed for the task files. To PROPERLY named directory in Google Disk (nothing new to our previous workflow). For example event photos, proper partner's logo files, named-with-date template to update content etc.
+      options:
+        - label: 'Yes'
+        - label: 'No'
+        - label: 'Partially - not organised'
+          required: true
   - type: textarea
     id: notes
     attributes:
