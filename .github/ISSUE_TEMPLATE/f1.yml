@@ -18,7 +18,7 @@ body:
     id: expectations
     attributes:
       label: 📌 Expectations Bullet Points
-      description: List starting from "-" what it is supposed to be (shortlist).
+      description: List starting from "-" what it is supposed to be (shortlist). At longer tasks, That's the place I'll be coming back to and only looking at.
       placeholder: "Here!"
     validations:
       required: true
