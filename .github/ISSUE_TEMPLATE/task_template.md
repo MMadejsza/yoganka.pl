@@ -1,5 +1,5 @@
 ---
-name: Bussiness Requirement
+name: Task / Bussiness Requirement
 about: Template for BodyHealing
 labels: yoganka
 priority: B0
