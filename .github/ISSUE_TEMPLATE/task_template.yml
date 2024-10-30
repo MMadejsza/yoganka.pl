@@ -34,7 +34,7 @@ body:
       default: 2
     validations:
       required: true
-   - type: textarea
+  - type: textarea
     id: notes
     attributes:
       label: 📂 Additional Notes
