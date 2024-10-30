@@ -31,7 +31,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        - [] Labeled?
-        - [] Prioritized and scaled in projects?
-        - [] Milestone?
-        - [] Files provided?
+        - [ ] Labeled?
+        - [ ] Prioritized and scaled in projects?
+        - [ ] Milestone?
+        - [ ] Files provided?
