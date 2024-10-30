@@ -1,7 +1,7 @@
 ---
 name: 'Error / Bug'
 about: 'Bug Template for BodyHealing'
-labels: yoganka
+labels: yoganka, bug
 priority: B0
 project: '7'
 assignees: 'MMadejsza'
