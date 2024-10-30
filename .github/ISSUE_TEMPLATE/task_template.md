@@ -3,6 +3,7 @@ name: Bussiness Requirement
 about: Template for BodyHealing
 labels: yoganka
 priority: B0
+project: 'Yoganka.pl_Workflow'
 assignees: 'MMadejsza'
 ---
 - Above "preview" tab shows how your message will look like. [Delete]
