@@ -1,7 +1,7 @@
 ---
 name: Task / Bussiness Requirement
-about: Template for BodyHealing
-labels: yoganka
+about: Feature/Change Proposition template for BodyHealing
+labels: yoganka, Feature
 priority: B0
 project: '7'
 assignees: 'MMadejsza'
