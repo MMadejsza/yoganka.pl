@@ -4,6 +4,14 @@ title: "-"
 projects: ["MMadejsza/Yoganka.pl_Workflow"]
 assignees: MMadejsza
 body:
+   - type: textarea
+    id: date
+    attributes:
+      label: 📅 Deadline
+      placeholder: "DD-MM-YYYY"
+    validations:
+      required: true
+      
   - type: textarea
     id: task_summary
     attributes:
@@ -11,15 +19,7 @@ body:
       description: Brief Summary.
       placeholder: "A short description of the task/issue."
     validations:
-      required: true
-
-  - type: textarea
-    id: date
-    attributes:
-      label: 📋 Deadline
-      placeholder: "DD-MM-YYYY"
-    validations:
-      required: true
+      required: true 
       
   - type: textarea
     id: notes
@@ -28,7 +28,7 @@ body:
       description: Any other notes or context that may help.
       placeholder: "Optional additional notes."
       value: |        
-        - [] Labeled?
-        - [] Prioritized and scaled in projects?
-        - [] Milestone?
-        - [] Files provided?
+        -[] Labeled?
+        -[] Prioritized and scaled in projects?
+        -[] Milestone?
+        -[] Files provided?
