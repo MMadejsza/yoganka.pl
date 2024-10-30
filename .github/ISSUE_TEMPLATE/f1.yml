@@ -1,15 +1,15 @@
 name: Task / Bussiness Requirement Form
 description: Feature/Change Proposition template for BodyHealing
 title: "[Bug]: "
-labels: "yoganka,Feature"
-projects: "https://github.com/users/MMadejsza/projects/7"
+labels: "yoganka, Feature"
+projects: "MMadejsza/projects/7"
 assignees:
   - MMadejsza
 body:
   - type: markdown
     attributes:
       value: |
-        ""
+     
   - type: input
     id: contact
     attributes:
