@@ -5,14 +5,13 @@ labels: yoganka
 priority: B0
 assignees: 'MMadejsza'
 ---
-
+- Above "preview" tab shows how your message will look like.
 ### 📆 Timeline / Due Date
 - **Estimated Start Date**: `yyyy-mm-dd` [Maciej's section - leave it blank]
 - **Due Date**: `yyyy-mm-dd`
   
 ### 📝 Task Summary
 - [Clearly define what needs to be achieved]
-- Above "preview" tab shows how your message will look like.
 
 ### 📌 Expectations Bullet Points
 - [ ] [List specific requirements or acceptance criteria]
