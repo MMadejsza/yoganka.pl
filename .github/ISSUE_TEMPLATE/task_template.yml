@@ -22,12 +22,6 @@ body:
       placeholder: "Here!"
     validations:
       required: true
-  - type: textarea
-    id: notes
-    attributes:
-      label: 📂 Additional Notes
-      description: Add any additional notes, screenshots links, or examples to clarify the task requirements.
-      placeholder: "Here!" 
   - type: dropdown
     id: priority
     attributes:
@@ -40,3 +34,9 @@ body:
       default: 2
     validations:
       required: true
+   - type: textarea
+    id: notes
+    attributes:
+      label: 📂 Additional Notes
+      description: Add any additional notes, screenshots links, or examples to clarify the task requirements.
+      placeholder: "Optional" 
