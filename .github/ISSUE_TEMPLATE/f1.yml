@@ -1,8 +1,8 @@
 name: Task / Bussiness Requirement Form
 description: Feature/Change Proposition template for BodyHealing
 title: "[Bug]: "
-labels: ["yoganka", "Feature"]
-projects: ["Yoganka.pl_Workflow"]
+labels: "yoganka,Feature"
+projects: "https://github.com/users/MMadejsza/projects/7"
 assignees:
   - MMadejsza
 body:
