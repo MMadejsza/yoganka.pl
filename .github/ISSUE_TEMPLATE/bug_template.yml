@@ -47,6 +47,18 @@ body:
         - 🕐 Non-specified in time
     validations:
       required: true
+  - type: dropdown
+    id: files
+    attributes:
+      label: 📷 Have you uploaded all necessary media/files to Google Disk?
+      description: Upload all needed to repair the bug, files. To PROPERLY named directory in Google Disk (nothing new to our previous workflow). For example event photos, proper partner's logo files, named-with-date template to update content etc.
+      options:
+        - 💪 Yes
+        - 👎 No
+        - ❔ Not needed/Idk if needed
+        - ☝️ Partially - not organized
+    validations:
+      required: true
   - type: textarea
     id: notes
     attributes:
