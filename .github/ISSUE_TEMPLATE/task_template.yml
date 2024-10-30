@@ -39,9 +39,9 @@ body:
       label: 📷 Have you uploaded all necessary media/files to Google Disk?
       description: Upload all needed for the task files. To PROPERLY named directory in Google Disk (nothing new to our previous workflow). For example event photos, proper partner's logo files, named-with-date template to update content etc.
       options:
-        -  💪 Yes
-        -  👎 No
-        -  ❔ Partially - not organised
+        - 💪 Yes
+        - 👎 No
+        - ❔ Partially - not organised
           required: true
   - type: textarea
     id: notes
