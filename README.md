@@ -1,8 +1,8 @@
 ## Dev Tasks Shortcuts
-[feature](https://github.com/MMadejsza/yoganka.pl/issues/new?template=task_template.yml&labels=feature&assignees=MMadejsza)
-[enhancement](https://github.com/MMadejsza/yoganka.pl/issues/new?template=task_template.yml&labels=enhancement&assignees=MMadejsza)
-[bug](https://github.com/MMadejsza/yoganka.pl/issues/new?template=task_template.yml&labels=bug&assignees=MMadejsza)
-[documentation](https://github.com/MMadejsza/yoganka.pl/issues/new?template=task_template.yml&labels=documentation&assignees=MMadejsza)
+- [feature](https://github.com/MMadejsza/yoganka.pl/issues/new?template=task_template.yml&labels=feature&assignees=MMadejsza)
+- [enhancement](https://github.com/MMadejsza/yoganka.pl/issues/new?template=task_template.yml&labels=enhancement&assignees=MMadejsza)
+- [bug](https://github.com/MMadejsza/yoganka.pl/issues/new?template=task_template.yml&labels=bug&assignees=MMadejsza)
+- [documentation](https://github.com/MMadejsza/yoganka.pl/issues/new?template=task_template.yml&labels=documentation&assignees=MMadejsza)
 
 ## Given Design for Desktop:
 [Design on Miro](https://miro.com/welcomeonboard/T3ZpUGNpamhxemJJMklKdUt6OHpOeXl1UGc4YUpRaVQ1d0xSeWtnaGU3d0FxVlpEakFvZmNLMTVGVm0zcXVRQnwzNDU4NzY0NTk5MDcxMjMzODE3fDI=?share_link_id=883729976940)
