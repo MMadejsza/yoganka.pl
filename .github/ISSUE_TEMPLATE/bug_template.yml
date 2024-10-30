@@ -37,17 +37,6 @@ body:
         - Firefox
         - Microsoft Edge
       default: 0  
-   - type: dropdown
-    id: priority
-    attributes:
-      label: What browsers are you seeing the problem on?
-      multiple: true
-      options:
-        - Chrome
-        - Safari
-        - Firefox
-        - Microsoft Edge
-      default: 0  
   - type: textarea
     id: notes
     attributes:
