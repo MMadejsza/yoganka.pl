@@ -31,7 +31,6 @@ body:
         - 💥 ASAP
         - ☝️ 1-2 weeks
         - 🕐 Non-specified in time
-      default: 2
     validations:
       required: true
   - type: textarea
