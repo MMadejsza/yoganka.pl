@@ -41,8 +41,9 @@ body:
       options:
         - 💪 Yes
         - 👎 No
-        - ❔ Partially - not organised
-          required: true
+        - ❔ Partially - not organized
+    validations:
+      required: true
   - type: textarea
     id: notes
     attributes:
