@@ -25,6 +25,7 @@ body:
         - 📔 Tablet
         - 📔 Tablet horizontally
         - 💻 Desktop
+      default: 0
   - type: dropdown
     id: browsers
     attributes:
@@ -35,6 +36,10 @@ body:
         - Safari
         - Firefox
         - Microsoft Edge
+      default: 0
+      validations:
+        required: true
+        
   - type: textarea
     id: notes
     attributes:
