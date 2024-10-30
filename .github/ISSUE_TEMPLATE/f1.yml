@@ -32,7 +32,7 @@ body:
     id: priority
     attributes:
       label: How urgent it is?
-      description: Fo example is it important strategically like for upcoming events or Is it "Would be nice to have"?
+      description: For example, it's important strategically like for upcoming events or it's just "Would be nice to have"?
       options:
         - ASAP
         - 1-2 weeks
