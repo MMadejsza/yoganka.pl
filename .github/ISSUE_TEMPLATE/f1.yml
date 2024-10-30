@@ -2,7 +2,7 @@ name: Task / Bussiness Requirement Form
 description: Feature/Change Proposition template for BodyHealing
 title: "[Task]"
 labels: ["yoganka", "Feature"]
-projects: ["MMadejsza/7"]
+projects: ["Yoganka.pl_Workflow"]
 assignees:
   - MMadejsza
 body:
@@ -37,6 +37,6 @@ body:
         - 💥 ASAP
         - ☝️ 1-2 weeks
         - 🕐 Non-specified in time
-      default: 1
+      default: 🕐 Non-specified in time
     validations:
       required: true
