@@ -1,4 +1,4 @@
-// @import './_config.scss';
+@use '_config' as config;
 
 @font-face {
 	font-family: 'yoganka2';
@@ -12,34 +12,6 @@
 	font-family: 'by Yoganka';
 	src: url('/fonts/PrimaSansBT-Roman.otf') format('truetype');
 }
-$icon-position: -3.5rem;
-$border-radius: 25px;
-$section-padding-y: 1rem;
-
-$base: #fff8f4;
-$base-text: #1e1b18;
-$tile: #f5ece5;
-// $tile-title: #4d3410;
-$tile-title: #805346;
-// $tile-title: #825445;
-$tile-text: #1e1b18;
-$tile-text-muted: #4e453b;
-$accent-bcg: #1c7993;
-$accent-text: #ffffff;
-$nav: #f6e0c8;
-
-$transitive-box-shadow: $base 0px 25px 52px 78px;
-$section-shadow: rgba(0, 0, 0, 0.35) 8px 52px -19px inset;
-$active-box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
-$tile-shadow: ($active-box-shadow), rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
-	rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
-$box-shadow: 2px 8px 10px rgba(149, 157, 165, 0.2);
-$active-text-icons-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-$header-img-size: 460px;
-$base-transition: 0.4s ease-in-out;
-$font-body-healing: 'bh';
-// $font-by-yoganka: 'Caveat', cursive;
-$font-by-yoganka: 'by Yoganka', Helvetica;
 
 * {
 	margin: 0;
@@ -54,8 +26,8 @@ html {
 	font-weight: 400;
 	font-size: 8.5px;
 	text-align: center;
-	background-color: $base;
-	color: $base-text;
+	background-color: config.$base;
+	color: config.$base-text;
 }
 body {
 	margin: 0 auto;
@@ -69,7 +41,7 @@ img {
 }
 a {
 	color: inherit;
-	transition: $base-transition;
+	transition: config.$base-transition;
 }
 .section-header {
 	grid: 1 / -1;
@@ -77,7 +49,7 @@ a {
 	padding: 1rem 0.5rem;
 	font-size: 4rem;
 	text-transform: uppercase;
-	color: $tile-title;
+	color: config.$tile-title;
 }
 .wrapper {
 	display: grid;
@@ -97,8 +69,8 @@ a {
 }
 section:not(:first-of-type),
 footer {
-	padding: 0 $section-padding-y 2rem;
-	box-shadow: $section-shadow;
+	padding: 0 config.$section-padding-y 2rem;
+	box-shadow: config.$section-shadow;
 }
 //  section:nth-child(even) {
 // 	background-color: rgba(0, 0, 0, 0.02);
@@ -107,7 +79,7 @@ footer {
 	outline: none;
 	border: none;
 	cursor: auto;
-	background-color: $base;
+	background-color: config.$base;
 }
 //! COMMON BLOCKS END
 //! NAV
@@ -126,8 +98,8 @@ footer {
 .burger__bar {
 	width: 100%;
 	height: 4px;
-	background-color: $accent-bcg;
-	transition: $base-transition;
+	background-color: config.$accent-bcg;
+	transition: config.$base-transition;
 	border-radius: 2px;
 }
 //Initial state
@@ -159,11 +131,11 @@ footer {
 	height: 100%;
 	text-transform: uppercase;
 	letter-spacing: 1px;
-	border-top-left-radius: $border-radius;
-	border-bottom-left-radius: $border-radius;
-	box-shadow: $active-box-shadow, $tile-shadow;
-	background-color: $nav;
-	transition: $base-transition;
+	border-top-left-radius: config.$border-radius;
+	border-bottom-left-radius: config.$border-radius;
+	box-shadow: config.$active-box-shadow, config.$tile-shadow;
+	background-color: config.$nav;
+	transition: config.$base-transition;
 	z-index: 6;
 
 	display: flex;
@@ -190,16 +162,16 @@ footer {
 	line-height: 6rem;
 	font-size: 2.2rem;
 	text-decoration: none;
-	color: $tile-text-muted;
+	color: config.$tile-text-muted;
 }
 i.nav__icon {
 	width: 28.5px;
 	display: inline-block;
 	margin-right: 1.5rem;
-	left: $icon-position;
-	color: $accent-bcg;
+	left: config.$icon-position;
+	color: config.$accent-bcg;
 	font-size: 2.2rem;
-	transition: $base-transition;
+	transition: config.$base-transition;
 }
 .nav__logo-container {
 	position: relative;
@@ -241,7 +213,7 @@ i.nav__icon {
 		'. . . . .'
 		'. . . . .'
 		'motto motto motto motto motto';
-	transition: $base-transition;
+	transition: config.$base-transition;
 }
 .top-image-header__header {
 	position: relative;
@@ -250,30 +222,19 @@ i.nav__icon {
 	text-align: center;
 }
 .top-image-header__logo {
-	// grid-area: title;
 	position: absolute;
 	left: 50%;
 	transform: translateX(-50%);
-	// max-width: 60vw;
-	// place-self: center;
-	// transform: translateY(-50%);
-
-	// width: 40vw;
-	// height: 10vw;
-	// max-height: 75px;
-	// font-family: Arial, Helvetica, sans-serif;
-	// font-size: 2rem;
-	// font-weight: 600;
 }
 .top-image-header__title-bar {
 	margin: 0 auto;
 	width: max-content;
-	font-family: $font-body-healing, serif;
+	font-family: config.$font-body-healing, serif;
 	font-size: 2rem;
 	font-weight: 100;
 	letter-spacing: 2px;
 	text-align: left;
-	color: $tile-title;
+	color: config.$tile-title;
 
 	display: flex;
 	flex-direction: column;
@@ -283,21 +244,21 @@ i.nav__icon {
 	text-transform: none;
 }
 .top-image-header__subtitle {
-	font-family: $font-by-yoganka;
+	font-family: config.$font-by-yoganka;
 	font-weight: lighter;
 	font-size: 2rem;
 	letter-spacing: 3px;
 }
 .top-image-header__motto {
 	grid-area: motto;
-	background-color: $base;
+	background-color: config.$base;
 	font-size: 1.7rem;
 	letter-spacing: 1px;
 	font-weight: 400;
 	line-height: 8rem;
-	color: $tile-title;
+	color: config.$tile-title;
 	overflow: visible;
-	box-shadow: $transitive-box-shadow;
+	box-shadow: config.$transitive-box-shadow;
 }
 //! NAV  END
 //! ABOUT
@@ -323,8 +284,8 @@ i.nav__icon {
 	width: 90%;
 	max-width: 70%;
 	background-color: transparent;
-	border-radius: $border-radius;
-	box-shadow: $box-shadow;
+	border-radius: config.$border-radius;
+	box-shadow: config.$box-shadow;
 	overflow: hidden;
 }
 .about__img--portrait {
@@ -338,9 +299,9 @@ i.nav__icon {
 	min-width: 70%;
 	height: 12%;
 	padding: 0 0.5rem;
-	background-color: $base;
-	border-top-left-radius: $border-radius;
-	border-bottom-right-radius: $border-radius;
+	background-color: config.$base;
+	border-top-left-radius: config.$border-radius;
+	border-bottom-right-radius: config.$border-radius;
 	overflow: hidden;
 
 	display: flex;
@@ -388,11 +349,11 @@ i.nav__icon {
 	gap: 2rem;
 
 	padding: 2.5rem 1rem;
-	background-color: $tile;
-	border-radius: $border-radius;
+	background-color: config.$tile;
+	border-radius: config.$border-radius;
 	overflow: hidden;
-	box-shadow: $box-shadow;
-	transition: $base-transition;
+	box-shadow: config.$box-shadow;
+	transition: config.$base-transition;
 }
 .tile--event {
 	justify-content: inherit;
@@ -402,7 +363,7 @@ i.nav__icon {
 	max-width: 80%;
 	aspect-ratio: 1/1;
 	margin-bottom: 1.5rem;
-	border-radius: $border-radius;
+	border-radius: config.$border-radius;
 }
 .tile__img--event-modal {
 	max-width: 50%;
@@ -412,19 +373,19 @@ i.nav__icon {
 	font-size: 2.2rem;
 	font-weight: 500;
 	letter-spacing: 1px;
-	color: $tile-title;
+	color: config.$tile-title;
 }
 .tile__date {
-	color: $tile-text;
+	color: config.$tile-text;
 }
 .tile__location {
 	font-size: 1.9rem;
 	font-weight: 400;
-	color: $tile-text-muted;
+	color: config.$tile-text-muted;
 }
 .tile__desc {
 	font-size: 1.9rem;
-	color: $tile-text-muted;
+	color: config.$tile-text-muted;
 }
 //! TILE END
 //! OFFER
@@ -452,10 +413,10 @@ i.nav__icon {
 	bottom: -1rem;
 	left: -1rem;
 	border: none;
-	border-radius: $border-radius;
+	border-radius: config.$border-radius;
 	height: 1px;
 	background-color: transparent;
-	box-shadow: $active-box-shadow;
+	box-shadow: config.$active-box-shadow;
 	width: 100%;
 	margin: 20px 0;
 }
@@ -469,7 +430,7 @@ i.nav__icon {
 	font-size: 3rem;
 	line-height: 6rem;
 	text-transform: uppercase;
-	color: $tile-title;
+	color: config.$tile-title;
 }
 #wyjazdy {
 	grid-area: wyjazdy;
@@ -501,12 +462,12 @@ i.nav__icon {
 	min-height: 0px;
 	max-height: 0vh;
 	padding: 1.5rem 1rem;
-	background-color: rgba($tile, 0.95);
-	border-radius: $border-radius;
-	box-shadow: $active-text-icons-shadow;
+	background-color: rgba(config.$tile, 0.95);
+	border-radius: config.$border-radius;
+	box-shadow: config.$active-text-icons-shadow;
 	opacity: 0;
 	z-index: 8;
-	transition: $base-transition;
+	transition: config.$base-transition;
 }
 i.modal__icon {
 	min-width: 3.5rem;
@@ -514,7 +475,7 @@ i.modal__icon {
 	line-height: 3.5rem;
 	margin: 0;
 	text-align: center;
-	color: $accent-bcg;
+	color: config.$accent-bcg;
 }
 .modal__x-btn {
 	position: absolute;
@@ -525,11 +486,11 @@ i.modal__icon {
 }
 .modal__close-btn {
 	font-size: 3rem;
-	text-shadow: $active-text-icons-shadow;
+	text-shadow: config.$active-text-icons-shadow;
 }
 .modal__close-btn:hover {
-	color: $accent-bcg;
-	text-shadow: $active-box-shadow;
+	color: config.$accent-bcg;
+	text-shadow: config.$active-box-shadow;
 }
 .modal__modal-body {
 	display: grid;
@@ -537,7 +498,7 @@ i.modal__icon {
 	grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
 	grid-gap: 2.5rem;
 
-	border-radius: $border-radius;
+	border-radius: config.$border-radius;
 }
 .modal__modal-body--offer {
 	max-height: 89dvh;
@@ -621,12 +582,12 @@ i.modal-checklist__icon {
 	line-height: 2.5rem;
 	font-weight: bold;
 	text-transform: uppercase;
-	color: $accent-text;
-	background-color: $accent-bcg;
-	border-radius: $border-radius;
-	box-shadow: $active-text-icons-shadow;
+	color: config.$accent-text;
+	background-color: config.$accent-bcg;
+	border-radius: config.$border-radius;
+	box-shadow: config.$active-text-icons-shadow;
 	cursor: pointer;
-	transition: $base-transition;
+	transition: config.$base-transition;
 	overflow: hidden;
 }
 .tile__btn {
@@ -643,8 +604,8 @@ i.modal-checklist__icon {
 	max-width: 100%;
 	min-width: 175px;
 	padding: 1.5rem 1rem;
-	background-color: $tile;
-	border-radius: $border-radius;
+	background-color: config.$tile;
+	border-radius: config.$border-radius;
 	overflow: hidden;
 
 	display: flex;
@@ -689,25 +650,25 @@ i.modal-checklist__icon {
 }
 .partners__gallery-slide::before,
 .glide::before {
-	left: calc(-1 * $section-padding-y);
-	background: linear-gradient(to left, rgba(0, 0, 0, 0), $base);
+	left: calc(-1 * config.$section-padding-y);
+	background: linear-gradient(to left, rgba(0, 0, 0, 0), config.$base);
 }
 .modal .glide::before {
-	background: linear-gradient(to left, rgba(0, 0, 0, 0), $tile);
+	background: linear-gradient(to left, rgba(0, 0, 0, 0), config.$tile);
 }
 .partners__gallery-slide::after,
 .glide::after {
-	right: calc(-1 * $section-padding-y);
-	background: linear-gradient(to right, rgba(0, 0, 0, 0), $base);
+	right: calc(-1 * config.$section-padding-y);
+	background: linear-gradient(to right, rgba(0, 0, 0, 0), config.$base);
 }
 .modal .glide::after {
-	background: linear-gradient(to right, rgba(0, 0, 0, 0), $tile);
+	background: linear-gradient(to right, rgba(0, 0, 0, 0), config.$tile);
 }
 .partners__gallery-slide:hover .partners__gallery {
 	animation-play-state: paused;
 }
 .partners__gallery {
-	background-color: $tile;
+	background-color: config.$tile;
 
 	display: flex;
 	justify-content: space-around;
@@ -721,7 +682,7 @@ i.modal-checklist__icon {
 	max-width: 225px;
 	max-height: 225px;
 	padding: 0;
-	border-radius: $border-radius;
+	border-radius: config.$border-radius;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -732,7 +693,7 @@ i.modal-checklist__icon {
 	max-height: 100%;
 	object-fit: contain;
 	filter: grayscale(1);
-	transition: $base-transition;
+	transition: config.$base-transition;
 }
 .partners__link:last-child {
 	margin-right: 2.5rem;
@@ -752,12 +713,12 @@ i.modal-checklist__icon {
 	grid-area: footer;
 	// min-height: 300px;
 	padding: 0rem 1rem 2rem 1rem;
-	background-color: rgba($nav, 0.8);
+	background-color: rgba(config.$nav, 0.8);
 	font-size: 1.7rem;
-	color: $tile-text-muted;
-	box-shadow: $tile-shadow;
-	border-top-left-radius: $border-radius;
-	border-top-right-radius: $border-radius;
+	color: config.$tile-text-muted;
+	box-shadow: config.$tile-shadow;
+	border-top-left-radius: config.$border-radius;
+	border-top-right-radius: config.$border-radius;
 
 	display: flex;
 	flex-direction: column;
@@ -794,7 +755,7 @@ footer a {
 .footer__social-link {
 	position: relative;
 	font-size: 3.5rem;
-	color: $accent-bcg;
+	color: config.$accent-bcg;
 }
 
 .footer__qr {
@@ -803,17 +764,17 @@ footer a {
 	top: 25px;
 	right: 0;
 	opacity: 0;
-	transition: $base-transition;
+	transition: config.$base-transition;
 }
 .footer__qr-image {
-	transition: $base-transition;
-	border-radius: $border-radius;
+	transition: config.$base-transition;
+	border-radius: config.$border-radius;
 }
 .footer__legal {
 	font-size: 1.9rem;
 }
 .footer__credit-link {
-	color: $tile-text-muted;
+	color: config.$tile-text-muted;
 }
 .footer__pop-ups {
 	position: fixed;
@@ -823,7 +784,7 @@ footer a {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	transition: $base-transition;
+	transition: config.$base-transition;
 	gap: 1.5rem;
 	z-index: 10;
 }
@@ -839,16 +800,16 @@ footer a {
 	padding: 0;
 	margin: 0;
 	text-decoration: none;
-	color: $accent-text;
+	color: config.$accent-text;
 	border-radius: 50%;
-	background-color: rgba($accent-bcg, 0.7);
-	box-shadow: $active-text-icons-shadow;
-	transition: $base-transition;
+	background-color: rgba(config.$accent-bcg, 0.7);
+	box-shadow: config.$active-text-icons-shadow;
+	transition: config.$base-transition;
 }
 .footer__pop-up-btn:hover {
 	transform: translateY(-25%) scale(1.15);
 	border: 1px solid #bbb;
-	box-shadow: $active-box-shadow;
+	box-shadow: config.$active-box-shadow;
 }
 .footer__cookie-pop-up {
 	position: absolute;
@@ -858,8 +819,8 @@ footer a {
 	height: 6rem;
 	padding-left: 0.5rem;
 	border-radius: 50px;
-	box-shadow: $active-box-shadow;
-	transition: $base-transition;
+	box-shadow: config.$active-box-shadow;
+	transition: config.$base-transition;
 	opacity: 0;
 	font-size: 1.5rem;
 
@@ -873,18 +834,18 @@ i.footer__cookie-close-icon {
 	font-size: 3rem;
 	line-height: 7rem;
 	margin-right: 2rem;
-	color: $accent-text;
+	color: config.$accent-text;
 }
 .footer__pop-up-btn--cookies:focus .footer__cookie-pop-up {
 	right: 0%;
-	background-color: rgba($accent-bcg, 0.95);
+	background-color: rgba(config.$accent-bcg, 0.95);
 	opacity: 1;
 }
 .footer__pop-up-btn--cookies:focus .fa-cookie-bite {
 	opacity: 0;
 }
 .clickable:not(.footer__pop-ups *) {
-	box-shadow: $tile-shadow;
+	box-shadow: config.$tile-shadow;
 	position: relative;
 }
 .clickable:not(.footer__pop-ups *)::after {
@@ -897,7 +858,7 @@ i.footer__cookie-close-icon {
 	height: 10%;
 	font-size: 1rem;
 	letter-spacing: 1px;
-	color: $tile-text-muted;
+	color: config.$tile-text-muted;
 	background: linear-gradient(to bottom, rgba(0, 0, 0, 0), #c2bebf);
 
 	display: flex;
@@ -931,14 +892,14 @@ div.hidden {
 	min-height: 33vh;
 }
 .glide--comp .glide__track {
-	border-radius: $border-radius;
+	border-radius: config.$border-radius;
 	// border: 1px solid red;
 }
 .glide__track {
 	overflow: visible;
 }
 .certificates .glide__slides {
-	background-color: rgba($nav, 0.55);
+	background-color: rgba(config.$nav, 0.55);
 }
 .glide__slides {
 	height: 100%;
@@ -949,7 +910,7 @@ div.hidden {
 	overflow-x: hidden;
 }
 .glide__slide {
-	border-radius: $border-radius;
+	border-radius: config.$border-radius;
 	// border: 1px solid black;
 	display: flex;
 	justify-content: center;
@@ -967,17 +928,17 @@ div.hidden {
 .glide__bullet {
 	width: 1rem;
 	height: 1rem;
-	background-color: $base;
+	background-color: config.$base;
 }
 .glide__bullet--active {
-	background-color: $accent-bcg;
+	background-color: config.$accent-bcg;
 }
 .glide__arrow {
 	padding: 1rem 1.5rem;
 	transform: translateY(calc(-50% - 3rem / 2));
 	font-size: 3rem;
-	color: $accent-bcg;
-	border-radius: $border-radius;
+	color: config.$accent-bcg;
+	border-radius: config.$border-radius;
 	z-index: 5;
 }
 .glide__arrow--left {
@@ -1139,22 +1100,22 @@ div.hidden {
 	.nav__link:hover {
 		position: relative;
 		z-index: 2;
-		text-shadow: $active-text-icons-shadow;
+		text-shadow: config.$active-text-icons-shadow;
 		// background-color: rgba(0, 0, 0, 0.05);
 
-		color: $accent-bcg;
+		color: config.$accent-bcg;
 	}
 	.nav__item {
-		transition: $base-transition;
+		transition: config.$base-transition;
 	}
 	.nav__item:hover {
 		transform: scale(1.05) translateY(0.5rem);
-		border-bottom-left-radius: $border-radius;
-		border-bottom-right-radius: $border-radius;
+		border-bottom-left-radius: config.$border-radius;
+		border-bottom-right-radius: config.$border-radius;
 	}
 	.nav__link:hover,
 	.nav__link:hover i.nav__icon {
-		color: $accent-bcg;
+		color: config.$accent-bcg;
 	}
 	.top-image-header {
 		background-image: url(/imgs/header/1024_header_portrait.jpg);
@@ -1175,7 +1136,7 @@ div.hidden {
 	}
 	.tile.clickable:hover {
 		cursor: pointer;
-		box-shadow: $tile-shadow;
+		box-shadow: config.$tile-shadow;
 		transform: translateY(-5%) scale(1.05);
 	}
 	.about__heading {
@@ -1213,7 +1174,7 @@ div.hidden {
 		max-width: 95vw;
 	}
 	.modal__btn:hover {
-		box-shadow: $active-box-shadow;
+		box-shadow: config.$active-box-shadow;
 	}
 	.modal__modal-body {
 		grid-template-columns: repeat(6, minmax(65px, 1fr));
@@ -1320,7 +1281,7 @@ div.hidden {
 	.partners__link:hover {
 		cursor: pointer;
 		transform: translateY(-18%) scale(1.1);
-		box-shadow: $tile-shadow;
+		box-shadow: config.$tile-shadow;
 	}
 	.footer {
 		flex-flow: row wrap;
@@ -1333,7 +1294,7 @@ div.hidden {
 	// }
 	.footer__company-details a:hover {
 		font-size: 2.2rem;
-		text-shadow: $active-text-icons-shadow;
+		text-shadow: config.$active-text-icons-shadow;
 	}
 	.footer__legal,
 	.footer__credit {
@@ -1355,7 +1316,7 @@ div.hidden {
 		font-size: 2rem;
 	}
 	.footer__social-link:hover {
-		text-shadow: $active-text-icons-shadow;
+		text-shadow: config.$active-text-icons-shadow;
 	}
 	.footer__qr {
 		left: 50%;
@@ -1367,10 +1328,10 @@ div.hidden {
 		top: -185px;
 
 		opacity: 1;
-		transition: $base-transition;
+		transition: config.$base-transition;
 	}
 	.footer__social-link:hover .footer__qr-image {
-		box-shadow: $active-box-shadow;
+		box-shadow: config.$active-box-shadow;
 	}
 }
 @media (min-width: 800px) {
@@ -1459,8 +1420,8 @@ div.hidden {
 		height: auto;
 		padding-left: 1rem;
 		border-radius: 0;
-		border-bottom-left-radius: $border-radius;
-		border-bottom-right-radius: $border-radius;
+		border-bottom-left-radius: config.$border-radius;
+		border-bottom-right-radius: config.$border-radius;
 
 		flex-direction: row;
 		justify-content: space-evenly;
@@ -1476,11 +1437,11 @@ div.hidden {
 		padding: 0 1rem;
 		font-size: 1.3rem;
 		line-height: 6rem;
-		transition: $base-transition;
-		color: $tile-title;
+		transition: config.$base-transition;
+		color: config.$tile-title;
 	}
 	i.nav__icon {
-		color: $tile-title;
+		color: config.$tile-title;
 	}
 	.top-image-header {
 		margin-top: 5rem;
@@ -1514,7 +1475,7 @@ div.hidden {
 	}
 	.top-image-header__motto {
 		font-size: 1.6rem;
-		color: $tile-title;
+		color: config.$tile-title;
 		font-weight: lighter;
 		box-shadow: none;
 		background-color: transparent;
@@ -1626,7 +1587,7 @@ div.hidden {
 	}
 	.footer__company-details a {
 		font-size: 2.2rem;
-		color: $tile-title;
+		color: config.$tile-title;
 	}
 
 	.footer__legal {
