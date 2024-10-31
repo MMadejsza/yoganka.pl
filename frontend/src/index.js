@@ -1,6 +1,7 @@
 import Glide from '@glidejs/glide';
+import '/src/styles/main.scss';
 
-const htmlToImgsPath = '/imgs'
+const htmlToImgsPath = '/imgs';
 // Created camps so far
 const kaszubyCamp = {
 	type: `camp`,
