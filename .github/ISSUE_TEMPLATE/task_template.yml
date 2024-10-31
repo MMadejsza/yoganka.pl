@@ -1,0 +1,52 @@
+name: Task/Bussiness Requirement
+description: Feature/Change Proposition template for BodyHealing
+title: "[Task]"
+labels: ["yoganka", "Feature"]
+projects: ["MMadejsza/Yoganka.pl_Workflow"]
+assignees:
+  - MMadejsza
+body:
+  - type: textarea
+    id: desc
+    attributes:
+      label: 📝 Task Description
+      description: Clearly define what you think about.
+      placeholder: "Here!"
+    validations:
+      required: true
+  - type: textarea
+    id: expectations
+    attributes:
+      label: 📌 Expectations Bullet Points
+      description: List starting from "-" what it is supposed to be (shortlist). At longer tasks, That's the place I'll be coming back to and only looking at.
+      placeholder: "Here!"
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 📆 How urgent it is?
+      description: For example, it's important strategically like for upcoming events or it's just "Would be nice to have"?
+      options:
+        - 💥 ASAP
+        - ☝️ 1-2 weeks
+        - 🕐 Non-specified in time
+    validations:
+      required: true
+  - type: dropdown
+    id: files
+    attributes:
+      label: 📷 Have you uploaded all necessary media/files to Google Disk?
+      description: Upload all needed for the task files. To PROPERLY named directory in Google Disk (nothing new to our previous workflow). For example event photos, proper partner's logo files, named-with-date template to update content etc.
+      options:
+        - 💪 Yes
+        - 👎 No
+        - ❔ Partially - not organized
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: 📂 Additional Notes
+      description: Add any additional notes, screenshots links, or examples to clarify the task requirements.
+      placeholder: "Optional" 
