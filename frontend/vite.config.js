@@ -25,5 +25,12 @@ export default defineConfig({
 	},
 	optimizeDeps: {
 		include: ['glide'], // add glide to bundling
-	  },
+	},
+	css: {
+		preprocessorOptions: {
+			scss: {
+				api: 'modern-compiler', // or "modern"
+			},
+		},
+	},
 });
