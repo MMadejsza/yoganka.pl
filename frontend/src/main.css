@@ -27,7 +27,8 @@ html {
 	--baseText: #1e1b18;
 	--tile: #f5ece5;
 	--tileForRGBA: 245, 236, 230;
-	--tileTitle: #4d3410;
+	/* --tileTitle: #4d3410; */
+	--tileTitle: #805346;
 	/* --tileTitle: #825445; */
 	--tileText: #1e1b18;
 	--tileTextMuted: #4e453b;
@@ -1512,7 +1513,7 @@ div.hidden {
 		letter-spacing: 6px;
 	}
 	.top-image-header__logo {
-		display: none;
+		margin-top: 2rem;
 	}
 	.top-image-header__motto {
 		font-size: 1.6rem;
@@ -1527,7 +1528,7 @@ div.hidden {
 		max-width: 1000px;
 		/* top: 60%; */
 		top: 0;
-		margin-top: 450px;
+		margin-top: 525px;
 		transform: translateY(-50%);
 		height: 90vh;
 		max-height: 750px;
