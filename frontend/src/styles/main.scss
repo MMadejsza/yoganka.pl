@@ -182,7 +182,7 @@ i.nav__icon {
 	left: 50%;
 	transform: translateX(-50%);
 
-	width: 70%;
+	width: 60%;
 	// margin-top: -3rem;
 }
 .top-image-header {
@@ -193,7 +193,6 @@ i.nav__icon {
 	background-attachment: fixed;
 	background-repeat: no-repeat;
 	background-size: cover;
-	//! próba rozwiązania ios
 	background-position: top left;
 	overflow: hidden;
 
@@ -222,6 +221,7 @@ i.nav__icon {
 	text-align: center;
 }
 .top-image-header__logo {
+	max-width: 60vw;
 	position: absolute;
 	left: 50%;
 	transform: translateX(-50%);
