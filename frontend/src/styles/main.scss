@@ -111,14 +111,14 @@ footer {
 }
 // Active state
 .burger.active .burger__bar--top {
-	transform: translateY(calc(10px / 2 - -10px / 2)) rotate(45deg);
+	transform: translateY(calc((10px / 2) - (-10px / 2))) rotate(45deg);
 }
 .burger.active .burger__bar--middle {
 	transform: translateX(-100%);
 	opacity: 0;
 }
 .burger.active .burger__bar--bottom {
-	transform: translateY(calc(-29px / 2 + 4px / 2)) rotate(-45deg);
+	transform: translateY(calc((-29px / 2) + (4px / 2))) rotate(-45deg);
 }
 .burger.active + .nav {
 	right: 0;
@@ -650,19 +650,19 @@ i.modal-checklist__icon {
 }
 .partners__gallery-slide::before,
 .glide::before {
-	left: calc(-1 * config.$section-padding-y);
-	background: linear-gradient(to left, rgba(0, 0, 0, 0), config.$base);
+	left: config.$section-padding-y * -1;
+	background: linear-gradient(to left, transparent, config.$base);
 }
 .modal .glide::before {
-	background: linear-gradient(to left, rgba(0, 0, 0, 0), config.$tile);
+	background: linear-gradient(to left, transparent, config.$tile);
 }
 .partners__gallery-slide::after,
 .glide::after {
-	right: calc(-1 * config.$section-padding-y);
-	background: linear-gradient(to right, rgba(0, 0, 0, 0), config.$base);
+	right: config.$section-padding-y * -1;
+	background: linear-gradient(to right, transparent, config.$base);
 }
 .modal .glide::after {
-	background: linear-gradient(to right, rgba(0, 0, 0, 0), config.$tile);
+	background: linear-gradient(to right, transparent, config.$tile);
 }
 .partners__gallery-slide:hover .partners__gallery {
 	animation-play-state: paused;
@@ -859,7 +859,7 @@ i.footer__cookie-close-icon {
 	font-size: 1rem;
 	letter-spacing: 1px;
 	color: config.$tile-text-muted;
-	background: linear-gradient(to bottom, rgba(0, 0, 0, 0), #c2bebf);
+	background: linear-gradient(to bottom, transparent, darken(config.$tile, 13%));
 
 	display: flex;
 	justify-content: center;
@@ -1017,10 +1017,10 @@ div.hidden {
 		padding: 0 2rem 2rem;
 	}
 	.burger.active .burger__bar--top {
-		transform: translateY(calc(33px / 2)) rotate(45deg);
+		transform: translateY(33px / 2) rotate(45deg);
 	}
 	.burger.active .burger__bar--bottom {
-		transform: translateY(calc(-36px / 2)) rotate(-45deg);
+		transform: translateY(-36px / 2) rotate(-45deg);
 	}
 	.about__certificates {
 		min-width: 65%;
