@@ -233,52 +233,60 @@ footer {
 		'. . . . .'
 		'motto motto motto motto motto';
 	transition: config.$base-transition;
-}
-.top-image-header__header {
-	position: relative;
-	grid-area: title;
-	padding: 0.5rem 1rem;
-	text-align: center;
-}
-.top-image-header__logo {
-	max-width: 60vw;
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
-}
-.top-image-header__title-bar {
-	margin: 0 auto;
-	width: max-content;
-	font-family: config.$font-body-healing, serif;
-	font-size: 2rem;
-	font-weight: 100;
-	letter-spacing: 2px;
-	text-align: left;
-	color: config.$tile-title;
 
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-}
-.top-image-header__title {
-	text-transform: none;
-}
-.top-image-header__subtitle {
-	font-family: config.$font-by-yoganka;
-	font-weight: lighter;
-	font-size: 2rem;
-	letter-spacing: 3px;
-}
-.top-image-header__motto {
-	grid-area: motto;
-	background-color: config.$base;
-	font-size: 1.7rem;
-	letter-spacing: 1px;
-	font-weight: 400;
-	line-height: 8rem;
-	color: config.$tile-title;
-	overflow: visible;
-	box-shadow: config.$transitive-box-shadow;
+	&__header {
+		grid-area: title;
+		position: relative;
+		padding: 0.5rem 1rem;
+		text-align: center;
+	}
+
+	&__logo {
+		position: absolute;
+		left: 50%;
+		max-width: 60vw;
+		transform: translateX(-50%);
+	}
+
+	&__title-bar {
+		width: max-content;
+		margin: 0 auto;
+
+		font-family: config.$font-body-healing, serif;
+		font-size: 2rem;
+		font-weight: 100;
+		letter-spacing: 2px;
+		text-align: left;
+		color: config.$tile-title;
+
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+
+	&__title {
+		text-transform: none;
+	}
+
+	&__subtitle {
+		font-family: config.$font-by-yoganka;
+		font-weight: lighter;
+		font-size: 2rem;
+		letter-spacing: 3px;
+	}
+
+	&__motto {
+		grid-area: motto;
+		font-size: 1.7rem;
+		letter-spacing: 1px;
+		font-weight: 400;
+		line-height: 8rem;
+		color: config.$tile-title;
+
+		background-color: config.$base;
+		box-shadow: config.$transitive-box-shadow;
+		overflow: visible;
+	}
 }
 
 //! ABOUT
@@ -1005,13 +1013,16 @@ div.hidden {
 	}
 	.top-image-header {
 		background-image: url(/imgs/header/768_header_portrait.jpg);
+
+		&__title-bar {
+			font-size: 2.3rem;
+		}
+
+		&__motto {
+			letter-spacing: 1px;
+		}
 	}
-	.top-image-header__title-bar {
-		font-size: 2.3rem;
-	}
-	.top-image-header__motto {
-		letter-spacing: 1px;
-	}
+
 	.footer__socials {
 		gap: 4rem;
 	}
@@ -1130,15 +1141,18 @@ div.hidden {
 
 	.top-image-header {
 		background-image: url(/imgs/header/1024_header_portrait.jpg);
+
+		&__title-bar {
+			height: 11rem;
+
+			font-size: 3rem;
+			letter-spacing: 3px;
+		}
+		&__motto {
+			font-size: 2.5rem;
+		}
 	}
-	.top-image-header__title-bar {
-		height: 11rem;
-		font-size: 3rem;
-		letter-spacing: 3px;
-	}
-	.top-image-header__motto {
-		font-size: 2.5rem;
-	}
+
 	.about {
 		gap: 2.5rem 1.5rem;
 	}
@@ -1452,9 +1466,12 @@ div.hidden {
 	}
 
 	.top-image-header {
-		margin-top: 5rem;
 		height: 90svh;
 		max-height: 750px;
+		min-height: 675px;
+		margin-top: 5rem;
+		background-image: none;
+
 		grid-template-areas:
 			'title title title title title'
 			'. . . . .'
@@ -1466,28 +1483,33 @@ div.hidden {
 			'. . . . .'
 			'. . . . .'
 			'motto motto motto . .';
-		background-image: none;
-		min-height: 675px;
+
+		&__header {
+			width: 100%;
+		}
+
+		&__title-bar {
+			width: max-content;
+			height: 13rem;
+
+			font-size: 4rem;
+			letter-spacing: 6px;
+		}
+
+		&__logo {
+			margin-top: 2rem;
+		}
+
+		&__motto {
+			font-size: 1.6rem;
+			font-weight: lighter;
+			color: config.$tile-title;
+
+			box-shadow: none;
+			background-color: transparent;
+		}
 	}
-	.top-image-header__header {
-		width: 100%;
-	}
-	.top-image-header__title-bar {
-		width: max-content;
-		height: 13rem;
-		font-size: 4rem;
-		letter-spacing: 6px;
-	}
-	.top-image-header__logo {
-		margin-top: 2rem;
-	}
-	.top-image-header__motto {
-		font-size: 1.6rem;
-		color: config.$tile-title;
-		font-weight: lighter;
-		box-shadow: none;
-		background-color: transparent;
-	}
+
 	.about {
 		position: absolute;
 		z-index: -1;
