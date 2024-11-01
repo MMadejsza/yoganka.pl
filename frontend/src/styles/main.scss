@@ -46,16 +46,15 @@ a {
 }
 .section-header {
 	grid: 1 / -1;
-	line-height: 6rem;
 	padding: 1rem 0.5rem;
+
 	font-size: 4rem;
+	line-height: 6rem;
 	text-transform: uppercase;
 	color: config.$tile-title;
 }
 .wrapper {
 	display: grid;
-	gap: 2.2rem 0;
-	-webkit-overflow-scrolling: touch;
 	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 	grid-template-areas:
 		'header header header header header '
@@ -64,6 +63,8 @@ a {
 		'cert cert cert cert cert'
 		'partners partners partners partners partners'
 		'footer footer footer footer footer';
+	gap: 2.2rem 0;
+	-webkit-overflow-scrolling: touch;
 }
 .stopScroll {
 	overflow: hidden;
@@ -973,8 +974,6 @@ div.hidden {
 		--section-padding-y: 2rem;
 		font-size: 9px;
 	}
-	// .top-image-header {
-	// background-position-y: -2vh;
 	.top-image-header__motto {
 		letter-spacing: 0px;
 	}
@@ -1002,7 +1001,6 @@ div.hidden {
 }
 @media (min-width: 480px) {
 	html {
-		--header-img-size: 640px;
 		font-size: 12px;
 	}
 	.top-image-header {
@@ -1028,7 +1026,6 @@ div.hidden {
 @media (min-width: 640px) {
 	// portrait tablets, portrait iPad, e-readers (Nook/Kindle), landscape 800x480 phones (Android)
 	html {
-		--header-img-size: 800px;
 		font-size: 13px;
 	}
 	.wrapper > section:not(:first-of-type),
@@ -1115,9 +1112,6 @@ div.hidden {
 }
 @media (min-width: 768px) {
 	// tablet, landscape iPad, lo-res laptops ands desktops
-	html {
-		--header-img-size: 1080px;
-	}
 	.nav__item {
 		transition: config.$base-transition;
 
@@ -1396,7 +1390,6 @@ div.hidden {
 @media (min-width: 1025px) {
 	// big landscape tablets, laptops, and desktops
 	html {
-		--header-img-size: 1080px;
 		font-size: 10px;
 	}
 	.wrapper {
