@@ -205,7 +205,6 @@ footer {
 		transform: translateX(-50%);
 	}
 }
-
 //! NAV  END
 .top-image-header {
 	grid-area: header;
@@ -290,7 +289,6 @@ footer {
 		overflow: visible;
 	}
 }
-
 //! ABOUT
 .about {
 	grid-area: about;
@@ -379,7 +377,6 @@ footer {
 		font-size: 3rem;
 	}
 }
-
 //! ABOUT  END
 //! TILE
 .tile {
@@ -394,42 +391,50 @@ footer {
 	padding: 2.5rem 1rem;
 	background-color: config.$tile;
 	border-radius: config.$border-radius;
-	overflow: hidden;
 	box-shadow: config.$box-shadow;
+	overflow: hidden;
 	transition: config.$base-transition;
+
+	&--event {
+		justify-content: inherit;
+	}
+
+	&__img {
+		place-self: center;
+		max-width: 80%;
+		aspect-ratio: 1/1;
+		margin-bottom: 1.5rem;
+		border-radius: config.$border-radius;
+
+		&--event-modal {
+			max-width: 50%;
+		}
+	}
+
+	&__title,
+	&__date {
+		font-size: 2.2rem;
+		font-weight: 500;
+		letter-spacing: 1px;
+		color: config.$tile-title;
+	}
+
+	&__date {
+		color: config.$tile-text;
+	}
+
+	&__location {
+		font-size: 1.9rem;
+		font-weight: 400;
+		color: config.$tile-text-muted;
+	}
+
+	&__desc {
+		font-size: 1.9rem;
+		color: config.$tile-text-muted;
+	}
 }
-.tile--event {
-	justify-content: inherit;
-}
-.tile__img {
-	place-self: center;
-	max-width: 80%;
-	aspect-ratio: 1/1;
-	margin-bottom: 1.5rem;
-	border-radius: config.$border-radius;
-}
-.tile__img--event-modal {
-	max-width: 50%;
-}
-.tile__title,
-.tile__date {
-	font-size: 2.2rem;
-	font-weight: 500;
-	letter-spacing: 1px;
-	color: config.$tile-title;
-}
-.tile__date {
-	color: config.$tile-text;
-}
-.tile__location {
-	font-size: 1.9rem;
-	font-weight: 400;
-	color: config.$tile-text-muted;
-}
-.tile__desc {
-	font-size: 1.9rem;
-	color: config.$tile-text-muted;
-}
+
 //! TILE END
 //! OFFER
 .offer {
