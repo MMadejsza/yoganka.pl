@@ -22,6 +22,7 @@
 }
 //! COMMON BLOCKS
 html {
+	--section-padding-y: #{config.$section-padding-y};
 	scroll-behavior: smooth;
 	font-family: 'EB Garamond', serif;
 	font-weight: 400;
@@ -71,7 +72,7 @@ a {
 }
 section:not(:first-of-type),
 footer {
-	padding: 0 config.$section-padding-y 2rem;
+	padding: 0 var(--section-padding-y) 2rem;
 	box-shadow: config.$section-shadow;
 }
 * input {
@@ -678,7 +679,7 @@ i.modal-checklist__icon {
 }
 .partners__gallery-slide::before,
 .glide::before {
-	left: config.$section-padding-y * -1;
+	left: calc(var(--section-padding-y) * -1);
 	background: linear-gradient(to left, transparent, config.$base);
 }
 .modal .glide::before {
@@ -686,7 +687,7 @@ i.modal-checklist__icon {
 }
 .partners__gallery-slide::after,
 .glide::after {
-	right: config.$section-padding-y * -1;
+	right: calc(var(--section-padding-y) * -1);
 	background: linear-gradient(to right, transparent, config.$base);
 }
 .modal .glide::after {
