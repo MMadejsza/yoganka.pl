@@ -1449,20 +1449,25 @@ div.hidden {
 	}
 }
 @media (min-width: 960px) {
-	.modal__modal-body {
-		grid-template-columns: repeat(6, minmax(125px, 1fr));
-	}
-	.modal__header {
-		place-self: center;
-		grid-column: 1 / 4;
-		grid-row: 2;
-	}
-	.modal__full-desc {
-		grid-column: -1 / -4;
-		place-self: center;
-	}
-	.modal__desc {
-		grid-template-columns: repeat(2, minmax(300px, 1fr));
+	.modal {
+		&__modal-body {
+			grid-template-columns: repeat(6, minmax(125px, 1fr));
+		}
+
+		&__header {
+			place-self: center;
+			grid-column: 1 / 4;
+			grid-row: 2;
+		}
+
+		&__full-desc {
+			grid-column: -1 / -4;
+			place-self: center;
+		}
+
+		&__desc {
+			grid-template-columns: repeat(2, minmax(300px, 1fr));
+		}
 	}
 	.partners__link {
 		width: 40vw;
@@ -1642,7 +1647,6 @@ div.hidden {
 			background-attachment: fixed;
 		}
 	}
-
 	.offer {
 		margin-top: -3rem;
 		grid-template-columns: repeat(4, minmax(150px, 1fr));
@@ -1661,12 +1665,10 @@ div.hidden {
 			}
 		}
 	}
-
 	.modal {
 		max-width: 900px;
 		padding: 1.5rem 2.5rem;
 	}
-
 	.certificates__gallery {
 		grid-template-columns: repeat(5, minmax(150px, 1fr));
 		padding: 2.5rem 15rem;
