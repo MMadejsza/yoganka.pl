@@ -28,8 +28,9 @@ html {
 	font-weight: 400;
 	font-size: 8.5px;
 	text-align: center;
-	background-color: config.$base;
 	color: config.$base-text;
+
+	background-color: config.$base;
 }
 body {
 	margin: 0 auto;
@@ -297,75 +298,88 @@ footer {
 
 	display: grid;
 	grid-template-columns: minmax(300px, 1fr);
-	place-items: center;
 	grid-template-areas:
 		'header'
 		'portrait'
 		'content';
+	place-items: center;
 	gap: 2rem;
-}
-.about__header {
-	grid-area: header;
-}
-.about__img {
-	grid-area: portrait;
-	position: relative;
-	width: 90%;
-	max-width: 70%;
-	background-color: transparent;
-	border-radius: config.$border-radius;
-	box-shadow: config.$box-shadow;
-	overflow: hidden;
-}
-.about__img--portrait {
-	width: 100%;
-	max-width: 640px;
-}
-.about__certificates {
-	position: absolute;
-	bottom: 0;
-	right: 0;
-	min-width: 70%;
-	height: 12%;
-	padding: 0 0.5rem;
-	background-color: config.$base;
-	border-top-left-radius: config.$border-radius;
-	border-bottom-right-radius: config.$border-radius;
-	overflow: hidden;
 
-	display: flex;
-	justify-content: right;
-	gap: 1rem;
-}
-.about__certificates img {
-	max-height: 100%;
-	filter: grayscale(1);
-}
-.about__content {
-	grid-area: content;
+	&__header {
+		grid-area: header;
+	}
 
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	gap: 1.5rem;
-	padding: 1rem;
+	&__img {
+		grid-area: portrait;
+		position: relative;
+		width: 90%;
+		max-width: 70%;
+
+		background-color: transparent;
+		border-radius: config.$border-radius;
+		box-shadow: config.$box-shadow;
+		overflow: hidden;
+	}
+
+	&__img--portrait {
+		width: 100%;
+		max-width: 640px;
+	}
+
+	&__certificates {
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		min-width: 70%;
+		height: 12%;
+		padding: 0 0.5rem;
+
+		background-color: config.$base;
+		border-top-left-radius: config.$border-radius;
+		border-bottom-right-radius: config.$border-radius;
+		overflow: hidden;
+
+		display: flex;
+		justify-content: right;
+		gap: 1rem;
+	}
+
+	&__certificates img {
+		max-height: 100%;
+		filter: grayscale(1);
+	}
+
+	&__content {
+		grid-area: content;
+
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		gap: 1.5rem;
+		padding: 1rem;
+	}
+
+	&__heading {
+		grid-area: h2;
+		font-size: 4rem;
+		font-weight: 500;
+		text-transform: uppercase;
+	}
+
+	&__description {
+		grid-area: article;
+	}
+
+	&__signature {
+		align-self: flex-end;
+		margin-right: 1rem;
+
+		font-family: 'Birthstone Bounce', cursive;
+		font-size: 3rem;
+	}
 }
-.about__heading {
-	grid-area: h2;
-	font-size: 4rem;
-	font-weight: 500;
-	text-transform: uppercase;
-}
-.about__description {
-	grid-area: article;
-}
-.about__signature {
-	align-self: flex-end;
-	margin-right: 1rem;
-	font-family: 'Birthstone Bounce', cursive;
-	font-size: 3rem;
-}
+
 //! ABOUT  END
 //! TILE
 .tile {
@@ -1023,7 +1037,6 @@ div.hidden {
 			letter-spacing: 1px;
 		}
 	}
-
 	.footer__socials {
 		gap: 4rem;
 	}
@@ -1059,7 +1072,6 @@ div.hidden {
 	.offer-type__header {
 		grid-column: 1 /-1;
 	}
-
 	.offer-type--events {
 		display: grid;
 		grid-template-columns: minmax(300px, 400px);
@@ -1139,7 +1151,6 @@ div.hidden {
 			text-shadow: config.$active-text-icons-shadow;
 		}
 	}
-
 	.top-image-header {
 		background-image: url(/imgs/header/1024_header_portrait.jpg);
 
@@ -1153,12 +1164,12 @@ div.hidden {
 			font-size: 2.5rem;
 		}
 	}
-
 	.about {
 		gap: 2.5rem 1.5rem;
-	}
-	.about__img {
-		max-width: 640px;
+
+		&__img {
+			max-width: 640px;
+		}
 	}
 	.tile.clickable:hover {
 		cursor: pointer;
@@ -1376,7 +1387,6 @@ div.hidden {
 	.modal__desc {
 		grid-template-columns: repeat(2, minmax(300px, 1fr));
 	}
-
 	.partners__link {
 		width: 40vw;
 		height: 40vw;
@@ -1465,7 +1475,6 @@ div.hidden {
 			}
 		}
 	}
-
 	.top-image-header {
 		height: 90svh;
 		max-height: 750px;
@@ -1510,46 +1519,51 @@ div.hidden {
 			background-color: transparent;
 		}
 	}
-
 	.about {
 		position: absolute;
-		z-index: -1;
-		max-width: 1000px;
-		// top: 60%;
 		top: 0;
 		margin-top: 525px;
-		transform: translateY(-50%);
+		max-width: 1000px;
 		height: 90vh;
 		max-height: 750px;
+		z-index: -1;
+		transform: translateY(-50%);
+
 		display: flex;
 		justify-content: space-around;
 		align-items: center;
-	}
-	.about__header {
-		display: none;
-	}
-	.about__content {
-		max-width: 50%;
-	}
-	.about__heading,
-	.about__greeting,
-	.about__description {
-		justify-self: left;
-		text-align: left;
-		padding-left: 2rem;
-	}
-	.about__img--portrait {
-		display: none;
-	}
-	.about__img {
-		order: 2;
-		background: url('/imgs/about/600_about_profile.jpg');
-		width: 35%;
-		height: 70%;
-		background-repeat: no-repeat;
-		background-size: cover;
-		background-position: center;
-		background-attachment: fixed;
+
+		&__header {
+			display: none;
+		}
+
+		&__content {
+			max-width: 50%;
+		}
+
+		&__heading,
+		&__greeting,
+		&__description {
+			padding-left: 2rem;
+			justify-self: left;
+			text-align: left;
+		}
+
+		&__img--portrait {
+			display: none;
+		}
+
+		&__img {
+			order: 2;
+			width: 35%;
+			height: 70%;
+
+			background: url('/imgs/about/600_about_profile.jpg');
+			background-repeat: no-repeat;
+			background-size: cover;
+			background-position: center;
+			background-attachment: fixed;
+		}
 	}
 
 	.offer {
@@ -1638,6 +1652,7 @@ div.hidden {
 }
 @media (min-width: 1280px) {
 	// hi-res laptops and desktops
+	// about is absolute at this stage
 	.wrapper,
 	.about {
 		max-width: 1200px;
@@ -1647,10 +1662,11 @@ div.hidden {
 	}
 	.about {
 		margin-top: 500px;
-	}
-	.about__img {
-		width: 31%;
-		height: 78%;
+
+		&__img {
+			width: 31%;
+			height: 78%;
+		}
 	}
 	.offer {
 		grid-gap: 3.5rem 3rem;
