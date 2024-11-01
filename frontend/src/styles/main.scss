@@ -86,12 +86,13 @@ footer {
 	right: 2rem;
 	width: 3.5rem;
 	height: 3rem;
+	position: fixed;
+	z-index: 7;
+	cursor: pointer;
+
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	cursor: pointer;
-	position: fixed;
-	z-index: 7;
 
 	&__bar {
 		width: 100%;
@@ -112,10 +113,12 @@ footer {
 		.burger__bar--top {
 			transform: translateY(calc((10px / 2) - (-10px / 2))) rotate(45deg);
 		}
+
 		.burger__bar--middle {
 			transform: translateX(-100%);
 			opacity: 0;
 		}
+
 		.burger__bar--bottom {
 			transform: translateY(calc((-29px / 2) + (4px / 2))) rotate(-45deg);
 		}
@@ -131,62 +134,76 @@ footer {
 	right: -100%;
 	width: max-content;
 	height: 100%;
+	z-index: 6;
+
 	text-transform: uppercase;
 	letter-spacing: 1px;
+
 	border-top-left-radius: config.$border-radius;
 	border-bottom-left-radius: config.$border-radius;
 	box-shadow: config.$active-box-shadow, config.$tile-shadow;
 	background-color: config.$nav;
 	transition: config.$base-transition;
-	z-index: 6;
 
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-}
-.nav__list {
-	display: flex;
-	flex-direction: column;
-	list-style: none;
-	margin-top: 3.5rem;
-}
-.nav__item {
-	position: relative;
-	min-width: 50px;
-	text-align: left;
-	overflow: hidden;
-}
-.nav__link {
-	display: block;
-	cursor: pointer;
-	height: 6rem;
-	margin: 0 2rem;
-	line-height: 6rem;
-	font-size: 2.2rem;
-	text-decoration: none;
-	color: config.$tile-text-muted;
-}
-i.nav__icon {
-	width: 28.5px;
-	display: inline-block;
-	margin-right: 1.5rem;
-	left: config.$icon-position;
-	color: config.$accent-bcg;
-	font-size: 2.2rem;
-	transition: config.$base-transition;
-}
-.nav__logo-container {
-	position: relative;
-	width: 100%;
-}
-.nav__logo {
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
 
-	width: 60%;
-	// margin-top: -3rem;
+	&__list {
+		margin-top: 3.5rem;
+
+		display: flex;
+		flex-direction: column;
+		list-style: none;
+	}
+
+	&__item {
+		position: relative;
+		min-width: 50px;
+		overflow: hidden;
+
+		text-align: left;
+	}
+
+	&__link {
+		display: block;
+
+		height: 6rem;
+		margin: 0 2rem;
+		cursor: pointer;
+
+		line-height: 6rem;
+		font-size: 2.2rem;
+		text-decoration: none;
+		color: config.$tile-text-muted;
+
+		.nav__icon {
+			display: inline-block;
+			width: 28.5px;
+			left: config.$icon-position;
+			margin-right: 1.5rem;
+
+			color: config.$accent-bcg;
+			font-size: 2.2rem;
+
+			transition: config.$base-transition;
+		}
+	}
+
+	&__logo-container {
+		position: relative;
+		width: 100%;
+	}
+
+	&__logo {
+		position: absolute;
+		left: 50%;
+		width: 60%;
+		transform: translateX(-50%);
+	}
 }
+
+//! NAV  END
 .top-image-header {
 	grid-area: header;
 	height: 100svh;
@@ -262,7 +279,7 @@ i.nav__icon {
 	overflow: visible;
 	box-shadow: config.$transitive-box-shadow;
 }
-//! NAV  END
+
 //! ABOUT
 .about {
 	grid-area: about;
@@ -1101,26 +1118,22 @@ div.hidden {
 	html {
 		--header-img-size: 1080px;
 	}
-	.nav__link:hover {
-		position: relative;
-		z-index: 2;
-		text-shadow: config.$active-text-icons-shadow;
-		// background-color: rgba(0, 0, 0, 0.05);
-
-		color: config.$accent-bcg;
-	}
 	.nav__item {
 		transition: config.$base-transition;
+
+		&:hover {
+			transform: scale(1.05) translateY(0.5rem);
+
+			border-bottom-left-radius: config.$border-radius;
+			border-bottom-right-radius: config.$border-radius;
+		}
+
+		&:hover .nav__link {
+			color: config.$accent-bcg;
+			text-shadow: config.$active-text-icons-shadow;
+		}
 	}
-	.nav__item:hover {
-		transform: scale(1.05) translateY(0.5rem);
-		border-bottom-left-radius: config.$border-radius;
-		border-bottom-right-radius: config.$border-radius;
-	}
-	.nav__link:hover,
-	.nav__link:hover i.nav__icon {
-		color: config.$accent-bcg;
-	}
+
 	.top-image-header {
 		background-image: url(/imgs/header/1024_header_portrait.jpg);
 	}
@@ -1192,10 +1205,6 @@ div.hidden {
 	.tile__img--event-modal {
 		grid-column: 1 / -1;
 	}
-	// .modal__header {
-	// grid-column: span 3;
-	// width: max-content;
-	// }
 	.modal__full-desc {
 		padding: 0 1rem;
 	}
@@ -1265,9 +1274,6 @@ div.hidden {
 	.modal-checklist--optional {
 		grid-column: -1 / -4;
 	}
-	// .modal-checklist--free-time {
-	// 	grid-column: span 3;
-	// }
 	.modal__user-action {
 		gap: 3rem;
 	}
@@ -1293,9 +1299,6 @@ div.hidden {
 		justify-content: center;
 		row-gap: 2rem;
 	}
-	// .footer__company-details {
-	// 	width: 50%;
-	// }
 	.footer__company-details a:hover {
 		font-size: 2.2rem;
 		text-shadow: config.$active-text-icons-shadow;
@@ -1413,9 +1416,6 @@ div.hidden {
 	.burger {
 		display: none;
 	}
-	.nav__logo-container {
-		display: none;
-	}
 	.nav {
 		grid-area: nav;
 		top: 0;
@@ -1423,30 +1423,41 @@ div.hidden {
 		width: 100%;
 		height: auto;
 		padding-left: 1rem;
+
 		border-radius: 0;
 		border-bottom-left-radius: config.$border-radius;
 		border-bottom-right-radius: config.$border-radius;
 
 		flex-direction: row;
 		justify-content: space-evenly;
+
+		&__logo-container {
+			display: none;
+		}
+
+		&__list {
+			width: max-content;
+			margin: 0;
+
+			flex-direction: row;
+			gap: 2rem;
+		}
+
+		&__link {
+			margin: 0;
+			padding: 0 1rem;
+
+			font-size: 1.3rem;
+			line-height: 6rem;
+			color: config.$tile-title;
+			transition: config.$base-transition;
+
+			.nav__icon {
+				color: config.$tile-title;
+			}
+		}
 	}
-	.nav__list {
-		flex-direction: row;
-		width: max-content;
-		gap: 2rem;
-		margin: 0;
-	}
-	.nav__link {
-		margin: 0;
-		padding: 0 1rem;
-		font-size: 1.3rem;
-		line-height: 6rem;
-		transition: config.$base-transition;
-		color: config.$tile-title;
-	}
-	i.nav__icon {
-		color: config.$tile-title;
-	}
+
 	.top-image-header {
 		margin-top: 5rem;
 		height: 90svh;
