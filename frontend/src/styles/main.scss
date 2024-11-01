@@ -1,6 +1,25 @@
 @use '_config' as config;
 @forward '_media';
 
+@mixin btn() {
+	display: block;
+	min-width: 125px;
+	padding: 0.5rem 1rem;
+
+	font-size: 1.5rem;
+	line-height: 2.5rem;
+	font-weight: bold;
+	text-transform: uppercase;
+	color: config.$accent-text;
+
+	cursor: pointer;
+	background-color: config.$accent-bcg;
+	border-radius: config.$border-radius;
+	box-shadow: config.$active-text-icons-shadow;
+	overflow: hidden;
+	transition: config.$base-transition;
+}
+
 @font-face {
 	font-family: 'yoganka2';
 	src: url('/fonts/BLUDHAVEN.ttf') format('truetype');
@@ -433,8 +452,11 @@ footer {
 		font-size: 1.9rem;
 		color: config.$tile-text-muted;
 	}
-}
 
+	&__btn {
+		@include btn();
+	}
+}
 //! TILE END
 //! OFFER
 .offer {
@@ -447,48 +469,41 @@ footer {
 		'wyjazdy wyjazdy'
 		'zajecia zajecia'
 		'wydarzenia wydarzenia';
-	// justify-items: center;
 	grid-gap: 3.5rem 0.5rem;
+
 	overflow: visible;
-}
-.offer__section-header {
-	grid-area: title;
-	position: relative;
-	width: 100%; //- Must be for the line across full body
-}
-.offer__lineShadow {
-	position: absolute;
-	bottom: -1rem;
-	left: -1rem;
-	border: none;
-	border-radius: config.$border-radius;
-	height: 1px;
-	background-color: transparent;
-	box-shadow: config.$active-box-shadow;
-	width: 100%;
-	margin: 20px 0;
-}
-.offer-type {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-	grid-template-rows: 5rem;
-	grid-gap: 2.5rem 1.5rem;
-}
-.offer-type__header {
-	font-size: 3rem;
-	line-height: 6rem;
-	text-transform: uppercase;
-	color: config.$tile-title;
-}
-#wyjazdy {
-	grid-area: wyjazdy;
-}
-#zajecia {
-	grid-area: zajecia;
-}
-.offer-type--events {
-	grid-area: wydarzenia;
-	grid-template-rows: 6rem;
+
+	&__section-header {
+		grid-area: title;
+		position: relative;
+	}
+	.offer-type {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		grid-template-rows: 5rem;
+		grid-gap: 2.5rem 1.5rem;
+
+		&__header {
+			font-size: 3rem;
+			line-height: 6rem;
+			text-transform: uppercase;
+			color: config.$tile-title;
+		}
+
+		&--events {
+			grid-area: wydarzenia;
+			grid-template-rows: 6rem;
+		}
+
+		// Zagnieżdżenie dla wyjazdy i zajęcia
+		&#wyjazdy {
+			grid-area: wyjazdy;
+		}
+
+		&#zajecia {
+			grid-area: zajecia;
+		}
+	}
 }
 //@ MODAL
 .modal__overlay {
@@ -621,24 +636,8 @@ i.modal-checklist__icon {
 	flex-flow: row wrap;
 	gap: 1rem;
 }
-.modal__btn,
-.tile__btn {
-	display: block;
-	min-width: 125px;
-	padding: 0.5rem 1rem;
-	font-size: 1.5rem;
-	line-height: 2.5rem;
-	font-weight: bold;
-	text-transform: uppercase;
-	color: config.$accent-text;
-	background-color: config.$accent-bcg;
-	border-radius: config.$border-radius;
-	box-shadow: config.$active-text-icons-shadow;
-	cursor: pointer;
-	transition: config.$base-transition;
-	overflow: hidden;
-}
-.tile__btn {
+.modal__btn {
+	@include btn();
 }
 //! OFFER END
 //! CERTIFICATES
@@ -1193,24 +1192,28 @@ div.hidden {
 			'wyjazdy wyjazdy'
 			'zajecia zajecia'
 			'wydarzenia wydarzenia';
-	}
-	.offer-type {
-		width: 100%;
-		grid-template-columns: repeat(auto-fit, minmax(345px, 1fr));
-		grid-gap: 2.5rem 2rem;
-	}
-	.offer-type--events {
-		display: grid;
-		width: 100%;
-		grid-template-columns: repeat(auto-fill, minmax(235px, 1fr));
-	}
-	.offer-type--events .tile {
-		max-width: 500px;
-	}
-	.offer-type--events .tile:nth-last-of-type(1) {
-		justify-self: center;
-		grid-column: span 2;
-		width: 50%;
+
+		.offer-type {
+			width: 100%;
+			grid-template-columns: repeat(auto-fit, minmax(345px, 1fr));
+			grid-gap: 2.5rem 2rem;
+
+			&--events {
+				display: grid;
+				width: 100%;
+				grid-template-columns: repeat(auto-fill, minmax(235px, 1fr));
+
+				& .tile {
+					max-width: 500px;
+
+					&:nth-last-of-type(1) {
+						justify-self: center;
+						grid-column: span 2;
+						width: 50%;
+					}
+				}
+			}
+		}
 	}
 	.modal {
 		max-width: 95vw;
@@ -1367,13 +1370,20 @@ div.hidden {
 	}
 }
 @media (min-width: 800px) {
-	.offer-type--events {
-		grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-	}
-	.offer-type--events .tile:nth-last-of-type(1) {
-		justify-self: auto;
-		grid-column: auto;
-		width: auto;
+	.offer {
+		.offer-type {
+			&--events {
+				grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+
+				& .tile {
+					&:nth-last-of-type(1) {
+						justify-self: auto;
+						grid-column: auto;
+						width: auto;
+					}
+				}
+			}
+		}
 	}
 }
 @media (min-width: 960px) {
@@ -1578,15 +1588,18 @@ div.hidden {
 			'title title title title'
 			'wyjazdy wyjazdy zajecia zajecia'
 			'wydarzenia wydarzenia wydarzenia wydarzenia';
+
+		.offer-type {
+			grid-template-columns: repeat(auto-fit, minmax(225px, 1fr));
+			align-items: stretch;
+
+			&--events {
+				grid-area: wydarzenia;
+				grid-template-columns: repeat(auto-fill, minmax(275px, 1fr));
+			}
+		}
 	}
-	.offer-type {
-		grid-template-columns: repeat(auto-fit, minmax(225px, 1fr));
-		align-items: stretch;
-	}
-	.offer-type--events {
-		grid-template-columns: repeat(auto-fill, minmax(275px, 1fr));
-		grid-area: wydarzenia;
-	}
+
 	.modal {
 		max-width: 900px;
 		padding: 1.5rem 2.5rem;
@@ -1610,8 +1623,8 @@ div.hidden {
 		height: 20vw;
 	}
 	.footer {
+		padding: 0 2rem 3rem;
 		font-size: 1.9rem;
-		// display: grid;
 		grid-template-columns: repeat(7, minmax(100px, 1fr));
 		grid-template-areas:
 			'socials socials socials logo logo details details '
@@ -1675,9 +1688,10 @@ div.hidden {
 	}
 	.offer {
 		grid-gap: 3.5rem 3rem;
-	}
-	.offer-type {
-		grid-gap: 2.5rem 3rem;
+
+		.offer-type {
+			grid-gap: 2.5rem 3rem;
+		}
 	}
 	.modal {
 		max-width: 1200px;
