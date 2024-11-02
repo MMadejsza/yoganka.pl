@@ -896,8 +896,6 @@ document.addEventListener('DOMContentLoaded', function () {
 	const cookiePopup = document.querySelector('.footer__cookie-pop-up');
 	cookieCircleBtn.addEventListener('click', (e) => {
 		e.preventDefault();
-		cookiePopup.style.right = '0%';
-		cookiePopup.style.backgroundColor = 'rgba(var(--accentBackgroundForRGBA), 0.95)';
 		cookiePopup.style.opacity = '1';
 		cookiePopup.style.visibility = 'visible';
 	});
