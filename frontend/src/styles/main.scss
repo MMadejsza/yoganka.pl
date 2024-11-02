@@ -1,7 +1,7 @@
 @use '_config' as config;
 @forward '_media';
 
-@mixin btn() {
+%action-btn {
 	display: block;
 	min-width: 125px;
 	padding: 0.5rem 1rem;
@@ -523,7 +523,7 @@ footer {
 	}
 
 	&__btn {
-		@include btn();
+		@extend %action-btn;
 	}
 }
 //! TILE END
@@ -735,7 +735,7 @@ footer {
 	}
 
 	&__btn {
-		@include btn();
+		@extend %action-btn;
 	}
 }
 .modal-checklist {
