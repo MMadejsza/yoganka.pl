@@ -19,6 +19,31 @@
 	overflow: hidden;
 	transition: config.$base-transition;
 }
+%slider-shade-overlay {
+	position: absolute;
+	top: 0;
+	width: 10vw;
+	height: 100%;
+	content: '';
+	z-index: 2;
+}
+@mixin slider-shade-wing($direction, $color) {
+	@if $direction == 'left' {
+		left: calc(var(--section-padding-y) * -1);
+	} @else if $direction == 'right' {
+		right: calc(var(--section-padding-y) * -1);
+	}
+	background: linear-gradient(to #{$direction}, transparent, $color);
+}
+@keyframes slide {
+	from {
+		transform: translate(0);
+	}
+
+	to {
+		transform: translate(-100%);
+	}
+}
 
 @font-face {
 	font-family: 'yoganka2';
@@ -556,11 +581,11 @@ footer {
 	&__close-btn {
 		font-size: 3rem;
 		text-shadow: config.$active-text-icons-shadow;
-	}
 
-	&__close-btn:hover {
-		color: config.$accent-bcg;
-		text-shadow: config.$active-box-shadow;
+		&:hover {
+			color: config.$accent-bcg;
+			text-shadow: config.$active-box-shadow;
+		}
 	}
 
 	&__modal-body {
@@ -585,6 +610,15 @@ footer {
 					rgba(0, 0, 0, 0) 100%
 				);
 			}
+		}
+	}
+
+	& .glide {
+		&::before {
+			@include slider-shade-wing('left', config.$tile);
+		}
+		&::after {
+			@include slider-shade-wing('right', config.$tile);
 		}
 	}
 
@@ -717,81 +751,75 @@ footer {
 .partners {
 	grid-area: partners;
 	overflow: hidden;
+
+	&__gallery {
+		background-color: config.$tile;
+
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
+		gap: 2rem;
+		animation: 15s slide infinite linear;
+	}
+
+	&__gallery-slide {
+		display: flex;
+		align-items: center;
+		position: relative;
+
+		&:hover .partners__gallery {
+			animation-play-state: paused;
+		}
+
+		&::before {
+			@extend %slider-shade-overlay;
+			@include slider-shade-wing('left', config.$base);
+		}
+
+		&::after {
+			@extend %slider-shade-overlay;
+			@include slider-shade-wing('right', config.$base);
+		}
+	}
+
+	&__link {
+		width: 55vw;
+		height: 55vw;
+		max-width: 225px;
+		max-height: 225px;
+		padding: 0;
+
+		border-radius: config.$border-radius;
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		&:last-child {
+			margin-right: 2.5rem;
+		}
+	}
+
+	&__image {
+		display: block;
+		max-width: 100%;
+		max-height: 100%;
+		object-fit: contain;
+
+		filter: grayscale(1);
+		transition: config.$base-transition;
+	}
 }
-.partners__gallery-slide {
-	display: flex;
-	align-items: center;
-	position: relative;
-}
-.partners__gallery-slide::before,
-.partners__gallery-slide::after,
+
 .glide::before,
 .glide::after {
-	position: absolute;
-	top: 0;
-	width: 10vw;
-	height: 100%;
-	content: '';
-	z-index: 2;
+	@extend %slider-shade-overlay;
 }
-.partners__gallery-slide::before,
 .glide::before {
-	left: calc(var(--section-padding-y) * -1);
-	background: linear-gradient(to left, transparent, config.$base);
+	@include slider-shade-wing('left', config.$base);
 }
-.modal .glide::before {
-	background: linear-gradient(to left, transparent, config.$tile);
-}
-.partners__gallery-slide::after,
 .glide::after {
-	right: calc(var(--section-padding-y) * -1);
-	background: linear-gradient(to right, transparent, config.$base);
-}
-.modal .glide::after {
-	background: linear-gradient(to right, transparent, config.$tile);
-}
-.partners__gallery-slide:hover .partners__gallery {
-	animation-play-state: paused;
-}
-.partners__gallery {
-	background-color: config.$tile;
-
-	display: flex;
-	justify-content: space-around;
-	align-items: center;
-	gap: 2rem;
-	animation: 15s slide infinite linear;
-}
-.partners__link {
-	width: 55vw;
-	height: 55vw;
-	max-width: 225px;
-	max-height: 225px;
-	padding: 0;
-	border-radius: config.$border-radius;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-.partners__image {
-	display: block;
-	max-width: 100%;
-	max-height: 100%;
-	object-fit: contain;
-	filter: grayscale(1);
-	transition: config.$base-transition;
-}
-.partners__link:last-child {
-	margin-right: 2.5rem;
-}
-@keyframes slide {
-	from {
-		transform: translate(0);
-	}
-
-	to {
-		transform: translate(-100%);
-	}
+	@include slider-shade-wing('right', config.$base);
 }
 //! PARTNERS END
 //! FOOTER
@@ -1168,15 +1196,20 @@ div.hidden {
 			align-items: center;
 		}
 	}
-	.partners__link {
-		width: 40vw;
-		height: 40vw;
-	}
-	.partners__gallery-slide:before {
-		left: -2rem;
-	}
-	.partners__gallery-slide:after {
-		right: -2rem;
+	.partners {
+		&__link {
+			width: 40vw;
+			height: 40vw;
+		}
+
+		&__gallery-slide {
+			&::before {
+				left: -2rem;
+			}
+			&::after {
+				right: -2rem;
+			}
+		}
 	}
 	.footer__social-link {
 		font-size: 4rem;
@@ -1365,18 +1398,17 @@ div.hidden {
 			grid-column: -1 / -4;
 		}
 	}
-	// to bump up specificity
-	.wrapper section.partners {
-		padding-bottom: 6rem;
-	}
-	.partners__gallery {
-		gap: 4rem;
-		animation: 20s slide infinite linear;
-	}
-	.partners__link:hover {
-		cursor: pointer;
-		transform: translateY(-18%) scale(1.1);
-		box-shadow: config.$tile-shadow;
+	.partners {
+		padding-bottom: 6rem !important;
+		&__gallery {
+			gap: 4rem;
+			animation: 20s slide infinite linear;
+		}
+		&__link:hover {
+			cursor: pointer;
+			transform: translateY(-18%) scale(1.1);
+			box-shadow: config.$tile-shadow;
+		}
 	}
 	.footer {
 		flex-flow: row wrap;
@@ -1464,15 +1496,19 @@ div.hidden {
 			grid-template-columns: repeat(2, minmax(300px, 1fr));
 		}
 	}
-	.partners__link {
-		width: 40vw;
-		height: 40vw;
-	}
-	.partners__gallery-slide:before {
-		width: 7vw;
-	}
-	.partners__gallery-slide:after {
-		width: 7vw;
+	.partners {
+		&__gallery-slide {
+			&::before {
+				width: 7vw;
+			}
+			&::after {
+				width: 7vw;
+			}
+		}
+		&__link {
+			width: 40vw;
+			height: 40vw;
+		}
 	}
 	.footer__pop-ups {
 		right: 2rem;
@@ -1743,14 +1779,19 @@ div.hidden {
 		max-width: 1200px;
 		padding: 1.5rem 4rem;
 	}
-	.partners__link {
-		width: 30vw;
-		height: 30vw;
-	}
-	.partners__gallery-slide:before {
-		width: 5vw;
-	}
-	.partners__gallery-slide:after {
-		width: 5vw;
+	.partners {
+		&__link {
+			width: 30vw;
+			height: 30vw;
+		}
+
+		&__gallery-slide {
+			&::before {
+				width: 5vw;
+			}
+			&::after {
+				width: 5vw;
+			}
+		}
 	}
 }
