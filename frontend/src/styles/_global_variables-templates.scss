@@ -1,3 +1,5 @@
+@use 'sass:map';
+
 @font-face {
 	font-family: 'yoganka2';
 	src: url('/fonts/BLUDHAVEN.ttf') format('truetype');
@@ -11,9 +13,11 @@
 	src: url('/fonts/PrimaSansBT-Roman.otf') format('truetype');
 }
 
-$icon-position: -3.5rem;
-$border-radius: 25px;
-$section-padding-y: 1rem;
+$sizes: (
+	icon-position: -3.5rem,
+	border-radius: 25px,
+	section-padding-y: 1rem,
+);
 
 $base: #fff8f4;
 $base-text: #1e1b18;
@@ -34,8 +38,9 @@ $tile-shadow: ($active-box-shadow), rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
 	rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
 $box-shadow: 2px 8px 10px rgba(149, 157, 165, 0.2);
 $active-text-icons-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-$header-img-size: 460px;
+
 $base-transition: 0.4s ease-in-out;
+
 $font-body-healing: 'bh';
 // $font-by-yoganka: 'Caveat', cursive;
 $font-by-yoganka: 'by Yoganka', Helvetica;
@@ -53,7 +58,7 @@ $font-by-yoganka: 'by Yoganka', Helvetica;
 
 	cursor: pointer;
 	background-color: $accent-bcg;
-	border-radius: $border-radius;
+	border-radius: map.get($sizes, border-radius);
 	box-shadow: $active-text-icons-shadow;
 	overflow: hidden;
 	transition: $base-transition;

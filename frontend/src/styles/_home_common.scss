@@ -1,3 +1,4 @@
+@use 'sass:map';
 @use 'sass:color';
 @use '_global_variables-templates' as var;
 
@@ -9,7 +10,7 @@
 	list-style: none;
 }
 html {
-	--section-padding-y: #{var.$section-padding-y};
+	--section-padding-y: #{map.get(var.$sizes, section-padding-y)};
 	scroll-behavior: smooth;
 	font-family: 'EB Garamond', serif;
 	font-weight: 400;

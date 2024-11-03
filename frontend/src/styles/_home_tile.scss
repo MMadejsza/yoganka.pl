@@ -1,3 +1,4 @@
+@use 'sass:map';
 @use '_global_variables-templates' as var;
 
 %action-btn {
@@ -13,7 +14,7 @@
 
 	cursor: pointer;
 	background-color: var.$accent-bcg;
-	border-radius: var.$border-radius;
+	border-radius: map.get(var.$sizes, border-radius);
 	box-shadow: var.$active-text-icons-shadow;
 	overflow: hidden;
 	transition: var.$base-transition;
@@ -31,7 +32,7 @@
 
 	padding: 2.5rem 1rem;
 	background-color: var.$tile;
-	border-radius: var.$border-radius;
+	border-radius: map.get(var.$sizes, border-radius);
 	box-shadow: var.$box-shadow;
 	overflow: hidden;
 	transition: var.$base-transition;
@@ -45,7 +46,7 @@
 		max-width: 80%;
 		aspect-ratio: 1/1;
 		margin-bottom: 1.5rem;
-		border-radius: var.$border-radius;
+		border-radius: map.get(var.$sizes, border-radius);
 
 		&--event-modal {
 			max-width: 50%;

@@ -1,3 +1,4 @@
+@use 'sass:map';
 @use '_global_variables-templates' as var;
 @use '_global_mixins-keyframes' as mixin;
 
@@ -163,8 +164,8 @@
 		&:hover {
 			transform: scale(1.05) translateY(0.5rem);
 
-			border-bottom-left-radius: var.$border-radius;
-			border-bottom-right-radius: var.$border-radius;
+			border-bottom-left-radius: map.get(var.$sizes, border-radius);
+			border-bottom-right-radius: map.get(var.$sizes, border-radius);
 		}
 
 		&:hover .nav__link {
@@ -503,8 +504,8 @@
 		padding-left: 1rem;
 
 		border-radius: 0;
-		border-bottom-left-radius: var.$border-radius;
-		border-bottom-right-radius: var.$border-radius;
+		border-bottom-left-radius: map.get(var.$sizes, border-radius);
+		border-bottom-right-radius: map.get(var.$sizes, border-radius);
 
 		flex-direction: row;
 		justify-content: space-evenly;

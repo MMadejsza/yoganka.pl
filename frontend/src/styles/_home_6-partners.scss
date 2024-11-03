@@ -1,3 +1,4 @@
+@use 'sass:map';
 @use '_global_variables-templates' as var;
 @use '_global_mixins-keyframes' as mixin;
 
@@ -44,7 +45,7 @@
 		max-height: 225px;
 		padding: 0;
 
-		border-radius: var.$border-radius;
+		border-radius: map.get(var.$sizes, border-radius);
 
 		display: flex;
 		justify-content: center;

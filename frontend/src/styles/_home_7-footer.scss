@@ -1,3 +1,4 @@
+@use 'sass:map';
 @use '_global_variables-templates' as var;
 
 //! FOOTER
@@ -9,8 +10,8 @@
 
 	background-color: rgba(var.$nav, 0.8);
 	box-shadow: var.$tile-shadow;
-	border-top-left-radius: var.$border-radius;
-	border-top-right-radius: var.$border-radius;
+	border-top-left-radius: map.get(var.$sizes, border-radius);
+	border-top-right-radius: map.get(var.$sizes, border-radius);
 
 	display: flex;
 	flex-direction: column;
@@ -67,7 +68,7 @@
 
 	&__qr-image {
 		transition: var.$base-transition;
-		border-radius: var.$border-radius;
+		border-radius: map.get(var.$sizes, border-radius);
 	}
 
 	&__legal {

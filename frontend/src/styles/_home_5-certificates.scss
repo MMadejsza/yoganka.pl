@@ -1,3 +1,4 @@
+@use 'sass:map';
 @use '_global_variables-templates' as var;
 
 //! CERTIFICATES
@@ -17,7 +18,7 @@
 		padding: 1.5rem 1rem;
 
 		background-color: var.$tile;
-		border-radius: var.$border-radius;
+		border-radius: map.get(var.$sizes, border-radius);
 		overflow: hidden;
 
 		display: flex;

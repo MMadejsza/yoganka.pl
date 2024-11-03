@@ -1,3 +1,4 @@
+@use 'sass:map';
 @use '_global_variables-templates' as var;
 @use '_global_mixins-keyframes' as mixin;
 
@@ -33,7 +34,7 @@
 		min-height: 33vh;
 	}
 	&--comp .glide__track {
-		border-radius: var.$border-radius;
+		border-radius: map.get(var.$sizes, border-radius);
 	}
 	&__track {
 		overflow: visible;
@@ -48,7 +49,7 @@
 		justify-content: space-around;
 	}
 	&__slide {
-		border-radius: var.$border-radius;
+		border-radius: map.get(var.$sizes, border-radius);
 
 		display: flex;
 		justify-content: center;
@@ -72,7 +73,7 @@
 
 		font-size: 3rem;
 		color: var.$accent-bcg;
-		border-radius: var.$border-radius;
+		border-radius: map.get(var.$sizes, border-radius);
 
 		&--left {
 			left: 1rem;
