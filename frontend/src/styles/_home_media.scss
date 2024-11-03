@@ -159,7 +159,7 @@
 @media (min-width: 768px) {
 	// tablet, landscape iPad, lo-res laptops ands desktops
 	.nav__item {
-		transition: var.$base-transition;
+		transition: map.get(var.$behavior, base-transition);
 
 		&:hover {
 			transform: scale(1.05) translateY(0.5rem);
@@ -395,7 +395,7 @@
 				top: -185px;
 
 				opacity: 1;
-				transition: var.$base-transition;
+				transition: map.get(var.$behavior, base-transition);
 			}
 
 			&:hover .footer__qr-image {
@@ -529,7 +529,7 @@
 			font-size: 1.3rem;
 			line-height: 6rem;
 			color: map.get(var.$colors, tile-title);
-			transition: var.$base-transition;
+			transition: map.get(var.$behavior, base-transition);
 
 			.nav__icon {
 				color: map.get(var.$colors, tile-title);

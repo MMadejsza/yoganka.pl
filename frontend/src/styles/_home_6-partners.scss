@@ -63,7 +63,7 @@
 		object-fit: contain;
 
 		filter: grayscale(1);
-		transition: var.$base-transition;
+		transition: map.get(var.$behavior, base-transition);
 	}
 }
 //! PARTNERS END

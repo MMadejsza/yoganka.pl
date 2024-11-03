@@ -57,7 +57,9 @@ $shadows: (
 	),
 );
 
-$base-transition: 0.4s ease-in-out;
+$behavior: (
+	base-transition: 0.4s ease-in-out,
+);
 
 $typo: (
 	font-body-healing: (
@@ -87,7 +89,7 @@ $typo: (
 	border-radius: map.get($sizes, border-radius);
 	box-shadow: map.get($shadows, active-text-icons-shadow);
 	overflow: hidden;
-	transition: $base-transition;
+	transition: map.get($behavior, base-transition);
 }
 %slider-shade-overlay {
 	position: absolute;

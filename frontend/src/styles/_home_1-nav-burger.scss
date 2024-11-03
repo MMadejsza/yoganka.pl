@@ -19,7 +19,7 @@
 		width: 100%;
 		height: 4px;
 		background-color: map.get(var.$colors, accent-bcg);
-		transition: var.$base-transition;
+		transition: map.get(var.$behavior, base-transition);
 		border-radius: 2px;
 		//Initial state
 
@@ -64,7 +64,7 @@
 	border-bottom-left-radius: map.get(var.$sizes, border-radius);
 	box-shadow: var.$active-box-shadow, map.get(var.$sizes, tile-shadow);
 	background-color: map.get(var.$colors, nav);
-	transition: var.$base-transition;
+	transition: map.get(var.$behavior, base-transition);
 
 	display: flex;
 	flex-direction: column;
@@ -107,7 +107,7 @@
 			color: map.get(var.$colors, accent-bcg);
 			font-size: 2.2rem;
 
-			transition: var.$base-transition;
+			transition: map.get(var.$behavior, base-transition);
 		}
 	}
 

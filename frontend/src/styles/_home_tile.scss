@@ -17,7 +17,7 @@
 	border-radius: map.get(var.$sizes, border-radius);
 	box-shadow: map.get(var.$shadows, active-text-icons-shadow);
 	overflow: hidden;
-	transition: var.$base-transition;
+	transition: map.get(var.$behavior, base-transition);
 }
 
 //! TILE
@@ -35,7 +35,7 @@
 	border-radius: map.get(var.$sizes, border-radius);
 	box-shadow: map.get(var.$shadows, box-shadow);
 	overflow: hidden;
-	transition: var.$base-transition;
+	transition: map.get(var.$behavior, base-transition);
 
 	&--event {
 		justify-content: inherit;

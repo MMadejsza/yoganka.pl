@@ -63,11 +63,11 @@
 		top: 25px;
 		right: 0;
 		opacity: 0;
-		transition: var.$base-transition;
+		transition: map.get(var.$behavior, base-transition);
 	}
 
 	&__qr-image {
-		transition: var.$base-transition;
+		transition: map.get(var.$behavior, base-transition);
 		border-radius: map.get(var.$sizes, border-radius);
 	}
 
@@ -91,7 +91,7 @@
 		align-items: center;
 		gap: 1.5rem;
 
-		transition: var.$base-transition;
+		transition: map.get(var.$behavior, base-transition);
 	}
 
 	.footer__pop-up-btn {
@@ -112,7 +112,7 @@
 		border-radius: 50%;
 		background-color: rgba(map.get(var.$colors, accent-bcg), 0.7);
 		box-shadow: map.get(var.$shadows, active-text-icons-shadow);
-		transition: var.$base-transition;
+		transition: map.get(var.$behavior, base-transition);
 
 		&:hover {
 			transform: translateY(-25%) scale(1.15);
@@ -142,7 +142,7 @@
 
 		border-radius: 50px;
 		box-shadow: var.$active-box-shadow;
-		transition: var.$base-transition;
+		transition: map.get(var.$behavior, base-transition);
 		opacity: 0;
 
 		display: flex;
