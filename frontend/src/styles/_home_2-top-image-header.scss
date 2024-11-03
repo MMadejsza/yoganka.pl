@@ -48,7 +48,7 @@
 		width: max-content;
 		margin: 0 auto;
 
-		font-family: var.$font-body-healing, serif;
+		font-family: map.get(var.$typo, font-body-healing);
 		font-size: 2rem;
 		font-weight: 100;
 		letter-spacing: 2px;
@@ -65,7 +65,7 @@
 	}
 
 	&__subtitle {
-		font-family: var.$font-by-yoganka;
+		font-family: map.get(var.$typo, font-by-yoganka);
 		font-weight: lighter;
 		font-size: 2rem;
 		letter-spacing: 3px;

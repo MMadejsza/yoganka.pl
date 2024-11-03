@@ -31,8 +31,8 @@ $colors: (
 	accent-text: #ffffff,
 	nav: #f6e0c8,
 );
-$active-box-shadow: (rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px);
 
+$active-box-shadow: (rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px);
 $shadows: (
 	transitive-box-shadow: (
 		(map.get($colors, base)) 0px 25px 52px 78px,
@@ -59,9 +59,17 @@ $shadows: (
 
 $base-transition: 0.4s ease-in-out;
 
-$font-body-healing: 'bh';
-// $font-by-yoganka: 'Caveat', cursive;
-$font-by-yoganka: 'by Yoganka', Helvetica;
+$typo: (
+	font-body-healing: (
+		'bh',
+	),
+	// font-by-yoganka: 'Caveat', cursive,
+	font-by-yoganka:
+		(
+			'by Yoganka',
+			Helvetica,
+		),
+);
 
 %action-btn {
 	display: block;
