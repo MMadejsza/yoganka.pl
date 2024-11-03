@@ -49,5 +49,5 @@
 }
 
 @mixin animation($duration, $keyframe, $looping: infinite, $behavior: linear) {
-	animation: $duration, $keyframe, $looping, $behavior;
+	animation: $duration $keyframe $looping $behavior;
 }

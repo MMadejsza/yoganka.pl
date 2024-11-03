@@ -1,0 +1,91 @@
+@use '_global_variables-templates' as var;
+
+//! ABOUT
+.about {
+	grid-area: about;
+	font-size: 2rem;
+
+	display: grid;
+	grid-template-columns: minmax(300px, 1fr);
+	grid-template-areas:
+		'header'
+		'portrait'
+		'content';
+	place-items: center;
+	gap: 2rem;
+
+	&__header {
+		grid-area: header;
+	}
+
+	&__img {
+		grid-area: portrait;
+		position: relative;
+		width: 90%;
+		max-width: 70%;
+
+		background-color: transparent;
+		border-radius: var.$border-radius;
+		box-shadow: var.$box-shadow;
+		overflow: hidden;
+	}
+
+	&__img--portrait {
+		width: 100%;
+		max-width: 640px;
+	}
+
+	&__certificates {
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		min-width: 70%;
+		height: 12%;
+		padding: 0 0.5rem;
+
+		background-color: var.$base;
+		border-top-left-radius: var.$border-radius;
+		border-bottom-right-radius: var.$border-radius;
+		overflow: hidden;
+
+		display: flex;
+		justify-content: right;
+		gap: 1rem;
+	}
+
+	&__certificates img {
+		max-height: 100%;
+		filter: grayscale(1);
+	}
+
+	&__content {
+		grid-area: content;
+
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		gap: 1.5rem;
+		padding: 1rem;
+	}
+
+	&__heading {
+		grid-area: h2;
+		font-size: 4rem;
+		font-weight: 500;
+		text-transform: uppercase;
+	}
+
+	&__description {
+		grid-area: article;
+	}
+
+	&__signature {
+		align-self: flex-end;
+		margin-right: 1rem;
+
+		font-family: 'Birthstone Bounce', cursive;
+		font-size: 3rem;
+	}
+}
+//! ABOUT  END

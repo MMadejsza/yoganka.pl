@@ -1,0 +1,68 @@
+@use '_global_variables-templates' as var;
+@use '_global_mixins-keyframes' as mixin;
+
+//! PARTNERS
+.partners {
+	grid-area: partners;
+	overflow: hidden;
+
+	&__gallery {
+		background-color: var.$tile;
+
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
+		gap: 2rem;
+
+		@include mixin.animation(15s, slide, infinite, linear);
+	}
+
+	&__gallery-slide {
+		display: flex;
+		align-items: center;
+		position: relative;
+
+		&:hover .partners__gallery {
+			animation-play-state: paused;
+		}
+
+		&::before {
+			@extend %slider-shade-overlay;
+			@include mixin.slider-shade-wing('left', var.$base);
+		}
+
+		&::after {
+			@extend %slider-shade-overlay;
+			@include mixin.slider-shade-wing('right', var.$base);
+		}
+	}
+
+	&__link {
+		width: 55vw;
+		height: 55vw;
+		max-width: 225px;
+		max-height: 225px;
+		padding: 0;
+
+		border-radius: var.$border-radius;
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		&:last-child {
+			margin-right: 2.5rem;
+		}
+	}
+
+	&__image {
+		display: block;
+		max-width: 100%;
+		max-height: 100%;
+		object-fit: contain;
+
+		filter: grayscale(1);
+		transition: var.$base-transition;
+	}
+}
+//! PARTNERS END

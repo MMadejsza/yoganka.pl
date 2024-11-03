@@ -1,0 +1,91 @@
+@use '_global_variables-templates' as var;
+
+%action-btn {
+	display: block;
+	min-width: 125px;
+	padding: 0.5rem 1rem;
+
+	font-size: 1.5rem;
+	line-height: 2.5rem;
+	font-weight: bold;
+	text-transform: uppercase;
+	color: var.$accent-text;
+
+	cursor: pointer;
+	background-color: var.$accent-bcg;
+	border-radius: var.$border-radius;
+	box-shadow: var.$active-text-icons-shadow;
+	overflow: hidden;
+	transition: var.$base-transition;
+}
+
+//! TILE
+.tile {
+	position: relative;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	gap: 2rem;
+
+	padding: 2.5rem 1rem;
+	background-color: var.$tile;
+	border-radius: var.$border-radius;
+	box-shadow: var.$box-shadow;
+	overflow: hidden;
+	transition: var.$base-transition;
+
+	&--event {
+		justify-content: inherit;
+	}
+
+	&__img {
+		place-self: center;
+		max-width: 80%;
+		aspect-ratio: 1/1;
+		margin-bottom: 1.5rem;
+		border-radius: var.$border-radius;
+
+		&--event-modal {
+			max-width: 50%;
+		}
+
+		&--modal-slider {
+			place-self: center;
+
+			max-width: 95%;
+			max-height: 45vh;
+			margin: 0;
+			aspect-ratio: auto;
+		}
+	}
+
+	&__title,
+	&__date {
+		font-size: 2.2rem;
+		font-weight: 500;
+		letter-spacing: 1px;
+		color: var.$tile-title;
+	}
+
+	&__date {
+		color: var.$tile-text;
+	}
+
+	&__location {
+		font-size: 1.9rem;
+		font-weight: 400;
+		color: var.$tile-text-muted;
+	}
+
+	&__desc {
+		font-size: 1.9rem;
+		color: var.$tile-text-muted;
+	}
+
+	&__btn {
+		@extend %action-btn;
+	}
+}
+//! TILE END

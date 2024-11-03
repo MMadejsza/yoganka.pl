@@ -1,0 +1,251 @@
+@use '_global_variables-templates' as var;
+@use '_global_mixins-keyframes' as mixin;
+
+%action-btn {
+	display: block;
+	min-width: 125px;
+	padding: 0.5rem 1rem;
+
+	font-size: 1.5rem;
+	line-height: 2.5rem;
+	font-weight: bold;
+	text-transform: uppercase;
+	color: var.$accent-text;
+
+	cursor: pointer;
+	background-color: var.$accent-bcg;
+	border-radius: var.$border-radius;
+	box-shadow: var.$active-text-icons-shadow;
+	overflow: hidden;
+	transition: var.$base-transition;
+}
+
+//! OFFER
+.offer {
+	grid-area: offer;
+
+	display: grid;
+	grid-template-columns: repeat(2, minmax(150px, 1fr));
+	grid-template-areas:
+		'title title'
+		'wyjazdy wyjazdy'
+		'zajecia zajecia'
+		'wydarzenia wydarzenia';
+	grid-gap: 3.5rem 0.5rem;
+
+	overflow: visible;
+
+	&__section-header {
+		grid-area: title;
+		position: relative;
+	}
+	.offer-type {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		grid-template-rows: 5rem;
+		grid-gap: 2.5rem 1.5rem;
+
+		&__header {
+			font-size: 3rem;
+			line-height: 6rem;
+			text-transform: uppercase;
+			color: var.$tile-title;
+		}
+
+		&--events {
+			grid-area: wydarzenia;
+			grid-template-rows: 6rem;
+		}
+
+		// Zagnieżdżenie dla wyjazdy i zajęcia
+		&#wyjazdy {
+			grid-area: wyjazdy;
+		}
+
+		&#zajecia {
+			grid-area: zajecia;
+		}
+	}
+}
+//@ MODAL
+.modal__overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 300vh;
+	z-index: 8;
+
+	backdrop-filter: blur(10px);
+}
+.modal {
+	display: block;
+	position: fixed;
+	top: 50dvh;
+	left: 50dvw;
+	transform: translate(-50%, -50%);
+	width: 0vw;
+	min-height: 0px;
+	max-height: 0vh;
+	padding: 1.5rem 1rem;
+	z-index: 8;
+
+	background-color: rgba(var.$tile, 0.95);
+	border-radius: var.$border-radius;
+	box-shadow: var.$active-text-icons-shadow;
+	opacity: 0;
+	transition: var.$base-transition;
+
+	// full name for specificity required by i in font awesome
+	.modal__icon {
+		min-width: 3.5rem;
+		height: 3.5rem;
+		margin: 0;
+
+		line-height: 3.5rem;
+		text-align: center;
+		color: var.$accent-bcg;
+	}
+
+	&__x-btn {
+		position: absolute;
+		top: 3rem;
+		right: 2rem;
+		transform: translate(-50%, -50%);
+		z-index: 9;
+	}
+
+	&__close-btn {
+		font-size: 3rem;
+		text-shadow: var.$active-text-icons-shadow;
+
+		&:hover {
+			color: var.$accent-bcg;
+			text-shadow: var.$active-box-shadow;
+		}
+	}
+
+	&__modal-body {
+		display: grid;
+		width: 100%;
+		grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
+		grid-gap: 2.5rem;
+
+		border-radius: var.$border-radius;
+
+		&--offer {
+			max-height: 89dvh;
+			padding-bottom: 1rem;
+
+			overflow-y: auto;
+			overflow-x: hidden;
+
+			& section:nth-child(even) {
+				background: radial-gradient(
+					circle at center,
+					rgba(0, 0, 0, 0.06) 70%,
+					rgba(0, 0, 0, 0) 100%
+				);
+			}
+		}
+	}
+
+	& .glide {
+		&::before {
+			@include mixin.slider-shade-wing('left', var.$tile);
+		}
+		&::after {
+			@include mixin.slider-shade-wing('right', var.$tile);
+		}
+	}
+
+	&__header {
+		padding: 0 1rem;
+
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: 2rem;
+	}
+
+	&__list {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-evenly;
+		align-content: start;
+		flex-wrap: wrap;
+
+		font-size: 2rem;
+		line-height: 3.5rem;
+		text-align: left;
+
+		&--at-glance {
+			gap: 1rem;
+		}
+	}
+
+	&__li {
+		display: flex;
+		gap: 2rem;
+
+		&--at-glance {
+			font-size: 2.5rem;
+		}
+	}
+
+	&__full-desc {
+		grid-column: 1 / -1;
+		font-size: 2.2rem;
+
+		&--event {
+			padding: 0 2rem;
+			font-size: 2.1rem;
+		}
+	}
+
+	&__title {
+		margin-bottom: 1.5rem;
+		font-size: 2.5rem;
+
+		i {
+			margin-right: 2rem;
+		}
+
+		&--day {
+			margin: 1rem 0;
+			font-size: 2.2rem;
+			text-decoration: underline;
+		}
+	}
+
+	&__user-action {
+		padding-bottom: 0;
+
+		display: flex;
+		justify-content: center;
+		flex-flow: row wrap;
+		gap: 1rem;
+	}
+
+	&__btn {
+		@extend %action-btn;
+	}
+}
+.modal-checklist {
+	&__list {
+		@extend .modal__list;
+	}
+
+	&__li {
+		@extend .modal__li;
+	}
+
+	.modal-checklist__icon {
+		font-size: 2.2rem;
+	}
+
+	&__title {
+		@extend .modal__title;
+	}
+}
+//! OFFER END

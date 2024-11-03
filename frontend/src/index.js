@@ -703,7 +703,7 @@ class Tile {
 		//@ section modal_desc
 		// create main container
 		const sectionDesc = this.createEl('section', {
-			class: `modal__desc modal__desc--${this.type} ${
+			class: `modal__full-desc modal__full-desc--${this.type} ${
 				this.extraClass ? this.extraClass : ''
 			}`,
 		});
