@@ -8,7 +8,7 @@ export default defineConfig({
 	// root: 'public',  // Main folder to src
 	publicDir: 'public',
 	build: {
-		outDir: '../www', // Folder, do którego będą trafiać zbudowane pliki, np. dla wrzucenia na serwer.
+		outDir: '../www',
 		emptyOutDir: true, // Clear folder before build
 	},
 	server: {
