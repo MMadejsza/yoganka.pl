@@ -11,12 +11,12 @@
 	line-height: 2.5rem;
 	font-weight: bold;
 	text-transform: uppercase;
-	color: var.$accent-text;
+	color: map.get(var.$colors, accent-text);
 
 	cursor: pointer;
-	background-color: var.$accent-bcg;
+	background-color: map.get(var.$colors, accent-bcg);
 	border-radius: map.get(var.$sizes, border-radius);
-	box-shadow: var.$active-text-icons-shadow;
+	box-shadow: map.get(var.$shadows, active-text-icons-shadow);
 	overflow: hidden;
 	transition: var.$base-transition;
 }
@@ -50,7 +50,7 @@
 			font-size: 3rem;
 			line-height: 6rem;
 			text-transform: uppercase;
-			color: var.$tile-title;
+			color: map.get(var.$colors, tile-title);
 		}
 
 		&--events {
@@ -91,9 +91,9 @@
 	padding: 1.5rem 1rem;
 	z-index: 8;
 
-	background-color: rgba(var.$tile, 0.95);
+	background-color: rgba(map.get(var.$colors, tile), 0.95);
 	border-radius: map.get(var.$sizes, border-radius);
-	box-shadow: var.$active-text-icons-shadow;
+	box-shadow: map.get(var.$shadows, active-text-icons-shadow);
 	opacity: 0;
 	transition: var.$base-transition;
 
@@ -105,7 +105,7 @@
 
 		line-height: 3.5rem;
 		text-align: center;
-		color: var.$accent-bcg;
+		color: map.get(var.$colors, accent-bcg);
 	}
 
 	&__x-btn {
@@ -118,10 +118,10 @@
 
 	&__close-btn {
 		font-size: 3rem;
-		text-shadow: var.$active-text-icons-shadow;
+		text-shadow: map.get(var.$shadows, active-text-icons-shadow);
 
 		&:hover {
-			color: var.$accent-bcg;
+			color: map.get(var.$colors, accent-bcg);
 			text-shadow: var.$active-box-shadow;
 		}
 	}
@@ -153,10 +153,10 @@
 
 	& .glide {
 		&::before {
-			@include mixin.slider-shade-wing('left', var.$tile);
+			@include mixin.slider-shade-wing('left', map.get(var.$colors, tile));
 		}
 		&::after {
-			@include mixin.slider-shade-wing('right', var.$tile);
+			@include mixin.slider-shade-wing('right', map.get(var.$colors, tile));
 		}
 	}
 

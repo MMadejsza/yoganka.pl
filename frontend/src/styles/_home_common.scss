@@ -16,9 +16,9 @@ html {
 	font-weight: 400;
 	font-size: 8.5px;
 	text-align: center;
-	color: var.$base-text;
+	color: map.get(var.$colors, base-text);
 
-	background-color: var.$base;
+	background-color: map.get(var.$colors, base);
 }
 body {
 	margin: 0 auto;
@@ -35,7 +35,7 @@ a {
 	transition: var.$base-transition;
 }
 .clickable:not(.footer__pop-ups *) {
-	box-shadow: var.$tile-shadow;
+	box-shadow: map.get(var.$shadows, tile-shadow);
 	position: relative;
 
 	&::after {
@@ -49,11 +49,11 @@ a {
 
 		font-size: 1rem;
 		letter-spacing: 1px;
-		color: var.$tile-text-muted;
+		color: map.get(var.$colors, tile-text-muted);
 		background: linear-gradient(
 			to bottom,
 			transparent,
-			color.scale(var.$tile, $lightness: -13%)
+			color.scale(map.get(var.$colors, tile), $lightness: -13%)
 		);
 
 		display: flex;
@@ -80,7 +80,7 @@ div.hidden {
 	font-size: 4rem;
 	line-height: 6rem;
 	text-transform: uppercase;
-	color: var.$tile-title;
+	color: map.get(var.$colors, tile-title)-title;
 }
 .wrapper {
 	display: grid;
@@ -101,12 +101,12 @@ div.hidden {
 section:not(:first-of-type),
 footer {
 	padding: 0 var(--section-padding-y) 2rem;
-	box-shadow: var.$section-shadow;
+	box-shadow: map.get(var.$shadows, section-shadow);
 }
 * input {
 	outline: none;
 	border: none;
 	cursor: auto;
-	background-color: var.$base;
+	background-color: map.get(var.$colors, base);
 }
 //! COMMON BLOCKS END

@@ -6,10 +6,10 @@
 	grid-area: footer;
 	padding: 0rem 1rem 2rem 1rem;
 	font-size: 1.7rem;
-	color: var.$tile-text-muted;
+	color: map.get(var.$colors, tile-text-muted);
 
-	background-color: rgba(var.$nav, 0.8);
-	box-shadow: var.$tile-shadow;
+	background-color: rgba(map.get(var.$colors, nav), 0.8);
+	box-shadow: map.get(var.$shadows, tile-shadow);
 	border-top-left-radius: map.get(var.$sizes, border-radius);
 	border-top-right-radius: map.get(var.$sizes, border-radius);
 
@@ -35,7 +35,7 @@
 	.footer__social-link {
 		position: relative;
 		font-size: 3.5rem;
-		color: var.$accent-bcg;
+		color: map.get(var.$colors, accent-bcg);
 	}
 
 	&__company-details {
@@ -76,7 +76,7 @@
 	}
 
 	&__credit-link {
-		color: var.$tile-text-muted;
+		color: map.get(var.$colors, tile-text-muted);
 	}
 
 	&__pop-ups {
@@ -107,11 +107,11 @@
 		line-height: 6rem;
 		font-size: 3rem;
 		text-decoration: none;
-		color: var.$accent-text;
+		color: map.get(var.$colors, accent-text);
 
 		border-radius: 50%;
-		background-color: rgba(var.$accent-bcg, 0.7);
-		box-shadow: var.$active-text-icons-shadow;
+		background-color: rgba(map.get(var.$colors, accent-bcg), 0.7);
+		box-shadow: map.get(var.$shadows, active-text-icons-shadow);
 		transition: var.$base-transition;
 
 		&:hover {
@@ -125,7 +125,7 @@
 
 		&--cookies:focus .footer__cookie-pop-up {
 			right: 0%;
-			background-color: rgba(var.$accent-bcg, 0.95);
+			background-color: rgba(map.get(var.$colors, accent-bcg), 0.95);
 			opacity: 1;
 		}
 	}
@@ -155,7 +155,7 @@
 			font-size: 3rem;
 			line-height: 7rem;
 			margin-right: 2rem;
-			color: var.$accent-text;
+			color: map.get(var.$colors, accent-text);
 		}
 	}
 }

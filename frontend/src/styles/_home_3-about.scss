@@ -27,7 +27,7 @@
 
 		background-color: transparent;
 		border-radius: map.get(var.$sizes, border-radius);
-		box-shadow: var.$box-shadow;
+		box-shadow: map.get(var.$shadows, box-shadow);
 		overflow: hidden;
 	}
 
@@ -44,7 +44,7 @@
 		height: 12%;
 		padding: 0 0.5rem;
 
-		background-color: var.$base;
+		background-color: map.get(var.$colors, base);
 		border-top-left-radius: map.get(var.$sizes, border-radius);
 		border-bottom-right-radius: map.get(var.$sizes, border-radius);
 		overflow: hidden;

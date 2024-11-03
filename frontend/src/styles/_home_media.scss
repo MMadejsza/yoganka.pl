@@ -169,8 +169,8 @@
 		}
 
 		&:hover .nav__link {
-			color: var.$accent-bcg;
-			text-shadow: var.$active-text-icons-shadow;
+			color: map.get(var.$colors, accent-bcg);
+			text-shadow: map.get(var.$shadows, active-text-icons-shadow);
 		}
 	}
 	.top-image-header {
@@ -204,7 +204,7 @@
 	.tile {
 		&.clickable:hover {
 			cursor: pointer;
-			box-shadow: var.$tile-shadow;
+			box-shadow: map.get(var.$shadows, tile-shadow);
 			transform: translateY(-5%) scale(1.05);
 		}
 
@@ -348,7 +348,7 @@
 		&__link:hover {
 			cursor: pointer;
 			transform: translateY(-18%) scale(1.1);
-			box-shadow: var.$tile-shadow;
+			box-shadow: map.get(var.$shadows, tile-shadow);
 		}
 	}
 	.footer {
@@ -359,7 +359,7 @@
 
 		&__company-details a:hover {
 			font-size: 2.2rem;
-			text-shadow: var.$active-text-icons-shadow;
+			text-shadow: map.get(var.$shadows, active-text-icons-shadow);
 		}
 		&__legal,
 		&__credit {
@@ -386,7 +386,7 @@
 		}
 		&__social-link {
 			&:hover {
-				text-shadow: var.$active-text-icons-shadow;
+				text-shadow: map.get(var.$shadows, active-text-icons-shadow);
 			}
 
 			&:hover .footer__qr {
@@ -528,11 +528,11 @@
 
 			font-size: 1.3rem;
 			line-height: 6rem;
-			color: var.$tile-title;
+			color: map.get(var.$colors, tile-title);
 			transition: var.$base-transition;
 
 			.nav__icon {
-				color: var.$tile-title;
+				color: map.get(var.$colors, tile-title);
 			}
 		}
 	}
@@ -574,7 +574,7 @@
 		&__motto {
 			font-size: 1.6rem;
 			font-weight: lighter;
-			color: var.$tile-title;
+			color: map.get(var.$colors, tile-title);
 
 			box-shadow: none;
 			background-color: transparent;
@@ -672,7 +672,7 @@
 		}
 		&__company-details a {
 			font-size: 2.2rem;
-			color: var.$tile-title;
+			color: map.get(var.$colors, tile-title);
 		}
 		&__legal {
 			grid-area: legal;

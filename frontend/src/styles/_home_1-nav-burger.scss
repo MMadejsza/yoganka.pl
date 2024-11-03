@@ -18,7 +18,7 @@
 	&__bar {
 		width: 100%;
 		height: 4px;
-		background-color: var.$accent-bcg;
+		background-color: map.get(var.$colors, accent-bcg);
 		transition: var.$base-transition;
 		border-radius: 2px;
 		//Initial state
@@ -63,7 +63,7 @@
 	border-top-left-radius: map.get(var.$sizes, border-radius);
 	border-bottom-left-radius: map.get(var.$sizes, border-radius);
 	box-shadow: var.$active-box-shadow, map.get(var.$sizes, tile-shadow);
-	background-color: var.$nav;
+	background-color: map.get(var.$colors, nav);
 	transition: var.$base-transition;
 
 	display: flex;
@@ -96,7 +96,7 @@
 		line-height: 6rem;
 		font-size: 2.2rem;
 		text-decoration: none;
-		color: var.$tile-text-muted;
+		color: map.get(var.$colors, tile-text-muted);
 
 		.nav__icon {
 			display: inline-block;
@@ -104,7 +104,7 @@
 			left: map.get(var.$sizes, icon-position);
 			margin-right: 1.5rem;
 
-			color: var.$accent-bcg;
+			color: map.get(var.$colors, accent-bcg);
 			font-size: 2.2rem;
 
 			transition: var.$base-transition;

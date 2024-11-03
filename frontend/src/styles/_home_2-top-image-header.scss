@@ -53,7 +53,7 @@
 		font-weight: 100;
 		letter-spacing: 2px;
 		text-align: left;
-		color: var.$tile-title;
+		color: map.get(var.$colors, tile-title);
 
 		display: flex;
 		flex-direction: column;
@@ -77,10 +77,10 @@
 		letter-spacing: 1px;
 		font-weight: 400;
 		line-height: 8rem;
-		color: var.$tile-title;
+		color: map.get(var.$colors, tile-title);
 
-		background-color: var.$base;
-		box-shadow: var.$transitive-box-shadow;
+		background-color: map.get(var.$colors, base);
+		box-shadow: map.get(var.$shadows, transitive-box-shadow);
 		overflow: visible;
 	}
 }

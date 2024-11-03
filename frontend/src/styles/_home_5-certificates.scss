@@ -8,7 +8,7 @@
 	overflow: hidden;
 
 	& .glide__slides {
-		background-color: rgba(var.$nav, 0.55);
+		background-color: rgba(map.get(var.$colors, nav), 0.55);
 	}
 
 	&__tile {
@@ -17,7 +17,7 @@
 		min-width: 175px;
 		padding: 1.5rem 1rem;
 
-		background-color: var.$tile;
+		background-color: map.get(var.$colors, tile);
 		border-radius: map.get(var.$sizes, border-radius);
 		overflow: hidden;
 

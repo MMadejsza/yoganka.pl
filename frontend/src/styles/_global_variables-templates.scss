@@ -18,26 +18,44 @@ $sizes: (
 	border-radius: 25px,
 	section-padding-y: 1rem,
 );
+$colors: (
+	base: #fff8f4,
+	base-text: #1e1b18,
+	tile: #f5ece5,
+	// tile-title: #4d3410,
+	tile-title: #805346,
+	// tile-title: #825445,
+	tile-text: #1e1b18,
+	tile-text-muted: #4e453b,
+	accent-bcg: #1c7993,
+	accent-text: #ffffff,
+	nav: #f6e0c8,
+);
+$active-box-shadow: (rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px);
 
-$base: #fff8f4;
-$base-text: #1e1b18;
-$tile: #f5ece5;
-// $tile-title: #4d3410;
-$tile-title: #805346;
-// $tile-title: #825445;
-$tile-text: #1e1b18;
-$tile-text-muted: #4e453b;
-$accent-bcg: #1c7993;
-$accent-text: #ffffff;
-$nav: #f6e0c8;
-
-$transitive-box-shadow: $base 0px 25px 52px 78px;
-$section-shadow: rgba(0, 0, 0, 0.35) 8px 52px -19px inset;
-$active-box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
-$tile-shadow: ($active-box-shadow), rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
-	rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
-$box-shadow: 2px 8px 10px rgba(149, 157, 165, 0.2);
-$active-text-icons-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+$shadows: (
+	transitive-box-shadow: (
+		(map.get($colors, base)) 0px 25px 52px 78px,
+	),
+	section-shadow: (
+		rgba(0, 0, 0, 0.35) 8px 52px -19px inset,
+	),
+	active-box-shadow: (
+		$active-box-shadow,
+	),
+	tile-shadow: (
+		$active-box-shadow,
+		rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+		rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
+		rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset,
+	),
+	box-shadow: (
+		2px 8px 10px rgba(149, 157, 165, 0.2),
+	),
+	active-text-icons-shadow: (
+		2px 2px 4px rgba(0, 0, 0, 0.3),
+	),
+);
 
 $base-transition: 0.4s ease-in-out;
 
@@ -54,12 +72,12 @@ $font-by-yoganka: 'by Yoganka', Helvetica;
 	line-height: 2.5rem;
 	font-weight: bold;
 	text-transform: uppercase;
-	color: $accent-text;
+	color: map.get($colors, accent-text);
 
 	cursor: pointer;
-	background-color: $accent-bcg;
+	background-color: map.get($colors, accent-bcg);
 	border-radius: map.get($sizes, border-radius);
-	box-shadow: $active-text-icons-shadow;
+	box-shadow: map.get($shadows, active-text-icons-shadow);
 	overflow: hidden;
 	transition: $base-transition;
 }
