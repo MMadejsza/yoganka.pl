@@ -1,3 +1,4 @@
+@use 'sass:color';
 @use '_global_variables-templates' as var;
 // @forward '_media';
 
@@ -106,7 +107,11 @@ a {
 		font-size: 1rem;
 		letter-spacing: 1px;
 		color: var.$tile-text-muted;
-		background: linear-gradient(to bottom, transparent, darken(var.$tile, 13%));
+		background: linear-gradient(
+			to bottom,
+			transparent,
+			color.scale(var.$tile, $lightness: -13%)
+		);
 
 		display: flex;
 		justify-content: center;
