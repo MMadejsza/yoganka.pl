@@ -2,6 +2,8 @@
 @use '_global_variables-templates' as var;
 @use '_global_mixins-keyframes' as mixin;
 
+@forward '_home_common';
+
 %action-btn {
 	display: block;
 	min-width: 125px;
@@ -42,114 +44,6 @@
 	src: url('/fonts/PrimaSansBT-Roman.otf') format('truetype');
 }
 
-* {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-	list-style: none;
-}
-//! COMMON BLOCKS
-html {
-	--section-padding-y: #{var.$section-padding-y};
-	scroll-behavior: smooth;
-	font-family: 'EB Garamond', serif;
-	font-weight: 400;
-	font-size: 8.5px;
-	text-align: center;
-	color: var.$base-text;
-
-	background-color: var.$base;
-}
-body {
-	margin: 0 auto;
-}
-ul {
-	list-style: none;
-}
-img {
-	display: block;
-	max-width: 100%;
-}
-a {
-	color: inherit;
-	transition: var.$base-transition;
-}
-.clickable:not(.footer__pop-ups *) {
-	box-shadow: var.$tile-shadow;
-	position: relative;
-
-	&::after {
-		content: '...';
-		position: absolute;
-		bottom: 0;
-		left: 0;
-		width: 100%;
-		height: 10%;
-		padding-bottom: 0.5rem;
-
-		font-size: 1rem;
-		letter-spacing: 1px;
-		color: var.$tile-text-muted;
-		background: linear-gradient(
-			to bottom,
-			transparent,
-			color.scale(var.$tile, $lightness: -13%)
-		);
-
-		display: flex;
-		justify-content: center;
-		align-items: flex-end;
-	}
-}
-div.visible {
-	opacity: 1;
-	width: 95vw;
-	min-height: max-content;
-	max-height: 92vh;
-}
-div.hidden {
-	display: none;
-}
-.blur {
-	backdrop-filter: blur(10px);
-}
-.section-header {
-	grid: 1 / -1;
-	padding: 1rem 0.5rem;
-
-	font-size: 4rem;
-	line-height: 6rem;
-	text-transform: uppercase;
-	color: var.$tile-title;
-}
-.wrapper {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-	grid-template-areas:
-		'header header header header header '
-		'about about about about about'
-		'offer offer offer offer offer'
-		'cert cert cert cert cert'
-		'partners partners partners partners partners'
-		'footer footer footer footer footer';
-	gap: 2.2rem 0;
-	-webkit-overflow-scrolling: touch;
-}
-.stopScroll {
-	overflow: hidden;
-}
-section:not(:first-of-type),
-footer {
-	padding: 0 var(--section-padding-y) 2rem;
-	box-shadow: var.$section-shadow;
-}
-* input {
-	outline: none;
-	border: none;
-	cursor: auto;
-	background-color: var.$base;
-}
-//! COMMON BLOCKS END
 //! NAV
 .burger {
 	top: 2rem;
