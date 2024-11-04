@@ -286,7 +286,6 @@
 
 		&__title {
 			grid-area: h;
-			margin: 0;
 
 			&--day {
 				margin: 0;
@@ -437,6 +436,9 @@
 		&__full-desc {
 			grid-column: -1 / -4;
 			place-self: center;
+			&--event {
+				grid-column: 1 / -1;
+			}
 		}
 
 		&__desc {
