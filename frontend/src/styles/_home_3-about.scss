@@ -85,7 +85,7 @@
 		align-self: flex-end;
 		margin-right: 1rem;
 
-		font-family: 'Birthstone Bounce', cursive;
+		font-family: map.get(var.$typo, signature);
 		font-size: 3rem;
 	}
 }
