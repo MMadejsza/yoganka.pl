@@ -77,7 +77,7 @@ html {
 	@include mixin.flex(column, $align: center);
 
 	&__list {
-		margin-top: 3.5rem;
+		margin-top: 5rem;
 
 		@include mixin.flex(column);
 

@@ -162,6 +162,9 @@
 		right: $burger-offset * $bar-width;
 	}
 
+	.nav__list {
+		margin-top: 7rem;
+	}
 	.nav__item {
 		transition: map.get(var.$behavior, base-transition);
 
@@ -426,6 +429,9 @@
 	}
 }
 @media (min-width: 960px) {
+	.nav__list {
+		margin-top: 8.5rem;
+	}
 	.burger {
 		$bar-height: 0.6rem;
 		$bar-width: 5rem;
