@@ -190,7 +190,7 @@
 	.about {
 		gap: 2.5rem 1.5rem;
 
-		&__img {
+		&__img-container {
 			max-width: 640px;
 		}
 
@@ -479,7 +479,7 @@
 @media (min-width: 1025px) {
 	// big landscape tablets, laptops, and desktops
 	html {
-		font-size: 10px;
+		font-size: 11px;
 	}
 	.wrapper {
 		max-width: 1000px;
@@ -613,11 +613,7 @@
 			text-align: left;
 		}
 
-		&__img--portrait {
-			display: none;
-		}
-
-		&__img {
+		&__img-container {
 			order: 2;
 			width: 35%;
 			height: 70%;
@@ -627,6 +623,9 @@
 			background-size: cover;
 			background-position: center;
 			background-attachment: fixed;
+		}
+		&__img--portrait {
+			display: none;
 		}
 	}
 	.offer {
@@ -706,7 +705,7 @@
 	.about {
 		margin-top: 500px;
 
-		&__img {
+		&__img-container {
 			width: 31%;
 			height: 78%;
 		}
@@ -741,5 +740,11 @@
 		.footer__social-link {
 			font-size: 4rem;
 		}
+	}
+}
+@media (min-width: 1921px) {
+	// big landscape tablets, laptops, and desktops
+	html {
+		font-size: 12px;
 	}
 }
