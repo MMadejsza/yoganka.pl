@@ -1,5 +1,6 @@
 @use 'sass:map';
 @use '_global_variables-templates' as var;
+@use '_global_mixins-keyframes' as mixin;
 
 //! FOOTER
 .footer {
@@ -13,11 +14,7 @@
 	border-top-left-radius: map.get(var.$sizes, border-radius);
 	border-top-right-radius: map.get(var.$sizes, border-radius);
 
-	display: flex;
-	flex-direction: column;
-	justify-content: space-evenly;
-	align-items: center;
-	gap: 1rem;
+	@include mixin.flex(column, space-evenly, center, 1rem);
 
 	&__logo {
 		width: 45vw;
@@ -39,10 +36,7 @@
 	}
 
 	&__company-details {
-		display: flex;
-		flex-direction: column;
-		justify-content: space-evenly;
-		gap: 0.5rem;
+		@include mixin.flex(column, space-evenly, $gap: 1rem);
 
 		& a {
 			font-size: 2.2rem;
@@ -51,10 +45,7 @@
 	}
 
 	&__socials {
-		display: flex;
-		justify-content: space-evenly;
-		align-items: center;
-		gap: 3rem;
+		@include mixin.flex(row, center, center, 3rem);
 	}
 
 	&__qr {
@@ -85,11 +76,7 @@
 		right: 1rem;
 		z-index: 10;
 
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		gap: 1.5rem;
+		@include mixin.flex(column, center, center, 1.5rem);
 
 		transition: map.get(var.$behavior, base-transition);
 	}
@@ -145,10 +132,7 @@
 		transition: map.get(var.$behavior, base-transition);
 		opacity: 0;
 
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		gap: 2rem;
+		@include mixin.flex(row, center, center, 2rem);
 
 		// to bump up specificity
 		.footer__cookie-close-icon {

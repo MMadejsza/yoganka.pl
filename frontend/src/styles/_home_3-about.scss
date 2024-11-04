@@ -1,6 +1,6 @@
 @use 'sass:map';
 @use '_global_variables-templates' as var;
-
+@use '_global_mixins-keyframes' as mixin;
 //! ABOUT
 .about {
 	grid-area: about;
@@ -49,25 +49,21 @@
 		border-bottom-right-radius: map.get(var.$sizes, border-radius);
 		overflow: hidden;
 
-		display: flex;
-		justify-content: right;
-		gap: 1rem;
+		@include mixin.flex($justify: right, $gap: 1rem);
 	}
 
-	&__certificates img {
-		max-height: 100%;
-		filter: grayscale(1);
+	&__certificates {
+		img {
+			max-height: 100%;
+			filter: grayscale(1);
+		}
 	}
 
 	&__content {
 		grid-area: content;
-
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		gap: 1.5rem;
 		padding: 1rem;
+
+		@include mixin.flex(column, center, center, 1.5rem);
 	}
 
 	&__heading {

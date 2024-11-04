@@ -1,5 +1,6 @@
 @use 'sass:map';
 @use '_global_variables-templates' as var;
+@use '_global_mixins-keyframes' as mixin;
 
 //! NAV
 .burger {
@@ -11,9 +12,7 @@
 	z-index: 7;
 	cursor: pointer;
 
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
+	@include mixin.flex(column, space-between);
 
 	&__bar {
 		width: 100%;
@@ -66,15 +65,13 @@
 	background-color: map.get(var.$colors, nav);
 	transition: map.get(var.$behavior, base-transition);
 
-	display: flex;
-	flex-direction: column;
-	align-items: center;
+	@include mixin.flex(column, $align: center);
 
 	&__list {
 		margin-top: 3.5rem;
 
-		display: flex;
-		flex-direction: column;
+		@include mixin.flex(column);
+
 		list-style: none;
 	}
 

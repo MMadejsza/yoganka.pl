@@ -51,3 +51,19 @@
 @mixin animation($duration, $keyframe, $looping: infinite, $behavior: linear) {
 	animation: $duration $keyframe $looping $behavior;
 }
+
+@mixin flex($direction: null, $justify: null, $align: null, $gap: null) {
+	display: flex;
+	@if $direction {
+		flex-direction: $direction;
+	}
+	@if $justify {
+		justify-content: $justify;
+	}
+	@if $align {
+		align-items: $align;
+	}
+	@if $gap {
+		gap: $gap;
+	}
+}

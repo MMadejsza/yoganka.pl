@@ -54,11 +54,7 @@
 	// 	letter-spacing: 2px;
 	// 	text-align: left;
 	// 	color: map.get(var.$colors, tile-title);
-
-	// 	display: flex;
-	// 	flex-direction: column;
-	// 	justify-content: center;
-	// }
+	// @include mixin.flex(column,center);
 
 	// &__title {
 	// 	text-transform: none;

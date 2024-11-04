@@ -1,5 +1,6 @@
 @use 'sass:map';
 @use '_global_variables-templates' as var;
+@use '_global_mixins-keyframes' as mixin;
 
 //! CERTIFICATES
 .certificates {
@@ -21,10 +22,7 @@
 		border-radius: map.get(var.$sizes, border-radius);
 		overflow: hidden;
 
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
+		@include mixin.flex(column, center, center);
 	}
 	&__name {
 		font-size: 2rem;

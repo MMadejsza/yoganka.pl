@@ -134,10 +134,7 @@
 			width: max-content;
 			justify-self: center;
 			grid-column: 1 / -1;
-			display: flex;
-			flex-direction: column;
-			// justify-content: center;
-			align-items: center;
+			@include mixin.flex(column, $align: center);
 		}
 	}
 	.partners {
@@ -479,7 +476,7 @@
 @media (min-width: 1025px) {
 	// big landscape tablets, laptops, and desktops
 	html {
-		font-size: 11px;
+		font-size: 10px;
 	}
 	.wrapper {
 		max-width: 1000px;
@@ -593,9 +590,7 @@
 		z-index: -1;
 		transform: translateY(-50%);
 
-		display: flex;
-		justify-content: space-around;
-		align-items: center;
+		@include mixin.flex(row, space-around, center);
 
 		&__header {
 			display: none;
@@ -658,9 +653,7 @@
 		padding: 0 2rem 3rem;
 		font-size: 1.9rem;
 
-		display: flex;
-		justify-content: space-evenly;
-		align-items: center;
+		@include mixin.flex($justify: space-evenly, $align: center);
 		row-gap: 1rem;
 
 		&__logo-container {
@@ -695,6 +688,9 @@
 @media (min-width: 1280px) {
 	// hi-res laptops and desktops
 	// about is absolute at this stage
+	html {
+		font-size: 11px;
+	}
 	.wrapper,
 	.about {
 		max-width: 1200px;

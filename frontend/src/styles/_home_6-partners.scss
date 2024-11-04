@@ -10,17 +10,13 @@
 	&__gallery {
 		background-color: map.get(var.$colors, tile);
 
-		display: flex;
-		justify-content: space-around;
-		align-items: center;
-		gap: 2rem;
+		@include mixin.flex($justify: space-around, $align: center, $gap: 2rem);
 
 		@include mixin.animation(15s, slide, infinite, linear);
 	}
 
 	&__gallery-slide {
-		display: flex;
-		align-items: center;
+		@include mixin.flex($align: center);
 		position: relative;
 
 		&:hover .partners__gallery {
@@ -47,9 +43,7 @@
 
 		border-radius: map.get(var.$sizes, border-radius);
 
-		display: flex;
-		justify-content: center;
-		align-items: center;
+		@include mixin.flex($justify: center, $align: center);
 
 		&:last-child {
 			margin-right: 2.5rem;
