@@ -1,13 +1,22 @@
 @use 'sass:map';
+@use 'sass:math';
 @use '_global_variables-templates' as var;
 @use '_global_mixins-keyframes' as mixin;
-
+html {
+	--bar-width: 3.5rem;
+}
 //! NAV
 .burger {
-	top: 2rem;
-	right: 2rem;
-	width: 3.5rem;
-	height: 3rem;
+	$bar-height: 0.4rem;
+	$bar-width: 3.5rem;
+	$bars-space: 2.5 * $bar-height;
+	$burger-offset: 0.7;
+	$burger-height: 3 * $bar-height + 2 * $bars-space;
+
+	top: $burger-offset * $bar-width;
+	right: $burger-offset * $bar-width;
+	width: $bar-width;
+	height: $burger-height;
 	position: fixed;
 	z-index: 7;
 	cursor: pointer;
@@ -15,13 +24,13 @@
 	@include mixin.flex(column, space-between);
 
 	&__bar {
-		width: 100%;
-		height: 4px;
+		width: $bar-width;
+		height: $bar-height;
 		background-color: map.get(var.$colors, accent-bcg);
 		transition: map.get(var.$behavior, base-transition);
-		border-radius: 2px;
-		//Initial state
+		border-radius: $bar-height * 0.5;
 
+		//Initial state
 		&--top,
 		&--bottom {
 			transform-origin: center;
@@ -31,7 +40,7 @@
 	// Active state
 	&.active {
 		.burger__bar--top {
-			transform: translateY(calc((10px / 2) - (-10px / 2))) rotate(45deg);
+			transform: translateY($burger-height * 0.5 - $bar-height * 0.5) rotate(45deg);
 		}
 
 		.burger__bar--middle {
@@ -40,7 +49,7 @@
 		}
 
 		.burger__bar--bottom {
-			transform: translateY(calc((-29px / 2) + (4px / 2))) rotate(-45deg);
+			transform: translateY(-$burger-height * 0.5 + $bar-height * 0.5) rotate(-45deg);
 		}
 
 		& + .nav {

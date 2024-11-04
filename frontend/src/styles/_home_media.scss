@@ -155,6 +155,13 @@
 }
 @media (min-width: 768px) {
 	// tablet, landscape iPad, lo-res laptops ands desktops
+	.burger {
+		$burger-offset: 1;
+		$bar-width: 3.5rem;
+		top: $burger-offset * $bar-width;
+		right: $burger-offset * $bar-width;
+	}
+
 	.nav__item {
 		transition: map.get(var.$behavior, base-transition);
 
@@ -419,6 +426,33 @@
 	}
 }
 @media (min-width: 960px) {
+	.burger {
+		$bar-height: 0.6rem;
+		$bar-width: 5rem;
+		$bars-space: 2.5 * $bar-height;
+		$burger-offset: 0.7;
+		$burger-height: 3 * $bar-height + 2 * $bars-space;
+
+		top: $burger-offset * $bar-width;
+		right: $burger-offset * $bar-width;
+		width: $bar-width;
+		height: $burger-height;
+
+		&__bar {
+			width: $bar-width;
+			height: $bar-height;
+			border-radius: $bar-height * 0.5;
+		}
+
+		&.active {
+			.burger__bar--top {
+				transform: translateY($burger-height * 0.5 - $bar-height * 0.5) rotate(45deg);
+			}
+			.burger__bar--bottom {
+				transform: translateY(-$burger-height * 0.5 + $bar-height * 0.5) rotate(-45deg);
+			}
+		}
+	}
 	.modal {
 		&__modal-body {
 			grid-template-columns: repeat(6, minmax(125px, 1fr));

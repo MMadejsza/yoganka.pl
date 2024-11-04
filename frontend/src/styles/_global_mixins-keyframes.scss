@@ -67,3 +67,8 @@
 		gap: $gap;
 	}
 }
+
+@mixin offset-burger($offset) {
+	top: $offset * var(--bar-width);
+	right: $offset * var(--bar-width);
+}
