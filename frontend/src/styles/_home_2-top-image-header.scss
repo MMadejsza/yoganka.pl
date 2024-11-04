@@ -44,32 +44,32 @@
 		transform: translateX(-50%);
 	}
 
-	&__title-bar {
-		width: max-content;
-		margin: 0 auto;
+	// &__title-bar {
+	// 	width: max-content;
+	// 	margin: 0 auto;
 
-		font-family: map.get(var.$typo, font-body-healing);
-		font-size: 2rem;
-		font-weight: 100;
-		letter-spacing: 2px;
-		text-align: left;
-		color: map.get(var.$colors, tile-title);
+	// 	font-family: map.get(var.$typo, font-body-healing);
+	// 	font-size: 2rem;
+	// 	font-weight: 100;
+	// 	letter-spacing: 2px;
+	// 	text-align: left;
+	// 	color: map.get(var.$colors, tile-title);
 
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-	}
+	// 	display: flex;
+	// 	flex-direction: column;
+	// 	justify-content: center;
+	// }
 
-	&__title {
-		text-transform: none;
-	}
+	// &__title {
+	// 	text-transform: none;
+	// }
 
-	&__subtitle {
-		font-family: map.get(var.$typo, font-by-yoganka);
-		font-weight: lighter;
-		font-size: 2rem;
-		letter-spacing: 3px;
-	}
+	// &__subtitle {
+	// 	font-family: map.get(var.$typo, font-by-yoganka);
+	// 	font-weight: lighter;
+	// 	font-size: 2rem;
+	// 	letter-spacing: 3px;
+	// }
 
 	&__motto {
 		grid-area: motto;

@@ -176,12 +176,13 @@
 	.top-image-header {
 		background-image: url(/imgs/header/1024_header_portrait.jpg);
 
-		&__title-bar {
-			height: 11rem;
+		// &__title-bar {
+		// 	height: 11rem;
 
-			font-size: 3rem;
-			letter-spacing: 3px;
-		}
+		// 	font-size: 3rem;
+		// 	letter-spacing: 3px;
+		// }
+
 		&__motto {
 			font-size: 2.5rem;
 		}
@@ -559,13 +560,13 @@
 			width: 100%;
 		}
 
-		&__title-bar {
-			width: max-content;
-			height: 13rem;
+		// &__title-bar {
+		// 	width: max-content;
+		// 	height: 13rem;
 
-			font-size: 4rem;
-			letter-spacing: 6px;
-		}
+		// 	font-size: 4rem;
+		// 	letter-spacing: 6px;
+		// }
 
 		&__logo {
 			margin-top: 2rem;
