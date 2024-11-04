@@ -2,6 +2,9 @@
 @use '_global_variables-templates' as var;
 @use '_global_mixins-keyframes' as mixin;
 
+@import url('/src/services/glide/dist/css/glide.core.min.css');
+@import url('/src/services/glide/dist/css/glide.theme.min.css');
+
 %slider-shade-overlay {
 	position: absolute;
 	top: 0;
