@@ -103,8 +103,7 @@
 
 		&:hover {
 			transform: translateY(-25%) scale(1.15);
-			border: 1px solid #bbb;
-			box-shadow: var.$active-box-shadow;
+			box-shadow: map.get(var.$shadows, active-box-shadow);
 		}
 		&--cookies:focus .fa-cookie-bite {
 			opacity: 0;
@@ -128,7 +127,7 @@
 		font-size: 1.5rem;
 
 		border-radius: 50px;
-		box-shadow: var.$active-box-shadow;
+		box-shadow: map.get(var.$shadows, active-box-shadow);
 		transition: map.get(var.$behavior, base-transition);
 		opacity: 0;
 

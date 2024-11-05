@@ -70,7 +70,7 @@ html {
 
 	border-top-left-radius: map.get(var.$sizes, border-radius);
 	border-bottom-left-radius: map.get(var.$sizes, border-radius);
-	box-shadow: var.$active-box-shadow, map.get(var.$sizes, tile-shadow);
+	box-shadow: map.get(var.$shadows, tile-shadow);
 	background-color: map.get(var.$colors, nav);
 	transition: map.get(var.$behavior, base-transition);
 
