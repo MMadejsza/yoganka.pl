@@ -175,9 +175,15 @@
 			border-bottom-right-radius: map.get(var.$sizes, border-radius);
 		}
 
-		&:hover .nav__link {
+		%hover {
 			color: map.get(var.$colors, accent-bcg);
 			text-shadow: map.get(var.$shadows, active-text-icons-shadow);
+		}
+		&:hover .nav__link {
+			@extend %hover;
+			i {
+				@extend %hover;
+			}
 		}
 	}
 	.top-image-header {
