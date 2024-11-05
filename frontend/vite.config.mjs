@@ -21,12 +21,8 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			'@': '/src', // alias @ for routes staring from 'src',
-			// '@glidejs': resolve(__dirname, 'node_modules/@glidejs'),
 		},
 	},
-	// optimizeDeps: {
-	// 	include: ['@glidejs/glide'], // add glide to bundling
-	// },
 	css: {
 		preprocessorOptions: {
 			scss: {
