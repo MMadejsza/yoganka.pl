@@ -131,6 +131,7 @@
 		width: 100%;
 		grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
 		grid-gap: 2.5rem;
+		justify-items: center;
 
 		border-radius: map.get(var.$sizes, border-radius);
 
@@ -149,6 +150,9 @@
 				);
 			}
 		}
+		// &--event {
+		// 	justify-items: center;
+		// }
 	}
 
 	& .glide {
@@ -224,6 +228,9 @@
 	}
 }
 .modal-checklist {
+	&--event {
+		width: max-content;
+	}
 	&__list {
 		@extend .modal__list;
 	}
