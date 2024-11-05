@@ -18,6 +18,7 @@
 	&__gallery-slide {
 		@include mixin.flex($align: center);
 		position: relative;
+		font-size: 0;
 
 		&:hover .partners__gallery {
 			animation-play-state: paused;
