@@ -1,3 +1,6 @@
+// Import of style moved to index.js due to troubles with proper vite bundling
+import '../../node_modules/@glidejs/glide/dist/css/glide.core.min.css';
+import '../../node_modules/@glidejs/glide/dist/css/glide.theme.min.css';
 import Glide from '@glidejs/glide';
 import '/src/styles/main.scss';
 

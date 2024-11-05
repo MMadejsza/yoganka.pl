@@ -1,16 +1,18 @@
 {
-  "name": "frontend",
-  "version": "1.0.0",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "devDependencies": {
-    "sass": "^1.80.5",
-    "vite": "^5.x.x"
-  },
-  "dependencies": {
-    "frontend": "file:"
-  }
+	"name": "frontend",
+	"version": "1.0.0",
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build",
+		"preview": "vite preview",
+		"b": "vite build && vite preview"
+	},
+	"devDependencies": {
+		"sass": "^1.80.5",
+		"vite": "^5.x.x"
+	},
+	"dependencies": {
+		"@glidejs/glide": "^3.6.2",
+		"frontend": "file:"
+	}
 }
