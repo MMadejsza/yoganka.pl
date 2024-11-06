@@ -1,7 +1,7 @@
 ## Dev Tasks Shortcuts
-- [feature](https://github.com/MMadejsza/yoganka.pl/issues/new?template=dev_issue_template.yml&labels=feature&assignees=MMadejsza)
-- [enhancement](https://github.com/MMadejsza/yoganka.pl/issues/new?template=dev_issue_template.yml&labels=enhancement&assignees=MMadejsza)
-- [bug](https://github.com/MMadejsza/yoganka.pl/issues/new?template=dev_issue_template.yml&labels=bug&assignees=MMadejsza)
+- [feature](https://github.com/MMadejsza/yoganka.pl/issues/new?template=task_template.yml&labels=feature&assignees=MMadejsza)
+- [enhancement](https://github.com/MMadejsza/yoganka.pl/issues/new?template=task_template.yml&labels=enhancement&assignees=MMadejsza)
+- [bug](https://github.com/MMadejsza/yoganka.pl/issues/new?template=bug_template.yml&labels=bug&assignees=MMadejsza)
 - [documentation](https://github.com/MMadejsza/yoganka.pl/issues/new?template=dev_issue_template.yml&labels=documentation&assignees=MMadejsza)
 
 ## Given Design for Desktop:
