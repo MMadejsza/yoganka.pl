@@ -225,6 +225,18 @@
 		&__img--event-modal {
 			grid-column: 1 / -1;
 		}
+
+		$title-font-size: 2.2rem;
+		$title-line-height: 1.1;
+		#wyjazdy &__title {
+			height: $title-font-size * 3 + 2.5 * $title-line-height;
+		}
+
+		&--event {
+			.tile__title {
+				height: $title-font-size * 2 + 1.8 * $title-line-height;
+			}
+		}
 	}
 	.offer {
 		grid-template-areas:
