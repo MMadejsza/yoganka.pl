@@ -4,7 +4,11 @@ import '../../node_modules/@glidejs/glide/dist/css/glide.theme.min.css';
 import Glide from '@glidejs/glide';
 import '/src/styles/main.scss';
 
+// Get todays date
+const todayRaw = new Date();
+const today = todayRaw.toISOString().split('T')[0]; // "YYYY-MM-DD"
 const htmlToImgsPath = '/imgs';
+
 // Created camps so far
 const kaszubyCamp = {
 	type: `camp`,
@@ -13,6 +17,7 @@ const kaszubyCamp = {
 	galleryPath: `${htmlToImgsPath}/offer/camps/camp_kaszuby/gallery`,
 	gallerySize: 12,
 	fileName: `camp_kaszuby`,
+	date: '2024-10-11',
 	front: {
 		nazwaWyjazdu: `Kojenie Zmysłów
 	   Joga | Aromaterapia | SPA | SkinCare`,
@@ -107,6 +112,7 @@ const warmiaCamp = {
 	galleryPath: `${htmlToImgsPath}/offer/camps/camp_warmia/gallery`,
 	gallerySize: 12,
 	fileName: `camp_warmia`,
+	date: '2024-11-08',
 	front: {
 		nazwaWyjazdu: `Comfy slow weekend
 	   Joga | Malowanie | SPA | Misy\u00A0i\u00A0gongi`,
@@ -207,6 +213,8 @@ const yogaAndSound = {
 	imgPath: `${htmlToImgsPath}/offer/events/yoga&sound/front`,
 	galleryPath: `${htmlToImgsPath}/offer/events/yoga&sound/front`,
 	fileName: `ys`,
+	date: '2025-05-21',
+	eventType: 'fixed',
 	front: {
 		nazwaWyjazdu: `YOGA\u00A0&\u00A0SOUND
 		Moon\u00A0Ceremony`,
@@ -240,6 +248,8 @@ const yogaNaSupach = {
 	imgPath: `${htmlToImgsPath}/offer/events/sup/front`,
 	galleryPath: `${htmlToImgsPath}/offer/events/sup/front`,
 	fileName: `sup`,
+	date: '2025-05-22',
+	eventType: 'fixed',
 	front: {
 		nazwaWyjazdu: `Sup yoga`,
 		listaDat: [`Latem`],
@@ -258,9 +268,11 @@ const hotYoga = {
 	imgPath: `${htmlToImgsPath}/offer/events/hot_yoga/front`,
 	galleryPath: `${htmlToImgsPath}/offer/events/hot_yoga/front`,
 	fileName: `hot_yoga`,
+	date: today,
+	eventType: 'fixed',
 	front: {
 		nazwaWyjazdu: `HOT YOGA`,
-		listaDat: [`19.10.2024 g.11.00`],
+		listaDat: [`Czwartki g.19.30`],
 		rejon: `Limitless\u00A0by\u00A0autopay, Sopot`,
 		krotkiOpis: `Unikatowa praktyka hot\u00A0yogi w\u00A0saunie`,
 	},
@@ -296,6 +308,7 @@ class Tile {
 		this.galleryPath = givenEventBody.galleryPath;
 		this.gallerySize = givenEventBody.gallerySize;
 		this.fileName = givenEventBody.fileName;
+		this.date = givenEventBody.date;
 		this.frontTitle = givenEventBody.front.nazwaWyjazdu;
 		this.frontDate = givenEventBody.front.listaDat;
 		this.frontLocation = givenEventBody.front.rejon;
@@ -481,6 +494,11 @@ class Tile {
 				}
 			}, 500);
 		});
+
+		// archive if after today's date
+		if (this.date < today) {
+			tile.classList.add('past');
+		}
 
 		return tile;
 	};
@@ -826,20 +844,32 @@ class Tile {
 }
 
 // list of active camps to sign for
-const activeCamps = [kaszubyCamp, warmiaCamp];
+const unSortedCamps = [kaszubyCamp, warmiaCamp];
+const activeCamps = unSortedCamps.sort((x, y) => new Date(y.date) - new Date(x.date));
 // list of active camps to sign for
-const activeEvents = [hotYoga, yogaAndSound, yogaNaSupach];
+const unsortedEvents = [hotYoga, yogaAndSound, yogaNaSupach];
+const activeEvents = unsortedEvents.sort((x, y) => {
+	// sort by type: "fixed" przed "repetitive"
+	if (x.eventType === 'fixed' && y.eventType !== 'fixed') {
+		return -1; // x (fixed) before y (repetitive)
+	} else if (x.eventType !== 'fixed' && y.eventType === 'fixed') {
+		return 1; // y (fixed) before x (repetitive)
+	}
+
+	// By date
+	return new Date(x.date) - new Date(y.date); // ascending
+});
 
 // fix top bcg image size
-function adjustImgHeight() {
-	// catch bcg
-	const bcgImg = document.querySelector('.top-image-header');
-	// catch initially computed height
-	let elHeight = window.getComputedStyle(bcgImg).height;
-	console.log(elHeight);
-	// make this height fixed to not be subject to vh
-	bcgImg.style.height = elHeight;
-}
+// function adjustImgHeight() {
+// 	// catch bcg
+// 	const bcgImg = document.querySelector('.top-image-header');
+// 	// catch initially computed height
+// 	let elHeight = window.getComputedStyle(bcgImg).height;
+// 	console.log(elHeight);
+// 	// make this height fixed to not be subject to vh
+// 	bcgImg.style.height = elHeight;
+// }
 // do when DOM loaded
 document.addEventListener('DOMContentLoaded', function () {
 	const menuLinks = document.querySelectorAll('ul li a');
