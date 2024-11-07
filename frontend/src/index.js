@@ -759,11 +759,13 @@ class Tile {
 		//@ attention
 		// create a footer with 2 buttons to cause and action
 		// @ footer modal_user-action
-		const attentionNote = this.createEl('h2', {
-			class: 'modal__attention-note',
-		});
-		attentionNote.innerText = this.modal.uwaga;
-		modalOffer.appendChild(attentionNote);
+		if (this.modal.uwaga) {
+			const attentionNote = this.createEl('h2', {
+				class: 'modal__attention-note',
+			});
+			attentionNote.innerText = this.modal.uwaga;
+			modalOffer.appendChild(attentionNote);
+		}
 		// create a footer with 2 buttons to cause and action
 		// @ footer modal_user-action
 		const footer = this.createEl('footer', {
