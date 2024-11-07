@@ -289,6 +289,7 @@ const hotYoga = {
 				`Napar Imbirowy`,
 			],
 		},
+		uwaga: 'Cena: 110zł',
 		linkFormularza: 'https://www.facebook.com/events/945794327582158',
 		// questionTemplate(subject) {
 		// 	return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
@@ -498,6 +499,10 @@ class Tile {
 		// archive if after today's date
 		if (this.date < today) {
 			tile.classList.add('past');
+			// remove the past price
+			if (this.modal) {
+				this.modal.krotkieInfo.cena = '-';
+			}
 		}
 
 		return tile;
@@ -751,6 +756,14 @@ class Tile {
 			);
 			modalOffer.appendChild(sectionIncluded);
 		}
+		//@ attention
+		// create a footer with 2 buttons to cause and action
+		// @ footer modal_user-action
+		const attentionNote = this.createEl('h2', {
+			class: 'modal__attention-note',
+		});
+		attentionNote.innerText = this.modal.uwaga;
+		modalOffer.appendChild(attentionNote);
 		// create a footer with 2 buttons to cause and action
 		// @ footer modal_user-action
 		const footer = this.createEl('footer', {
@@ -860,16 +873,6 @@ const activeEvents = unsortedEvents.sort((x, y) => {
 	return new Date(x.date) - new Date(y.date); // ascending
 });
 
-// fix top bcg image size
-// function adjustImgHeight() {
-// 	// catch bcg
-// 	const bcgImg = document.querySelector('.top-image-header');
-// 	// catch initially computed height
-// 	let elHeight = window.getComputedStyle(bcgImg).height;
-// 	console.log(elHeight);
-// 	// make this height fixed to not be subject to vh
-// 	bcgImg.style.height = elHeight;
-// }
 // do when DOM loaded
 document.addEventListener('DOMContentLoaded', function () {
 	const menuLinks = document.querySelectorAll('ul li a');
