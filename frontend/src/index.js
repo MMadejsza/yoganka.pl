@@ -230,7 +230,7 @@ const yogaAndSound = {
 			naglowek: 'Relaks menu:',
 			tresc: [
 				`Joga przy dźwiękach mis\u00A0i\u00A0gongów (gra Agnieszka\u00A0Topp)`,
-				`Relaks z\u00A0opaską na\u00A0oczach nasączona aromatycznymi olejkami`,
+				`Relaks z\u00A0opaską na\u00A0oczach nasączoną aromatycznymi olejkami`,
 				`Zdrowy napar naszego przepisu`,
 				`Inspirujące rozmowy w\u00A0kręgu`,
 				`Upominek`,
@@ -279,7 +279,7 @@ const hotYoga = {
 	modal: {
 		// imgModal: this.imgPath,
 		tytulOpisu: 'O spotkaniu:',
-		pelnyOpis: `Podwyższona temperatura w\u00A0saunie umożliwi dostęp do\u00A0głębszego rozluźnienia i\u00A0większej elastyczności ciała. Podrzegamy saunę do\u00A036\u00A0stopni. Przećwiczysz specjalnie dobrane pozycje siedzące i\u00A0leżące, które\u00A0łatwo zastosujesz w\u00A0życiu codziennym. Na\u00A0zakończenie czeka Cię sesja relaksacyjna i\u00A0seans saunowy prowadzony przez saunomistrza, z\u00A0dobranymi na\u00A0jesienną porę olejkami zwiększającymi odporność organizmu i\u00A0spokój umysłu.`,
+		pelnyOpis: `Podwyższona temperatura w\u00A0saunie umożliwi dostęp do\u00A0głębszego rozluźnienia i\u00A0większej elastyczności ciała. Podgrzewamy saunę do\u00A036\u00A0stopni. Przećwiczysz specjalnie dobrane pozycje siedzące i\u00A0leżące, które\u00A0łatwo zastosujesz w\u00A0życiu codziennym. Na\u00A0zakończenie czeka Cię sesja relaksacyjna i\u00A0seans saunowy prowadzony przez saunomistrza, z\u00A0dobranymi na\u00A0jesienną porę olejkami zwiększającymi odporność organizmu i\u00A0spokój umysłu.`,
 		program: {
 			naglowek: 'Relaks menu:',
 			tresc: [
@@ -679,24 +679,29 @@ class Tile {
 			'modal-checklist modal-checklist--free-time',
 		);
 		modalOffer.appendChild(sectionFreeTime);
-		//@ attention
-		// create a footer with 2 buttons to cause and action
-		// @ footer modal_user-action
-		const attentionNote = this.createEl('h2', {
-			class: 'modal__attention-note',
-		});
-		attentionNote.innerText = this.modal.uwaga;
-		modalOffer.appendChild(attentionNote);
-		// create a footer with 2 buttons to cause and action
-		// @ footer modal_user-action
-		const footer = this.createEl('footer', {
-			class: 'modal__user-action',
-		});
 
-		// use address  from camps dataset
-		this.generateModalBtns(footer, ['sign']);
+		// archive if after today's date
+		if (this.date >= today) {
+			//@ attention
+			// create a footer with 2 buttons to cause and action
+			// @ footer modal_user-action
+			const attentionNote = this.createEl('h2', {
+				class: 'modal__attention-note',
+			});
+			attentionNote.innerText = this.modal.uwaga;
+			modalOffer.appendChild(attentionNote);
 
-		modalOffer.appendChild(footer);
+			// @ footer modal_user-action
+			// create a footer with 2 buttons to cause and action
+			const footer = this.createEl('footer', {
+				class: 'modal__user-action',
+			});
+
+			// use address  from camps dataset
+			this.generateModalBtns(footer, ['sign']);
+
+			modalOffer.appendChild(footer);
+		}
 		// return complete modal body
 		return modalOffer;
 	};
