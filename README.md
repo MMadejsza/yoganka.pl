@@ -3,7 +3,7 @@
 - [bug](https://github.com/MMadejsza/yoganka.pl/issues/new?template=bug_template.yml&labels=bug,yoganka&assignees=MMadejsza)
 
 ## Supervisor Tasks Shortcuts
-- [Task](https://github.com/MMadejsza/yoganka.pl/issues/new?template=dev_issue_template.yml&labels=Supervisor&assignees=MMadejsza)
+- [task](https://github.com/MMadejsza/yoganka.pl/issues/new?template=dev_issue_template.yml&labels=Supervisor&assignees=MMadejsza)
 - [documentation](https://github.com/MMadejsza/yoganka.pl/issues/new?template=dev_issue_template.yml&labels=Supervisor,documentation&assignees=MMadejsza)
   
 ## Dev Tasks Shortcuts
