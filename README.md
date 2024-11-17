@@ -1,6 +1,6 @@
 ## Business Tasks Shortcuts
-- [feature](https://github.com/MMadejsza/yoganka.pl/issues/new?template=task_template.yml&labels=feature&assignees=MMadejsza)
-- [bug](https://github.com/MMadejsza/yoganka.pl/issues/new?template=bug_template.yml&labels=bug&assignees=MMadejsza)
+- [feature](https://github.com/MMadejsza/yoganka.pl/issues/new?template=task_template.yml&labels=feature,yoganka&assignees=MMadejsza)
+- [bug](https://github.com/MMadejsza/yoganka.pl/issues/new?template=bug_template.yml&labels=bug,yoganka&assignees=MMadejsza)
 
 ## Supervisor Tasks Shortcuts
 - [Task](https://github.com/MMadejsza/yoganka.pl/issues/new?template=dev_issue_template.yml&labels=Supervisor&assignees=MMadejsza)
