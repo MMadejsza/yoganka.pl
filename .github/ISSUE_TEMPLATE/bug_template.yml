@@ -5,48 +5,48 @@ labels: [yoganka, bug]
 projects: ["MMadejsza/Yoganka.pl_Workflow"]
 assignees: MMadejsza
 body:
-- type: textarea
-id: desc
-attributes:
-label: 📝 Bug Description
-description: Clearly define WHAT is the problem and WHEN it occurs.
-placeholder: "As specific as you can."
-validations:
-required: true
-- type: dropdown
-id: platform
-attributes:
-label: 📱 Mobile/Tablet/Desktop?
-multiple: true
-options:
-- 📱 Mobile
-- 📱 Mobile horizontally
-- 📔 Tablet
-- 📔 Tablet horizontally
-- 💻 Desktop
-default: 0
-- type: dropdown
-id: browsers
-attributes:
-label: 🎯 What browsers are you seeing the problem on?
-multiple: true
-options:
-- Chrome
-- Safari
-- Firefox
-- Microsoft Edge
-default: 0
-- type: dropdown
-id: priority
-attributes:
-label: 📆 How urgent it is?
-description: For example, it's important strategically like for upcoming events or it's just "Would be nice to have"?
-options:
-- 💥 ASAP
-- ☝️ 1-2 weeks
-- 🕐 Non-specified in time
-validations:
-required: true
+  - type: textarea
+    id: desc
+    attributes:
+      label: 📝 Bug Description
+      description: Clearly define WHAT is the problem and WHEN it occurs.
+      placeholder: "As specific as you can."
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: 📱 Mobile/Tablet/Desktop?
+      multiple: true
+      options:
+        - 📱 Mobile
+        - 📱 Mobile horizontally
+        - 📔 Tablet
+        - 📔 Tablet horizontally
+        - 💻 Desktop
+      default: 0
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: 🎯 What browsers are you seeing the problem on?
+      multiple: true
+      options:
+        - Chrome
+        - Safari
+        - Firefox
+        - Microsoft Edge
+      default: 0
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 📆 How urgent it is?
+      description: For example, it's important strategically like for upcoming events or it's just "Would be nice to have"?
+      options:
+        - 💥 ASAP
+        - ☝️ 1-2 weeks
+        - 🕐 Non-specified in time
+    validations:
+      required: true
   - type: dropdown
     id: files
     attributes:
@@ -59,9 +59,9 @@ required: true
         - ☝️ Partially - not organized
     validations:
       required: true
-- type: textarea
-id: notes
-attributes:
-label: 📂 Additional Notes that may help
-description: Who noticed it? Add any additional notes that may help to track the problem down, screenshots links, or examples to clarify the task requirements. 
-placeholder: "Optional" 
+  - type: textarea
+    id: notes
+    attributes:
+      label: 📂 Additional Notes that may help
+      description: Who noticed it? Add any additional notes that may help to track the problem down, screenshots links, or examples to clarify the task requirements. 
+      placeholder: "Optional" 
