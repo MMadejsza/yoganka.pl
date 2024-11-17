@@ -19,11 +19,11 @@ body:
       label: 📱 Mobile/Tablet/Desktop?
       multiple: true
       options:
-        - 📱 Mobile
-        - 📱 Mobile (horizontal)
-        - 📔 Tablet
-        - 📔 Tablet (horizontal)
-        - 💻 Desktop
+        - "📱 Mobile"
+        - "📱 Mobile (horizontal)"
+        - "📔 Tablet"
+        - "📔 Tablet (horizontal)"
+        - "💻 Desktop"
       default: 0
   - type: dropdown
     id: browsers
@@ -31,10 +31,10 @@ body:
       label: 🎯 What browsers are you seeing the problem on?
       multiple: true
       options:
-        - Chrome
-        - Safari
-        - Firefox
-        - Microsoft Edge
+        - "Chrome"
+        - "Safari"
+        - "Firefox"
+        - "Microsoft Edge"
       default: 0
   - type: dropdown
     id: priority
@@ -42,9 +42,9 @@ body:
       label: 📆 How urgent is it?
       description: For example, is it important strategically (like for upcoming events) or is it just "Would be nice to have"?
       options:
-        - 💥 ASAP
-        - ☝️ 1-2 weeks
-        - 🕐 No specific time
+        - "💥 ASAP"
+        - "☝️ 1-2 weeks"
+        - "🕐 No specific time"
     validations:
       required: true
   - type: dropdown
@@ -53,10 +53,10 @@ body:
       label: 📷 Have you uploaded all necessary media/files to Google Drive?
       description: Upload all necessary files to Google Drive in a PROPERLY named directory (following our previous workflow). For example: event photos, the correct partner's logo files, properly named templates with dates, etc.
       options:
-        - 💪 Yes
-        - 👎 No
-        - ❔ Not needed/Not sure if needed
-        - ☝️ Partially - not organized
+        - "💪 Yes"
+        - "👎 No"
+        - "❔ Not needed/Not sure if needed"
+        - "☝️ Partially - not organized"
     validations:
       required: true
   - type: textarea
