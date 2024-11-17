@@ -9,8 +9,8 @@ body:
     id: desc
     attributes:
       label: 📝 Bug Description
-      description: Clearly define WHAT is the problem and WHEN it occurs.
-      placeholder: "As specific as you can."
+      description: Clearly define WHAT the problem is and WHEN it occurs.
+      placeholder: "As specific as possible."
     validations:
       required: true
   - type: dropdown
@@ -20,9 +20,9 @@ body:
       multiple: true
       options:
         - 📱 Mobile
-        - 📱 Mobile horizontally
+        - 📱 Mobile (horizontal)
         - 📔 Tablet
-        - 📔 Tablet horizontally
+        - 📔 Tablet (horizontal)
         - 💻 Desktop
       default: 0
   - type: dropdown
@@ -39,23 +39,23 @@ body:
   - type: dropdown
     id: priority
     attributes:
-      label: 📆 How urgent it is?
-      description: For example, it's important strategically like for upcoming events or it's just "Would be nice to have"?
+      label: 📆 How urgent is it?
+      description: For example, is it important strategically (like for upcoming events) or is it just "Would be nice to have"?
       options:
         - 💥 ASAP
         - ☝️ 1-2 weeks
-        - 🕐 Non-specified in time
+        - 🕐 No specific time
     validations:
       required: true
   - type: dropdown
     id: files
     attributes:
-      label: 📷 Have you uploaded all necessary media/files to Google Disk?
-      description: Upload all needed to repair the bug, files. To PROPERLY named directory in Google Disk (nothing new to our previous workflow). For example event photos, proper partner's logo files, named-with-date template to update content etc.
+      label: 📷 Have you uploaded all necessary media/files to Google Drive?
+      description: Upload all necessary files to Google Drive in a PROPERLY named directory (following our previous workflow). For example: event photos, the correct partner's logo files, properly named templates with dates, etc.
       options:
         - 💪 Yes
         - 👎 No
-        - ❔ Not needed/Idk if needed
+        - ❔ Not needed/Not sure if needed
         - ☝️ Partially - not organized
     validations:
       required: true
@@ -63,5 +63,5 @@ body:
     id: notes
     attributes:
       label: 📂 Additional Notes that may help
-      description: Who noticed it? Add any additional notes that may help to track the problem down, screenshots links, or examples to clarify the task requirements. 
-      placeholder: "Optional" 
+      description: Who noticed it? Add any additional notes that may help track the problem, including screenshots, links, or examples to clarify the task requirements. 
+      placeholder: "Optional"
