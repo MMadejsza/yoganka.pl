@@ -9,7 +9,7 @@ body:
     id: desc
     attributes:
       label: 📝 Bug Description
-      description: Clearly define WHAT is the problem and WHEN it occurs.
+      description: Clearly define WHAT the problem is and WHEN it occurs.
       placeholder: "As specific as you can."
     validations:
       required: true
@@ -20,9 +20,9 @@ body:
       multiple: true
       options:
         - 📱 Mobile
-        - 📱 Mobile horizontally
+        - 📱 Mobile horizontal
         - 📔 Tablet
-        - 📔 Tablet horizontally
+        - 📔 Tablet horizontal
         - 💻 Desktop
       default: 0
   - type: dropdown
@@ -39,7 +39,7 @@ body:
   - type: dropdown
     id: priority
     attributes:
-      label: 📆 How urgent it is?
+      label: 📆 How urgent is it?
       description: For example, it's important strategically like for upcoming events or it's just "Would be nice to have"?
       options:
         - 💥 ASAP
@@ -50,8 +50,8 @@ body:
   - type: dropdown
     id: files
     attributes:
-      label: 📷 Have you uploaded all necessary media/files to Google Disk?
-      description: Upload all needed to repair the bug, files. To PROPERLY named directory in Google Disk (nothing new to our previous workflow). For example event photos, proper partner's logo files, named-with-date template to update content etc.
+      label: 📷 Have you uploaded all necessary media/files to Google Drive?
+      description: Upload all needed to repair the bug, files. To PROPERLY named directory in Google Disk (nothing new to our previous workflow). For example event photos, proper partner's logo files, named-with-date template to update content etc. OR following the form is enough.
       options:
         - 💪 Yes
         - 👎 No
