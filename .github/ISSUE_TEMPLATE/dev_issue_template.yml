@@ -4,7 +4,7 @@ title: "-"
 projects: ["MMadejsza/Yoganka.pl_Workflow"]
 assignees: MMadejsza
 body:
-  - type: date
+  - type: input
     id: date
     attributes:
       label: 📅 Deadline
