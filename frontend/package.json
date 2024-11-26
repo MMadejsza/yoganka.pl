@@ -7,12 +7,21 @@
 		"preview": "vite preview",
 		"b": "vite build && vite preview"
 	},
-	"devDependencies": {
-		"sass": "^1.80.5",
-		"vite": "^5.x.x"
-	},
 	"dependencies": {
 		"@glidejs/glide": "^3.6.2",
-		"frontend": "file:"
+		"frontend": "file:",
+		"react": "^18.3.1",
+		"react-dom": "^18.3.1"
+	},
+	"devDependencies": {
+		"@types/react": "^18.2.15",
+		"@types/react-dom": "^18.2.7",
+		"@vitejs/plugin-react": "^4.0.3",
+		"eslint": "^8.45.0",
+		"eslint-plugin-react": "^7.32.2",
+		"eslint-plugin-react-hooks": "^4.6.0",
+		"eslint-plugin-react-refresh": "^0.4.3",
+		"sass": "^1.80.5",
+		"vite": "^5.x.x"
 	}
 }
