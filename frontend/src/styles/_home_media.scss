@@ -207,11 +207,11 @@
 			max-width: 640px;
 		}
 
-		&__heading {
+		&__bio--heading {
 			font-size: 3rem;
 		}
 
-		&__content {
+		&__bio--content {
 			font-size: 1.7rem;
 		}
 	}
@@ -654,13 +654,13 @@
 			display: none;
 		}
 
-		&__content {
+		&__bio--content {
 			max-width: 50%;
 		}
 
-		&__heading,
-		&__greeting,
-		&__description {
+		&__bio--heading,
+		&__bio--greeting,
+		&__bio--description {
 			padding-left: 2rem;
 			justify-self: left;
 			text-align: left;
