@@ -60,7 +60,7 @@
 	.offer-type {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-		grid-template-rows: 5rem;
+		grid-template-rows: auto 1fr;
 		grid-gap: 2.5rem 1.5rem;
 
 		&__header {
