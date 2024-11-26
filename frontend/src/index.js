@@ -605,9 +605,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		const header = document.querySelector('.top-image-header');
 		header.style.backgroundAttachment = 'scroll';
 	}
-	const toggleMenu = () => {
-		hamburger.classList.toggle('active');
-	};
+
 	// function to replace the main contact btn's link
 	const whatsappTemplates = () => {
 		const phoneNumber = '48792891607';
