@@ -1,12 +1,14 @@
-function ImgDynamic({className}) {
+function ImgDynamic({classy, srcSet, ...props}) {
+	const stampedType = props.type == 'about' ? '__img--portrait' : '';
+
+	const srcSetProcessed = srcSet.map((item) => `${item.path} ${item.size}`).join(', ');
+
 	return (
 		<img
-			className={className}
-			srcSet={`${headerImg320} 320w, ${headerImg480} 480w`}
-			sizes='
-                    (max-width: 320px) 320px,
-                    480px'
-			src={headerImg480}
+			className={`${classy}${stampedType}`}
+			srcSet={srcSetProcessed}
+			src={srcSet[0].path}
+			{...props}
 			loading='lazy'
 		/>
 	);

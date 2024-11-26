@@ -1,15 +1,13 @@
 import Stamp from './Stamp.jsx';
+import ImgDynamic from './ImgDynamic.jsx';
 
 function StampedImg({placement, imgPaths, certPaths, ...props}) {
-	const srcSetProcessed = imgPaths.map((item) => `${item.path} ${item.size}`).join(', ');
-
 	return (
 		<aside className={`${placement}__img-container`}>
-			<img
-				className={`${placement}__img--portrait`}
-				srcSet={srcSetProcessed}
-				src={imgPaths[0].path}
-				loading='lazy'
+			<ImgDynamic
+				classy={placement}
+				type={placement}
+				srcSet={imgPaths}
 				{...props}
 			/>
 			<Stamp
