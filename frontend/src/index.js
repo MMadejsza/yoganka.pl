@@ -609,7 +609,6 @@ document.addEventListener('DOMContentLoaded', function () {
 		document.getElementById('whatsapp-contact').href = linkContact;
 	};
 
-	hamburger.addEventListener('click', () => toggleMenu());
 	menuLinks.forEach((link) => {
 		link.addEventListener('click', (event) => {
 			// fetch prop href from clicked menu tile

@@ -1,4 +1,4 @@
-import StampedImg from './StampedImg.jsx';
+import StampedImg from './imgs/StampedImg.jsx';
 import Bio from './Bio.jsx';
 import img320 from '/imgs/about/320_about_profile.jpg';
 import img600 from '/imgs/about/600_about_profile.jpg';
