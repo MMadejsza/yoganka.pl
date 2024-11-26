@@ -13,9 +13,9 @@ function Burger() {
 			className={`burger ${isOpen && `active`}`}
 			id='burger'
 			onClick={handleClick}>
-			<div class='burger__bar burger__bar--top'></div>
-			<div class='burger__bar burger__bar--middle'></div>
-			<div class='burger__bar burger__bar--bottom'></div>
+			<div className='burger__bar burger__bar--top'></div>
+			<div className='burger__bar burger__bar--middle'></div>
+			<div className='burger__bar burger__bar--bottom'></div>
 		</div>
 	);
 }
