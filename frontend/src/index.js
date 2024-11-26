@@ -596,15 +596,8 @@ const activeEvents = unsortedEvents.sort((x, y) => {
 // do when DOM loaded
 document.addEventListener('DOMContentLoaded', function () {
 	const menuLinks = document.querySelectorAll('ul li a');
-	const hamburger = document.getElementById('burger');
 	const wyjazdy = document.querySelector('#wyjazdy');
 	const wydarzenia = document.querySelector('#wydarzenia');
-
-	// if visited on iOS, remove nor supported backgroundAttachment fixed
-	if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
-		const header = document.querySelector('.top-image-header');
-		header.style.backgroundAttachment = 'scroll';
-	}
 
 	// function to replace the main contact btn's link
 	const whatsappTemplates = () => {

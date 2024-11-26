@@ -8,9 +8,11 @@ function Burger() {
 		setIsOpen(nextState);
 	}
 
+	let isActive = isOpen ? `active` : undefined;
+
 	return (
 		<div
-			className={`burger ${isOpen && `active`}`}
+			className={`burger ${isActive}`}
 			id='burger'
 			onClick={handleClick}>
 			<div className='burger__bar burger__bar--top'></div>

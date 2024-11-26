@@ -1,12 +1,21 @@
 import headerImg320 from '/imgs/logo/320_logo_14.png';
 import headerImg480 from '/imgs/logo/480_logo_14.png';
 
+const clPref = 'top-image-header';
+// if visited on iOS, remove nor supported backgroundAttachment fixed
+let iClass;
+if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+	iClass = {backgroundAttachment: 'scroll'};
+}
+
 function HeaderMain() {
 	return (
-		<section className='top-image-header'>
-			<header className='top-image-header__header'>
+		<section
+			className={clPref}
+			style={iClass}>
+			<header className={`${clPref}__header`}>
 				<img
-					className='top-image-header__logo'
+					className={`${clPref}__logo`}
 					srcSet={`${headerImg320} 320w, ${headerImg480} 480w`}
 					sizes='
 								(max-width: 320px) 320px,
@@ -15,7 +24,7 @@ function HeaderMain() {
 					loading='lazy'
 				/>
 			</header>
-			<div className='top-image-header__motto'>
+			<div className={`${clPref}__motto`}>
 				<h3>yoga | slow life | mindfulness</h3>
 			</div>
 		</section>
