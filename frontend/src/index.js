@@ -3,8 +3,8 @@ import '../../node_modules/@glidejs/glide/dist/css/glide.core.min.css';
 import '../../node_modules/@glidejs/glide/dist/css/glide.theme.min.css';
 import Glide from '@glidejs/glide';
 import '/src/styles/main.scss';
-import {CAMPS_DATA} from './CAMPS_DATA';
-import {EVENTS_DATA} from './EVENTS_DATA';
+import {CAMPS_DATA} from './DATA/CAMPS_DATA';
+import {EVENTS_DATA} from './DATA/EVENTS_DATA';
 
 // Get todays date
 const todayRaw = new Date();

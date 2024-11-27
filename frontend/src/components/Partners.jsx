@@ -1,6 +1,6 @@
 import Section from './Section.jsx';
 import Carousel from './Carousel.jsx';
-import {PARTNERS_DATA} from '../PARTNERS_DATA.js';
+import {PARTNERS_DATA} from '../DATA/PARTNERS_DATA.js';
 
 function Partners() {
 	const leadingClass = 'partners';

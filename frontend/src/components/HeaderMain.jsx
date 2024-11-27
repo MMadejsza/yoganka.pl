@@ -1,5 +1,5 @@
 import Section from './Section.jsx';
-import ImgDynamic from './imgs/ImgDynamic.jsx';
+import ImgDynamic from './imgsRelated/ImgDynamic.jsx';
 import headerImg320 from '/imgs/logo/320_logo_14.png';
 import headerImg480 from '/imgs/logo/480_logo_14.png';
 const imgPaths = [
