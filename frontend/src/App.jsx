@@ -5,6 +5,7 @@ import HeaderMain from './components/HeaderMain.jsx';
 import About from './components/About.jsx';
 import Certificates from './components/Certificates.jsx';
 import Partners from './components/Partners.jsx';
+import Footer from './components/Footer.jsx';
 
 function App() {
 	return (
@@ -15,6 +16,7 @@ function App() {
 			<About />
 			{/* <Certificates /> */}
 			<Partners />
+			<Footer />
 		</div>
 	);
 }
