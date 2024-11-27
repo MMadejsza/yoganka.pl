@@ -12,7 +12,7 @@ export const EVENTS_DATA = [
 		eventType: 'fixed',
 		front: {
 			nazwaWyjazdu: `Yoga\u00A0&\u00A0Breakfast`,
-			listaDat: ['01/12/2024'],
+			listaDat: ['01/12/2024', 'godz. 9:30'],
 			rejon: `toMy Kawiarnia\u00A0Gdańsk`,
 			krotkiOpis: `Błogi poranek z jogą w uroczej przestrzeni toMy kawiarnia w Gdańsku...`,
 		},
@@ -45,7 +45,7 @@ export const EVENTS_DATA = [
 		eventType: 'repetitive',
 		front: {
 			nazwaWyjazdu: `Wieczorna joga w\u00A0jurcie`,
-			listaDat: [`Środy 19:30`, '27/11/2024'],
+			listaDat: [`Środy`, 'godz. 19:30'],
 			rejon: `Jurta ul.\u00A0Makowa\u00A08, Tuchom`,
 			krotkiOpis: `Zapraszam Cię na wyjątkową praktykę jogi w przytulnej jurcie`,
 		},
@@ -104,24 +104,24 @@ export const EVENTS_DATA = [
 			// },
 		},
 	},
-	{
-		type: `event`,
-		extraClass: 'event',
-		imgPath: `${htmlToImgsPath}/offer/events/sup/front`,
-		galleryPath: `${htmlToImgsPath}/offer/events/sup/front`,
-		fileName: `sup`,
-		date: '2025-05-22',
-		eventType: 'repetitive',
-		front: {
-			nazwaWyjazdu: `Sup yoga`,
-			listaDat: [`Latem`],
-			rejon: `Zatoka Gdańska /\u00A0Jezioro Wysockie`,
-			krotkiOpis: `Praktyka jogi na\u00A0wodzie, czyli prawdziwe zen\u00A0nature.`,
-		},
-		modal: {
-			// imgModal: this.imgPath,
-			tytulOpisu: 'O zajęciach:',
-			pelnyOpis: `Zapraszam do\u00A0wodnego studia jogi. Zamieniamy matę na\u00A0deskę SUP. Poprawisz balans, wzmocnisz mięśnie posturalne. Otwarta przestrzeń z\u00A0nieskończonym oknem na\u00A0naturę stanowi doskonałą propozycję na\u00A0ciepłe dni. Czy jest coś wspanialszego od\u00A0jogi na\u00A0powietrzu? Promienie słońca, letni podmuch wiatru i\u00A0szum drzew dopełnią Twoją praktykę.`,
-		},
-	},
+	// {
+	// 	type: `event`,
+	// 	extraClass: 'event',
+	// 	imgPath: `${htmlToImgsPath}/offer/events/sup/front`,
+	// 	galleryPath: `${htmlToImgsPath}/offer/events/sup/front`,
+	// 	fileName: `sup`,
+	// 	date: '2025-05-22',
+	// 	eventType: 'repetitive',
+	// 	front: {
+	// 		nazwaWyjazdu: `Sup yoga`,
+	// 		listaDat: [`Latem`],
+	// 		rejon: `Zatoka Gdańska /\u00A0Jezioro Wysockie`,
+	// 		krotkiOpis: `Praktyka jogi na\u00A0wodzie, czyli prawdziwe zen\u00A0nature`,
+	// 	},
+	// 	modal: {
+	// 		// imgModal: this.imgPath,
+	// 		tytulOpisu: 'O zajęciach:',
+	// 		pelnyOpis: `Zapraszam do\u00A0wodnego studia jogi. Zamieniamy matę na\u00A0deskę SUP. Poprawisz balans, wzmocnisz mięśnie posturalne. Otwarta przestrzeń z\u00A0nieskończonym oknem na\u00A0naturę stanowi doskonałą propozycję na\u00A0ciepłe dni. Czy jest coś wspanialszego od\u00A0jogi na\u00A0powietrzu? Promienie słońca, letni podmuch wiatru i\u00A0szum drzew dopełnią Twoją praktykę.`,
+	// 	},
+	// },
 ];

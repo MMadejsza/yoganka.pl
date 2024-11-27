@@ -1,3 +1,4 @@
+import Section from './Section.jsx';
 import StampedImg from './imgs/StampedImg.jsx';
 import Bio from './Bio.jsx';
 import img320 from '/imgs/about/320_about_profile.jpg';
@@ -15,8 +16,9 @@ const stampedImgCertPaths = [
 
 function About() {
 	return (
-		<section className='about'>
-			<header className='about__header section-header'>O mnie</header>
+		<Section
+			classy='about'
+			header='O mnie'>
 			<StampedImg
 				placement='about'
 				imgPaths={stampedImgPaths}
@@ -25,7 +27,7 @@ function About() {
 				alt='Yoganka - w pozycji na plaży'
 			/>
 			<Bio placement='about' />
-		</section>
+		</Section>
 	);
 }
 
