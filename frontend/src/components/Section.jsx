@@ -9,7 +9,7 @@ function Section({classy, header, iSpecific, children}) {
 	if (header) {
 		headerContent = <header className={`${classy}__header section-header`}>{header}</header>;
 	}
-	console.log('iSpecific', iSpecific);
+
 	return (
 		<section
 			className={classy}
