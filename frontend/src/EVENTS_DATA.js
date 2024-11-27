@@ -12,7 +12,7 @@ export const EVENTS_DATA = [
 		eventType: 'fixed',
 		front: {
 			nazwaWyjazdu: `Yoga\u00A0&\u00A0Breakfast`,
-			listaDat: ['01/12/2024'],
+			listaDat: ['01/12/2024', 'godz. 9:30'],
 			rejon: `toMy Kawiarnia\u00A0Gdańsk`,
 			krotkiOpis: `Błogi poranek z jogą w uroczej przestrzeni toMy kawiarnia w Gdańsku...`,
 		},
@@ -45,7 +45,7 @@ export const EVENTS_DATA = [
 		eventType: 'repetitive',
 		front: {
 			nazwaWyjazdu: `Wieczorna joga w\u00A0jurcie`,
-			listaDat: [`Środy 19:30`, '27/11/2024'],
+			listaDat: [`Środy`, 'godz. 19:30'],
 			rejon: `Jurta ul.\u00A0Makowa\u00A08, Tuchom`,
 			krotkiOpis: `Zapraszam Cię na wyjątkową praktykę jogi w przytulnej jurcie`,
 		},
