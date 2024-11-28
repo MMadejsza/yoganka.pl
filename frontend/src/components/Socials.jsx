@@ -1,8 +1,9 @@
 function Socials({leadingClass, items}) {
 	return (
 		<div className={`${leadingClass}__socials`}>
-			{items.map((social) => (
+			{items.map((social, index) => (
 				<a
+					key={index}
 					className={`${leadingClass}__social-link`}
 					href={social.link}
 					target='_blank'
