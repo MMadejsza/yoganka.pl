@@ -1,7 +1,5 @@
 import {useEffect, useState} from 'react';
 
-const classy = 'footer';
-
 function FloatingPopUps() {
 	const [cookies, setCookies] = useState({
 		delete: false,
