@@ -6,6 +6,7 @@ import About from './components/About.jsx';
 import Certificates from './components/Certificates.jsx';
 import Partners from './components/Partners.jsx';
 import Footer from './components/Footer.jsx';
+import FloatingPopUps from './components/FloatingPopUps.jsx';
 
 function App() {
 	return (
@@ -17,6 +18,7 @@ function App() {
 			{/* <Certificates /> */}
 			<Partners />
 			<Footer />
+			<FloatingPopUps />
 		</div>
 	);
 }

@@ -1,22 +1,6 @@
 import {useEffect, useState} from 'react';
 
 const classy = 'footer';
-// // newsletter close
-// document.querySelector('.footer__pop-up-btn--gift').addEventListener('click', (e) => {
-// 	if (e.target.parentNode.classList.contains('footer__pop-up-btn--gift')) {
-// 		e.target.style.opacity = 0;
-// 		e.target.parentNode.style.opacity = 0;
-// 		setTimeout(() => {
-// 			e.target.parentNode.remove();
-// 			e.target.remove();
-// 		}, 800);
-// 	} else {
-// 		e.target.style.opacity = 0;
-// 		setTimeout(() => {
-// 			e.target.remove();
-// 		}, 800);
-// 	}
-// });
 
 function FloatingPopUps() {
 	const [cookies, setCookies] = useState({
@@ -94,31 +78,33 @@ function FloatingPopUps() {
 
 	return (
 		<div
-			className={`${classy}__pop-ups`}
+			className={`pop-ups`}
 			tabIndex='0'>
 			{isNewsletterScriptReady && (
 				<a
-					className={`${classy}__pop-up-btn ${classy}__pop-up-btn--gift ml-onclick-form`}
+					// --gift  required for scss opening on :focus
+					className={`pop-ups__single pop-ups__single--gift ml-onclick-form`}
 					href='#'
 					onClick={handleClickNewsletter}>
-					<i className={`${classy}__pop-up-icon fas fa-gift`}></i>
+					<i className={`pop-ups__icon fas fa-gift`} />
 				</a>
 			)}
 
 			{!cookies.delete && (
 				<a
-					className={`${classy}__pop-up-btn ${classy}__pop-up-btn--cookies`}
+					// --cookies  required for scss opening on :focus
+					className={`pop-ups__single pop-ups__single--cookies`}
 					href='#'>
-					<i className={`${classy}__pop-up-icon fas fa-cookie-bite`}></i>
-					<div className={`${classy}__cookie-pop-up`}>
-						<div className={`${classy}__cookie-msg`}>
+					<i className={`pop-ups__icon fas fa-cookie-bite`} />
+
+					<div className={`pop-ups__body`}>
+						<div className={`pop-ups__body--msg`}>
 							Używamy tylko niezbędnych plików cookie.
 						</div>
-						<div className={`${classy}__cookie-close`}>
-							<i
-								onClick={(e) => handleCookiesClose(e)}
-								className={`fas fa-times ${classy}__cookie-close-icon`}></i>
-						</div>
+						<i
+							onClick={(e) => handleCookiesClose(e)}
+							className={`fas fa-times pop-ups__icon pop-ups__icon--body-close`}
+						/>
 					</div>
 				</a>
 			)}

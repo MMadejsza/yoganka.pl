@@ -22,17 +22,15 @@
 		&__legal {
 			font-size: 1.8rem;
 		}
-		&__pop-ups {
-			bottom: 1.5rem;
-			right: 1.5rem;
-			gap: 1rem;
-		}
-		&__cookie-pop-up {
-			font-size: 1.4rem;
-		}
+
 		&__social-link {
 			font-size: 4rem;
 		}
+	}
+	.pop-ups {
+		bottom: 1.5rem;
+		right: 1.5rem;
+		gap: 1rem;
 	}
 }
 @media (min-width: 480px) {
@@ -56,10 +54,6 @@
 		}
 		&__social-link {
 			font-size: 3rem;
-		}
-		&__cookie-pop-up {
-			font-size: 1.7rem;
-			padding-left: 2rem;
 		}
 	}
 }
@@ -393,18 +387,7 @@
 		&__credit a {
 			line-height: 100%;
 		}
-		&__pop-ups {
-			gap: 1.5rem;
-		}
-		&__pop-up-btn {
-			width: 6.6rem;
-			height: 6.6rem;
-			line-height: 6.6rem;
-		}
-		&__cookie-pop-up {
-			height: 6.6rem;
-			font-size: 2rem;
-		}
+
 		&__qr {
 			left: 50%;
 			transform: translateX(-50%);
@@ -426,6 +409,15 @@
 			&:hover .footer__qr-image {
 				box-shadow: var.$active-box-shadow;
 			}
+		}
+	}
+	.pop-ups {
+		gap: 1.5rem;
+
+		&__single {
+			width: 6.6rem;
+			height: 6.6rem;
+			line-height: 6.6rem;
 		}
 	}
 }
@@ -514,20 +506,15 @@
 			height: 40vw;
 		}
 	}
-	.footer {
-		&__pop-ups {
-			right: 2rem;
-			gap: 1.8rem;
-		}
-		.footer__pop-up-btn {
+	.pop-ups {
+		right: 2rem;
+		gap: 1.8rem;
+
+		&__single {
 			width: 7rem;
 			height: 7rem;
 			line-height: 7rem;
 			font-size: 3.5rem;
-		}
-		&__cookie-pop-up {
-			height: 7rem;
-			font-size: 2.5rem;
 		}
 	}
 }
