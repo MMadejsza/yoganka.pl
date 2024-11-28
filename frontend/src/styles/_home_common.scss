@@ -35,7 +35,7 @@ a {
 	cursor: pointer;
 	transition: map.get(var.$behavior, base-transition);
 }
-.clickable:not(.footer__pop-ups *) {
+.clickable {
 	box-shadow: map.get(var.$shadows, tile-shadow);
 	position: relative;
 

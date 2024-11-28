@@ -626,41 +626,6 @@ document.addEventListener('DOMContentLoaded', function () {
 		wydarzenia.appendChild(new Tile(event).generateTile());
 	});
 
-	// cookies elements
-	const cookieCircleBtn = document.querySelector('.footer__pop-up-btn--cookies');
-	const cookieCircleBtnX = document.querySelector('.footer__cookie-close');
-	const cookiePopup = document.querySelector('.footer__cookie-pop-up');
-	cookieCircleBtn.addEventListener('click', (e) => {
-		e.preventDefault();
-		cookiePopup.style.opacity = '1';
-		cookiePopup.style.visibility = 'visible';
-	});
-	cookieCircleBtnX.addEventListener('click', (e) => {
-		cookieCircleBtn.style.opacity = 0;
-		cookiePopup.style.opacity = 0;
-
-		setTimeout(() => {
-			cookiePopup.style.visibility = 'hidden';
-			cookieCircleBtn.style.display = 'none';
-		}, 800);
-	});
-	// newsletter close
-	document.querySelector('.footer__pop-up-btn--gift').addEventListener('click', (e) => {
-		if (e.target.parentNode.classList.contains('footer__pop-up-btn--gift')) {
-			e.target.style.opacity = 0;
-			e.target.parentNode.style.opacity = 0;
-			setTimeout(() => {
-				e.target.parentNode.remove();
-				e.target.remove();
-			}, 800);
-		} else {
-			e.target.style.opacity = 0;
-			setTimeout(() => {
-				e.target.remove();
-			}, 800);
-		}
-	});
-
 	const glide = new Glide('.glide', {
 		type: 'carousel',
 		// startAt: 0,
