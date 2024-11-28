@@ -599,16 +599,6 @@ document.addEventListener('DOMContentLoaded', function () {
 	const wyjazdy = document.querySelector('#wyjazdy');
 	const wydarzenia = document.querySelector('#wydarzenia');
 
-	// function to replace the main contact btn's link
-	const whatsappTemplates = () => {
-		const phoneNumber = '48792891607';
-		const msgContact = `Hej! Piszę do Ciebie z yoganka.pl :)\n\nTu [imię] [Nazwisko]`;
-
-		const linkContact = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(msgContact)}`;
-
-		document.getElementById('whatsapp-contact').href = linkContact;
-	};
-
 	menuLinks.forEach((link) => {
 		link.addEventListener('click', (event) => {
 			// fetch prop href from clicked menu tile
