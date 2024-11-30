@@ -15,7 +15,7 @@ function App() {
 			<Nav />
 			<HeaderMain />
 			<About />
-			{/* <Certificates /> */}
+			<Certificates />
 			<Partners />
 			<Footer />
 			<FloatingPopUps />
