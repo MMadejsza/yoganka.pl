@@ -8,6 +8,9 @@
 	bottom: 1.5rem;
 	right: 1rem;
 	z-index: 10;
+	@include mixin.flex(column, center, center, 1.5rem);
+
+	transition: map.get(var.$behavior, base-transition);
 
 	&__single {
 		position: relative;
@@ -46,6 +49,7 @@
 	}
 
 	&__body {
+		@include mixin.flex(row, center, center, 2rem);
 		position: absolute;
 		top: 0;
 		right: -100vw;
@@ -58,8 +62,6 @@
 		box-shadow: map.get(var.$shadows, active-box-shadow);
 		transition: map.get(var.$behavior, base-transition);
 		opacity: 0;
-
-		@include mixin.flex(row, center, center, 2rem);
 	}
 
 	// to bump up specificity
@@ -69,8 +71,4 @@
 		margin-right: 2rem;
 		color: map.get(var.$colors, accent-text);
 	}
-
-	@include mixin.flex(column, center, center, 1.5rem);
-
-	transition: map.get(var.$behavior, base-transition);
 }
