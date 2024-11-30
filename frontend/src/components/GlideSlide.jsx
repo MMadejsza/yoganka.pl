@@ -1,7 +1,7 @@
 function GlideSlide({slideData, leadingClass}) {
 	return (
 		<li className='glide__slide'>
-			<div className={`${leadingClass}__tile tile`}>
+			<div className={`tile ${leadingClass}__tile`}>
 				{slideData.name && (
 					<h3>
 						<strong className={`${leadingClass}__name`}>{slideData.name}</strong>

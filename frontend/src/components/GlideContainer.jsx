@@ -42,110 +42,21 @@ function GlideContainer({glideConfig, glideBreakpoints, slides, leadingClass}) {
 							leadingClass={leadingClass}
 						/>
 					))}
-					{/* <li className='glide__slide'>
-						<div className='certificates__tile tile'>
-							<h3>
-								<strong className='certificates__name'>RYT200 Bali</strong>
-							</h3>
-							<p className='certificates__school'>House of OM</p>
-							<p className='certificates__duration'>200h</p>
-							<p className='certificates__type'>
-								<strong>Vinyasa &amp; Hatha</strong>
-							</p>
-						</div>
-					</li>
-					<li className='glide__slide'>
-						<div className='tile certificates__tile'>
-							<h3>
-								<strong className='certificates__name'>
-									Instruktor Hatha Jogi
-								</strong>
-							</h3>
-							<p className='certificates__school'>prof. Szopa</p>
-							<p className='certificates__duration'>150h</p>
-							<p className='certificates__type'>
-								<strong>Hatha</strong>
-							</p>
-						</div>
-					</li>
-					<li className='glide__slide'>
-						<div className='tile certificates__tile'>
-							<h3>
-								<strong className='certificates__name'>Warsztat sekwencji</strong>
-							</h3>
-							<p className='certificates__school'>Daga Yoga</p>
-							<p className='certificates__duration'>15h</p>
-						</div>
-					</li>
-					<li className='glide__slide'>
-						<div className='tile certificates__tile'>
-							<h3>
-								<strong className='certificates__name'>
-									Asana stabilna i wygodna
-								</strong>
-							</h3>
-							<p className='certificates__school'>SMU YOGA</p>
-							<p className='certificates__duration'>15h</p>
-						</div>
-					</li>
-					<li className='glide__slide'>
-						<div className='tile certificates__tile'>
-							<h3>
-								<strong className='certificates__name'>
-									Mobility &amp; Flexibility
-								</strong>
-							</h3>
-							<p className='certificates__school'>Bartosz Kuc</p>
-							<p className='certificates__duration'>16h</p>
-						</div>
-					</li>
-					<li className='glide__slide'>
-						<div className='tile certificates__tile'>
-							<h3>
-								<strong className='certificates__name'>Neuro Yoga</strong>
-							</h3>
-							<p className='certificates__school'>Celest Pereira</p>
-							<p className='certificates__duration'>15h</p>
-						</div>
-					</li>
-					<li className='glide__slide'>
-						<div className='tile certificates__tile'>
-							<h3>
-								<strong className='certificates__name'>
-									Warsztat pozycji odwróconych
-								</strong>
-							</h3>
-							<p className='certificates__school'>Joga Park</p>
-							<p className='certificates__duration'>15h</p>
-						</div>
-					</li> */}
 				</ul>
 			</div>
+
 			<div
 				className='glide__bullets'
 				data-glide-el='controls[nav]'>
-				<button
-					className='glide__bullet'
-					data-glide-dir='=0'></button>
-				<button
-					className='glide__bullet'
-					data-glide-dir='=1'></button>
-				<button
-					className='glide__bullet'
-					data-glide-dir='=2'></button>
-				<button
-					className='glide__bullet'
-					data-glide-dir='=3'></button>
-				<button
-					className='glide__bullet'
-					data-glide-dir='=4'></button>
-				<button
-					className='glide__bullet'
-					data-glide-dir='=5'></button>
-				<button
-					className='glide__bullet'
-					data-glide-dir='=6'></button>
+				{slides.map((slide, index) => (
+					<button
+						key={index}
+						className='glide__bullet'
+						data-glide-dir={`=${index}`}
+					/>
+				))}
 			</div>
+
 			<div
 				className='glide__arrows'
 				data-glide-el='controls'>
