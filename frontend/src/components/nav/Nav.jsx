@@ -29,6 +29,20 @@ const menuSet = [
 ];
 
 function Nav() {
+	function handleCLick(e) {
+		e.preventDefault();
+		// fetch prop href from clicked menu tile
+		const targetSelector = e.target.getAttribute('href');
+		// Find in Dom first element matching href
+		const targetSection = document.querySelector(targetSelector);
+		// If section exists - scroll to it
+		if (targetSection) {
+			// Prevent default way of scrolling
+			// Apply desired way of scrolling
+			targetSection.scrollIntoView({behavior: 'smooth'});
+		}
+	}
+
 	return (
 		<nav className='nav'>
 			<ul className='nav__list'>
@@ -37,6 +51,7 @@ function Nav() {
 						key={li.name}
 						className='nav__item'>
 						<a
+							onClick={(e) => handleCLick(e)}
 							href={li.link}
 							className='nav__link'>
 							<i className={`${li.icon} nav__icon`}></i>
