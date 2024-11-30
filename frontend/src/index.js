@@ -595,28 +595,8 @@ const activeEvents = unsortedEvents.sort((x, y) => {
 
 // do when DOM loaded
 document.addEventListener('DOMContentLoaded', function () {
-	const menuLinks = document.querySelectorAll('ul li a');
 	const wyjazdy = document.querySelector('#wyjazdy');
 	const wydarzenia = document.querySelector('#wydarzenia');
-
-	menuLinks.forEach((link) => {
-		link.addEventListener('click', (event) => {
-			// fetch prop href from clicked menu tile
-			const targetSelector = link.getAttribute('href');
-			// Find in Dom first element matching href
-			const targetSection = document.querySelector(targetSelector);
-			// If section exists - scroll to it
-			if (targetSection) {
-				// Prevent default way of scrolling
-				event.preventDefault();
-				toggleMenu();
-				// Apply desired way of scrolling
-				targetSection.scrollIntoView({behavior: 'smooth'});
-			}
-		});
-	});
-
-	whatsappTemplates();
 
 	// generate offered camps for website
 	activeCamps.forEach((camp) => {
@@ -625,28 +605,4 @@ document.addEventListener('DOMContentLoaded', function () {
 	activeEvents.forEach((event) => {
 		wydarzenia.appendChild(new Tile(event).generateTile());
 	});
-
-	const glide = new Glide('.glide', {
-		type: 'carousel',
-		// startAt: 0,
-		perView: 5,
-		focusAt: 'center',
-		gap: 20,
-		autoplay: 2200,
-		animationDuration: 800,
-		breakpoints: {
-			// <=
-			360: {
-				perView: 1,
-			},
-			480: {
-				perView: 2,
-			},
-			1024: {
-				perView: 3,
-			},
-		},
-	});
-
-	glide.mount();
 });

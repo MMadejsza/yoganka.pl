@@ -37,7 +37,6 @@ function Nav() {
 		const targetSection = document.querySelector(targetSelector);
 		// If section exists - scroll to it
 		if (targetSection) {
-			// Prevent default way of scrolling
 			// Apply desired way of scrolling
 			targetSection.scrollIntoView({behavior: 'smooth'});
 		}
