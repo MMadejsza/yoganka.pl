@@ -214,7 +214,9 @@ class Tile {
 			tile.classList.add('past');
 			// remove the past price
 			if (this.modal) {
-				this.modal.krotkieInfo.cena = '-';
+				if (this.modal.krotkieInfo) {
+					this.modal.krotkieInfo.cena = '-';
+				}
 			}
 		}
 

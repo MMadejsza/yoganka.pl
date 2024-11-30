@@ -8,7 +8,7 @@ export const EVENTS_DATA = [
 		imgPath: `${htmlToImgsPath}/offer/events/yoga_breakfast/front`,
 		galleryPath: `${htmlToImgsPath}/offer/events/yoga_breakfast/front`,
 		fileName: `yoga_breakfast`,
-		date: '2024-11-27',
+		date: '2024-12-01',
 		eventType: 'fixed',
 		front: {
 			nazwaWyjazdu: `Yoga\u00A0&\u00A0Breakfast`,
@@ -41,7 +41,7 @@ export const EVENTS_DATA = [
 		imgPath: `${htmlToImgsPath}/offer/events/jurta/front`,
 		galleryPath: `${htmlToImgsPath}/offer/events/jurta/front`,
 		fileName: `jurta`,
-		date: '2024-11-27',
+		date: '2025-11-27',
 		eventType: 'repetitive',
 		front: {
 			nazwaWyjazdu: `Wieczorna joga w\u00A0jurcie`,
@@ -75,7 +75,7 @@ export const EVENTS_DATA = [
 		imgPath: `${htmlToImgsPath}/offer/events/yoga&sound/front`,
 		galleryPath: `${htmlToImgsPath}/offer/events/yoga&sound/front`,
 		fileName: `ys`,
-		date: '2025-05-21',
+		date: '2030-05-21',
 		eventType: 'repetitive',
 		front: {
 			nazwaWyjazdu: `YOGA\u00A0&\u00A0SOUND
