@@ -10,7 +10,13 @@ function Offer({id, specifier, header, data}) {
 		<article
 			id={id}
 			className={classy}>
-			<header class='offer-type__header'>{header}</header>
+			<header className='offer-type__header'>{header}</header>
+			{data.map((tileData, index) => (
+				<Tile
+					data={tileData}
+					key={index}
+				/>
+			))}
 		</article>
 	);
 }

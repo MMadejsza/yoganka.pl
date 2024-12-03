@@ -1,7 +1,7 @@
 import ImgDynamic from './imgsRelated/ImgDynamic.jsx';
 function Tile({data}) {
 	const imgPaths = [
-		{path: ` ${data.imgPath}/320_${data.fileName}_0.jpg`, size: '320w'},
+		{path: `${data.imgPath}/320_${data.fileName}_0.jpg`, size: '320w'},
 		{path: `${data.imgPath}/480_${data.fileName}_0.jpg`, size: '600w'},
 	];
 	return (
@@ -31,8 +31,8 @@ function Tile({data}) {
 
 			{data.front.desc && <p className='tile__desc'>{data.front.desc}</p>}
 
-			{btnsContent.length > 0 &&
-				btnsContent.map((btn, index) => (
+			{data.front.btnsContent.length > 0 &&
+				data.front.btnsContent.map((btn, index) => (
 					<a
 						key={index}
 						href={btn.link}
