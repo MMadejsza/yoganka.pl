@@ -21,8 +21,8 @@ const config = {
 function BusinessDetails({leadingClass}) {
 	return (
 		<div className={`${leadingClass}__company-details`}>
-			<p className={`${leadingClass}__company-location`}>{config.name.name}</p>
-			<p className={`${leadingClass}__company-location`}>{config.name.location}</p>
+			<p className={`${leadingClass}__company-name`}>{config.name.name}</p>
+			<p className={`${leadingClass}__company-location`}>{config.name.address}</p>
 			<a
 				className={`${leadingClass}__company-phone`}
 				href={config.phone.link}
