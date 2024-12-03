@@ -219,4 +219,4 @@ export const CAMPS_DATA = [
 			},
 		},
 	},
-];
+].sort((x, y) => new Date(y.date) - new Date(x.date));

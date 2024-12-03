@@ -171,4 +171,14 @@ export const EVENTS_DATA = [
 	// 	optional: {},
 	// 	freeTime: {},
 	// },
-];
+].sort((x, y) => {
+	// sort by type: "fixed" przed "repetitive"
+	if (x.eventType === 'fixed' && y.eventType !== 'fixed') {
+		return -1; // x (fixed) before y (repetitive)
+	} else if (x.eventType !== 'fixed' && y.eventType === 'fixed') {
+		return 1; // y (fixed) before x (repetitive)
+	}
+
+	// By date
+	return new Date(x.date) - new Date(y.date); // ascending
+});
