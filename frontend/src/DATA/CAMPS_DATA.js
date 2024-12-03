@@ -3,7 +3,7 @@ const htmlToImgsPath = '/imgs';
 export const CAMPS_DATA = [
 	// Created camps so far
 	{
-		id: '01',
+		id: 'CA01',
 		name: 'Kojenie Zmysłów - Kaszuby',
 		type: `camp`,
 		extraClass: '',
@@ -104,7 +104,7 @@ export const CAMPS_DATA = [
 		},
 	},
 	{
-		id: '02',
+		id: 'CA02',
 		name: 'Comfy slow weekend - Warmia',
 		type: `camp`,
 		extraClass: 'long',

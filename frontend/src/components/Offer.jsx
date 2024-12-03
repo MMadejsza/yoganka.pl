@@ -1,3 +1,5 @@
+import Tile from 'Tile.jsx';
+
 function Offer({id, specifier, header, data}) {
 	let classy = 'offer-type';
 	if (specifier === 'events') {

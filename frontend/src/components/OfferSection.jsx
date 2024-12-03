@@ -1,5 +1,6 @@
 import Section from './Section.jsx';
 import Offer from './Offer.jsx';
+import {CLASSES_DATA} from '../DATA/CLASSES_DATA.js';
 
 function OfferSection() {
 	const leadingClass = 'offer';
@@ -13,7 +14,7 @@ function OfferSection() {
 			<Offer
 				id='zajecia'
 				header={`Zajęcia`}
-				data={[]}
+				data={CLASSES_DATA}
 			/>
 			<Offer
 				id='wydarzenia'
