@@ -1,17 +1,19 @@
+import {useState} from 'react';
 import ImgDynamic from './imgsRelated/ImgDynamic.jsx';
+import Modal from './Modal.jsx';
 
 function Tile({data, today}) {
+	const [visiting, setVisiting] = useState();
+
 	const imgPaths = [
 		{path: `${data.imgPath}/320_${data.fileName}_0.jpg`, size: '320w'},
 		{path: `${data.imgPath}/480_${data.fileName}_0.jpg`, size: '600w'},
 	];
-
+	let clickable = data.type !== 'class';
 	let conditionalClasses = data.type !== 'class' ? ' tile--clickable' : '';
-
 	if (data.extraClass) {
 		conditionalClasses += ` tile--${data.extraClass}`;
 	}
-
 	if (data.date < today) {
 		conditionalClasses += ` past`;
 		// remove the past price
@@ -20,8 +22,14 @@ function Tile({data, today}) {
 		}
 	}
 
+	function handleModalClick() {
+		setVisiting('visible');
+	}
+
 	return (
-		<div className={'tile' + conditionalClasses}>
+		<div
+			className={'tile' + conditionalClasses}
+			onClick={clickable && handleModalClick}>
 			<ImgDynamic
 				classy={`tile__img`}
 				srcSet={imgPaths}
@@ -30,8 +38,7 @@ function Tile({data, today}) {
                     (max-width: 768px) 480px,
                     480px
                     `}
-				alt={data.name}
-			/>
+				alt={data.name}></ImgDynamic>
 			<h3 className='tile__title'>{data.front.title}</h3>
 
 			{data.front.dates.length > 0 &&
@@ -56,6 +63,12 @@ function Tile({data, today}) {
 						{btn.text}
 					</a>
 				))}
+
+			<Modal
+				tile={data}
+				onClose={handleModalClick}
+				classy={visiting}
+			/>
 		</div>
 	);
 }
