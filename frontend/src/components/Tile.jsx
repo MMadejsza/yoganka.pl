@@ -5,10 +5,10 @@ function Tile({data}) {
 		{path: `${data.imgPath}/480_${data.fileName}_0.jpg`, size: '600w'},
 	];
 
-	let clickable = data.type !== 'class' ? 'clickable' : '';
+	let clickable = data.type !== 'class' ? ' tile--clickable' : '';
 
 	return (
-		<div className={'tile ' + clickable}>
+		<div className={'tile' + clickable}>
 			<ImgDynamic
 				classy={`tile__img`}
 				srcSet={imgPaths}

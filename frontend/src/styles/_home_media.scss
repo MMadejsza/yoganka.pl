@@ -210,7 +210,7 @@
 		}
 	}
 	.tile {
-		&.clickable:hover {
+		&--clickable:hover {
 			cursor: pointer;
 			box-shadow: map.get(var.$shadows, tile-shadow);
 			transform: translateY(-5%) scale(1.05);
