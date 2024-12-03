@@ -48,7 +48,7 @@ export const EVENTS_DATA = [
 		id: `E02`,
 		name: `Wieczorna joga w\u00A0jurcie`,
 		type: `event`,
-		date: `2024-11-27`,
+		date: false,
 		fileName: `jurta`,
 		imgPath: `${htmlToImgsPath}/offer/events/jurta/front`,
 		galleryPath: `${htmlToImgsPath}/offer/events/jurta/front`,

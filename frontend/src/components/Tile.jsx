@@ -1,14 +1,27 @@
 import ImgDynamic from './imgsRelated/ImgDynamic.jsx';
-function Tile({data}) {
+
+function Tile({data, today}) {
 	const imgPaths = [
 		{path: `${data.imgPath}/320_${data.fileName}_0.jpg`, size: '320w'},
 		{path: `${data.imgPath}/480_${data.fileName}_0.jpg`, size: '600w'},
 	];
 
-	let clickable = data.type !== 'class' ? ' tile--clickable' : '';
+	let conditionalClasses = data.type !== 'class' ? ' tile--clickable' : '';
+
+	if (data.extraClass) {
+		conditionalClasses += ` tile--${data.extraClass}`;
+	}
+
+	if (data.date < today) {
+		conditionalClasses += ` past`;
+		// remove the past price
+		if (data.modal) {
+			data.modal.glance.price = '-';
+		}
+	}
 
 	return (
-		<div className={'tile' + clickable}>
+		<div className={'tile' + conditionalClasses}>
 			<ImgDynamic
 				classy={`tile__img`}
 				srcSet={imgPaths}

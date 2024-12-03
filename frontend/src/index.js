@@ -209,15 +209,6 @@ class Tile {
 			}, 500);
 		});
 
-		// archive if after today's date
-		if (this.date < today) {
-			tile.classList.add('past');
-			// remove the past price
-			if (this.modal) {
-				this.modal.krotkieInfo.cena = '-';
-			}
-		}
-
 		return tile;
 	};
 
@@ -575,23 +566,6 @@ class Tile {
 		return glide;
 	};
 }
-
-// list of active camps to sign for
-const unSortedCamps = CAMPS_DATA;
-const activeCamps = unSortedCamps.sort((x, y) => new Date(y.date) - new Date(x.date));
-// list of active camps to sign for
-const unsortedEvents = EVENTS_DATA;
-const activeEvents = unsortedEvents.sort((x, y) => {
-	// sort by type: "fixed" przed "repetitive"
-	if (x.eventType === 'fixed' && y.eventType !== 'fixed') {
-		return -1; // x (fixed) before y (repetitive)
-	} else if (x.eventType !== 'fixed' && y.eventType === 'fixed') {
-		return 1; // y (fixed) before x (repetitive)
-	}
-
-	// By date
-	return new Date(x.date) - new Date(y.date); // ascending
-});
 
 // do when DOM loaded
 document.addEventListener('DOMContentLoaded', function () {

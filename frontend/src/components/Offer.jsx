@@ -1,6 +1,6 @@
 import Tile from './Tile.jsx';
 
-function Offer({id, specifier, header, data}) {
+function Offer({id, specifier, header, data, today}) {
 	let classy = 'offer-type';
 	if (specifier === 'events') {
 		classy += ` offer-type--events`;
@@ -15,6 +15,7 @@ function Offer({id, specifier, header, data}) {
 				<Tile
 					data={tileData}
 					key={index}
+					today={today}
 				/>
 			))}
 		</article>
