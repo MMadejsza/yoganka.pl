@@ -1,39 +1,45 @@
-import ImgDynamic from 'ImgDynamic.jsx';
+import ImgDynamic from './imgsRelated/ImgDynamic.jsx';
 function Tile({data}) {
+	const imgPaths = [
+		{path: ` ${data.imgPath}/320_${data.fileName}_0.jpg`, size: '320w'},
+		{path: `${data.imgPath}/480_${data.fileName}_0.jpg`, size: '600w'},
+	];
 	return (
 		<div className='tile'>
 			<ImgDynamic
 				classy={`tile__img`}
-				srcSet={`
-                    ${data.imgPath}/320_${data.fileName}_0.jpg 320w,
-					${data.imgPath}/480_${data.fileName}_0.jpg 480w,
-                    `}
+				srcSet={imgPaths}
 				sizes={`
                     (max-width: 640px) 320px,
                     (max-width: 768px) 480px,
                     480px
                     `}
-				src={`${data.imgPath}/480_${data.fileName}_0.jpg`}
+				alt={data.name}
 			/>
-			<img
-				className='tile__img'
-				srcset='
-                imgs/offer/regular/individual_and_group/front/320_group_0.jpg 320w,
-                imgs/offer/regular/individual_and_group/front/480_group_0.jpg 480w
-            '
-				sizes='
-            (max-width: 640px) 320px,
-            (max-width: 768px) 480px,
-            480px'
-				src='imgs/offer/regular/individual_and_group/front/480_group_0.jpg'
-				loading='lazy'
-			/>
-			<h3 className='tile__title'>Grupowe i&nbsp;Indywidualne</h3>
-			<a
-				href='#footer__socials'
-				className='tile__btn tile__btn--general-contact'>
-				Skontaktuj się
-			</a>
+			<h3 className='tile__title'>{data.front.title}</h3>
+
+			{data.front.dates.length > 0 &&
+				data.front.dates.map((date, index) => (
+					<h3
+						className='tile__date'
+						key={index}>
+						{date}
+					</h3>
+				))}
+
+			{data.front.location && <h4 className='tile__location'>{data.front.location}</h4>}
+
+			{data.front.desc && <p className='tile__desc'>{data.front.desc}</p>}
+
+			{btnsContent.length > 0 &&
+				btnsContent.map((btn, index) => (
+					<a
+						key={index}
+						href={btn.link}
+						className={`tile__btn tile__btn--${data.fileName}`}>
+						{btn.text}
+					</a>
+				))}
 		</div>
 	);
 }

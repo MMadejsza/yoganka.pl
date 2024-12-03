@@ -6,7 +6,7 @@ function ImgDynamic({classy, srcSet, ...props}) {
 	return (
 		<img
 			className={`${classy}${stampedType}`}
-			srcSet={srcSetProcessed}
+			srcSet={srcSet}
 			src={srcSet[0].path}
 			{...props}
 			loading='lazy'
