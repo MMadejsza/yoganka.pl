@@ -3,14 +3,7 @@ import '../../node_modules/@glidejs/glide/dist/css/glide.core.min.css';
 import '../../node_modules/@glidejs/glide/dist/css/glide.theme.min.css';
 import Glide from '@glidejs/glide';
 import '/src/styles/main.scss';
-import {CAMPS_DATA} from './DATA/CAMPS_DATA';
-import {EVENTS_DATA} from './DATA/EVENTS_DATA';
 
-// Get todays date
-const todayRaw = new Date();
-const today = todayRaw.toISOString().split('T')[0]; // "YYYY-MM-DD"
-
-// class tile template
 class Tile {
 	scrollFlag = 1;
 
@@ -31,18 +24,6 @@ class Tile {
 		this.hamburger = document.getElementById('burger');
 		this.body = document.body;
 	}
-
-	// Util function for creating elements with possible multiple attributes
-	createEl = (el, attributes) => {
-		const element = document.createElement(el);
-		// Attributes is objects with prop=value elements
-		if (attributes) {
-			for (var key in attributes) {
-				element.setAttribute(key, attributes[key]);
-			}
-		}
-		return element;
-	};
 
 	// event listener to open modal
 	showModal = () => {
@@ -133,50 +114,8 @@ class Tile {
 			}
 		});
 	};
-	// main function generating and returning tile
+
 	generateTile = () => {
-		function appendEl(parent, ...args) {
-			args.forEach((el) => parent.appendChild(el));
-		}
-		// Create separate tags
-		const tile = this.createEl('div', {class: 'tile clickable'});
-		// If for example "long" class required what triggers different grid layout
-		if (this.extraClass) {
-			tile.classList.add(`tile--${this.extraClass}`);
-		}
-		const img = this.createEl('img', {
-			class: 'tile__img',
-			srcset: `
-					${this.imgPath}/320_${this.fileName}_0.jpg 320w,
-					${this.imgPath}/480_${this.fileName}_0.jpg 480w,
-					`,
-			sizes: `
-					(max-width: 640px) 320px,
-					(max-width: 768px) 480px,
-					480px
-					`,
-			src: `${this.imgPath}/480_${this.fileName}_0.jpg`,
-			loading: 'lazy',
-		});
-		const frontTitle = this.createEl('h3', {class: 'tile__title'});
-		frontTitle.innerText = this.frontTitle;
-		const frontDates = [];
-		this.frontDate.forEach((el) => {
-			const frontDate = this.createEl('h3', {class: 'tile__date'});
-			frontDate.innerText = el;
-			frontDates.push(frontDate);
-		});
-		const frontLocation = this.createEl('h4', {class: 'tile__location'});
-		frontLocation.innerText = this.frontLocation;
-
-		// Append those tags
-		appendEl(tile, img, frontTitle, ...frontDates, frontLocation);
-		if (this.frontDesc) {
-			const frontDesc = this.createEl('p', {class: 'tile__desc'});
-			frontDesc.innerText = this.frontDesc;
-			tile.appendChild(frontDesc);
-		}
-
 		// add listeners for opening and closing
 		tile.addEventListener('click', (e) => {
 			e.stopPropagation();
@@ -518,65 +457,7 @@ class Tile {
 				loading: 'lazy',
 				alt: 'Galeria Wyjazdu',
 			});
-			const glideSlideLi = this.createEl('li', {
-				class: 'glide__slide',
-			});
-			glideSlideLi.appendChild(image);
-			glideSlides.appendChild(glideSlideLi);
 		}
 		glideTrack.appendChild(glideSlides);
-
-		const glideBullets = this.createEl('div', {
-			'class': 'glide__bullets',
-			'data-glide-el': 'controls[nav]',
-		});
-		for (let i = 1; i <= imgsNumber; i++) {
-			const glideBullet = this.createEl('button', {
-				'class': 'glide__bullet',
-				'data-glide-dir': `=${i}`,
-			});
-			glideBullets.appendChild(glideBullet);
-		}
-		glide.appendChild(glideTrack);
-		glide.appendChild(glideBullets);
-
-		const glideArrows = this.createEl('div', {
-			'class': 'glide__arrows',
-			'data-glide-el': `controls`,
-		});
-		const glideArrowLeft = this.createEl('button', {
-			'class': 'glide__arrow glide__arrow--left',
-			'data-glide-dir': `<`,
-		});
-		const iconArrowLeft = this.createEl('i', {
-			class: 'fa-solid fa-chevron-left',
-		});
-		glideArrowLeft.appendChild(iconArrowLeft);
-		const glideArrowRight = this.createEl('button', {
-			'class': 'glide__arrow glide__arrow--right',
-			'data-glide-dir': `>`,
-		});
-		const iconArrowRight = this.createEl('i', {
-			class: 'fa-solid fa-chevron-right',
-		});
-		glideArrowRight.appendChild(iconArrowRight);
-		glideArrows.append(glideArrowLeft, glideArrowRight);
-		glide.appendChild(glideArrows);
-
-		return glide;
 	};
 }
-
-// do when DOM loaded
-document.addEventListener('DOMContentLoaded', function () {
-	const wyjazdy = document.querySelector('#wyjazdy');
-	const wydarzenia = document.querySelector('#wydarzenia');
-
-	// generate offered camps for website
-	activeCamps.forEach((camp) => {
-		wyjazdy.appendChild(new Tile(camp).generateTile());
-	});
-	activeEvents.forEach((event) => {
-		wydarzenia.appendChild(new Tile(event).generateTile());
-	});
-});
