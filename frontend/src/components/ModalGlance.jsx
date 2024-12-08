@@ -9,9 +9,9 @@ function CampGlance({glance}) {
 		<>
 			{glance.title && <h3 className='modal__title'>{glance.title}</h3>}
 			<ul className='modal__list modal__list--at-glance'>
-				{Object.entries(glance).map(([info, text], index) => {
-					if (info != 'title' && text) {
-						const rowName = info;
+				{Object.entries(glance).map(([key, text], index) => {
+					if (key != 'title' && text) {
+						const rowName = key;
 						return (
 							<li
 								key={index}

@@ -65,37 +65,38 @@ export const CAMPS_DATA = [
 					},
 				],
 			},
-			included: {
-				title: `W Cenie:`,
-				list: [
-					`4 praktyki jogi (Slow Flow, Hatha, Nidra)`,
-					`Warsztat świec i wosków`,
-					`Skin care`,
-					`Krąg`,
-					`Upominek`,
-					`Pobyt z Wyżywieniem`,
-					`Kawa / Herbata / Napary 24/h`,
-				],
-			},
-			excluded: {
-				title: `We własnym zakresie:`,
-				list: [`Dojazd`, `Ubezpieczenie`],
-			},
-			optional: {
-				title: `Poszerz Slow Menu:`,
-				list: [
-					`Masaż Kobido 200zł/1h`,
-					`Masaż Misami Tybetańskimi koszt na miejscu 150 zł`,
-				],
-			},
-			freeTime: {
-				title: `W Czasie Wolnym:`,
-				//(note: statuses are free/optional/available for different icons)
-				list: [
-					{status: `free`, activity: `Kocyk, leśne spacery, pogaduchy, zdrowe napary`},
-					{status: `optional`, activity: `Masaż Misami lub Kobido`},
-					{status: `optional`, activity: `Sauna z balią`},
-				],
+			summary: {
+				included: {
+					title: `W Cenie:`,
+					list: [
+						`4 praktyki jogi (Slow Flow, Hatha, Nidra)`,
+						`Warsztat świec i wosków`,
+						`Skin care`,
+						`Krąg`,
+						`Upominek`,
+						`Pobyt z Wyżywieniem`,
+						`Kawa / Herbata / Napary 24/h`,
+					],
+				},
+				optional: {
+					title: `Poszerz Slow Menu:`,
+					list: [
+						`Masaż Kobido 200zł/1h`,
+						`Masaż Misami Tybetańskimi koszt na miejscu 150 zł`,
+					],
+				},
+				freeTime: {
+					title: `W Czasie Wolnym:`,
+					//(note: statuses are free/optional/available for different icons)
+					list: [
+						{
+							status: `free`,
+							activity: `Kocyk, leśne spacery, pogaduchy, zdrowe napary`,
+						},
+						{status: `optional`, activity: `Masaż Misami lub Kobido`},
+						{status: `optional`, activity: `Sauna z balią`},
+					],
+				},
 			},
 			note: `Zaserwuj sobie spokój i zdrowszą siebie. Wypełnij poniższe zgłoszenie`,
 			formLink: `https://forms.gle/kYN6VpfP3aV1b9yB8`,
@@ -174,45 +175,39 @@ export const CAMPS_DATA = [
 					},
 				],
 			},
-
-			included: {
-				title: `W Cenie:`,
-				list: [
-					`6 praktyk jogi`,
-					`Malowanie intuicyjne`,
-					`Koncert mis i gongów`,
-					`Balia`,
-					`Pobyt z Wyżywieniem`,
-					`Kawa / Herbata / Napary 24/h`,
-				],
+			summary: {
+				included: {
+					title: `W Cenie:`,
+					list: [
+						`6 praktyk jogi`,
+						`Malowanie intuicyjne`,
+						`Koncert mis i gongów`,
+						`Balia`,
+						`Pobyt z Wyżywieniem`,
+						`Kawa / Herbata / Napary 24/h`,
+					],
+				},
+				optional: {
+					title: `Poszerz Slow Menu:`,
+					list: [
+						`Masaż Kobido 30zł/30min`,
+						`Masaż Misami Tybetańskimi 120 zł/45min`,
+						`Sauna (jeszcze w budowie)`,
+					],
+				},
+				freeTime: {
+					title: `W Czasie Wolnym:`,
+					//(note: statuses are free/optional/available for different icons)
+					list: [
+						{
+							status: `free`,
+							activity: `Kocyk, leśne spacery, pogaduchy, zdrowe napary`,
+						},
+						{status: `optional`, activity: `Masaż Misami oraz Kobido`},
+						{status: `optional`, activity: `Sauna`},
+					],
+				},
 			},
-
-			excluded: {
-				title: `Poszerz Slow Menu:`,
-				list: [
-					`Masaż Kobido 30zł/30min`,
-					`Masaż Misami Tybetańskimi 120 zł/45min`,
-					`Sauna (jeszcze w budowie)`,
-				],
-			},
-			optional: {
-				title: `W Czasie Wolnym:`,
-				//(note: statuses are free/optional/available for different icons)
-				list: [
-					{status: `free`, aktywnosc: `Kocyk, leśne spacery, pogaduchy, zdrowe napary`},
-					{status: `optional`, aktywnosc: `Masaż Misami oraz Kobido`},
-					{status: `optional`, aktywnosc: `Sauna`},
-				],
-			},
-			// freeTime: {
-			// 	title: `W Czasie Wolnym:`,
-			// 	//(note: statuses are free/optional/available for different icons)
-			// 	list: [
-			// 		{status: `free`, activity: `Kocyk, leśne spacery, pogaduchy, zdrowe napary`},
-			// 		{status: `optional`, activity: `Masaż Misami lub Kobido`},
-			// 		{status: `optional`, activity: `Sauna z balią`},
-			// 	],
-			// },
 			note: `Zaserwuj sobie spokój i zdrowszą siebie.`,
 			formLink: `https://forms.gle/6Ri5sqnXgUQGSRNT9`,
 			questionTemplate(subject) {

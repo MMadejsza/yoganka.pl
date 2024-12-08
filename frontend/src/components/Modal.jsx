@@ -1,12 +1,14 @@
 import {createPortal} from 'react-dom';
 import GlideContainer from './GlideContainer.jsx';
-import CampGlance from './CampGlance.jsx';
+import CampGlance from './ModalGlance.jsx';
 import CampDay from './CampDay.jsx';
+import ModalList from './ModalList.jsx';
 
-function Modal({tile, classy, onClose}) {
+function Modal({tile, classy, onClose, today}) {
 	let visibility = classy ? 'visible' : undefined;
+	let upToDate = true; //tile.date > today;
 
-	console.log(`modal ${tile.front.title} visible: ${visibility}`);
+	console.log(`modal ${tile.name} visible: ${visibility}`);
 
 	return createPortal(
 		<div className={`modal ${visibility}`}>
@@ -42,6 +44,11 @@ function Modal({tile, classy, onClose}) {
 						className='tile__img'
 						src={tile.imgPath}
 					/>
+
+					<header className={`modal__header`}>
+						<CampGlance glance={tile.modal.glance} />
+					</header>
+
 					<section
 						className={`modal__full-desc modal__full-desc--${tile.type} ${
 							tile.extraClass ? 'modal__full-desc--' + tile.extraClass : ''
@@ -51,10 +58,6 @@ function Modal({tile, classy, onClose}) {
 						)}
 						<p className='modal__full-desc-content'>{tile.modal.fullDesc}</p>
 					</section>
-
-					<header className={`modal__header`}>
-						<CampGlance glance={tile.modal.glance} />
-					</header>
 
 					<section
 						className={`modal__desc ${
@@ -68,9 +71,29 @@ function Modal({tile, classy, onClose}) {
 							/>
 						))}
 					</section>
+
+					{Object.entries(tile.modal.summary).map(([listType, content], index) => (
+						<ModalList
+							key={index}
+							listType={listType}
+							data={content}
+						/>
+					))}
+
+					{upToDate && <h2 className='modal__attention-note'>{tile.modal.note}</h2>}
+
+					{upToDate && (
+						<footer className='modal__user-action'>
+							<a
+								href={tile.modal.formLink}
+								className={`modal__btn modal__sign-up`}
+								target='_blank'>
+								Dołączam
+							</a>
+						</footer>
+					)}
 				</div>
 			)}
-			{tile.name}
 		</div>,
 		document.getElementById('modal'),
 	);

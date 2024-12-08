@@ -68,6 +68,7 @@ function Tile({data, today}) {
 				tile={data}
 				onClose={handleModalClick}
 				classy={visiting}
+				today={today}
 			/>
 		</div>
 	);
