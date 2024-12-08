@@ -11,7 +11,7 @@ function Modal({tile, singleImg, classy, onClose, today}) {
 	let isEvent = tile.type === 'event';
 	const modal = tile.modal;
 
-	console.log(`modal ${tile.name} visible: ${visibility}`);
+	// console.log(`modal ${tile.name} visible: ${visibility}`);
 
 	const dynamicClass = (baseClass, extraClass) =>
 		`${baseClass} ${extraClass ? `${baseClass}--${extraClass}` : ''}`;
@@ -52,7 +52,7 @@ function Modal({tile, singleImg, classy, onClose, today}) {
 				</a>
 			</div>
 			<div className='modal__modal-body modal__modal-body--offer '>
-				{/* <GlideContainer
+				<GlideContainer
 					glideConfig={{
 						type: 'carousel',
 						// startAt: 0,
@@ -67,9 +67,9 @@ function Modal({tile, singleImg, classy, onClose, today}) {
 						path: tile.galleryPath,
 						size: tile.gallerySize,
 					}}
-				/> */}
+				/>
 
-				{singleImg}
+				{/* {singleImg} */}
 				<section
 					className={`modal__full-desc--${tile.type} ${dynamicClass(
 						'modal__full-desc',

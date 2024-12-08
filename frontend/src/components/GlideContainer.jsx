@@ -10,22 +10,28 @@ function GlideContainer({glideConfig, glideBreakpoints, slides}) {
 	useEffect(() => {
 		// double checking if component is rendered
 		if (glideContainer.current) {
-			const glide = new Glide(glideContainer.current, {
-				...glideConfig,
-				breakpoints: glideBreakpoints || {
-					360: {perView: 1},
-					480: {perView: 2},
-					1024: {perView: 3},
-				},
-			});
-			glide.mount();
+			try {
+				setTimeout(() => {
+					const glide = new Glide(glideContainer.current, {
+						...glideConfig,
+						breakpoints: glideBreakpoints || {
+							360: {perView: 1},
+							480: {perView: 2},
+							1024: {perView: 3},
+						},
+					});
+					glide.mount();
 
-			// happens after unmounting the component:
-			return () => {
-				glide.destroy();
-			};
+					// happens after unmounting the component:
+					return () => {
+						glide.destroy();
+					};
+				}, 1000);
+			} catch (error) {
+				console.error('Error initializing Glide:', error);
+			}
 		}
-	}, [glideConfig, glideBreakpoints]);
+	}, [glideConfig, glideBreakpoints, slides]);
 
 	let photosArr;
 	if (slides.type === 'photo') {
@@ -53,7 +59,7 @@ function GlideContainer({glideConfig, glideBreakpoints, slides}) {
 								<PhotoSlide
 									key={index}
 									photoNo={index}
-									slideData={emptyItem}
+									slideData={''}
 								/>
 						  ))
 						: null}
