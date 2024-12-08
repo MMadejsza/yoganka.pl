@@ -18,19 +18,21 @@ function Modal({tile, classy, onClose}) {
 				</a>
 			</div>
 
-			{/* <GlideContainer
-				glideConfig={{
-					type: 'carousel',
-					// startAt: 0,
-					perView: 5,
-					focusAt: 'center',
-					gap: 20,
-					autoplay: 2200,
-					animationDuration: 800,
-				}}
-				slides={fasle}
-				leadingClass={leadingClass}
-			/> */}
+			<div className='modal__modal-body modal__modal-body--offer '>
+				{/* <GlideContainer
+					glideConfig={{
+						type: 'carousel',
+						// startAt: 0,
+						perView: 5,
+						focusAt: 'center',
+						gap: 20,
+						autoplay: 2200,
+						animationDuration: 800,
+					}}
+					slides={fasle}
+					leadingClass={leadingClass}
+				/> */}
+			</div>
 			{tile.name}
 		</div>,
 		document.getElementById('modal'),

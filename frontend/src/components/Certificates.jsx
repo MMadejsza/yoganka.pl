@@ -10,6 +10,7 @@ function Certificates() {
 				classy={leadingClass}
 				header='Certyfikaty'>
 				<GlideContainer
+					type='tile'
 					glideConfig={{
 						type: 'carousel',
 						// startAt: 0,

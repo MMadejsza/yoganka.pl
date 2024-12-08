@@ -1,4 +1,4 @@
-function GlideSlide({slideData, leadingClass}) {
+function CertificateSlide({slideData, leadingClass}) {
 	return (
 		<li className='glide__slide'>
 			<div className={`tile ${leadingClass}__tile`}>
@@ -23,4 +23,4 @@ function GlideSlide({slideData, leadingClass}) {
 	);
 }
 
-export default GlideSlide;
+export default CertificateSlide;

@@ -58,17 +58,6 @@ class Tile {
 			});
 			// create its main container
 			const modal = this.createEl('div', {class: 'modal'});
-			// create its close btn
-			const X = this.createEl('div', {class: 'modal__x-btn'});
-			const Xa = this.createEl('a', {class: 'modal__close-btn'});
-			const Xai = this.createEl('i', {class: 'fa-solid fa-xmark modal__icon'});
-			Xa.appendChild(Xai);
-			X.addEventListener('click', (e) => {
-				e.stopPropagation();
-				this.closeModal();
-			});
-			X.appendChild(Xa);
-			modal.appendChild(X);
 
 			let modalBody;
 			// call to build main modal body

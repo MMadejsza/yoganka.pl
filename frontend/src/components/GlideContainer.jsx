@@ -2,9 +2,9 @@ import React, {useEffect, useRef} from 'react';
 import '@glidejs/glide/dist/css/glide.core.min.css';
 import '@glidejs/glide/dist/css/glide.theme.min.css';
 import Glide from '@glidejs/glide';
-import GlideSlide from './GlideSlide.jsx';
+import CertificateSlide from './CertificateSlide.jsx';
 
-function GlideContainer({glideConfig, glideBreakpoints, slides, leadingClass}) {
+function GlideContainer({glideConfig, glideBreakpoints, type, slides, leadingClass}) {
 	const glideContainer = useRef(null);
 
 	useEffect(() => {
@@ -36,7 +36,7 @@ function GlideContainer({glideConfig, glideBreakpoints, slides, leadingClass}) {
 				data-glide-el='track'>
 				<ul className='glide__slides'>
 					{slides.map((slide, index) => (
-						<GlideSlide
+						<CertificateSlide
 							key={index}
 							slideData={slide}
 							leadingClass={leadingClass}
