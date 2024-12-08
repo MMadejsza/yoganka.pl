@@ -8,11 +8,11 @@ export const EVENTS_DATA = [
 		imgPath: `${htmlToImgsPath}/offer/events/yoga_breakfast/front`,
 		galleryPath: `${htmlToImgsPath}/offer/events/yoga_breakfast/front`,
 		fileName: `yoga_breakfast`,
-		date: '2024-12-01',
+		date: '2024-12-08',
 		eventType: 'fixed',
 		front: {
 			nazwaWyjazdu: `Yoga\u00A0&\u00A0Breakfast`,
-			listaDat: ['01/12/2024', 'godz. 9:30'],
+			listaDat: ['08/12/2024', 'godz. 9:30'],
 			rejon: `toMy Kawiarnia\u00A0Gdańsk`,
 			krotkiOpis: `Błogi poranek z jogą w uroczej przestrzeni toMy kawiarnia w Gdańsku...`,
 		},
