@@ -70,16 +70,26 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 				<GlideContainer
 					glideConfig={{
 						type: 'carousel',
-						// startAt: 0,
-						perView: 5,
 						focusAt: 'center',
+						startAt: 0,
+						perView: 2,
 						gap: 20,
-						autoplay: 2200,
+						// autoplay: 2200,
 						animationDuration: 800,
+					}}
+					breakpoints={{
+						// <=
+						360: {
+							perView: 1,
+						},
+						480: {
+							perView: 1,
+						},
 					}}
 					slides={{
 						type: 'photo',
 						path: tile.galleryPath,
+						fileName: tile.fileName,
 						size: tile.gallerySize,
 					}}
 				/>

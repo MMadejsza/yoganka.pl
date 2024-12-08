@@ -7,24 +7,6 @@ import '/src/styles/main.scss';
 class Tile {
 	scrollFlag = 1;
 
-	// constructor destructuring template camp offer
-	constructor(givenEventBody) {
-		this.type = givenEventBody.type;
-		this.extraClass = givenEventBody.extraClass;
-		this.imgPath = givenEventBody.imgPath;
-		this.galleryPath = givenEventBody.galleryPath;
-		this.gallerySize = givenEventBody.gallerySize;
-		this.fileName = givenEventBody.fileName;
-		this.date = givenEventBody.date;
-		this.frontTitle = givenEventBody.front.nazwaWyjazdu;
-		this.frontDate = givenEventBody.front.listaDat;
-		this.frontLocation = givenEventBody.front.rejon;
-		this.frontDesc = givenEventBody.front.krotkiOpis;
-		this.modal = givenEventBody.modal;
-		this.hamburger = document.getElementById('burger');
-		this.body = document.body;
-	}
-
 	// event listener to open modal
 	showModal = () => {
 		const modal = document.querySelector('.modal');
@@ -109,84 +91,6 @@ class Tile {
 		return tile;
 	};
 
-	generateTileModalEvent = () => {
-		// create main container
-		const modalOffer = this.createEl('div', {
-			class: `modal__modal-body modal__modal-body--offer modal__modal-body--event`,
-		});
-		//@ img
-		const img = this.createEl('img', {
-			class: 'tile__img',
-			srcset: `
-					${this.imgPath}/320_${this.fileName}_0.jpg 320w,
-					${this.imgPath}/480_${this.fileName}_0.jpg 480w,
-					`,
-			sizes: `
-					(max-width: 640px) 320px,
-					(max-width: 768px) 480px,
-					480px
-					`,
-			src: `${this.imgPath}/480_${this.fileName}_0.jpg`,
-			loading: 'lazy',
-		});
-		modalOffer.appendChild(img);
-		// const img = this.generateGallerySlider(this.galleryPath, this.fileName, 1);
-		modalOffer.appendChild(img);
-
-		//@ header
-		// create modal plan for camp
-		//@ section modal_desc
-		// create main container
-		const sectionDesc = this.createEl('section', {
-			class: `modal__full-desc modal__full-desc--${this.type} ${
-				this.extraClass ? this.extraClass : ''
-			}`,
-		});
-		// create header container h3
-		const sectionDescHeader = this.createEl('h3', {class: 'modal__title'});
-		// create icon
-		// populate header with icon and text
-		sectionDescHeader.innerText = this.modal.tytulOpisu;
-		// append ready section header
-		sectionDesc.appendChild(sectionDescHeader);
-		// create desc
-		const sectionDescContent = this.createEl('p', {class: 'modal__paragraph'});
-		sectionDescContent.innerText = this.modal.pelnyOpis;
-		sectionDesc.append(sectionDescContent);
-		modalOffer.appendChild(sectionDesc);
-
-		//@ section modal_included
-		// create section for what's included using util function and custom parameters
-		if (this.modal.program) {
-			const sectionIncluded = this.tileModalChecklistClassic(
-				'program',
-				'fa-solid fa-check modal__icon modal-checklist__icon',
-				'modal-checklist modal-checklist--included modal-checklist--event',
-			);
-			modalOffer.appendChild(sectionIncluded);
-		}
-		//@ attention
-		// create a footer with 2 buttons to cause and action
-		// @ footer modal_user-action
-		if (this.modal.uwaga) {
-			const attentionNote = this.createEl('h2', {
-				class: 'modal__attention-note',
-			});
-			attentionNote.innerText = this.modal.uwaga;
-			modalOffer.appendChild(attentionNote);
-		}
-		// create a footer with 2 buttons to cause and action
-		// @ footer modal_user-action
-		const footer = this.createEl('footer', {
-			class: 'modal__user-action',
-		});
-		// use address  from camps dataset
-		this.generateModalBtns(footer, ['sign']);
-		modalOffer.appendChild(footer);
-
-		// return complete modal body
-		return modalOffer;
-	};
 	generateGallerySlider = (relativePath, imgName, imgsNumber) => {
 		// const glideContainer = this.createEl('div', {class: 'glide-container'});
 		const glide = this.createEl('div', {class: 'glide glide--comp'});

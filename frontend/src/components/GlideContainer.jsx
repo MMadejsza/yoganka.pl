@@ -56,8 +56,8 @@ function GlideContainer({glideConfig, glideBreakpoints, slides}) {
 						? photosArr.map((emptyItem, index) => (
 								<PhotoSlide
 									key={index}
-									photoNo={index}
-									slideData={''}
+									photoNo={index + 1}
+									slideData={slides}
 								/>
 						  ))
 						: null}
