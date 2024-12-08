@@ -1,6 +1,7 @@
 import {createPortal} from 'react-dom';
 import GlideContainer from './GlideContainer.jsx';
 import CampGlance from './CampGlance.jsx';
+import CampDay from './CampDay.jsx';
 
 function Modal({tile, classy, onClose}) {
 	let visibility = classy ? 'visible' : undefined;
@@ -37,11 +38,14 @@ function Modal({tile, classy, onClose}) {
 						size: tile.gallerySize,
 					}}
 				/> */}
-
+					<img
+						className='tile__img'
+						src={tile.imgPath}
+					/>
 					<section
-						className={`modal__full-desc modal__full-desc--${
-							tile.type
-						} modal__full-desc--${tile.extraClass ? tile.extraClass : ''}`}>
+						className={`modal__full-desc modal__full-desc--${tile.type} ${
+							tile.extraClass ? 'modal__full-desc--' + tile.extraClass : ''
+						}`}>
 						{tile.modal.fullDescTitle && (
 							<h3 className='modal__title'>{tile.modal.fullDescTitle}</h3>
 						)}
@@ -51,6 +55,19 @@ function Modal({tile, classy, onClose}) {
 					<header className={`modal__header`}>
 						<CampGlance glance={tile.modal.glance} />
 					</header>
+
+					<section
+						className={`modal__desc ${
+							tile.extraClass ? `modal__desc--` + tile.extraClass : ''
+						}`}>
+						<h3 className='modal__title'>{tile.modal.plan.title}</h3>
+						{tile.modal.plan.schedule.map((day, index) => (
+							<CampDay
+								key={index}
+								dayData={day}
+							/>
+						))}
+					</section>
 				</div>
 			)}
 			{tile.name}

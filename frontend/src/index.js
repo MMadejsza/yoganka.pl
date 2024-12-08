@@ -183,53 +183,15 @@ class Tile {
 		return section;
 	};
 	generateTileModalCamp = () => {
-		// create main container
-		const modalOffer = this.createEl('div', {
-			class: `modal__modal-body modal__modal-body--offer `,
-		});
-		//@ img
 		const img = this.generateGallerySlider(this.galleryPath, this.fileName, this.gallerySize);
 		modalOffer.appendChild(img);
 
-		//@ glance
-		const glance = this.createEl('header', {class: 'modal__header'});
-		// create header container h3
-		const glanceHeader = this.createEl('h3', {class: 'modal__title'});
-		glanceHeader.innerText = this.modal.krotkieInfo.naglowek;
-		glance.appendChild(glanceHeader);
-		const ul = this.createEl('ul', {class: 'modal__list modal__list--at-glance'});
-		// point list of icons to include in order
-		const icons = {
-			rejon: 'fa-solid fa-location-dot',
-			nocleg: 'fa-solid fa-bed',
-			liczbaMiejsc: 'fa-solid fa-people-group',
-			cena: 'fa-solid fa-tag',
-		};
-		// iterate after modal's "at glance" part
-		Object.entries(this.modal.krotkieInfo).forEach(([info, text], index) => {
-			const rowName = info;
-			// omit title:
-			if (index > 0) {
-				// create li
-				const li = this.createEl('li', {class: 'modal__li modal__li--at-glance'});
-				// create icon choosing the right one in order
-				const icon = this.createEl('i', {
-					class: icons[rowName]
-						? icons[rowName] + ' modal__icon'
-						: 'fa-solid fa-check modal__icon',
-				});
-				// append icon + text from glance array
-				li.append(icon, text);
-				// append li
-				ul.appendChild(li);
-			}
-		});
 		//@ section modal_plan
 		// create modal plan for camp
 		//@ section modal_desc
 		// create main container
 		const sectionDesc = this.createEl('section', {
-			class: `modal__desc modal__desc--${this.extraClass ? this.extraClass : ''}`,
+			class: `modal__desc ${this.extraClass ? `modal__desc--` + this.extraClass : ''}`,
 		});
 		// create header container h3
 		const sectionDescHeader = this.createEl('h3', {class: 'modal__title'});
