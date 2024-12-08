@@ -10,7 +10,6 @@ function Certificates() {
 				classy={leadingClass}
 				header='Certyfikaty'>
 				<GlideContainer
-					type='tile'
 					glideConfig={{
 						type: 'carousel',
 						// startAt: 0,
@@ -20,7 +19,7 @@ function Certificates() {
 						autoplay: 2200,
 						animationDuration: 800,
 					}}
-					slides={CERTIFICATES_DATA}
+					slides={{type: 'tile', data: CERTIFICATES_DATA}}
 					leadingClass={leadingClass}
 				/>
 			</Section>

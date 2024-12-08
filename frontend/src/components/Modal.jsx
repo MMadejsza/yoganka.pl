@@ -29,8 +29,11 @@ function Modal({tile, classy, onClose}) {
 						autoplay: 2200,
 						animationDuration: 800,
 					}}
-					slides={fasle}
-					leadingClass={leadingClass}
+					slides={{
+						type: 'photo',
+						path: tile.galleryPath,
+						size: tile.gallerySize,
+					}}
 				/> */}
 			</div>
 			{tile.name}

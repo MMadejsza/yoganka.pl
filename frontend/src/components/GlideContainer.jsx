@@ -3,10 +3,10 @@ import '@glidejs/glide/dist/css/glide.core.min.css';
 import '@glidejs/glide/dist/css/glide.theme.min.css';
 import Glide from '@glidejs/glide';
 import CertificateSlide from './CertificateSlide.jsx';
+import PhotoSlide from './PhotoSlide.jsx';
 
-function GlideContainer({glideConfig, glideBreakpoints, type, slides, leadingClass}) {
+function GlideContainer({glideConfig, glideBreakpoints, slides}) {
 	const glideContainer = useRef(null);
-
 	useEffect(() => {
 		// double checking if component is rendered
 		if (glideContainer.current) {
@@ -27,6 +27,11 @@ function GlideContainer({glideConfig, glideBreakpoints, type, slides, leadingCla
 		}
 	}, [glideConfig, glideBreakpoints]);
 
+	let photosArr;
+	if (slides.type === 'photo') {
+		photosArr = Array.from({length: slides.size});
+	}
+
 	return (
 		<div
 			className='glide'
@@ -35,26 +40,47 @@ function GlideContainer({glideConfig, glideBreakpoints, type, slides, leadingCla
 				className='glide__track'
 				data-glide-el='track'>
 				<ul className='glide__slides'>
-					{slides.map((slide, index) => (
-						<CertificateSlide
-							key={index}
-							slideData={slide}
-							leadingClass={leadingClass}
-						/>
-					))}
+					{slides.type === 'tile'
+						? slides.data.map((slide, index) => (
+								<CertificateSlide
+									key={index}
+									slideData={slide}
+								/>
+						  ))
+						: null}
+					{slides.type === 'photo'
+						? photosArr.map((emptyItem, index) => (
+								<PhotoSlide
+									key={index}
+									photoNo={index}
+									slideData={emptyItem}
+								/>
+						  ))
+						: null}
 				</ul>
 			</div>
 
 			<div
 				className='glide__bullets'
 				data-glide-el='controls[nav]'>
-				{slides.map((slide, index) => (
-					<button
-						key={index}
-						className='glide__bullet'
-						data-glide-dir={`=${index}`}
-					/>
-				))}
+				{slides.type === 'tile'
+					? slides.data.map((slide, index) => (
+							<button
+								key={index}
+								className='glide__bullet'
+								data-glide-dir={`=${index}`}
+							/>
+					  ))
+					: null}
+				{slides.type === 'photo'
+					? photosArr.map((photo, index) => (
+							<button
+								key={index}
+								className='glide__bullet'
+								data-glide-dir={`=${index}`}
+							/>
+					  ))
+					: null}
 			</div>
 
 			<div

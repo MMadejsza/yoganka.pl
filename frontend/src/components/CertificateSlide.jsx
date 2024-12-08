@@ -1,4 +1,5 @@
-function CertificateSlide({slideData, leadingClass}) {
+function CertificateSlide({slideData}) {
+	const leadingClass = 'certificates';
 	return (
 		<li className='glide__slide'>
 			<div className={`tile ${leadingClass}__tile`}>
