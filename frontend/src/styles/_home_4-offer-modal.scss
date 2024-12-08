@@ -112,6 +112,7 @@
 	border-radius: map.get(var.$sizes, border-radius);
 	box-shadow: map.get(var.$shadows, active-text-icons-shadow);
 	opacity: 0;
+
 	transition: map.get(var.$behavior, base-transition);
 
 	// full name for specificity required by i in font awesome

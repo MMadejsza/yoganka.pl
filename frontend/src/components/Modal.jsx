@@ -1,15 +1,30 @@
+import React, {useEffect, useState} from 'react';
+
 import {createPortal} from 'react-dom';
 import GlideContainer from './GlideContainer.jsx';
 import CampGlance from './ModalGlance.jsx';
 import CampDay from './CampDay.jsx';
 import ModalList from './ModalList.jsx';
 
-function Modal({tile, singleImg, classy, onClose, today}) {
-	let visibility = classy ? 'visible' : undefined;
+function Modal({visited, tile, singleImg, onClose, today}) {
+	const [isVisible, setIsVisible] = useState(false);
+	let visibility = isVisible ? 'visible' : '';
 	let isUpToDate = tile.date > today;
 	let isCamp = tile.type === 'camp';
 	let isEvent = tile.type === 'event';
 	const modal = tile.modal;
+
+	useEffect(() => {
+		if (visited) {
+			const delay = setTimeout(() => setIsVisible(true), 5);
+			return () => clearTimeout(delay);
+		}
+	}, [visited]);
+
+	const handleClose = () => {
+		setIsVisible(false); // hide modal but let animate
+		setTimeout(() => onClose(), 300); // delete modal
+	};
 
 	// console.log(`modal ${tile.name} visible: ${visibility}`);
 
@@ -46,7 +61,7 @@ function Modal({tile, singleImg, classy, onClose, today}) {
 					className='modal__close-btn'
 					onClick={(e) => {
 						e.stopPropagation();
-						onClose();
+						handleClose();
 					}}>
 					<i className='fa-solid fa-xmark modal__icon'></i>
 				</a>

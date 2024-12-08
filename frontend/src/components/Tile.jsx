@@ -70,13 +70,15 @@ function Tile({data, today}) {
 					</a>
 				))}
 
-			<Modal
-				tile={data}
-				singleImg={singleImg}
-				onClose={handleModalClick}
-				classy={visiting}
-				today={today}
-			/>
+			{visiting && (
+				<Modal
+					visited={visiting}
+					tile={data}
+					singleImg={singleImg}
+					onClose={handleModalClick}
+					today={today}
+				/>
+			)}
 		</div>
 	);
 }

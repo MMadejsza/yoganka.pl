@@ -11,22 +11,20 @@ function GlideContainer({glideConfig, glideBreakpoints, slides}) {
 		// double checking if component is rendered
 		if (glideContainer.current) {
 			try {
-				setTimeout(() => {
-					const glide = new Glide(glideContainer.current, {
-						...glideConfig,
-						breakpoints: glideBreakpoints || {
-							360: {perView: 1},
-							480: {perView: 2},
-							1024: {perView: 3},
-						},
-					});
-					glide.mount();
+				const glide = new Glide(glideContainer.current, {
+					...glideConfig,
+					breakpoints: glideBreakpoints || {
+						360: {perView: 1},
+						480: {perView: 2},
+						1024: {perView: 3},
+					},
+				});
+				glide.mount();
 
-					// happens after unmounting the component:
-					return () => {
-						glide.destroy();
-					};
-				}, 1000);
+				// happens after unmounting the component:
+				return () => {
+					glide.destroy();
+				};
 			} catch (error) {
 				console.error('Error initializing Glide:', error);
 			}
