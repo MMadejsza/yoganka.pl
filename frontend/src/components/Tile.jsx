@@ -3,7 +3,7 @@ import ImgDynamic from './imgsRelated/ImgDynamic.jsx';
 import Modal from './Modal.jsx';
 
 function Tile({data, today}) {
-	const [visiting, setVisiting] = useState();
+	const [visiting, setVisiting] = useState(false);
 
 	const imgPaths = [
 		{path: `${data.imgPath}/320_${data.fileName}_0.jpg`, size: '320w'},
@@ -23,13 +23,13 @@ function Tile({data, today}) {
 	}
 
 	function handleModalClick() {
-		setVisiting('visible');
+		setVisiting(!visiting);
 	}
 
 	return (
 		<div
 			className={'tile' + conditionalClasses}
-			onClick={clickable && handleModalClick}>
+			onClick={clickable ? handleModalClick : undefined}>
 			<ImgDynamic
 				classy={`tile__img`}
 				srcSet={imgPaths}
