@@ -1,5 +1,4 @@
-function CampGlance({tile}) {
-	const camp = tile.modal;
+function CampGlance({glance}) {
 	const icons = {
 		area: 'fa-solid fa-location-dot',
 		accommodation: 'fa-solid fa-bed',
@@ -8,9 +7,9 @@ function CampGlance({tile}) {
 	};
 	return (
 		<>
-			{camp.glance.title && <h3 className='modal__title'>{camp.glance.title}</h3>}
+			{glance.title && <h3 className='modal__title'>{glance.title}</h3>}
 			<ul className='modal__list modal__list--at-glance'>
-				{Object.entries(camp.glance).map(([info, text], index) => {
+				{Object.entries(glance).map(([info, text], index) => {
 					if (info != 'title' && text) {
 						const rowName = info;
 						return (

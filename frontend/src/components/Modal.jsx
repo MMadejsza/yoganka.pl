@@ -49,7 +49,7 @@ function Modal({tile, classy, onClose}) {
 					</section>
 
 					<header className={`modal__header`}>
-						<CampGlance tile={tile} />
+						<CampGlance glance={tile.modal.glance} />
 					</header>
 				</div>
 			)}
