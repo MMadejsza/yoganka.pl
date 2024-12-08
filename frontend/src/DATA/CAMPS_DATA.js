@@ -27,7 +27,7 @@ export const CAMPS_DATA = [
 			glance: {
 				title: ``,
 				accommodation: `Dworek Krępkowice`,
-				capacity: ``,
+				capacity: `12`,
 				price: `1200zł`,
 				// travel: `we własnym zakresie`,
 			},
@@ -132,7 +132,7 @@ export const CAMPS_DATA = [
 				title: ``,
 				accommodation: `Witramowo 32`,
 				capacity: ``,
-				cena: `1550zł`,
+				price: `1550zł`,
 				// travel: `we własnym zakresie`,
 			},
 			plan: {

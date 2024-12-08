@@ -224,10 +224,6 @@ class Tile {
 				ul.appendChild(li);
 			}
 		});
-		// append list in header
-		glance.appendChild(ul);
-		// append complete header
-		modalOffer.appendChild(glance);
 		//@ section modal_plan
 		// create modal plan for camp
 		//@ section modal_desc
