@@ -35,6 +35,16 @@ function Modal({tile, classy, onClose}) {
 						size: tile.gallerySize,
 					}}
 				/> */}
+
+				<section
+					className={`modal__full-desc modal__full-desc--${tile.type} modal__full-desc--${
+						tile.extraClass ? tile.extraClass : ''
+					}`}>
+					{tile.modal.fullDescTitle && (
+						<h3 className='modal__title'>{tile.modal.fullDescTitle}</h3>
+					)}
+					<p className='modal__full-desc-content'>{tile.modal.fullDesc}</p>
+				</section>
 			</div>
 			{tile.name}
 		</div>,

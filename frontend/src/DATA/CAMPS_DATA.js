@@ -126,7 +126,8 @@ export const CAMPS_DATA = [
 		},
 
 		modal: {
-			opis: `Siostrzana energia, otulający zapach jesieni, atmosfera zrozumienia. Ten retreat to coś\u00A0więcej niż odpoczynek, to\u00A04-dniowa podróż do\u00A0siebie. Jeśli marzysz o takim wyjeździe, ale nie\u00A0masz z\u00A0kim pojechać, to\u00A0chcę Cię\u00A0uspokoić, że\u00A0poznasz na\u00A0miejscu fantastyczne kobiety. Oferuję szeroki wachlarz wspólnych zajęć.`,
+			fullDescTitle: '',
+			fullDesc: `Siostrzana energia, otulający zapach jesieni, atmosfera zrozumienia. Ten retreat to coś\u00A0więcej niż odpoczynek, to\u00A04-dniowa podróż do\u00A0siebie. Jeśli marzysz o takim wyjeździe, ale nie\u00A0masz z\u00A0kim pojechać, to\u00A0chcę Cię\u00A0uspokoić, że\u00A0poznasz na\u00A0miejscu fantastyczne kobiety. Oferuję szeroki wachlarz wspólnych zajęć.`,
 			glance: {
 				title: ``,
 				accommodation: `Witramowo 32`,

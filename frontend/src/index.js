@@ -191,16 +191,6 @@ class Tile {
 		const img = this.generateGallerySlider(this.galleryPath, this.fileName, this.gallerySize);
 		modalOffer.appendChild(img);
 
-		//@ section modal_full-desc
-		// create main container
-		const sectionFullDesc = this.createEl('section', {
-			class: `modal__full-desc modal__full-desc--${this.extraClass ? this.extraClass : ''}`,
-		});
-		const fullDescContent = this.createEl('p', {class: 'modal__full-desc-content'});
-		fullDescContent.innerText = this.modal.opis;
-		sectionFullDesc.append(fullDescContent);
-		modalOffer.append(sectionFullDesc);
-
 		//@ glance
 		const glance = this.createEl('header', {class: 'modal__header'});
 		// create header container h3
