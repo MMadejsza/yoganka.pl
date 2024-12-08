@@ -5,7 +5,7 @@ export const EVENTS_DATA = [
 		id: `E01`,
 		name: `Yoga\u00A0&\u00A0Breakfast`,
 		type: `event`,
-		date: `2024-11-27`,
+		date: `2024-12-15`,
 		fileName: `yoga_breakfast`,
 		imgPath: `${htmlToImgsPath}/offer/events/yoga_breakfast/front`,
 		galleryPath: `${htmlToImgsPath}/offer/events/yoga_breakfast/front`,
@@ -14,7 +14,7 @@ export const EVENTS_DATA = [
 		extraClass: `event`,
 		front: {
 			title: `Yoga\u00A0&\u00A0Breakfast`,
-			dates: [`01/12/2024`, `godz. 9:30`],
+			dates: [`15/12/2024`, `godz. 9:30`],
 			location: `toMy Kawiarnia\u00A0Gdańsk`,
 			desc: `Błogi poranek z jogą w uroczej przestrzeni toMy kawiarnia w Gdańsku...`,
 			btnsContent: [],
@@ -48,7 +48,7 @@ export const EVENTS_DATA = [
 		id: `E02`,
 		name: `Wieczorna joga w\u00A0jurcie`,
 		type: `event`,
-		date: false,
+		date: `2025-03-16`,
 		fileName: `jurta`,
 		imgPath: `${htmlToImgsPath}/offer/events/jurta/front`,
 		galleryPath: `${htmlToImgsPath}/offer/events/jurta/front`,
@@ -172,7 +172,7 @@ export const EVENTS_DATA = [
 	// 	freeTime: {},
 	// },
 ].sort((x, y) => {
-	// sort by type: "fixed" przed "repetitive"
+	// sort by type: "fixed" before "repetitive"
 	if (x.eventType === 'fixed' && y.eventType !== 'fixed') {
 		return -1; // x (fixed) before y (repetitive)
 	} else if (x.eventType !== 'fixed' && y.eventType === 'fixed') {

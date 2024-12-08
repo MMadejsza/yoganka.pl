@@ -26,19 +26,25 @@ function Tile({data, today}) {
 		setVisiting(!visiting);
 	}
 
+	const singleImg = (
+		<ImgDynamic
+			classy={`tile__img`}
+			srcSet={imgPaths}
+			sizes={`
+		(max-width: 640px) 320px,
+		(max-width: 768px) 480px,
+		480px
+		`}
+			alt={data.name}
+		/>
+	);
+
 	return (
 		<div
 			className={'tile' + conditionalClasses}
 			onClick={clickable ? handleModalClick : undefined}>
-			<ImgDynamic
-				classy={`tile__img`}
-				srcSet={imgPaths}
-				sizes={`
-                    (max-width: 640px) 320px,
-                    (max-width: 768px) 480px,
-                    480px
-                    `}
-				alt={data.name}></ImgDynamic>
+			{singleImg}
+
 			<h3 className='tile__title'>{data.front.title}</h3>
 
 			{data.front.dates.length > 0 &&
@@ -66,6 +72,7 @@ function Tile({data, today}) {
 
 			<Modal
 				tile={data}
+				singleImg={singleImg}
 				onClose={handleModalClick}
 				classy={visiting}
 				today={today}

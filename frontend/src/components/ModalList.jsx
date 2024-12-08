@@ -1,4 +1,4 @@
-function ModalList({listType, data}) {
+function ModalList({extraClass, listType, data}) {
 	const icons = {
 		included: 'fa-solid fa-check modal__icon modal-checklist__icon',
 		excluded: 'fa-regular fa-hand-point-right modal__icon modal-checklist__icon',
@@ -46,7 +46,7 @@ function ModalList({listType, data}) {
 		content = data.list.map((activity, index) => (
 			<li
 				key={index}
-				className='modal-checklist__li'>
+				className={`modal-checklist__li`}>
 				<i
 					className={iconClasses}
 					aria-hidden='true'></i>
@@ -55,12 +55,14 @@ function ModalList({listType, data}) {
 		));
 	}
 
+	const dynamicClass = (baseClass, extra) =>
+		`${baseClass} modal-checklist--${extra} modal-checklist--${
+			listType === 'freeTime' ? 'free-time' : listType
+		}`;
+
 	return (
 		<>
-			<section
-				className={`modal-checklist modal-checklist--${
-					listType === 'freeTime' ? 'free-time' : listType
-				}`}>
+			<section className={dynamicClass('modal-checklist', extraClass)}>
 				<h3 className='modal-checklist__title'>{data.title}</h3>
 				<ul className='modal-checklist__list'>{content}</ul>
 			</section>
