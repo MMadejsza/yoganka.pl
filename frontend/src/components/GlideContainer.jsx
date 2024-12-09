@@ -5,7 +5,7 @@ import Glide from '@glidejs/glide';
 import CertificateSlide from './CertificateSlide.jsx';
 import PhotoSlide from './PhotoSlide.jsx';
 
-function GlideContainer({glideConfig, glideBreakpoints, slides}) {
+function GlideContainer({placement, glideConfig, glideBreakpoints, slides}) {
 	const glideContainer = useRef(null);
 	useEffect(() => {
 		// double checking if component is rendered
@@ -35,33 +35,33 @@ function GlideContainer({glideConfig, glideBreakpoints, slides}) {
 	if (slides.type === 'photo') {
 		photosArr = Array.from({length: slides.size});
 	}
+	const renderProperSlideType = () => {
+		if (slides.type === 'tile') {
+			return slides.data.map((slide, index) => (
+				<CertificateSlide
+					key={index}
+					slideData={slide}
+				/>
+			));
+		} else if (slides.type === 'photo') {
+			return photosArr.map((emptyItem, index) => (
+				<PhotoSlide
+					key={index}
+					photoNo={index + 1}
+					slideData={slides}
+				/>
+			));
+		}
+	};
 
 	return (
 		<div
-			className='glide'
+			className={`glide ${placement ? 'glide--comp' : ''}`}
 			ref={glideContainer}>
 			<div
 				className='glide__track'
 				data-glide-el='track'>
-				<ul className='glide__slides'>
-					{slides.type === 'tile'
-						? slides.data.map((slide, index) => (
-								<CertificateSlide
-									key={index}
-									slideData={slide}
-								/>
-						  ))
-						: null}
-					{slides.type === 'photo'
-						? photosArr.map((emptyItem, index) => (
-								<PhotoSlide
-									key={index}
-									photoNo={index + 1}
-									slideData={slides}
-								/>
-						  ))
-						: null}
-				</ul>
+				<ul className='glide__slides'>{renderProperSlideType()}</ul>
 			</div>
 
 			<div

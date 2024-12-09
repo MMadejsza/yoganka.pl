@@ -9,7 +9,7 @@ export const EVENTS_DATA = [
 		fileName: `yoga_breakfast`,
 		imgPath: `${htmlToImgsPath}/offer/events/yoga_breakfast/front`,
 		galleryPath: `${htmlToImgsPath}/offer/events/yoga_breakfast/front`,
-		gallerySize: ``,
+		gallerySize: 0,
 		eventType: `fixed`,
 		extraClass: `event`,
 		front: {
@@ -52,7 +52,7 @@ export const EVENTS_DATA = [
 		fileName: `jurta`,
 		imgPath: `${htmlToImgsPath}/offer/events/jurta/front`,
 		galleryPath: `${htmlToImgsPath}/offer/events/jurta/front`,
-		gallerySize: ``,
+		gallerySize: 0,
 		eventType: `repetitive`,
 		extraClass: `event`,
 		front: {
@@ -96,7 +96,7 @@ export const EVENTS_DATA = [
 		fileName: `ys`,
 		imgPath: `${htmlToImgsPath}/offer/events/yoga&sound/front`,
 		galleryPath: `${htmlToImgsPath}/offer/events/yoga&sound/front`,
-		gallerySize: ``,
+		gallerySize: 0,
 		eventType: `repetitive`,
 		extraClass: `event`,
 		front: {

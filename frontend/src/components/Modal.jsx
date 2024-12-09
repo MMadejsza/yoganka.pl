@@ -66,35 +66,40 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 					<i className='fa-solid fa-xmark modal__icon'></i>
 				</a>
 			</div>
-			<div className='modal__modal-body modal__modal-body--offer '>
-				<GlideContainer
-					glideConfig={{
-						type: 'carousel',
-						focusAt: 'center',
-						startAt: 0,
-						perView: 2,
-						gap: 20,
-						// autoplay: 2200,
-						animationDuration: 800,
-					}}
-					breakpoints={{
-						// <=
-						360: {
-							perView: 1,
-						},
-						480: {
-							perView: 1,
-						},
-					}}
-					slides={{
-						type: 'photo',
-						path: tile.galleryPath,
-						fileName: tile.fileName,
-						size: tile.gallerySize,
-					}}
-				/>
+			<div
+				className='modal__modal-body modal__modal-body--offer '
+				onClick={(e) => e.stopPropagation()}>
+				{tile.gallerySize ? (
+					<GlideContainer
+						placement={'comp'}
+						glideConfig={{
+							type: 'carousel',
+							focusAt: 'center',
+							perView: tile.gallerySize ? 2 : 1,
+							// startAt: 0,
+							gap: 20,
+							// autoplay: 2200,
+							animationDuration: 800,
+						}}
+						glideBreakpoints={{
+							// <=
+							360: {
+								perView: 1,
+							},
+							480: {
+								perView: 1,
+							},
+						}}
+						slides={{
+							type: 'photo',
+							path: tile.galleryPath,
+							fileName: tile.fileName,
+							size: tile.gallerySize,
+						}}></GlideContainer>
+				) : (
+					singleImg
+				)}
 
-				{/* {singleImg} */}
 				<section
 					className={`modal__full-desc--${tile.type} ${dynamicClass(
 						'modal__full-desc',

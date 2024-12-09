@@ -31,10 +31,10 @@ function Tile({data, today}) {
 			classy={`tile__img`}
 			srcSet={imgPaths}
 			sizes={`
-		(max-width: 640px) 320px,
-		(max-width: 768px) 480px,
-		480px
-		`}
+					(max-width: 640px) 320px,
+					(max-width: 768px) 480px,
+					480px
+					`}
 			alt={data.name}
 		/>
 	);
