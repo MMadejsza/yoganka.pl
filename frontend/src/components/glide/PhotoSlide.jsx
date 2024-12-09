@@ -1,4 +1,4 @@
-import ImgDynamic from './imgsRelated/ImgDynamic.jsx';
+import ImgDynamic from '../imgsRelated/ImgDynamic.jsx';
 
 function PhotoSlide({slideData, photoNo}) {
 	const imgPaths = [

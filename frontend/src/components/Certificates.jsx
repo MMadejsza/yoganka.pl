@@ -1,5 +1,5 @@
 import Section from './Section.jsx';
-import GlideContainer from './GlideContainer.jsx';
+import GlideContainer from './glide/GlideContainer.jsx';
 import {CERTIFICATES_DATA} from '../DATA/CERTIFICATES_DATA.js';
 
 function Certificates() {

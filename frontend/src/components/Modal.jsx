@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {createPortal} from 'react-dom';
-import GlideContainer from './GlideContainer.jsx';
+import GlideContainer from './glide/GlideContainer.jsx';
 import CampGlance from './ModalGlance.jsx';
 import CampDay from './CampDay.jsx';
 import ModalList from './ModalList.jsx';
