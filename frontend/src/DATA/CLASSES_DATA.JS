@@ -18,7 +18,7 @@ export const CLASSES_DATA = [
 			dates: [],
 			location: ``,
 			desc: ``,
-			btnsContent: [{text: `Skontaktuj się`, link: `#footer__socials`}],
+			btnsContent: [{text: `Skontaktuj się`, link: `.footer__socials`}],
 		},
 		modal: false,
 	},

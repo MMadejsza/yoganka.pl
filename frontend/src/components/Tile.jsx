@@ -45,14 +45,29 @@ function Tile({data, today}) {
 			{date}
 		</h3>
 	));
-	const renderBtns = data.front.btnsContent.map((btn, index) => (
-		<a
-			key={index}
-			href={btn.link}
-			className={`tile__btn tile__btn--${data.fileName}`}>
-			{btn.text}
-		</a>
-	));
+	const renderBtns = data.front.btnsContent.map((btn, index) => {
+		function handleCLick(e) {
+			e.preventDefault();
+			// fetch prop href from clicked menu tile
+			const targetSelector = e.target.getAttribute('href');
+			// Find in Dom first element matching href
+			const targetSection = document.querySelector(targetSelector);
+			// If section exists - scroll to it
+			if (targetSection) {
+				// Apply desired way of scrolling
+				targetSection.scrollIntoView({behavior: 'smooth'});
+			}
+		}
+		return (
+			<a
+				onClick={(e) => handleCLick(e)}
+				key={index}
+				href={btn.link}
+				className={`tile__btn tile__btn--${data.fileName}`}>
+				{btn.text}
+			</a>
+		);
+	});
 
 	return (
 		<div
