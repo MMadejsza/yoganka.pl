@@ -3,7 +3,6 @@ import ImgDynamic from './imgsRelated/ImgDynamic.jsx';
 import Modal from './Modal.jsx';
 
 function Tile({data, today}) {
-	const modal = useRef();
 	const clickable = data.type !== 'class';
 	const isPast = data.date < today;
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,7 +17,6 @@ function Tile({data, today}) {
 	const toggleModal = () => {
 		// console.log(`toggleModal()`);
 		setIsModalOpen(!isModalOpen);
-		modal.current.showModal();
 	};
 
 	// archive
@@ -74,7 +72,6 @@ function Tile({data, today}) {
 
 			{isModalOpen && (
 				<Modal
-					ref={modal}
 					visited={isModalOpen}
 					tile={data}
 					singleImg={renderSingleImg}

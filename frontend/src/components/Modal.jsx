@@ -1,11 +1,11 @@
-import React, {useEffect, useState, forwardRef} from 'react';
+import React, {useEffect, useState} from 'react';
 import {createPortal} from 'react-dom';
 import GlideContainer from './glide/GlideContainer.jsx';
 import CampGlance from './ModalGlance.jsx';
 import CampDay from './CampDay.jsx';
 import ModalList from './ModalList.jsx';
 
-const Modal = forwardRef(function Modal({visited, tile, singleImg, onClose, today}, ref) {
+function Modal({visited, tile, singleImg, onClose, today}) {
 	const [isVisible, setIsVisible] = useState(false);
 	const [isClosing, setIsClosing] = useState(false);
 
@@ -72,26 +72,17 @@ const Modal = forwardRef(function Modal({visited, tile, singleImg, onClose, toda
 				className={`modal__overlay ${isVisible ? 'visible' : ''}`}
 				onClick={handleClose}
 			/>
-			<dialog
-				ref={ref}
+			<div
 				className={`modal ${isClosing ? 'fade-out' : isVisible ? 'visible' : ''}`}
 				onClick={(e) => e.stopPropagation()}>
-				<form method='dialog'>
-					<div className='modal__x-btn'>
-						<button
-							className='modal__close-btn'
-							onClick={() => {
-								handleClose();
-							}}>
-							<i className='fa-solid fa-xmark modal__icon'></i>
-						</button>
-						{/* <a
+				<div className='modal__x-btn'>
+					<a
 						className='modal__close-btn'
 						onClick={handleClose}>
 						<i className='fa-solid fa-xmark modal__icon'></i>
-					</a> */}
-					</div>
-				</form>
+					</a>
+				</div>
+
 				<div
 					className='modal__modal-body modal__modal-body--offer '
 					onClick={(e) => e.stopPropagation()}>
@@ -160,10 +151,10 @@ const Modal = forwardRef(function Modal({visited, tile, singleImg, onClose, toda
 
 					{renderFooter()}
 				</div>
-			</dialog>
+			</div>
 		</>,
 		document.getElementById('modal'),
 	);
-});
+}
 
 export default Modal;
