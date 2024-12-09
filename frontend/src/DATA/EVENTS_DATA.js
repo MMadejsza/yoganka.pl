@@ -141,7 +141,7 @@ export const EVENTS_DATA = [
 	// 	fileName: `sup`,
 	// 	imgPath: `${htmlToImgsPath}/offer/events/sup/front`,
 	// 	galleryPath: `${htmlToImgsPath}/offer/events/sup/front`,
-	// 	gallerySize: ``,
+	// 	gallerySize: 0,
 	// 	eventType: `repetitive`,
 	// 	extraClass: `event`,
 	// 	front: {
@@ -154,10 +154,10 @@ export const EVENTS_DATA = [
 	// 	modal: {
 	// 		fullDescTitle: `O zajęciach:`,
 	// 		fullDesc: `Zapraszam do\u00A0wodnego studia jogi. Zamieniamy matę na\u00A0deskę SUP. Poprawisz balans, wzmocnisz mięśnie posturalne. Otwarta przestrzeń z\u00A0nieskończonym oknem na\u00A0naturę stanowi doskonałą propozycję na\u00A0ciepłe dni. Czy jest coś wspanialszego od\u00A0jogi na\u00A0powietrzu? Promienie słońca, letni podmuch wiatru i\u00A0szum drzew dopełnią Twoją praktykę.`,
-	// 	},
-	// 	program: {
-	// 		title: ``,
-	// 		list: [],
+	// 		program: {
+	// 			title: ``,
+	// 			list: [],
+	// 		},
 	// 	},
 	// 	formLink: ``,
 	// 	note: ``,
