@@ -115,6 +115,15 @@
 
 	transition: map.get(var.$behavior, base-transition);
 
+	&.visible {
+		opacity: 1;
+		width: 95vw;
+		min-height: max-content;
+		max-height: 92vh;
+	}
+	&.fade-out {
+		opacity: 0;
+	}
 	// full name for specificity required by i in font awesome
 	.modal__icon {
 		min-width: 3.5rem;

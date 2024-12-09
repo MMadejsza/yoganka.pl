@@ -7,6 +7,7 @@ import ModalList from './ModalList.jsx';
 
 function Modal({visited, tile, singleImg, onClose, today}) {
 	const [isVisible, setIsVisible] = useState(false);
+	const [isClosing, setIsClosing] = useState(false);
 
 	const {type, modal, gallerySize, galleryPath, fileName, extraClass} = tile;
 	let isUpToDate = tile.date > today;
@@ -21,7 +22,8 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 	}, [visited]);
 	const handleClose = () => {
 		setIsVisible(false); // hide modal but let animate
-		setTimeout(() => onClose(), 300); // delete modal
+		setIsClosing(true);
+		setTimeout(() => onClose(), 500); // delete modal
 	};
 	const dynamicClass = (baseClass, extraClass) =>
 		`${baseClass} ${extraClass ? `${baseClass}--${extraClass}` : ''}`;
@@ -49,7 +51,7 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 		);
 
 	return createPortal(
-		<div className={`modal ${isVisible ? 'visible' : ''}`}>
+		<div className={`modal ${isVisible ? 'visible' : ''} ${isClosing ? 'fade-out' : ''}`}>
 			<div className='modal__x-btn'>
 				<a
 					className='modal__close-btn'
