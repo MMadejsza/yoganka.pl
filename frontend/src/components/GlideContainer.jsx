@@ -1,17 +1,18 @@
 import React, {useEffect, useRef} from 'react';
+import Glide from '@glidejs/glide';
 import '@glidejs/glide/dist/css/glide.core.min.css';
 import '@glidejs/glide/dist/css/glide.theme.min.css';
-import Glide from '@glidejs/glide';
 import CertificateSlide from './CertificateSlide.jsx';
 import PhotoSlide from './PhotoSlide.jsx';
 
 function GlideContainer({placement, glideConfig, glideBreakpoints, slides}) {
-	const glideContainer = useRef(null);
+	const glideRef = useRef(null);
+
 	useEffect(() => {
 		// double checking if component is rendered
-		if (glideContainer.current) {
+		if (glideRef.current) {
 			try {
-				const glide = new Glide(glideContainer.current, {
+				const glide = new Glide(glideRef.current, {
 					...glideConfig,
 					breakpoints: glideBreakpoints || {
 						360: {perView: 1},
@@ -29,23 +30,23 @@ function GlideContainer({placement, glideConfig, glideBreakpoints, slides}) {
 				console.error('Error initializing Glide:', error);
 			}
 		}
-	}, [glideConfig, glideBreakpoints, slides]);
+	}, [glideConfig, glideBreakpoints]);
 
-	let photosArr;
-	if (slides.type === 'photo') {
-		photosArr = Array.from({length: slides.size});
-	}
-	const renderProperSlideType = () => {
-		if (slides.type === 'tile') {
+	const isTile = slides.type === 'tile';
+	const isPhoto = slides.type === 'photo';
+
+	const renderSlides = () => {
+		const SlideComponent = isTile ? CertificateSlide : isPhoto ? PhotoSlide : null;
+		if (isTile) {
 			return slides.data.map((slide, index) => (
-				<CertificateSlide
+				<SlideComponent
 					key={index}
 					slideData={slide}
 				/>
 			));
-		} else if (slides.type === 'photo') {
-			return photosArr.map((emptyItem, index) => (
-				<PhotoSlide
+		} else if (isPhoto) {
+			return Array.from({length: slides.size}).map((_, index) => (
+				<SlideComponent
 					key={index}
 					photoNo={index + 1}
 					slideData={slides}
@@ -53,38 +54,31 @@ function GlideContainer({placement, glideConfig, glideBreakpoints, slides}) {
 			));
 		}
 	};
+	const renderBullets = () => {
+		const bulletsCount = isTile ? slides.data.length : isPhoto ? slides.size : 0;
 
+		return Array.from({length: bulletsCount}).map((_, index) => (
+			<button
+				key={index}
+				className='glide__bullet'
+				data-glide-dir={`=${index}`}
+			/>
+		));
+	};
 	return (
 		<div
-			className={`glide ${placement ? 'glide--comp' : ''}`}
-			ref={glideContainer}>
+			className={`glide ${placement ? `glide--${placement}` : ''}`}
+			ref={glideRef}>
 			<div
 				className='glide__track'
 				data-glide-el='track'>
-				<ul className='glide__slides'>{renderProperSlideType()}</ul>
+				<ul className='glide__slides'>{renderSlides()}</ul>
 			</div>
 
 			<div
 				className='glide__bullets'
 				data-glide-el='controls[nav]'>
-				{slides.type === 'tile'
-					? slides.data.map((slide, index) => (
-							<button
-								key={index}
-								className='glide__bullet'
-								data-glide-dir={`=${index}`}
-							/>
-					  ))
-					: null}
-				{slides.type === 'photo'
-					? photosArr.map((photo, index) => (
-							<button
-								key={index}
-								className='glide__bullet'
-								data-glide-dir={`=${index}`}
-							/>
-					  ))
-					: null}
+				{renderBullets()}
 			</div>
 
 			<div
