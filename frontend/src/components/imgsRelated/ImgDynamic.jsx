@@ -1,5 +1,8 @@
 function ImgDynamic({classy, srcSet, ...props}) {
-	const conditionalClasses = [classy, props.type == 'about' ? '__img--portrait' : ''].join(' ');
+	const conditionalClasses = [
+		props.type != 'about' ? classy : '',
+		props.type == 'about' ? 'about__img--portrait' : '',
+	].join(' ');
 
 	const srcSetString = srcSet.map((item) => `${item.path} ${item.size}`).join(', ');
 
