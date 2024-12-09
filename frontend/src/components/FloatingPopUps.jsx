@@ -52,7 +52,8 @@ function FloatingPopUps() {
 		}
 	}, []);
 
-	function handleClickNewsletter() {
+	function handleClickNewsletter(e) {
+		e.preventDefault();
 		if (isNewsletterScriptReady && typeof window.ml === 'function') {
 			// if API function is ready to use - use it to show modal
 			window.ml('show', 'jiW5Nb', true);
@@ -66,9 +67,7 @@ function FloatingPopUps() {
 		}
 	}
 
-	function handleCookiesClose(e) {
-		e.preventDefault();
-
+	function handleCookiesClose() {
 		setCookies({
 			delete: true,
 		});
@@ -92,7 +91,8 @@ function FloatingPopUps() {
 				<a
 					// --cookies  required for scss opening on :focus
 					className={`pop-ups__single pop-ups__single--cookies`}
-					href='#'>
+					href='#'
+					onClick={(e) => e.preventDefault()}>
 					<i className={`pop-ups__icon fas fa-cookie-bite`} />
 
 					<div className={`pop-ups__body`}>
@@ -100,7 +100,7 @@ function FloatingPopUps() {
 							Używamy tylko niezbędnych plików cookie.
 						</div>
 						<i
-							onClick={(e) => handleCookiesClose(e)}
+							onClick={() => handleCookiesClose()}
 							className={`fas fa-times pop-ups__icon pop-ups__icon--body-close`}
 						/>
 					</div>
