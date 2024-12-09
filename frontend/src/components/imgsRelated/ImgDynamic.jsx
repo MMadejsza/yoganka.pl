@@ -1,12 +1,12 @@
 function ImgDynamic({classy, srcSet, ...props}) {
-	const stampedType = props.type == 'about' ? '__img--portrait' : '';
+	const conditionalClasses = [classy, props.type == 'about' ? '__img--portrait' : ''].join(' ');
 
-	const srcSetProcessed = srcSet.map((item) => `${item.path} ${item.size}`).join(', ');
+	const srcSetString = srcSet.map((item) => `${item.path} ${item.size}`).join(', ');
 
 	return (
 		<img
-			className={`${classy}${stampedType}`}
-			srcSet={srcSetProcessed}
+			className={conditionalClasses}
+			srcSet={srcSetString}
 			src={srcSet[0].path}
 			{...props}
 			loading='lazy'

@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-
 import {createPortal} from 'react-dom';
 import GlideContainer from './GlideContainer.jsx';
 import CampGlance from './ModalGlance.jsx';
@@ -8,11 +7,11 @@ import ModalList from './ModalList.jsx';
 
 function Modal({visited, tile, singleImg, onClose, today}) {
 	const [isVisible, setIsVisible] = useState(false);
-	let visibility = isVisible ? 'visible' : '';
+
+	const {type, modal, gallerySize, galleryPath, fileName, extraClass} = tile;
 	let isUpToDate = tile.date > today;
-	let isCamp = tile.type === 'camp';
-	let isEvent = tile.type === 'event';
-	const modal = tile.modal;
+	let isCamp = type === 'camp';
+	let isEvent = type === 'event';
 
 	useEffect(() => {
 		if (visited) {
@@ -20,14 +19,10 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 			return () => clearTimeout(delay);
 		}
 	}, [visited]);
-
 	const handleClose = () => {
 		setIsVisible(false); // hide modal but let animate
 		setTimeout(() => onClose(), 300); // delete modal
 	};
-
-	// console.log(`modal ${tile.name} visible: ${visibility}`);
-
 	const dynamicClass = (baseClass, extraClass) =>
 		`${baseClass} ${extraClass ? `${baseClass}--${extraClass}` : ''}`;
 
@@ -40,7 +35,6 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 			/>
 		));
 	};
-
 	const renderFooter = () =>
 		isUpToDate && (
 			<footer className='modal__user-action'>
@@ -55,55 +49,47 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 		);
 
 	return createPortal(
-		<div className={`modal ${visibility}`}>
+		<div className={`modal ${isVisible ? 'visible' : ''}`}>
 			<div className='modal__x-btn'>
 				<a
 					className='modal__close-btn'
-					onClick={(e) => {
-						e.stopPropagation();
-						handleClose();
-					}}>
+					onClick={handleClose}>
 					<i className='fa-solid fa-xmark modal__icon'></i>
 				</a>
 			</div>
 			<div
 				className='modal__modal-body modal__modal-body--offer '
 				onClick={(e) => e.stopPropagation()}>
-				{tile.gallerySize ? (
+				{gallerySize ? (
 					<GlideContainer
 						placement={'comp'}
 						glideConfig={{
 							type: 'carousel',
 							focusAt: 'center',
-							perView: tile.gallerySize ? 2 : 1,
-							// startAt: 0,
+							perView: 2,
 							gap: 20,
-							// autoplay: 2200,
 							animationDuration: 800,
 						}}
 						glideBreakpoints={{
 							// <=
-							360: {
-								perView: 1,
-							},
-							480: {
-								perView: 1,
-							},
+							360: {perView: 1},
+							480: {perView: 1},
 						}}
 						slides={{
 							type: 'photo',
-							path: tile.galleryPath,
-							fileName: tile.fileName,
-							size: tile.gallerySize,
-						}}></GlideContainer>
+							path: galleryPath,
+							fileName: fileName,
+							size: gallerySize,
+						}}
+					/>
 				) : (
 					singleImg
 				)}
 
 				<section
-					className={`modal__full-desc--${tile.type} ${dynamicClass(
+					className={`modal__full-desc--${type} ${dynamicClass(
 						'modal__full-desc',
-						tile.extraClass,
+						extraClass,
 					)}`}>
 					{modal.fullDescTitle && <h3 className='modal__title'>{modal.fullDescTitle}</h3>}
 					<p className='modal__full-desc-content'>{modal.fullDesc}</p>
@@ -114,7 +100,7 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 						<header className={`modal__header`}>
 							<CampGlance glance={modal.glance} />
 						</header>
-						<section className={dynamicClass('modal__desc', tile.extraClass)}>
+						<section className={dynamicClass('modal__desc', extraClass)}>
 							<h3 className='modal__title'>{modal.plan.title}</h3>
 							{modal.plan.schedule.map((day, index) => (
 								<CampDay

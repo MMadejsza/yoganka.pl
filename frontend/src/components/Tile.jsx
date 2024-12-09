@@ -3,30 +3,31 @@ import ImgDynamic from './imgsRelated/ImgDynamic.jsx';
 import Modal from './Modal.jsx';
 
 function Tile({data, today}) {
-	const [visiting, setVisiting] = useState(false);
+	const clickable = data.type !== 'class';
+	const isPast = data.date < today;
+	const [isModalOpen, setIsModalOpen] = useState(false);
+
+	const conditionalClasses = [
+		'tile',
+		clickable ? 'tile--clickable' : '',
+		isPast ? 'past' : '',
+		data.extraClass ? `tile--${data.extraClass}` : '',
+	].join(' ');
+
+	const toggleModal = () => {
+		console.log(`onClose()`);
+		setIsModalOpen(!isModalOpen);
+	};
+
+	// archive
+	const glance = {...data.modal.glance};
+	if (isPast) glance.price = '-';
 
 	const imgPaths = [
 		{path: `${data.imgPath}/320_${data.fileName}_0.jpg`, size: '320w'},
 		{path: `${data.imgPath}/480_${data.fileName}_0.jpg`, size: '600w'},
 	];
-	let clickable = data.type !== 'class';
-	let conditionalClasses = data.type !== 'class' ? ' tile--clickable' : '';
-	if (data.extraClass) {
-		conditionalClasses += ` tile--${data.extraClass}`;
-	}
-	if (data.date < today) {
-		conditionalClasses += ` past`;
-		// remove the past price
-		if (data.modal) {
-			data.modal.glance.price = '-';
-		}
-	}
-
-	function handleModalClick() {
-		setVisiting(!visiting);
-	}
-
-	const singleImg = (
+	const renderSingleImg = (
 		<ImgDynamic
 			classy={`tile__img`}
 			srcSet={imgPaths}
@@ -38,44 +39,44 @@ function Tile({data, today}) {
 			alt={data.name}
 		/>
 	);
+	const renderDates = data.front.dates.map((date, index) => (
+		<h3
+			className='tile__date'
+			key={index}>
+			{date}
+		</h3>
+	));
+	const renderBtns = data.front.btnsContent.map((btn, index) => (
+		<a
+			key={index}
+			href={btn.link}
+			className={`tile__btn tile__btn--${data.fileName}`}>
+			{btn.text}
+		</a>
+	));
 
 	return (
 		<div
-			className={'tile' + conditionalClasses}
-			onClick={clickable ? handleModalClick : undefined}>
-			{singleImg}
+			className={conditionalClasses}
+			onClick={clickable ? toggleModal : undefined}>
+			{renderSingleImg}
 
 			<h3 className='tile__title'>{data.front.title}</h3>
 
-			{data.front.dates.length > 0 &&
-				data.front.dates.map((date, index) => (
-					<h3
-						className='tile__date'
-						key={index}>
-						{date}
-					</h3>
-				))}
+			{data.front.dates.length > 0 && renderDates}
 
 			{data.front.location && <h4 className='tile__location'>{data.front.location}</h4>}
 
 			{data.front.desc && <p className='tile__desc'>{data.front.desc}</p>}
 
-			{data.front.btnsContent.length > 0 &&
-				data.front.btnsContent.map((btn, index) => (
-					<a
-						key={index}
-						href={btn.link}
-						className={`tile__btn tile__btn--${data.fileName}`}>
-						{btn.text}
-					</a>
-				))}
+			{data.front.btnsContent.length > 0 && renderBtns}
 
-			{visiting && (
+			{isModalOpen && (
 				<Modal
-					visited={visiting}
+					visited={isModalOpen}
 					tile={data}
-					singleImg={singleImg}
-					onClose={handleModalClick}
+					singleImg={renderSingleImg}
+					onClose={toggleModal}
 					today={today}
 				/>
 			)}

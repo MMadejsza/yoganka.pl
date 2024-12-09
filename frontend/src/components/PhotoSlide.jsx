@@ -8,7 +8,6 @@ function PhotoSlide({slideData, photoNo}) {
 		{path: `${slideData.path}/1024_${slideData.fileName}_${photoNo}.jpg`, size: '1400w'},
 		{path: `${slideData.path}/1200_${slideData.fileName}_${photoNo}.jpg`, size: '1600w'},
 	];
-	console.log('Photoslide');
 	return (
 		<li className='glide__slide'>
 			<ImgDynamic
