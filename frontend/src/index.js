@@ -1,9 +1,3 @@
-// Import of style moved to index.js due to troubles with proper vite bundling
-import '../../node_modules/@glidejs/glide/dist/css/glide.core.min.css';
-import '../../node_modules/@glidejs/glide/dist/css/glide.theme.min.css';
-import Glide from '@glidejs/glide';
-import '/src/styles/main.scss';
-
 class Tile {
 	scrollFlag = 1;
 
@@ -20,6 +14,7 @@ class Tile {
 			modal.scrollTop = 0;
 		}
 	};
+
 	// event listener to close modal
 	closeModal = () => {
 		const modal = document.querySelector('.modal__overlay');
@@ -31,6 +26,7 @@ class Tile {
 		// allow scroll - update status
 		this.scrollFlag = 1;
 	};
+
 	appendModal = () => {
 		// Add modal if exists
 		if (this.modal) {
@@ -46,41 +42,5 @@ class Tile {
 
 			return overlay;
 		}
-	};
-
-	generateTile = () => {
-		// add listeners for opening and closing
-		tile.addEventListener('click', (e) => {
-			e.stopPropagation();
-			const thisModal = this.appendModal();
-			const thisGlide = thisModal.querySelector('.glide--comp');
-			setTimeout(() => {
-				this.showModal();
-			}, 50);
-			setTimeout(() => {
-				if (thisGlide) {
-					new Glide(thisGlide, {
-						type: 'carousel',
-						focusAt: 'center',
-						perView: 2,
-						startAt: 0,
-						gap: 20,
-						// autoplay: 2200,
-						animationDuration: 800,
-						breakpoints: {
-							// <=
-							360: {
-								perView: 1,
-							},
-							480: {
-								perView: 1,
-							},
-						},
-					}).mount();
-				}
-			}, 500);
-		});
-
-		return tile;
 	};
 }
