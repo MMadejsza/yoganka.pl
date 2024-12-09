@@ -5,30 +5,24 @@ function CampGlance({glance}) {
 		capacity: 'fa-solid fa-people-group',
 		price: 'fa-solid fa-tag',
 	};
+
+	const renderItemsList = (data) => {
+		return Object.entries(data)
+			.filter(([key, text]) => key != 'title' && text)
+			.map(([key, text], index) => (
+				<li
+					key={index}
+					className='modal__li modal__li--at-glance'>
+					<i className={`${icons[key] || 'fa-solid fa-check'} modal__icon`} />
+					{text}
+				</li>
+			));
+	};
+
 	return (
 		<>
 			{glance.title && <h3 className='modal__title'>{glance.title}</h3>}
-			<ul className='modal__list modal__list--at-glance'>
-				{Object.entries(glance).map(([key, text], index) => {
-					if (key != 'title' && text) {
-						const rowName = key;
-						return (
-							<li
-								key={index}
-								className='modal__li modal__li--at-glance'>
-								<i
-									className={
-										icons[rowName]
-											? icons[rowName] + ' modal__icon'
-											: 'fa-solid fa-check modal__icon'
-									}
-								/>
-								{text}
-							</li>
-						);
-					}
-				})}
-			</ul>
+			<ul className='modal__list modal__list--at-glance'>{renderItemsList(glance)}</ul>
 		</>
 	);
 }

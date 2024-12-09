@@ -20,8 +20,7 @@ function Tile({data, today}) {
 	};
 
 	// archive
-	const glance = {...data.modal.glance};
-	if (isPast) glance.price = '-';
+	if (isPast) data.modal.glance.price = '-';
 
 	const imgPaths = [
 		{path: `${data.imgPath}/320_${data.fileName}_0.jpg`, size: '320w'},
