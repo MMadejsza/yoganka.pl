@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, forwardRef} from 'react';
 import {createPortal} from 'react-dom';
 import GlideContainer from './glide/GlideContainer.jsx';
 import CampGlance from './ModalGlance.jsx';
 import CampDay from './CampDay.jsx';
 import ModalList from './ModalList.jsx';
 
-function Modal({visited, tile, singleImg, onClose, today}) {
+const Modal = forwardRef(function Modal({visited, tile, singleImg, onClose, today}, ref) {
 	const [isVisible, setIsVisible] = useState(false);
 	const [isClosing, setIsClosing] = useState(false);
 
@@ -20,6 +20,18 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 			return () => clearTimeout(delay);
 		}
 	}, [visited]);
+
+	useEffect(() => {
+		if (isVisible) {
+			document.body.classList.add('stopScroll');
+		} else {
+			document.body.classList.remove('stopScroll');
+		}
+
+		return () => {
+			document.body.classList.remove('stopScroll');
+		};
+	}, [isVisible]);
 
 	const handleClose = () => {
 		setIsClosing(true);
@@ -55,85 +67,103 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 		);
 
 	return createPortal(
-		<div
-			className={`modal ${isClosing ? 'fade-out' : isVisible ? 'visible' : ''}`}
-			onClick={(e) => e.stopPropagation()}>
-			<div className='modal__x-btn'>
-				<a
-					className='modal__close-btn'
-					onClick={handleClose}>
-					<i className='fa-solid fa-xmark modal__icon'></i>
-				</a>
-			</div>
+		<>
 			<div
-				className='modal__modal-body modal__modal-body--offer '
+				className={`modal__overlay ${isVisible ? 'visible' : ''}`}
+				onClick={handleClose}
+			/>
+			<dialog
+				ref={ref}
+				className={`modal ${isClosing ? 'fade-out' : isVisible ? 'visible' : ''}`}
 				onClick={(e) => e.stopPropagation()}>
-				{gallerySize ? (
-					<GlideContainer
-						placement={'comp'}
-						glideConfig={{
-							type: 'carousel',
-							focusAt: 'center',
-							perView: 2,
-							gap: 20,
-							animationDuration: 800,
-						}}
-						glideBreakpoints={{
-							// <=
-							360: {perView: 1},
-							480: {perView: 1},
-						}}
-						slides={{
-							type: 'photo',
-							path: galleryPath,
-							fileName: fileName,
-							size: gallerySize,
-						}}
-					/>
-				) : (
-					singleImg
-				)}
+				<form method='dialog'>
+					<div className='modal__x-btn'>
+						<button
+							className='modal__close-btn'
+							onClick={() => {
+								handleClose();
+							}}>
+							<i className='fa-solid fa-xmark modal__icon'></i>
+						</button>
+						{/* <a
+						className='modal__close-btn'
+						onClick={handleClose}>
+						<i className='fa-solid fa-xmark modal__icon'></i>
+					</a> */}
+					</div>
+				</form>
+				<div
+					className='modal__modal-body modal__modal-body--offer '
+					onClick={(e) => e.stopPropagation()}>
+					{gallerySize ? (
+						<GlideContainer
+							placement={'comp'}
+							glideConfig={{
+								type: 'carousel',
+								focusAt: 'center',
+								perView: 2,
+								gap: 20,
+								animationDuration: 800,
+							}}
+							glideBreakpoints={{
+								// <=
+								360: {perView: 1},
+								480: {perView: 1},
+							}}
+							slides={{
+								type: 'photo',
+								path: galleryPath,
+								fileName: fileName,
+								size: gallerySize,
+							}}
+						/>
+					) : (
+						singleImg
+					)}
 
-				<section
-					className={`modal__full-desc--${type} ${dynamicClass(
-						'modal__full-desc',
-						extraClass,
-					)}`}>
-					{modal.fullDescTitle && <h3 className='modal__title'>{modal.fullDescTitle}</h3>}
-					<p className='modal__full-desc-content'>{modal.fullDesc}</p>
-				</section>
+					<section
+						className={`modal__full-desc--${type} ${dynamicClass(
+							'modal__full-desc',
+							extraClass,
+						)}`}>
+						{modal.fullDescTitle && (
+							<h3 className='modal__title'>{modal.fullDescTitle}</h3>
+						)}
+						<p className='modal__full-desc-content'>{modal.fullDesc}</p>
+					</section>
 
-				{isCamp && (
-					<>
-						<header className={`modal__header`}>
-							<CampGlance glance={modal.glance} />
-						</header>
-						<section className={dynamicClass('modal__desc', extraClass)}>
-							<h3 className='modal__title'>{modal.plan.title}</h3>
-							{modal.plan.schedule.map((day, index) => (
-								<CampDay
-									key={index}
-									dayData={day}
-								/>
-							))}
-						</section>
-						{renderSummaryLists()}
-					</>
-				)}
-				{isEvent && (
-					<ModalList
-						extraClass='event'
-						listType='included'
-						data={modal.program}
-					/>
-				)}
-				{isUpToDate && <h2 className='modal__attention-note'>{modal.note}</h2>}
+					{isCamp && (
+						<>
+							<header className={`modal__header`}>
+								<CampGlance glance={modal.glance} />
+							</header>
+							<section className={dynamicClass('modal__desc', extraClass)}>
+								<h3 className='modal__title'>{modal.plan.title}</h3>
+								{modal.plan.schedule.map((day, index) => (
+									<CampDay
+										key={index}
+										dayData={day}
+									/>
+								))}
+							</section>
+							{renderSummaryLists()}
+						</>
+					)}
+					{isEvent && (
+						<ModalList
+							extraClass='event'
+							listType='included'
+							data={modal.program}
+						/>
+					)}
+					{isUpToDate && <h2 className='modal__attention-note'>{modal.note}</h2>}
 
-				{renderFooter()}
-			</div>
-		</div>,
+					{renderFooter()}
+				</div>
+			</dialog>
+		</>,
 		document.getElementById('modal'),
 	);
-}
+});
 
 export default Modal;

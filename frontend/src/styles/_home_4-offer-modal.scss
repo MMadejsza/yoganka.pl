@@ -93,8 +93,14 @@
 	width: 100vw;
 	height: 300vh;
 	z-index: 8;
-
+	pointer-events: none;
+	background-color: rgba(0, 0, 0, 0.05);
 	backdrop-filter: blur(10px);
+
+	&.visible {
+		opacity: 1;
+		pointer-events: auto;
+	}
 }
 .modal {
 	display: block;
@@ -103,15 +109,18 @@
 	left: 50dvw;
 	transform: translate(-50%, -50%) scale(0.9);
 	padding: 1.5rem 1rem;
-	z-index: 8;
+	z-index: 9;
 
 	background-color: rgba(map.get(var.$colors, tile), 0.95);
+	border: none;
 	border-radius: map.get(var.$sizes, border-radius);
 	box-shadow: map.get(var.$shadows, active-text-icons-shadow);
 	opacity: 0;
 
 	transition: map.get(var.$behavior, base-transition);
-
+	&::backdrop {
+		backdrop-filter: blur(10px);
+	}
 	&.visible {
 		opacity: 1;
 		width: 95vw;

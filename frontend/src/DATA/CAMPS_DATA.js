@@ -25,7 +25,7 @@ export const CAMPS_DATA = [
 			fullDescTitle: ``,
 			fullDesc: `Zabieram\u00A0Cię do\u00A0urokliwego domku, otulonego drewnem, gdzie schowamy\u00A0się w\u00A0ulubionych skarpetach, ciepłych swetrach i\u00A0ukoimy nasze zmysły. Nie\u00A0zabraknie jesiennej klasyki, czyli odpoczynku przy\u00A0kominku z\u00A0kubkiem aromatycznego naparu.`,
 			glance: {
-				title: ``,
+				title: `W skrócie:`,
 				accommodation: `Dworek Krępkowice`,
 				capacity: `12`,
 				price: `1200zł`,
@@ -56,8 +56,8 @@ export const CAMPS_DATA = [
 					},
 					{
 						'day': 'Niedziela:',
-						'08:30': `Zmysł propriocepcji*:                            	          	
-                                                       Joga Slow Flow`,
+						'08:30': `Zmysł propriocepcji*:
+						Joga Slow Flow`,
 						'09:30': 'Nieśpieszne śniadanie',
 						'CZAS WOLNY': '',
 						'13:00': 'Lunch i pożegnanie',

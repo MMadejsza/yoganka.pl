@@ -24,6 +24,7 @@ html {
 body {
 	margin: 0 auto;
 }
+
 ul {
 	list-style: none;
 }
@@ -35,6 +36,10 @@ a {
 	color: inherit;
 	cursor: pointer;
 	transition: map.get(var.$behavior, base-transition);
+}
+button {
+	background-color: transparent;
+	border: none;
 }
 // div.visible {
 // 	opacity: 1;
