@@ -15,7 +15,7 @@ function Tile({data, today}) {
 	].join(' ');
 
 	const toggleModal = () => {
-		console.log(`onClose()`);
+		// console.log(`toggleModal()`);
 		setIsModalOpen(!isModalOpen);
 	};
 
