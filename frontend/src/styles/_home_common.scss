@@ -36,15 +36,15 @@ a {
 	cursor: pointer;
 	transition: map.get(var.$behavior, base-transition);
 }
-div.visible {
-	opacity: 1;
-	width: 95vw;
-	min-height: max-content;
-	max-height: 92vh;
-}
-div.hidden {
-	display: none;
-}
+// div.visible {
+// 	opacity: 1;
+// 	width: 95vw;
+// 	min-height: max-content;
+// 	max-height: 92vh;
+// }
+// div.hidden {
+// 	display: none;
+// }
 .blur {
 	backdrop-filter: blur(10px);
 }

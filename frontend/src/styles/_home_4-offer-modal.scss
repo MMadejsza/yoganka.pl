@@ -101,10 +101,7 @@
 	position: fixed;
 	top: 50dvh;
 	left: 50dvw;
-	transform: translate(-50%, -50%);
-	width: 0vw;
-	min-height: 0px;
-	max-height: 0vh;
+	transform: translate(-50%, -50%) scale(0.9);
 	padding: 1.5rem 1rem;
 	z-index: 8;
 
@@ -120,9 +117,15 @@
 		width: 95vw;
 		min-height: max-content;
 		max-height: 92vh;
+		transform: translate(-50%, -50%) scale(1);
+		transition: map.get(var.$behavior, base-transition);
 	}
 	&.fade-out {
 		opacity: 0;
+		width: 0vw;
+		max-height: 0vh;
+		transform: translate(-50%, -50%) scale(0.95);
+		transition: map.get(var.$behavior, base-transition);
 	}
 	// full name for specificity required by i in font awesome
 	.modal__icon {

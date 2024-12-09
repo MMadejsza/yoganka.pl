@@ -35,7 +35,7 @@ function ModalList({extraClass, listType, data}) {
 
 	const dynamicClass = `modal-checklist modal-checklist--${
 		listType == 'freeTime' ? 'free-time' : listType
-	} ${extraClass ?? ''}`;
+	} ${extraClass ? `modal-checklist--${extraClass}` : ''}`;
 
 	return (
 		<>

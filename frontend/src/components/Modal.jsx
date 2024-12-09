@@ -20,11 +20,15 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 			return () => clearTimeout(delay);
 		}
 	}, [visited]);
+
 	const handleClose = () => {
-		setIsVisible(false); // hide modal but let animate
 		setIsClosing(true);
-		setTimeout(() => onClose(), 500); // delete modal
+		setTimeout(() => {
+			setIsVisible(false); // hide modal but let animate
+			onClose();
+		}, 400); // delete modal
 	};
+
 	const dynamicClass = (baseClass, extraClass) =>
 		`${baseClass} ${extraClass ? `${baseClass}--${extraClass}` : ''}`;
 
@@ -51,7 +55,9 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 		);
 
 	return createPortal(
-		<div className={`modal ${isVisible ? 'visible' : ''} ${isClosing ? 'fade-out' : ''}`}>
+		<div
+			className={`modal ${isClosing ? 'fade-out' : isVisible ? 'visible' : ''}`}
+			onClick={(e) => e.stopPropagation()}>
 			<div className='modal__x-btn'>
 				<a
 					className='modal__close-btn'
