@@ -37,19 +37,16 @@ a {
 	cursor: pointer;
 	transition: map.get(var.$behavior, base-transition);
 }
+i {
+	--fa-animation-iteration-count: 2;
+	--fa-animation-duration: 1.1s;
+	--fa-animation-delay: 0.8s;
+	// --fa-animation-timing: ease-in;
+}
 button {
 	background-color: transparent;
 	border: none;
 }
-// div.visible {
-// 	opacity: 1;
-// 	width: 95vw;
-// 	min-height: max-content;
-// 	max-height: 92vh;
-// }
-// div.hidden {
-// 	display: none;
-// }
 .blur {
 	backdrop-filter: blur(10px);
 }

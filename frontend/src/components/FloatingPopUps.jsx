@@ -83,7 +83,7 @@ function FloatingPopUps() {
 					className={`pop-ups__single pop-ups__single--gift ml-onclick-form`}
 					href='#'
 					onClick={handleClickNewsletter}>
-					<i className={`pop-ups__icon fas fa-gift`} />
+					<i className={`pop-ups__icon fas fa-gift fa-bounce`} />
 				</a>
 			)}
 
@@ -93,7 +93,7 @@ function FloatingPopUps() {
 					className={`pop-ups__single pop-ups__single--cookies`}
 					href='#'
 					onClick={(e) => e.preventDefault()}>
-					<i className={`pop-ups__icon fas fa-cookie-bite`} />
+					<i className={`pop-ups__icon fas fa-cookie-bite fa-bounce`} />
 
 					<div className={`pop-ups__body`}>
 						<div className={`pop-ups__body--msg`}>
