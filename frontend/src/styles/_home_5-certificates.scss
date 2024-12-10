@@ -25,6 +25,12 @@
 
 		@include mixin.flex(column, center, center);
 	}
+	&__name,
+	&__school,
+	&__duration,
+	&__type {
+		white-space: pre-line;
+	}
 	&__name {
 		font-size: 2rem;
 	}

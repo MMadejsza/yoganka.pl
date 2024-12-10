@@ -4,6 +4,7 @@ function CampGlance({glance}) {
 		accommodation: 'fa-solid fa-bed',
 		capacity: 'fa-solid fa-people-group',
 		price: 'fa-solid fa-tag',
+		travel: 'fa-solid fa-plane-departure',
 	};
 
 	const renderItemsList = (data) => {

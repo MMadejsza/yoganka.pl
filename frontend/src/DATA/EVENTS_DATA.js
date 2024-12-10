@@ -5,7 +5,7 @@ export const EVENTS_DATA = [
 		id: `E01`,
 		name: `Yoga\u00A0&\u00A0Breakfast`,
 		type: `event`,
-		date: `2024-12-15`,
+		date: `2025-01-12`,
 		fileName: `yoga_breakfast`,
 		imgPath: `${htmlToImgsPath}/offer/events/yoga_breakfast/front`,
 		galleryPath: `${htmlToImgsPath}/offer/events/yoga_breakfast/front`,
@@ -14,7 +14,7 @@ export const EVENTS_DATA = [
 		extraClass: `event`,
 		front: {
 			title: `Yoga\u00A0&\u00A0Breakfast`,
-			dates: [`15/12/2024`, `godz. 9:30`],
+			dates: [`11/01/2025 `, `12/01/2025`, `godz. 9:30`],
 			location: `toMy Kawiarnia\u00A0Gdańsk`,
 			desc: `Błogi poranek z jogą w uroczej przestrzeni toMy kawiarnia w Gdańsku...`,
 			btnsContent: [],

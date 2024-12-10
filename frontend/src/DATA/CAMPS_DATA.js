@@ -1,7 +1,155 @@
 const htmlToImgsPath = `/imgs`;
 
 export const CAMPS_DATA = [
-	// Created camps so far
+	{
+		id: `CA04`,
+		name: `Summer Chill Camp`,
+		type: `camp`,
+		date: `2025-06-28`,
+		fileName: `camp_chill`,
+		imgPath: `${htmlToImgsPath}/offer/camps/camp_chill/front`,
+		galleryPath: `${htmlToImgsPath}/offer/camps/camp_chill/gallery`,
+		gallerySize: 12,
+		eventType: ``,
+		extraClass: ``,
+		front: {
+			title: `Summer Chill Camp`,
+			dates: [`27-30.06.2025`],
+			location: `Wipsowo 44`,
+			desc: `W PRZYGOTOWANIU`,
+			btnsContent: [],
+		},
+		modal: {
+			fullDescTitle: ``,
+			fullDesc: `Letni camp w\u00A0magicznym Wipsowie. 4\u00A0dni pełne relaksu, natury, pysznego jedzenia i\u00A0oczywiście jogi! Pełna oferta dostępna na\u00A0początku 2025.`,
+			glance: {
+				title: ``,
+				area: `-`,
+				accommodation: `-`,
+				capacity: `-`,
+				price: `-`,
+				travel: `-`,
+			},
+
+			plan: {
+				title: ``,
+				schedule: [],
+			},
+			summary: {},
+			note: ``,
+			btnsContent: [],
+			formLink: `https://forms.gle/recTtsdmUdY71wwv5`,
+			questionTemplate(subject) {
+				return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
+			},
+			program: {},
+		},
+	},
+	{
+		id: `CA03`,
+		name: `Kobieca harmonia - 
+		JOGA | ASTROLOGIA | ECSTATIC DANCE`,
+		type: `camp`,
+		date: `2025-03-07`,
+		fileName: `camp_harmonia`,
+		imgPath: `${htmlToImgsPath}/offer/camps/camp_harmonia/front`,
+		galleryPath: `${htmlToImgsPath}/offer/camps/camp_harmonia/gallery`,
+		gallerySize: 12,
+		eventType: ``,
+		extraClass: ``,
+		front: {
+			title: `Kobieca harmonia
+					Joga | Astrologia
+					| Ecstatic Dance`,
+			dates: [`07-09.03.2025`],
+			location: `Stara Szkoła Wysoka Wieś`,
+			desc: ``,
+			btnsContent: [],
+		},
+		modal: {
+			fullDescTitle: ``,
+			fullDesc: `Zanurz się w\u00A0wyjątkowy kobiecy weekend na\u00A0Warmii, gdzie zrelaksujesz ciało, umysł i\u00A0duszę. Czekają na\u00A0Ciebie codzienne praktyki jogi i\u00A0medytacji w\u00A0kameralnym gronie, w\u00A0otoczeniu malowniczej przyrody. Rozpieszczą Cię zdrowe, wegetariańskie posiłki przygotowane z\u00A0lokalnych składników. Południa spędzimy na\u00A0astrologicznych odkryciach, wspólnie eksplorując kobiecą energię Wenus. A\u00A0wieczorem podczas ecstatic dance wyzwolisz swoją wolność.
+
+			Dodatkowo, przygotowałam wieczór pielęgnacyjny twarzy z\u00A0naturalnymi kosmetykami, abyś poczuła się piękna i\u00A0zadbana. Odpoczniesz również w saunie, pozwalając ciepłu uwolnić napięcia i\u00A0zregenerować ciało. To czas, by zadbać o\u00A0siebie w\u00A0pełni, poczuć harmonię z\u00A0sobą i\u00A0gwiazdami.
+
+			Dołącz do\u00A0nas i\u00A0spraw, by\u00A0Dzień Kobiet był czasem, który\u00A0zapamiętasz na\u00A0długo!`,
+			glance: {
+				title: ``,
+				area: `Ostróda`,
+				accommodation: `Stara Szkoła Wysoka Wieś`,
+				// capacity: `12`,
+				price: `1199zł do 10 stycznia
+				1269zł od 11 stycznia`,
+				// travel: `we własnym zakresie`,
+			},
+
+			plan: {
+				title: `Slow Menu`,
+				schedule: [
+					{
+						'day': 'Piątek:',
+						'15:00': 'Możliwość przyjazdu, spacery',
+						'18:00': 'Joga łagodna, relaksująca',
+						'19:00': 'Wspólna kolacja',
+						'21:00': `Krąg powitalny, skincare, babskie\u00A0pogaduchy`,
+					},
+					{
+						'day': 'Sobota:',
+						'08:00': 'Joga Slow Flow Vinyasa',
+						'10:00': 'Niespieszne śniadanko',
+						'11:30': `Aktywuj swoją wenus, warsztaty astrologiczne z\u00A0kubkiem kakao`,
+						'15:00': 'Obiad',
+						'16:30': 'CZAS WOLNY',
+						'18:00': 'Kolacja',
+						'20:00': 'Joga wieczorna',
+
+						'21:30': 'Ecstatic Dance +\u00A0ceremonia kakao',
+					},
+					{
+						'day': 'Niedziela:',
+						'08:00': 'Joga Slow Flow Vinyasa',
+						'09:45': 'Niespieszne śniadanko',
+						'11:00': `spacer leśny w ciszy`,
+						'12:00': 'Sesja Mindfulness',
+						'13:30': `Lunch i\u00A0wyjazd do\u00A0domu`,
+					},
+				],
+			},
+			summary: {
+				included: {
+					title: `Cena zawiera:`,
+					list: [
+						`4 praktyki jogi`,
+						`Warsztat astrologii`,
+						`Skin Care`,
+						`Ecstatic Dance`,
+						`Sauna`,
+						`Pobyt z Wyżywieniem`,
+						`Kawa / Herbata / Napary 24/h`,
+					],
+				},
+				freeTime: {
+					title: `W Czasie Wolnym:`,
+					//(note: statuses are free/optional/available for different icons)
+					list: [
+						{
+							status: `free`,
+							activity: `Leśne spacery`,
+						},
+						{status: `free`, activity: `Zdrowe napary`},
+						{status: `free`, activity: `Sauna`},
+					],
+				},
+			},
+			note: `Gotowa na niesamowity weekend?`,
+			btnsContent: [{text: `Tak! Dołączam`, link: `https://forms.gle/recTtsdmUdY71wwv5`}],
+			formLink: `https://forms.gle/recTtsdmUdY71wwv5`,
+			questionTemplate(subject) {
+				return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
+			},
+			program: {},
+		},
+	},
 	{
 		id: `CA01`,
 		name: `Kojenie Zmysłów -\u00A0Kaszuby`,
@@ -99,6 +247,7 @@ export const CAMPS_DATA = [
 				},
 			},
 			note: `Zaserwuj sobie spokój i zdrowszą siebie. Wypełnij poniższe zgłoszenie`,
+			btnsContent: [{text: `Dołączam`, link: `https://forms.gle/kYN6VpfP3aV1b9yB8`}],
 			formLink: `https://forms.gle/kYN6VpfP3aV1b9yB8`,
 			questionTemplate(subject) {
 				return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
@@ -209,6 +358,7 @@ export const CAMPS_DATA = [
 				},
 			},
 			note: `Zaserwuj sobie spokój i zdrowszą siebie.`,
+			btnsContent: [{text: `Dołączam`, link: `https://forms.gle/6Ri5sqnXgUQGSRNT9`}],
 			formLink: `https://forms.gle/6Ri5sqnXgUQGSRNT9`,
 			questionTemplate(subject) {
 				return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;

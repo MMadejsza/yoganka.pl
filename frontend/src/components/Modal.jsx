@@ -8,7 +8,6 @@ import ModalList from './ModalList.jsx';
 function Modal({visited, tile, singleImg, onClose, today}) {
 	const [isVisible, setIsVisible] = useState(false);
 	const [isClosing, setIsClosing] = useState(false);
-
 	const {type, modal, gallerySize, galleryPath, fileName, extraClass} = tile;
 	let isUpToDate = tile.date > today;
 	let isCamp = type === 'camp';
@@ -45,26 +44,36 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 		`${baseClass} ${extraClass ? `${baseClass}--${extraClass}` : ''}`;
 
 	const renderSummaryLists = () => {
-		return Object.entries(modal.summary).map(([listType, content], index) => (
-			<ModalList
-				key={index}
-				listType={listType}
-				data={content}
-			/>
-		));
-	};
-	const renderFooter = () =>
-		isUpToDate && (
-			<footer className='modal__user-action'>
-				<a
-					href={modal.formLink}
-					className='modal__btn modal__sign-up'
-					target='_blank'
-					rel='noopener noreferrer'>
-					Dołączam
-				</a>
-			</footer>
+		return (
+			<section className='modal__summary'>
+				{Object.entries(modal.summary).map(([listType, content], index) => (
+					<ModalList
+						key={index}
+						listType={listType}
+						data={content}
+					/>
+				))}
+			</section>
 		);
+	};
+
+	const renderFooter = () => {
+		return (
+			isUpToDate && (
+				<footer className='modal__user-action'>
+					{modal.btnsContent.map((btn, index) => (
+						<a
+							onClick={(e) => e.preventDefault()}
+							key={index}
+							href={btn.link}
+							className={`modal__btn`}>
+							{btn.text}
+						</a>
+					))}
+				</footer>
+			)
+		);
+	};
 
 	return createPortal(
 		<>
@@ -116,28 +125,37 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 						className={`modal__full-desc--${type} ${dynamicClass(
 							'modal__full-desc',
 							extraClass,
-						)}`}>
+						)} ${modal.fullDesc.length > 375 ? 'modal__full-desc--long-text' : ''}`}>
 						{modal.fullDescTitle && (
 							<h3 className='modal__title'>{modal.fullDescTitle}</h3>
 						)}
-						<p className='modal__full-desc-content'>{modal.fullDesc}</p>
+						<p className=' modal__full-desc modal__full-desc--content'>
+							{modal.fullDesc}
+						</p>
 					</section>
 
 					{isCamp && (
 						<>
-							<header className={`modal__header`}>
+							<header
+								className={`modal__header ${
+									modal.fullDesc.length > 375 ? 'modal__full-desc--long-text' : ''
+								}`}>
 								<CampGlance glance={modal.glance} />
 							</header>
-							<section className={dynamicClass('modal__desc', extraClass)}>
-								<h3 className='modal__title'>{modal.plan.title}</h3>
-								{modal.plan.schedule.map((day, index) => (
-									<CampDay
-										key={index}
-										dayData={day}
-									/>
-								))}
-							</section>
-							{renderSummaryLists()}
+
+							{modal.plan.schedule.length > 0 && (
+								<section className={dynamicClass('modal__desc', extraClass)}>
+									<h3 className='modal__title'>{modal.plan.title}</h3>
+									{modal.plan.schedule.map((day, index) => (
+										<CampDay
+											key={index}
+											dayData={day}
+										/>
+									))}
+								</section>
+							)}
+
+							{Object.keys(modal.summary).length > 0 && renderSummaryLists()}
 						</>
 					)}
 					{isEvent && (
@@ -147,9 +165,11 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 							data={modal.program}
 						/>
 					)}
-					{isUpToDate && <h2 className='modal__attention-note'>{modal.note}</h2>}
+					{isUpToDate && modal.note && (
+						<h2 className='modal__attention-note'>{modal.note}</h2>
+					)}
 
-					{renderFooter()}
+					{modal.btnsContent.length > 0 && renderFooter()}
 				</div>
 			</div>
 		</>,

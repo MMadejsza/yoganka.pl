@@ -181,7 +181,7 @@
 			overflow-y: auto;
 			overflow-x: hidden;
 
-			& section:nth-child(even) {
+			& > section:nth-child(even) {
 				background: radial-gradient(
 					circle at center,
 					rgba(0, 0, 0, 0.06) 70%,
@@ -224,6 +224,7 @@
 
 	&__li {
 		@include mixin.flex($gap: 2rem);
+		white-space: pre-line;
 
 		&--at-glance {
 			font-size: 2.5rem;
@@ -232,11 +233,13 @@
 
 	&__full-desc {
 		grid-column: 1 / -1;
+		padding: 2rem 0;
 		font-size: 2.2rem;
+		white-space: pre-line;
 
-		&--event {
+		&--event,
+		&--content {
 			padding: 0 2rem;
-			font-size: 2.1rem;
 		}
 	}
 
@@ -264,6 +267,11 @@
 
 	&__btn {
 		@extend %action-btn;
+	}
+	&__summary {
+		grid-column: 1 /-1;
+		@include mixin.flex(row, center, flex-start, 2rem);
+		flex-wrap: wrap;
 	}
 }
 .modal-checklist {

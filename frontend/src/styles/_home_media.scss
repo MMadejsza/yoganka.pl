@@ -275,7 +275,8 @@
 		}
 
 		&__full-desc {
-			padding: 0 1rem;
+			padding-left: 1rem;
+			padding-right: 1rem;
 		}
 
 		&__desc {
@@ -345,18 +346,7 @@
 		}
 	}
 	.modal-checklist {
-		&--included {
-			grid-column: span 3;
-		}
-
-		&--event {
-			grid-column: 1 / -1;
-		}
-
-		&--excluded,
-		&--optional {
-			grid-column: -1 / -4;
-		}
+		flex-basis: 48%;
 	}
 	.partners {
 		padding-bottom: 6rem !important;
@@ -483,7 +473,8 @@
 		&__full-desc {
 			grid-column: -1 / -4;
 			place-self: center;
-			&--event {
+			&--event,
+			&--long-text {
 				grid-column: 1 / -1;
 			}
 		}
@@ -689,6 +680,10 @@
 	.modal {
 		max-width: 900px;
 		padding: 1.5rem 2.5rem;
+	}
+	.modal-checklist {
+		padding: 0 1rem;
+		flex-basis: auto;
 	}
 	.partners__link {
 		width: 20vw;

@@ -78,7 +78,8 @@ button {
 .stopScroll {
 	overflow: hidden;
 }
-section:not(:first-of-type),
+.wrapper > section:not(:first-of-type),
+.modal__modal-body > section:not(:first-of-type),
 footer {
 	padding: 0 var(--section-padding-y) 2rem;
 	box-shadow: map.get(var.$shadows, section-shadow);
@@ -89,4 +90,5 @@ footer {
 	cursor: auto;
 	background-color: map.get(var.$colors, base);
 }
+
 //! COMMON BLOCKS END

@@ -6,7 +6,7 @@ export const CERTIFICATES_DATA = [
 		themes: ['Vinyasa', 'Hatha'],
 	},
 	{
-		name: 'Instruktor Hatha Jogi',
+		name: 'Instruktor Hatha\u00A0Jogi',
 		instructor: 'prof. Szopa',
 		duration: '150h',
 		themes: ['Hatha'],
@@ -18,7 +18,7 @@ export const CERTIFICATES_DATA = [
 		themes: [],
 	},
 	{
-		name: 'Asana stabilna i wygodna',
+		name: 'Asana stabilna i\u00A0wygodna',
 		instructor: 'SMU YOGA',
 		duration: '15h',
 		themes: [],
@@ -39,6 +39,12 @@ export const CERTIFICATES_DATA = [
 		name: 'Warsztat pozycji odwróconych',
 		instructor: 'Joga Park',
 		duration: '15h',
+		themes: [],
+	},
+	{
+		name: 'Kurs  bezpieczne i\u00A0ektywne wygięcia',
+		instructor: 'Magdalena Gebert',
+		duration: '',
 		themes: [],
 	},
 ];

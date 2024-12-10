@@ -95,6 +95,7 @@
 	&__date {
 		font-size: 2.2rem;
 		font-weight: 500;
+		white-space: pre-line;
 		letter-spacing: 1px;
 		color: map.get(var.$colors, tile-title);
 	}
@@ -106,11 +107,13 @@
 	&__location {
 		font-size: 1.9rem;
 		font-weight: 400;
+		white-space: pre-line;
 		color: map.get(var.$colors, tile-text-muted);
 	}
 
 	&__desc {
 		font-size: 1.9rem;
+		white-space: pre-line;
 		color: map.get(var.$colors, tile-text-muted);
 	}
 
