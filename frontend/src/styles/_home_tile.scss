@@ -1,4 +1,5 @@
 @use 'sass:map';
+@use 'sass:color';
 @use '_global_variables-templates' as var;
 
 %action-btn {
@@ -41,6 +42,34 @@
 		justify-content: inherit;
 	}
 
+	&--clickable {
+		box-shadow: map.get(var.$shadows, tile-shadow);
+		position: relative;
+
+		&::after {
+			content: '...';
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			height: 10%;
+			padding-bottom: 0.5rem;
+
+			font-size: 1rem;
+			letter-spacing: 1px;
+			color: map.get(var.$colors, tile-text-muted);
+			background: linear-gradient(
+				to bottom,
+				transparent,
+				color.scale(map.get(var.$colors, tile), $lightness: -13%)
+			);
+
+			display: flex;
+			justify-content: center;
+			align-items: flex-end;
+		}
+	}
+
 	&__img {
 		place-self: center;
 		max-width: 80%;
@@ -66,6 +95,7 @@
 	&__date {
 		font-size: 2.2rem;
 		font-weight: 500;
+		white-space: pre-line;
 		letter-spacing: 1px;
 		color: map.get(var.$colors, tile-title);
 	}
@@ -77,11 +107,13 @@
 	&__location {
 		font-size: 1.9rem;
 		font-weight: 400;
+		white-space: pre-line;
 		color: map.get(var.$colors, tile-text-muted);
 	}
 
 	&__desc {
 		font-size: 1.9rem;
+		white-space: pre-line;
 		color: map.get(var.$colors, tile-text-muted);
 	}
 

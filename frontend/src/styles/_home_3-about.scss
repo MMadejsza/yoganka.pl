@@ -59,25 +59,32 @@
 		}
 	}
 
-	&__content {
+	&__bio--description {
+		grid-area: article;
+	}
+
+	&__bio--description,
+	&__bio--content,
+	&__bio--heading,
+	&__bio--signature {
+		white-space: pre-line;
+	}
+
+	&__bio--content {
 		grid-area: content;
 		padding: 1rem;
 
 		@include mixin.flex(column, center, center, 1.5rem);
 	}
 
-	&__heading {
+	&__bio--heading {
 		grid-area: h2;
 		font-size: 4rem;
 		font-weight: 500;
 		text-transform: uppercase;
 	}
 
-	&__description {
-		grid-area: article;
-	}
-
-	&__signature {
+	&__bio--signature {
 		align-self: flex-end;
 		margin-right: 1rem;
 

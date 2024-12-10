@@ -1,0 +1,74 @@
+@use 'sass:map';
+@use 'sass:color';
+@use '_global_variables-templates' as var;
+@use '_global_mixins-keyframes' as mixin;
+
+.pop-ups {
+	position: fixed;
+	bottom: 1.5rem;
+	right: 1rem;
+	z-index: 10;
+	@include mixin.flex(column, center, center, 1.5rem);
+
+	transition: map.get(var.$behavior, base-transition);
+
+	&__single {
+		position: relative;
+		display: block;
+		width: 6rem;
+		max-width: 100px;
+		height: 6rem;
+		max-height: 100px;
+		margin: 0;
+		padding: 0;
+
+		line-height: 6rem;
+		font-size: 3rem;
+		text-decoration: none;
+		color: map.get(var.$colors, accent-text);
+
+		border-radius: 50%;
+		background-color: rgba(map.get(var.$colors, accent-bcg), 0.7);
+		box-shadow: map.get(var.$shadows, active-text-icons-shadow);
+		transition: map.get(var.$behavior, base-transition);
+
+		&:hover {
+			transform: translateY(-25%) scale(1.15);
+			box-shadow: map.get(var.$shadows, active-box-shadow);
+		}
+
+		&--cookies:focus .pop-ups__icon {
+			line-height: 6rem;
+		}
+
+		&--cookies:focus .pop-ups__body {
+			right: 0%;
+			background-color: rgba(map.get(var.$colors, accent-bcg), 0.95);
+			opacity: 1;
+		}
+	}
+
+	&__body {
+		@include mixin.flex(row, center, center, 2rem);
+		position: absolute;
+		top: 0;
+		right: -100vw;
+		width: max-content;
+		padding-left: 0.5rem;
+
+		font-size: 1.5rem;
+
+		border-radius: 50px;
+		box-shadow: map.get(var.$shadows, active-box-shadow);
+		transition: map.get(var.$behavior, base-transition);
+		opacity: 0;
+	}
+
+	// to bump up specificity
+	&__icon--body-close {
+		font-size: 3rem;
+		line-height: 7rem;
+		margin-right: 2rem;
+		color: map.get(var.$colors, accent-text);
+	}
+}

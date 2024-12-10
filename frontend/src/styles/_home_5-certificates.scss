@@ -16,6 +16,7 @@
 		place-self: center;
 		max-width: 100%;
 		min-width: 175px;
+		margin: 1.5rem 0;
 		padding: 1.5rem 1rem;
 
 		background-color: map.get(var.$colors, tile);
@@ -23,6 +24,12 @@
 		overflow: hidden;
 
 		@include mixin.flex(column, center, center);
+	}
+	&__name,
+	&__school,
+	&__duration,
+	&__type {
+		white-space: pre-line;
 	}
 	&__name {
 		font-size: 2rem;
