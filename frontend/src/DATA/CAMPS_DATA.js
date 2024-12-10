@@ -23,12 +23,12 @@ export const CAMPS_DATA = [
 			fullDescTitle: ``,
 			fullDesc: `Letni camp w\u00A0magicznym Wipsowie. 4\u00A0dni pełne relaksu, natury, pysznego jedzenia i\u00A0oczywiście jogi! Pełna oferta dostępna na\u00A0początku 2025.`,
 			glance: {
-				title: ``,
-				area: `-`,
-				accommodation: `-`,
-				capacity: `-`,
-				price: `-`,
-				travel: `-`,
+				title: `W przygotowaniu!`,
+				area: ``,
+				accommodation: ``,
+				capacity: ``,
+				price: ``,
+				travel: ``,
 			},
 
 			plan: {

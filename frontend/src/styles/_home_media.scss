@@ -120,16 +120,6 @@
 		&__list {
 			align-self: self-start;
 		}
-		&--included {
-			grid-column: 1;
-			grid-row: span 2;
-		}
-		&--free-time {
-			width: max-content;
-			justify-self: center;
-			grid-column: 1 / -1;
-			@include mixin.flex(column, $align: center);
-		}
 	}
 	.partners {
 		&__link {
@@ -594,14 +584,6 @@
 		&__header {
 			width: 100%;
 		}
-
-		// &__title-bar {
-		// 	width: max-content;
-		// 	height: 13rem;
-
-		// 	font-size: 4rem;
-		// 	letter-spacing: 6px;
-		// }
 
 		&__logo {
 			margin-top: 2rem;

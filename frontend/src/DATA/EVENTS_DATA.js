@@ -29,6 +29,12 @@ export const EVENTS_DATA = [
 				title: `Relaks menu:`,
 				list: [`Praktyka jogi (50min)`, `Zdrowy napar`, `Śniadanie wegetariańskie`],
 			},
+			btnsContent: [
+				{
+					text: `Dołączam`,
+					link: `mailto:kontakt@yoganka.pl?&body=Hej! Piszę do Ciebie z yoganka.pl`,
+				},
+			],
 			formLink: `mailto:kontakt@yoganka.pl?&body=Hej! Piszę do Ciebie z yoganka.pl`,
 			note: `Wymiana: 40 zł bez śniadania
 			80zł ze śniadaniem
@@ -74,6 +80,12 @@ export const EVENTS_DATA = [
 					`Dłuższa relaksacja`,
 				],
 			},
+			btnsContent: [
+				{
+					text: `Dołączam`,
+					link: `mailto:kontakt@yoganka.pl?&body=Hej! Piszę do Ciebie z yoganka.pl`,
+				},
+			],
 			formLink: `mailto:kontakt@yoganka.pl?&body=Hej! Piszę do Ciebie z yoganka.pl`,
 			note: `Cena: 50zł`,
 			// questionTemplate(subject) {
@@ -120,6 +132,12 @@ export const EVENTS_DATA = [
 					`Upominek`,
 				],
 			},
+			btnsContent: [
+				{
+					text: `Dołączam`,
+					link: `https://forms.gle/kYN6VpfP3aV1b9yB8`,
+				},
+			],
 			formLink: `https://forms.gle/kYN6VpfP3aV1b9yB8`,
 			note: ``,
 			// questionTemplate(subject) {
@@ -159,6 +177,8 @@ export const EVENTS_DATA = [
 	// 			list: [],
 	// 		},
 	// 	},
+	// btnsContent: [
+	// ],
 	// 	formLink: ``,
 	// 	note: ``,
 	// 	// questionTemplate(subject) {
