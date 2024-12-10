@@ -9,7 +9,7 @@ export const CAMPS_DATA = [
 		fileName: `camp_chill`,
 		imgPath: `${htmlToImgsPath}/offer/camps/camp_chill/front`,
 		galleryPath: `${htmlToImgsPath}/offer/camps/camp_chill/gallery`,
-		gallerySize: 12,
+		gallerySize: 9,
 		eventType: ``,
 		extraClass: ``,
 		front: {
@@ -63,7 +63,7 @@ export const CAMPS_DATA = [
 					| Ecstatic Dance`,
 			dates: [`07-09.03.2025`],
 			location: `Stara Szkoła Wysoka Wieś`,
-			desc: ``,
+			desc: `...`,
 			btnsContent: [],
 		},
 		modal: {
@@ -365,4 +365,4 @@ export const CAMPS_DATA = [
 			},
 		},
 	},
-].sort((x, y) => new Date(y.date) - new Date(x.date));
+].sort((x, y) => new Date(x.date) - new Date(y.date));
