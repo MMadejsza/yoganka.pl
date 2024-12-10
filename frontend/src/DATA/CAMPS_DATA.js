@@ -47,7 +47,7 @@ export const CAMPS_DATA = [
 	},
 	{
 		id: `CA03`,
-		name: `Kobieca harmonia - 
+		name: `Kobieca harmonia -
 		JOGA | ASTROLOGIA | ECSTATIC DANCE`,
 		type: `camp`,
 		date: `2025-03-07`,

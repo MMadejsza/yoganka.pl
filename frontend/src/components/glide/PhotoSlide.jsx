@@ -2,11 +2,11 @@ import ImgDynamic from '../imgsRelated/ImgDynamic.jsx';
 
 function PhotoSlide({slideData, photoNo}) {
 	const imgPaths = [
-		{path: `${slideData.path}/320_${slideData.fileName}_${photoNo}.jpg`, size: '480w'},
-		{path: `${slideData.path}/480_${slideData.fileName}_${photoNo}.jpg`, size: '768w'},
-		{path: `${slideData.path}/768_${slideData.fileName}_${photoNo}.jpg`, size: '1024w'},
-		{path: `${slideData.path}/1024_${slideData.fileName}_${photoNo}.jpg`, size: '1400w'},
-		{path: `${slideData.path}/1200_${slideData.fileName}_${photoNo}.jpg`, size: '1600w'},
+		{path: `${slideData.path}/480_${slideData.fileName}_${photoNo}.jpg`, size: '480w'},
+		{path: `${slideData.path}/768_${slideData.fileName}_${photoNo}.jpg`, size: '768w'},
+		{path: `${slideData.path}/1024_${slideData.fileName}_${photoNo}.jpg`, size: '1024w'},
+		{path: `${slideData.path}/1400_${slideData.fileName}_${photoNo}.jpg`, size: '1400w'},
+		{path: `${slideData.path}/1600_${slideData.fileName}_${photoNo}.jpg`, size: '1600w'},
 	];
 	return (
 		<li className='glide__slide'>
