@@ -54,7 +54,7 @@ export const CAMPS_DATA = [
 		fileName: `camp_harmonia`,
 		imgPath: `${htmlToImgsPath}/offer/camps/camp_harmonia/front`,
 		galleryPath: `${htmlToImgsPath}/offer/camps/camp_harmonia/gallery`,
-		gallerySize: 5,
+		gallerySize: 7,
 		eventType: ``,
 		extraClass: ``,
 		front: {
