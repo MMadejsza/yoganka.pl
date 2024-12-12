@@ -40,11 +40,17 @@ body {
 		'partners partners partners partners partners'
 		'space space space space space'
 		'footer footer footer footer footer';
-	gap: 2.2rem 0;
+	// gap: 2.2rem 0;
 	-webkit-overflow-scrolling: touch;
 }
 .space {
 	grid-area: space;
+}
+.wrapper > *:not(:empty) {
+	margin-bottom: var(--grid-gap);
+}
+.wrapper > *:last-child {
+	margin-bottom: 0;
 }
 
 ul {
@@ -96,6 +102,13 @@ footer {
 	border: none;
 	cursor: auto;
 	background-color: map.get(var.$colors, base);
+}
+
+.error {
+	grid-area: space;
+	place-self: center;
+	margin: 2rem auto;
+	text-align: center;
 }
 
 //! COMMON BLOCKS END

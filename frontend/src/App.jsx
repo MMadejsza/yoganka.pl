@@ -6,6 +6,7 @@ import CampsPage from './pages/CampsPage.jsx';
 import EventsPage from './pages/EventsPage.jsx';
 import ClassesPage from './pages/ClassesPage.jsx';
 import B2BPage from './pages/B2BPage.jsx';
+import ErrorPage from './pages/ErrorPage.jsx';
 
 const router = createBrowserRouter([
 	{
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
 			{path: '/zajecia', element: <ClassesPage />},
 			{path: '/b2b', element: <B2BPage />},
 		],
+		errorElement: <ErrorPage />,
 	},
 	{},
 	{},
