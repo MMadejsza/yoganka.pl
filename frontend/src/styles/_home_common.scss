@@ -23,6 +23,28 @@ html {
 }
 body {
 	margin: 0 auto;
+	min-height: 100vh;
+	display: grid;
+}
+
+.wrapper {
+	display: grid;
+	min-height: 100vh;
+	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	grid-template-rows: auto auto auto auto auto 1fr auto;
+	grid-template-areas:
+		'header header header header header '
+		'about about about about about'
+		'offer offer offer offer offer'
+		'cert cert cert cert cert'
+		'partners partners partners partners partners'
+		'space space space space space'
+		'footer footer footer footer footer';
+	gap: 2.2rem 0;
+	-webkit-overflow-scrolling: touch;
+}
+.space {
+	grid-area: space;
 }
 
 ul {
@@ -59,19 +81,7 @@ button {
 	text-transform: uppercase;
 	color: map.get(var.$colors, tile-title);
 }
-.wrapper {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-	grid-template-areas:
-		'header header header header header '
-		'about about about about about'
-		'offer offer offer offer offer'
-		'cert cert cert cert cert'
-		'partners partners partners partners partners'
-		'footer footer footer footer footer';
-	gap: 2.2rem 0;
-	-webkit-overflow-scrolling: touch;
-}
+
 .stopScroll {
 	overflow: hidden;
 }
