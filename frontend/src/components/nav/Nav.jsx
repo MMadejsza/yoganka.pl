@@ -19,7 +19,7 @@ const menuSet = [
 	{
 		name: 'Zajęcia',
 		icon: 'far fa-clock',
-		link: '#zajecia',
+		link: '/classes',
 	},
 	{
 		name: 'Wyjazdy',
@@ -29,12 +29,13 @@ const menuSet = [
 	{
 		name: 'Wydarzenia',
 		icon: 'fas fa-calendar-check',
-		link: '.offer-type--events',
+		link: '/events',
 	},
 	{
 		name: 'Certyfikaty',
 		icon: 'fa-solid fa-certificate',
 		link: '.certificates',
+		action: handleClick,
 	},
 	{
 		name: 'Kontakt',
