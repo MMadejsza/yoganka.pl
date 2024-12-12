@@ -1,6 +1,7 @@
 import {useState, useRef} from 'react';
 import ImgDynamic from './imgsRelated/ImgDynamic.jsx';
 import Modal from './Modal.jsx';
+import {smoothScrollInto} from '../utils/utils.js';
 
 function Tile({data, today}) {
 	const clickable = data.type !== 'class';
@@ -46,21 +47,21 @@ function Tile({data, today}) {
 		</h3>
 	));
 	const renderBtns = data.front.btnsContent.map((btn, index) => {
-		function handleCLick(e) {
-			e.preventDefault();
-			// fetch prop href from clicked menu tile
-			const targetSelector = e.target.getAttribute('href');
-			// Find in Dom first element matching href
-			const targetSection = document.querySelector(targetSelector);
-			// If section exists - scroll to it
-			if (targetSection) {
-				// Apply desired way of scrolling
-				targetSection.scrollIntoView({behavior: 'smooth'});
-			}
-		}
+		// function handleCLick(e) {
+		// 	e.preventDefault();
+		// 	// fetch prop href from clicked menu tile
+		// 	const targetSelector = e.target.getAttribute('href');
+		// 	// Find in Dom first element matching href
+		// 	const targetSection = document.querySelector(targetSelector);
+		// 	// If section exists - scroll to it
+		// 	if (targetSection) {
+		// 		// Apply desired way of scrolling
+		// 		targetSection.scrollIntoView({behavior: 'smooth'});
+		// 	}
+		// }
 		return (
 			<a
-				onClick={(e) => handleCLick(e)}
+				onClick={(e) => smoothScrollInto(e)}
 				key={index}
 				href={btn.link}
 				className={`tile__btn tile__btn--${data.fileName}`}>

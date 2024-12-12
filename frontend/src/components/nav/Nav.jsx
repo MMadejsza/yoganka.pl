@@ -1,19 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import LogoFull from '../LogoFull.jsx';
-
-const handleClick = (e) => {
-	e.preventDefault();
-	// fetch prop href from clicked menu tile
-	const targetSelector = e.target.getAttribute('href');
-	// Find in Dom first element matching href
-	const targetSection = document.querySelector(targetSelector);
-	// If section exists - scroll to it
-	if (targetSection) {
-		// Apply desired way of scrolling
-		targetSection.scrollIntoView({behavior: 'smooth'});
-	}
-};
+import {smoothScrollInto} from '../../utils/utils.js';
 
 const menuSet = [
 	{
@@ -35,13 +23,13 @@ const menuSet = [
 		name: 'Certyfikaty',
 		icon: 'fa-solid fa-certificate',
 		link: '.certificates',
-		action: handleClick,
+		action: smoothScrollInto,
 	},
 	{
 		name: 'Kontakt',
 		icon: 'fa-solid fa-circle-info',
 		link: '.footer__socials',
-		action: handleClick,
+		action: smoothScrollInto,
 	},
 ];
 
