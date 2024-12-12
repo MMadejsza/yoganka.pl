@@ -38,7 +38,14 @@ export const CLASSES_DATA = [
 			dates: [],
 			location: ``,
 			desc: ``,
-			btnsContent: [{text: `Poproś o ofertę`, link: `mailto:kontakt@yoganka.pl`}],
+			btnsContent: [
+				{
+					type: 'router',
+					text: `Poproś o ofertę`,
+					link: '/b2b',
+					//`mailto:kontakt@yoganka.pl`
+				},
+			],
 		},
 		modal: false,
 	},
