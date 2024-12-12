@@ -115,6 +115,10 @@ html {
 
 			transition: map.get(var.$behavior, base-transition);
 		}
+		&.active {
+			color: map.get(var.$colors, accent-bcg);
+			text-shadow: map.get(var.$shadows, active-text-icons-shadow);
+		}
 	}
 
 	&__logo-container {

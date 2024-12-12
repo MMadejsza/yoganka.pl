@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 import LogoFull from '../LogoFull.jsx';
 import {smoothScrollInto} from '../../utils/utils.js';
 
@@ -50,12 +50,22 @@ function Nav() {
 								{li.name}
 							</a>
 						) : (
-							<Link
+							<NavLink
 								to={li.link}
-								className='nav__link'>
-								<i className={`${li.icon} nav__icon`}></i>
-								{li.name}
-							</Link>
+								className={({isActive}) =>
+									isActive ? 'nav__link active' : 'nav__link'
+								}>
+								{({isActive}) => (
+									<>
+										<i
+											className={`${li.icon} nav__link ${
+												isActive ? 'active' : ''
+											}`}
+										/>
+										{li.name}
+									</>
+								)}
+							</NavLink>
 						)}
 					</li>
 				))}
