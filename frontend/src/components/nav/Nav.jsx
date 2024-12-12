@@ -1,5 +1,20 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 import LogoFull from '../LogoFull.jsx';
+
+const handleClick = (e) => {
+	e.preventDefault();
+	// fetch prop href from clicked menu tile
+	const targetSelector = e.target.getAttribute('href');
+	// Find in Dom first element matching href
+	const targetSection = document.querySelector(targetSelector);
+	// If section exists - scroll to it
+	if (targetSection) {
+		// Apply desired way of scrolling
+		targetSection.scrollIntoView({behavior: 'smooth'});
+	}
+};
+
 const menuSet = [
 	{
 		name: 'Zajęcia',
@@ -9,7 +24,7 @@ const menuSet = [
 	{
 		name: 'Wyjazdy',
 		icon: 'fas fa-cloud-moon',
-		link: '#wyjazdy',
+		link: '/camps',
 	},
 	{
 		name: 'Wydarzenia',
@@ -25,23 +40,11 @@ const menuSet = [
 		name: 'Kontakt',
 		icon: 'fa-solid fa-circle-info',
 		link: '.footer__socials',
+		action: handleClick,
 	},
 ];
 
 function Nav() {
-	function handleCLick(e) {
-		e.preventDefault();
-		// fetch prop href from clicked menu tile
-		const targetSelector = e.target.getAttribute('href');
-		// Find in Dom first element matching href
-		const targetSection = document.querySelector(targetSelector);
-		// If section exists - scroll to it
-		if (targetSection) {
-			// Apply desired way of scrolling
-			targetSection.scrollIntoView({behavior: 'smooth'});
-		}
-	}
-
 	return (
 		<nav className='nav'>
 			<ul className='nav__list'>
@@ -49,13 +52,22 @@ function Nav() {
 					<li
 						key={li.name}
 						className='nav__item'>
-						<a
-							onClick={(e) => handleCLick(e)}
-							href={li.link}
-							className='nav__link'>
-							<i className={`${li.icon} nav__icon`}></i>
-							{li.name}
-						</a>
+						{li.action ? (
+							<a
+								onClick={(e) => li.action(e)}
+								href={li.link}
+								className='nav__link'>
+								<i className={`${li.icon} nav__icon`}></i>
+								{li.name}
+							</a>
+						) : (
+							<Link
+								to={li.link}
+								className='nav__link'>
+								<i className={`${li.icon} nav__icon`}></i>
+								{li.name}
+							</Link>
+						)}
 					</li>
 				))}
 			</ul>
