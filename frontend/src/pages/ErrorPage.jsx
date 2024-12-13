@@ -9,7 +9,7 @@ function ErrorPage() {
 			<Burger />
 			<Nav />
 			<div className='error'>
-				<h1 className='error__title'>Błąd - Nie mamy takiej strony :)</h1>
+				<h1 className='error__title'>Ups... Nie mamy takiej strony :)</h1>
 			</div>
 			<Footer />
 			<FloatingPopUps />
