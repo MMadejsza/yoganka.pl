@@ -60,7 +60,6 @@ function Tile({data, today}) {
 		}
 		return (
 			<a
-				onClick={(e) => handleCLick(e)}
 				key={index}
 				href={btn.link}
 				className={`tile__btn tile__btn--${data.fileName}`}>

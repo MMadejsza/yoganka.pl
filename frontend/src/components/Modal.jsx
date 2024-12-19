@@ -63,7 +63,6 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 				<footer className='modal__user-action'>
 					{modal.btnsContent.map((btn, index) => (
 						<a
-							onClick={(e) => e.preventDefault()}
 							key={index}
 							href={btn.link}
 							className={`modal__btn`}>
