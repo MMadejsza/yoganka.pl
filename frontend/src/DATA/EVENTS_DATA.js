@@ -31,6 +31,7 @@ export const EVENTS_DATA = [
 			},
 			btnsContent: [
 				{
+					action: 'classic',
 					text: `Dołączam`,
 					link: `mailto:kontakt@yoganka.pl?&body=Hej! Piszę do Ciebie z yoganka.pl`,
 				},
@@ -82,6 +83,7 @@ export const EVENTS_DATA = [
 			},
 			btnsContent: [
 				{
+					action: 'classic',
 					text: `Dołączam`,
 					link: `mailto:kontakt@yoganka.pl?&body=Hej! Piszę do Ciebie z yoganka.pl`,
 				},
@@ -133,10 +135,7 @@ export const EVENTS_DATA = [
 				],
 			},
 			btnsContent: [
-				{
-					text: `Dołączam`,
-					link: `https://forms.gle/kYN6VpfP3aV1b9yB8`,
-				},
+				{action: 'classic', text: `Dołączam`, link: `https://forms.gle/kYN6VpfP3aV1b9yB8`},
 			],
 			formLink: `https://forms.gle/kYN6VpfP3aV1b9yB8`,
 			note: ``,
