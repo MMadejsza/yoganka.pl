@@ -65,6 +65,7 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 						<a
 							key={index}
 							href={btn.link}
+							target='_blank'
 							className={`modal__btn`}>
 							{btn.text}
 						</a>

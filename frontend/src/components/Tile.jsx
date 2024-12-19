@@ -47,7 +47,7 @@ function Tile({data, today}) {
 	));
 	const renderBtns = data.front.btnsContent.map((btn, index) => {
 		function handleCLick(e) {
-			e.preventDefault();
+			// e.preventDefault();
 			// fetch prop href from clicked menu tile
 			const targetSelector = e.target.getAttribute('href');
 			// Find in Dom first element matching href
@@ -60,6 +60,8 @@ function Tile({data, today}) {
 		}
 		return (
 			<a
+				onClick={(e) => handleCLick(e)}
+				target='_blank'
 				key={index}
 				href={btn.link}
 				className={`tile__btn tile__btn--${data.fileName}`}>
