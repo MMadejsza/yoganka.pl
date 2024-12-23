@@ -40,10 +40,9 @@ export const CLASSES_DATA = [
 			desc: ``,
 			btnsContent: [
 				{
-					action: 'classic',
 					type: 'router',
 					text: `Poproś o ofertę`,
-					link: `mailto:kontakt@yoganka.pl`,
+					link: `/b2b`,
 				},
 			],
 		},
