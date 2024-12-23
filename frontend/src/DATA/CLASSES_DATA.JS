@@ -18,7 +18,7 @@ export const CLASSES_DATA = [
 			dates: [],
 			location: ``,
 			desc: ``,
-			btnsContent: [{text: `Skontaktuj się`, link: `.footer__socials`}],
+			btnsContent: [{action: 'scroll', text: `Skontaktuj się`, link: `.footer__socials`}],
 		},
 		modal: false,
 	},
@@ -40,10 +40,10 @@ export const CLASSES_DATA = [
 			desc: ``,
 			btnsContent: [
 				{
+					action: 'classic',
 					type: 'router',
 					text: `Poproś o ofertę`,
-					link: '/b2b',
-					//`mailto:kontakt@yoganka.pl`
+					link: `mailto:kontakt@yoganka.pl`,
 				},
 			],
 		},

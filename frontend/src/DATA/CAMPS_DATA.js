@@ -142,7 +142,13 @@ export const CAMPS_DATA = [
 				},
 			},
 			note: `Gotowa na niesamowity weekend?`,
-			btnsContent: [{text: `Tak! Dołączam`, link: `https://forms.gle/recTtsdmUdY71wwv5`}],
+			btnsContent: [
+				{
+					action: 'classic',
+					text: `Tak! Dołączam`,
+					link: `https://forms.gle/recTtsdmUdY71wwv5`,
+				},
+			],
 			formLink: `https://forms.gle/recTtsdmUdY71wwv5`,
 			questionTemplate(subject) {
 				return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
@@ -247,7 +253,9 @@ export const CAMPS_DATA = [
 				},
 			},
 			note: `Zaserwuj sobie spokój i zdrowszą siebie. Wypełnij poniższe zgłoszenie`,
-			btnsContent: [{text: `Dołączam`, link: `https://forms.gle/kYN6VpfP3aV1b9yB8`}],
+			btnsContent: [
+				{action: 'classic', text: `Dołączam`, link: `https://forms.gle/kYN6VpfP3aV1b9yB8`},
+			],
 			formLink: `https://forms.gle/kYN6VpfP3aV1b9yB8`,
 			questionTemplate(subject) {
 				return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
@@ -358,7 +366,9 @@ export const CAMPS_DATA = [
 				},
 			},
 			note: `Zaserwuj sobie spokój i zdrowszą siebie.`,
-			btnsContent: [{text: `Dołączam`, link: `https://forms.gle/6Ri5sqnXgUQGSRNT9`}],
+			btnsContent: [
+				{action: 'classic', text: `Dołączam`, link: `https://forms.gle/6Ri5sqnXgUQGSRNT9`},
+			],
 			formLink: `https://forms.gle/6Ri5sqnXgUQGSRNT9`,
 			questionTemplate(subject) {
 				return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
