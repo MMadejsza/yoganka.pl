@@ -1,5 +1,5 @@
-import {useState, useRef} from 'react';
-import {Link} from 'react-router-dom';
+import {useState} from 'react';
+import {Link, useNavigate, useLocation} from 'react-router-dom';
 import ImgDynamic from './imgsRelated/ImgDynamic.jsx';
 import Modal from './Modal.jsx';
 import {smoothScrollInto} from '../utils/utils.js';
@@ -7,7 +7,10 @@ import {smoothScrollInto} from '../utils/utils.js';
 function Tile({data, today}) {
 	const clickable = data.type !== 'class';
 	const isPast = data.date < today;
-	const [isModalOpen, setIsModalOpen] = useState(false);
+	const navigate = useNavigate();
+	const location = useLocation();
+	const isModalPath = location.pathname === `/${data.fileName}`;
+	const [isModalOpen, setIsModalOpen] = useState(isModalPath);
 
 	const conditionalClasses = [
 		'tile',
@@ -16,11 +19,15 @@ function Tile({data, today}) {
 		data.extraClass ? `tile--${data.extraClass}` : '',
 	].join(' ');
 
-	const toggleModal = () => {
-		// console.log(`toggleModal()`);
-		setIsModalOpen(!isModalOpen);
+	const handleOpenModal = () => {
+		setIsModalOpen(true);
+		navigate(`/${data.fileName}`, {state: {background: location}});
 	};
 
+	const handleCloseModal = () => {
+		setIsModalOpen(false);
+		navigate(-1);
+	};
 	// archive
 	if (isPast) data.modal.glance.price = '-';
 
@@ -73,7 +80,7 @@ function Tile({data, today}) {
 	return (
 		<div
 			className={conditionalClasses}
-			onClick={clickable ? toggleModal : undefined}>
+			onClick={clickable ? handleOpenModal : undefined}>
 			{renderSingleImg}
 
 			<h3 className='tile__title'>{data.front.title}</h3>
@@ -91,7 +98,7 @@ function Tile({data, today}) {
 					visited={isModalOpen}
 					tile={data}
 					singleImg={renderSingleImg}
-					onClose={toggleModal}
+					onClose={handleCloseModal}
 					today={today}
 				/>
 			)}
