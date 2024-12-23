@@ -58,7 +58,7 @@ function Nav() {
 								{({isActive}) => (
 									<>
 										<i
-											className={`${li.icon} nav__link ${
+											className={`${li.icon} nav__icon ${
 												isActive ? 'active' : ''
 											}`}
 										/>

@@ -26,7 +26,7 @@ function Tile({data, today}) {
 
 	const handleCloseModal = () => {
 		setIsModalOpen(false);
-		navigate(-1);
+		navigate(location.state?.background?.pathname || '/', {replace: true});
 	};
 	// archive
 	if (isPast) data.modal.glance.price = '-';
