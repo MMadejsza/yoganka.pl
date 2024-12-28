@@ -7,17 +7,23 @@ const menuSet = [
 	{
 		name: 'Zajęcia',
 		icon: 'far fa-clock',
-		link: '/zajecia',
+		// link: '/zajecia',
+		link: '#zajecia',
+		action: smoothScrollInto, //to delete
 	},
 	{
 		name: 'Wyjazdy',
 		icon: 'fas fa-cloud-moon',
-		link: '/wyjazdy',
+		// link: '/wyjazdy',
+		link: '#wyjazdy',
+		action: smoothScrollInto, //to delete
 	},
 	{
 		name: 'Wydarzenia',
 		icon: 'fas fa-calendar-check',
-		link: '/wydarzenia',
+		// link: '/wydarzenia',
+		link: '#wydarzenia',
+		action: smoothScrollInto, //to delete
 	},
 	{
 		name: 'Certyfikaty',
