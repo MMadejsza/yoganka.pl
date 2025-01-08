@@ -151,9 +151,6 @@
 
 		&:hover {
 			transform: scale(1.05) translateY(0.5rem);
-
-			border-bottom-left-radius: map.get(var.$sizes, border-radius);
-			border-bottom-right-radius: map.get(var.$sizes, border-radius);
 		}
 
 		%hover {
@@ -252,6 +249,8 @@
 		max-width: 95vw;
 
 		&__btn:hover {
+			transform: scale(1.05) translateY(0.5rem);
+
 			box-shadow: var.$active-box-shadow;
 		}
 
@@ -355,6 +354,7 @@
 
 		&__company-details a:hover {
 			font-size: 2.2rem;
+			transform: scale(1.05) translateY(0.5rem);
 			text-shadow: map.get(var.$shadows, active-text-icons-shadow);
 		}
 		&__legal,
@@ -371,6 +371,8 @@
 		}
 		&__social-link {
 			&:hover {
+				transform: scale(1.05) translateY(0.5rem);
+
 				text-shadow: map.get(var.$shadows, active-text-icons-shadow);
 			}
 
