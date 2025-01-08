@@ -4,11 +4,12 @@
 
 %action-btn {
 	display: block;
-	min-width: 125px;
+	width: 95%;
+	min-height: 48px;
 	padding: 0.5rem 1rem;
 
-	font-size: 1.5rem;
-	line-height: 2.5rem;
+	font-size: 1.8rem;
+	line-height: 48px;
 	font-weight: bold;
 	text-transform: uppercase;
 	color: map.get(var.$colors, accent-text);

@@ -5,11 +5,12 @@
 
 %action-btn {
 	display: block;
-	min-width: 125px;
+	width: 95%;
+	min-height: 48px;
 	padding: 0.5rem 1rem;
 
-	font-size: 1.5rem;
-	line-height: 2.5rem;
+	font-size: 1.8rem;
+	line-height: 48px;
 	font-weight: bold;
 	text-transform: uppercase;
 	color: map.get(var.$colors, accent-text);
@@ -150,13 +151,13 @@
 	&__x-btn {
 		position: absolute;
 		top: 3rem;
-		right: 2rem;
+		right: 0rem;
 		transform: translate(-50%, -50%);
 		z-index: 9;
 	}
 
 	&__close-btn {
-		font-size: 3rem;
+		font-size: 48px;
 		text-shadow: map.get(var.$shadows, active-text-icons-shadow);
 
 		&:hover {
@@ -261,6 +262,7 @@
 
 	&__user-action {
 		padding-bottom: 0;
+		width: 100%;
 
 		@include mixin.flex($justify: center, $gap: 1rem);
 		flex-flow: row wrap;

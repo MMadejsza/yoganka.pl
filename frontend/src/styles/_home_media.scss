@@ -675,9 +675,19 @@
 			}
 		}
 	}
+	.tile__btn {
+		width: max-content;
+		height: 3rem;
+		line-height: 3rem;
+	}
 	.modal {
 		max-width: 900px;
 		padding: 1.5rem 2.5rem;
+		&__btn {
+			width: max-content;
+			height: 3rem;
+			line-height: 3rem;
+		}
 	}
 	.modal-checklist {
 		padding: 0 1rem;
