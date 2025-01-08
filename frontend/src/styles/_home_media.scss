@@ -553,7 +553,7 @@
 		&__link {
 			margin: 0;
 			padding: 0 1rem;
-
+			width: max-content;
 			font-size: 1.3rem;
 			line-height: 6rem;
 			color: map.get(var.$colors, tile-title);

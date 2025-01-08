@@ -92,8 +92,7 @@ html {
 
 	&__link {
 		display: block;
-
-		// height: 6rem;
+		width: 100%;
 		margin: 0 2rem;
 		cursor: pointer;
 
@@ -121,6 +120,7 @@ html {
 
 		&.active:first-child .nav__logo-container {
 			box-shadow: map.get(var.$shadows, active-logo-shadow);
+			transition: map.get(var.$behavior, base-transition);
 		}
 		&.active,
 		&.active .nav__icon {
