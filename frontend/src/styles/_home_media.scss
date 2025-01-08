@@ -540,7 +540,11 @@
 		&__logo-container {
 			display: none;
 		}
-
+		.nav__icon {
+			display: inline-flex;
+			justify-content: center;
+			width: min-content;
+		}
 		&__list {
 			width: max-content;
 			margin: 0;
