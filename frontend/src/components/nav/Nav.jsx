@@ -42,6 +42,11 @@ const menuSet = [
 function Nav() {
 	return (
 		<nav className='nav'>
+			<NavLink
+				to={'/'}
+				className={({isActive}) => (isActive ? 'nav__link active' : 'nav__link')}>
+				<LogoFull placement='nav' />
+			</NavLink>
 			<ul className='nav__list'>
 				{menuSet.map((li) => (
 					<li
@@ -52,7 +57,7 @@ function Nav() {
 								onClick={(e) => li.action(e)}
 								href={li.link}
 								className='nav__link'>
-								<i className={`${li.icon} nav__icon`}></i>
+								{li.icon != '' ? <i className={`${li.icon} nav__icon`}></i> : null}
 								{li.name}
 							</a>
 						) : (
@@ -76,7 +81,6 @@ function Nav() {
 					</li>
 				))}
 			</ul>
-			<LogoFull placement='nav' />
 		</nav>
 	);
 }

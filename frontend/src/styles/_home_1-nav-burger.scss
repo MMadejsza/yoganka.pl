@@ -77,10 +77,8 @@ html {
 	@include mixin.flex(column, $align: center);
 
 	&__list {
-		margin-top: 5rem;
-
 		@include mixin.flex(column);
-
+		margin-top: 1rem;
 		list-style: none;
 	}
 
@@ -95,7 +93,7 @@ html {
 	&__link {
 		display: block;
 
-		height: 6rem;
+		// height: 6rem;
 		margin: 0 2rem;
 		cursor: pointer;
 
@@ -109,7 +107,7 @@ html {
 			justify-content: center;
 			width: 28.5px;
 			left: map.get(var.$sizes, icon-position);
-			margin-right: 1rem;
+			margin-right: 1.5rem;
 
 			color: map.get(var.$colors, accent-bcg);
 			font-size: 2.2rem;
@@ -121,6 +119,9 @@ html {
 			}
 		}
 
+		&.active:first-child .nav__logo-container {
+			box-shadow: map.get(var.$shadows, active-logo-shadow);
+		}
 		&.active,
 		&.active .nav__icon {
 			color: map.get(var.$colors, accent-bcg);
@@ -134,11 +135,12 @@ html {
 	}
 
 	&__logo {
-		position: absolute;
-		left: 50%;
+		display: inline-block;
+		// position: absolute;
+		// left: 50%;
 		width: 60%;
-		transform: translateX(-50%);
-		margin-top: 3rem;
+		// transform: translateX(-50%);
+		margin-top: 5rem;
 	}
 }
 //! NAV  END
