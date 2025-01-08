@@ -5,37 +5,37 @@ import {smoothScrollInto} from '../../utils/utils.js';
 
 const menuSet = [
 	{
-		name: 'Zajęcia',
-		icon: 'far fa-clock',
-		// link: '/zajecia',
-		link: '#zajecia',
-		action: smoothScrollInto, //to delete
-	},
-	{
 		name: 'Wyjazdy',
-		icon: 'fas fa-cloud-moon',
-		// link: '/wyjazdy',
-		link: '#wyjazdy',
-		action: smoothScrollInto, //to delete
+		icon: 'fa-solid fa-mountain-sun', // Represents travel in nature; peaceful and connected to retreats
+		link: '/wyjazdy',
+		// link: '#wyjazdy',
+		// action: smoothScrollInto, //to delete
 	},
 	{
 		name: 'Wydarzenia',
-		icon: 'fas fa-calendar-check',
-		// link: '/wydarzenia',
-		link: '#wydarzenia',
-		action: smoothScrollInto, //to delete
+		icon: 'fas fa-bell', // Bell symbolizes mindfulness and yoga-related events
+		link: '/wydarzenia',
+		// link: '#wydarzenia',
+		// action: smoothScrollInto, //to delete
 	},
 	{
 		name: 'Certyfikaty',
-		icon: 'fa-solid fa-certificate',
+		icon: 'fas fa-award', // Badge reflects achievements and certificates in a subtle way
 		link: '.certificates',
 		action: smoothScrollInto,
 	},
 	{
 		name: 'Kontakt',
-		icon: 'fa-solid fa-circle-info',
+		icon: 'fas fa-comment-dots', // Light and informal symbol for easy communication
 		link: '.footer__socials',
 		action: smoothScrollInto,
+	},
+	{
+		name: 'Zajęcia',
+		icon: 'fas fa-spa', // Lotus flower symbolizes yoga, harmony, and relaxation
+		link: '/zajecia',
+		// link: '#zajecia',
+		// action: smoothScrollInto, //to delete
 	},
 ];
 
