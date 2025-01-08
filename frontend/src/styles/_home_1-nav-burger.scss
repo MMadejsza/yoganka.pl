@@ -105,8 +105,9 @@ html {
 		color: map.get(var.$colors, tile-text-muted);
 
 		.nav__icon {
-			display: inline-block;
-			width: 28.5px;
+			display: inline-flex;
+			justify-content: center;
+			width: min-content;
 			left: map.get(var.$sizes, icon-position);
 			margin-right: 1.5rem;
 
@@ -114,8 +115,14 @@ html {
 			font-size: 2.2rem;
 
 			transition: map.get(var.$behavior, base-transition);
+			&::before {
+				margin: 0;
+				padding: 0;
+			}
 		}
-		&.active {
+
+		&.active,
+		&.active .nav__icon {
 			color: map.get(var.$colors, accent-bcg);
 			text-shadow: map.get(var.$shadows, active-text-icons-shadow);
 		}
