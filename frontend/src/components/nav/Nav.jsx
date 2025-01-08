@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {NavLink} from 'react-router-dom';
+import {NavLink, useNavigate, useLocation} from 'react-router-dom';
 import Logo from '../Logo.jsx';
 import {smoothScrollInto} from '../../utils/utils.js';
 
@@ -21,7 +21,8 @@ const menuSet = [
 	{
 		name: 'Certyfikaty',
 		icon: 'fas fa-award', // Badge reflects achievements and certificates in a subtle way
-		link: '.certificates',
+		link: '/',
+		scroll: '.certificates',
 		action: smoothScrollInto,
 	},
 	{
@@ -40,6 +41,9 @@ const menuSet = [
 ];
 
 function Nav() {
+	const navigate = useNavigate();
+	const location = useLocation();
+
 	const [isMobile, setIsMobile] = useState(false);
 
 	useEffect(() => {
@@ -80,9 +84,10 @@ function Nav() {
 						className='nav__item'>
 						{li.action ? (
 							<a
-								onClick={(e) => li.action(e)}
+								onClick={(e) => li.action(e, navigate, location)}
 								href={li.link}
-								className='nav__link'>
+								className='nav__link'
+								data-scroll={li.scroll}>
 								{li.icon != '' ? <i className={`${li.icon} nav__icon`}></i> : null}
 								{li.name}
 							</a>
