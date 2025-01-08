@@ -1,3 +1,6 @@
+@use 'sass:map';
+@use '_global_variables-templates' as var;
+
 @keyframes slide {
 	from {
 		transform: translate(0);
@@ -5,6 +8,26 @@
 
 	to {
 		transform: translate(-100%);
+	}
+}
+@keyframes highlights {
+	0% {
+		width: 0%;
+		box-shadow: none; /* Wewnętrzny cień: duże przesunięcie i rozmycie */
+	}
+
+	50% {
+		width: 15%;
+		box-shadow: -8px 0px 15px (map.get(var.$colors, accent-bcg)); /* Wewnętrzny cień: duże przesunięcie i rozmycie */
+	}
+	55% {
+		width: 15%;
+		box-shadow: -8px 0px 15px (map.get(var.$colors, accent-bcg)); /* Wewnętrzny cień: duże przesunięcie i rozmycie */
+	}
+
+	100% {
+		width: 0%;
+		box-shadow: none; /* Wewnętrzny cień: duże przesunięcie i rozmycie */
 	}
 }
 

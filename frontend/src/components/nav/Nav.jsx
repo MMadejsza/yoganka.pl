@@ -50,7 +50,7 @@ function Nav() {
 	useEffect(() => {
 		const mediaQuery = window.matchMedia('(max-width: 1024px)');
 
-		// Function updating based on media querry
+		// Function updating based on media query
 		const handleMediaChange = (e) => {
 			setIsMobile(e.matches);
 		};

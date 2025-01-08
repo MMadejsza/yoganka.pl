@@ -6,6 +6,18 @@ html {
 	--bar-width: 3.5rem;
 }
 //! NAV
+
+body.highlighted::after {
+	position: absolute;
+	background-color: red;
+	height: 100vh;
+	top: 0;
+	right: -15%;
+	content: '';
+	// z-index: 0;
+	animation: 3s highlights ease-in-out;
+}
+
 .burger {
 	$bar-height: 0.4rem;
 	$bar-width: 3.5rem;
@@ -37,6 +49,20 @@ html {
 		}
 	}
 
+	&::after {
+		content: '';
+		position: absolute;
+		border-radius: 7%;
+		width: 250%;
+		height: 140%;
+		z-index: -1;
+		top: 50%;
+		left: 50%;
+		transform: translate(-32%, -50%);
+		box-shadow: rgba(0, 0, 0, 0.8) 0px 0px 5px -2.5px;
+		transition: map.get(var.$behavior, base-transition);
+	}
+
 	// Active state
 	&.active {
 		.burger__bar--top {
@@ -55,6 +81,10 @@ html {
 		& + .nav {
 			right: 0;
 		}
+	}
+
+	&.active::after {
+		opacity: 0;
 	}
 }
 .nav {

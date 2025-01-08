@@ -1,6 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 
 function Burger() {
+	let openCount = useRef(0);
 	const [isOpen, setIsOpen] = useState(false);
 	const [startX, setStartX] = useState(null);
 	let isActive = isOpen ? `active` : undefined;
@@ -8,6 +9,17 @@ function Burger() {
 	// Function handling burger click
 	function handleClick() {
 		setIsOpen((prevState) => !prevState);
+		// count opening when clicked not open
+		if (!isOpen) {
+			openCount.current += 1;
+		}
+		if (openCount.current > 0) {
+			if (isOpen) {
+				setTimeout(() => {
+					document.body.classList.add('highlighted');
+				}, 500);
+			}
+		}
 	}
 
 	// Function fetching touch position
@@ -25,6 +37,8 @@ function Burger() {
 			console.log(currentX + startX);
 			if (startX - currentX > window.innerWidth * 0.1) {
 				setIsOpen(true);
+				// count opening
+				openCount += 1;
 			}
 		}
 		// If drag right is longer than 10% of the screen - close
