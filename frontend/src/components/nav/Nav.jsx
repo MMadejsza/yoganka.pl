@@ -28,7 +28,8 @@ const menuSet = [
 	{
 		name: 'Kontakt',
 		icon: 'fas fa-comment-dots', // Light and informal symbol for easy communication
-		link: '.footer__socials',
+		link: '/',
+		scroll: '.footer__socials',
 		action: smoothScrollInto,
 	},
 	{
