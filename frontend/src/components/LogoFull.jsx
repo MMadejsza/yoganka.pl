@@ -5,6 +5,7 @@ function LogoFull({placement}) {
 				className={`${placement}__logo`}
 				src='imgs/logo/logo_1.svg'
 				loading='lazy'
+				alt='Logo Yoganka'
 			/>
 		</div>
 	);
