@@ -145,7 +145,7 @@ export const CAMPS_DATA = [
 			btnsContent: [
 				{
 					action: 'classic',
-					text: `Tak! Dołączam`,
+					text: `Wypełnij formularz`,
 					link: `https://forms.gle/recTtsdmUdY71wwv5`,
 				},
 			],
@@ -254,7 +254,11 @@ export const CAMPS_DATA = [
 			},
 			note: `Zaserwuj sobie spokój i zdrowszą siebie. Wypełnij poniższe zgłoszenie`,
 			btnsContent: [
-				{action: 'classic', text: `Dołączam`, link: `https://forms.gle/kYN6VpfP3aV1b9yB8`},
+				{
+					action: 'classic',
+					text: `Wypełnij formularz`,
+					link: `https://forms.gle/kYN6VpfP3aV1b9yB8`,
+				},
 			],
 			formLink: `https://forms.gle/kYN6VpfP3aV1b9yB8`,
 			questionTemplate(subject) {
