@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {NavLink} from 'react-router-dom';
-import LogoFull from '../LogoFull.jsx';
+import Logo from '../Logo.jsx';
 import {smoothScrollInto} from '../../utils/utils.js';
 
 const menuSet = [
@@ -40,12 +40,38 @@ const menuSet = [
 ];
 
 function Nav() {
+	const [isMobile, setIsMobile] = useState(false);
+
+	useEffect(() => {
+		const mediaQuery = window.matchMedia('(max-width: 1024px)');
+
+		// Function updating based on media querry
+		const handleMediaChange = (e) => {
+			setIsMobile(e.matches);
+		};
+
+		// Initial setup
+		handleMediaChange(mediaQuery);
+
+		// Add Listening
+		mediaQuery.addEventListener('change', handleMediaChange);
+
+		// Remove on umount
+		return () => mediaQuery.removeEventListener('change', handleMediaChange);
+	}, []);
+
 	return (
 		<nav className='nav'>
 			<NavLink
 				to={'/'}
 				className={({isActive}) => (isActive ? 'nav__link active' : 'nav__link')}>
-				<LogoFull placement='nav' />
+				{({isActive}) => (
+					<Logo
+						placement='nav'
+						media={isMobile ? 'mobile' : null}
+						isActive={isActive}
+					/>
+				)}
 			</NavLink>
 			<ul className='nav__list'>
 				{menuSet.map((li) => (

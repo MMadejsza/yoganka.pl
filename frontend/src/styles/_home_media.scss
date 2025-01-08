@@ -525,18 +525,29 @@
 		left: 0;
 		width: 100%;
 		height: auto;
-		padding-left: 1rem;
+		padding: 0.5rem;
 
 		border-radius: 0;
 		border-bottom-left-radius: map.get(var.$sizes, border-radius);
 		border-bottom-right-radius: map.get(var.$sizes, border-radius);
 
 		flex-direction: row;
-		justify-content: space-evenly;
+		justify-content: center;
+		gap: 2rem;
 
 		&__logo-container {
-			display: none;
+			height: 6rem;
 		}
+
+		&__logo {
+			margin-top: 0;
+			max-height: 100%;
+			max-width: 100%;
+			height: auto;
+			width: auto;
+			object-fit: contain;
+		}
+
 		.nav__icon {
 			display: inline-flex;
 			justify-content: center;
@@ -559,6 +570,10 @@
 			color: map.get(var.$colors, tile-title);
 			transition: map.get(var.$behavior, base-transition);
 
+			&.active:first-child .nav__logo {
+				box-shadow: map.get(var.$shadows, active-logo-shadow);
+				transition: map.get(var.$behavior, base-transition);
+			}
 			.nav__icon {
 				color: map.get(var.$colors, tile-title);
 			}
