@@ -31,8 +31,10 @@
 	// no & for specificity
 	.footer__social-link {
 		position: relative;
-		font-size: 3.5rem;
 		color: map.get(var.$colors, accent-bcg);
+	}
+	&__social-icon {
+		font-size: 3.5rem;
 	}
 
 	&__company-details {

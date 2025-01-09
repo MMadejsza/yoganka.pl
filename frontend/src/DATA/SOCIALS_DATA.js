@@ -27,6 +27,7 @@ export const SOCIALS_DATA = [
 		link: 'tel:+48792891607',
 		title: 'Zadzwoń',
 		iconClass: 'fa-solid fa-phone',
+		materialSymbol: 'call',
 		qr: `${qrsPath}/qrphone.png`,
 		qrAlt: function () {
 			return `${this.name} QR Code`;
@@ -37,6 +38,7 @@ export const SOCIALS_DATA = [
 		link: 'mailto:kontakt@yoganka.pl?&body=Hej! Piszę do Ciebie z yoganka.pl',
 		title: 'Wyślij maila',
 		iconClass: 'fa-solid fa-envelope',
+		materialSymbol: 'mail',
 		qr: `${qrsPath}/qrmail.png`,
 		qrAlt: function () {
 			return `${this.name} QR Code`;

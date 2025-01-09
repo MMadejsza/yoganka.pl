@@ -22,8 +22,6 @@
 		margin: 0;
 		padding: 0;
 
-		line-height: 6rem;
-		font-size: 3rem;
 		text-decoration: none;
 		color: map.get(var.$colors, accent-text);
 
@@ -46,6 +44,11 @@
 			background-color: rgba(map.get(var.$colors, accent-bcg), 0.95);
 			opacity: 1;
 		}
+	}
+
+	&__icon {
+		line-height: 6rem;
+		font-size: 4rem;
 	}
 
 	&__body {
