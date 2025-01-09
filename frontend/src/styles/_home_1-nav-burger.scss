@@ -163,7 +163,8 @@ body.highlighted::after {
 	}
 	&__logo {
 		display: block;
-		width: 80%;
+		min-width: 145px;
+		width: 25vw;
 		margin-top: 5rem;
 		padding: 1rem;
 	}
