@@ -67,6 +67,11 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 							href={btn.link}
 							target='_blank'
 							className={`modal__btn`}>
+							{btn.icon ? (
+								<i
+									className={`${btn.icon} nav__icon`}
+									style={{paddingRight: '1rem'}}></i>
+							) : null}
 							{btn.text}
 						</a>
 					))}

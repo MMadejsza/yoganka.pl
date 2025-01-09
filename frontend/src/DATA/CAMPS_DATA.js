@@ -1,3 +1,4 @@
+import {whatsAppTemplate} from '../utils/utils.js';
 const htmlToImgsPath = `/imgs`;
 
 export const CAMPS_DATA = [
@@ -148,6 +149,12 @@ export const CAMPS_DATA = [
 					text: `Wypełnij formularz`,
 					link: `https://forms.gle/recTtsdmUdY71wwv5`,
 				},
+				{
+					action: 'classic',
+					text: `WhatsApp`,
+					link: whatsAppTemplate(),
+					icon: 'fa-brands fa-whatsapp',
+				},
 			],
 			formLink: `https://forms.gle/recTtsdmUdY71wwv5`,
 			questionTemplate(subject) {
@@ -258,6 +265,12 @@ export const CAMPS_DATA = [
 					action: 'classic',
 					text: `Wypełnij formularz`,
 					link: `https://forms.gle/kYN6VpfP3aV1b9yB8`,
+				},
+				{
+					action: 'classic',
+					text: `WhatsApp`,
+					link: whatsAppTemplate(),
+					icon: 'fa-brands fa-whatsapp',
 				},
 			],
 			formLink: `https://forms.gle/kYN6VpfP3aV1b9yB8`,
@@ -372,6 +385,12 @@ export const CAMPS_DATA = [
 			note: `Zaserwuj sobie spokój i zdrowszą siebie.`,
 			btnsContent: [
 				{action: 'classic', text: `Dołączam`, link: `https://forms.gle/6Ri5sqnXgUQGSRNT9`},
+				{
+					action: 'classic',
+					text: `WhatsApp`,
+					link: whatsAppTemplate(),
+					icon: 'fa-brands fa-whatsapp',
+				},
 			],
 			formLink: `https://forms.gle/6Ri5sqnXgUQGSRNT9`,
 			questionTemplate(subject) {

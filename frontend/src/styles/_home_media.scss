@@ -676,7 +676,7 @@
 		}
 	}
 	.tile__btn {
-		width: max-content;
+		// width: max-content;
 		height: 3rem;
 		line-height: 3rem;
 	}
@@ -685,8 +685,9 @@
 		padding: 1.5rem 2.5rem;
 		&__btn {
 			width: max-content;
-			height: 3rem;
-			line-height: 3rem;
+			flex-basis: 35%;
+			height: 4.5rem;
+			line-height: 4.5rem;
 		}
 	}
 	.modal-checklist {

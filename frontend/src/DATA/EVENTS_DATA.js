@@ -1,3 +1,4 @@
+import {whatsAppTemplate} from '../utils/utils.js';
 const htmlToImgsPath = `/imgs`;
 
 export const EVENTS_DATA = [
@@ -34,6 +35,12 @@ export const EVENTS_DATA = [
 					action: 'classic',
 					text: `Wypełnij formularz`,
 					link: `mailto:kontakt@yoganka.pl?&body=Hej! Piszę do Ciebie z yoganka.pl`,
+				},
+				{
+					action: 'classic',
+					text: `WhatsApp`,
+					link: whatsAppTemplate(),
+					icon: 'fa-brands fa-whatsapp',
 				},
 			],
 			formLink: `mailto:kontakt@yoganka.pl?&body=Hej! Piszę do Ciebie z yoganka.pl`,
@@ -87,6 +94,12 @@ export const EVENTS_DATA = [
 					text: `Wypełnij formularz`,
 					link: `mailto:kontakt@yoganka.pl?&body=Hej! Piszę do Ciebie z yoganka.pl`,
 				},
+				{
+					action: 'classic',
+					text: `WhatsApp`,
+					link: whatsAppTemplate(),
+					icon: 'fa-brands fa-whatsapp',
+				},
 			],
 			formLink: `mailto:kontakt@yoganka.pl?&body=Hej! Piszę do Ciebie z yoganka.pl`,
 			note: `Cena: 50zł`,
@@ -139,6 +152,12 @@ export const EVENTS_DATA = [
 					action: 'classic',
 					text: `Wypełnij formularz`,
 					link: `https://forms.gle/kYN6VpfP3aV1b9yB8`,
+				},
+				{
+					action: 'classic',
+					text: `WhatsApp`,
+					link: whatsAppTemplate(),
+					icon: 'fa-brands fa-whatsapp',
 				},
 			],
 			formLink: `https://forms.gle/kYN6VpfP3aV1b9yB8`,
