@@ -47,13 +47,18 @@ function Tile({data, today}) {
 			alt={data.name}
 		/>
 	);
-	const renderDates = data.front.dates.map((date, index) => (
-		<h3
-			className='tile__date'
-			key={index}>
-			{date}
-		</h3>
-	));
+	const renderDates =
+		// <div>
+		// 	{
+		data.front.dates.map((date, index) => (
+			<h3
+				className='tile__date'
+				key={index}>
+				{date}
+			</h3>
+		));
+		// 	}
+		// </div>
 	const renderBtns = data.front.btnsContent.map((btn, index) => {
 		if (btn.type === 'router') {
 			return (

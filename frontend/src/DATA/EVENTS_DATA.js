@@ -15,7 +15,7 @@ export const EVENTS_DATA = [
 		extraClass: `event`,
 		front: {
 			title: `Yoga\u00A0&\u00A0Breakfast`,
-			dates: [`11/01/2025 `, `12/01/2025`, `godz. 9:30`],
+			dates: [`11/01/2025 godz. 9:30`, `12/01/2025 godz. 9:30`],
 			location: `toMy Kawiarnia\u00A0Gdańsk`,
 			desc: `Błogi poranek z jogą w uroczej przestrzeni toMy kawiarnia w Gdańsku...`,
 			btnsContent: [],
@@ -71,7 +71,7 @@ export const EVENTS_DATA = [
 		extraClass: `event`,
 		front: {
 			title: `Wieczorna joga w\u00A0jurcie`,
-			dates: [`Środy`, `godz. 19:30`],
+			dates: [`Środy godz. 19:30`, ' ', ' '],
 			location: `Jurta ul.\u00A0Makowa\u00A08, Tuchom`,
 			desc: `Zapraszam Cię na wyjątkową praktykę jogi w przytulnej jurcie`,
 			btnsContent: [],
@@ -129,7 +129,7 @@ export const EVENTS_DATA = [
 		front: {
 			title: `YOGA\u00A0&\u00A0SOUND
 		Moon\u00A0Ceremony`,
-			dates: [`Latem`],
+			dates: [`Latem`, '', ''],
 			location: `Plaże w Gdańsku`,
 			desc: `Joga na\u00A0plaży przy pełni księżyca z\u00A0dźwiękami mis i\u00A0gongów w\u00A0tle, które wprowadzą Cię w\u00A0relaksującą podróż`,
 			btnsContent: [],
