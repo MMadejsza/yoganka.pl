@@ -1,5 +1,6 @@
 import React from 'react';
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
+import 'material-symbols';
 import RootPage from './pages/RootPage.jsx';
 import HomePage from './pages/HomePage.jsx';
 import CampsPage from './pages/CampsPage.jsx';

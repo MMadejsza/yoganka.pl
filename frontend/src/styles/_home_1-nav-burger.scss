@@ -90,7 +90,7 @@ body.highlighted::after {
 	position: fixed;
 	top: 0;
 	right: -100%;
-	width: max-content;
+	width: min-content;
 	height: 100%;
 	z-index: 6;
 
@@ -120,8 +120,9 @@ body.highlighted::after {
 	}
 
 	&__link {
-		display: block;
-		width: 100%;
+		display: flex;
+		align-items: center;
+		// width: 100%;
 		margin: 0 2rem;
 		cursor: pointer;
 
@@ -131,11 +132,9 @@ body.highlighted::after {
 		color: map.get(var.$colors, tile-text-muted);
 
 		.nav__icon {
-			display: inline-flex;
-			justify-content: center;
 			width: 28.5px;
 			left: map.get(var.$sizes, icon-position);
-			margin-right: 1.5rem;
+			margin-right: 1rem;
 
 			color: map.get(var.$colors, accent-bcg);
 			font-size: 2.2rem;
@@ -147,7 +146,7 @@ body.highlighted::after {
 			}
 		}
 
-		&.active:first-child .nav__logo-container {
+		&.active:first-child .nav__logo {
 			box-shadow: map.get(var.$shadows, active-logo-shadow);
 			transition: map.get(var.$behavior, base-transition);
 		}
@@ -159,16 +158,14 @@ body.highlighted::after {
 	}
 
 	&__logo-container {
-		position: relative;
+		display: flex;
+		justify-content: center;
 	}
-
 	&__logo {
-		display: inline-block;
-		// position: absolute;
-		// left: 50%;
-		max-width: 60%;
-		// transform: translateX(-50%);
+		display: block;
+		width: 80%;
 		margin-top: 5rem;
+		padding: 1rem;
 	}
 }
 //! NAV  END

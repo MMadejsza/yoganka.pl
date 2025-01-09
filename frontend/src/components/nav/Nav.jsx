@@ -2,39 +2,38 @@ import React, {useState, useEffect} from 'react';
 import {NavLink, useNavigate, useLocation} from 'react-router-dom';
 import Logo from '../Logo.jsx';
 import {smoothScrollInto} from '../../utils/utils.js';
-
 const menuSet = [
 	{
 		name: 'Wyjazdy',
-		icon: 'fa-solid fa-mountain-sun', // Represents travel in nature; peaceful and connected to retreats
+		icon: 'landscape_2', // Represents travel in nature; peaceful and connected to retreats
 		link: '/wyjazdy',
 		// link: '#wyjazdy',
 		// action: smoothScrollInto, //to delete
 	},
 	{
 		name: 'Wydarzenia',
-		icon: 'fas fa-bell', // Bell symbolizes mindfulness and yoga-related events
+		icon: 'notifications', // Bell symbolizes mindfulness and yoga-related events
 		link: '/wydarzenia',
 		// link: '#wydarzenia',
 		// action: smoothScrollInto, //to delete
 	},
 	{
 		name: 'Certyfikaty',
-		icon: 'fas fa-award', // Badge reflects achievements and certificates in a subtle way
+		icon: 'verified', // Badge reflects achievements and certificates in a subtle way
 		link: '/',
 		scroll: '.certificates',
 		action: smoothScrollInto,
 	},
 	{
 		name: 'Kontakt',
-		icon: 'fas fa-comment-dots', // Light and informal symbol for easy communication
+		icon: 'chat', // Light and informal symbol for easy communication
 		link: '/',
 		scroll: '.footer__socials',
 		action: smoothScrollInto,
 	},
 	{
 		name: 'Zajęcia',
-		icon: 'fas fa-spa', // Lotus flower symbolizes yoga, harmony, and relaxation
+		icon: 'self_improvement', // Lotus flower symbolizes yoga, harmony, and relaxation
 		link: '/',
 		scroll: '#zajecia',
 		action: smoothScrollInto,
@@ -93,7 +92,11 @@ function Nav({setIsNavOpen}) {
 								href={li.link}
 								className='nav__link'
 								data-scroll={li.scroll}>
-								{li.icon != '' ? <i className={`${li.icon} nav__icon`}></i> : null}
+								{li.icon != '' ? (
+									<span className='material-symbols-outlined nav__icon'>
+										{li.icon}
+									</span>
+								) : null}
 								{li.name}
 							</a>
 						) : (
@@ -107,11 +110,12 @@ function Nav({setIsNavOpen}) {
 								}>
 								{({isActive}) => (
 									<>
-										<i
+										<span
 											className={`${li.icon} nav__icon ${
 												isActive ? 'active' : ''
-											}`}
-										/>
+											} material-symbols-outlined nav__icon`}>
+											{li.icon}
+										</span>
 										{li.name}
 									</>
 								)}

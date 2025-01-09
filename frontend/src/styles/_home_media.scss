@@ -159,7 +159,7 @@
 		}
 		&:hover .nav__link {
 			@extend %hover;
-			i {
+			span {
 				@extend %hover;
 			}
 		}
