@@ -57,8 +57,8 @@ function Tile({data, today}) {
 				{date}
 			</h3>
 		));
-		// 	}
-		// </div>
+	// 	}
+	// </div>
 	const renderBtns = data.front.btnsContent.map((btn, index) => {
 		if (btn.type === 'router') {
 			return (
