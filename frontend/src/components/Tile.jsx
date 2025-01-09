@@ -61,6 +61,7 @@ function Tile({data, today}) {
 					key={index}
 					to={btn.link}
 					className={`tile__btn tile__btn--${data.fileName}`}>
+					{btn.icon ?? <i className={btn.icon} />}
 					{btn.text}
 				</Link>
 			);
@@ -71,6 +72,11 @@ function Tile({data, today}) {
 					key={index}
 					href={btn.link}
 					className={`tile__btn tile__btn--${data.fileName}`}>
+					{btn.icon ? (
+						<i
+							className={`${btn.icon} nav__icon`}
+							style={{paddingRight: '1rem'}}></i>
+					) : null}
 					{btn.text}
 				</a>
 			);

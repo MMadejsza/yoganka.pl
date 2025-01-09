@@ -1,8 +1,8 @@
 import React, {useState, useEffect, useRef} from 'react';
 
-function Burger() {
+function Burger({isNavOpen: isOpen, setIsNavOpen: setIsOpen}) {
 	let openCount = useRef(0);
-	const [isOpen, setIsOpen] = useState(false);
+	// const [isOpen, setIsOpen] = useState(false);
 	const [startX, setStartX] = useState(null);
 	let isActive = isOpen ? `active` : undefined;
 

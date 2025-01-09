@@ -15,3 +15,12 @@ export const smoothScrollInto = (e, navigate, location) => {
 		}
 	}, 500);
 };
+// function to replace the main contact btn's link
+export const whatsAppTemplate = () => {
+	const phoneNumber = '48792891607';
+	const msgContact = `Hej! Piszę do Ciebie z yoganka.pl :)\n\nTu [imię] [Nazwisko]`;
+
+	const linkContact = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(msgContact)}`;
+
+	return linkContact;
+};

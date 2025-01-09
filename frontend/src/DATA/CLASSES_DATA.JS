@@ -1,3 +1,4 @@
+import {whatsAppTemplate} from '../utils/utils.js';
 const imgGroupPath = `/imgs/offer/regular/individual_and_group/front`;
 const imgB2BPath = `/imgs/offer/regular/commercial/front`;
 
@@ -18,7 +19,14 @@ export const CLASSES_DATA = [
 			dates: [],
 			location: ``,
 			desc: ``,
-			btnsContent: [{action: 'scroll', text: `Skontaktuj się`, link: `.footer__socials`}],
+			btnsContent: [
+				{
+					action: 'scroll',
+					icon: 'fa-brands fa-whatsapp',
+					text: `WhatsApp`,
+					link: whatsAppTemplate(),
+				},
+			],
 		},
 		modal: false,
 	},
@@ -41,7 +49,7 @@ export const CLASSES_DATA = [
 			btnsContent: [
 				{
 					type: 'router',
-					text: `Poproś o ofertę`,
+					text: `Współpraca B2B`,
 					link: `/b2b`,
 				},
 			],

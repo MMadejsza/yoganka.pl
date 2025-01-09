@@ -35,18 +35,19 @@ const menuSet = [
 	{
 		name: 'Zajęcia',
 		icon: 'fas fa-spa', // Lotus flower symbolizes yoga, harmony, and relaxation
-		link: '/zajecia',
-		// link: '#zajecia',
-		// action: smoothScrollInto, //to delete
+		link: '/',
+		scroll: '#zajecia',
+		action: smoothScrollInto,
 	},
 ];
 
-function Nav() {
+function Nav({setIsNavOpen}) {
 	const navigate = useNavigate();
 	const location = useLocation();
 
 	const [isMobile, setIsMobile] = useState(false);
 
+	// Limiting touch effectiveness only for mobile devices
 	useEffect(() => {
 		const mediaQuery = window.matchMedia('(max-width: 1024px)');
 
@@ -85,7 +86,10 @@ function Nav() {
 						className='nav__item'>
 						{li.action ? (
 							<a
-								onClick={(e) => li.action(e, navigate, location)}
+								onClick={(e) => {
+									li.action(e, navigate, location);
+									if (isMobile) setIsNavOpen(false);
+								}}
 								href={li.link}
 								className='nav__link'
 								data-scroll={li.scroll}>
@@ -95,6 +99,9 @@ function Nav() {
 						) : (
 							<NavLink
 								to={li.link}
+								onClick={(e) => {
+									if (isMobile) setIsNavOpen(false);
+								}}
 								className={({isActive}) =>
 									isActive ? 'nav__link active' : 'nav__link'
 								}>

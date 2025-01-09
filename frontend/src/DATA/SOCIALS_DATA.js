@@ -1,12 +1,4 @@
-// function to replace the main contact btn's link
-const whatsappTemplate = () => {
-	const phoneNumber = '48792891607';
-	const msgContact = `Hej! Piszę do Ciebie z yoganka.pl :)\n\nTu [imię] [Nazwisko]`;
-
-	const linkContact = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(msgContact)}`;
-
-	return linkContact;
-};
+import {whatsAppTemplate} from '../utils/utils.js';
 const qrsPath = 'imgs/qrs';
 
 export const SOCIALS_DATA = [
@@ -52,7 +44,7 @@ export const SOCIALS_DATA = [
 	},
 	{
 		name: 'WhatsApp',
-		link: whatsappTemplate(),
+		link: whatsAppTemplate(),
 		title: 'Napisz!',
 		iconClass: 'fab fa-whatsapp',
 		qr: `${qrsPath}/qrwa.png`,
