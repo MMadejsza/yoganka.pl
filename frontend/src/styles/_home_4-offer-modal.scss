@@ -277,7 +277,6 @@
 .modal-checklist {
 	&--event {
 		grid-column: 1 / -1;
-		width: max-content;
 	}
 	&__list {
 		@extend .modal__list;
