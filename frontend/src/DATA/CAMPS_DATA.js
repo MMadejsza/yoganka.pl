@@ -146,14 +146,14 @@ export const CAMPS_DATA = [
 			btnsContent: [
 				{
 					action: 'classic',
-					text: `Wypełnij formularz`,
-					link: `https://forms.gle/recTtsdmUdY71wwv5`,
-				},
-				{
-					action: 'classic',
 					text: `WhatsApp`,
 					link: whatsAppTemplate(),
 					icon: 'fa-brands fa-whatsapp',
+				},
+				{
+					action: 'classic',
+					text: `Wypełnij formularz`,
+					link: `https://forms.gle/recTtsdmUdY71wwv5`,
 				},
 			],
 			formLink: `https://forms.gle/recTtsdmUdY71wwv5`,
