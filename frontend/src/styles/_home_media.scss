@@ -644,6 +644,11 @@
 		padding: 0 1rem;
 		flex-basis: auto;
 	}
+	.partners {
+		.glide__track {
+			min-height: 450px;
+		}
+	}
 	.footer {
 		padding: 0 2rem 3rem;
 		font-size: 1.9rem;
