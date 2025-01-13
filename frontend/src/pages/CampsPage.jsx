@@ -1,8 +1,9 @@
+import CampsIntoSection from '../components/CampsIntoSection.jsx';
+
 function CampsPage() {
 	return (
 		<>
-			<h1>hi camps</h1>
-			<div className='space'></div>
+			<CampsIntoSection />
 		</>
 	);
 }

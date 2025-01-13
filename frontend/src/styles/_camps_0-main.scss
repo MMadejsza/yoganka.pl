@@ -1,0 +1,20 @@
+@use 'sass:map';
+@use 'sass:color';
+@use '_global_variables-templates' as var;
+@use '_global_mixins-keyframes' as mixin;
+
+@media (min-width: 1025px) {
+	.camps-intro {
+		grid-column: 1 / -1;
+		margin-top: 11rem;
+		@include mixin.flex(row, center);
+		flex-wrap: wrap;
+	}
+	.camps-intro__header {
+		flex-basis: 100%;
+	}
+	.camps-intro__welcome-desc {
+		white-space: pre-line;
+		font-size: 1.5rem;
+	}
+}

@@ -491,7 +491,7 @@
 		max-width: 1000px;
 		margin: 0 auto;
 		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-		grid-template-rows: repeat(6, auto) 1fr auto;
+		grid-template-rows: repeat(5, auto) 1fr auto;
 		grid-template-areas:
 			'nav nav nav nav nav '
 			'about about about about about'
