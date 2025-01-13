@@ -5,7 +5,7 @@ function Carousel({classy, items}) {
 
 	return (
 		<div className={`${classy}__gallery-slide`}>
-			{arrayForSets.map((article, articleIndex) => (
+			{arrayForSets.map((articleIndex) => (
 				<article
 					key={articleIndex}
 					className={`${classy}__gallery`}>

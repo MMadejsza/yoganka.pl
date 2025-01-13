@@ -40,7 +40,7 @@ body {
 		'partners partners partners partners partners'
 		'space space space space space'
 		'footer footer footer footer footer';
-	// gap: 2.2rem 0;
+	// gap: 5rem 0;
 	-webkit-overflow-scrolling: touch;
 }
 .space {
@@ -88,6 +88,9 @@ button {
 
 .stopScroll {
 	overflow: hidden;
+}
+.wrapper > section:not(.partners) {
+	margin-bottom: 5rem;
 }
 .wrapper > section:not(:first-of-type),
 .modal__modal-body > section:not(:first-of-type),

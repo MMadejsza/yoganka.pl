@@ -25,12 +25,14 @@ function About({isMobile}) {
 		<Section
 			classy='about'
 			header='O mnie'>
-			<ImgDynamic
-				classy={`logo-writing`}
-				srcSet={logoPaths}
-				sizes='(max-width: 320px) 320px,
+			{isMobile ? null : (
+				<ImgDynamic
+					classy={`logo-writing`}
+					srcSet={logoPaths}
+					sizes='(max-width: 320px) 320px,
 							480px'
-			/>
+				/>
+			)}
 			<StampedImg
 				placement='about'
 				imgPaths={stampedImgPaths}

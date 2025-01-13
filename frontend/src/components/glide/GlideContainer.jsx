@@ -52,6 +52,21 @@ function GlideContainer({placement, glideConfig, glideBreakpoints, slides}) {
 					slideData={slides}
 				/>
 			));
+		} else {
+			return slides.data.map((partner, index) => (
+				<a
+					key={index}
+					href={partner.link}
+					target='_blank'
+					className={`partners__link`}>
+					<img
+						src={partner.logo}
+						loading='lazy'
+						alt={partner.alt}
+						className={`partners__image`}
+					/>
+				</a>
+			));
 		}
 	};
 	const renderBullets = () => {

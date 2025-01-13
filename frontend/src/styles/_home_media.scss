@@ -12,7 +12,7 @@
 		letter-spacing: 0px;
 	}
 	.offer {
-		grid-gap: 3.5rem 1.5rem;
+		grid-gap: 5rem 1.5rem;
 	}
 	.partners__image {
 		width: 50vw;
@@ -322,16 +322,22 @@
 		flex-basis: 48%;
 	}
 	.partners {
-		padding-bottom: 6rem !important;
 		&__gallery {
 			gap: 4rem;
 			animation: 20s slide infinite linear;
 		}
-		&__link:hover {
-			cursor: pointer;
-			transform: translateY(-18%) scale(1.1);
-			box-shadow: map.get(var.$shadows, tile-shadow);
+		.glide__track {
+			height: 40vh;
 		}
+		&__link {
+			max-width: 225px;
+			max-height: 225px;
+		}
+	}
+	.partners__link:hover {
+		cursor: pointer;
+		transform: translateY(-18%) scale(1.1);
+		box-shadow: map.get(var.$shadows, tile-shadow);
 	}
 	.footer {
 		flex-flow: row wrap;
@@ -466,10 +472,6 @@
 			&::after {
 				width: 7vw;
 			}
-		}
-		&__link {
-			width: 40vw;
-			height: 40vw;
 		}
 	}
 	.pop-ups {
@@ -642,10 +644,6 @@
 		padding: 0 1rem;
 		flex-basis: auto;
 	}
-	.partners__link {
-		width: 20vw;
-		height: 20vw;
-	}
 	.footer {
 		padding: 0 2rem 3rem;
 		font-size: 1.9rem;
@@ -711,7 +709,7 @@
 		}
 	}
 	.offer {
-		grid-gap: 3.5rem 3rem;
+		grid-gap: 5rem 3rem;
 
 		.offer-type {
 			grid-gap: 2.5rem 3rem;
@@ -722,11 +720,9 @@
 		padding: 1.5rem 4rem;
 	}
 	.partners {
-		&__link {
-			width: 30vw;
-			height: 30vw;
+		.glide__track {
+			height: 50vh;
 		}
-
 		&__gallery-slide {
 			&::before {
 				width: 5vw;
