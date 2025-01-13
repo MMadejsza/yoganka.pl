@@ -20,7 +20,7 @@ function Partners() {
 					perView: 5,
 					focusAt: 'center',
 					gap: 30,
-					autoplay: 2200,
+					// autoplay: 2200,
 					animationDuration: 800,
 				}}
 				slides={{type: 'partner', data: PARTNERS_DATA}}

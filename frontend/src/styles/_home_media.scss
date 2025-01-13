@@ -16,7 +16,6 @@
 	}
 	.partners__image {
 		width: 50vw;
-		height: 50vw;
 	}
 	.footer {
 		&__legal {
@@ -117,11 +116,6 @@
 		}
 	}
 	.partners {
-		&__link {
-			width: 40vw;
-			height: 40vw;
-		}
-
 		&__gallery-slide {
 			&::before {
 				left: -2rem;
@@ -328,6 +322,7 @@
 		}
 		.glide__track {
 			height: 40vh;
+			min-height: 450px;
 		}
 		&__link {
 			max-width: 225px;
@@ -644,11 +639,7 @@
 		padding: 0 1rem;
 		flex-basis: auto;
 	}
-	.partners {
-		.glide__track {
-			min-height: 450px;
-		}
-	}
+
 	.footer {
 		padding: 0 2rem 3rem;
 		font-size: 1.9rem;
