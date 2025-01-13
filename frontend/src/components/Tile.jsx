@@ -66,7 +66,7 @@ function Tile({data, today}) {
 					key={index}
 					to={btn.link}
 					className={`tile__btn tile__btn--${data.fileName}`}>
-					{btn.icon ?? <i className={btn.icon} />}
+					{btn.icon ? <i className={btn.icon} /> : null}
 					{btn.text}
 				</Link>
 			);
