@@ -8,7 +8,7 @@
 		--section-padding-y: 2rem;
 		font-size: 9px;
 	}
-	.top-image-header__motto {
+	.motto {
 		letter-spacing: 0px;
 	}
 	.offer {
@@ -39,14 +39,9 @@
 	}
 	.top-image-header {
 		background-image: url(/imgs/header/768_header_portrait.jpg);
-
-		&__title-bar {
-			font-size: 2.3rem;
-		}
-
-		&__motto {
-			letter-spacing: 1px;
-		}
+	}
+	.motto {
+		letter-spacing: 1px;
 	}
 	.footer {
 		&__socials {
@@ -166,17 +161,9 @@
 	}
 	.top-image-header {
 		background-image: url(/imgs/header/1024_header_portrait.jpg);
-
-		// &__title-bar {
-		// 	height: 11rem;
-
-		// 	font-size: 3rem;
-		// 	letter-spacing: 3px;
-		// }
-
-		&__motto {
-			font-size: 2.5rem;
-		}
+	}
+	.motto {
+		font-size: 2.5rem;
 	}
 	.about {
 		gap: 2.5rem 1.5rem;
@@ -510,7 +497,6 @@
 		grid-template-rows: repeat(6, auto) 1fr auto;
 		grid-template-areas:
 			'nav nav nav nav nav '
-			'header header header header header '
 			'about about about about about'
 			'offer offer offer offer offer'
 			'cert cert cert cert cert'
@@ -581,54 +567,27 @@
 			}
 		}
 	}
-	.top-image-header {
-		height: 90svh;
-		max-height: 750px;
-		min-height: 675px;
-		margin-top: 5rem;
-		background-image: none;
+	.logo-writing {
+		position: static;
+		flex-basis: 100%;
+		max-width: 500px;
+		transform: none;
+	}
+	.motto {
+		font-size: 1.6rem;
+		font-weight: lighter;
+		color: map.get(var.$colors, tile-title);
 
-		grid-template-areas:
-			'title title title title title'
-			'. . . . .'
-			'. . . . .'
-			'. . . . .'
-			'. . . . .'
-			'. . . . .'
-			'. . . . .'
-			'. . . . .'
-			'. . . . .'
-			'motto motto motto . .';
-
-		&__header {
-			width: 100%;
-		}
-
-		&__logo {
-			margin-top: 2rem;
-		}
-
-		&__motto {
-			font-size: 1.6rem;
-			font-weight: lighter;
-			color: map.get(var.$colors, tile-title);
-
-			box-shadow: none;
-			background-color: transparent;
-		}
+		box-shadow: none;
+		background-color: transparent;
 	}
 	.about {
-		position: absolute;
-		top: 0;
-		margin-top: 525px;
+		margin-top: 11rem;
+		margin-bottom: 3rem;
 		max-width: 1000px;
-		height: 90vh;
-		max-height: 750px;
-		z-index: -1;
-		transform: translateY(-50%);
 
 		@include mixin.flex(row, space-around, center);
-
+		flex-wrap: wrap;
 		&__header {
 			display: none;
 		}
@@ -648,16 +607,7 @@
 		&__img-container {
 			order: 2;
 			width: 35%;
-			height: 70%;
-
-			background: url('/imgs/about/600_about_profile.jpg');
-			background-repeat: no-repeat;
-			background-size: cover;
-			background-position: center;
-			background-attachment: fixed;
-		}
-		&__img--portrait {
-			display: none;
+			min-height: 525px;
 		}
 	}
 	.offer {
@@ -748,6 +698,9 @@
 	html {
 		font-size: 11px;
 	}
+	.logo-writing {
+		max-width: 600px;
+	}
 	.wrapper,
 	.about {
 		max-width: 1200px;
@@ -756,11 +709,10 @@
 		gap: 4rem;
 	}
 	.about {
-		margin-top: 500px;
+		// margin-top: 500px;
 
 		&__img-container {
 			width: 31%;
-			height: 78%;
 		}
 	}
 	.offer {
@@ -795,7 +747,13 @@
 		}
 	}
 }
-@media (min-width: 1921px) {
+@media (min-width: 1400px) {
+	.nav,
+	.nav__list {
+		gap: 5.5rem;
+	}
+}
+@media (min-width: 1920px) {
 	// big landscape tablets, laptops, and desktops
 	html {
 		font-size: 12px;

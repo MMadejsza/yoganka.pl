@@ -1,8 +1,9 @@
 import Section from './Section.jsx';
+import Motto from './HeaderMotto.jsx';
 import ImgDynamic from './imgsRelated/ImgDynamic.jsx';
 import headerImg320 from '/imgs/logo/320_logo_14.png';
 import headerImg480 from '/imgs/logo/480_logo_14.png';
-const imgPaths = [
+const logoPaths = [
 	{path: headerImg320, size: '320w'},
 	{path: headerImg480, size: '480w'},
 ];
@@ -16,16 +17,14 @@ function HeaderMain() {
 				classy={prefix}
 				header={
 					<ImgDynamic
-						classy={`${prefix}__logo`}
-						srcSet={imgPaths}
+						classy={`logo-writing`}
+						srcSet={logoPaths}
 						sizes='(max-width: 320px) 320px,
 							480px'
 					/>
 				}
 				iSpecific>
-				<div className={`${prefix}__motto`}>
-					<h3>yoga | slow life | mindfulness</h3>
-				</div>
+				<Motto />
 			</Section>
 		</>
 	);

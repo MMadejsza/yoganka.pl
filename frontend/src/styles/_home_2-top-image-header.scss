@@ -4,7 +4,6 @@
 .top-image-header {
 	grid-area: header;
 	height: 100svh;
-	text-transform: uppercase;
 	background-image: url(/imgs/header/480_header_portrait.jpg);
 	background-attachment: fixed;
 	background-repeat: no-repeat;
@@ -36,47 +35,24 @@
 		padding: 0.5rem 1rem;
 		text-align: center;
 	}
+}
+.logo-writing {
+	position: absolute;
+	left: 50%;
+	max-width: 60vw;
+	transform: translateX(-50%);
+}
+.motto {
+	grid-area: motto;
+	font-size: 1.7rem;
+	letter-spacing: 1px;
+	font-weight: 400;
+	text-transform: uppercase;
 
-	&__logo {
-		position: absolute;
-		left: 50%;
-		max-width: 60vw;
-		transform: translateX(-50%);
-	}
+	line-height: 8rem;
+	color: map.get(var.$colors, tile-title);
 
-	// &__title-bar {
-	// 	width: max-content;
-	// 	margin: 0 auto;
-
-	// 	font-family: map.get(var.$typo, font-body-healing);
-	// 	font-size: 2rem;
-	// 	font-weight: 100;
-	// 	letter-spacing: 2px;
-	// 	text-align: left;
-	// 	color: map.get(var.$colors, tile-title);
-	// @include mixin.flex(column,center);
-
-	// &__title {
-	// 	text-transform: none;
-	// }
-
-	// &__subtitle {
-	// 	font-family: map.get(var.$typo, font-by-yoganka);
-	// 	font-weight: lighter;
-	// 	font-size: 2rem;
-	// 	letter-spacing: 3px;
-	// }
-
-	&__motto {
-		grid-area: motto;
-		font-size: 1.7rem;
-		letter-spacing: 1px;
-		font-weight: 400;
-		line-height: 8rem;
-		color: map.get(var.$colors, tile-title);
-
-		background-color: map.get(var.$colors, base);
-		box-shadow: map.get(var.$shadows, transitive-box-shadow);
-		overflow: visible;
-	}
+	background-color: map.get(var.$colors, base);
+	box-shadow: map.get(var.$shadows, transitive-box-shadow);
+	overflow: visible;
 }
