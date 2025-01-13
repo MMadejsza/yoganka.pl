@@ -535,7 +535,7 @@
 
 		flex-direction: row;
 		justify-content: center;
-		gap: 2rem;
+		gap: 3rem;
 
 		&__logo-container {
 			height: 6rem;
@@ -543,10 +543,11 @@
 
 		&__logo {
 			margin-top: 0;
+			padding: 0.5rem 0;
+			min-width: auto; //reset
 			max-height: 100%;
 			max-width: 100%;
-			height: auto;
-			width: auto;
+			width: auto; //reset
 			object-fit: contain;
 		}
 
@@ -565,9 +566,8 @@
 
 		&__link {
 			margin: 0;
-			padding: 0 1rem;
 			width: max-content;
-			font-size: 1.3rem;
+			font-size: 1.5rem;
 			line-height: 6rem;
 			color: map.get(var.$colors, tile-title);
 			transition: map.get(var.$behavior, base-transition);
@@ -737,6 +737,11 @@
 		}
 	}
 }
+@media (min-width: 1080px) {
+	.nav__link {
+		font-size: 2rem;
+	}
+}
 @media (min-width: 1280px) {
 	// hi-res laptops and desktops
 	// about is absolute at this stage
@@ -747,8 +752,8 @@
 	.about {
 		max-width: 1200px;
 	}
-	.nav__link {
-		font-size: 2rem;
+	.nav {
+		gap: 4rem;
 	}
 	.about {
 		margin-top: 500px;

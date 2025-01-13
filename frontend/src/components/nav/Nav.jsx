@@ -46,6 +46,10 @@ function Nav({setIsNavOpen}) {
 
 	const [isMobile, setIsMobile] = useState(false);
 
+	const closeDrawer = () => {
+		if (isMobile) setIsNavOpen(false);
+	};
+
 	// Limiting touch effectiveness only for mobile devices
 	useEffect(() => {
 		const mediaQuery = window.matchMedia('(max-width: 1024px)');
@@ -69,6 +73,9 @@ function Nav({setIsNavOpen}) {
 		<nav className='nav'>
 			<NavLink
 				to={'/'}
+				onClick={(e) => {
+					closeDrawer();
+				}}
 				className={({isActive}) => (isActive ? 'nav__link active' : 'nav__link')}>
 				{({isActive}) => (
 					<Logo
@@ -87,7 +94,7 @@ function Nav({setIsNavOpen}) {
 							<a
 								onClick={(e) => {
 									li.action(e, navigate, location);
-									if (isMobile) setIsNavOpen(false);
+									closeDrawer();
 								}}
 								href={li.link}
 								className='nav__link'
@@ -103,7 +110,7 @@ function Nav({setIsNavOpen}) {
 							<NavLink
 								to={li.link}
 								onClick={(e) => {
-									if (isMobile) setIsNavOpen(false);
+									closeDrawer();
 								}}
 								className={({isActive}) =>
 									isActive ? 'nav__link active' : 'nav__link'
