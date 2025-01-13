@@ -564,10 +564,13 @@
 			}
 		}
 	}
-	.logo-writing {
-		position: static;
+	.logo-writing__container {
 		flex-basis: 100%;
-		max-width: 500px;
+		@include mixin.flex(row, center);
+	}
+	.logo-writing__logo-file {
+		position: static;
+		max-width: 480px;
 		transform: none;
 	}
 	.motto {
@@ -687,9 +690,7 @@
 	html {
 		font-size: 11px;
 	}
-	.logo-writing {
-		max-width: 600px;
-	}
+
 	.wrapper,
 	.about {
 		max-width: 1200px;

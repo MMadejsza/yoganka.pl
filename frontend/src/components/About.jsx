@@ -26,12 +26,14 @@ function About({isMobile}) {
 			classy='about'
 			header='O mnie'>
 			{isMobile ? null : (
-				<ImgDynamic
-					classy={`logo-writing`}
-					srcSet={logoPaths}
-					sizes='(max-width: 320px) 320px,
-							480px'
-				/>
+				<div className='logo-writing__container'>
+					<ImgDynamic
+						classy={`logo-writing__logo-file`}
+						srcSet={logoPaths}
+						sizes='(max-width: 320px) 320px,
+								480px'
+					/>
+				</div>
 			)}
 			<StampedImg
 				placement='about'

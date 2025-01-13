@@ -16,12 +16,14 @@ function HeaderMain() {
 			<Section
 				classy={prefix}
 				header={
-					<ImgDynamic
-						classy={`logo-writing`}
-						srcSet={logoPaths}
-						sizes='(max-width: 320px) 320px,
+					<div className='logo-writing__container'>
+						<ImgDynamic
+							classy={`logo-writing__logo-file`}
+							srcSet={logoPaths}
+							sizes='(max-width: 320px) 320px,
 							480px'
-					/>
+						/>
+					</div>
 				}
 				iSpecific>
 				<Motto />
