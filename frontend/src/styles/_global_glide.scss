@@ -57,7 +57,7 @@
 		justify-content: center;
 	}
 	&__bullets {
-		bottom: 1rem;
+		bottom: 0;
 		padding: 0.5rem;
 		border-radius: 50px;
 		background-color: rgba(map.get(var.$colors, accent-bcg), 0.03);
