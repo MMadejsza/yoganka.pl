@@ -58,6 +58,9 @@
 	}
 	&__bullets {
 		bottom: 1rem;
+		padding: 0.5rem;
+		border-radius: 50px;
+		background-color: rgba(map.get(var.$colors, accent-bcg), 0.03);
 	}
 	&__bullet {
 		width: 1rem;

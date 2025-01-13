@@ -70,7 +70,7 @@ function GlideContainer({placement, glideConfig, glideBreakpoints, slides}) {
 		}
 	};
 	const renderBullets = () => {
-		const bulletsCount = isTile ? slides.data.length : isPhoto ? slides.size : 0;
+		const bulletsCount = isPhoto ? slides.size : slides.data.length;
 
 		return Array.from({length: bulletsCount}).map((_, index) => (
 			<button

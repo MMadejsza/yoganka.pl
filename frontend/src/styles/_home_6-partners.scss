@@ -58,5 +58,8 @@
 		filter: grayscale(1);
 		transition: map.get(var.$behavior, base-transition);
 	}
+	.glide__bullets {
+		bottom: 20%;
+	}
 }
 //! PARTNERS END
