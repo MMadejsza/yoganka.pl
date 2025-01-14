@@ -15,8 +15,9 @@ function OfferSection() {
 			<Offer
 				id='wyjazdy'
 				header={`Kobiece Wyjazdy z\u00a0Jogą`}
-				data={CAMPS_DATA.slice(-2)}
+				data={CAMPS_DATA}
 				today={today}
+				limit={-2}
 			/>
 			<Offer
 				id='zajecia'

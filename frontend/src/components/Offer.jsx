@@ -1,6 +1,6 @@
 import Tile from './Tile.jsx';
 
-function Offer({id, specifier, header, data, today}) {
+function Offer({id, specifier, header, data, today, limit}) {
 	let classy = 'offer-type';
 	if (specifier === 'events') {
 		classy += ` offer-type--events`;
@@ -11,7 +11,7 @@ function Offer({id, specifier, header, data, today}) {
 			id={id}
 			className={classy}>
 			<header className='offer-type__header'>{header}</header>
-			{data.map((tileData, index) => (
+			{data.slice(limit).map((tileData, index) => (
 				<Tile
 					data={tileData}
 					key={index}
