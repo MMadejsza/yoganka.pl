@@ -10,6 +10,8 @@ function CampsPage() {
 			<CampsIntoSection />
 			<CampsBenefitsSection />
 			<OfferSection products={products} />
+			{/* mobile? -> slajder with gallery */}
+			{/* desktop? -> section with gallery masonry */}
 		</>
 	);
 }

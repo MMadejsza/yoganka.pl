@@ -67,6 +67,9 @@
 	grid-gap: 0rem;
 	background-color: map-get(var.$colors, base);
 	box-shadow: map.get(var.$shadows, transitive-box-shadow);
+	#wyjazdy {
+		grid-column: 1/-1;
+	}
 }
 
 @media (min-width: 1025px) {
