@@ -4,6 +4,7 @@ import '@glidejs/glide/dist/css/glide.core.min.css';
 import '@glidejs/glide/dist/css/glide.theme.min.css';
 import CertificateSlide from './CertificateSlide.jsx';
 import PhotoSlide from './PhotoSlide.jsx';
+import ReviewSlide from './ReviewSlide.jsx';
 
 function GlideContainer({placement, glideConfig, glideBreakpoints, slides}) {
 	const glideRef = useRef(null);
@@ -34,17 +35,24 @@ function GlideContainer({placement, glideConfig, glideBreakpoints, slides}) {
 
 	const isTile = slides.type === 'tile';
 	const isPhoto = slides.type === 'photo';
+	const isReview = slides.type === 'review';
 
 	const renderSlides = () => {
-		const SlideComponent = isTile ? CertificateSlide : isPhoto ? PhotoSlide : null;
-		if (isTile) {
+		const SlideComponent = (() => {
+			if (isTile) return CertificateSlide;
+			if (isPhoto) return PhotoSlide;
+			if (isReview) return ReviewSlide;
+			return null;
+		})();
+
+		if (SlideComponent && isTile) {
 			return slides.data.map((slide, index) => (
 				<SlideComponent
 					key={index}
 					slideData={slide}
 				/>
 			));
-		} else if (isPhoto) {
+		} else if (SlideComponent && isPhoto) {
 			return Array.from({length: slides.size}).map((_, index) => (
 				<SlideComponent
 					key={index}

@@ -71,6 +71,10 @@
 		grid-column: 1/-1;
 	}
 }
+.reviews {
+	grid-area: cert;
+	overflow: hidden;
+}
 
 @media (min-width: 1025px) {
 	.camps-intro {
