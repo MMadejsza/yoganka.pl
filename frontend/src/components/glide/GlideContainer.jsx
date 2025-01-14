@@ -45,7 +45,7 @@ function GlideContainer({placement, glideConfig, glideBreakpoints, slides}) {
 			return null;
 		})();
 
-		if (SlideComponent && isTile) {
+		if (SlideComponent && (isTile || isReview)) {
 			return slides.data.map((slide, index) => (
 				<SlideComponent
 					key={index}

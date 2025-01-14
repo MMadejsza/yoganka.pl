@@ -24,7 +24,7 @@
 }
 .camps-benefits {
 	grid-area: about;
-	background-color: map-get(var.$colors, nav);
+	background-color: map.get(var.$colors, nav);
 	box-shadow: map.get(var.$shadows, transitive-box-shadow-nav);
 
 	&__bullets-container {
@@ -36,15 +36,15 @@
 		grid-template-columns: 1fr 2fr;
 		gap: 0.5rem 0;
 		padding: 1rem 0;
-		background-color: map-get(var.$colors, tile);
-		border-radius: map-get(var.$sizes, border-radius);
+		background-color: map.get(var.$colors, tile);
+		border-radius: map.get(var.$sizes, border-radius);
 
 		text-align: left;
 
 		&:nth-child(even) {
 			text-align: right;
 			grid-template-columns: 2fr 1fr;
-			background-color: map-get(var.$colors, base);
+			background-color: map.get(var.$colors, base);
 
 			& .camps-benefits__symbol-container {
 				grid-column: 2/3;
@@ -59,13 +59,13 @@
 		grid-row: 1/-3;
 		place-self: center;
 		text-shadow: map.get(var.$shadows, active-text-icons-shadow);
-		color: map-get(var.$colors, accent-bcg);
+		color: map.get(var.$colors, accent-bcg);
 	}
 }
 
 .camps-benefits + section.offer {
 	grid-gap: 0rem;
-	background-color: map-get(var.$colors, base);
+	background-color: map.get(var.$colors, base);
 	box-shadow: map.get(var.$shadows, transitive-box-shadow);
 	#wyjazdy {
 		grid-column: 1/-1;
@@ -74,6 +74,31 @@
 .reviews {
 	grid-area: cert;
 	overflow: hidden;
+	.glide__track {
+		height: 70vh;
+		max-height: 450px;
+	}
+	&__img {
+		max-width: 100px;
+		max-width: 100px;
+	}
+	&__tile {
+		height: 65vh;
+		width: 80vw;
+		max-height: 450px;
+		max-width: 300px;
+	}
+	&__name {
+		text-shadow: map.get(var.$shadows, active-text-icons-shadow);
+		font-size: 2.2rem;
+	}
+	&__productName {
+		font-size: 2rem;
+	}
+	&__review {
+		font-style: italic;
+		font-size: 1.9rem;
+	}
 }
 
 @media (min-width: 1025px) {

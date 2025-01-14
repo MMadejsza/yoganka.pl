@@ -1,11 +1,12 @@
 function ReviewSlide({slideData}) {
 	const {img, name, productName, review} = slideData;
-	const leadingClass = 'certificates';
+	const leadingClass = 'reviews';
 	return (
 		<li className='glide__slide'>
 			<div className={`tile ${leadingClass}__tile`}>
 				{img && (
 					<img
+						className={`${leadingClass}__img tile__img`}
 						src={img}
 						alt={`${name} profile photo`}
 					/>
@@ -16,7 +17,7 @@ function ReviewSlide({slideData}) {
 					</h3>
 				)}
 				{productName && <p className={`${leadingClass}__productName`}>{productName}</p>}
-				{review && <p className={`${leadingClass}__review`}>{review}</p>}
+				{review && <p className={`${leadingClass}__review`}>{`"${review}"`}</p>}
 			</div>
 		</li>
 	);
