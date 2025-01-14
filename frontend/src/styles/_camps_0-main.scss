@@ -3,18 +3,36 @@
 @use '_global_variables-templates' as var;
 @use '_global_mixins-keyframes' as mixin;
 
+.camps-intro {
+	// grid-area: header;
+	height: 100vh;
+	@include mixin.flex(column, space-between, center);
+	flex-wrap: wrap;
+
+	&__header {
+		margin-top: 5rem;
+		padding: 1rem;
+	}
+	&__welcome-desc {
+		padding: 1rem;
+
+		white-space: pre-line;
+		font-size: 1.7rem;
+	}
+}
+
 @media (min-width: 1025px) {
 	.camps-intro {
 		grid-column: 1 / -1;
 		margin-top: 11rem;
 		@include mixin.flex(row, center);
 		flex-wrap: wrap;
-	}
-	.camps-intro__header {
-		flex-basis: 100%;
-	}
-	.camps-intro__welcome-desc {
-		white-space: pre-line;
-		font-size: 1.5rem;
+		&__header {
+			flex-basis: 100%;
+		}
+		&__welcome-desc {
+			white-space: pre-line;
+			font-size: 1.5rem;
+		}
 	}
 }
