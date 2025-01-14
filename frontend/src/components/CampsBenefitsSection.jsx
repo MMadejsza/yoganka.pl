@@ -1,41 +1,5 @@
 import Section from './Section.jsx';
-export const BENEFITS_DATA = [
-	{
-		symbol: 'self_improvement',
-		title: 'House of OM',
-		text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus, ratione!',
-	},
-	{
-		symbol: 'self_improvement',
-
-		title: 'House of OM',
-		text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus, ratione!',
-	},
-	{
-		symbol: 'self_improvement',
-
-		title: 'House of OM',
-		text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus, ratione!',
-	},
-	{
-		symbol: 'self_improvement',
-
-		title: 'House of OM',
-		text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus, ratione!',
-	},
-	{
-		symbol: 'self_improvement',
-
-		title: 'House of OM',
-		text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus, ratione!',
-	},
-	{
-		symbol: 'self_improvement',
-
-		title: 'House of OM',
-		text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus, ratione!',
-	},
-];
+import {BENEFITS_DATA} from '../DATA/CAMPS_BENEFITS_DATA.js';
 
 function CampsBenefitsSection({isMobile}) {
 	return (
