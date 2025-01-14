@@ -3,7 +3,15 @@ import About from '../components/About.jsx';
 import OfferSection from '../components/OfferSection.jsx';
 import Certificates from '../components/Certificates.jsx';
 import Partners from '../components/Partners.jsx';
+import {CLASSES_DATA} from '../DATA/CLASSES_DATA.js';
+import {CAMPS_DATA} from '../DATA/CAMPS_DATA.js';
+import {EVENTS_DATA} from '../DATA/EVENTS_DATA.js';
 
+const products = [
+	{id: 'wyjazdy', header: `Kobiece Wyjazdy z\u00a0Jogą`, data: CAMPS_DATA, limit: 2},
+	{id: 'zajecia', header: `Zajęcia`, data: CLASSES_DATA},
+	{id: 'wydarzenia', header: `Wydarzenia`, data: EVENTS_DATA, specifier: 'events'},
+];
 function HomePage() {
 	const mediaQuery = window.matchMedia('(max-width: 1024px)');
 	const isMobile = mediaQuery.matches;
@@ -11,7 +19,7 @@ function HomePage() {
 		<>
 			{isMobile ? <HeaderMain /> : null}
 			<About isMobile={isMobile} />
-			<OfferSection />
+			<OfferSection products={products} />
 			<Certificates />
 			<Partners />
 		</>

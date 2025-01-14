@@ -5,13 +5,14 @@ function Offer({id, specifier, header, data, today, limit}) {
 	if (specifier === 'events') {
 		classy += ` offer-type--events`;
 	}
+	const products = limit ? data.slice(0, limit) : data;
 
 	return (
 		<article
 			id={id}
 			className={classy}>
 			<header className='offer-type__header'>{header}</header>
-			{data.slice(limit).map((tileData, index) => (
+			{products.map((tileData, index) => (
 				<Tile
 					data={tileData}
 					key={index}

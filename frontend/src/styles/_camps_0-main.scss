@@ -63,6 +63,12 @@
 	}
 }
 
+.camps-benefits + section.offer {
+	grid-gap: 0rem;
+	background-color: map-get(var.$colors, base);
+	box-shadow: map.get(var.$shadows, transitive-box-shadow);
+}
+
 @media (min-width: 1025px) {
 	.camps-intro {
 		grid-column: 1 / -1;

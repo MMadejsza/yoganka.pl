@@ -398,4 +398,18 @@ export const CAMPS_DATA = [
 			},
 		},
 	},
-].sort((x, y) => new Date(x.date) - new Date(y.date));
+].sort((x, y) => {
+	const today = new Date();
+	const dateX = new Date(x.date);
+	const dateY = new Date(y.date);
+
+	// Send to the end if archived
+	const isXPast = dateX < today;
+	const isYPast = dateY < today;
+
+	if (isXPast && !isYPast) return 1; // x past, y future -> x goes last
+	if (!isXPast && isYPast) return -1; // x future, y past
+
+	// Sort normal within splitted groups
+	return dateX - dateY;
+});
