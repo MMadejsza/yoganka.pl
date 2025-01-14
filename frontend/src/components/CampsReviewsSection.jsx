@@ -50,7 +50,8 @@ function CampsReviewsSection() {
 						360: {perView: 1},
 						480: {perView: 1},
 					}}
-					slides={{type: 'review', data: REVIEWS_DATA}}
+					type='review'
+					slides={{data: REVIEWS_DATA}}
 					leadingClass={leadingClass}
 				/>
 			</Section>

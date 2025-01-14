@@ -6,7 +6,7 @@ import CertificateSlide from './CertificateSlide.jsx';
 import PhotoSlide from './PhotoSlide.jsx';
 import ReviewSlide from './ReviewSlide.jsx';
 
-function GlideContainer({placement, glideConfig, glideBreakpoints, slides}) {
+function GlideContainer({placement, glideConfig, glideBreakpoints, slides, type}) {
 	const glideRef = useRef(null);
 
 	useEffect(() => {
@@ -33,10 +33,29 @@ function GlideContainer({placement, glideConfig, glideBreakpoints, slides}) {
 		}
 	}, [glideConfig, glideBreakpoints]);
 
-	const isTile = slides.type === 'tile';
-	const isPhoto = slides.type === 'photo';
-	const isReview = slides.type === 'review';
+	const isTile = type === 'tile';
+	const isPhoto = type === 'photo';
+	const isAllPhotos = type === 'allPhotos';
+	const isReview = type === 'review';
 
+	const renderJointGalery = () => {
+		const allPhotos = [];
+
+		slides.forEach((camp) => {
+			// For each com create array of gallery slides
+			const singleCampGallery = Array.from({length: camp.gallerySize}).map((_, index) => (
+				<PhotoSlide
+					key={`${index}${camp.fileName}`}
+					photoNo={index + 1}
+					slideData={camp}
+				/>
+			));
+			allPhotos.push(...singleCampGallery);
+		});
+
+		console.log(allPhotos.length);
+		return allPhotos;
+	};
 	const renderSlides = () => {
 		const SlideComponent = (() => {
 			if (isTile) return CertificateSlide;
@@ -95,14 +114,16 @@ function GlideContainer({placement, glideConfig, glideBreakpoints, slides}) {
 			<div
 				className='glide__track'
 				data-glide-el='track'>
-				<ul className='glide__slides'>{renderSlides()}</ul>
+				<ul className='glide__slides'>
+					{isAllPhotos ? renderJointGalery() : renderSlides()}
+				</ul>
 			</div>
 
-			<div
+			{/* <div
 				className='glide__bullets'
 				data-glide-el='controls[nav]'>
 				{renderBullets()}
-			</div>
+			</div> */}
 
 			<div
 				className='glide__arrows'

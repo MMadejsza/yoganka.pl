@@ -115,9 +115,9 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 								360: {perView: 1},
 								480: {perView: 1},
 							}}
+							type='photo'
 							slides={{
-								type: 'photo',
-								path: galleryPath,
+								galleryPath: galleryPath,
 								fileName: fileName,
 								size: gallerySize,
 							}}
