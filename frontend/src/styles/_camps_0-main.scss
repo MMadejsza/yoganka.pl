@@ -16,6 +16,7 @@
 	}
 	&__welcome-desc {
 		padding: 1rem;
+		margin-bottom: 3rem;
 
 		white-space: pre-line;
 		font-size: 1.7rem;
@@ -24,6 +25,7 @@
 .camps-benefits {
 	grid-area: about;
 	background-color: map-get(var.$colors, nav);
+	box-shadow: map.get(var.$shadows, transitive-box-shadow-nav);
 
 	&__bullets-container {
 		@include mixin.flex(column);
