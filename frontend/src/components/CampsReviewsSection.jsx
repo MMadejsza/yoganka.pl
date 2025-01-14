@@ -45,6 +45,11 @@ function CampsReviewsSection() {
 						autoplay: 2200,
 						animationDuration: 800,
 					}}
+					glideBreakpoints={{
+						// <=
+						360: {perView: 1},
+						480: {perView: 1},
+					}}
 					slides={{type: 'review', data: REVIEWS_DATA}}
 					leadingClass={leadingClass}
 				/>
