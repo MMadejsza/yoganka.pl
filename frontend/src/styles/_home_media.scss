@@ -60,6 +60,11 @@
 	footer {
 		padding: 0 2rem 2rem;
 	}
+	.nav {
+		$width: 300px;
+		right: calc($width * -1 - 25px);
+		width: $width;
+	}
 	.burger.active {
 		.burger__bar--top {
 			transform: translateY(33px / 2) rotate(45deg);
@@ -134,22 +139,26 @@
 		top: $burger-offset * $bar-width;
 		right: $burger-offset * $bar-width;
 	}
+	.nav {
+		$width: 350px;
+		right: calc($width * -1 - 25px);
+		width: $width;
+		&__item {
+			transition: map.get(var.$behavior, base-transition);
 
-	.nav__item {
-		transition: map.get(var.$behavior, base-transition);
+			&:hover {
+				transform: scale(1.05) translateY(0.5rem);
+			}
 
-		&:hover {
-			transform: scale(1.05) translateY(0.5rem);
-		}
-
-		%hover {
-			color: map.get(var.$colors, accent-bcg);
-			text-shadow: map.get(var.$shadows, active-text-icons-shadow);
-		}
-		&:hover .nav__link {
-			@extend %hover;
-			span {
+			%hover {
+				color: map.get(var.$colors, accent-bcg);
+				text-shadow: map.get(var.$shadows, active-text-icons-shadow);
+			}
+			&:hover .nav__link {
 				@extend %hover;
+				span {
+					@extend %hover;
+				}
 			}
 		}
 	}

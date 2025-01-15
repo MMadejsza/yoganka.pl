@@ -16,7 +16,7 @@ function Burger({isNavOpen: isOpen, setIsNavOpen: setIsOpen}) {
 		if (openCount.current > 0) {
 			if (isOpen) {
 				setTimeout(() => {
-					document.body.classList.add('highlighted');
+					document.querySelector('.nav').classList.add('highlighted');
 				}, 500);
 			}
 		}
@@ -34,7 +34,7 @@ function Burger({isNavOpen: isOpen, setIsNavOpen: setIsOpen}) {
 		// If exists and is in the right 20% of the screen (drawer from the right)
 		if (startX !== null && startX / window.innerWidth >= 0.8) {
 			// If drag left is longer than 10% of the screen - open
-			console.log(currentX + startX);
+			// console.log(currentX + startX);
 			if (startX - currentX > window.innerWidth * 0.1) {
 				setIsOpen(true);
 				// count opening

@@ -7,15 +7,19 @@ html {
 }
 //! NAV
 
-body.highlighted::after {
-	position: absolute;
-	background-color: red;
-	height: 100vh;
-	top: 0;
-	right: -15%;
-	content: '';
-	animation: 3s highlights ease-in-out;
-}
+// .nav.highlighted::after {
+// 	position: absolute;
+// 	background-color: red;
+// 	height: 100vh;
+// 	width: 15%;
+// 	top: 0;
+// 	right: -15%;
+// 	content: '';
+// 	animation: 3s highlights ease-in-out;
+// 	// z-index: 1000;
+// 	border: 1px solid red;
+// 	overflow: hidden;
+// }
 
 .burger {
 	$bar-height: 0.4rem;
@@ -32,6 +36,7 @@ body.highlighted::after {
 	z-index: 7;
 	cursor: pointer;
 
+	transition: map.get(var.$behavior, base-transition);
 	@include mixin.flex(column, space-between);
 
 	&__bar {
@@ -87,10 +92,11 @@ body.highlighted::after {
 	}
 }
 .nav {
+	$width: 210px;
 	position: fixed;
 	top: 0;
-	right: -100%;
-	width: min-content;
+	right: calc($width * -1 - 25px);
+	width: $width;
 	height: 100%;
 	z-index: 6;
 
@@ -168,5 +174,8 @@ body.highlighted::after {
 		margin-top: 5rem;
 		padding: 1rem;
 	}
+}
+.nav.highlighted {
+	animation: 3s highlights ease-in-out;
 }
 //! NAV  END
