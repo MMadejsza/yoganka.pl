@@ -13,7 +13,7 @@ function CampsReviewsSection() {
 					glideConfig={{
 						type: 'carousel',
 						// startAt: 0,
-						perView: 2,
+						perView: 4,
 						focusAt: 'center',
 						gap: 20,
 						autoplay: 2200,
@@ -23,7 +23,7 @@ function CampsReviewsSection() {
 						// <=
 						360: {perView: 1},
 						480: {perView: 1},
-						767: {perView: 1},
+						1024: {perView: 2},
 					}}
 					type='review'
 					slides={{data: REVIEWS_DATA}}

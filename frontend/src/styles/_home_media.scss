@@ -502,7 +502,7 @@
 		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 		grid-template-rows: repeat(5, auto) 1fr auto;
 		grid-template-areas:
-			'nav nav nav nav nav '
+			'header header header header header'
 			'about about about about about'
 			'offer offer offer offer offer'
 			'cert cert cert cert cert'
@@ -514,7 +514,7 @@
 		display: none;
 	}
 	.nav {
-		grid-area: nav;
+		// grid-area: nav;
 		top: 0;
 		left: 0;
 		width: 100%;

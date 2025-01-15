@@ -1,7 +1,7 @@
 export const BENEFITS_DATA = [
 	{
 		symbol: 'self_improvement',
-		title: 'Głębokie połączenie z sobą',
+		title: 'Głębokie połączenie z\u00A0sobą',
 		text: 'Odkryj wewnętrzny spokój i zrozumienie siebie poprzez medytację i praktyki jogowe.',
 	},
 	{
@@ -11,17 +11,17 @@ export const BENEFITS_DATA = [
 	},
 	{
 		symbol: 'spa',
-		title: 'Regeneracja ciała i ducha',
+		title: 'Regeneracja ciała i\u00A0ducha',
 		text: 'Poczuj harmonię dzięki praktykom relaksacyjnym i terapeutycznym seansom.',
 	},
 	{
 		symbol: 'group',
-		title: 'Społeczność o podobnych wartościach',
+		title: 'Osoby o\u00A0podobnych wartościach',
 		text: 'Dołącz do grupy osób, które inspirują i wspierają na drodze do lepszego życia.',
 	},
 	{
 		symbol: 'restaurant',
-		title: 'Zdrowa i smaczna dieta',
+		title: 'Zdrowa i\u00A0smaczna dieta',
 		text: 'Rozkoszuj się specjalnie przygotowanymi wegańskimi i wegetariańskimi posiłkami.',
 	},
 	{
