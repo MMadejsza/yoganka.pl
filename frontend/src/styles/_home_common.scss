@@ -89,7 +89,7 @@ button {
 .stopScroll {
 	overflow: hidden;
 }
-.wrapper > section:not(.partners) {
+.wrapper > section:not(.partners):not(:first-of-type) {
 	margin-bottom: 5rem;
 }
 .wrapper > section:not(:first-of-type),

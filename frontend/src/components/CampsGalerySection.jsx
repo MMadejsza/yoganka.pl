@@ -12,7 +12,7 @@ function CampsGalerySection({camps}) {
 					glideConfig={{
 						type: 'carousel',
 						// startAt: 0,
-						perView: 5,
+						perView: 2,
 						focusAt: 'center',
 						gap: 20,
 						autoplay: 2200,
@@ -20,8 +20,9 @@ function CampsGalerySection({camps}) {
 					}}
 					glideBreakpoints={{
 						// <=
-						360: {perView: 1},
-						480: {perView: 1},
+						// 360: {perView: 1},
+						// 480: {perView: 1},
+						1024: {perView: 1},
 					}}
 					type='allPhotos'
 					slides={camps}

@@ -40,6 +40,7 @@ $shadows: (
 	transitive-box-shadow-nav: (
 		(map.get($colors, nav)) 0px 25px 52px 78px,
 	),
+
 	active-logo-shadow: (
 		map.get($colors, accent-bcg) 0px 34px 35px -50px,
 	),
@@ -60,6 +61,9 @@ $shadows: (
 	),
 	active-text-icons-shadow: (
 		2px 2px 4px rgba(0, 0, 0, 0.3),
+	),
+	text-on-background-shadow: (
+		2px 2px 4px rgba(map.get($colors, base), 0.5),
 	),
 );
 
