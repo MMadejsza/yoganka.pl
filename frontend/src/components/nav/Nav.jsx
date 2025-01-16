@@ -75,6 +75,7 @@ function Nav({setIsNavOpen}) {
 				to={'/'}
 				onClick={(e) => {
 					closeDrawer();
+					window.scrollTo(0, 0);
 				}}
 				className={({isActive}) => (isActive ? 'nav__link active' : 'nav__link')}>
 				{({isActive}) => (
@@ -111,6 +112,7 @@ function Nav({setIsNavOpen}) {
 								to={li.link}
 								onClick={(e) => {
 									closeDrawer();
+									window.scrollTo(0, 0);
 								}}
 								className={({isActive}) =>
 									isActive ? 'nav__link active' : 'nav__link'
