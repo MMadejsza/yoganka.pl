@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {Link, useNavigate, useLocation} from 'react-router-dom';
 import ImgDynamic from './imgsRelated/ImgDynamic.jsx';
 import Modal from './Modal.jsx';
-import {smoothScrollInto} from '../utils/utils.js';
+import {smoothScrollInto} from '../utils/utils.jsx';
 
 function Tile({data, today}) {
 	const clickable = data.type !== 'class';

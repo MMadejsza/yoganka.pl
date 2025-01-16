@@ -1,4 +1,4 @@
-import {whatsAppTemplate} from '../utils/utils.js';
+import {whatsAppTemplate} from '../utils/utils.jsx';
 const imgGroupPath = `/imgs/offer/regular/individual_and_group/front`;
 const imgB2BPath = `/imgs/offer/regular/commercial/front`;
 

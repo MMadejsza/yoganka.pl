@@ -1,4 +1,4 @@
-import {whatsAppTemplate} from '../utils/utils.js';
+import {whatsAppTemplate} from '../utils/utils.jsx';
 const qrsPath = 'imgs/qrs';
 
 export const SOCIALS_DATA = [

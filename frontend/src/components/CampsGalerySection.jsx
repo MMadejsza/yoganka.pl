@@ -1,5 +1,6 @@
 import Section from './Section.jsx';
 import GlideContainer from './glide/GlideContainer.jsx';
+import {renderJointGalery} from '../utils/utils.jsx';
 
 function CampsGalerySection({camps, isMobile}) {
 	const leadingClass = 'galery';
@@ -12,7 +13,6 @@ function CampsGalerySection({camps, isMobile}) {
 					<GlideContainer
 						glideConfig={{
 							type: 'carousel',
-							// startAt: 0,
 							perView: 2,
 							focusAt: 'center',
 							gap: 20,
@@ -20,9 +20,6 @@ function CampsGalerySection({camps, isMobile}) {
 							animationDuration: 800,
 						}}
 						glideBreakpoints={{
-							// <=
-							// 360: {perView: 1},
-							// 480: {perView: 1},
 							1024: {perView: 1},
 						}}
 						type='allPhotos'
@@ -30,7 +27,7 @@ function CampsGalerySection({camps, isMobile}) {
 						leadingClass={leadingClass}
 					/>
 				) : (
-					<main>Galeria</main>
+					<main className={`${leadingClass}__container`}>{renderJointGalery(camps)}</main>
 				)}
 			</Section>
 		</>

@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {NavLink, useNavigate, useLocation} from 'react-router-dom';
 import Logo from '../Logo.jsx';
-import {smoothScrollInto} from '../../utils/utils.js';
+import {smoothScrollInto} from '../../utils/utils.jsx';
 const menuSet = [
 	{
 		name: 'Wyjazdy',

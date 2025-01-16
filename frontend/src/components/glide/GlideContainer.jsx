@@ -5,6 +5,7 @@ import '@glidejs/glide/dist/css/glide.theme.min.css';
 import CertificateSlide from './CertificateSlide.jsx';
 import PhotoSlide from './PhotoSlide.jsx';
 import ReviewSlide from './ReviewSlide.jsx';
+import {renderJointGalery} from '../../utils/utils.jsx';
 
 function GlideContainer({placement, glideConfig, glideBreakpoints, slides, type}) {
 	const glideRef = useRef(null);
@@ -38,24 +39,24 @@ function GlideContainer({placement, glideConfig, glideBreakpoints, slides, type}
 	const isAllPhotos = type === 'allPhotos';
 	const isReview = type === 'review';
 
-	const renderJointGalery = () => {
-		const allPhotos = [];
+	// const renderJointGalery = () => {
+	// 	const allPhotos = [];
 
-		slides.forEach((camp) => {
-			// For each com create array of gallery slides
-			const singleCampGallery = Array.from({length: camp.gallerySize}).map((_, index) => (
-				<PhotoSlide
-					key={`${index}${camp.fileName}`}
-					photoNo={index + 1}
-					slideData={camp}
-				/>
-			));
-			allPhotos.push(...singleCampGallery);
-		});
+	// 	slides.forEach((camp) => {
+	// 		// For each com create array of gallery slides
+	// 		const singleCampGallery = Array.from({length: camp.gallerySize}).map((_, index) => (
+	// 			<PhotoSlide
+	// 				key={`${index}${camp.fileName}`}
+	// 				photoNo={index + 1}
+	// 				slideData={camp}
+	// 			/>
+	// 		));
+	// 		allPhotos.push(...singleCampGallery);
+	// 	});
 
-		console.log(allPhotos.length);
-		return allPhotos;
-	};
+	// 	console.log(allPhotos.length);
+	// 	return allPhotos;
+	// };
 	const renderSlides = () => {
 		const SlideComponent = (() => {
 			if (isTile) return CertificateSlide;
@@ -115,7 +116,7 @@ function GlideContainer({placement, glideConfig, glideBreakpoints, slides, type}
 				className='glide__track'
 				data-glide-el='track'>
 				<ul className='glide__slides'>
-					{isAllPhotos ? renderJointGalery() : renderSlides()}
+					{isAllPhotos ? renderJointGalery(slides) : renderSlides()}
 				</ul>
 			</div>
 

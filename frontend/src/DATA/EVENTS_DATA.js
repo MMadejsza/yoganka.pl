@@ -1,4 +1,4 @@
-import {whatsAppTemplate} from '../utils/utils.js';
+import {whatsAppTemplate} from '../utils/utils.jsx';
 const htmlToImgsPath = `/imgs`;
 
 export const EVENTS_DATA = [

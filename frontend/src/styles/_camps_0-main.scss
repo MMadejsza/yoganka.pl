@@ -345,6 +345,7 @@
 	}
 	.galery {
 		grid-column: 1/-1;
+		overflow: visible;
 	}
 }
 
@@ -401,6 +402,22 @@
 		}
 		&__symbol {
 			font-size: 10rem;
+		}
+	}
+	.galery__container {
+		position: relative;
+		margin-top: 5rem;
+		@include mixin.flex(row, space-evenly, space-evenly);
+		flex-wrap: wrap;
+		gap: 2rem;
+		overflow: visible;
+
+		.item {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 1.2em;
+			position: relative;
 		}
 	}
 }
