@@ -184,13 +184,12 @@
 			font-size: 1.7rem;
 		}
 	}
+	.clickable:hover {
+		cursor: pointer;
+		box-shadow: map.get(var.$shadows, tile-shadow);
+		transform: translateY(-5%) scale(1.05);
+	}
 	.tile {
-		&--clickable:hover {
-			cursor: pointer;
-			box-shadow: map.get(var.$shadows, tile-shadow);
-			transform: translateY(-5%) scale(1.05);
-		}
-
 		&__img--event-modal {
 			grid-column: 1 / -1;
 		}

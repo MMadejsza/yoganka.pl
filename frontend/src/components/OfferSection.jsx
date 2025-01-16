@@ -18,6 +18,7 @@ function OfferSection({products}) {
 					today={today}
 					limit={product.limit}
 					specifier={product.specifier}
+					moreLink={product.moreLink ? product.moreLink : null}
 				/>
 			))}
 		</Section>

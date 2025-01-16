@@ -6,6 +6,7 @@ import {smoothScrollInto} from '../utils/utils.jsx';
 
 function Tile({data, today}) {
 	const clickable = data.type !== 'class';
+	const classes = data.type === 'class';
 	const isPast = data.date < today;
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -14,7 +15,8 @@ function Tile({data, today}) {
 
 	const conditionalClasses = [
 		'tile',
-		clickable ? 'tile--clickable' : '',
+		clickable ? 'clickable' : '',
+		classes ? 'tile--classes' : '',
 		isPast ? 'past' : '',
 		data.extraClass ? `tile--${data.extraClass}` : '',
 	].join(' ');

@@ -8,9 +8,21 @@ import {CAMPS_DATA} from '../DATA/CAMPS_DATA.js';
 import {EVENTS_DATA} from '../DATA/EVENTS_DATA.js';
 
 const products = [
-	{id: 'wyjazdy', header: `Kobiece Wyjazdy z\u00a0Jogą`, data: CAMPS_DATA, limit: 2},
+	{
+		id: 'wyjazdy',
+		header: `Kobiece Wyjazdy z\u00a0Jogą`,
+		data: CAMPS_DATA,
+		limit: 2,
+		moreLink: '/wyjazdy',
+	},
 	{id: 'zajecia', header: `Zajęcia`, data: CLASSES_DATA},
-	{id: 'wydarzenia', header: `Wydarzenia`, data: EVENTS_DATA, specifier: 'events'},
+	{
+		id: 'wydarzenia',
+		header: `Wydarzenia`,
+		data: EVENTS_DATA,
+		moreLink: '/wydarzenia',
+		specifier: 'events',
+	},
 ];
 function HomePage() {
 	const mediaQuery = window.matchMedia('(max-width: 1024px)');
