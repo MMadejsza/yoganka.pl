@@ -2,6 +2,7 @@ import Section from './Section.jsx';
 import {BENEFITS_DATA} from '../DATA/CAMPS_BENEFITS_DATA.js';
 
 function CampsBenefitsSection({isMobile}) {
+	const classy = 'camps-benefits__';
 	return (
 		<Section
 			classy='camps-benefits'
@@ -9,19 +10,21 @@ function CampsBenefitsSection({isMobile}) {
 			<main className='camps-benefits__bullets-container'>
 				{BENEFITS_DATA.map((benefit) => {
 					return (
-						<article
-							key={benefit.title}
-							className='camps-benefits__bullet'>
-							<aside className='camps-benefits__symbol-container'>
-								<span className='material-symbols-outlined camps-benefits__symbol'>
-									{benefit.symbol}
-								</span>
-							</aside>
-							<header className='camps-benefits__bullet-header'>
-								{benefit.title}
-							</header>
-							<p className='camps-benefits__bullet-p'>{benefit.text}</p>
-						</article>
+						<div className={`${classy}bullet-container`}>
+							<article
+								key={benefit.title}
+								className={`${classy}bullet`}>
+								<aside className={`${classy}symbol-container`}>
+									<span className={`material-symbols-outlined ${classy}symbol`}>
+										{benefit.symbol}
+									</span>
+								</aside>
+								<header className={`${classy}bullet-header`}>
+									{benefit.title}
+								</header>
+								<p className={`${classy}bullet-p`}>{benefit.text}</p>
+							</article>
+						</div>
 					);
 				})}
 			</main>

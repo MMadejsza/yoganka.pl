@@ -1,5 +1,6 @@
 @use 'sass:map';
 @use 'sass:color';
+@use 'sass:math';
 @use '_global_variables-templates' as var;
 @use '_global_mixins-keyframes' as mixin;
 
@@ -23,7 +24,7 @@
 	&__welcome-desc {
 		padding: 1rem;
 		margin-bottom: 100px;
-		background-color: rgba(map.get(var.$colors, tile), 0.5);
+		background-color: rgba(map.get(var.$colors, nav), 0.5);
 		white-space: pre-line;
 		font-size: 1.7rem;
 	}
@@ -288,57 +289,67 @@
 	}
 	.camps-benefits {
 		$padding: 1rem;
+		$target-scale: 1.1;
+		$target-rotation: 180deg;
+		$rotation-timing: 0.8s;
+		$opacity-timing: math.div($rotation-timing, 2);
+		$opacity-delay-init: $opacity-timing;
+		$opacity-delay-end: $opacity-timing * 0;
 
 		&__bullets-container {
 			@include mixin.flex(row);
 			flex-wrap: wrap;
 			gap: 4rem;
 		}
+		&__bullet-container {
+			flex-basis: 45%;
+			position: relative;
+			z-index: 1;
+			border-radius: map.get(var.$sizes, border-radius);
+		}
+		&__bullet-container:hover &__bullet {
+			box-shadow: map.get(var.$shadows, tile-shadow-reverse);
+			transform: scale($target-scale) rotateX($target-rotation);
+		}
 		&__bullet {
 			position: relative;
-			flex-basis: 45%;
 			min-height: 250px;
-			// max-height: 355px;
-
 			grid-template-areas:
 				' s  h'
 				' s  h';
-			// grid-template-areas:
-			// 	' s  p'
-			// 	' s  p'
-			// 	' h  p';
+			box-shadow: map.get(var.$shadows, active-box-shadow);
+			transition: transform $rotation-timing ease-in-out,
+				box-shadow $rotation-timing ease-in-out, opacity $opacity-timing ease-in-out;
 
 			&:nth-child(even) {
 				text-align: left;
 				grid-template-areas:
 					' s  h'
 					' s  h';
-				// grid-template-areas:
-				// 	' s  p'
-				// 	' s  p'
-				// 	' h  p';
-
 				& .camps-benefits__bullet-header,
 				& .camps-benefits__bullet-p {
 					padding: 0 1rem 1rem $padding;
 				}
-				& .camps-benefits__symbol-container {
-					// grid-column: 1/2;
-				}
-			}
-			// perspective: 1000px;
-			transition: 0.8s ease-in-out;
-			&:hover {
-				transform: scale(1.1) rotateX(180deg);
 			}
 		}
 
 		&__bullet-header {
 			text-align: center;
-			// place-self: start;
+			opacity: 1;
+			transition: opacity $opacity-timing ease-in-out;
+			transition-delay: $opacity-delay-init;
 		}
-		&__bullet:hover &__bullet-header {
-			transition-delay: 0.4s;
+		&__bullet-container:hover &__bullet-header {
+			transition-delay: $opacity-delay-end;
+			opacity: 0;
+		}
+		&__symbol-container {
+			opacity: 1;
+			transition: opacity $opacity-timing ease-in-out;
+			transition-delay: $opacity-delay-init;
+		}
+		&__bullet-container:hover &__symbol-container {
+			transition-delay: $opacity-delay-end;
 			opacity: 0;
 		}
 
@@ -346,24 +357,16 @@
 			position: absolute;
 			top: 50%;
 			left: 50%;
-			transform: translate(-50%, -50%);
 			text-align: center;
 			opacity: 0;
-		}
-		&__bullet:hover &__bullet-p {
-			transition-delay: 0.4s;
-			transform: translate(-50%, -50%) rotateX(180deg);
-			opacity: 1;
-		}
+			transition: transform $rotation-timing ease-in-out, opacity $opacity-timing ease-in-out;
+			transition-delay: $opacity-delay-end;
 
-		&__symbol-container {
-			// opacity: 0;
+			transform: translate(-50%, -50%) rotateX($target-rotation);
 		}
-		&__bullet:hover &__symbol-container {
-			transition-delay: 0.4s;
-			opacity: 0;
-		}
-		&__symbol {
+		&__bullet-container:hover &__bullet-p {
+			opacity: 1;
+			transition-delay: $opacity-delay-init;
 		}
 	}
 }
