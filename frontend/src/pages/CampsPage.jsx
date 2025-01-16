@@ -7,13 +7,18 @@ import {CAMPS_DATA} from '../DATA/CAMPS_DATA.js';
 
 const products = [{id: 'wyjazdy', header: `Wybierz swój wyjazd`, data: CAMPS_DATA, limit: 0}];
 function CampsPage() {
+	const mediaQuery = window.matchMedia('(max-width: 1024px)');
+	const isMobile = mediaQuery.matches;
 	return (
 		<>
 			<CampsIntoSection />
 			<CampsBenefitsSection />
 			<OfferSection products={products} />
 			<CampsReviewsSection />
-			<CampsGalerySection camps={CAMPS_DATA} />
+			<CampsGalerySection
+				camps={CAMPS_DATA}
+				isMobile={isMobile}
+			/>
 			{/* mobile? -> slajder with gallery */}
 			{/* desktop? -> section with gallery masonry */}
 		</>
