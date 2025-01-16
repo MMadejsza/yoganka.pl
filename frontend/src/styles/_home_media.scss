@@ -36,6 +36,12 @@
 	html {
 		font-size: 12px;
 	}
+
+	.nav {
+		$width: 300px;
+		right: calc($width * -1 - 25px);
+		width: $width;
+	}
 	.top-image-header {
 		background-image: url(/imgs/header/768_header_portrait.jpg);
 	}
@@ -59,11 +65,6 @@
 	.wrapper > section:not(:first-of-type),
 	footer {
 		padding: 0 2rem 2rem;
-	}
-	.nav {
-		$width: 300px;
-		right: calc($width * -1 - 25px);
-		width: $width;
 	}
 	.burger.active {
 		.burger__bar--top {

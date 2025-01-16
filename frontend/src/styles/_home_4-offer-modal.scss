@@ -24,10 +24,8 @@
 }
 
 .past {
-	position: relative;
-	// filter: saturate(0.5);
 	&::before {
-		content: ''; /* Tworzymy pusty element */
+		content: '';
 		position: absolute;
 		top: 0;
 		left: 0;

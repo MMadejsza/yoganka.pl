@@ -47,50 +47,6 @@ export const CAMPS_DATA = [
 		},
 	},
 	{
-		id: `CA04`,
-		name: `Summer Chill Camp`,
-		type: `camp`,
-		date: `2025-06-28`,
-		fileName: `camp_chill`,
-		imgPath: `${htmlToImgsPath}/offer/camps/camp_chill/front`,
-		galleryPath: `${htmlToImgsPath}/offer/camps/camp_chill/gallery`,
-		gallerySize: 9,
-		eventType: ``,
-		extraClass: ``,
-		front: {
-			title: `Summer Chill Camp`,
-			dates: [`27-30.06.2025`],
-			location: `Wipsowo 44`,
-			desc: `W PRZYGOTOWANIU`,
-			btnsContent: [],
-		},
-		modal: {
-			fullDescTitle: ``,
-			fullDesc: `Letni camp w\u00A0magicznym Wipsowie. 4\u00A0dni pełne relaksu, natury, pysznego jedzenia i\u00A0oczywiście jogi! Pełna oferta dostępna na\u00A0początku 2025.`,
-			glance: {
-				title: `W przygotowaniu!`,
-				area: ``,
-				accommodation: ``,
-				capacity: ``,
-				price: ``,
-				travel: ``,
-			},
-
-			plan: {
-				title: ``,
-				schedule: [],
-			},
-			summary: {},
-			note: ``,
-			btnsContent: [],
-			formLink: `https://forms.gle/recTtsdmUdY71wwv5`,
-			questionTemplate(subject) {
-				return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
-			},
-			program: {},
-		},
-	},
-	{
 		id: `CA03`,
 		name: `Kobieca harmonia -
 		JOGA | ASTROLOGIA | ECSTATIC DANCE`,
@@ -220,7 +176,8 @@ export const CAMPS_DATA = [
 		extraClass: ``,
 		front: {
 			title: `Kojenie Zmysłów
-           Joga | Aromaterapia | SPA | SkinCare`,
+           Joga | Aromaterapia 
+		   | SPA | SkinCare`,
 			dates: [`11-13/10/2024`],
 			location: `Kaszuby`,
 			desc: ``,
@@ -337,7 +294,8 @@ export const CAMPS_DATA = [
 		extraClass: `long`,
 		front: {
 			title: `Comfy slow weekend
-           Joga | Malowanie | SPA | Misy\u00A0i\u00A0gongi`,
+           Joga | Malowanie | SPA 
+		   | Misy\u00A0i\u00A0gongi`,
 			dates: [`08-11.11.2024`],
 			location: `Warmia`,
 			desc: ``,
