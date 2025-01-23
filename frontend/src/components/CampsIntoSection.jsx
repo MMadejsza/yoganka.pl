@@ -6,7 +6,7 @@ function CampsIntoSection({isMobile}) {
 			classy='camps-intro'
 			header='Kobiece Wyjazdy Jogowe'>
 			<article className='about__bio--content camps-intro__welcome-desc'>
-				<p>
+				<p className='about__bio--description'>
 					Zapraszam Cię na moje autorskie, rozwojowe weekendy z jogą w roli głównej. Campy
 					są odpowiedzią na twoje potrzeby holistycznego projektu, który całościowo zadba
 					o Twoje samopoczucie. To nie tylko ćwiczenia fizyczne ale również przestrzeń na
@@ -15,16 +15,16 @@ function CampsIntoSection({isMobile}) {
 					których mieszkamy są starannie wyselekcjonowane aby wspierały proces
 					regeneracji.
 				</p>
-				<p>
+				<p className='about__bio--description'>
 					Poza jogą, medytacją czeka na Ciebie warsztat kreatywny/rozwojowy, a to wszystko
 					w otoczeniu kojącej natury.
 				</p>
-				<p>
+				<p className='about__bio--description'>
 					Na każdy wyjazd obowiązuje rezerwacja poprzez formularz oraz przedpłata wskazana
 					w ofercie konkretnego campu. Liczba miejsc jest ograniczona, aby zadbać o Twój
 					komfort przebywania oraz praktykowania.
 				</p>
-				<p>Do błogiego zobaczenia!</p>
+				<p className='about__bio--description'>Do błogiego zobaczenia!</p>
 			</article>
 		</Section>
 	);

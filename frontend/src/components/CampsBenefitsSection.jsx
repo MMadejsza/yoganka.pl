@@ -1,16 +1,18 @@
 import Section from './Section.jsx';
 import {BENEFITS_DATA} from '../DATA/CAMPS_BENEFITS_DATA.js';
 
-function CampsBenefitsSection({isMobile}) {
+function CampsBenefitsSection() {
 	const classy = 'camps-benefits__';
 	return (
 		<Section
 			classy='camps-benefits'
 			header='Co Cię czeka?'>
 			<main className='camps-benefits__bullets-container'>
-				{BENEFITS_DATA.map((benefit) => {
+				{BENEFITS_DATA.map((benefit, index) => {
 					return (
-						<div className={`${classy}bullet-container`}>
+						<div
+							className={`${classy}bullet-container`}
+							key={index}>
 							<article
 								key={benefit.title}
 								className={`${classy}bullet`}>

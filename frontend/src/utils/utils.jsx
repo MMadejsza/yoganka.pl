@@ -42,6 +42,6 @@ export const renderJointGalery = (campsArr, isMobile) => {
 		allPhotos.push(...singleCampGallery);
 	});
 
-	console.log(allPhotos.length);
+	// console.log(allPhotos.length);
 	return allPhotos;
 };
