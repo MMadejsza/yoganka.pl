@@ -39,24 +39,6 @@ function GlideContainer({placement, glideConfig, glideBreakpoints, slides, type}
 	const isAllPhotos = type === 'allPhotos';
 	const isReview = type === 'review';
 
-	// const renderJointGalery = () => {
-	// 	const allPhotos = [];
-
-	// 	slides.forEach((camp) => {
-	// 		// For each com create array of gallery slides
-	// 		const singleCampGallery = Array.from({length: camp.gallerySize}).map((_, index) => (
-	// 			<PhotoSlide
-	// 				key={`${index}${camp.fileName}`}
-	// 				photoNo={index + 1}
-	// 				slideData={camp}
-	// 			/>
-	// 		));
-	// 		allPhotos.push(...singleCampGallery);
-	// 	});
-
-	// 	console.log(allPhotos.length);
-	// 	return allPhotos;
-	// };
 	const renderSlides = () => {
 		const SlideComponent = (() => {
 			if (isTile) return CertificateSlide;

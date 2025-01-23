@@ -26,7 +26,7 @@ function PhotoSlide({slideData, photoNo, isMobile}) {
 	return isMobile ? (
 		<li className='glide__slide'>{dynamicImg}</li>
 	) : (
-		<div className='item'>{dynamicImg}</div>
+		<div className='item glide__slide'>{dynamicImg}</div>
 	);
 }
 
