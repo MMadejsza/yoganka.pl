@@ -29,7 +29,7 @@ export const CAMPS_DATA = [
 			fullDesc: `Wyjątkowa propozycja na jesienny weekend i\u00A0ostatni warsztat w\u00A02025\u00A0roku. Wybieramy się na Mazury, gdzie zaszyjemy się w przytulnej przestrzeni GROM otoczeni lasem. Będziemy odpuszczać wszystko co nie\u00A0służy dzięki jodze, zagłębiać\u00A0się w\u00A0tajniki numerologii oraz odprężymy\u00A0się przy tworzeniu wosków/świec sojowych. Jesienne wieczory poświęcimy na odpoczynek.`,
 			glance: {
 				title: ``,
-				area: `Jezioro Leleskie`,
+				area: `Grom`,
 				accommodation: `Przestrzeń GROM`,
 				price: `1444zł`,
 			},
@@ -288,8 +288,8 @@ export const CAMPS_DATA = [
 			Dołącz do\u00A0nas i\u00A0spraw, by\u00A0Dzień Kobiet był czasem, który\u00A0zapamiętasz na\u00A0długo!`,
 			glance: {
 				title: ``,
-				area: `Ostróda`,
-				accommodation: `Stara Szkoła Wysoka Wieś`,
+				area: `Wysoka Wieś`,
+				accommodation: `Stara Szkoła`,
 				// capacity: `12`,
 				price: `1199zł do 10 stycznia
 				1269zł od 11 stycznia`,
