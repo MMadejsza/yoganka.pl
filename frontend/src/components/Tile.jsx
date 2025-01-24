@@ -10,8 +10,12 @@ function Tile({data, today}) {
 	const isPast = data.date < today;
 	const navigate = useNavigate();
 	const location = useLocation();
-	const isModalPath = location.pathname === `/${data.fileName}`;
+	const isModalPath = location.pathname === `/${data.link}`;
 	const [isModalOpen, setIsModalOpen] = useState(isModalPath);
+	console.log(`isModalPath ${isModalPath}
+		location.pathname ${location.pathname}
+		data.link ${data.link}
+		`);
 
 	const conditionalClasses = [
 		'tile',
@@ -23,7 +27,7 @@ function Tile({data, today}) {
 
 	const handleOpenModal = () => {
 		setIsModalOpen(true);
-		navigate(`/${data.fileName}`, {state: {background: location}});
+		navigate(`/${data.link}`, {state: {background: location}});
 	};
 
 	const handleCloseModal = () => {

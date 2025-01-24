@@ -14,7 +14,7 @@ const router = createBrowserRouter([
 		element: <RootPage />,
 		children: [
 			{index: true, element: <HomePage />},
-			{path: ':fileName', element: <HomePage />},
+			{path: ':link', element: <CampsPage />},
 			{path: 'wyjazdy', element: <CampsPage />},
 			{path: 'wydarzenia', element: <EventsPage />},
 			{path: 'zajecia', element: <ClassesPage />},
@@ -22,8 +22,6 @@ const router = createBrowserRouter([
 		],
 		errorElement: <ErrorPage />,
 	},
-	{},
-	{},
 ]);
 
 function App() {
