@@ -4,6 +4,118 @@ const htmlToImgsPath = `/imgs`;
 export const CAMPS_DATA = [
 	// Add comments for each property
 	{
+		id: `CA07`,
+		name: `Peak yoga`,
+		type: `camp`,
+		date: `2025-08-05`,
+		link: `camp-peak-yoga`,
+		fileName: `camp_peak_yoga`,
+		imgPath: `${htmlToImgsPath}/offer/camps/camp_peak_yoga/front`,
+		galleryPath: `${htmlToImgsPath}/offer/camps/camp_peak_yoga/gallery`,
+		gallerySize: 6,
+		eventType: ``,
+		extraClass: `long`,
+		front: {
+			title: `Peak yoga camp, wakacje z\u00A0jogą w\u00A0górach`,
+			dates: [`05-10.08.2025`],
+			location: `Karpaty`,
+			desc: `...`,
+			btnsContent: [],
+		},
+		modal: {
+			fullDescTitle: ``,
+			fullDesc: `Wakacje z\u00A0jogą, czyli aż\u00A06 dni wytchnienia w\u00A0górskim raju. Poziomkowa Górka to miejsce, gdzie natura spotyka\u00A0się z\u00A0harmonią ciała i\u00A0ducha. Poranki z\u00A0widokiem na\u00A0szczyty,  kojące górskie powietrze, joga, medytacja, piesze wędrówki sprawią, że\u00A0to będzie wyjątkowy czas. To moment tylko dla\u00A0Ciebie – na\u00A0oddech, zwolnienie tempa i\u00A0odnalezienie równowagi w magicznej atmosferze górskiego spokoju. Harmonogram jest poglądowy, stałą częścią dnia będą posiłki i\u00A0sesje jogi. W czasie wolnym piesze wędrówki, lokalne wycieczki wg. uznania. Wieczory to czas na\u00A0regenerację i\u00A0odpoczynek np. w\u00A0saunie. Warsztat ceramiczny w\u00A0przygotowaniu, odbędzie\u00A0się w\u00A0wybrany\u00A0dzień.`,
+			glance: {
+				title: ``,
+				area: `Beskid Wyspowy`,
+				accommodation: `Poziomkowa Górka`,
+				price: `3011zł*`,
+			},
+
+			plan: {
+				title: `Slow menu`,
+				schedule: [
+					{
+						'day': 'Wtorek:',
+						'17:00': 'Możliwość przyjazdu, spacery',
+						'18:00': `Spotkanie przy stole -\u00A0wspólna kolacja`,
+						'19:30': 'Joga wieczorna',
+					},
+					{
+						'day': 'Środa - Sobota:',
+						'08:30': 'Poranna joga',
+						'10:00': 'Niespieszne śniadanie',
+						'11:00': `Górskie wędrówki`,
+						'15:00': `Spotkanie przy stole -\u00A0wspólny obiad`,
+						'19:00': `Joga wieczorna (yin/nidra/hatha)`,
+					},
+					{
+						'day': 'Niedziela:',
+						'08:30': 'Joga pożegnalna (1,5h)',
+						'10:00': 'Niespieszne śniadanie',
+						'11:00': `Pożegnanie i\u00A0wyjazd`,
+					},
+					{
+						'day': '*Uwagi*',
+						'*': 'Przedstawione informacje są poglądowe',
+						'**': 'Godziny mogą ulec zmianie',
+						'***': `W przygotowaniu warsztat kreatywny `,
+					},
+				],
+			},
+			summary: {
+				included: {
+					title: `Cena zawiera:`,
+					list: [
+						`11h jogi`,
+						`3h medytacji`,
+						`2h mindfulness`,
+						`Warsztat kreatywny`,
+						`3 pyszne posiłki dziennie`,
+						`5 noclegów`,
+					],
+				},
+				optional: {
+					title: `Poszerz slow menu:`,
+					list: [`Masaże`, `Sauna`, `Jacuzzi`],
+				},
+				freeTime: {
+					title: `W czasie wolnym:`,
+					//(note: statuses are free/optional/available for different icons)
+					list: [
+						{status: `free`, activity: `Górskie wędrówki`},
+						{status: `free`, activity: `Zwiedzanie okolic`},
+						{
+							status: `free`,
+							activity: `Wycieczki (np. skansen w\u00A0Laskowej, nad\u00A0jezioro)`,
+						},
+						{status: `free`, activity: `Relaks`},
+						{status: `optional`, activity: `Sauna`},
+						{status: `optional`, activity: `Jacuzzi`},
+					],
+				},
+			},
+			note: ``,
+			btnsContent: [
+				{
+					action: 'classic',
+					text: `WhatsApp`,
+					link: whatsAppTemplate(),
+					icon: 'fa-brands fa-whatsapp',
+				},
+				{
+					action: 'classic',
+					text: `Wypełnij formularz`,
+					link: `https://forms.gle/fX2Dx8KJaBhQFEGh9`,
+				},
+			],
+			// questionTemplate(subject) {
+			// 	return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
+			// },
+			program: {},
+		},
+	},
+	{
 		id: `CA06`,
 		name: `Energia liczb`,
 		type: `camp`,
@@ -78,7 +190,7 @@ export const CAMPS_DATA = [
 					],
 				},
 				freeTime: {
-					title: `W Czasie Wolnym:`,
+					title: `W czasie wolnym:`,
 					//(note: statuses are free/optional/available for different icons)
 					list: [
 						{status: `free`, activity: `Leśne spacery`},
@@ -179,11 +291,11 @@ export const CAMPS_DATA = [
 					],
 				},
 				excluded: {
-					title: `Poszerz Slow Menu:`,
+					title: `Poszerz slow menu:`,
 					list: [`Masaże`, `Zabiegi spa`],
 				},
 				freeTime: {
-					title: `W Czasie Wolnym:`,
+					title: `W czasie wolnym:`,
 					//(note: statuses are free/optional/available for different icons)
 					list: [
 						{status: `free`, activity: `Wycieczki rowerowe`},
@@ -343,7 +455,7 @@ export const CAMPS_DATA = [
 					],
 				},
 				freeTime: {
-					title: `W Czasie Wolnym:`,
+					title: `W czasie wolnym:`,
 					//(note: statuses are free/optional/available for different icons)
 					list: [
 						{
@@ -455,14 +567,14 @@ export const CAMPS_DATA = [
 					],
 				},
 				optional: {
-					title: `Poszerz Slow Menu:`,
+					title: `Poszerz slow menu:`,
 					list: [
 						`Masaż Kobido 200zł/1h`,
 						`Masaż Misami Tybetańskimi koszt na miejscu 150 zł`,
 					],
 				},
 				freeTime: {
-					title: `W Czasie Wolnym:`,
+					title: `W czasie wolnym:`,
 					//(note: statuses are free/optional/available for different icons)
 					list: [
 						{
@@ -579,7 +691,7 @@ export const CAMPS_DATA = [
 					],
 				},
 				optional: {
-					title: `Poszerz Slow Menu:`,
+					title: `Poszerz slow menu:`,
 					list: [
 						`Masaż Kobido 30zł/30min`,
 						`Masaż Misami Tybetańskimi 120 zł/45min`,
@@ -587,7 +699,7 @@ export const CAMPS_DATA = [
 					],
 				},
 				freeTime: {
-					title: `W Czasie Wolnym:`,
+					title: `W czasie wolnym:`,
 					//(note: statuses are free/optional/available for different icons)
 					list: [
 						{
