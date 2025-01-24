@@ -13,9 +13,10 @@ const menuSet = [
 	{
 		name: 'Wydarzenia',
 		icon: 'notifications', // Bell symbolizes mindfulness and yoga-related events
-		link: '/wydarzenia',
-		// link: '#wydarzenia',
-		// action: smoothScrollInto, //to delete
+		// link: '/wydarzenia',
+		link: '/',
+		scroll: '#wydarzenia',
+		action: smoothScrollInto, //to delete
 	},
 	{
 		name: 'Certyfikaty',

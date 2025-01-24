@@ -12,8 +12,17 @@ export const smoothScrollInto = (e, navigate, location) => {
 		const targetSection = document.querySelector(targetSelector);
 		// If section exists - scroll to it
 		if (targetSection) {
-			// Apply desired way of scrolling
-			targetSection.scrollIntoView({behavior: 'smooth'});
+			// Calculate position to move including offset
+			const offset = 80;
+			// Section top position + current view position - offset
+			const targetPosition =
+				targetSection.getBoundingClientRect().top + window.scrollY - offset;
+
+			// Action
+			window.scrollTo({
+				top: targetPosition,
+				behavior: 'smooth',
+			});
 		}
 	}, 500);
 };
