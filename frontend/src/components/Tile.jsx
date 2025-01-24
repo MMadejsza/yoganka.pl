@@ -10,7 +10,7 @@ function Tile({data, today}) {
 	const isPast = data.date < today;
 	const navigate = useNavigate();
 	const location = useLocation();
-	const isModalPath = location.pathname === `/${data.link}`;
+	const isModalPath = location.pathname.includes(data.link);
 	const [isModalOpen, setIsModalOpen] = useState(isModalPath);
 	console.log(`isModalPath ${isModalPath}
 		location.pathname ${location.pathname}
@@ -27,7 +27,8 @@ function Tile({data, today}) {
 
 	const handleOpenModal = () => {
 		setIsModalOpen(true);
-		navigate(`/${data.link}`, {state: {background: location}});
+		const subpage = data.type == 'camp' ? 'wyjazdy' : 'wydarzenia';
+		navigate(`/${subpage}/${data.link}`, {state: {background: location}});
 	};
 
 	const handleCloseModal = () => {
