@@ -33,6 +33,7 @@ $colors: (
 );
 
 $active-box-shadow: (rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px);
+$active-box-shadow-reverse: (rgba(0, 0, 0, 0.3) 0px -19px 38px, rgba(0, 0, 0, 0.22) 0px -15px 12px);
 $shadows: (
 	transitive-box-shadow: (
 		(map.get($colors, base)) 0px 25px 52px 78px,
@@ -57,9 +58,10 @@ $shadows: (
 		rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset,
 	),
 	tile-shadow-reverse: (
+		$active-box-shadow-reverse,
 		rgba(50, 50, 93, 0.25) 0px -50px 100px -20px,
 		rgba(0, 0, 0, 0.3) 0px -30px 60px -30px,
-		rgba(10, 37, 64, 0.35) 0px 2px 6px 0px inset,
+		rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset,
 	),
 	box-shadow: (
 		2px 8px 10px rgba(149, 157, 165, 0.2),

@@ -12,6 +12,7 @@ function CampsBenefitsSection() {
 					return (
 						<div
 							className={`${classy}bullet-container`}
+							tabindex='0'
 							key={index}>
 							<article
 								key={benefit.title}
