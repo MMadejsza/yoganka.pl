@@ -2,11 +2,223 @@ import {whatsAppTemplate} from '../utils/utils.jsx';
 const htmlToImgsPath = `/imgs`;
 
 export const CAMPS_DATA = [
+	// Add comments for each property
+	{
+		id: `CA06`,
+		name: `Energia liczb`,
+		type: `camp`,
+		date: `2025-10-24`,
+		link: `camp-energia-liczb`,
+		fileName: `camp_energia_liczb`,
+		imgPath: `${htmlToImgsPath}/offer/camps/camp_energia_liczb/front`,
+		galleryPath: `${htmlToImgsPath}/offer/camps/camp_energia_liczb/gallery`,
+		gallerySize: 5,
+		eventType: ``,
+		extraClass: ``,
+		front: {
+			title: `Energia liczb i\u00A0moc\u00A0jogi  
+					Joga |\u00A0Numerologia
+					|\u00A0Aromaterapia`,
+			dates: [`24-26.10.2025`],
+			location: `Mazury`,
+			desc: `...`,
+			btnsContent: [],
+		},
+		modal: {
+			fullDescTitle: ``,
+			fullDesc: `Wyjątkowa propozycja na jesienny weekend i\u00A0ostatni warsztat w\u00A02025\u00A0roku. Wybieramy się na Mazury, gdzie zaszyjemy się w przytulnej przestrzeni GROM otoczeni lasem. Będziemy odpuszczać wszystko co nie\u00A0służy dzięki jodze, zagłębiać\u00A0się w\u00A0tajniki numerologii oraz odprężymy\u00A0się przy tworzeniu wosków/świec sojowych. Jesienne wieczory poświęcimy na odpoczynek.`,
+			glance: {
+				title: ``,
+				area: `Jezioro Leleskie`,
+				accommodation: `Przestrzeń GROM`,
+				price: `1444zł`,
+			},
+
+			plan: {
+				title: `Slow Menu`,
+				schedule: [
+					{
+						'day': 'Piątek:',
+						'16:00': 'Możliwość przyjazdu, spacery',
+						'17:00': 'Joga wieczorna (1,5h)',
+						'19:00': `Spotkanie przy stole -\u00A0wspólna kolacja`,
+						'21:00': `Regeneracja w\u00A0saunie`,
+					},
+					{
+						'day': 'Sobota:',
+						'08:00': 'Joga na dobry dzień (Slow Flow Vinyasa 1h)',
+						'09:30': 'Niespieszne śniadanie',
+						'11:11': `Warsztat numerologii z Olgą Siedorow`,
+						'14:00': `Spotkanie przy stole -\u00A0wspólny obiad`,
+						'17:00': `Warsztat tworzenia wosków/świec\u00A0sojowych (2h)`,
+						'19:00': `Spotkanie przy stole -\u00A0wspólna kolacja`,
+						'20:30': 'Joga Nidra',
+					},
+					{
+						'day': 'Niedziela:',
+						'08:30': 'Joga pożegnalna (1,5h)',
+						'10:00': 'Niespieszne śniadanie',
+						'11:00': `Spacery /\u00A0czas\u00A0wolny`,
+						'13:30': `Lunch i\u00A0pożegnanie`,
+						'*': 'Godziny mogą ulec zmianie',
+					},
+				],
+			},
+			summary: {
+				included: {
+					title: `Cena zawiera:`,
+					list: [
+						`5h jogi`,
+						`2h warsztatów numerologii`,
+						`2h warsztatów aromaterapii`,
+						`3 pyszne posiłki dziennie`,
+						`2 noclegi`,
+						`Sauna`,
+						`Upominek`,
+					],
+				},
+				freeTime: {
+					title: `W Czasie Wolnym:`,
+					//(note: statuses are free/optional/available for different icons)
+					list: [
+						{status: `free`, activity: `Leśne spacery`},
+						{status: `free`, activity: `Pogaduchy`},
+						{status: `free`, activity: `Relaks`},
+					],
+				},
+			},
+			note: `Gotowa na jesienne otulenie?`,
+			btnsContent: [
+				{
+					action: 'classic',
+					text: `WhatsApp`,
+					link: whatsAppTemplate(),
+					icon: 'fa-brands fa-whatsapp',
+				},
+				{
+					action: 'classic',
+					text: `Wypełnij formularz`,
+					link: `https://forms.gle/fX2Dx8KJaBhQFEGh9`,
+				},
+			],
+			// questionTemplate(subject) {
+			// 	return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
+			// },
+			program: {},
+		},
+	},
+	{
+		id: `CA05`,
+		name: `Ajurweda`,
+		type: `camp`,
+		date: `2025-05-16`,
+		link: `camp-krawczyki`,
+		fileName: `camp_krawczyki`,
+		imgPath: `${htmlToImgsPath}/offer/camps/camp_krawczyki/front`,
+		galleryPath: `${htmlToImgsPath}/offer/camps/camp_krawczyki/gallery`,
+		gallerySize: 7,
+		eventType: ``,
+		extraClass: ``,
+		front: {
+			title: `Joga | SPA | Ajurweda`,
+			dates: [`16-18.05.2025`],
+			location: `Warmia`,
+			desc: `...`,
+			btnsContent: [],
+		},
+		modal: {
+			fullDescTitle: ``,
+			fullDesc: `Joga w\u00A0agroturystyce z\u00A0profesjonalnymi zabiegami spa to\u00A0doskonała propozycja na\u00A0wiosenne przebudzenie oraz\u00A0odprężenie. Rojst słynie z\u00A0leczniczej borowiny, której nie\u00A0omieszkamy wypróbować. Warsztaty ajurwedy będą dopełnieniem weekendu,  pokazując Ci możliwości harmonijnego życia. Położenie ośrodka sprzyja rowerowym wycieczkom, gdyż\u00A0nieopodal rozciąga\u00A0się malowniczka ścieżka GreenVelo!`,
+			glance: {
+				title: ``,
+				area: `Krawczyki k. Bartoszyc`,
+				accommodation: `Rojst Borowinowy Las`,
+				price: `1333zł`,
+			},
+
+			plan: {
+				title: `Slow Menu`,
+				schedule: [
+					{
+						'day': 'Piątek:',
+						'16:00': 'Możliwość przyjazdu, spacery',
+						'18:00': 'Joga wieczorna',
+						'19:00': `Spotkanie przy stole -\u00A0wspólna kolacja`,
+						'21:00': `Relaks w\u00A0saunie z\u00A0balią`,
+					},
+					{
+						'day': 'Sobota:',
+						'09:00': 'Joga Slow Flow Vinyasa',
+						'10:00': 'Niespieszne śniadanie',
+						'11:30': `Pierwsze zabiegi w\u00A0spa /\u00A0czas wolny/\u00A0spacery /\u00A0wycieczka\u00A0rowerowa`,
+						'15:00': `Spotkanie przy stole -\u00A0wspólny obiad`,
+						'16:30': 'Ajurweda',
+						'19:00': `Spotkanie przy stole -\u00A0wspólna kolacja`,
+						'20:30': 'Joga na dobranoc',
+					},
+					{
+						'day': 'Niedziela:',
+						'08:30': 'Poranna joga (1,5h)',
+						'10:00': 'Niespieszne śniadanie',
+						'11:00': `Zabiegi w\u00A0spa /\u00A0czas\u00A0wolny`,
+						'13:30': `Lunch i\u00A0pożegnanie`,
+					},
+				],
+			},
+			summary: {
+				included: {
+					title: `Cena zawiera:`,
+					list: [
+						`5h jogi`,
+						`2h Warsztat ajurwedy`,
+						`3 pyszne posiłki dziennie`,
+						`2 noclegi`,
+						`Rowery (8 sztuk)`,
+						`Bilard`,
+						`Kawa / Herbata / Napary\u00A024/h`,
+					],
+				},
+				excluded: {
+					title: `Poszerz Slow Menu:`,
+					list: [`Masaże`, `Zabiegi spa`],
+				},
+				freeTime: {
+					title: `W Czasie Wolnym:`,
+					//(note: statuses are free/optional/available for different icons)
+					list: [
+						{status: `free`, activity: `Wycieczki rowerowe`},
+						{status: `free`, activity: `Spacery`},
+						{status: `optional`, activity: `Masaże`},
+						{status: `optional`, activity: `Zabiegi spa`},
+					],
+				},
+			},
+			note: `Gotowa na wiosenne odprężenie?`,
+			btnsContent: [
+				{
+					action: 'classic',
+					text: `WhatsApp`,
+					link: whatsAppTemplate(),
+					icon: 'fa-brands fa-whatsapp',
+				},
+				{
+					action: 'classic',
+					text: `Wypełnij formularz`,
+					link: `https://forms.gle/fX2Dx8KJaBhQFEGh9`,
+				},
+			],
+			// questionTemplate(subject) {
+			// 	return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
+			// },
+			program: {},
+		},
+	},
 	{
 		id: `CA04`,
 		name: `Summer Chill Camp`,
 		type: `camp`,
 		date: `2025-06-28`,
+		link: `camp-summer-chill`,
 		fileName: `camp_chill`,
 		imgPath: `${htmlToImgsPath}/offer/camps/camp_chill/front`,
 		galleryPath: `${htmlToImgsPath}/offer/camps/camp_chill/gallery`,
@@ -48,10 +260,10 @@ export const CAMPS_DATA = [
 	},
 	{
 		id: `CA03`,
-		name: `Kobieca harmonia -
-		JOGA | ASTROLOGIA | ECSTATIC DANCE`,
+		name: `Kobieca harmonia`,
 		type: `camp`,
 		date: `2025-03-07`,
+		link: `camp-harmonia`,
 		fileName: `camp_harmonia`,
 		imgPath: `${htmlToImgsPath}/offer/camps/camp_harmonia/front`,
 		galleryPath: `${htmlToImgsPath}/offer/camps/camp_harmonia/gallery`,
@@ -63,7 +275,7 @@ export const CAMPS_DATA = [
 					Joga | Astrologia
 					| Ecstatic Dance`,
 			dates: [`07-09.03.2025`],
-			location: `Stara Szkoła Wysoka Wieś`,
+			location: `Mazury`,
 			desc: `...`,
 			btnsContent: [],
 		},
@@ -97,7 +309,7 @@ export const CAMPS_DATA = [
 					{
 						'day': 'Sobota:',
 						'08:00': 'Joga Slow Flow Vinyasa',
-						'10:00': 'Niespieszne śniadanko',
+						'10:00': 'Niespieszne śniadanie',
 						'11:30': `Aktywuj swoją wenus, warsztaty astrologiczne z\u00A0kubkiem kakao`,
 						'15:00': 'Obiad',
 						'16:30': 'CZAS WOLNY',
@@ -109,10 +321,11 @@ export const CAMPS_DATA = [
 					{
 						'day': 'Niedziela:',
 						'08:00': 'Joga Slow Flow Vinyasa',
-						'09:45': 'Niespieszne śniadanko',
+						'09:45': 'Niespieszne śniadanie',
 						'11:00': `spacer leśny w ciszy`,
 						'12:00': 'Sesja Mindfulness',
-						'13:30': `Lunch i\u00A0wyjazd do\u00A0domu`,
+						'13:30': `Lunch i\u00A0pożegnanie`,
+						'*': 'Godziny mogą ulec zmianie',
 					},
 				],
 			},
@@ -168,6 +381,7 @@ export const CAMPS_DATA = [
 		name: `Kojenie Zmysłów -\u00A0Kaszuby`,
 		type: `camp`,
 		date: `2024-10-11`,
+		link: `camp-kaszuby`,
 		fileName: `camp_kaszuby`,
 		imgPath: `${htmlToImgsPath}/offer/camps/camp_kaszuby/front`,
 		galleryPath: `${htmlToImgsPath}/offer/camps/camp_kaszuby/gallery`,
@@ -222,7 +436,7 @@ export const CAMPS_DATA = [
 						Joga Slow Flow`,
 						'09:30': 'Nieśpieszne śniadanie',
 						'CZAS WOLNY': '',
-						'13:00': 'Lunch i pożegnanie',
+						'13:00': `Lunch i\u00A0pożegnanie`,
 						'*': 'zmysł czucia głębokiego, ciała w przestrzeni',
 					},
 				],
@@ -283,9 +497,10 @@ export const CAMPS_DATA = [
 	},
 	{
 		id: `CA02`,
-		name: `Comfy slow weekend - Warmia`,
+		name: `Comfy slow`,
 		type: `camp`,
 		date: `2024-11-08`,
+		link: `camp-warmia`,
 		fileName: `camp_warmia`,
 		imgPath: `${htmlToImgsPath}/offer/camps/camp_warmia/front`,
 		galleryPath: `${htmlToImgsPath}/offer/camps/camp_warmia/gallery`,
@@ -347,7 +562,7 @@ export const CAMPS_DATA = [
 						'08:30': `Joga Slow Flow`,
 						'09:30': 'Niespieszne śniadanie',
 						'CZAS WOLNY': '',
-						'13:00': 'Lunch i powrót do domu',
+						'13:00': `Lunch i\u00A0pożegnanie`,
 					},
 				],
 			},
