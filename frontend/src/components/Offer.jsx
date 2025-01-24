@@ -1,5 +1,5 @@
 import Tile from './Tile.jsx';
-import {Link, useNavigate, useLocation} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 function Offer({id, specifier, header, data, today, limit, moreLink}) {
 	let classy = 'offer-type';

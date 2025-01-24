@@ -20,7 +20,7 @@ const products = [
 		id: 'wydarzenia',
 		header: `Wydarzenia`,
 		data: EVENTS_DATA,
-		moreLink: '/wydarzenia',
+		// moreLink: '/wydarzenia',
 		specifier: 'events',
 	},
 ];
