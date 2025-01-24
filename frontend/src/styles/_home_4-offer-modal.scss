@@ -156,11 +156,13 @@
 	}
 	// full name for specificity required by i in font awesome
 	.modal__icon {
-		min-width: 3.5rem;
-		height: 3.5rem;
-		margin: 0;
+		$size: 3.5rem;
 
-		line-height: 3.5rem;
+		min-width: $size;
+		height: $size;
+		margin: 0;
+		font-size: $size;
+		line-height: $size;
 		text-align: center;
 		color: map.get(var.$colors, accent-bcg);
 	}
