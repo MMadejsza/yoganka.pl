@@ -394,7 +394,7 @@ export const CAMPS_DATA = [
 		   | SPA | SkinCare`,
 			dates: [`11-13/10/2024`],
 			location: `Kaszuby`,
-			desc: ``,
+			desc: `...`,
 			btnsContent: [],
 		},
 		modal: {
@@ -513,7 +513,7 @@ export const CAMPS_DATA = [
 		   | Misy\u00A0i\u00A0gongi`,
 			dates: [`08-11.11.2024`],
 			location: `Warmia`,
-			desc: ``,
+			desc: `...`,
 			btnsContent: [],
 		},
 
