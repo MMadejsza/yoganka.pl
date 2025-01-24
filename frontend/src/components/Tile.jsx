@@ -12,10 +12,6 @@ function Tile({data, today}) {
 	const location = useLocation();
 	const isModalPath = location.pathname.includes(data.link);
 	const [isModalOpen, setIsModalOpen] = useState(isModalPath);
-	console.log(`isModalPath ${isModalPath}
-		location.pathname ${location.pathname}
-		data.link ${data.link}
-		`);
 
 	const conditionalClasses = [
 		'tile',
