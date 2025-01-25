@@ -60,7 +60,7 @@
 		bottom: 0;
 		padding: 0.5rem;
 		border-radius: 50px;
-		background-color: rgba(map.get(var.$colors, accent-bcg), 0.03);
+		background-color: rgba(map.get(var.$colors, nav), 0.7);
 	}
 	&__bullet {
 		width: 1rem;

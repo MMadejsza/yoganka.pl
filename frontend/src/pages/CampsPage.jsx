@@ -7,8 +7,8 @@ import {CAMPS_DATA} from '../DATA/CAMPS_DATA.js';
 
 const products = [{id: 'wyjazdy', header: `Wybierz swój wyjazd`, data: CAMPS_DATA, limit: 0}];
 function CampsPage() {
-	const mediaQuery = window.matchMedia('(max-width: 1025px)');
-	const isMobile = mediaQuery.matches;
+	// const mediaQuery = window.matchMedia('(max-width: 1025px)');
+	// const isMobile = mediaQuery.matches;
 	return (
 		<>
 			<CampsIntoSection />

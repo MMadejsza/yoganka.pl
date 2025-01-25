@@ -9,7 +9,13 @@ import {renderJointGalery} from '../../utils/utils.jsx';
 
 function GlideContainer({placement, glideConfig, glideBreakpoints, slides, type}) {
 	const glideRef = useRef(null);
-
+	const totalPhotosNumber = (slides) => {
+		let counter = 0; // Zainicjowanie zmiennej counter
+		slides.forEach((camp) => {
+			counter += camp.gallerySize; // Sumowanie gallerySize dla każdego campa
+		});
+		return counter; // Zwrócenie wyniku
+	};
 	useEffect(() => {
 		// double checking if component is rendered
 		if (glideRef.current) {
@@ -80,9 +86,9 @@ function GlideContainer({placement, glideConfig, glideBreakpoints, slides, type}
 		}
 	};
 	const renderBullets = () => {
-		const bulletsCount = isPhoto ? slides.size : slides.data.length;
+		const counter = type !== 'allPhotos' ? slides.size : totalPhotosNumber(slides);
 
-		return Array.from({length: bulletsCount}).map((_, index) => (
+		return Array.from({length: counter}).map((_, index) => (
 			<button
 				key={index}
 				className='glide__bullet'
@@ -102,11 +108,11 @@ function GlideContainer({placement, glideConfig, glideBreakpoints, slides, type}
 				</ul>
 			</div>
 
-			{/* <div
+			<div
 				className='glide__bullets'
 				data-glide-el='controls[nav]'>
 				{renderBullets()}
-			</div> */}
+			</div>
 
 			<div
 				className='glide__arrows'
