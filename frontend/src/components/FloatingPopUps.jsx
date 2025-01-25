@@ -83,7 +83,7 @@ function FloatingPopUps() {
 					className={`pop-ups__single pop-ups__single--gift ml-onclick-form`}
 					href='#'
 					onClick={handleClickNewsletter}>
-					<span className='material-symbols-outlined pop-ups__icon'>mail</span>
+					<span className='material-symbols-rounded pop-ups__icon'>mail</span>
 				</a>
 			)}
 
@@ -94,7 +94,7 @@ function FloatingPopUps() {
 					href='#'
 					onClick={(e) => e.preventDefault()}>
 					{/* <i className={`pop-ups__icon fas fa-cookie-bite fa-bounce`} /> */}
-					<span className='material-symbols-outlined pop-ups__icon'>cookie</span>
+					<span className='material-symbols-rounded pop-ups__icon'>cookie</span>
 					<div className={`pop-ups__body`}>
 						<div className={`pop-ups__body--msg`}>
 							Używamy tylko niezbędnych plików cookie.

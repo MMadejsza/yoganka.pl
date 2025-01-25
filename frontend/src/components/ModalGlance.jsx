@@ -22,7 +22,7 @@ function CampGlance({glance}) {
 					key={index}
 					className='modal__li modal__li--at-glance'>
 					{/* <i className={`${icons[key] || 'fa-solid fa-check'} modal__icon`} /> */}
-					<span className='material-symbols-outlined modal__icon'>{icons[key]}</span>
+					<span className='material-symbols-rounded modal__icon'>{icons[key]}</span>
 					{text}
 				</li>
 			));

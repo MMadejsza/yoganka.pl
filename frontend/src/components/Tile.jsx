@@ -86,7 +86,7 @@ function Tile({data, today}) {
 					{btn.icon ? (
 						<i className={`${btn.icon} nav__icon`}></i>
 					) : btn.symbol ? (
-						<span className='material-symbols-outlined nav__icon'>{btn.symbol}</span>
+						<span className='material-symbols-rounded nav__icon'>{btn.symbol}</span>
 					) : null}
 					{btn.text}
 				</a>

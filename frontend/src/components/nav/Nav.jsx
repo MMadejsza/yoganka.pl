@@ -102,7 +102,7 @@ function Nav({setIsNavOpen}) {
 								className='nav__link'
 								data-scroll={li.scroll}>
 								{li.icon != '' ? (
-									<span className='material-symbols-outlined nav__icon'>
+									<span className='material-symbols-rounded nav__icon'>
 										{li.icon}
 									</span>
 								) : null}
@@ -123,7 +123,7 @@ function Nav({setIsNavOpen}) {
 										<span
 											className={`${li.icon} nav__icon ${
 												isActive ? 'active' : ''
-											} material-symbols-outlined nav__icon`}>
+											} material-symbols-rounded nav__icon`}>
 											{li.icon}
 										</span>
 										{li.name}

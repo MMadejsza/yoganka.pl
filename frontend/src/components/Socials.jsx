@@ -11,7 +11,7 @@ function Socials({leadingClass, items}) {
 					<div className={`${leadingClass}__social`}>
 						{/* {social.materialSymbol ? (
 							<span
-								className={`material-symbols-outlined ${leadingClass}__social-icon ${social.materialSymbol}`}>
+								className={`material-symbols-rounded ${leadingClass}__social-icon ${social.materialSymbol}`}>
 								{social.materialSymbol}
 							</span>
 						) : ( */}

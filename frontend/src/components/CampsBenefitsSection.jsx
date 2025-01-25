@@ -18,7 +18,7 @@ function CampsBenefitsSection() {
 								key={benefit.title}
 								className={`${classy}bullet`}>
 								<aside className={`${classy}symbol-container`}>
-									<span className={`material-symbols-outlined ${classy}symbol`}>
+									<span className={`material-symbols-rounded ${classy}symbol`}>
 										{benefit.symbol}
 									</span>
 								</aside>

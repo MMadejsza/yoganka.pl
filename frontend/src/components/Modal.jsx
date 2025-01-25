@@ -74,7 +74,7 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 									className={`${btn.icon} nav__icon`}
 									style={{paddingRight: '1rem'}}></i>
 							) : btn.symbol ? (
-								<span className='material-symbols-outlined nav__icon'>
+								<span className='material-symbols-rounded nav__icon'>
 									{btn.symbol}
 								</span>
 							) : null}
