@@ -58,10 +58,9 @@
 	position: relative;
 	min-height: 472px;
 	display: flex;
+
 	flex-direction: column;
 	flex-basis: 90%;
-	align-items: center;
-	justify-content: space-between;
 	gap: 2rem;
 
 	padding: 2.5rem 1rem;
@@ -75,9 +74,6 @@
 		box-shadow: map.get(var.$shadows, tile-shadow);
 	}
 
-	&--event {
-		justify-content: inherit;
-	}
 	&--classes {
 		.tile__title {
 			height: 100%;

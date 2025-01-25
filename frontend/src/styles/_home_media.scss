@@ -80,19 +80,7 @@
 	.about__certificates {
 		min-width: 65%;
 	}
-	.section--header {
-		grid-column: 1 /-1;
-	}
-	.offer-type {
-		&__header {
-			@extend .section--header;
-		}
 
-		&--events {
-			display: grid;
-			grid-template-columns: minmax(300px, 400px);
-		}
-	}
 	.modal {
 		&__modal-body {
 			gap: 2rem 1.5rem;
@@ -204,8 +192,14 @@
 		}
 
 		&--event {
+			$height: $title-font-size * 2 + 1.8 * $title-line-height;
 			.tile__title {
-				height: $title-font-size * 2 + 1.8 * $title-line-height;
+				height: $height;
+			}
+			.tile__date,
+			.tile__location {
+				word-wrap: break-word;
+				height: $height;
 			}
 		}
 	}
@@ -217,23 +211,14 @@
 			'wydarzenia wydarzenia';
 
 		.offer-type {
-			width: 100%;
-			grid-template-columns: repeat(auto-fit, minmax(345px, 1fr));
-			grid-gap: 2.5rem 2rem;
+			.tile {
+				flex-basis: 47%;
+			}
 
 			&--events {
-				display: grid;
-				width: 100%;
-				grid-template-columns: repeat(auto-fill, minmax(235px, 1fr));
-
 				& .tile {
 					max-width: 500px;
-
-					&:nth-last-of-type(1) {
-						justify-self: center;
-						grid-column: span 2;
-						width: 50%;
-					}
+					flex-basis: 31%;
 				}
 			}
 		}
@@ -405,23 +390,7 @@
 		}
 	}
 }
-@media (min-width: 800px) {
-	.offer {
-		.offer-type {
-			&--events {
-				grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
 
-				& .tile {
-					&:nth-last-of-type(1) {
-						justify-self: auto;
-						grid-column: auto;
-						width: auto;
-					}
-				}
-			}
-		}
-	}
-}
 @media (min-width: 960px) {
 	.burger {
 		$bar-height: 0.6rem;
@@ -523,7 +492,6 @@
 		display: none;
 	}
 	.nav {
-		// grid-area: nav;
 		top: 0;
 		left: 0;
 		width: 100%;
@@ -637,12 +605,15 @@
 			'wydarzenia wydarzenia wydarzenia wydarzenia';
 
 		.offer-type {
-			grid-template-columns: repeat(auto-fit, minmax(225px, 1fr));
-			align-items: stretch;
-
+			align-content: flex-start;
+			&#zajecia {
+				.tile {
+					height: -webkit-fill-available;
+					max-height: 87%;
+				}
+			}
 			&--events {
 				grid-area: wydarzenia;
-				grid-template-columns: repeat(auto-fill, minmax(275px, 1fr));
 			}
 		}
 	}
@@ -717,8 +688,6 @@
 		gap: 4rem;
 	}
 	.about {
-		// margin-top: 500px;
-
 		&__img-container {
 			width: 31%;
 		}

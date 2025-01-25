@@ -15,9 +15,9 @@ export const EVENTS_DATA = [
 		eventType: `fixed`,
 		extraClass: `event`,
 		front: {
-			title: `Śniadanie z Yogą`,
+			title: `Śniadanie z\u00A0Yogą`,
 			dates: [`23/02/2025 godz. 8:00`],
-			location: `Restauracja VANA, Garnizon`,
+			location: 'Restauracja VANA, Garnizon',
 			desc: `Rozpocznij swój dzień od harmonijnego połączenia ruchu i smaku! Podczas naszego ...`,
 			btnsContent: [],
 		},
@@ -73,7 +73,119 @@ export const EVENTS_DATA = [
 			freeTime: {},
 		},
 	},
-	// {
+
+	{
+		id: `E03`,
+		name: `YOGA\u00A0&\u00A0SOUND
+		Moon\u00A0Ceremony`,
+		type: `event`,
+		date: `2025-05-21`,
+		link: `yoga&sound`,
+		fileName: `ys`,
+		imgPath: `${htmlToImgsPath}/offer/events/yoga&sound/front`,
+		galleryPath: `${htmlToImgsPath}/offer/events/yoga&sound/front`,
+		gallerySize: 0,
+		eventType: `repetitive`,
+		extraClass: `event`,
+		front: {
+			title: `Yoga\u00A0&\u00A0Sound
+		Moon\u00A0Ceremony`,
+			dates: [`Latem`],
+			location: `Plaże w Gdańsku`,
+			desc: `Joga na\u00A0plaży przy pełni księżyca z\u00A0dźwiękami mis i\u00A0gongów w\u00A0tle, które wprowadzą Cię w\u00A0relaksującą podróż`,
+			btnsContent: [],
+		},
+		modal: {
+			fullDescTitle: `O spotkaniu:`,
+			fullDesc: `Takiego wydarzenia w\u00A0Trójmieście nie\u00A0było. Dźwięki mis\u00A0i\u00A0gongów tworzą kojącą atmosferę, pomagając w\u00A0głębszym relaksie i medytacji. Pod rozgwieżdżonym niebem, wśród szumu fal, każda asana staje się bardziej intymna i\u00A0energetyzująca. Bliskość natury i\u00A0moc pełni księżyca dodają praktyce niezwykłej mocy uzdrawiającej. To idealna okazja, by odprężyć ciało, wyciszyć umysł i\u00A0połączyć się z\u00A0otaczającą cię przyrodą.`,
+			program: {
+				title: `Relaks menu:`,
+				list: [
+					`Joga przy dźwiękach mis\u00A0i\u00A0gongów (gra\u00A0Agnieszka\u00A0Topp)`,
+					`Relaks z\u00A0opaską na\u00A0oczach nasączoną aromatycznymi olejkami`,
+					`Zdrowy napar naszego przepisu`,
+					`Inspirujące rozmowy w\u00A0kręgu`,
+					`Upominek`,
+				],
+			},
+			btnsContent: [
+				{
+					action: 'classic',
+					text: `WhatsApp`,
+					title: `Wiadomość WhatsApp`,
+					link: whatsAppTemplate(),
+					icon: 'fa-brands fa-whatsapp',
+				},
+				// {
+				// 	action: 'classic',
+				// title: `Formularz Google w osobnej zakładce`,
+
+				// 	text: `Wypełnij formularz`,
+				// symbol:`edit`,
+				// 	link: `https://forms.gle/kYN6VpfP3aV1b9yB8`,
+				// },
+			],
+			formLink: `https://forms.gle/kYN6VpfP3aV1b9yB8`,
+			note: ``,
+			// questionTemplate(subject) {
+			// 	return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
+			// },
+			glance: {},
+			plan: {},
+			included: {},
+			excluded: {},
+			optional: {},
+			freeTime: {},
+		},
+	},
+	{
+		id: `E04`,
+		name: `Sup Yoga`,
+		type: `event`,
+		date: `2025-05-22`,
+		fileName: `sup`,
+		link: `sup-yoga`,
+		imgPath: `${htmlToImgsPath}/offer/events/sup/front`,
+		galleryPath: `${htmlToImgsPath}/offer/events/sup/front`,
+		gallerySize: 0,
+		eventType: `repetitive`,
+		extraClass: `event`,
+		front: {
+			title: `Sup Yoga`,
+			dates: [`Latem`],
+			location: `Zatoka Gdańska /\u00A0Jezioro Wysockie`,
+			desc: `Praktyka jogi na\u00A0wodzie, czyli prawdziwe zen\u00A0nature`,
+			btnsContent: [],
+		},
+		modal: {
+			fullDescTitle: `O zajęciach:`,
+			fullDesc: `Zapraszam do\u00A0wodnego studia jogi. Zamieniamy matę na\u00A0deskę SUP. Poprawisz balans, wzmocnisz mięśnie posturalne. Otwarta przestrzeń z\u00A0nieskończonym oknem na\u00A0naturę stanowi doskonałą propozycję na\u00A0ciepłe dni. Czy jest coś wspanialszego od\u00A0jogi na\u00A0powietrzu? Promienie słońca, letni podmuch wiatru i\u00A0szum drzew dopełnią Twoją praktykę.`,
+			program: {
+				title: ``,
+				list: [],
+			},
+			btnsContent: [
+				{
+					action: 'classic',
+					text: `WhatsApp`,
+					title: `Wiadomość WhatsApp`,
+					link: whatsAppTemplate(),
+					icon: 'fa-brands fa-whatsapp',
+				},
+			],
+		},
+		formLink: ``,
+		note: ``,
+		// questionTemplate(subject) {
+		// 	return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
+		// },
+		glance: {},
+		plan: {},
+		included: {},
+		excluded: {},
+		optional: {},
+		freeTime: {},
+	}, // {
 	// 	id: `E01`,
 	// 	name: `Yoga\u00A0&\u00A0Breakfast`,
 	// 	type: `event`,
@@ -193,118 +305,6 @@ export const EVENTS_DATA = [
 	// 		freeTime: {},
 	// 	},
 	// },
-	{
-		id: `E03`,
-		name: `YOGA\u00A0&\u00A0SOUND
-		Moon\u00A0Ceremony`,
-		type: `event`,
-		date: `2025-05-21`,
-		link: `yoga&sound`,
-		fileName: `ys`,
-		imgPath: `${htmlToImgsPath}/offer/events/yoga&sound/front`,
-		galleryPath: `${htmlToImgsPath}/offer/events/yoga&sound/front`,
-		gallerySize: 0,
-		eventType: `repetitive`,
-		extraClass: `event`,
-		front: {
-			title: `YOGA\u00A0&\u00A0SOUND
-		Moon\u00A0Ceremony`,
-			dates: [`Latem`, '', ''],
-			location: `Plaże w Gdańsku`,
-			desc: `Joga na\u00A0plaży przy pełni księżyca z\u00A0dźwiękami mis i\u00A0gongów w\u00A0tle, które wprowadzą Cię w\u00A0relaksującą podróż`,
-			btnsContent: [],
-		},
-		modal: {
-			fullDescTitle: `O spotkaniu:`,
-			fullDesc: `Takiego wydarzenia w\u00A0Trójmieście nie\u00A0było. Dźwięki mis\u00A0i\u00A0gongów tworzą kojącą atmosferę, pomagając w\u00A0głębszym relaksie i medytacji. Pod rozgwieżdżonym niebem, wśród szumu fal, każda asana staje się bardziej intymna i\u00A0energetyzująca. Bliskość natury i\u00A0moc pełni księżyca dodają praktyce niezwykłej mocy uzdrawiającej. To idealna okazja, by odprężyć ciało, wyciszyć umysł i\u00A0połączyć się z\u00A0otaczającą cię przyrodą.`,
-			program: {
-				title: `Relaks menu:`,
-				list: [
-					`Joga przy dźwiękach mis\u00A0i\u00A0gongów (gra\u00A0Agnieszka\u00A0Topp)`,
-					`Relaks z\u00A0opaską na\u00A0oczach nasączoną aromatycznymi olejkami`,
-					`Zdrowy napar naszego przepisu`,
-					`Inspirujące rozmowy w\u00A0kręgu`,
-					`Upominek`,
-				],
-			},
-			btnsContent: [
-				{
-					action: 'classic',
-					text: `WhatsApp`,
-					title: `Wiadomość WhatsApp`,
-					link: whatsAppTemplate(),
-					icon: 'fa-brands fa-whatsapp',
-				},
-				// {
-				// 	action: 'classic',
-				// title: `Formularz Google w osobnej zakładce`,
-
-				// 	text: `Wypełnij formularz`,
-				// symbol:`edit`,
-				// 	link: `https://forms.gle/kYN6VpfP3aV1b9yB8`,
-				// },
-			],
-			formLink: `https://forms.gle/kYN6VpfP3aV1b9yB8`,
-			note: ``,
-			// questionTemplate(subject) {
-			// 	return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
-			// },
-			glance: {},
-			plan: {},
-			included: {},
-			excluded: {},
-			optional: {},
-			freeTime: {},
-		},
-	},
-	{
-		id: `E04`,
-		name: `Sup Yoga`,
-		type: `event`,
-		date: `2025-05-22`,
-		fileName: `sup`,
-		link: `sup-yoga`,
-		imgPath: `${htmlToImgsPath}/offer/events/sup/front`,
-		galleryPath: `${htmlToImgsPath}/offer/events/sup/front`,
-		gallerySize: 0,
-		eventType: `repetitive`,
-		extraClass: `event`,
-		front: {
-			title: `Sup Yoga`,
-			dates: [`Latem`],
-			location: `Zatoka Gdańska /\u00A0Jezioro Wysockie`,
-			desc: `Praktyka jogi na\u00A0wodzie, czyli prawdziwe zen\u00A0nature`,
-			btnsContent: [],
-		},
-		modal: {
-			fullDescTitle: `O zajęciach:`,
-			fullDesc: `Zapraszam do\u00A0wodnego studia jogi. Zamieniamy matę na\u00A0deskę SUP. Poprawisz balans, wzmocnisz mięśnie posturalne. Otwarta przestrzeń z\u00A0nieskończonym oknem na\u00A0naturę stanowi doskonałą propozycję na\u00A0ciepłe dni. Czy jest coś wspanialszego od\u00A0jogi na\u00A0powietrzu? Promienie słońca, letni podmuch wiatru i\u00A0szum drzew dopełnią Twoją praktykę.`,
-			program: {
-				title: ``,
-				list: [],
-			},
-			btnsContent: [
-				{
-					action: 'classic',
-					text: `WhatsApp`,
-					title: `Wiadomość WhatsApp`,
-					link: whatsAppTemplate(),
-					icon: 'fa-brands fa-whatsapp',
-				},
-			],
-		},
-		formLink: ``,
-		note: ``,
-		// questionTemplate(subject) {
-		// 	return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
-		// },
-		glance: {},
-		plan: {},
-		included: {},
-		excluded: {},
-		optional: {},
-		freeTime: {},
-	},
 ].sort((x, y) => {
 	// sort by type: "fixed" before "repetitive"
 	if (x.eventType === 'fixed' && y.eventType !== 'fixed') {
