@@ -143,7 +143,7 @@ export const EVENTS_DATA = [
 			program: {
 				title: `Relaks menu:`,
 				list: [
-					`Joga przy dźwiękach mis\u00A0i\u00A0gongów (gra Agnieszka\u00A0Topp)`,
+					`Joga przy dźwiękach mis\u00A0i\u00A0gongów (gra\u00A0Agnieszka\u00A0Topp)`,
 					`Relaks z\u00A0opaską na\u00A0oczach nasączoną aromatycznymi olejkami`,
 					`Zdrowy napar naszego przepisu`,
 					`Inspirujące rozmowy w\u00A0kręgu`,
