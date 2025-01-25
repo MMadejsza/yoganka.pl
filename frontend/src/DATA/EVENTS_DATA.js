@@ -98,6 +98,7 @@ export const EVENTS_DATA = [
 			fullDesc: `Takiego wydarzenia w\u00A0Trójmieście nie\u00A0było. Dźwięki mis\u00A0i\u00A0gongów tworzą kojącą atmosferę, pomagając w\u00A0głębszym relaksie i medytacji. Pod rozgwieżdżonym niebem, wśród szumu fal, każda asana staje się bardziej intymna i\u00A0energetyzująca. Bliskość natury i\u00A0moc pełni księżyca dodają praktyce niezwykłej mocy uzdrawiającej. To idealna okazja, by odprężyć ciało, wyciszyć umysł i\u00A0połączyć się z\u00A0otaczającą cię przyrodą.`,
 			program: {
 				title: `Relaks menu:`,
+				listType: 'included',
 				list: [
 					`Joga przy dźwiękach mis\u00A0i\u00A0gongów (gra\u00A0Agnieszka\u00A0Topp)`,
 					`Relaks z\u00A0opaską na\u00A0oczach nasączoną aromatycznymi olejkami`,
@@ -160,6 +161,7 @@ export const EVENTS_DATA = [
 			fullDesc: `Zapraszam do\u00A0wodnego studia jogi. Zamieniamy matę na\u00A0deskę SUP. Poprawisz balans, wzmocnisz mięśnie posturalne. Otwarta przestrzeń z\u00A0nieskończonym oknem na\u00A0naturę stanowi doskonałą propozycję na\u00A0ciepłe dni. Czy jest coś wspanialszego od\u00A0jogi na\u00A0powietrzu? Promienie słońca, letni podmuch wiatru i\u00A0szum drzew dopełnią Twoją praktykę.`,
 			program: {
 				title: ``,
+				listType: 'included',
 				list: [],
 			},
 			btnsContent: [

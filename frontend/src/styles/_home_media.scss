@@ -314,6 +314,9 @@
 	}
 	.modal-checklist {
 		flex-basis: 45%;
+		&--event {
+			max-width: 90%;
+		}
 	}
 	.partners {
 		&__gallery {
@@ -633,6 +636,9 @@
 	.modal-checklist {
 		padding: 0 1rem;
 		flex-basis: auto;
+		&--event {
+			max-width: 75%;
+		}
 	}
 
 	.footer {
