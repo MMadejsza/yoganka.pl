@@ -10,11 +10,14 @@ import {renderJointGalery} from '../../utils/utils.jsx';
 function GlideContainer({placement, glideConfig, glideBreakpoints, slides, type}) {
 	const glideRef = useRef(null);
 	const totalPhotosNumber = (slides) => {
-		let counter = 0; // Zainicjowanie zmiennej counter
+		let counter = 0;
 		slides.forEach((camp) => {
-			counter += camp.gallerySize; // Sumowanie gallerySize dla każdego campa
+			const todayRaw = new Date();
+			const today = todayRaw.toISOString().split('T')[0];
+			if (camp.date < today) counter += camp.gallerySize;
 		});
-		return counter; // Zwrócenie wyniku
+		console.log(counter);
+		return counter;
 	};
 	useEffect(() => {
 		// double checking if component is rendered

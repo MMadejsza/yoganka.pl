@@ -8,7 +8,7 @@ function CampsGalerySection({camps, isMobile}) {
 		<>
 			<Section
 				classy={leadingClass}
-				header='Jak to wygląda?'>
+				header='Jak to wyglądało?'>
 				{isMobile ? (
 					<GlideContainer
 						glideConfig={{

@@ -12,7 +12,7 @@
 	@include mixin.flex(column, space-between, center);
 	flex-wrap: wrap;
 	gap: 55vh;
-	background-image: url(/imgs/wyjazdy-bcg.png);
+	background-image: url(/imgs/320_wyjazdy-bcg.png);
 	background-attachment: fixed;
 	background-repeat: no-repeat;
 	background-size: cover;
@@ -229,6 +229,8 @@
 }
 @media (min-width: 360px) {
 	.camps-intro {
+		background-image: url(/imgs/480_wyjazdy-bcg.png);
+
 		&__welcome-desc {
 			font-size: 2rem;
 		}
@@ -275,6 +277,10 @@
 	}
 }
 @media (min-width: 480px) {
+	.camps-intro {
+		background-image: url(/imgs/768_wyjazdy-bcg.png);
+	}
+
 	.camps-benefits {
 		&__bullet {
 			min-height: 200px;
@@ -295,6 +301,7 @@
 
 @media (min-width: 768px) {
 	.camps-intro {
+		background-image: url(/imgs/1024_wyjazdy-bcg.png);
 		&__welcome-desc {
 			padding: 2rem;
 		}
@@ -337,6 +344,7 @@
 
 @media (min-width: 1024px) {
 	.camps-intro {
+		background-image: url(/imgs/1400_wyjazdy-bcg.png);
 		&__welcome-desc {
 			font-size: 2.4rem;
 		}
