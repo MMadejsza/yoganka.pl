@@ -16,7 +16,7 @@ export const REVIEWS_DATA = [
 		// img: 'https://thispersondoesnotexist.com/?gender=male&age=40&ethnicity=white',
 		name: 'Milena Minkina',
 		productName: 'Zajęcia dla firm',
-		review: 'Pani Ania poprowadziła dla nas zajęcia z jogi i mindfulness podczas firmowego wyjazdu integracyjnego i było to naprawdę świetne doświadczenie! Zajęcia zostały przygotowane i poprowadzone z pełnym profesjonalizmem, idealnie dostosowane do różnych potrzeb i poziomów zaawansowania uczestników, dzięki temu czuliśmy się komfortowo i swobodnie. [...] :)',
+		review: 'Pani Ania poprowadziła dla nas zajęcia z jogi i mindfulness podczas firmowego wyjazdu integracyjnego i było to naprawdę świetne doświadczenie! Zajęcia zostały przygotowane i poprowadzone z pełnym profesjonalizmem, idealnie dostosowane do różnych potrzeb i poziomów zaawansowania uczestników, dzięki temu czuliśmy się komfortowo i swobodnie. Pani Ania wykazała pełne zaangażowanie – dbała nie tylko o poprawną technikę ćwiczeń, ale także o stworzenie ciepłej i pozytywnej atmosfery. Z całego serca polecamy zajęcia z Yoganką ze względu na profesjonalizm, dbałość o każdy szczegół i łatwość nawiązywania kontaktów nawet z najbardziej wymagającą i zróżnicowaną grupą! :)',
 	},
 	{
 		// img: 'https://thispersondoesnotexist.com/?gender=female&age=35&ethnicity=white',
@@ -28,13 +28,22 @@ export const REVIEWS_DATA = [
 		// img: 'https://thispersondoesnotexist.com/?gender=female&age=35&ethnicity=white',
 		name: 'Tomasz Kot',
 		productName: 'Zajęcia',
-		review: `Uczestniczę w zajęciach 🧘‍♀️ prowadzonych przez Anię już prawie rok. Z niecierpliwością czekam na kolejne zajęcia we wtorek i czwartek. Prowadząca jest przesympatyczną osobą z pozytywną energią, co jest gwarancją komfortowej i relaksującej atmosfery na ćwiczeniach.	Polecam każdemu, poszukującemu spokoju, relaksu i harmonii.	Napięcia i stresy nagromadzone w ciele przez cały dzień odchodzą w zapomnienie. Joga to wspaniały sposób na zadbanie o kręgosłup. Zajęcia są urozmaicone i dostosowane do możliwości grupy.[...] `,
+		review: `Uczestniczę w zajęciach 🧘‍♀️ prowadzonych przez Anię już prawie rok. Z niecierpliwością czekam na kolejne zajęcia we wtorek i czwartek.
+		Prowadząca jest przesympatyczną osobą z pozytywną energią, co jest gwarancją komfortowej i relaksującej atmosfery na ćwiczeniach.
+		Polecam każdemu, poszukującemu spokoju, relaksu i harmonii.
+		Napięcia i stresy nagromadzone w ciele przez cały dzień odchodzą w zapomnienie. Joga to wspaniały sposób na zadbanie o kręgosłup.
+		Zajęcia są urozmaicone i dostosowane do możliwości grupy. Kreatywność Yoganki potrafi zaskoczyć, nigdy nie wiadomo co nowego pojawi się na praktyce.
+		Ps. Na ostatnich zajęciach, w fazie relaksacji, udało mi się na chwilę zasnąć :). Jest to dla mnie wystarczający dowód jak bardzo relaksująca jest yoga z Anią.🙏💚`,
 	},
 	{
 		// img: 'https://thispersondoesnotexist.com/?gender=female&age=35&ethnicity=white',
 		name: 'Karolina Pantkowska',
 		productName: 'Yoga & Sound',
-		review: `Chciałabym podzielić się moimi ostatnimi doświadczeniami z zajęć jogi, które odbywają się u yoganki! 🧘‍♀️💖 Nauka asan w towarzystwie gongów to absolutna perla  ✨️✨️. Ich obecność dodaje zajęciom lekkości i sprawia, że praktyka staje się jeszcze bardziej przyjemna. 🦩💕 Yoganka z pasją dzieli się swoją wiedzą	i inspiruje nas do rozwoju. Każda minuta spędzona na macie to krok w kierunku lepszego samopoczucia i harmonii.	Dla wszystkich, którzy szukają wyjątkowego sposobu na relaks i odnalezienie [...]`,
+		review: `Chciałabym podzielić się moimi ostatnimi doświadczeniami z zajęć jogi, które odbywają się u yoganki! 🧘‍♀️💖
+		Nauka asan w towarzystwie gongów to absolutna perla  ✨️✨️. Ich obecność dodaje zajęciom lekkości i sprawia, że praktyka staje się jeszcze bardziej przyjemna. 🦩💕
+		Yoganka z pasją dzieli się swoją wiedzą	i inspiruje nas do rozwoju. Każda minuta spędzona na macie to krok w kierunku lepszego samopoczucia i harmonii.
+		Dla wszystkich, którzy szukają wyjątkowego sposobu na relaks i odnalezienie wewnętrznego spokoju, gorąco polecam zajęcia jogi z gonkami u tej niesamowitej yoganki! 🌼💫
+		Namaste! 🙏💚`,
 	},
 	{
 		// img: 'https://thispersondoesnotexist.com/?gender=female&age=35&ethnicity=white',

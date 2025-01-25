@@ -23,7 +23,7 @@ function CampsReviewsSection() {
 						// <=
 						360: {perView: 1},
 						480: {perView: 1},
-						1024: {perView: 2},
+						1024: {perView: 1},
 					}}
 					type='review'
 					slides={REVIEWS_DATA}
