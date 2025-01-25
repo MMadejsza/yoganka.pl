@@ -415,8 +415,7 @@ export const CAMPS_DATA = [
 				area: `Wysoka Wieś`,
 				accommodation: `Stara Szkoła`,
 				// capacity: `12`,
-				price: `1199zł do 10 stycznia
-				1269zł od 11 stycznia`,
+				price: `1269zł`,
 				// travel: `we własnym zakresie`,
 			},
 

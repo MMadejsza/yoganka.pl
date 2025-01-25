@@ -130,12 +130,12 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 					) : (
 						singleImg
 					)}
-
+					{/* ${modal.fullDesc.length > 375 ? 'modal__full-desc--long-text' : ''} */}
 					<section
 						className={`modal__full-desc--${type} ${dynamicClass(
 							'modal__full-desc',
 							extraClass,
-						)} ${modal.fullDesc.length > 375 ? 'modal__full-desc--long-text' : ''}`}>
+						)} modal__full-desc--long-text`}>
 						{modal.fullDescTitle && (
 							<h3 className='modal__title'>{modal.fullDescTitle}</h3>
 						)}
@@ -146,10 +146,7 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 
 					{isCamp && (
 						<>
-							<header
-								className={`modal__header ${
-									modal.fullDesc.length > 375 ? 'modal__full-desc--long-text' : ''
-								}`}>
+							<header className={`modal__header modal__full-desc--long-text`}>
 								<CampGlance glance={modal.glance} />
 							</header>
 
