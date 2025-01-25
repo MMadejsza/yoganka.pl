@@ -174,7 +174,7 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 						<h2 className='modal__attention-note'>{modal.note}</h2>
 					)}
 
-					{modal.btnsContent.length > 0 && renderFooter()}
+					{modal.btnsContent?.length > 0 && renderFooter()}
 				</div>
 			</div>
 		</>,
