@@ -60,10 +60,6 @@
 		position: relative;
 	}
 	.offer-type {
-		// display: grid;
-		// grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-		// grid-template-rows: auto 1fr;
-		// grid-gap: 2.5rem 1.5rem;
 		@include mixin.flex(row, center);
 		flex-wrap: wrap;
 		gap: 2.5rem 1.5rem;
@@ -80,13 +76,11 @@
 
 		&--events {
 			grid-area: wydarzenia;
-			// grid-template-rows: 6rem;
 		}
 
 		// Zagnieżdżenie dla wyjazdy i zajęcia
 		.tile {
 			flex-basis: 100%;
-			// flex-grow: 2;
 		}
 		&#wyjazdy {
 			grid-area: wyjazdy;
@@ -97,7 +91,6 @@
 		}
 		&__more {
 			flex-basis: 100%;
-			// grid-column: 1/-1;
 			height: 100px;
 			display: flex;
 			flex-flow: row wrap;
@@ -224,9 +217,6 @@
 				);
 			}
 		}
-		// &--event {
-		// 	justify-items: center;
-		// }
 	}
 
 	& .glide {
@@ -313,7 +303,6 @@
 .modal-checklist {
 	&--event {
 		grid-column: 1 / -1;
-		// width: max-content;
 	}
 	&__list {
 		@extend .modal__list;
