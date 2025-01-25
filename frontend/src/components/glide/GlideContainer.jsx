@@ -89,7 +89,7 @@ function GlideContainer({placement, glideConfig, glideBreakpoints, slides, type}
 		const counter =
 			type == 'allPhotos'
 				? totalPhotosNumber(slides)
-				: type == 'tile' || 'review' || 'partner'
+				: ['tile', 'review', 'partner'].includes(type)
 				? slides.length
 				: slides.size;
 
@@ -101,6 +101,7 @@ function GlideContainer({placement, glideConfig, glideBreakpoints, slides, type}
 			/>
 		));
 	};
+
 	return (
 		<div
 			className={`glide ${placement ? `glide--${placement}` : ''}`}

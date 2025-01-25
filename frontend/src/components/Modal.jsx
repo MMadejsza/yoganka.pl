@@ -117,7 +117,6 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 							}}
 							glideBreakpoints={{
 								// <=
-
 								1025: {perView: 1},
 							}}
 							type='photo'

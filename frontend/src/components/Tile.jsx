@@ -63,7 +63,6 @@ function Tile({data, today}) {
 	// 	}
 	// </div>
 	const renderBtns = data.front.btnsContent.map((btn, index) => {
-		console.log(`btn ${btn.text} icon ${btn.icon} symbol ${btn.symbol}`);
 		if (btn.action === 'subPage') {
 			return (
 				<Link
