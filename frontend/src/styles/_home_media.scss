@@ -125,6 +125,9 @@
 }
 @media (min-width: 768px) {
 	// tablet, landscape iPad, lo-res laptops ands desktops
+	.glide-slides {
+		min-height: 30vh;
+	}
 	.burger {
 		$burger-offset: 1;
 		$bar-width: 3.5rem;

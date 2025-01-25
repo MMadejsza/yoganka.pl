@@ -54,9 +54,13 @@
 	}
 }
 //! TILE
+.offer-type {
+	.tile {
+		min-height: 472px;
+	}
+}
 .tile {
 	position: relative;
-	min-height: 472px;
 	display: flex;
 
 	flex-direction: column;
