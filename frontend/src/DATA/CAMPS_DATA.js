@@ -512,7 +512,7 @@ export const CAMPS_DATA = [
 		fileName: `camp_kaszuby`,
 		imgPath: `${htmlToImgsPath}/offer/camps/camp_kaszuby/front`,
 		galleryPath: `${htmlToImgsPath}/offer/camps/camp_kaszuby/gallery`,
-		gallerySize: 12,
+		gallerySize: 22,
 		eventType: ``,
 		extraClass: ``,
 		front: {
@@ -633,7 +633,7 @@ export const CAMPS_DATA = [
 		fileName: `camp_warmia`,
 		imgPath: `${htmlToImgsPath}/offer/camps/camp_warmia/front`,
 		galleryPath: `${htmlToImgsPath}/offer/camps/camp_warmia/gallery`,
-		gallerySize: 12,
+		gallerySize: 24,
 		eventType: ``,
 		extraClass: `long`,
 		front: {

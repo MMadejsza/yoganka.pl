@@ -4,6 +4,9 @@ import {renderJointGalery} from '../utils/utils.jsx';
 
 function CampsGalerySection({camps, isMobile}) {
 	const leadingClass = 'galery';
+	const todayRaw = new Date();
+	const today = todayRaw.toISOString().split('T')[0];
+	const retroCamps = camps.filter((camp) => camp.date < today);
 	return (
 		<>
 			<Section
@@ -23,7 +26,7 @@ function CampsGalerySection({camps, isMobile}) {
 							1024: {perView: 1},
 						}}
 						type='allPhotos'
-						slides={camps}
+						slides={retroCamps}
 						leadingClass={leadingClass}
 					/>
 				) : (
