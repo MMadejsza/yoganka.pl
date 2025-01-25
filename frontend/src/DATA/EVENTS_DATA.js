@@ -35,12 +35,15 @@ export const EVENTS_DATA = [
 				{
 					action: 'classic',
 					text: `WhatsApp`,
+					title: `Wiadomość WhatsApp`,
 					link: whatsAppTemplate(),
 					icon: 'fa-brands fa-whatsapp',
 				},
 				{
 					action: 'classic',
-					text: `Wypełnij formularz`,
+					title: `Formularz Google w osobnej zakładce`,
+					text: `Wyślij maila`,
+					symbol: 'mail',
 					link: `mailto:kontakt@yoganka.pl?&body=Hej! Piszę do Ciebie z yoganka.pl`,
 				},
 			],
@@ -94,12 +97,15 @@ export const EVENTS_DATA = [
 	// 			{
 	// 				action: 'classic',
 	// 				text: `WhatsApp`,
+	// title: `Wiadomość WhatsApp`,
 	// 				link: whatsAppTemplate(),
 	// 				icon: 'fa-brands fa-whatsapp',
 	// 			},
 	// 			{
 	// 				action: 'classic',
 	// 				text: `Zgłoś się mailowo`,
+	// 				title: `Wyślij maila`,
+
 	// 				link: `mailto:kontakt@yoganka.pl?&body=Hej! Piszę do Ciebie z yoganka.pl`,
 	// 			},
 	// 		],
@@ -154,12 +160,16 @@ export const EVENTS_DATA = [
 				{
 					action: 'classic',
 					text: `WhatsApp`,
+					title: `Wiadomość WhatsApp`,
 					link: whatsAppTemplate(),
 					icon: 'fa-brands fa-whatsapp',
 				},
 				// {
 				// 	action: 'classic',
+				// title: `Formularz Google w osobnej zakładce`,
+
 				// 	text: `Wypełnij formularz`,
+				// symbol:`edit`,
 				// 	link: `https://forms.gle/kYN6VpfP3aV1b9yB8`,
 				// },
 			],
@@ -178,7 +188,7 @@ export const EVENTS_DATA = [
 	},
 	{
 		id: `E04`,
-		name: `Sup yoga`,
+		name: `Sup Yoga`,
 		type: `event`,
 		date: `2025-05-22`,
 		fileName: `sup`,
@@ -189,7 +199,7 @@ export const EVENTS_DATA = [
 		eventType: `repetitive`,
 		extraClass: `event`,
 		front: {
-			title: `Sup yoga`,
+			title: `Sup Yoga`,
 			dates: [`Latem`],
 			location: `Zatoka Gdańska /\u00A0Jezioro Wysockie`,
 			desc: `Praktyka jogi na\u00A0wodzie, czyli prawdziwe zen\u00A0nature`,
@@ -206,6 +216,7 @@ export const EVENTS_DATA = [
 				{
 					action: 'classic',
 					text: `WhatsApp`,
+					title: `Wiadomość WhatsApp`,
 					link: whatsAppTemplate(),
 					icon: 'fa-brands fa-whatsapp',
 				},

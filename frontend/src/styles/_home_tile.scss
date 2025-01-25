@@ -1,9 +1,12 @@
 @use 'sass:map';
 @use 'sass:color';
 @use '_global_variables-templates' as var;
+@use '_global_mixins-keyframes' as mixin;
 
 %action-btn {
-	display: block;
+	@include mixin.flex(row, center, center);
+	flex-wrap: wrap;
+	gap: 1rem;
 	width: 95%;
 	min-height: 48px;
 	padding: 0rem 1rem;
@@ -12,6 +15,7 @@
 	line-height: 48px;
 	font-weight: bold;
 	text-transform: uppercase;
+	text-decoration: none;
 	color: map.get(var.$colors, accent-text);
 
 	cursor: pointer;

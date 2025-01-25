@@ -101,12 +101,15 @@ export const CAMPS_DATA = [
 				{
 					action: 'classic',
 					text: `WhatsApp`,
+					title: `Wiadomość WhatsApp`,
 					link: whatsAppTemplate(),
 					icon: 'fa-brands fa-whatsapp',
 				},
 				{
 					action: 'classic',
+					title: `Formularz Google w osobnej zakładce`,
 					text: `Wypełnij formularz`,
+					symbol: `edit`,
 					link: `https://forms.gle/fX2Dx8KJaBhQFEGh9`,
 				},
 			],
@@ -205,12 +208,16 @@ export const CAMPS_DATA = [
 				{
 					action: 'classic',
 					text: `WhatsApp`,
+					title: `Wiadomość WhatsApp`,
 					link: whatsAppTemplate(),
 					icon: 'fa-brands fa-whatsapp',
 				},
 				{
 					action: 'classic',
+					title: `Formularz Google w osobnej zakładce`,
+
 					text: `Wypełnij formularz`,
+					symbol: `edit`,
 					link: `https://forms.gle/fX2Dx8KJaBhQFEGh9`,
 				},
 			],
@@ -311,12 +318,16 @@ export const CAMPS_DATA = [
 				{
 					action: 'classic',
 					text: `WhatsApp`,
+					title: `Wiadomość WhatsApp`,
 					link: whatsAppTemplate(),
 					icon: 'fa-brands fa-whatsapp',
 				},
 				{
 					action: 'classic',
+					title: `Formularz Google w osobnej zakładce`,
+
 					text: `Wypełnij formularz`,
+					symbol: `edit`,
 					link: `https://forms.gle/fX2Dx8KJaBhQFEGh9`,
 				},
 			],
@@ -473,12 +484,16 @@ export const CAMPS_DATA = [
 				{
 					action: 'classic',
 					text: `WhatsApp`,
+					title: `Wiadomość WhatsApp`,
 					link: whatsAppTemplate(),
 					icon: 'fa-brands fa-whatsapp',
 				},
 				{
 					action: 'classic',
+					title: `Formularz Google w osobnej zakładce`,
+
 					text: `Wypełnij formularz`,
+					symbol: `edit`,
 					link: `https://forms.gle/recTtsdmUdY71wwv5`,
 				},
 			],
@@ -592,11 +607,13 @@ export const CAMPS_DATA = [
 	// 			{
 	// 				action: 'classic',
 	// 				text: `Wypełnij formularz`,
+	// symbol:`edit`
 	// 				link: `https://forms.gle/kYN6VpfP3aV1b9yB8`,
 	// 			},
 	// 			{
 	// 				action: 'classic',
 	// 				text: `WhatsApp`,
+	// title: `Wiadomość WhatsApp`,
 	// 				link: whatsAppTemplate(),
 	// 				icon: 'fa-brands fa-whatsapp',
 	// 			},
@@ -718,6 +735,7 @@ export const CAMPS_DATA = [
 	// 			{
 	// 				action: 'classic',
 	// 				text: `WhatsApp`,
+	// title: `Wiadomość WhatsApp`,
 	// 				link: whatsAppTemplate(),
 	// 				icon: 'fa-brands fa-whatsapp',
 	// 			},

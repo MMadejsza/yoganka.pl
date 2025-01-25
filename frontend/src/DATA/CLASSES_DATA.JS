@@ -21,10 +21,11 @@ export const CLASSES_DATA = [
 			desc: ``,
 			btnsContent: [
 				{
-					action: 'scroll',
+					action: 'classic',
 					icon: 'fa-brands fa-whatsapp',
 					text: `WhatsApp`,
 					link: whatsAppTemplate(),
+					title: `Wiadomość WhatsApp`,
 				},
 			],
 		},
@@ -48,10 +49,17 @@ export const CLASSES_DATA = [
 			desc: ``,
 			btnsContent: [
 				{
-					type: 'router',
-					text: `Współpraca B2B`,
-					link: `/b2b`,
+					action: 'classic',
+					symbol: 'mail',
+					text: `Wyślij maila`,
+					link: `mailto:kontakt@yoganka.pl`,
+					title: `kontakt@yoganka.pl`,
 				},
+				// {
+				// 	type: 'router',
+				// 	text: `Współpraca B2B`,
+				// 	link: `/b2b`,
+				// },
 			],
 		},
 		modal: false,

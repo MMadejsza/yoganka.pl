@@ -63,11 +63,13 @@ function Tile({data, today}) {
 	// 	}
 	// </div>
 	const renderBtns = data.front.btnsContent.map((btn, index) => {
-		if (btn.type === 'router') {
+		console.log(`btn ${btn.text} icon ${btn.icon} symbol ${btn.symbol}`);
+		if (btn.action === 'subPage') {
 			return (
 				<Link
 					key={index}
 					to={btn.link}
+					title={btn.title}
 					className={`tile__btn tile__btn--${data.fileName}`}>
 					{btn.icon ? <i className={btn.icon} /> : null}
 					{btn.text}
@@ -76,14 +78,16 @@ function Tile({data, today}) {
 		} else {
 			return (
 				<a
-					onClick={(e) => smoothScrollInto(e)}
+					onClick={btn.action === 'scroll' ? (e) => smoothScrollInto(e) : null}
 					key={index}
+					target='_blank'
 					href={btn.link}
+					title={btn.title}
 					className={`tile__btn tile__btn--${data.fileName}`}>
 					{btn.icon ? (
-						<i
-							className={`${btn.icon} nav__icon`}
-							style={{paddingRight: '1rem'}}></i>
+						<i className={`${btn.icon} nav__icon`}></i>
+					) : btn.symbol ? (
+						<span className='material-symbols-outlined nav__icon'>{btn.symbol}</span>
 					) : null}
 					{btn.text}
 				</a>
@@ -105,7 +109,7 @@ function Tile({data, today}) {
 
 			{data.front.desc && <p className='tile__desc'>{data.front.desc}</p>}
 
-			{data.front.btnsContent.length > 0 && renderBtns}
+			{data.front.btnsContent?.length > 0 && renderBtns}
 
 			{isModalOpen && (
 				<Modal

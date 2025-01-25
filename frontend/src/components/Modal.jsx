@@ -66,11 +66,16 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 							key={index}
 							href={btn.link}
 							target='_blank'
+							title={btn.title}
 							className={`modal__btn`}>
 							{btn.icon ? (
 								<i
 									className={`${btn.icon} nav__icon`}
 									style={{paddingRight: '1rem'}}></i>
+							) : btn.symbol ? (
+								<span className='material-symbols-outlined nav__icon'>
+									{btn.symbol}
+								</span>
 							) : null}
 							{btn.text}
 						</a>
