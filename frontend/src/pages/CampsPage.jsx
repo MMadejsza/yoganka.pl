@@ -14,7 +14,7 @@ function CampsPage() {
 			<CampsIntoSection />
 			<CampsBenefitsSection />
 			<OfferSection products={products} />
-			{/* <CampsReviewsSection /> */}
+			<CampsReviewsSection />
 			<CampsGalerySection
 				camps={CAMPS_DATA}
 				isMobile={true}
