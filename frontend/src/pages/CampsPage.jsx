@@ -13,6 +13,7 @@ function CampsPage() {
 	return (
 		<>
 			<Helmet>
+				<title>Yoganka - Wyjazdy</title>
 				<link
 					rel='canonical'
 					href='https://yoganka.pl/wyjazdy'

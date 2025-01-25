@@ -31,6 +31,7 @@ function HomePage() {
 	return (
 		<>
 			<Helmet>
+				<title>Yoganka</title>
 				<link
 					rel='canonical'
 					href='https://yoganka.pl/'
