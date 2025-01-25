@@ -20,7 +20,7 @@ function Certificates() {
 						animationDuration: 800,
 					}}
 					type='tile'
-					slides={{data: CERTIFICATES_DATA}}
+					slides={CERTIFICATES_DATA}
 					leadingClass={leadingClass}
 				/>
 			</Section>

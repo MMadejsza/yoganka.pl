@@ -17,6 +17,9 @@
 	grid-column: 1 / -1;
 	padding: 2rem 0 3rem;
 	overflow: hidden;
+	// @include mixin.flex(column);
+	// flex-wrap: wrap;
+
 	&::before {
 		@extend %slider-shade-overlay;
 		@include mixin.slider-shade-wing('left', map.get(var.$colors, base));
@@ -38,6 +41,7 @@
 	&--comp .glide__track {
 		border-radius: map.get(var.$sizes, border-radius);
 	}
+
 	&__track {
 		overflow: visible;
 	}
@@ -52,11 +56,15 @@
 	}
 	&__slide {
 		border-radius: map.get(var.$sizes, border-radius);
-
 		display: flex;
 		justify-content: center;
 	}
 	&__bullets {
+		width: max-content;
+		max-width: 95%;
+		@include mixin.flex(row, center);
+		flex-wrap: wrap;
+		gap: 1rem 0;
 		bottom: 0;
 		padding: 0.5rem;
 		border-radius: 50px;

@@ -96,7 +96,7 @@ export const CAMPS_DATA = [
 					],
 				},
 			},
-			note: ``,
+			note: `Gotowa na wakacje z jogą?`,
 			btnsContent: [
 				{
 					action: 'classic',
@@ -148,7 +148,7 @@ export const CAMPS_DATA = [
 			},
 
 			plan: {
-				title: `Slow Menu`,
+				title: `Slow menu`,
 				schedule: [
 					{
 						'day': 'Piątek:',
@@ -250,7 +250,7 @@ export const CAMPS_DATA = [
 			},
 
 			plan: {
-				title: `Slow Menu`,
+				title: `Slow menu`,
 				schedule: [
 					{
 						'day': 'Piątek:',
@@ -410,7 +410,7 @@ export const CAMPS_DATA = [
 			},
 
 			plan: {
-				title: `Slow Menu`,
+				title: `Slow menu`,
 				schedule: [
 					{
 						'day': 'Piątek:',

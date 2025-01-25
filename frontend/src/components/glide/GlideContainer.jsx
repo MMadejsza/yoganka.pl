@@ -54,7 +54,7 @@ function GlideContainer({placement, glideConfig, glideBreakpoints, slides, type}
 		})();
 
 		if (SlideComponent && (isTile || isReview)) {
-			return slides.data.map((slide, index) => (
+			return slides.map((slide, index) => (
 				<SlideComponent
 					key={index}
 					slideData={slide}
@@ -69,7 +69,7 @@ function GlideContainer({placement, glideConfig, glideBreakpoints, slides, type}
 				/>
 			));
 		} else {
-			return slides.data.map((partner, index) => (
+			return slides.map((partner, index) => (
 				<a
 					key={index}
 					href={partner.link}
@@ -85,8 +85,13 @@ function GlideContainer({placement, glideConfig, glideBreakpoints, slides, type}
 			));
 		}
 	};
-	const renderBullets = () => {
-		const counter = type !== 'allPhotos' ? slides.size : totalPhotosNumber(slides);
+	const renderBullets = (type) => {
+		const counter =
+			type == 'allPhotos'
+				? totalPhotosNumber(slides)
+				: type == 'tile' || 'review' || 'partner'
+				? slides.length
+				: slides.size;
 
 		return Array.from({length: counter}).map((_, index) => (
 			<button
@@ -111,7 +116,7 @@ function GlideContainer({placement, glideConfig, glideBreakpoints, slides, type}
 			<div
 				className='glide__bullets'
 				data-glide-el='controls[nav]'>
-				{renderBullets()}
+				{renderBullets(type)}
 			</div>
 
 			<div

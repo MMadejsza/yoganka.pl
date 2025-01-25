@@ -23,7 +23,8 @@ function Partners() {
 					// autoplay: 2200,
 					animationDuration: 800,
 				}}
-				slides={{type: 'partner', data: PARTNERS_DATA}}
+				type='partner'
+				slides={PARTNERS_DATA}
 				leadingClass={leadingClass}
 			/>
 		</Section>
