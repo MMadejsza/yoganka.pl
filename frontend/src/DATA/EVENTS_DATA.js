@@ -4,32 +4,45 @@ const htmlToImgsPath = `/imgs`;
 export const EVENTS_DATA = [
 	{
 		id: `E01`,
-		name: `Yoga\u00A0&\u00A0Breakfast`,
+		name: `Śniadanie z Yogą`,
 		type: `event`,
-		date: `2025-01-12`,
-		link: `yoga-breakfast`,
-		fileName: `yoga_breakfast`,
-		imgPath: `${htmlToImgsPath}/offer/events/yoga_breakfast/front`,
-		galleryPath: `${htmlToImgsPath}/offer/events/yoga_breakfast/front`,
+		date: `2025-02-23`,
+		link: `sniadanie-z-yoga`,
+		fileName: `sniadanie_z_yoga`,
+		imgPath: `${htmlToImgsPath}/offer/events/sniadanie_z_yoga/front`,
+		galleryPath: `${htmlToImgsPath}/offer/events/sniadanie_z_yoga/front`,
 		gallerySize: 0,
 		eventType: `fixed`,
 		extraClass: `event`,
 		front: {
-			title: `Yoga\u00A0&\u00A0Breakfast`,
-			dates: [`11/01/2025 godz. 9:30`, `12/01/2025 godz. 9:30`],
-			location: `toMy Kawiarnia\u00A0Gdańsk`,
-			desc: `Błogi poranek z jogą w uroczej przestrzeni toMy kawiarnia w Gdańsku...`,
+			title: `Śniadanie z Yogą`,
+			dates: [`23/02/2025 godz. 8:00`],
+			location: `Restauracja VANA, Garnizon`,
+			desc: `Rozpocznij swój dzień od harmonijnego połączenia ruchu i smaku! Podczas naszego ...`,
 			btnsContent: [],
 		},
 		modal: {
 			fullDescTitle: `O spotkaniu:`,
-			fullDesc: `Błogi poranek z\u00A0ogą w\u00A0uroczej przestrzeni toMy kawiarnia\u00A0w\u00A0Gdańsku. Po praktyce usiądziemy razem do\u00A0stołu i\u00A0zjemy pyszne śniadanie przygotowane przez pracowników kawiarni. Zabierz swoją matę. Możesz dołączyć też tylko na\u00A0samą praktykę.			
+			fullDesc: `
+			Rozpocznij swój dzień od\u00A0harmonijnego połączenia ruchu i\u00A0smaku! Podczas naszego wydarzenia Śniadanie z\u00A0jogą czeka\u00A0Cię poranna sesja jogi, która\u00A0rozbudzi Twoje ciało, wyciszy umysł i\u00A0napełni energią (slow\u00A0flow\u00A0joga). Po praktyce zapraszamy na\u00A0zdrowe, pyszne śniadanie w\u00A0przyjaznej atmosferze – idealne, by\u00A0zjeść wspólnie, porozmawiać i\u00A0cieszyć\u00A0się dobrym początkiem dnia.
+
+			To idealnie połączenie przyjemnego z\u00A0pożytecznym. Przy\u00A0okazji wyjścia do\u00A0miasta, robisz dla siebie coś dobrego - zwalniasz po\u00A0oddech, równowagę i\u00A0regenerację. 
+			Joga potrwa 60\u00A0minut.
 			
-			Do zobaczenia!`,
+			Dołącz\u00A0do\u00A0nas!
+			`,
 
 			program: {
-				title: `Relaks menu:`,
-				list: [`Praktyka jogi (50min)`, `Zdrowy napar`, `Śniadanie wegetariańskie`],
+				listType: 'excluded',
+				title: `Menu śniadaniowe:`,
+				list: [
+					`Choco-Orange Oatmeal, kremowa czekoladowo-pomarańczowa owsianka z\u00A0jogurtem i\u00A0świeżą pomarańczą`,
+					`Cinnamon\u00A0Roll\u00A0Omlette, puszysty omlet cynamonka, otulony karmelizowanymi jabłkami`,
+					`Asparagus Turkish Eggs, jajka po\u00A0turecku ze\u00A0szparagami i\u00A0koperkiem. Podane z\u00A0chlebem na\u00A0zakwasie`,
+					`Eggsperience, 3\u00A0jajka na\u00A0maśle ze\u00A0szczypiorkiem (jajecznica lub sadzone), podane z\u00A0sałatką i\u00A0z\u00A0chlebem na\u00A0zakwasie`,
+					`Beets, bajgiel z\u00A0hummusem buraczanym, carpaccio z\u00A0buraka i\u00A0kozim serem`,
+					`Jedna kawa/herbata`,
+				],
 			},
 			btnsContent: [
 				{
@@ -41,16 +54,14 @@ export const EVENTS_DATA = [
 				},
 				{
 					action: 'classic',
-					title: `Formularz Google w osobnej zakładce`,
-					text: `Wyślij maila`,
-					symbol: 'mail',
-					link: `mailto:kontakt@yoganka.pl?&body=Hej! Piszę do Ciebie z yoganka.pl`,
+					title: `Formularz Feetsy w osobnej zakładce`,
+					text: `Zapisz się w Feetsy`,
+					symbol: 'edit',
+					link: `https://app.fitssey.com/yoganka/backoffice.v4/schedule`,
 				},
 			],
 			formLink: `mailto:kontakt@yoganka.pl?&body=Hej! Piszę do Ciebie z yoganka.pl`,
-			note: `Wymiana: 40 zł bez śniadania
-			80zł ze śniadaniem
-			(w obu wariantach napar już w cenie)`,
+			note: `Wymiana: 79zł`,
 			// questionTemplate(subject) {
 			// 	return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
 			// },
@@ -62,6 +73,66 @@ export const EVENTS_DATA = [
 			freeTime: {},
 		},
 	},
+	// {
+	// 	id: `E01`,
+	// 	name: `Yoga\u00A0&\u00A0Breakfast`,
+	// 	type: `event`,
+	// 	date: `2025-01-12`,
+	// 	link: `yoga-breakfast`,
+	// 	fileName: `yoga_breakfast`,
+	// 	imgPath: `${htmlToImgsPath}/offer/events/yoga_breakfast/front`,
+	// 	galleryPath: `${htmlToImgsPath}/offer/events/yoga_breakfast/front`,
+	// 	gallerySize: 0,
+	// 	eventType: `fixed`,
+	// 	extraClass: `event`,
+	// 	front: {
+	// 		title: `Yoga\u00A0&\u00A0Breakfast`,
+	// 		dates: [`11/01/2025 godz. 9:30`, `12/01/2025 godz. 9:30`],
+	// 		location: `toMy Kawiarnia\u00A0Gdańsk`,
+	// 		desc: `Błogi poranek z jogą w uroczej przestrzeni toMy kawiarnia w Gdańsku...`,
+	// 		btnsContent: [],
+	// 	},
+	// 	modal: {
+	// 		fullDescTitle: `O spotkaniu:`,
+	// 		fullDesc: `Błogi poranek z\u00A0ogą w\u00A0uroczej przestrzeni toMy kawiarnia\u00A0w\u00A0Gdańsku. Po praktyce usiądziemy razem do\u00A0stołu i\u00A0zjemy pyszne śniadanie przygotowane przez pracowników kawiarni. Zabierz swoją matę. Możesz dołączyć też tylko na\u00A0samą praktykę.
+
+	// 		Do zobaczenia!`,
+
+	// 		program: {
+	// 			title: `Relaks menu:`,
+	// 			list: [`Praktyka jogi (50min)`, `Zdrowy napar`, `Śniadanie wegetariańskie`],
+	// 		},
+	// 		btnsContent: [
+	// 			{
+	// 				action: 'classic',
+	// 				text: `WhatsApp`,
+	// 				title: `Wiadomość WhatsApp`,
+	// 				link: whatsAppTemplate(),
+	// 				icon: 'fa-brands fa-whatsapp',
+	// 			},
+	// 			{
+	// 				action: 'classic',
+	// 				title: `Formularz Google w osobnej zakładce`,
+	// 				text: `Wyślij maila`,
+	// 				symbol: 'mail',
+	// 				link: `mailto:kontakt@yoganka.pl?&body=Hej! Piszę do Ciebie z yoganka.pl`,
+	// 			},
+	// 		],
+	// 		formLink: `mailto:kontakt@yoganka.pl?&body=Hej! Piszę do Ciebie z yoganka.pl`,
+	// 		note: `Wymiana: 40 zł bez śniadania
+	// 		80zł ze śniadaniem
+	// 		(w obu wariantach napar już w cenie)`,
+	// 		// questionTemplate(subject) {
+	// 		// 	return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
+	// 		// },
+	// 		glance: {},
+	// 		plan: {},
+	// 		included: {},
+	// 		excluded: {},
+	// 		optional: {},
+	// 		freeTime: {},
+	// 	},
+	// },
 	// {
 	// 	id: `E02`,
 	// 	name: `Wieczorna joga w\u00A0jurcie`,

@@ -168,7 +168,7 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 					{isEvent && (
 						<ModalList
 							extraClass='event'
-							listType='included'
+							listType={modal.program.listType}
 							data={modal.program}
 						/>
 					)}
