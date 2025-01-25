@@ -73,15 +73,13 @@ export const EVENTS_DATA = [
 			freeTime: {},
 		},
 	},
-
 	{
 		id: `E03`,
-		name: `YOGA\u00A0&\u00A0SOUND
-		Moon\u00A0Ceremony`,
+		name: `YOGA & SOUND - Moon Ceremony`,
 		type: `event`,
 		date: `2025-05-21`,
 		link: `yoga&sound`,
-		fileName: `ys`,
+		fileName: `yoga&sound`,
 		imgPath: `${htmlToImgsPath}/offer/events/yoga&sound/front`,
 		galleryPath: `${htmlToImgsPath}/offer/events/yoga&sound/front`,
 		gallerySize: 0,

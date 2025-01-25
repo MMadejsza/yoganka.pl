@@ -1,3 +1,4 @@
+import {Helmet} from 'react-helmet';
 import CampsIntoSection from '../components/CampsIntoSection.jsx';
 import CampsBenefitsSection from '../components/CampsBenefitsSection.jsx';
 import OfferSection from '../components/OfferSection.jsx';
@@ -11,6 +12,12 @@ function CampsPage() {
 	// const isMobile = mediaQuery.matches;
 	return (
 		<>
+			<Helmet>
+				<link
+					rel='canonical'
+					href='https://yoganka.pl/wyjazdy'
+				/>
+			</Helmet>
 			<CampsIntoSection />
 			<CampsBenefitsSection />
 			<OfferSection products={products} />

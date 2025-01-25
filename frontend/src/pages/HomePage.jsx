@@ -1,3 +1,4 @@
+import {Helmet} from 'react-helmet';
 import HeaderMain from '../components/HeaderMain.jsx';
 import About from '../components/About.jsx';
 import OfferSection from '../components/OfferSection.jsx';
@@ -29,6 +30,12 @@ function HomePage() {
 	const isMobile = mediaQuery.matches;
 	return (
 		<>
+			<Helmet>
+				<link
+					rel='canonical'
+					href='https://yoganka.pl/'
+				/>
+			</Helmet>
 			{isMobile ? <HeaderMain /> : null}
 			<About isMobile={isMobile} />
 			<OfferSection products={products} />

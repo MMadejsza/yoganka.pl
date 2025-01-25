@@ -5,7 +5,7 @@ export const CAMPS_DATA = [
 	// Add comments for each property
 	{
 		id: `CA07`,
-		name: `Peak yoga`,
+		name: `Peak Yoga Camp wakacje z jogą w górach`,
 		type: `camp`,
 		date: `2025-08-05`,
 		link: `camp-peak-yoga`,
@@ -121,7 +121,7 @@ export const CAMPS_DATA = [
 	},
 	{
 		id: `CA06`,
-		name: `Energia liczb`,
+		name: `Energia liczb i moc jogi. Joga | Numerologia	| Aromaterapia`,
 		type: `camp`,
 		date: `2025-10-24`,
 		link: `camp-energia-liczb`,
@@ -229,7 +229,7 @@ export const CAMPS_DATA = [
 	},
 	{
 		id: `CA05`,
-		name: `Ajurweda`,
+		name: `Joga | SPA | Ajurweda`,
 		type: `camp`,
 		date: `2025-05-16`,
 		link: `camp-ajurweda`,

@@ -6,7 +6,6 @@ function ReviewSlide({slideData}) {
 			// cut length
 			const newRev = review.slice(0, 289);
 			const newRevWords = newRev.split(' ');
-			console.log(newRevWords[newRevWords.length - 1]);
 			if (newRevWords[newRevWords.length - 1].length >= 5) {
 				newRevWords.splice(-1, 1, '[...]');
 			} else {

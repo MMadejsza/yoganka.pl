@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {createPortal} from 'react-dom';
+import {Helmet} from 'react-helmet';
 import GlideContainer from './glide/GlideContainer.jsx';
 import CampGlance from './ModalGlance.jsx';
 import CampDay from './CampDay.jsx';
@@ -85,8 +86,60 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 		);
 	};
 
+	const metaDescription =
+		tile.type == 'camp'
+			? `Dowiedz się wszystkiego o kobiecym wyjeździe z jogą do: ${tile.front.location}.`
+			: `Dowiedz się wszystkiego o wydarzeniu ${tile.name}. Miejsce: ${tile.front.location}.`;
+	const metaTitle =
+		tile.type == 'camp'
+			? `${tile.name} - Kobiecy Wyjazd z jogą`
+			: `${tile.name} - Wydarzenie z Yoganką`;
+	const canonicalTagUrl =
+		tile.type == 'camp'
+			? `https://yoganka.pl/wyjazdy/${tile.link} `
+			: `https://yoganka.pl/wydarzenia/${tile.link}`;
+	// const metaImgSpecifier = tile == 'camp' ? 'camps' : 'events';
+	// const metaImgUrl = `https://yoganka.pl/imgs/offer/${metaImgSpecifier}/${tile.fileName}/front/480_${tile.fileName}_0.jpg`;
 	return createPortal(
 		<>
+			<Helmet>
+				<title>{metaTitle}</title>
+
+				<meta
+					name='description'
+					content={metaDescription}
+				/>
+				<meta
+					name='robots'
+					content='index, follow'
+				/>
+				<meta
+					property='og:title'
+					content={metaTitle}
+				/>
+				<meta
+					property='og:description'
+					content={`Dowiedz się wszystkiego o wyjeździe do: ${tile.front.location}. Kliknij teraz!`}
+				/>
+				{/* <meta
+					property='og:image'
+					content={metaImgUrl}
+				/> */}
+				<meta
+					property='og:url'
+					content={`https://yoganka.pl/${
+						tile.type == 'camp' ? 'wyjazdy' : 'wydarzenia'
+					}/${tile.link}`}
+				/>
+				<meta
+					property='og:type'
+					content='website'
+				/>
+				<link
+					rel='canonical'
+					href={canonicalTagUrl}
+				/>
+			</Helmet>
 			<div
 				className={`modal__overlay ${isVisible ? 'visible' : ''}`}
 				onClick={handleClose}
