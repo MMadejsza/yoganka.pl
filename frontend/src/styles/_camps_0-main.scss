@@ -9,7 +9,7 @@
 	grid-area: header;
 	min-height: 100vh;
 
-	@include mixin.flex(column, space-between, center);
+	@include mixin.flex(column, space-between);
 	flex-wrap: wrap;
 	gap: 55vh;
 	background-image: url(/imgs/320_wyjazdy-bcg.png);

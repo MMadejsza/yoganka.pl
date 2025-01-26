@@ -4,7 +4,7 @@ function CampsIntoSection({isMobile}) {
 	return (
 		<Section
 			classy='camps-intro'
-			header='Kobiece Wyjazdy Jogowe'>
+			header={`Kobiece Wyjazdy z\u00a0Jogą`}>
 			<article className='about__bio--content camps-intro__welcome-desc'>
 				<p className='about__bio--description'>
 					Zapraszam Cię na moje autorskie, rozwojowe weekendy z jogą w roli głównej. Campy
