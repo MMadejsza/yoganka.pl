@@ -4,14 +4,18 @@
 @use '_global_mixins-keyframes' as mixin;
 
 %action-btn {
-	display: block;
-	min-width: 125px;
-	padding: 0.5rem 1rem;
+	@include mixin.flex(row, center, center);
+	flex-wrap: wrap;
+	gap: 1rem;
+	width: 95%;
+	min-height: 48px;
+	padding: 0rem 1rem;
 
-	font-size: 1.5rem;
-	line-height: 2.5rem;
+	font-size: 1.8rem;
+	line-height: 48px;
 	font-weight: bold;
 	text-transform: uppercase;
+	text-decoration: none;
 	color: map.get(var.$colors, accent-text);
 
 	cursor: pointer;
@@ -23,10 +27,8 @@
 }
 
 .past {
-	position: relative;
-	// filter: saturate(0.5);
 	&::before {
-		content: ''; /* Tworzymy pusty element */
+		content: '';
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -49,7 +51,7 @@
 		'wyjazdy wyjazdy'
 		'zajecia zajecia'
 		'wydarzenia wydarzenia';
-	grid-gap: 3.5rem 0.5rem;
+	grid-gap: 5rem 0.5rem;
 
 	overflow: visible;
 
@@ -58,12 +60,14 @@
 		position: relative;
 	}
 	.offer-type {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-		grid-template-rows: auto 1fr;
-		grid-gap: 2.5rem 1.5rem;
+		@include mixin.flex(row, center);
+		flex-wrap: wrap;
+		gap: 2.5rem 1.5rem;
 
 		&__header {
+			flex-basis: 100%;
+			width: 100%;
+			height: min-content;
 			font-size: 3rem;
 			line-height: 6rem;
 			text-transform: uppercase;
@@ -72,16 +76,37 @@
 
 		&--events {
 			grid-area: wydarzenia;
-			grid-template-rows: 6rem;
 		}
 
 		// Zagnieżdżenie dla wyjazdy i zajęcia
+		.tile {
+			flex-basis: 100%;
+		}
 		&#wyjazdy {
 			grid-area: wyjazdy;
 		}
 
 		&#zajecia {
 			grid-area: zajecia;
+		}
+		&__more {
+			flex-basis: 100%;
+			height: 100px;
+			display: flex;
+			flex-flow: row wrap;
+			justify-content: center;
+			align-content: center;
+			background-color: rgba(226.5833333333, 201.0083333333, 181.1166666667, 0.5);
+			border-radius: 25px;
+			box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px,
+				rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
+				rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+			font-size: 2.5rem;
+			font-size: 2.2rem;
+			font-weight: 500;
+			white-space: pre-line;
+			letter-spacing: 1px;
+			color: #805346;
 		}
 	}
 }
@@ -138,11 +163,13 @@
 	}
 	// full name for specificity required by i in font awesome
 	.modal__icon {
-		min-width: 3.5rem;
-		height: 3.5rem;
-		margin: 0;
+		$size: 3.5rem;
 
-		line-height: 3.5rem;
+		min-width: $size;
+		height: $size;
+		margin: 0;
+		font-size: $size;
+		line-height: $size;
 		text-align: center;
 		color: map.get(var.$colors, accent-bcg);
 	}
@@ -150,16 +177,17 @@
 	&__x-btn {
 		position: absolute;
 		top: 3rem;
-		right: 2rem;
+		right: 0rem;
 		transform: translate(-50%, -50%);
 		z-index: 9;
 	}
 
 	&__close-btn {
-		font-size: 3rem;
+		font-size: 48px;
 		text-shadow: map.get(var.$shadows, active-text-icons-shadow);
 
 		&:hover {
+			transform: scale(1.05) translateY(0.5rem);
 			color: map.get(var.$colors, accent-bcg);
 			text-shadow: var.$active-box-shadow;
 		}
@@ -189,9 +217,6 @@
 				);
 			}
 		}
-		// &--event {
-		// 	justify-items: center;
-		// }
 	}
 
 	& .glide {
@@ -239,7 +264,7 @@
 
 		&--event,
 		&--content {
-			padding: 0 2rem;
+			padding: 0 1rem;
 		}
 	}
 
@@ -260,6 +285,7 @@
 
 	&__user-action {
 		padding-bottom: 0;
+		width: 100%;
 
 		@include mixin.flex($justify: center, $gap: 1rem);
 		flex-flow: row wrap;

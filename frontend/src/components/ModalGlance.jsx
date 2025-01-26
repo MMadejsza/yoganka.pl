@@ -1,10 +1,17 @@
 function CampGlance({glance}) {
+	// const icons = {
+	// 	area: 'fa-solid fa-location-dot',
+	// 	accommodation: 'fa-solid fa-bed',
+	// 	capacity: 'fa-solid fa-people-group',
+	// 	price: 'fa-solid fa-tag',
+	// 	travel: 'fa-solid fa-plane-departure',
+	// };
 	const icons = {
-		area: 'fa-solid fa-location-dot',
-		accommodation: 'fa-solid fa-bed',
-		capacity: 'fa-solid fa-people-group',
-		price: 'fa-solid fa-tag',
-		travel: 'fa-solid fa-plane-departure',
+		area: 'location_on',
+		accommodation: 'hotel',
+		capacity: 'groups',
+		price: 'sell',
+		travel: 'local_taxi',
 	};
 
 	const renderItemsList = (data) => {
@@ -14,7 +21,8 @@ function CampGlance({glance}) {
 				<li
 					key={index}
 					className='modal__li modal__li--at-glance'>
-					<i className={`${icons[key] || 'fa-solid fa-check'} modal__icon`} />
+					{/* <i className={`${icons[key] || 'fa-solid fa-check'} modal__icon`} /> */}
+					<span className='material-symbols-rounded modal__icon'>{icons[key]}</span>
 					{text}
 				</li>
 			));

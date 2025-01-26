@@ -1,16 +1,21 @@
 @use 'sass:map';
 @use 'sass:color';
 @use '_global_variables-templates' as var;
+@use '_global_mixins-keyframes' as mixin;
 
 %action-btn {
-	display: block;
-	min-width: 125px;
-	padding: 0.5rem 1rem;
+	@include mixin.flex(row, center, center);
+	flex-wrap: wrap;
+	gap: 1rem;
+	width: 95%;
+	min-height: 48px;
+	padding: 0rem 1rem;
 
-	font-size: 1.5rem;
-	line-height: 2.5rem;
+	font-size: 1.8rem;
+	line-height: 48px;
 	font-weight: bold;
 	text-transform: uppercase;
+	text-decoration: none;
 	color: map.get(var.$colors, accent-text);
 
 	cursor: pointer;
@@ -21,14 +26,45 @@
 	transition: map.get(var.$behavior, base-transition);
 }
 
-//! TILE
-.tile {
+.clickable {
+	box-shadow: map.get(var.$shadows, tile-shadow);
 	position: relative;
 
+	&:not(.offer-type__more.clickable):after {
+		content: '...';
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height: 10%;
+		padding-bottom: 0.5rem;
+
+		font-size: 1rem;
+		letter-spacing: 1px;
+		color: map.get(var.$colors, tile-text-muted);
+		background: linear-gradient(
+			to bottom,
+			transparent,
+			color.scale(map.get(var.$colors, tile), $lightness: -13%)
+		);
+
+		display: flex;
+		justify-content: center;
+		align-items: flex-end;
+	}
+}
+//! TILE
+.offer-type {
+	.tile {
+		min-height: 472px;
+	}
+}
+.tile {
+	position: relative;
 	display: flex;
+
 	flex-direction: column;
-	align-items: center;
-	justify-content: space-between;
+	flex-basis: 90%;
 	gap: 2rem;
 
 	padding: 2.5rem 1rem;
@@ -38,35 +74,13 @@
 	overflow: hidden;
 	transition: map.get(var.$behavior, base-transition);
 
-	&--event {
-		justify-content: inherit;
+	&.clickable {
+		box-shadow: map.get(var.$shadows, tile-shadow);
 	}
 
-	&--clickable {
-		box-shadow: map.get(var.$shadows, tile-shadow);
-		position: relative;
-
-		&::after {
-			content: '...';
-			position: absolute;
-			bottom: 0;
-			left: 0;
-			width: 100%;
-			height: 10%;
-			padding-bottom: 0.5rem;
-
-			font-size: 1rem;
-			letter-spacing: 1px;
-			color: map.get(var.$colors, tile-text-muted);
-			background: linear-gradient(
-				to bottom,
-				transparent,
-				color.scale(map.get(var.$colors, tile), $lightness: -13%)
-			);
-
-			display: flex;
-			justify-content: center;
-			align-items: flex-end;
+	&--classes {
+		.tile__title {
+			height: 100%;
 		}
 	}
 

@@ -1,65 +1,139 @@
-import React from 'react';
-import LogoFull from '../LogoFull.jsx';
+import React, {useState, useEffect} from 'react';
+import {NavLink, useNavigate, useLocation} from 'react-router-dom';
+import Logo from '../Logo.jsx';
+import {smoothScrollInto} from '../../utils/utils.jsx';
 const menuSet = [
 	{
-		name: 'Zajęcia',
-		icon: 'far fa-clock',
-		link: '#zajecia',
-	},
-	{
 		name: 'Wyjazdy',
-		icon: 'fas fa-cloud-moon',
-		link: '#wyjazdy',
+		icon: 'landscape_2', // Represents travel in nature; peaceful and connected to retreats
+		link: '/wyjazdy',
+		// link: '#wyjazdy',
+		// action: smoothScrollInto, //to delete
 	},
 	{
 		name: 'Wydarzenia',
-		icon: 'fas fa-calendar-check',
-		link: '.offer-type--events',
+		icon: 'notifications', // Bell symbolizes mindfulness and yoga-related events
+		// link: '/wydarzenia',
+		link: '/',
+		scroll: '#wydarzenia',
+		action: smoothScrollInto, //to delete
 	},
 	{
 		name: 'Certyfikaty',
-		icon: 'fa-solid fa-certificate',
-		link: '.certificates',
+		icon: 'verified', // Badge reflects achievements and certificates in a subtle way
+		link: '/',
+		scroll: '.certificates',
+		action: smoothScrollInto,
 	},
 	{
 		name: 'Kontakt',
-		icon: 'fa-solid fa-circle-info',
-		link: '.footer__socials',
+		icon: 'chat', // Light and informal symbol for easy communication
+		link: '/',
+		scroll: '.footer__socials',
+		action: smoothScrollInto,
+	},
+	{
+		name: 'Zajęcia',
+		icon: 'self_improvement', // Lotus flower symbolizes yoga, harmony, and relaxation
+		link: '/',
+		scroll: '#zajecia',
+		action: smoothScrollInto,
 	},
 ];
 
-function Nav() {
-	function handleCLick(e) {
-		e.preventDefault();
-		// fetch prop href from clicked menu tile
-		const targetSelector = e.target.getAttribute('href');
-		// Find in Dom first element matching href
-		const targetSection = document.querySelector(targetSelector);
-		// If section exists - scroll to it
-		if (targetSection) {
-			// Apply desired way of scrolling
-			targetSection.scrollIntoView({behavior: 'smooth'});
-		}
-	}
+function Nav({setIsNavOpen}) {
+	const navigate = useNavigate();
+	const location = useLocation();
+
+	const [isMobile, setIsMobile] = useState(false);
+
+	const closeDrawer = () => {
+		if (isMobile) setIsNavOpen(false);
+	};
+
+	// Limiting touch effectiveness only for mobile devices
+	useEffect(() => {
+		const mediaQuery = window.matchMedia('(max-width: 1024px)');
+
+		// Function updating based on media query
+		const handleMediaChange = (e) => {
+			setIsMobile(e.matches);
+		};
+
+		// Initial setup
+		handleMediaChange(mediaQuery);
+
+		// Add Listening
+		mediaQuery.addEventListener('change', handleMediaChange);
+
+		// Remove on umount
+		return () => mediaQuery.removeEventListener('change', handleMediaChange);
+	}, []);
 
 	return (
 		<nav className='nav'>
+			<NavLink
+				to={'/'}
+				onClick={(e) => {
+					closeDrawer();
+					window.scrollTo(0, 0);
+				}}
+				className={({isActive}) => (isActive ? 'nav__link active' : 'nav__link')}>
+				{({isActive}) => (
+					<Logo
+						placement='nav'
+						media={isMobile ? 'mobile' : null}
+						isActive={isActive}
+					/>
+				)}
+			</NavLink>
 			<ul className='nav__list'>
 				{menuSet.map((li) => (
 					<li
 						key={li.name}
 						className='nav__item'>
-						<a
-							onClick={(e) => handleCLick(e)}
-							href={li.link}
-							className='nav__link'>
-							<i className={`${li.icon} nav__icon`}></i>
-							{li.name}
-						</a>
+						{li.action ? (
+							<a
+								onClick={(e) => {
+									li.action(e, navigate, location);
+									closeDrawer();
+								}}
+								href={li.link}
+								className='nav__link'
+								data-scroll={li.scroll}>
+								{li.icon != '' ? (
+									<span className='material-symbols-rounded nav__icon'>
+										{li.icon}
+									</span>
+								) : null}
+								{li.name}
+							</a>
+						) : (
+							<NavLink
+								to={li.link}
+								onClick={(e) => {
+									closeDrawer();
+									window.scrollTo(0, 0);
+								}}
+								className={({isActive}) =>
+									isActive ? 'nav__link active' : 'nav__link'
+								}>
+								{({isActive}) => (
+									<>
+										<span
+											className={`${li.icon} nav__icon ${
+												isActive ? 'active' : ''
+											} material-symbols-rounded nav__icon`}>
+											{li.icon}
+										</span>
+										{li.name}
+									</>
+								)}
+							</NavLink>
+						)}
 					</li>
 				))}
 			</ul>
-			<LogoFull placement='nav' />
 		</nav>
 	);
 }

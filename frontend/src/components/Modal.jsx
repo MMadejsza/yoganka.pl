@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {createPortal} from 'react-dom';
+import {Helmet} from 'react-helmet';
 import GlideContainer from './glide/GlideContainer.jsx';
 import CampGlance from './ModalGlance.jsx';
 import CampDay from './CampDay.jsx';
@@ -66,7 +67,17 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 							key={index}
 							href={btn.link}
 							target='_blank'
+							title={btn.title}
 							className={`modal__btn`}>
+							{btn.icon ? (
+								<i
+									className={`${btn.icon} nav__icon`}
+									style={{paddingRight: '1rem'}}></i>
+							) : btn.symbol ? (
+								<span className='material-symbols-rounded nav__icon'>
+									{btn.symbol}
+								</span>
+							) : null}
 							{btn.text}
 						</a>
 					))}
@@ -75,8 +86,60 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 		);
 	};
 
+	const metaDescription =
+		tile.type == 'camp'
+			? `Dowiedz się wszystkiego o kobiecym wyjeździe z jogą do: ${tile.front.location}.`
+			: `Dowiedz się wszystkiego o wydarzeniu ${tile.name}. Miejsce: ${tile.front.location}.`;
+	const metaTitle =
+		tile.type == 'camp'
+			? `${tile.name} - Kobiecy Wyjazd z jogą`
+			: `${tile.name} - Wydarzenie z Yoganką`;
+	const canonicalTagUrl =
+		tile.type == 'camp'
+			? `https://yoganka.pl/wyjazdy/${tile.link} `
+			: `https://yoganka.pl/wydarzenia/${tile.link}`;
+	// const metaImgSpecifier = tile == 'camp' ? 'camps' : 'events';
+	// const metaImgUrl = `https://yoganka.pl/imgs/offer/${metaImgSpecifier}/${tile.fileName}/front/480_${tile.fileName}_0.jpg`;
 	return createPortal(
 		<>
+			<Helmet>
+				<title>{metaTitle}</title>
+
+				<meta
+					name='description'
+					content={metaDescription}
+				/>
+				<meta
+					name='robots'
+					content='index, follow'
+				/>
+				<meta
+					property='og:title'
+					content={metaTitle}
+				/>
+				<meta
+					property='og:description'
+					content={`Dowiedz się wszystkiego o wyjeździe do: ${tile.front.location}. Kliknij teraz!`}
+				/>
+				{/* <meta
+					property='og:image'
+					content={metaImgUrl}
+				/> */}
+				<meta
+					property='og:url'
+					content={`https://yoganka.pl/${
+						tile.type == 'camp' ? 'wyjazdy' : 'wydarzenia'
+					}/${tile.link}`}
+				/>
+				<meta
+					property='og:type'
+					content='website'
+				/>
+				<link
+					rel='canonical'
+					href={canonicalTagUrl}
+				/>
+			</Helmet>
 			<div
 				className={`modal__overlay ${isVisible ? 'visible' : ''}`}
 				onClick={handleClose}
@@ -107,12 +170,11 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 							}}
 							glideBreakpoints={{
 								// <=
-								360: {perView: 1},
-								480: {perView: 1},
+								1025: {perView: 1},
 							}}
+							type='photo'
 							slides={{
-								type: 'photo',
-								path: galleryPath,
+								galleryPath: galleryPath,
 								fileName: fileName,
 								size: gallerySize,
 							}}
@@ -120,12 +182,12 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 					) : (
 						singleImg
 					)}
-
+					{/* ${modal.fullDesc.length > 375 ? 'modal__full-desc--long-text' : ''} */}
 					<section
 						className={`modal__full-desc--${type} ${dynamicClass(
 							'modal__full-desc',
 							extraClass,
-						)} ${modal.fullDesc.length > 375 ? 'modal__full-desc--long-text' : ''}`}>
+						)} modal__full-desc--long-text`}>
 						{modal.fullDescTitle && (
 							<h3 className='modal__title'>{modal.fullDescTitle}</h3>
 						)}
@@ -136,10 +198,7 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 
 					{isCamp && (
 						<>
-							<header
-								className={`modal__header ${
-									modal.fullDesc.length > 375 ? 'modal__full-desc--long-text' : ''
-								}`}>
+							<header className={`modal__header modal__full-desc--long-text`}>
 								<CampGlance glance={modal.glance} />
 							</header>
 
@@ -161,7 +220,7 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 					{isEvent && (
 						<ModalList
 							extraClass='event'
-							listType='included'
+							listType={modal.program.listType}
 							data={modal.program}
 						/>
 					)}
@@ -169,7 +228,7 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 						<h2 className='modal__attention-note'>{modal.note}</h2>
 					)}
 
-					{modal.btnsContent.length > 0 && renderFooter()}
+					{modal.btnsContent?.length > 0 && renderFooter()}
 				</div>
 			</div>
 		</>,

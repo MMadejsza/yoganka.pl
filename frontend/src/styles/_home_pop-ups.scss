@@ -22,8 +22,6 @@
 		margin: 0;
 		padding: 0;
 
-		line-height: 6rem;
-		font-size: 3rem;
 		text-decoration: none;
 		color: map.get(var.$colors, accent-text);
 
@@ -48,13 +46,18 @@
 		}
 	}
 
+	&__icon {
+		line-height: 6rem;
+		font-size: 4rem;
+	}
+
 	&__body {
 		@include mixin.flex(row, center, center, 2rem);
 		position: absolute;
 		top: 0;
 		right: -100vw;
 		width: max-content;
-		padding-left: 0.5rem;
+		padding-left: 1rem;
 
 		font-size: 1.5rem;
 

@@ -1,3 +1,4 @@
+import {whatsAppTemplate} from '../utils/utils.jsx';
 const imgGroupPath = `/imgs/offer/regular/individual_and_group/front`;
 const imgB2BPath = `/imgs/offer/regular/commercial/front`;
 
@@ -18,7 +19,15 @@ export const CLASSES_DATA = [
 			dates: [],
 			location: ``,
 			desc: ``,
-			btnsContent: [{action: 'scroll', text: `Skontaktuj się`, link: `.footer__socials`}],
+			btnsContent: [
+				{
+					action: 'classic',
+					icon: 'fa-brands fa-whatsapp',
+					text: `WhatsApp`,
+					link: whatsAppTemplate(),
+					title: `Wiadomość WhatsApp`,
+				},
+			],
 		},
 		modal: false,
 	},
@@ -39,7 +48,18 @@ export const CLASSES_DATA = [
 			location: ``,
 			desc: ``,
 			btnsContent: [
-				{action: 'classic', text: `Poproś o ofertę`, link: `mailto:kontakt@yoganka.pl`},
+				{
+					action: 'classic',
+					symbol: 'mail',
+					text: `Wyślij maila`,
+					link: `mailto:kontakt@yoganka.pl`,
+					title: `kontakt@yoganka.pl`,
+				},
+				// {
+				// 	type: 'router',
+				// 	text: `Współpraca B2B`,
+				// 	link: `/b2b`,
+				// },
 			],
 		},
 		modal: false,

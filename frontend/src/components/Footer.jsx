@@ -1,4 +1,4 @@
-import LogoFull from './LogoFull.jsx';
+import Logo from './Logo.jsx';
 import BusinessDetails from './BusinessDetails.jsx';
 import Socials from './Socials.jsx';
 import DevDetails from './DevDetails.jsx';
@@ -9,7 +9,7 @@ function Footer() {
 
 	return (
 		<footer className={leadingClass}>
-			<LogoFull placement={leadingClass} />
+			<Logo placement={leadingClass} />
 			<BusinessDetails leadingClass={leadingClass} />
 			<Socials
 				leadingClass={leadingClass}

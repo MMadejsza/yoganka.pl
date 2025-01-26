@@ -9,10 +9,16 @@
 	},
 	"dependencies": {
 		"@glidejs/glide": "^3.6.2",
+		"@shopify/polaris-icons": "^9.3.0",
 		"frontend": "file:",
+		"material-symbols": "^0.27.2",
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1",
-		"react-markdown": "^9.0.1"
+		"react-helmet": "^6.1.0",
+		"react-markdown": "^9.0.1",
+		"react-material-symbols": "^4.4.0",
+		"react-router-dom": "^7.0.2",
+		"sitemap": "^8.0.0"
 	},
 	"devDependencies": {
 		"@types/react": "^18.2.15",

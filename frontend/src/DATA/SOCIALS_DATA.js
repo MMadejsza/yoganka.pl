@@ -1,12 +1,4 @@
-// function to replace the main contact btn's link
-const whatsappTemplate = () => {
-	const phoneNumber = '48792891607';
-	const msgContact = `Hej! Piszę do Ciebie z yoganka.pl :)\n\nTu [imię] [Nazwisko]`;
-
-	const linkContact = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(msgContact)}`;
-
-	return linkContact;
-};
+import {whatsAppTemplate} from '../utils/utils.jsx';
 const qrsPath = 'imgs/qrs';
 
 export const SOCIALS_DATA = [
@@ -35,6 +27,7 @@ export const SOCIALS_DATA = [
 		link: 'tel:+48792891607',
 		title: 'Zadzwoń',
 		iconClass: 'fa-solid fa-phone',
+		materialSymbol: 'call',
 		qr: `${qrsPath}/qrphone.png`,
 		qrAlt: function () {
 			return `${this.name} QR Code`;
@@ -45,6 +38,7 @@ export const SOCIALS_DATA = [
 		link: 'mailto:kontakt@yoganka.pl?&body=Hej! Piszę do Ciebie z yoganka.pl',
 		title: 'Wyślij maila',
 		iconClass: 'fa-solid fa-envelope',
+		materialSymbol: 'mail',
 		qr: `${qrsPath}/qrmail.png`,
 		qrAlt: function () {
 			return `${this.name} QR Code`;
@@ -52,7 +46,7 @@ export const SOCIALS_DATA = [
 	},
 	{
 		name: 'WhatsApp',
-		link: whatsappTemplate(),
+		link: whatsAppTemplate(),
 		title: 'Napisz!',
 		iconClass: 'fab fa-whatsapp',
 		qr: `${qrsPath}/qrwa.png`,

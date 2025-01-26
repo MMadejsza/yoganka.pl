@@ -4,10 +4,18 @@ import '@glidejs/glide/dist/css/glide.core.min.css';
 import '@glidejs/glide/dist/css/glide.theme.min.css';
 import CertificateSlide from './CertificateSlide.jsx';
 import PhotoSlide from './PhotoSlide.jsx';
+import ReviewSlide from './ReviewSlide.jsx';
+import {renderJointGalery} from '../../utils/utils.jsx';
 
-function GlideContainer({placement, glideConfig, glideBreakpoints, slides}) {
+function GlideContainer({placement, glideConfig, glideBreakpoints, slides, type}) {
 	const glideRef = useRef(null);
-
+	const totalPhotosNumber = (slides) => {
+		let counter = 0;
+		slides.forEach((camp) => {
+			counter += camp.gallerySize;
+		});
+		return counter;
+	};
 	useEffect(() => {
 		// double checking if component is rendered
 		if (glideRef.current) {
@@ -32,19 +40,27 @@ function GlideContainer({placement, glideConfig, glideBreakpoints, slides}) {
 		}
 	}, [glideConfig, glideBreakpoints]);
 
-	const isTile = slides.type === 'tile';
-	const isPhoto = slides.type === 'photo';
+	const isTile = type === 'tile';
+	const isPhoto = type === 'photo';
+	const isAllPhotos = type === 'allPhotos';
+	const isReview = type === 'review';
 
 	const renderSlides = () => {
-		const SlideComponent = isTile ? CertificateSlide : isPhoto ? PhotoSlide : null;
-		if (isTile) {
-			return slides.data.map((slide, index) => (
+		const SlideComponent = (() => {
+			if (isTile) return CertificateSlide;
+			if (isPhoto) return PhotoSlide;
+			if (isReview) return ReviewSlide;
+			return null;
+		})();
+
+		if (SlideComponent && (isTile || isReview)) {
+			return slides.map((slide, index) => (
 				<SlideComponent
 					key={index}
 					slideData={slide}
 				/>
 			));
-		} else if (isPhoto) {
+		} else if (SlideComponent && isPhoto) {
 			return Array.from({length: slides.size}).map((_, index) => (
 				<SlideComponent
 					key={index}
@@ -52,12 +68,32 @@ function GlideContainer({placement, glideConfig, glideBreakpoints, slides}) {
 					slideData={slides}
 				/>
 			));
+		} else {
+			return slides.map((partner, index) => (
+				<a
+					key={index}
+					href={partner.link}
+					target='_blank'
+					className={`partners__link`}>
+					<img
+						src={partner.logo}
+						loading='lazy'
+						alt={partner.alt}
+						className={`partners__image`}
+					/>
+				</a>
+			));
 		}
 	};
-	const renderBullets = () => {
-		const bulletsCount = isTile ? slides.data.length : isPhoto ? slides.size : 0;
+	const renderBullets = (type) => {
+		const counter =
+			type == 'allPhotos'
+				? totalPhotosNumber(slides)
+				: ['tile', 'review', 'partner'].includes(type)
+				? slides.length
+				: slides.size;
 
-		return Array.from({length: bulletsCount}).map((_, index) => (
+		return Array.from({length: counter}).map((_, index) => (
 			<button
 				key={index}
 				className='glide__bullet'
@@ -65,6 +101,7 @@ function GlideContainer({placement, glideConfig, glideBreakpoints, slides}) {
 			/>
 		));
 	};
+
 	return (
 		<div
 			className={`glide ${placement ? `glide--${placement}` : ''}`}
@@ -72,13 +109,15 @@ function GlideContainer({placement, glideConfig, glideBreakpoints, slides}) {
 			<div
 				className='glide__track'
 				data-glide-el='track'>
-				<ul className='glide__slides'>{renderSlides()}</ul>
+				<ul className='glide__slides'>
+					{isAllPhotos ? renderJointGalery(slides) : renderSlides()}
+				</ul>
 			</div>
 
 			<div
 				className='glide__bullets'
 				data-glide-el='controls[nav]'>
-				{renderBullets()}
+				{renderBullets(type)}
 			</div>
 
 			<div

@@ -1,24 +1,36 @@
-import {useState, useRef} from 'react';
+import {useState} from 'react';
+import {Link, useNavigate, useLocation} from 'react-router-dom';
 import ImgDynamic from './imgsRelated/ImgDynamic.jsx';
 import Modal from './Modal.jsx';
+import {smoothScrollInto} from '../utils/utils.jsx';
 
 function Tile({data, today}) {
 	const clickable = data.type !== 'class';
+	const classes = data.type === 'class';
 	const isPast = data.date < today;
-	const [isModalOpen, setIsModalOpen] = useState(false);
+	const navigate = useNavigate();
+	const location = useLocation();
+	const isModalPath = location.pathname.includes(data.link);
+	const [isModalOpen, setIsModalOpen] = useState(isModalPath);
 
 	const conditionalClasses = [
 		'tile',
-		clickable ? 'tile--clickable' : '',
+		clickable ? 'clickable' : '',
+		classes ? 'tile--classes' : '',
 		isPast ? 'past' : '',
 		data.extraClass ? `tile--${data.extraClass}` : '',
 	].join(' ');
 
-	const toggleModal = () => {
-		// console.log(`toggleModal()`);
-		setIsModalOpen(!isModalOpen);
+	const handleOpenModal = () => {
+		setIsModalOpen(true);
+		const subpage = data.type == 'camp' ? 'wyjazdy' : 'wydarzenia';
+		navigate(`/${subpage}/${data.link}`, {state: {background: location}});
 	};
 
+	const handleCloseModal = () => {
+		setIsModalOpen(false);
+		navigate(location.state?.background?.pathname || '/', {replace: true});
+	};
 	// archive
 	if (isPast) data.modal.glance.price = '-';
 
@@ -38,44 +50,54 @@ function Tile({data, today}) {
 			alt={data.name}
 		/>
 	);
-	const renderDates = data.front.dates.map((date, index) => (
-		<h3
-			className='tile__date'
-			key={index}>
-			{date}
-		</h3>
-	));
+	const renderDates =
+		// <div>
+		// 	{
+		data.front.dates.map((date, index) => (
+			<h3
+				className='tile__date'
+				key={index}>
+				{date}
+			</h3>
+		));
+	// 	}
+	// </div>
 	const renderBtns = data.front.btnsContent.map((btn, index) => {
-		function handleCLick(e) {
-			if (btn.action === 'scroll') {
-				e.preventDefault();
-			}
-			// fetch prop href from clicked menu tile
-			const targetSelector = e.target.getAttribute('href');
-			// Find in Dom first element matching href
-			const targetSection = document.querySelector(targetSelector);
-			// If section exists - scroll to it
-			if (targetSection) {
-				// Apply desired way of scrolling
-				targetSection.scrollIntoView({behavior: 'smooth'});
-			}
+		if (btn.action === 'subPage') {
+			return (
+				<Link
+					key={index}
+					to={btn.link}
+					title={btn.title}
+					className={`tile__btn tile__btn--${data.fileName}`}>
+					{btn.icon ? <i className={btn.icon} /> : null}
+					{btn.text}
+				</Link>
+			);
+		} else {
+			return (
+				<a
+					onClick={btn.action === 'scroll' ? (e) => smoothScrollInto(e) : null}
+					key={index}
+					target='_blank'
+					href={btn.link}
+					title={btn.title}
+					className={`tile__btn tile__btn--${data.fileName}`}>
+					{btn.icon ? (
+						<i className={`${btn.icon} nav__icon`}></i>
+					) : btn.symbol ? (
+						<span className='material-symbols-rounded nav__icon'>{btn.symbol}</span>
+					) : null}
+					{btn.text}
+				</a>
+			);
 		}
-		return (
-			<a
-				onClick={(e) => handleCLick(e)}
-				target='_blank'
-				key={index}
-				href={btn.link}
-				className={`tile__btn tile__btn--${data.fileName}`}>
-				{btn.text}
-			</a>
-		);
 	});
 
 	return (
 		<div
 			className={conditionalClasses}
-			onClick={clickable ? toggleModal : undefined}>
+			onClick={clickable ? handleOpenModal : undefined}>
 			{renderSingleImg}
 
 			<h3 className='tile__title'>{data.front.title}</h3>
@@ -86,14 +108,14 @@ function Tile({data, today}) {
 
 			{data.front.desc && <p className='tile__desc'>{data.front.desc}</p>}
 
-			{data.front.btnsContent.length > 0 && renderBtns}
+			{data.front.btnsContent?.length > 0 && renderBtns}
 
 			{isModalOpen && (
 				<Modal
 					visited={isModalOpen}
 					tile={data}
 					singleImg={renderSingleImg}
-					onClose={toggleModal}
+					onClose={handleCloseModal}
 					today={today}
 				/>
 			)}

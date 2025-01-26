@@ -16,6 +16,7 @@
 .glide {
 	grid-column: 1 / -1;
 	padding: 2rem 0 3rem;
+	overflow-x: hidden;
 
 	&::before {
 		@extend %slider-shade-overlay;
@@ -38,26 +39,33 @@
 	&--comp .glide__track {
 		border-radius: map.get(var.$sizes, border-radius);
 	}
+
 	&__track {
 		overflow: visible;
 	}
 	&__slides {
 		height: 100%;
-		min-height: 30vh;
 		overflow: visible;
-		overflow-x: hidden;
+		overflow: hidden;
 
 		align-items: center;
 		justify-content: space-around;
 	}
 	&__slide {
 		border-radius: map.get(var.$sizes, border-radius);
-
 		display: flex;
 		justify-content: center;
 	}
 	&__bullets {
-		bottom: 1rem;
+		width: max-content;
+		max-width: 95%;
+		@include mixin.flex(row, center);
+		flex-wrap: wrap;
+		gap: 1rem 0;
+		bottom: 0;
+		padding: 0.5rem;
+		border-radius: 50px;
+		background-color: rgba(map.get(var.$colors, nav), 0.7);
 	}
 	&__bullet {
 		width: 1rem;

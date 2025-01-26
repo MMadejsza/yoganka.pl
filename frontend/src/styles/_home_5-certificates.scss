@@ -31,7 +31,8 @@
 	&__type {
 		white-space: pre-line;
 	}
-	&__name {
+	&__name,
+	.reviews__name {
 		font-size: 2rem;
 	}
 	&__school {

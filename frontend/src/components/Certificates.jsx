@@ -19,7 +19,8 @@ function Certificates() {
 						autoplay: 2200,
 						animationDuration: 800,
 					}}
-					slides={{type: 'tile', data: CERTIFICATES_DATA}}
+					type='tile'
+					slides={CERTIFICATES_DATA}
 					leadingClass={leadingClass}
 				/>
 			</Section>

@@ -1,4 +1,6 @@
-function Bio({placement}) {
+import Motto from './HeaderMotto.jsx';
+
+function Bio({placement, isMobile}) {
 	const prefix = placement;
 	const pClass = `${prefix}__bio--description`;
 
@@ -26,6 +28,7 @@ function Bio({placement}) {
 				Do zobaczenia na macie!
 			</p>
 			<p className={`${prefix}__bio--signature`}>Anna Madejsza</p>
+			{isMobile ? null : <Motto />}
 		</article>
 	);
 }
