@@ -12,7 +12,7 @@ function GlideContainer({placement, glideConfig, glideBreakpoints, slides, type}
 	const totalPhotosNumber = (slides) => {
 		let counter = 0;
 		slides.forEach((camp) => {
-			counter += camp.gallerySize;
+			counter += camp.pastGallerySize;
 		});
 		return counter;
 	};

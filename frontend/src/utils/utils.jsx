@@ -40,12 +40,13 @@ export const renderJointGalery = (campsArr, isMobile) => {
 
 	campsArr.forEach((camp) => {
 		// For each com create array of gallery slides
-		const singleCampGallery = Array.from({length: camp.gallerySize}).map((_, index) => (
+		const singleCampGallery = Array.from({length: camp.pastGallerySize}).map((_, index) => (
 			<PhotoSlide
 				key={`${index}${camp.fileName}`}
 				photoNo={index + 1}
 				slideData={camp}
 				isMobile={isMobile}
+				past={true}
 			/>
 		));
 		allPhotos.push(...singleCampGallery);

@@ -597,7 +597,7 @@ export const CAMPS_DATA = [
 		galleryPath: `${htmlToImgsPath}/offer/camps/camp_kaszuby/gallery`,
 		gallerySize: 13,
 		pastGalleryPath: `${htmlToImgsPath}/offer/camps/camp_kaszuby/past_gallery`,
-		pastGallerySize: 22,
+		pastGallerySize: 10,
 		eventType: ``,
 		extraClass: ``,
 		front: {
@@ -719,8 +719,8 @@ export const CAMPS_DATA = [
 		imgPath: `${htmlToImgsPath}/offer/camps/camp_warmia/front`,
 		galleryPath: `${htmlToImgsPath}/offer/camps/camp_warmia/gallery`,
 		gallerySize: 13,
-		pastGalleryPath: `${htmlToImgsPath}/offer/camps/camp_kaszuby/past_gallery`,
-		pastGallerySize: 22,
+		pastGalleryPath: `${htmlToImgsPath}/offer/camps/camp_warmia/past_gallery`,
+		pastGallerySize: 12,
 		eventType: ``,
 		extraClass: `long`,
 		front: {
