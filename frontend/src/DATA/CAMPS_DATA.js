@@ -353,7 +353,7 @@ export const CAMPS_DATA = [
 			title: `Summer ZenNature Camp`,
 			dates: [`27-30.06.2025`],
 			location: `Warmia`,
-			desc: `W PRZYGOTOWANIU`,
+			desc: `...`,
 			btnsContent: [],
 		},
 		modal: {
