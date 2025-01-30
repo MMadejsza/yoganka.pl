@@ -5,7 +5,7 @@ export const CAMPS_DATA = [
 	// Add comments for each property
 	{
 		id: `CA07`,
-		name: `Peak Yoga Camp wakacje z jogą w górach`,
+		name: `Peak Yoga Camp - Joga | Glina | Góry`,
 		type: `camp`,
 		date: `2025-08-05`,
 		link: `camp-peak-yoga`,
@@ -17,7 +17,7 @@ export const CAMPS_DATA = [
 		extraClass: `long`,
 		front: {
 			title: `Peak Yoga Camp
-			wakacje z\u00A0jogą w\u00A0górach`,
+			Joga |\u00A0Glina |\u00A0Góry`,
 			dates: [`05-10.08.2025`],
 			location: `Beskid Wyspowy`,
 			desc: `...`,
@@ -229,7 +229,7 @@ export const CAMPS_DATA = [
 	},
 	{
 		id: `CA05`,
-		name: `Joga | SPA | Ajurweda`,
+		name: `Wellness yoga camp - Joga | SPA | AJurweda`,
 		type: `camp`,
 		date: `2025-05-16`,
 		link: `camp-ajurweda`,
@@ -240,7 +240,8 @@ export const CAMPS_DATA = [
 		eventType: ``,
 		extraClass: ``,
 		front: {
-			title: `Joga | SPA | Ajurweda`,
+			title: `Wellness\u00A0Yoga\u00A0Camp
+			Joga |\u00A0SPA |\u00A0AJurweda`,
 			dates: [`16-18.05.2025`],
 			location: `Warmia`,
 			desc: `...`,
@@ -339,7 +340,7 @@ export const CAMPS_DATA = [
 	},
 	{
 		id: `CA04`,
-		name: `Summer ZenNature Camp`,
+		name: `Summer ZenNature Camp - Joga | Biżuteria z kamieni | Relaks`,
 		type: `camp`,
 		date: `2025-06-28`,
 		link: `camp-summer-zennature`,
@@ -350,7 +351,8 @@ export const CAMPS_DATA = [
 		eventType: ``,
 		extraClass: `long`,
 		front: {
-			title: `Summer ZenNature Camp`,
+			title: `Summer ZenNature\u00A0Camp
+			Joga |\u00A0Biżuteria z\u00A0kamieni |\u00A0Relaks`,
 			dates: [`27-30.06.2025`],
 			location: `Warmia`,
 			desc: `...`,

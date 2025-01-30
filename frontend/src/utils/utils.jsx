@@ -1,7 +1,7 @@
 import PhotoSlide from '../components/glide/PhotoSlide.jsx';
 
 export const smoothScrollInto = (e, navigate, location) => {
-	console.log(location);
+	// console.log(location);
 	e.preventDefault();
 	navigate(`/`, {state: {background: location}});
 	setTimeout(() => {
