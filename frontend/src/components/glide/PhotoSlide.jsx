@@ -39,11 +39,12 @@ function PhotoSlide({slideData, photoNo, isMobile, past}) {
 		tile__img tile__img--modal-slider`}
 			srcSet={imgPaths}
 			sizes={`
-			(max-width: 768px) 480px,
-			(max-width: 1024px) and (orientation: portrait) 1024px,
-			(max-width: 1200px) 1400px,
-			1600px
-	`}
+			(max-width: 480px) 100vw,
+			(max-width: 768px) 100vw,
+			(max-width: 1024px) 90vw,
+			(max-width: 1200px) 80vw,
+			1200px
+				`}
 			alt='Galeria Wyjazdu'
 		/>
 	);

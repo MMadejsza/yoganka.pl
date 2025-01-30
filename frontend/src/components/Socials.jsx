@@ -1,7 +1,9 @@
 function Socials({leadingClass, items}) {
+	const mediaQuery = window.matchMedia('(max-width: 1024px)');
+	const isNotMobile = !mediaQuery.matches;
 	return (
 		<div className={`${leadingClass}__socials`}>
-			{items.map((social, index) => (
+			{items.map((social) => (
 				<a
 					key={social.name}
 					className={`${leadingClass}__social-link`}
@@ -17,13 +19,15 @@ function Socials({leadingClass, items}) {
 						) : ( */}
 						<i className={`${leadingClass}__social-icon ${social.iconClass}`} />
 						{/* )} */}
-						<div className={`${leadingClass}__qr`}>
-							<img
-								className={`${leadingClass}__qr-image`}
-								src={social.qr}
-								alt={social.qrAlt()}
-							/>
-						</div>
+						{isNotMobile && (
+							<div className={`${leadingClass}__qr`}>
+								<img
+									className={`${leadingClass}__qr-image`}
+									src={isNotMobile ? social.qr : ''}
+									alt={social.qrAlt()}
+								/>
+							</div>
+						)}
 					</div>
 				</a>
 			))}

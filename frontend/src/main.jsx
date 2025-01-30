@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
-import 'material-symbols';
+// import 'material-symbols';
 import '/src/styles/main.scss';
 
 function loadFontAwesome() {
