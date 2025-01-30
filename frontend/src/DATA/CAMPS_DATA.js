@@ -339,42 +339,125 @@ export const CAMPS_DATA = [
 	},
 	{
 		id: `CA04`,
-		name: `Summer Chill Camp`,
+		name: `Summer ZenNature Camp`,
 		type: `camp`,
 		date: `2025-06-28`,
-		link: `camp-summer-chill`,
-		fileName: `camp_chill`,
-		imgPath: `${htmlToImgsPath}/offer/camps/camp_chill/front`,
-		galleryPath: `${htmlToImgsPath}/offer/camps/camp_chill/gallery`,
+		link: `camp-summer-zennature`,
+		fileName: `camp_zennature`,
+		imgPath: `${htmlToImgsPath}/offer/camps/camp_zennature/front`,
+		galleryPath: `${htmlToImgsPath}/offer/camps/camp_zennature/gallery`,
 		gallerySize: 9,
 		eventType: ``,
-		extraClass: ``,
+		extraClass: `long`,
 		front: {
-			title: `Summer Chill Camp`,
+			title: `Summer ZenNature Camp`,
 			dates: [`27-30.06.2025`],
-			location: `Wipsowo 44`,
+			location: `Warmia`,
 			desc: `W PRZYGOTOWANIU`,
 			btnsContent: [],
 		},
 		modal: {
 			fullDescTitle: ``,
-			fullDesc: `Letni camp w\u00A0magicznym Wipsowie. 4\u00A0dni pełne relaksu, natury, pysznego jedzenia i\u00A0oczywiście jogi! Pełna oferta dostępna na\u00A0początku 2025.`,
+			fullDesc: `Zanurzysz\u00A0się w\u00A0letnim błogostanie, gdzie czas zwalnia, oddech\u00A0się wydłuża, a\u00A0ciało i\u00A0dusza odnajdują pełną harmonię. W samym sercu mazurskiej natury, w\u00A0miejscu pulsującym spokojem, czeka\u00A0na Ciebie wyjątkowa przestrzeń relaksu i\u00A0odnowy. Tak można opisać błogie Wipsowo 44. Te cztery dni to czas obfity w\u00A0jogę w\u00A0rytmie natury na drewnianym tarasie z\u00A0lasem w\u00A0tle, kojące rytuały ziołowe w\u00A0pa w\u00A0kurniku, kąpiele w\u00A0jeziorze, spacery na\u00A0boso i\u00A0drzemki w\u00A0hamakach. Dopełnieniem będzie warsztat tworzenia biżuterii z\u00A0kamieni naturalnych ze\u00A0Studiem Cudo. Bez wahania musisz tego doświadczyć! 
+			Plan godzinowy może ulec zmianie, codziennie rano i\u00A0wieczorem sesja jogi, pranayama, dużo czasu wolnego na regenerację. Wrócisz wypoczęta i\u00A0personalizowanym naszyjnikiem!`,
 			glance: {
-				title: `W przygotowaniu!`,
-				area: ``,
-				accommodation: ``,
+				title: ``,
+				area: `Wipsowo`,
+				accommodation: `Wipsowo 44`,
 				capacity: ``,
-				price: ``,
+				price: `2222zł`,
 				travel: ``,
 			},
 
 			plan: {
-				title: ``,
-				schedule: [],
+				title: `Poglądowe ZenNature  menu`,
+				schedule: [
+					{
+						'day': 'Piątek:',
+						'16:00': 'Możliwość przyjazdu, zenNature, błogi\u00A0relaks',
+						'18:00': 'Kolacja',
+						'20:00': `Zen Yoga`,
+						'21:30': `Ciepło ogniska`,
+					},
+					{
+						'day': 'Sobota:',
+						'08:30': 'Sunrise yoga',
+						'09:45': 'Niespieszne śniadanie',
+						'11:00': `Zen nature: bose spacery, malowanie, drzemki w\u00A0hamakach, kąpiele`,
+						'14:00': `Spotkanie przy stole - obiad`,
+						'17:00': `Mindfulness`,
+						'18:00': `Spotkanie przy stole:\u00A0kolacja`,
+						'20:00': `Sunset yoga`,
+					},
+					{
+						'day': 'Niedziela:',
+						'08:00': 'Medytacja w widokiem na las',
+						'08:30': 'Sunrise yoga',
+						'09:30': 'Niespieszne śniadanie',
+						'11:30': `Naszyjniki z kamieni`,
+						'14:00': `Spotkanie przy stole - obiad`,
+						'15:30': `Czas wolny: spa w kurniku, malowanie, spacery, kąpiele`,
+						'18:00': `Spotkanie przy stole:\u00A0kolacja`,
+						'20:00': `Sunset yoga nidra +\u00A0yin`,
+						'21:30': `Ruska bania dla\u00A0chętnych (dodatkowo\u00A0płatna)`,
+					},
+					{
+						'day': 'Poniedziałek:',
+						'08:00': 'Joga na\u00A0pożegnanie',
+						'09:30': 'Niespieszne śniadanie',
+						'12:00': 'Wymeldowanie i\u00A0powrót do\u00A0domu',
+					},
+				],
 			},
-			summary: {},
-			note: ``,
-			btnsContent: [],
+			summary: {
+				included: {
+					title: `W cenie:`,
+					list: [
+						`7h jogi`,
+						`2h Warsztatu biżuterii`,
+						`3 noce`,
+						`3x dziennie pełne wyżywienie`,
+						`Malowanie w plenerze`,
+						`Medytacja oraz sesja mindfulness`,
+					],
+				},
+				optional: {
+					title: `Poszerz zen menu:`,
+					list: [
+						`Ruska bania 600zł/grupa (min. 12\u00A0osób)`,
+						`Rytuał spa w\u00A0kurniku 160zł/osoba`,
+					],
+				},
+				freeTime: {
+					title: `W czasie wolnym:`,
+					//(note: statuses are free/optional/available for different icons)
+					list: [
+						{status: `free`, activity: `Spacer, kąpiele w\u00A0jeziorze/leśne`},
+						{status: `free`, activity: `Chodzenie bosko, spanie w\u00A0hamakach`},
+						{status: `free`, activity: `Malowanie w\u00A0plenerze`},
+						{status: `free`, activity: `SUP`},
+						{status: `free`, activity: `Ruska bania/spa rytuał samoobsługowy`},
+					],
+				},
+			},
+			note: `Do zobaczenia!`,
+			btnsContent: [
+				{
+					action: 'classic',
+					text: `WhatsApp`,
+					title: `Wiadomość WhatsApp`,
+					link: whatsAppTemplate(),
+					icon: 'fa-brands fa-whatsapp',
+				},
+				{
+					action: 'classic',
+					title: `Formularz Google w osobnej zakładce`,
+
+					text: `Wypełnij formularz`,
+					symbol: `edit`,
+					link: `https://forms.gle/KL6LU2pXRGn4SmXw6`,
+				},
+			],
 			formLink: `https://forms.gle/recTtsdmUdY71wwv5`,
 			questionTemplate(subject) {
 				return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
@@ -496,7 +579,7 @@ export const CAMPS_DATA = [
 					link: `https://forms.gle/fX2Dx8KJaBhQFEGh9`,
 				},
 			],
-			formLink: `https://forms.gle/fX2Dx8KJaBhQFEGh9`,
+			formLink: `https://forms.gle/KL6LU2pXRGn4SmXw6`,
 			questionTemplate(subject) {
 				return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
 			},
