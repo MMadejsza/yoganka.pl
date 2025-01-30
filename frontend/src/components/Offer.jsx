@@ -21,6 +21,9 @@ function Offer({id, specifier, header, data, today, limit, moreLink}) {
 			{moreLink ? (
 				<Link
 					className={`${classy}__more clickable`}
+					onClick={() => {
+						window.scrollTo(0, 0);
+					}}
 					to={moreLink}>
 					Zobacz więcej ...
 				</Link>
