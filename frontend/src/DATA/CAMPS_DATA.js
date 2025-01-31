@@ -229,9 +229,9 @@ export const CAMPS_DATA = [
 	},
 	{
 		id: `CA05`,
-		name: `Wellness yoga camp - Joga | SPA | AJurweda`,
+		name: `Wellness yoga camp - Joga | SPA | Ajurweda`,
 		type: `camp`,
-		date: `2025-05-16`,
+		date: `2025-05-09`,
 		link: `camp-ajurweda`,
 		fileName: `camp_ajurweda`,
 		imgPath: `${htmlToImgsPath}/offer/camps/camp_ajurweda/front`,
@@ -241,8 +241,8 @@ export const CAMPS_DATA = [
 		extraClass: ``,
 		front: {
 			title: `Wellness\u00A0Yoga\u00A0Camp
-			Joga |\u00A0SPA |\u00A0AJurweda`,
-			dates: [`16-18.05.2025`],
+			Joga |\u00A0SPA |\u00A0Ajurweda`,
+			dates: [`09-11.05.2025`],
 			location: `Warmia`,
 			desc: `...`,
 			btnsContent: [],
