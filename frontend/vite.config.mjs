@@ -2,11 +2,15 @@
 import {defineConfig} from 'vite';
 import react from '@vitejs/plugin-react';
 import viteImagemin from 'vite-plugin-imagemin';
-import autoprefixer from 'autoprefixer'; // Import statyczny
-import cssnano from 'cssnano'; // Import statyczny
+import autoprefixer from 'autoprefixer';
+import cssnano from 'cssnano';
+import postcssDiscardComments from 'postcss-discard-comments';
 
 export default defineConfig({
 	plugins: [
+		postcssDiscardComments({
+			removeAll: true,
+		}),
 		react(),
 		viteImagemin({
 			gifsicle: {optimizationLevel: 7},
@@ -19,7 +23,15 @@ export default defineConfig({
 	// root: 'public',  // Main folder to src
 	publicDir: 'public',
 	build: {
-		minify: 'esbuild',
+		minify: 'terser',
+		terserOptions: {
+			format: {
+				comments: false,
+			},
+			compress: {
+				drop_console: true,
+			},
+		},
 		outDir: '../www',
 		emptyOutDir: true, // Clear folder before build
 		treeshake: true, //Make sure you don't use unnecessary dependencies and your code is cleaned of unused functions and libraries.
