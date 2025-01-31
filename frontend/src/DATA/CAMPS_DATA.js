@@ -599,7 +599,7 @@ export const CAMPS_DATA = [
 		galleryPath: `${htmlToImgsPath}/offer/camps/camp_kaszuby/gallery`,
 		gallerySize: 13,
 		pastGalleryPath: `${htmlToImgsPath}/offer/camps/camp_kaszuby/past_gallery`,
-		pastGallerySize: 10,
+		pastGallerySize: 9,
 		eventType: ``,
 		extraClass: ``,
 		front: {
