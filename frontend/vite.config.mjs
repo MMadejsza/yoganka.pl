@@ -18,6 +18,8 @@ export default defineConfig({
 			svgo: {
 				plugins: [{removeViewBox: false}],
 			},
+			mozjpeg: {quality: 65},
+			webp: {quality: 65},
 		}),
 	],
 	// root: 'public',  // Main folder to src
