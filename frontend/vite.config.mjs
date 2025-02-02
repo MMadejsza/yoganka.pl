@@ -1,7 +1,7 @@
 // vite.config.js pre-ready for React
 import {defineConfig} from 'vite';
 import react from '@vitejs/plugin-react';
-import viteImagemin from 'vite-plugin-imagemin';
+const viteImagemin = await import('vite-plugin-imagemin').then((m) => m.default || m);
 import autoprefixer from 'autoprefixer';
 import cssnano from 'cssnano';
 import postcssDiscardComments from 'postcss-discard-comments';
@@ -12,7 +12,7 @@ export default defineConfig({
 			removeAll: true,
 		}),
 		react(),
-		viteImagemin({
+		viteImagemin.default({
 			gifsicle: {optimizationLevel: 7},
 			optipng: {optimizationLevel: 7},
 			svgo: {
