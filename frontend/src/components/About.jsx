@@ -8,13 +8,13 @@ const logoPaths = [
 	{path: logoImg320, size: '320w'},
 	{path: logoImg480, size: '480w'},
 ];
-import img320 from '/imgs/about/320_about_profile.jpg';
-import img600 from '/imgs/about/600_about_profile.jpg';
+import img320 from '/imgs/about/480_about_profile.jpg';
+import img600 from '/imgs/about/768_about_profile.jpg';
 import cert320 from '/imgs/about/about_YA-Logo.png';
 import cert600 from '/imgs/about/about_ryt.png';
 const stampedImgPaths = [
-	{path: img320, size: '320w'},
-	{path: img600, size: '600w'},
+	{path: img320, size: '480w'},
+	{path: img600, size: '768w'},
 ];
 const stampedImgCertPaths = [
 	{path: cert320, alt: 'Logo federacji yogi'},
