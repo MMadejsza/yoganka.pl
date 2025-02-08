@@ -44,6 +44,14 @@ export default defineConfig({
 		hmr: {
 			overlay: true, // Shows error full screen
 		},
+		proxy: {
+			'/api': {
+				target: 'http://localhost:3000', // (Express)
+				changeOrigin: true,
+				secure: false,
+				rewrite: (path) => path.replace(/^\/api/, ''), // delete `/api` from URL
+			},
+		},
 	},
 	resolve: {
 		alias: {
