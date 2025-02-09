@@ -114,9 +114,10 @@ export const createProduct = async (req, res, next) => {
 		.catch((err) => console.log(err));
 };
 export const showAllProducts = (req, res, next) => {
-	Product.fetchAll()
-		.then(([rows, fieldData]) => {
-			return res.json(rows);
+	Product.findAll()
+		.then((products) => {
+			console.log(products);
+			return res.json(products);
 		})
 		.catch((err) => console.log(err));
 };
