@@ -9,6 +9,11 @@ const options = [
 		path: 'admin/show-all-users',
 		method: 'GET',
 	},
+	{
+		label: 'a all user settings',
+		path: 'admin/show-all-users-settings',
+		method: 'GET',
+	},
 	// /admin/delete-user/:id
 	{
 		label: 'a all customers',

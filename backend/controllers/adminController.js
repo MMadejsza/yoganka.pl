@@ -12,9 +12,9 @@ import Newsletter from '../models/newsletterModel.js';
 import SubscribedNewsletter from '../models/newsletterSubscribedModel.js';
 
 export const showAllUsers = (req, res, next) => {
-	User.fetchAll()
-		.then(([rows, fieldData]) => {
-			return res.json(rows);
+	User.findAll()
+		.then((users) => {
+			return res.json(users);
 		})
 		.catch((err) => console.log(err));
 };
@@ -29,6 +29,13 @@ export const editUser = (req, res, next) => {
 	User.fetchAll()
 		.then(([rows, fieldData]) => {
 			return res.json(rows);
+		})
+		.catch((err) => console.log(err));
+};
+export const showAllUserSettings = (req, res, next) => {
+	UserSettings.findAll()
+		.then((settings) => {
+			return res.json(settings);
 		})
 		.catch((err) => console.log(err));
 };
@@ -63,9 +70,9 @@ export const showAllCustomersPhones = (req, res, next) => {
 };
 
 export const showAllSchedules = (req, res, next) => {
-	ScheduleRecord.fetchAll()
-		.then(([rows, fieldData]) => {
-			return res.json(rows);
+	ScheduleRecord.findAll()
+		.then((scheduleRecords) => {
+			return res.json(scheduleRecords);
 		})
 		.catch((err) => console.log(err));
 };
@@ -78,9 +85,9 @@ export const showBookedSchedules = (req, res, next) => {
 };
 
 export const showAllParticipantsFeedback = (req, res, next) => {
-	Feedback.fetchAll()
-		.then(([rows, fieldData]) => {
-			return res.json(rows);
+	Feedback.findAll()
+		.then((feedbacks) => {
+			return res.json(feedbacks);
 		})
 		.catch((err) => console.log(err));
 };
@@ -92,9 +99,9 @@ export const showAllNewsletters = (req, res, next) => {
 		.catch((err) => console.log(err));
 };
 export const showAllSubscribedNewsletters = (req, res, next) => {
-	SubscribedNewsletter.fetchAll()
-		.then(([rows, fieldData]) => {
-			return res.json(rows);
+	SubscribedNewsletter.findAll()
+		.then((subscribedNewsletters) => {
+			return res.json(subscribedNewsletters);
 		})
 		.catch((err) => console.log(err));
 };
@@ -130,9 +137,9 @@ export const showAllBookings = (req, res, next) => {
 		.catch((err) => console.log(err));
 };
 export const showAllInvoices = (req, res, next) => {
-	Invoice.fetchAll()
-		.then(([rows, fieldData]) => {
-			return res.json(rows);
+	Invoice.findAll()
+		.then((invoices) => {
+			return res.json(invoices);
 		})
 		.catch((err) => console.log(err));
 };
