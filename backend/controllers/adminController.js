@@ -70,8 +70,43 @@ export const showAllSchedules = (req, res, next) => {
 		})
 		.catch((err) => console.log(err));
 };
+export const showAllParticipantsFeedback = (req, res, next) => {
+	Feedback.fetchAll()
+		.then(([rows, fieldData]) => {
+			return res.json(rows);
+		})
+		.catch((err) => console.log(err));
+};
+export const showAllNewsletters = (req, res, next) => {
+	Newsletter.fetchAll()
+		.then(([rows, fieldData]) => {
+			return res.json(rows);
+		})
+		.catch((err) => console.log(err));
+};
+export const showAllSubscribedNewsletters = (req, res, next) => {
+	SubscribedNewsletter.fetchAll()
+		.then(([rows, fieldData]) => {
+			return res.json(rows);
+		})
+		.catch((err) => console.log(err));
+};
 export const showAllProducts = (req, res, next) => {
 	Product.fetchAll()
+		.then(([rows, fieldData]) => {
+			return res.json(rows);
+		})
+		.catch((err) => console.log(err));
+};
+export const showAllBookings = (req, res, next) => {
+	Booking.fetchAll()
+		.then(([rows, fieldData]) => {
+			return res.json(rows);
+		})
+		.catch((err) => console.log(err));
+};
+export const showAllInvoices = (req, res, next) => {
+	Invoice.fetchAll()
 		.then(([rows, fieldData]) => {
 			return res.json(rows);
 		})

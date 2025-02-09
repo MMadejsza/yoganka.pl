@@ -91,7 +91,7 @@ function ErrorPage() {
 		const selectedOption = selectOption.options[selectOption.selectedIndex];
 		const val = selectedOption.value; // Wartość wybranej opcji
 		const method = selectedOption.dataset.method; // Metoda wybranej opcji
-
+		console.clear();
 		console.log(`method ${method}`);
 
 		const content = type === 'admin' ? 'application/json' : 'text/html';
