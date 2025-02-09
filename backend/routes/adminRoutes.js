@@ -3,7 +3,7 @@ import * as adminC from '../controllers/adminController.js';
 
 const router = express.Router();
 
-//  /admin/* => GET
+//@ GET
 // filtering is on the Frontend side due to low number of total records
 router.get('/show-all-users', adminC.showAllUsers);
 router.get('/show-all-users-settings', adminC.showAllUserSettings);
@@ -18,8 +18,16 @@ router.get('/show-all-products', adminC.showAllProducts);
 router.get('/show-all-bookings', adminC.showAllBookings);
 router.get('/show-all-invoices', adminC.showAllInvoices);
 
-//  /admin/* => POST
+//@ POST
+//# CREATE
+router.post('/create-user', adminC.createUser);
+//? router.post('/create-customer', adminC.createCustomer);
+//? router.post('/create-customer-phone', adminC.createCustomerPhone);
+router.post('/create-schedule-record', adminC.createScheduleRecord);
+// router.post('/create-newsletter', adminC.createNewsletter);
 router.post('/create-product', adminC.createProduct);
+// router.post('/create-booking', adminC.createBooking);
+// router.post('/create-invoice', adminC.createInvoice);
 
 router.post('/ex', (req, res) => {
 	console.log('Got in backend:', req.body);

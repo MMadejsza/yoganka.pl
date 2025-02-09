@@ -18,6 +18,22 @@ export const showAllUsers = (req, res, next) => {
 		})
 		.catch((err) => console.log(err));
 };
+export const createUser = (req, res, next) => {
+	User.create({
+		RegistrationDate: req.body.regDate,
+		Login: req.body.login,
+		Location: req.body.location,
+		PasswordHash: req.body.pass,
+		LastLoginDate: req.body.loginDate,
+		Email: req.body.mail + Math.floor(Math.random() * 1000) + '@google.com',
+		Role: req.body.role,
+		ProfilePictureSrcSetJSON: req.body.profilePic,
+	})
+		.then(() => {
+			console.log('✅ created');
+		})
+		.catch((err) => console.log(err));
+};
 export const deleteUser = (req, res, next) => {
 	User.fetchAll()
 		.then(([rows, fieldData]) => {
@@ -83,6 +99,18 @@ export const showBookedSchedules = (req, res, next) => {
 		})
 		.catch((err) => console.log(err));
 };
+export const createScheduleRecord = (req, res, next) => {
+	ScheduleRecord.create({
+		ProductID: req.body.productID,
+		Date: req.body.date,
+		StartTime: req.body.startTime,
+		Location: req.body.location,
+	})
+		.then(() => {
+			console.log('✅ created');
+		})
+		.catch((err) => console.log(err));
+};
 
 export const showAllParticipantsFeedback = (req, res, next) => {
 	Feedback.findAll()
@@ -115,8 +143,8 @@ export const createProduct = async (req, res, next) => {
 		TotalSpaces: req.body.totalSpaces,
 		StartDate: req.body.startDate,
 	})
-		.then((res) => {
-			console.log('created');
+		.then(() => {
+			console.log('✅ created');
 		})
 		.catch((err) => console.log(err));
 };

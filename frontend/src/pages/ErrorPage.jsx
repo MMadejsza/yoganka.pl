@@ -20,7 +20,6 @@ const options = [
 		path: 'admin/show-all-customers',
 		method: 'GET',
 	},
-	// /admin/show-all-customers
 	// /admin/edit-customer/:id
 	// /admin/delete-customer/:id
 	{
@@ -28,7 +27,6 @@ const options = [
 		path: 'admin/show-all-customers-phones',
 		method: 'GET',
 	},
-	// /admin/add-customer-phone
 	// /admin/edit-customer-phone/:id
 	// /admin/delete-customer-phone/:id
 
@@ -42,7 +40,6 @@ const options = [
 		path: 'admin/show-booked-schedules',
 		method: 'GET',
 	},
-	// /admin/create-schedule
 	// /admin/edit-schedule/:id
 	// /admin/delete-schedule/:id
 
@@ -57,7 +54,6 @@ const options = [
 		path: 'admin/show-all-newsletters',
 		method: 'GET',
 	},
-	// /admin/create-newsletter
 	// /admin/edit-newsletter/:id
 	// /admin/delete-newsletter/:id
 	{
@@ -71,7 +67,6 @@ const options = [
 		path: 'admin/show-all-products',
 		method: 'GET',
 	},
-	// /admin/create-product
 	// /admin/edit-product/:id
 	// /admin/delete-product/:id
 	{
@@ -79,7 +74,6 @@ const options = [
 		path: 'admin/show-all-bookings',
 		method: 'GET',
 	},
-	// /admin/create-booking
 	// /admin/edit-booking/:id
 	// /admin/delete-booking/:id
 	{
@@ -87,12 +81,13 @@ const options = [
 		path: 'admin/show-all-invoices',
 		method: 'GET',
 	},
-	// /admin/create-invoice
 	// /admin/edit-invoice/:id
 	// /admin/delete-invoice/:id
 ];
 
 function ErrorPage() {
+	const todayRaw = new Date();
+	const today = todayRaw.toISOString().split('T')[0]; // "YYYY-MM-DD"
 	const handleSubmit = async (e, type) => {
 		e.preventDefault();
 
@@ -137,23 +132,31 @@ function ErrorPage() {
 		}
 	};
 
-	const handleDodaj = async (e) => {
+	const scheduleRecord = {
+		productID: 10,
+		date: '2024-02-09',
+		startTime: '12:00:00',
+		location: 'Some location',
+	};
+
+	const product = {
+		name: 'product',
+		type: 'sometype',
+		location: 'somelocation',
+		duration: 'someduration',
+		price: 9.99,
+		totalSpaces: 10,
+		startDate: '2025-12-12',
+	};
+	const handleDodaj = async (e, obiekt, path) => {
 		e.preventDefault();
 		const requestOptions = {
 			method: 'POST',
 			headers: {'Content-Type': 'application/json'},
-			body: JSON.stringify({
-				name: 'product',
-				type: 'sometype',
-				location: 'somelocation',
-				duration: 'someduration',
-				price: 9.99,
-				totalSpaces: 10,
-				startDate: '2025-12-12',
-			}),
+			body: JSON.stringify(obiekt),
 		};
 		try {
-			const response = await fetch(`/api/admin/create-product`, requestOptions);
+			const response = await fetch(`/api/admin/${path}`, requestOptions);
 		} catch (error) {
 			console.error('Error:', error);
 		}
@@ -184,9 +187,19 @@ function ErrorPage() {
 					<button type='submit'>Submit</button>
 				</form>
 				<form
-					onSubmit={(e) => handleDodaj(e)}
+					onSubmit={(e) => handleDodaj(e, product, 'create-product')}
 					autoComplete='on'>
 					<button type='submit'>Dodaj produkt</button>
+				</form>
+				<form
+					onSubmit={(e) => handleDodaj(e, user, 'create-user')}
+					autoComplete='on'>
+					<button type='submit'>Dodaj usera</button>
+				</form>
+				<form
+					onSubmit={(e) => handleDodaj(e, scheduleRecord, 'create-schedule-record')}
+					autoComplete='on'>
+					<button type='submit'>Dodaj schedule</button>
 				</form>
 			</div>
 			<Footer />
