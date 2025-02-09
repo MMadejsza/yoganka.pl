@@ -11,6 +11,7 @@ import Invoice from '../models/invoiceModel.js';
 import Newsletter from '../models/newsletterModel.js';
 import SubscribedNewsletter from '../models/newsletterSubscribedModel.js';
 
+//@ USERS
 export const showAllUsers = (req, res, next) => {
 	User.findAll()
 		.then((users) => {
@@ -55,7 +56,7 @@ export const showAllUserSettings = (req, res, next) => {
 		})
 		.catch((err) => console.log(err));
 };
-
+//@ CUSTOMERS
 export const showAllCustomers = (req, res, next) => {
 	Customer.findAll()
 		.then((customers) => {
@@ -84,7 +85,7 @@ export const showAllCustomersPhones = (req, res, next) => {
 		})
 		.catch((err) => console.log(err));
 };
-
+//@ SCHEDULES
 export const showAllSchedules = (req, res, next) => {
 	ScheduleRecord.findAll()
 		.then((scheduleRecords) => {
@@ -111,7 +112,7 @@ export const createScheduleRecord = (req, res, next) => {
 		})
 		.catch((err) => console.log(err));
 };
-
+//@ FEEDBACK
 export const showAllParticipantsFeedback = (req, res, next) => {
 	Feedback.findAll()
 		.then((feedbacks) => {
@@ -119,6 +120,7 @@ export const showAllParticipantsFeedback = (req, res, next) => {
 		})
 		.catch((err) => console.log(err));
 };
+//@ NEWSLETTERS
 export const showAllNewsletters = (req, res, next) => {
 	Newsletter.findAll()
 		.then((newsletters) => {
@@ -126,6 +128,7 @@ export const showAllNewsletters = (req, res, next) => {
 		})
 		.catch((err) => console.log(err));
 };
+//# SUBS
 export const showAllSubscribedNewsletters = (req, res, next) => {
 	SubscribedNewsletter.findAll()
 		.then((subscribedNewsletters) => {
@@ -133,6 +136,7 @@ export const showAllSubscribedNewsletters = (req, res, next) => {
 		})
 		.catch((err) => console.log(err));
 };
+//@ PRODUCTS
 export const createProduct = async (req, res, next) => {
 	Product.create({
 		Name: req.body.name,
@@ -156,7 +160,7 @@ export const showAllProducts = (req, res, next) => {
 		})
 		.catch((err) => console.log(err));
 };
-
+//@ BOOKINGS
 export const showAllBookings = (req, res, next) => {
 	Booking.findAll()
 		.then((bookings) => {
@@ -164,6 +168,7 @@ export const showAllBookings = (req, res, next) => {
 		})
 		.catch((err) => console.log(err));
 };
+//@ INVOICES
 export const showAllInvoices = (req, res, next) => {
 	Invoice.findAll()
 		.then((invoices) => {
