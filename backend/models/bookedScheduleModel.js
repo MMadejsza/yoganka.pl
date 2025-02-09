@@ -3,16 +3,25 @@ import sequelizeDb from '../utils/db.js';
 
 /** @type {import('sequelize').Model} */
 
-export const BookedSchedule = sequelizeDb.define(
-	'product',
+const BookedSchedule = sequelizeDb.define(
+	'BookedSchedule',
 	{
 		ScheduleID: {
 			type: DataTypes.INTEGER,
 			primaryKey: true,
+			references: {
+				model: 'ScheduleRecord', // The name of the target table
+				key: 'ScheduleID', // The name of the column in the target table
+			},
 		},
 		BookingID: {
 			type: DataTypes.INTEGER,
 			primaryKey: true,
+
+			references: {
+				model: 'Booking', // The name of the target table
+				key: 'BookingID', // The name of the column in the target table
+			},
 		},
 	},
 	{
@@ -20,3 +29,4 @@ export const BookedSchedule = sequelizeDb.define(
 		timestamps: false, // turn off `createdAt` and `updatedAt`
 	},
 );
+export default BookedSchedule;

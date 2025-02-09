@@ -1,17 +1,38 @@
-import db from '../utils/db.js';
+import sequelizeDb from '../utils/db.js';
+import {DataTypes} from 'sequelize';
 
-class Newsletter {
-	constructor(newsletterID, status, creationDate, sendDate, title, content) {
-		this.newsletterID = newsletterID;
-		this.status = status;
-		this.creationDate = creationDate;
-		this.sendDate = sendDate;
-		this.title = title;
-		this.content = content;
-	}
-
-	static fetchAll() {
-		return db.execute(`SELECT * FROM newsletters`);
-	}
-}
+const Newsletter = sequelizeDb.define(
+	'Newsletter',
+	{
+		NewsletterID: {
+			type: DataTypes.INTEGER(11),
+			primaryKey: true,
+			autoIncrement: true,
+		},
+		Status: {
+			type: DataTypes.STRING(50),
+			allowNull: false,
+		},
+		CreationDate: {
+			type: DataTypes.DATE,
+			allowNull: false,
+		},
+		SendDate: {
+			type: DataTypes.DATE,
+			allowNull: true,
+		},
+		Title: {
+			type: DataTypes.STRING(255),
+			allowNull: false,
+		},
+		Content: {
+			type: DataTypes.TEXT,
+			allowNull: false,
+		},
+	},
+	{
+		tableName: 'newsletters',
+		timestamps: false,
+	},
+);
 export default Newsletter;

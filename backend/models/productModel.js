@@ -2,8 +2,8 @@ import {DataTypes} from 'sequelize';
 import sequelizeDb from '../utils/db.js';
 
 /** @type {import('sequelize').Model} */
-export const Product = sequelizeDb.define(
-	'product',
+const Product = sequelizeDb.define(
+	'Product',
 	{
 		ProductID: {
 			type: DataTypes.INTEGER,
@@ -44,7 +44,7 @@ export const Product = sequelizeDb.define(
 		timestamps: false, // turn off `createdAt` and `updatedAt`
 	},
 );
-// export default Product;
+export default Product;
 // import db from '../utils/db.js';
 
 // class Product {

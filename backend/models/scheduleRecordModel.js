@@ -1,20 +1,39 @@
-import db from '../utils/db.js';
+import {DataTypes} from 'sequelize';
+import sequelizeDb from '../utils/db.js';
 
-class ScheduleRecord {
-	constructor(scheduleID, productID, date, startTime, location) {
-		// constructor(data) {
-		// Instead of manual this.uID = uID [...]
-		// Object.assign(this,uID, cID, cType, fName, sName, DoB, pContactMethod, loyalty, refSource, notes)
-		// Object.assign(this, data);
-		this.scheduleID = scheduleID;
-		this.productID = productID;
-		this.date = date;
-		this.startTime = startTime;
-		this.location = location;
-	}
+const ScheduleRecord = sequelizeDb.define(
+	'ScheduleRecord',
+	{
+		ScheduleID: {
+			type: DataTypes.INTEGER,
+			primaryKey: true,
+			autoIncrement: true,
+		},
+		ProductID: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+			references: {
+				model: 'Product', // The name of the target table
+				key: 'ProductID', // The name of the column in the target table
+			},
+		},
+		Date: {
+			type: DataTypes.DATEONLY,
+			allowNull: false,
+		},
+		StartTime: {
+			type: DataTypes.TIME,
+			allowNull: false,
+		},
+		Location: {
+			type: DataTypes.STRING(255),
+			allowNull: true,
+		},
+	},
+	{
+		tableName: 'schedule_records',
+		timestamps: false,
+	},
+);
 
-	static fetchAll() {
-		return db.execute(`SELECT * FROM schedule_records`);
-	}
-}
 export default ScheduleRecord;

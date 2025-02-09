@@ -1,8 +1,8 @@
 import {DataTypes} from 'sequelize';
 import sequelizeDb from '../utils/db.js';
 
-export const Customer = sequelizeDb.define(
-	'customer',
+const Customer = sequelizeDb.define(
+	'Customer',
 	{
 		CustomerID: {
 			type: DataTypes.INTEGER,
@@ -12,6 +12,10 @@ export const Customer = sequelizeDb.define(
 		UserID: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
+			references: {
+				model: 'User', // The name of the target table
+				key: 'UserID', // The name of the column in the target table
+			},
 		},
 		CustomerType: {
 			type: DataTypes.STRING(50),
@@ -52,3 +56,4 @@ export const Customer = sequelizeDb.define(
 		timestamps: false,
 	},
 );
+export default Customer;

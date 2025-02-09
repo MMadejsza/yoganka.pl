@@ -3,16 +3,23 @@ import sequelizeDb from '../utils/db.js';
 
 /** @type {import('sequelize').Model} */
 
-export const CustomerPhones = sequelizeDb.define(
-	'customerPhones',
+const CustomerPhones = sequelizeDb.define(
+	'CustomerPhones',
 	{
 		CustomerID: {
 			type: DataTypes.INTEGER,
 			primaryKey: true,
+
+			references: {
+				model: 'Customer', // The name of the target table
+				key: 'CustomerID', // The name of the column in the target table
+			},
 		},
 		CustomerMobile: {
 			type: DataTypes.STRING(20),
 			primaryKey: true,
+			unique: true,
+			allowNull: false,
 		},
 	},
 	{
@@ -20,3 +27,4 @@ export const CustomerPhones = sequelizeDb.define(
 		timestamps: false, // turn off `createdAt` and `updatedAt`
 	},
 );
+export default CustomerPhones;
