@@ -1,10 +1,15 @@
 import User from '../models/userModel.js';
+import UserSettings from '../models/userSettingsModel.js';
 import Customer from '../models/customerModel.js';
-import Product from '../models/productModel.js';
 import CustomerPhones from '../models/customerPhoneModel.js';
+import Feedback from '../models/feedbackModel.js';
+import Product from '../models/productModel.js';
 import ScheduleRecord from '../models/scheduleRecordModel.js';
 import BookedSchedule from '../models/bookedScheduleModel.js';
 import Booking from '../models/bookingModel.js';
+import Invoice from '../models/invoiceModel.js';
+import Newsletter from '../models/newsletterModel.js';
+import SubscribedNewsletter from '../models/newsletterSubscribedModel.js';
 
 export const showAllUsers = (req, res, next) => {
 	User.fetchAll()
