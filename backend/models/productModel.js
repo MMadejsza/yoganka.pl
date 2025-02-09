@@ -1,3 +1,7 @@
+import {DataTypes} from 'sequelize';
+import sequelizeDb from '../utils/db.js';
+
+/** @type {import('sequelize').Model} */
 export const Product = sequelizeDb.define(
 	'product',
 	{
