@@ -1,25 +1,54 @@
-import db from '../utils/db.js';
+import {DataTypes} from 'sequelize';
+import sequelizeDb from '../utils/db.js';
 
-class Customer {
-	constructor(uID, cID, cType, fName, sName, DoB, pContactMethod, loyalty, refSource, notes) {
-		// constructor(data) {
-		// Instead of manual this.uID = uID [...]
-		// Object.assign(this,uID, cID, cType, fName, sName, DoB, pContactMethod, loyalty, refSource, notes)
-		// Object.assign(this, data);
-		this.uID = uID;
-		this.cID = cID;
-		this.cType = cType;
-		this.fName = fName;
-		this.sName = sName;
-		this.DoB = DoB;
-		this.pContactMethod = pContactMethod;
-		this.loyalty = loyalty;
-		this.refSource = refSource;
-		this.notes = notes;
-	}
-
-	static fetchAll() {
-		return db.execute(`SELECT * FROM customers`);
-	}
-}
-export default Customer;
+export const Customer = sequelizeDb.define(
+	'customer',
+	{
+		CustomerID: {
+			type: DataTypes.INTEGER,
+			primaryKey: true,
+			autoIncrement: true,
+		},
+		UserID: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+		},
+		CustomerType: {
+			type: DataTypes.STRING(50),
+			allowNull: false,
+		},
+		FirstName: {
+			type: DataTypes.STRING(100),
+			allowNull: false,
+		},
+		LastName: {
+			type: DataTypes.STRING(100),
+			allowNull: false,
+		},
+		DoB: {
+			type: DataTypes.DATEONLY, // YYYY-MM-DD
+			allowNull: false,
+		},
+		PreferredContactMethod: {
+			type: DataTypes.STRING(50),
+			allowNull: true,
+		},
+		Loyalty: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+			defaultValue: 0,
+		},
+		ReferralSource: {
+			type: DataTypes.STRING(255),
+			allowNull: true,
+		},
+		Notes: {
+			type: DataTypes.TEXT,
+			allowNull: true,
+		},
+	},
+	{
+		tableName: 'customers',
+		timestamps: false,
+	},
+);
