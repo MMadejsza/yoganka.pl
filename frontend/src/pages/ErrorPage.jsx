@@ -127,6 +127,28 @@ function ErrorPage() {
 		}
 	};
 
+	const handleDodaj = async (e) => {
+		e.preventDefault();
+		const requestOptions = {
+			method: 'POST',
+			headers: {'Content-Type': 'application/json'},
+			body: JSON.stringify({
+				name: 'product',
+				type: 'sometype',
+				location: 'somelocation',
+				duration: 'someduration',
+				price: 9.99,
+				totalSpaces: 10,
+				startDate: '2025-12-12',
+			}),
+		};
+		try {
+			const response = await fetch(`/api/admin/create-product`, requestOptions);
+		} catch (error) {
+			console.error('Error:', error);
+		}
+	};
+
 	return (
 		<div className='wrapper'>
 			<Burger />
@@ -150,6 +172,11 @@ function ErrorPage() {
 						))}
 					</select>
 					<button type='submit'>Submit</button>
+				</form>
+				<form
+					onSubmit={(e) => handleDodaj(e)}
+					autoComplete='on'>
+					<button type='submit'>Dodaj produkt</button>
 				</form>
 			</div>
 			<Footer />

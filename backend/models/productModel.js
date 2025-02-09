@@ -15,6 +15,21 @@ class Product {
 		this.totalSpaces = totalSpaces;
 		this.startDate = startDate;
 	}
+	save() {
+		// ? as preparation for later on sequelize
+		return db.execute(
+			'INSERT INTO products (Name, Type, Location, Duration, Price, TotalSpaces, StartDate) VALUES (?, ?, ?, ?, ?, ?, ?)',
+			[
+				this.name,
+				this.type,
+				this.location,
+				this.duration,
+				this.price,
+				this.totalSpaces,
+				this.startDate,
+			],
+		);
+	}
 
 	static fetchAll() {
 		return db.execute(`SELECT * FROM products`);

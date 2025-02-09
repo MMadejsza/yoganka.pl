@@ -18,7 +18,6 @@ export const showAllUsers = (req, res, next) => {
 		})
 		.catch((err) => console.log(err));
 };
-
 export const deleteUser = (req, res, next) => {
 	User.fetchAll()
 		.then(([rows, fieldData]) => {
@@ -91,6 +90,26 @@ export const showAllSubscribedNewsletters = (req, res, next) => {
 		})
 		.catch((err) => console.log(err));
 };
+export const createProduct = (req, res, next) => {
+	const name = req.body.name;
+	const type = req.body.type;
+	const location = req.body.location;
+	const duration = req.body.duration;
+	const price = req.body.price;
+	const totalSpaces = req.body.totalSpaces;
+	const startDate = req.body.startDate;
+	const product = new Product(
+		null,
+		name,
+		type,
+		location,
+		duration,
+		price,
+		totalSpaces,
+		startDate,
+	);
+	product.save().catch((err) => console.log(err));
+};
 export const showAllProducts = (req, res, next) => {
 	Product.fetchAll()
 		.then(([rows, fieldData]) => {
@@ -98,6 +117,7 @@ export const showAllProducts = (req, res, next) => {
 		})
 		.catch((err) => console.log(err));
 };
+
 export const showAllBookings = (req, res, next) => {
 	Booking.fetchAll()
 		.then(([rows, fieldData]) => {
