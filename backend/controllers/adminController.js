@@ -3,7 +3,7 @@ import UserSettings from '../models/userSettingsModel.js';
 import Customer from '../models/customerModel.js';
 import CustomerPhones from '../models/customerPhoneModel.js';
 import Feedback from '../models/feedbackModel.js';
-import Product from '../models/productModel.js';
+import {Product} from '../models/productModel.js';
 import ScheduleRecord from '../models/scheduleRecordModel.js';
 import BookedSchedule from '../models/bookedScheduleModel.js';
 import Booking from '../models/bookingModel.js';
@@ -90,7 +90,8 @@ export const showAllSubscribedNewsletters = (req, res, next) => {
 		})
 		.catch((err) => console.log(err));
 };
-export const createProduct = (req, res, next) => {
+export const createProduct = async (req, res, next) => {
+	console.log(req.body);
 	const name = req.body.name;
 	const type = req.body.type;
 	const location = req.body.location;
@@ -98,17 +99,19 @@ export const createProduct = (req, res, next) => {
 	const price = req.body.price;
 	const totalSpaces = req.body.totalSpaces;
 	const startDate = req.body.startDate;
-	const product = new Product(
-		null,
-		name,
-		type,
-		location,
-		duration,
-		price,
-		totalSpaces,
-		startDate,
-	);
-	product.save().catch((err) => console.log(err));
+	Product.create({
+		Name: name,
+		Type: type,
+		Location: location,
+		Duration: duration,
+		Price: price,
+		TotalSpaces: totalSpaces,
+		StartDate: startDate,
+	})
+		.then((res) => {
+			console.log('created');
+		})
+		.catch((err) => console.log(err));
 };
 export const showAllProducts = (req, res, next) => {
 	Product.fetchAll()

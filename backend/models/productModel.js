@@ -1,39 +1,41 @@
-import Sequelize from 'sequelize';
+import {Sequelize, DataTypes, Model} from 'sequelize';
 import sequelizeDb from '../utils/db.js';
-const Product = sequelizeDb.define(
+
+/** @type {import('sequelize').Model} */
+export const Product = sequelizeDb.define(
 	'product',
 	{
 		ProductID: {
-			type: Sequelize.INTEGER,
+			type: DataTypes.INTEGER,
 			primaryKey: true,
 			autoIncrement: true,
 		},
 		Name: {
-			type: Sequelize.STRING(255),
+			type: DataTypes.STRING(255),
 			allowNull: true,
 		},
 		Type: {
-			type: Sequelize.STRING(50),
+			type: DataTypes.STRING(50),
 			allowNull: true,
 		},
 		Location: {
-			type: Sequelize.STRING(255),
+			type: DataTypes.STRING(255),
 			allowNull: true,
 		},
 		Duration: {
-			type: Sequelize.TIME, //  HH:MM:SS
+			type: DataTypes.TIME, //  HH:MM:SS
 			allowNull: true,
 		},
 		Price: {
-			type: Sequelize.DECIMAL(10, 2),
+			type: DataTypes.DECIMAL(10, 2),
 			allowNull: true,
 		},
 		TotalSpaces: {
-			type: Sequelize.INTEGER,
+			type: DataTypes.INTEGER,
 			allowNull: true,
 		},
 		StartDate: {
-			type: Sequelize.DATEONLY, //  YYYY-MM-DD
+			type: DataTypes.DATEONLY, //  YYYY-MM-DD
 			allowNull: true,
 		},
 	},
@@ -42,7 +44,7 @@ const Product = sequelizeDb.define(
 		timestamps: false, // turn off `createdAt` and `updatedAt`
 	},
 );
-export default Product;
+// export default Product;
 // import db from '../utils/db.js';
 
 // class Product {
