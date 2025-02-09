@@ -1,32 +1,54 @@
-import db from '../utils/db.js';
+import {DataTypes} from 'sequelize';
+import sequelizeDb from '../utils/db.js';
 
-class Booking {
-	constructor(
-		bookingID,
-		customerID,
-		scheduleID,
-		date,
-		product,
-		status,
-		amountPaid,
-		amountDue,
-		paymentMethod,
-		paymentStatus,
-	) {
-		this.bookingID = bookingID;
-		this.customerID = customerID;
-		this.scheduleID = scheduleID;
-		this.date = date;
-		this.product = product;
-		this.status = status;
-		this.amountPaid = amountPaid;
-		this.amountDue = amountDue;
-		this.paymentMethod = paymentMethod;
-		this.paymentStatus = paymentStatus;
-	}
-
-	static fetchAll() {
-		return db.execute(`SELECT * FROM bookings`);
-	}
-}
-export default Booking;
+/** @type {import('sequelize').Model} */
+export const Booking = sequelizeDb.define(
+	'booking',
+	{
+		BookingID: {
+			type: DataTypes.INTEGER,
+			primaryKey: true,
+			autoIncrement: true,
+		},
+		CustomerID: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+		},
+		ScheduleID: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+		},
+		Date: {
+			type: DataTypes.DATEONLY, // YYYY-MM-DD
+			allowNull: false,
+		},
+		Product: {
+			type: DataTypes.STRING(255),
+			allowNull: false,
+		},
+		Status: {
+			type: DataTypes.STRING(50),
+			allowNull: false,
+		},
+		AmountPaid: {
+			type: DataTypes.DECIMAL(10, 2),
+			allowNull: false,
+		},
+		AmountDue: {
+			type: DataTypes.DECIMAL(10, 2),
+			allowNull: false,
+		},
+		PaymentMethod: {
+			type: DataTypes.STRING(50),
+			allowNull: false,
+		},
+		PaymentStatus: {
+			type: DataTypes.STRING(50),
+			allowNull: false,
+		},
+	},
+	{
+		tableName: 'bookings',
+		timestamps: false,
+	},
+);
