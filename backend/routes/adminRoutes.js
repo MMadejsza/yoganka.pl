@@ -1,12 +1,12 @@
 import express from 'express';
+import * as adminController from '../controllers/adminController.js';
 
 const router = express.Router();
 
 //  /admin/* => GET
-router.get('/add-product', (req, res, next) => {
-	res.send(`
-    <a href="/admin/product" target="_blank" rel="noopener noreferrer"></a>`);
-});
+router.post('/show-all-users', adminController.showAllUsers);
+router.post('/show-all-customers', adminController.showAllCustomers);
+
 router.post('/product', (req, res) => {
 	console.log(req.body);
 	res.redirect('/');

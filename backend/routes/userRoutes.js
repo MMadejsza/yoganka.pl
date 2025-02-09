@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import rootDir from '../utils/dirPath.js';
+import db from '../utils/db.js';
 
 const router = express.Router();
 

@@ -9,7 +9,7 @@ function ErrorPage() {
 		const title = e.target.title.value;
 		const content = type == 'admin' ? 'application/json' : 'text/html';
 		try {
-			const response = await fetch(`/api/${type}/ex`, {
+			const response = await fetch(`/api/${title}`, {
 				method: 'POST',
 				headers: {'Content-Type': content},
 				body: type == 'admin' ? JSON.stringify({title}) : null,
@@ -40,7 +40,8 @@ function ErrorPage() {
 				<h1 className='error__title'>Ups... Nie mamy takiej strony :)</h1>
 				<form
 					onSubmit={(e) => handleSubmit(e, 'admin')}
-					style={{marginTop: '10rem'}}>
+					style={{marginTop: '10rem'}}
+					autoComplete='on'>
 					<input
 						type='text'
 						name='title'
@@ -48,11 +49,6 @@ function ErrorPage() {
 					/>
 					<button type='submit'>Submit</button>
 				</form>
-				<button
-					type='button'
-					onClick={(e) => handleSubmit(e, 'customer')}>
-					Submit
-				</button>
 				;
 			</div>
 			<Footer />

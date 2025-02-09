@@ -1,8 +1,7 @@
 import express from 'express';
-import adminRoutes from './routes/admin.js';
-import customerRoutes from './routes/customer.js';
-// import path from 'path';
-// import rootDir from './utils/dirPath.js';
+import adminRoutes from './routes/adminRoutes.js';
+import customerRoutes from './routes/customerRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 
 const app = express();
 
@@ -14,6 +13,7 @@ app.use(express.urlencoded({extended: true}));
 // Filtering that works only for /admin/*
 app.use(`/admin`, adminRoutes);
 app.use(`/customer`, customerRoutes);
+app.use(`/user`, userRoutes);
 
 app.use((req, res) => {
 	res.status(404).send(`<h1>Page not found</h1>`);
