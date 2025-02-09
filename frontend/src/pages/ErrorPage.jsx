@@ -12,26 +12,58 @@ const options = [
 		label: 'a all customers',
 		path: 'admin/show-all-customers',
 	},
+	// /admin/show-all-customers
+	// /admin/edit-customer/:id
+	// /admin/delete-customer/:id
+
 	{
 		label: 'a schedule',
-		path: 'admin/show-all-schedule',
+		path: 'admin/show-all-schedules',
 	},
+	// /admin/create-schedule
+	// /admin/edit-schedule/:id
+	// /admin/delete-schedule/:id
+
+	// /admin/show-all-customers-phones
+	// /admin/add-customer-phone
+	// /admin/edit-customer-phone/:id
+	// /admin/delete-customer-phone/:id
+
 	{
 		label: 'a all feedbacks',
-		path: 'admin/show-all-products',
+		path: 'admin/show-all-participants-feedback',
 	},
+	// /admin/delete-participant-feedback/:id
 	{
 		label: 'a all newsletters',
 		path: 'admin/show-all-products',
 	},
+	// 	/admin/show-all-newsletters
+	// /admin/create-newsletter
+	// /admin/edit-newsletter/:id
+	// /admin/delete-newsletter/:id
 	{
 		label: 'a all newsletters subs',
-		path: 'admin/show-all-products',
+		path: 'admin/show-all-subscribed-newsletters',
 	},
+	// /admin/delete-subscribed-newsletter/:id
 	{
 		label: 'a all products',
 		path: 'admin/show-all-products',
 	},
+	// /admin/create-product
+	// /admin/edit-product/:id
+	// /admin/delete-product/:id
+
+	// /admin/show-all-bookings
+	// /admin/create-booking
+	// /admin/edit-booking/:id
+	// /admin/delete-booking/:id
+
+	// /admin/show-all-invoices
+	// /admin/create-invoice
+	// /admin/edit-invoice/:id
+	// /admin/delete-invoice/:id
 ];
 
 function ErrorPage() {

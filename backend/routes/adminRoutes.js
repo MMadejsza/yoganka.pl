@@ -6,7 +6,7 @@ const router = express.Router();
 //  /admin/* => GET
 router.post('/show-all-users', adminController.showAllUsers);
 router.post('/show-all-customers', adminController.showAllCustomers);
-router.post('/show-all-schedule', adminController.showAllSchedules);
+router.post('/show-all-schedules', adminController.showAllSchedules);
 router.post('/show-all-products', adminController.showAllProducts);
 
 router.post('/product', (req, res) => {
