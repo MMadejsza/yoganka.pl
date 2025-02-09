@@ -1,4 +1,4 @@
-import {Sequelize, DataTypes, Model} from 'sequelize';
+import {DataTypes} from 'sequelize';
 import sequelizeDb from '../utils/db.js';
 
 /** @type {import('sequelize').Model} */

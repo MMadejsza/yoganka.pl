@@ -5,7 +5,7 @@ import CustomerPhones from '../models/customerPhoneModel.js';
 import Feedback from '../models/feedbackModel.js';
 import {Product} from '../models/productModel.js';
 import ScheduleRecord from '../models/scheduleRecordModel.js';
-import BookedSchedule from '../models/bookedScheduleModel.js';
+import {BookedSchedule} from '../models/bookedScheduleModel.js';
 import Booking from '../models/bookingModel.js';
 import Invoice from '../models/invoiceModel.js';
 import Newsletter from '../models/newsletterModel.js';
@@ -69,6 +69,14 @@ export const showAllSchedules = (req, res, next) => {
 		})
 		.catch((err) => console.log(err));
 };
+export const showBookedSchedules = (req, res, next) => {
+	BookedSchedule.findAll()
+		.then((bookedRecords) => {
+			return res.json(bookedRecords);
+		})
+		.catch((err) => console.log(err));
+};
+
 export const showAllParticipantsFeedback = (req, res, next) => {
 	Feedback.fetchAll()
 		.then(([rows, fieldData]) => {
@@ -91,22 +99,14 @@ export const showAllSubscribedNewsletters = (req, res, next) => {
 		.catch((err) => console.log(err));
 };
 export const createProduct = async (req, res, next) => {
-	console.log(req.body);
-	const name = req.body.name;
-	const type = req.body.type;
-	const location = req.body.location;
-	const duration = req.body.duration;
-	const price = req.body.price;
-	const totalSpaces = req.body.totalSpaces;
-	const startDate = req.body.startDate;
 	Product.create({
-		Name: name,
-		Type: type,
-		Location: location,
-		Duration: duration,
-		Price: price,
-		TotalSpaces: totalSpaces,
-		StartDate: startDate,
+		Name: req.body.name,
+		Type: req.body.type,
+		Location: req.body.location,
+		Duration: req.body.duration,
+		Price: req.body.price,
+		TotalSpaces: req.body.totalSpaces,
+		StartDate: req.body.startDate,
 	})
 		.then((res) => {
 			console.log('created');

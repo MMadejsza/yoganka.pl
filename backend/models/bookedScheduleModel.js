@@ -1,13 +1,22 @@
-import db from '../utils/db.js';
+import {DataTypes} from 'sequelize';
+import sequelizeDb from '../utils/db.js';
 
-class BookedSchedule {
-	constructor(bookingID, scheduleID) {
-		this.bookingID = bookingID;
-		this.scheduleID = scheduleID;
-	}
+/** @type {import('sequelize').Model} */
 
-	static fetchAll() {
-		return db.execute(`SELECT * FROM booked_schedules`);
-	}
-}
-export default BookedSchedule;
+export const BookedSchedule = sequelizeDb.define(
+	'product',
+	{
+		ScheduleID: {
+			type: DataTypes.INTEGER,
+			primaryKey: true,
+		},
+		BookingID: {
+			type: DataTypes.INTEGER,
+			primaryKey: true,
+		},
+	},
+	{
+		tableName: 'booked_schedules', // exact mysql table name
+		timestamps: false, // turn off `createdAt` and `updatedAt`
+	},
+);

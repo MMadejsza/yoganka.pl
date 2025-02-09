@@ -32,6 +32,11 @@ const options = [
 		path: 'admin/show-all-schedules',
 		method: 'GET',
 	},
+	{
+		label: 'a booked schedule records',
+		path: 'admin/show-booked-schedules',
+		method: 'GET',
+	},
 	// /admin/create-schedule
 	// /admin/edit-schedule/:id
 	// /admin/delete-schedule/:id
