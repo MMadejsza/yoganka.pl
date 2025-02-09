@@ -17,7 +17,9 @@ class User {
 	}
 
 	static fetchAll() {
-		return db.execute(`SELECT * FROM users`);
+		return db.execute(
+			`SELECT users.*, CONCAT(s.Animation, ', ', s.FontSize, ', ', s.Handedness, ', ', s.Theme, ', ', s.Notifications, ', ', s.UserPrefID) AS Ustawienia FROM users LEFT JOIN user_pref_settings AS s ON users.UserID = s.UserID;`,
+		);
 	}
 }
 export default User;
