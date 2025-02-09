@@ -1,13 +1,19 @@
 import express from 'express';
-import * as adminController from '../controllers/adminController.js';
+import * as adminC from '../controllers/adminController.js';
 
 const router = express.Router();
 
 //  /admin/* => GET
-router.post('/show-all-users', adminController.showAllUsers);
-router.post('/show-all-customers', adminController.showAllCustomers);
-router.post('/show-all-schedules', adminController.showAllSchedules);
-router.post('/show-all-products', adminController.showAllProducts);
+router.get('/show-all-users', adminC.showAllUsers);
+router.get('/show-all-customers', adminC.showAllCustomers);
+router.get('/show-all-customers-phones', adminC.showAllCustomersPhones);
+router.get('/show-all-schedules', adminC.showAllSchedules);
+router.get('/show-all-participants-feedback', adminC.showAllParticipantsFeedback);
+router.get('/show-all-newsletters', adminC.showAllNewsletters);
+router.get('/show-all-subscribed-newsletters', adminC.showAllSubscribedNewsletters);
+router.get('/show-all-products', adminC.showAllProducts);
+router.get('/show-all-bookings', adminC.showAllBookings);
+router.get('/show-all-invoices', adminC.showAllInvoices);
 
 router.post('/product', (req, res) => {
 	console.log(req.body);

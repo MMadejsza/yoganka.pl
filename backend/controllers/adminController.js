@@ -1,7 +1,10 @@
 import User from '../models/userModel.js';
 import Customer from '../models/customerModel.js';
-import ScheduleRecord from '../models/scheduleModel.js';
 import Product from '../models/productModel.js';
+import CustomerPhones from '../models/customerPhoneModel.js';
+import ScheduleRecord from '../models/scheduleRecordModel.js';
+import BookedSchedule from '../models/bookedScheduleModel.js';
+import Booking from '../models/bookingModel.js';
 
 export const showAllUsers = (req, res, next) => {
 	User.fetchAll()
@@ -10,6 +13,7 @@ export const showAllUsers = (req, res, next) => {
 		})
 		.catch((err) => console.log(err));
 };
+
 export const deleteUser = (req, res, next) => {
 	User.fetchAll()
 		.then(([rows, fieldData]) => {
@@ -41,6 +45,13 @@ export const deleteCustomer = (req, res, next) => {
 };
 export const editCustomer = (req, res, next) => {
 	User.fetchAll()
+		.then(([rows, fieldData]) => {
+			return res.json(rows);
+		})
+		.catch((err) => console.log(err));
+};
+export const showAllCustomersPhones = (req, res, next) => {
+	CustomerPhones.fetchAll()
 		.then(([rows, fieldData]) => {
 			return res.json(rows);
 		})
