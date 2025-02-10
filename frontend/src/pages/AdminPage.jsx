@@ -1,4 +1,5 @@
 import {useQuery} from '@tanstack/react-query';
+import {useLocation} from 'react-router-dom';
 import {fetchData} from '../utils/http.js';
 import SideNav from '../components/SideNav.jsx';
 import Section from '../components/Section.jsx';
@@ -85,46 +86,14 @@ const options = [
 	// /admin-console/delete-invoice/:id
 ];
 const sideNavTabs = [
-	{
-		name: 'Użytkownicy',
-		icon: 'group',
-		link: '',
-	},
-	{
-		name: 'Klienci',
-		icon: 'sentiment_satisfied',
-		// link: '/wydarzenia',
-	},
-	{
-		name: 'Produkty',
-		icon: 'inventory',
-		link: '',
-	},
-	{
-		name: 'Grafik',
-		icon: 'calendar_month',
-		link: '',
-	},
-	{
-		name: `Booking'i`,
-		icon: 'event_available',
-		link: '',
-	},
-	{
-		name: `Faktury`,
-		icon: 'receipt_long',
-		link: '',
-	},
-	{
-		name: `Newsletter'y`,
-		icon: 'contact_mail',
-		link: '',
-	},
-	{
-		name: `Opinie`,
-		icon: 'reviews',
-		link: '',
-	},
+	{name: 'Użytkownicy', icon: 'group', link: '/admin-console/show-all-users'},
+	{name: 'Klienci', icon: 'sentiment_satisfied', link: '/admin-console/show-all-customers'},
+	{name: 'Produkty', icon: 'inventory', link: '/admin-console/show-all-products'},
+	{name: 'Grafik', icon: 'calendar_month', link: '/admin-console/show-all-schedules'},
+	{name: `Booking'i`, icon: 'event_available', link: '/admin-console/show-all-bookings'},
+	{name: `Faktury`, icon: 'receipt_long', link: '/admin-console/show-all-invoices'},
+	{name: `Newsletter'y`, icon: 'contact_mail', link: '/admin-console/show-all-newsletters'},
+	{name: `Opinie`, icon: 'reviews', link: '/admin-console/show-all-participants-feedback'},
 ];
 const sideNavActions = [
 	{
@@ -145,88 +114,19 @@ const sideNavActions = [
 ];
 
 function AdminPage() {
-	// const handleSubmit = async (e, type) => {
-	// 	e.preventDefault();
+	const location = useLocation(); // fetch current path
 
-	// 	// Pobierz wybraną opcję
-	// 	const selectOption = e.target.querySelector('select');
-	// 	const selectedOption = selectOption.options[selectOption.selectedIndex];
-	// 	const val = selectedOption.value; // Wartość wybranej opcji
-	// 	const method = selectedOption.dataset.method; // Metoda wybranej opcji
-	// 	console.clear();
-	// 	console.log(`method ${method}`);
-
-	// 	const content = type === 'admin-console' ? 'application/json' : 'text/html';
-
-	// 	const requestOptions = {
-	// 		method: method,
-	// 		headers: {'Content-Type': content},
-	// 	};
-
-	// 	// Jeśli metoda nie jest GET, dodajemy body
-	// 	if (method !== 'GET') {
-	// 		requestOptions.body = type === 'admin-console' ? JSON.stringify({val}) : null;
-	// 	}
-
-	// 	try {
-	// 		const response = await fetch(`/api/${val}`, requestOptions);
-
-	// 		console.log('📄 Response:', response);
-
-	// 		const contentType = response.headers.get('Content-Type');
-
-	// 		if (contentType && contentType.includes('application/json')) {
-	// 			const data = await response.json();
-	// 			console.log(`✅ ${val} JSON resp:`, data);
-	// 		} else {
-	// 			const text = await response.text();
-	// 			console.log('📄 HTML Response:', text);
-
-	// 			document.body.innerHTML = text;
-	// 		}
-	// 	} catch (error) {
-	// 		console.error('Error:', error);
-	// 	}
-	// };
-
-	// const scheduleRecord = {
-	// 	productID: 10,
-	// 	date: '2024-02-09',
-	// 	startTime: '12:00:00',
-	// 	location: 'Some location',
-	// };
-	// const product = {
-	// 	name: 'product',
-	// 	type: 'sometype',
-	// 	location: 'somelocation',
-	// 	duration: 'someduration',
-	// 	price: 9.99,
-	// 	totalSpaces: 10,
-	// 	startDate: '2025-12-12',
-	// };
-
-	// const handleDodaj = async (e, obiekt, path) => {
-	// 	e.preventDefault();
-	// 	const requestOptions = {
-	// 		method: 'POST',
-	// 		headers: {'Content-Type': 'application/json'},
-	// 		body: JSON.stringify(obiekt),
-	// 	};
-	// 	try {
-	// 		const response = await fetch(`/api/admin-console/${path}`, requestOptions);
-	// 	} catch (error) {
-	// 		console.error('Error:', error);
-	// 	}
-	// };
-	const todayRaw = new Date();
-	const today = todayRaw.toISOString().split('T')[0]; // "YYYY-MM-DD"
-
-	// underneath sends http request and gives us data and loading state and errors as well
 	const {data, isPending, isError, error} = useQuery({
-		// as id for later caching received data to not send the same request again
-		queryKey: ['users'],
+		// as id for later caching received data to not send the same request again where location.pathname is key
+		queryKey: ['data', location.pathname],
 		// definition of the code sending the actual request- must be returning the promise
-		queryFn: fetchData,
+		queryFn: () => fetchData(location.pathname),
+		// only when location.pathname is set extra beyond admin panel:
+		enabled: location.pathname != '/admin-console',
+		// stopping unnecessary requests when jumping tabs
+		staleTime: 10000,
+		// how long tada is cached (default 5 mins)
+		// gcTime:30000
 	});
 
 	let content;
@@ -235,13 +135,14 @@ function AdminPage() {
 		window.alert(error.info?.message || 'Failed to fetch');
 	}
 	if (data) {
+		console.clear();
 		console.log(`✅ Data: `);
 		console.log(data);
 		content = (
 			<table className='data-table'>
 				<thead className='data-table__headers'>
 					<tr>
-						{data.headers.map((header, index) => (
+						{data.totalHeaders.map((header, index) => (
 							<th
 								className='data-table__single-header'
 								key={index}>
@@ -255,7 +156,7 @@ function AdminPage() {
 						<tr
 							className='data-table__cells'
 							key={rowIndex}>
-							{data.headers.map((header, headerIndex) => {
+							{data.totalHeaders.map((header, headerIndex) => {
 								let value = row[header];
 								if (typeof value === 'object' && value !== null) {
 									value = Object.values(value);
@@ -280,7 +181,11 @@ function AdminPage() {
 			<Section
 				classy='admin-intro'
 				header={`Admin Panel`}></Section>
-			<SideNav menuSet={sideNavTabs} />
+			<SideNav
+				menuSet={sideNavTabs}
+				// ref={link}
+				// onTabClick={handleTabClick}
+			/>
 			<SideNav
 				menuSet={sideNavActions}
 				side='right'

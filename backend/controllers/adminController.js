@@ -1,21 +1,24 @@
 import * as models from '../models/_index.js';
+import simpleListAll from '../utils/listAllToTable.js';
 
 //@ USERS
 export const showAllUsers = (req, res, next) => {
-	models.User.findAll({
-		include: [
-			{
-				model: models.UserPrefSettings,
-				attributes: ['UserPrefID'],
-			},
-		],
-	})
+	const model = models.User;
+	model
+		.findAll({
+			include: [
+				{
+					model: models.UserPrefSettings,
+					attributes: ['UserPrefID'],
+				},
+			],
+		})
 		.then((users) => {
-			const userHeaders = Object.keys(models.User.getAttributes());
+			const userHeaders = Object.keys(model.getAttributes());
 			const settingsHeaders = ['UserPrefSetting'];
-			const headers = [...userHeaders, ...settingsHeaders];
+			const totalHeaders = [...userHeaders, ...settingsHeaders];
 			return res.json({
-				headers,
+				totalHeaders,
 				content: users,
 			});
 		})
@@ -52,19 +55,11 @@ export const editUser = (req, res, next) => {
 		.catch((err) => console.log(err));
 };
 export const showAllUserSettings = (req, res, next) => {
-	models.UserSettings.findAll()
-		.then((settings) => {
-			return res.json(settings);
-		})
-		.catch((err) => console.log(err));
+	simpleListAll(res, models.UserSettings);
 };
 //@ CUSTOMERS
 export const showAllCustomers = (req, res, next) => {
-	models.Customer.findAll()
-		.then((customers) => {
-			return res.json(customers);
-		})
-		.catch((err) => console.log(err));
+	simpleListAll(res, models.Customer);
 };
 export const deleteCustomer = (req, res, next) => {
 	models.User.fetchAll()
@@ -89,11 +84,7 @@ export const showAllCustomersPhones = (req, res, next) => {
 };
 //@ SCHEDULES
 export const showAllSchedules = (req, res, next) => {
-	models.ScheduleRecord.findAll()
-		.then((scheduleRecords) => {
-			return res.json(scheduleRecords);
-		})
-		.catch((err) => console.log(err));
+	simpleListAll(res, models.ScheduleRecord);
 };
 export const showBookedSchedules = (req, res, next) => {
 	models.BookedSchedule.findAll()
@@ -116,29 +107,20 @@ export const createScheduleRecord = (req, res, next) => {
 };
 //@ FEEDBACK
 export const showAllParticipantsFeedback = (req, res, next) => {
-	models.Feedback.findAll()
-		.then((feedbacks) => {
-			return res.json(feedbacks);
-		})
-		.catch((err) => console.log(err));
+	simpleListAll(res, models.Feedback);
 };
 //@ NEWSLETTERS
 export const showAllNewsletters = (req, res, next) => {
-	models.Newsletter.findAll()
-		.then((newsletters) => {
-			return res.json(newsletters);
-		})
-		.catch((err) => console.log(err));
+	simpleListAll(res, models.Newsletter);
 };
 //# SUBS
 export const showAllSubscribedNewsletters = (req, res, next) => {
-	models.SubscribedNewsletter.findAll()
-		.then((subscribedNewsletters) => {
-			return res.json(subscribedNewsletters);
-		})
-		.catch((err) => console.log(err));
+	simpleListAll(res, models.SubscribedNewsletter);
 };
 //@ PRODUCTS
+export const showAllProducts = (req, res, next) => {
+	simpleListAll(res, models.Product);
+};
 export const createProduct = async (req, res, next) => {
 	models.Product.create({
 		Name: req.body.name,
@@ -154,27 +136,11 @@ export const createProduct = async (req, res, next) => {
 		})
 		.catch((err) => console.log(err));
 };
-export const showAllProducts = (req, res, next) => {
-	models.Product.findAll()
-		.then((products) => {
-			console.log(products);
-			return res.json(products);
-		})
-		.catch((err) => console.log(err));
-};
 //@ BOOKINGS
 export const showAllBookings = (req, res, next) => {
-	models.Booking.findAll()
-		.then((bookings) => {
-			return res.json(bookings);
-		})
-		.catch((err) => console.log(err));
+	simpleListAll(res, models.Booking);
 };
 //@ INVOICES
 export const showAllInvoices = (req, res, next) => {
-	models.Invoice.findAll()
-		.then((invoices) => {
-			return res.json(invoices);
-		})
-		.catch((err) => console.log(err));
+	simpleListAll(res, models.Invoice);
 };

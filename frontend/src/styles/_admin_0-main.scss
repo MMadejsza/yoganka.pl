@@ -87,7 +87,8 @@
 	}
 	.data-table {
 		width: 100%;
-		border-collapse: collapse;
+		border-collapse: separate;
+		border-spacing: 0;
 		font-size: 1.5rem;
 
 		&__headers {
@@ -96,10 +97,18 @@
 			border-bottom: 2px solid black;
 			background-color: rgba(map.get(var.$colors, nav), 1);
 			box-shadow: map.get(var.$shadows, box-shadow);
+			border-top-left-radius: map.get(var.$sizes, border-radius);
+			border-top-right-radius: map.get(var.$sizes, border-radius);
 		}
 
 		&__single-header {
 			padding: 1rem;
+		}
+		&__single-header:first-child {
+			border-top-left-radius: map.get(var.$sizes, border-radius);
+		}
+		&__single-header:last-child {
+			border-top-right-radius: map.get(var.$sizes, border-radius);
 		}
 
 		&__cells:first-child {

@@ -1,7 +1,8 @@
 // Util function for managing behavior of fetch for http requests
 export async function fetchData(link) {
+	console.log(`link: ${link}`);
 	// await promise solve
-	const response = await fetch('/api/admin-console/show-all-users');
+	const response = await fetch(`/api${link}`);
 	// if error
 	if (!response.ok) {
 		// instantiate error with message

@@ -1,10 +1,7 @@
 import React from 'react';
-import {NavLink, useNavigate, useLocation} from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 
-function SideNav({menuSet, side}) {
-	const navigate = useNavigate();
-	const location = useLocation();
-
+function SideNav({menuSet, side, onTabClick}) {
 	return (
 		<aside className='side-nav'>
 			<nav className={`nav ${side}`}>

@@ -23,6 +23,7 @@ const router = createBrowserRouter([
 			// {path: 'zajecia', element: <ClassesPage />},
 			// {path: 'b2b', element: <B2BPage />},
 			{path: 'admin-console', element: <AdminPage />},
+			{path: 'admin-console/:link', element: <AdminPage />},
 		],
 		errorElement: <ErrorPage />,
 	},
