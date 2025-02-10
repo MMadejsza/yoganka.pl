@@ -11,7 +11,7 @@ app.use(express.urlencoded({extended: true}));
 // app.use(express.static(path.join(rootDir, '../../frontend/public')));
 
 // Filtering that works only for /admin/*
-app.use(`/admin`, adminRoutes);
+app.use(`/admin-console`, adminRoutes);
 app.use(`/customer`, customerRoutes);
 app.use(`/user`, userRoutes);
 
