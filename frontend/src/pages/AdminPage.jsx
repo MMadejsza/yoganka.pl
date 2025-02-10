@@ -264,7 +264,7 @@ function AdminPage() {
 									<td
 										className='data-table__single-cell'
 										key={headerIndex}>
-										{value !== undefined ? value : '-'}
+										{value || '-'}
 									</td>
 								);
 							})}
@@ -272,17 +272,6 @@ function AdminPage() {
 					))}
 				</tbody>
 			</table>
-			// <ul className='data-table__list'>
-			// 	{data.content.map((record, index) => {
-			// 		return (
-			// 			<li
-			// 				className='data-table__record'
-			// 				key={index}>
-			// 				{record.UserID}
-			// 			</li>
-			// 		);
-			// 	})}
-			// </ul>
 		);
 	}
 

@@ -14,7 +14,6 @@ export const showAllUsers = (req, res, next) => {
 			const userHeaders = Object.keys(models.User.getAttributes());
 			const settingsHeaders = ['UserPrefSetting'];
 			const headers = [...userHeaders, ...settingsHeaders];
-			console.log(users);
 			return res.json({
 				headers,
 				content: users,
