@@ -5,9 +5,18 @@
 @use '_global_mixins-keyframes' as mixin;
 
 @media (min-width: 1025px) or (min-width: 1400px) {
+	.wrapper {
+		grid-template-rows: auto auto 1fr auto;
+		grid-template-areas:
+			'table table table table table'
+			'table table table table table'
+			'space space space space space'
+			'footer footer footer footer footer';
+	}
 	.admin-console {
+		grid-area: table;
 		grid-column: 1 /-1;
-		height: 100vh;
+		max-height: 100%;
 
 		grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
 		grid-template-rows: auto auto auto auto auto 1fr auto;
@@ -74,6 +83,33 @@
 					text-shadow: map.get(var.$shadows, active-text-icons-shadow);
 				}
 			}
+		}
+	}
+	.data-table {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: 1.5rem;
+
+		&__headers {
+			margin-bottom: 1rem;
+			font-size: 1.7rem;
+			border-bottom: 2px solid black;
+			background-color: rgba(map.get(var.$colors, nav), 1);
+			box-shadow: map.get(var.$shadows, box-shadow);
+		}
+
+		&__single-header {
+			padding: 1rem;
+		}
+
+		&__cells:first-child {
+			padding-top: 2rem;
+		}
+
+		&__single-cell {
+			width: min-content;
+			padding: 1rem;
+			border-bottom: 1px solid rgba(map.get(var.$colors, nav), 1);
 		}
 	}
 }
