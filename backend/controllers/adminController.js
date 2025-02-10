@@ -1,5 +1,6 @@
 import * as models from '../models/_index.js';
 import simpleListAll from '../utils/listAllToTable.js';
+import columnMaps from '../utils/columnsMapping.js';
 
 //@ USERS
 export const showAllUsers = (req, res, next) => {
@@ -14,12 +15,29 @@ export const showAllUsers = (req, res, next) => {
 			],
 		})
 		.then((users) => {
-			const userHeaders = Object.keys(model.getAttributes());
-			const settingsHeaders = ['UserPrefSetting'];
-			const totalHeaders = [...userHeaders, ...settingsHeaders];
-			return res.json({
-				totalHeaders,
-				content: users,
+			// fetching map for User table or empty object
+			const columnMap = columnMaps['User'] || {};
+
+			// Convert for users for different names
+			const formattedUsers = users.map((user) => {
+				const newUser = {}; // Container for formatted data
+
+				// 🔄 Iterate after each column in user record
+				for (const key in user.toJSON()) {
+					const newKey = columnMap[key] || key; // New or original name if not specified
+					newUser[newKey] = user[key]; // Assignment
+				}
+
+				return newUser; // Return new user object
+			});
+
+			// New headers (keys from columnMap)
+			const totalHeaders = Object.values(columnMap);
+
+			// ✅ Return response to frontend
+			res.json({
+				totalHeaders, // To render
+				content: formattedUsers, // With new names
 			});
 		})
 		.catch((err) => console.log(err));
@@ -59,6 +77,10 @@ export const showAllUserSettings = (req, res, next) => {
 };
 //@ CUSTOMERS
 export const showAllCustomers = (req, res, next) => {
+	// // ➕ Add new column
+	// if (user.firstName && user.lastName) {
+	// 	newUser['Full Name'] = `${user.firstName} ${user.lastName}`;
+	// }
 	simpleListAll(res, models.Customer);
 };
 export const deleteCustomer = (req, res, next) => {
