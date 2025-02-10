@@ -1,7 +1,5 @@
-import Burger from '../components/nav/Burger.jsx';
-import Nav from '../components/nav/Nav.jsx';
-import Footer from '../components/Footer.jsx';
-import FloatingPopUps from '../components/FloatingPopUps.jsx';
+import SideNav from '../components/SideNav.jsx';
+import Section from '../components/Section.jsx';
 
 const options = [
 	{
@@ -85,7 +83,7 @@ const options = [
 	// /admin-console/delete-invoice/:id
 ];
 
-function ErrorPage() {
+function AdminPage() {
 	const todayRaw = new Date();
 	const today = todayRaw.toISOString().split('T')[0]; // "YYYY-MM-DD"
 	const handleSubmit = async (e, type) => {
@@ -138,7 +136,6 @@ function ErrorPage() {
 		startTime: '12:00:00',
 		location: 'Some location',
 	};
-
 	const product = {
 		name: 'product',
 		type: 'sometype',
@@ -148,6 +145,7 @@ function ErrorPage() {
 		totalSpaces: 10,
 		startDate: '2025-12-12',
 	};
+
 	const handleDodaj = async (e, obiekt, path) => {
 		e.preventDefault();
 		const requestOptions = {
@@ -162,50 +160,78 @@ function ErrorPage() {
 		}
 	};
 
+	const sideNavTabs = [
+		{
+			name: 'Użytkownicy',
+			icon: 'group',
+			link: '',
+		},
+		{
+			name: 'Klienci',
+			icon: 'sentiment_satisfied',
+			// link: '/wydarzenia',
+		},
+		{
+			name: 'Produkty',
+			icon: 'inventory',
+			link: '',
+		},
+		{
+			name: 'Grafik',
+			icon: 'calendar_month',
+			link: '',
+		},
+		{
+			name: `Booking'i`,
+			icon: 'event_available',
+			link: '',
+		},
+		{
+			name: `Faktury`,
+			icon: 'receipt_long',
+			link: '',
+		},
+		{
+			name: `Newsletter'y`,
+			icon: 'contact_mail',
+			link: '',
+		},
+		{
+			name: `Opinie`,
+			icon: 'reviews',
+			link: '',
+		},
+	];
+	const sideNavActions = [
+		{
+			name: 'Dodaj',
+			icon: 'add_circle',
+			link: '',
+		},
+		{
+			name: 'Edytuj',
+			icon: 'edit',
+			// link: '/wydarzenia',
+		},
+		{
+			name: 'Usuń',
+			icon: 'delete_forever',
+			link: '',
+		},
+	];
+
 	return (
-		<div className='wrapper'>
-			<Burger />
-			<Nav />
-			<div className='error'>
-				<h1 className='error__title'>Ups... Nie mamy takiej strony :)</h1>
-				<form
-					onSubmit={(e) => handleSubmit(e, 'admin-console')}
-					style={{marginTop: '10rem'}}
-					autoComplete='on'>
-					<select
-						name='selectOption'
-						style={{border: '1px solid black', marginTop: '1rem'}}>
-						{options.map((option, index) => (
-							<option
-								key={index}
-								value={option.path}
-								data-method={option.method}>
-								{option.label}
-							</option>
-						))}
-					</select>
-					<button type='submit'>Submit</button>
-				</form>
-				<form
-					onSubmit={(e) => handleDodaj(e, product, 'create-product')}
-					autoComplete='on'>
-					<button type='submit'>Dodaj produkt</button>
-				</form>
-				<form
-					onSubmit={(e) => handleDodaj(e, user, 'create-user')}
-					autoComplete='on'>
-					<button type='submit'>Dodaj usera</button>
-				</form>
-				<form
-					onSubmit={(e) => handleDodaj(e, scheduleRecord, 'create-schedule-record')}
-					autoComplete='on'>
-					<button type='submit'>Dodaj schedule</button>
-				</form>
-			</div>
-			<Footer />
-			<FloatingPopUps />
+		<div className='admin-console'>
+			<Section
+				classy='admin-intro'
+				header={`Admin Panel`}></Section>
+			<SideNav menuSet={sideNavTabs} />
+			<SideNav
+				menuSet={sideNavActions}
+				side='right'
+			/>
 		</div>
 	);
 }
 
-export default ErrorPage;
+export default AdminPage;

@@ -7,20 +7,6 @@ html {
 }
 //! NAV
 
-// .nav.highlighted::after {
-// 	position: absolute;
-// 	background-color: red;
-// 	height: 100vh;
-// 	width: 15%;
-// 	top: 0;
-// 	right: -15%;
-// 	content: '';
-// 	animation: 3s highlights ease-in-out;
-// 	// z-index: 1000;
-// 	border: 1px solid red;
-// 	overflow: hidden;
-// }
-
 .burger {
 	$bar-height: 0.4rem;
 	$bar-width: 3.5rem;

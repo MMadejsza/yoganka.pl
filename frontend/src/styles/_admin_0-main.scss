@@ -1,0 +1,79 @@
+@use 'sass:map';
+@use 'sass:color';
+@use 'sass:math';
+@use '_global_variables-templates' as var;
+@use '_global_mixins-keyframes' as mixin;
+
+@media (min-width: 1025px) or (min-width: 1400px) {
+	.admin-console {
+		grid-column: 1 /-1;
+		height: 100vh;
+
+		grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+		grid-template-rows: auto auto auto auto auto 1fr auto;
+	}
+	.admin-intro {
+		margin-top: 8rem;
+
+		&__header {
+			width: 100%;
+			padding: 1rem;
+			text-shadow: map.get(var.$shadows, active-text-icons-shadow);
+			background-color: rgba(map.get(var.$colors, base), 0.75);
+		}
+	}
+	.side-nav {
+		.nav {
+			$width: min-content;
+			position: fixed;
+			top: 50%;
+			transform: translateY(-50%);
+			right: 100%;
+			left: 0;
+			width: $width;
+			z-index: 5;
+
+			border-top-left-radius: 0;
+			border-bottom-left-radius: 0;
+			border-top-right-radius: map.get(var.$sizes, border-radius);
+			border-bottom-right-radius: map.get(var.$sizes, border-radius);
+
+			@include mixin.flex(row, $align: center);
+			flex-wrap: wrap;
+
+			&.right {
+				right: 0;
+				left: auto;
+				border-top-right-radius: 0;
+				border-bottom-right-radius: 0;
+				border-top-left-radius: map.get(var.$sizes, border-radius);
+				border-bottom-left-radius: map.get(var.$sizes, border-radius);
+			}
+
+			&__list {
+				@include mixin.flex(column);
+				flex-wrap: wrap;
+				gap: 1rem;
+				margin-top: 0;
+			}
+
+			&__link {
+				margin: 0 1rem;
+				line-height: 4.5rem;
+				font-size: 1.8rem;
+
+				.nav__icon {
+					min-width: 33px;
+					margin-right: 1rem;
+					font-size: 3rem;
+				}
+
+				&.active,
+				&.active .nav__icon {
+					color: map.get(var.$colors, accent-bcg);
+					text-shadow: map.get(var.$shadows, active-text-icons-shadow);
+				}
+			}
+		}
+	}
+}
