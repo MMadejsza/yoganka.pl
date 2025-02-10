@@ -4,87 +4,6 @@ import {fetchData} from '../utils/http.js';
 import SideNav from '../components/SideNav.jsx';
 import Section from '../components/Section.jsx';
 
-const options = [
-	{
-		label: 'a all users', // And their settings
-		path: 'admin-console/show-all-users',
-		method: 'GET',
-	},
-	{
-		label: 'a all user settings',
-		path: 'admin-console/show-all-users-settings',
-		method: 'GET',
-	},
-	// /admin-console/delete-user/:id
-	{
-		label: 'a all customers',
-		path: 'admin-console/show-all-customers',
-		method: 'GET',
-	},
-	// /admin-console/edit-customer/:id
-	// /admin-console/delete-customer/:id
-	{
-		label: 'a all customers phones',
-		path: 'admin-console/show-all-customers-phones',
-		method: 'GET',
-	},
-	// /admin-console/edit-customer-phone/:id
-	// /admin-console/delete-customer-phone/:id
-
-	{
-		label: 'a schedule',
-		path: 'admin-console/show-all-schedules',
-		method: 'GET',
-	},
-	{
-		label: 'a booked schedule records',
-		path: 'admin-console/show-booked-schedules',
-		method: 'GET',
-	},
-	// /admin-console/edit-schedule/:id
-	// /admin-console/delete-schedule/:id
-
-	{
-		label: 'a all feedbacks',
-		path: 'admin-console/show-all-participants-feedback',
-		method: 'GET',
-	},
-	// /admin-console/delete-participant-feedback/:id
-	{
-		label: 'a all newsletters',
-		path: 'admin-console/show-all-newsletters',
-		method: 'GET',
-	},
-	// /admin-console/edit-newsletter/:id
-	// /admin-console/delete-newsletter/:id
-	{
-		label: 'a all newsletters subs',
-		path: 'admin-console/show-all-subscribed-newsletters',
-		method: 'GET',
-	},
-	// /admin-console/delete-subscribed-newsletter/:id
-	{
-		label: 'a all products',
-		path: 'admin-console/show-all-products',
-		method: 'GET',
-	},
-	// /admin-console/edit-product/:id
-	// /admin-console/delete-product/:id
-	{
-		label: 'a all bookings',
-		path: 'admin-console/show-all-bookings',
-		method: 'GET',
-	},
-	// /admin-console/edit-booking/:id
-	// /admin-console/delete-booking/:id
-	{
-		label: 'a all invoices',
-		path: 'admin-console/show-all-invoices',
-		method: 'GET',
-	},
-	// /admin-console/edit-invoice/:id
-	// /admin-console/delete-invoice/:id
-];
 const sideNavTabs = [
 	{name: 'Użytkownicy', icon: 'group', link: '/admin-console/show-all-users'},
 	{name: 'Klienci', icon: 'sentiment_satisfied', link: '/admin-console/show-all-customers'},
@@ -116,7 +35,7 @@ const sideNavActions = [
 function AdminPage() {
 	const location = useLocation(); // fetch current path
 
-	const {data, isPending, isError, error} = useQuery({
+	const {data, isLoading, isError, error} = useQuery({
 		// as id for later caching received data to not send the same request again where location.pathname is key
 		queryKey: ['data', location.pathname],
 		// definition of the code sending the actual request- must be returning the promise
