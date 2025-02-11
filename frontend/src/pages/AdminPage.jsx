@@ -101,11 +101,7 @@ function AdminPage() {
 			<Section
 				classy='admin-intro'
 				header={`Admin Panel`}></Section>
-			<SideNav
-				menuSet={sideNavTabs}
-				// ref={link}
-				// onTabClick={handleTabClick}
-			/>
+			<SideNav menuSet={sideNavTabs} />
 			<SideNav
 				menuSet={sideNavActions}
 				side='right'

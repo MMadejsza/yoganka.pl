@@ -49,7 +49,7 @@ function ModalForm({visited, onClose}) {
 						<i className='fa-solid fa-xmark modal__icon'></i>
 					</a>
 				</div>
-				<NewUserForm />
+				<NewUserForm closeModal={handleClose} />
 			</div>
 		</>,
 		document.getElementById('modal'),

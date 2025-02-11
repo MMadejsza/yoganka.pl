@@ -76,6 +76,7 @@ export const createUser = (req, res, next) => {
 	})
 		.then(() => {
 			console.log('✅ created');
+			res.status(201).json({message: '✅ User created'});
 		})
 		.catch((err) => console.log(err));
 };
