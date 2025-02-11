@@ -26,6 +26,11 @@ UserPrefSettings.belongsTo(User, {foreignKey: 'UserID'});
 Customer.hasMany(Booking, {foreignKey: 'CustomerID', onDelete: 'CASCADE'});
 Booking.belongsTo(Customer, {foreignKey: 'CustomerID'});
 
+//@ Feedback and Schedule
+//@ ------------------------------------------------------------
+Feedback.belongsTo(ScheduleRecord, {foreignKey: 'ScheduleID'});
+ScheduleRecord.hasMany(Feedback, {foreignKey: 'ScheduleID'});
+
 //@ Booking and BookedSchedules (M:M, total participation on both sides)
 //@ ----------------------------------------------------------------------
 Booking.belongsToMany(ScheduleRecord, {

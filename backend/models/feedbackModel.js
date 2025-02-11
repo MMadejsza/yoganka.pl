@@ -38,7 +38,7 @@ export const Feedback = sequelizeDb.define(
 			allowNull: true,
 		},
 		Delay: {
-			type: DataTypes.INTEGER,
+			type: DataTypes.STRING(5),
 			allowNull: true,
 		},
 	},

@@ -9,7 +9,7 @@ const formatIsoDateTime = (isoString) => {
 		day: '2-digit',
 	});
 	let formattedTime;
-	if (isoString.length != 10) {
+	if (isoString?.length != 10) {
 		formattedTime = date.toLocaleString('pl-PL', {
 			hour: '2-digit',
 			minute: '2-digit',

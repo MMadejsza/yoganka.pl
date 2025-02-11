@@ -18,14 +18,6 @@ const Booking = sequelizeDb.define(
 				key: 'CustomerID', // The name of the column in the target table
 			},
 		},
-		ScheduleID: {
-			type: DataTypes.INTEGER,
-			allowNull: false,
-			references: {
-				model: 'ScheduleRecord', // The name of the target table
-				key: 'ScheduleID', // The name of the column in the target table
-			},
-		},
 		Date: {
 			type: DataTypes.DATEONLY, // YYYY-MM-DD
 			allowNull: false,

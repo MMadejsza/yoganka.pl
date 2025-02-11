@@ -62,8 +62,8 @@ const columnMaps = {
 	},
 
 	Invoice: {
-		InvoiceID: 'ID faktury',
-		BookingID: 'ID rezerwacji',
+		InvoiceID: 'ID FV',
+		BookingID: 'ID Rezerwacji',
 		InvoiceDate: 'Data faktury',
 		DueDate: 'Termin płatności',
 		TotalAmount: 'Kwota całkowita',
@@ -71,7 +71,7 @@ const columnMaps = {
 	},
 
 	Newsletter: {
-		NewsletterID: 'ID newslettera',
+		NewsletterID: 'ID',
 		Status: 'Status',
 		CreationDate: 'Data utworzenia',
 		SendDate: 'Data wysyłki',
@@ -80,12 +80,12 @@ const columnMaps = {
 	},
 
 	Feedback: {
-		FeedbackID: 'ID opinii',
-		CustomerID: 'ID klienta',
-		ScheduleID: 'ID harmonogramu',
-		SubmissionDate: 'Data zgłoszenia',
-		Rating: 'Ocena',
-		Text: 'Treść opinii',
+		FeedbackID: 'ID Opinii',
+		CustomerID: 'ID Klienta',
+		ScheduleID: 'ID Terminu',
+		SubmissionDate: 'Data Zgłoszenia',
+		Rating: 'Ocena (1-5)',
+		Text: 'Treść Opinii',
 		Delay: 'Opóźnienie',
 	},
 };
