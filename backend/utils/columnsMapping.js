@@ -48,10 +48,11 @@ const columnMaps = {
 	},
 
 	Booking: {
-		BookingID: 'ID rezerwacji',
+		BookingID: 'ID',
 		CustomerID: 'ID klienta',
 		ScheduleID: 'ID harmonogramu',
-		Date: 'Data',
+		Name: 'Produkt',
+		Date: 'Data Rezerwacji',
 		Product: 'Produkt',
 		Status: 'Status',
 		AmountPaid: 'Kwota zapłacona',

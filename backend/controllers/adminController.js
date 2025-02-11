@@ -202,11 +202,14 @@ export const showAllSchedules = (req, res, next) => {
 
 				// 🔄 Iterate after each column in user record
 				for (const key in jsonRecord) {
+					const newKey = columnMap[key] || key; // New or original name if not specified
+					console.log(key);
 					if (key === 'Product' && jsonRecord[key]) {
 						newRecord['Typ'] = jsonRecord[key].Type; //  flatten object
 						newRecord['Nazwa'] = jsonRecord[key].Name;
+					} else if (key == 'Date') {
+						newRecord[newKey] = formatIsoDateTime(jsonRecord[key]);
 					} else {
-						const newKey = columnMap[key] || key; // New or original name if not specified
 						newRecord[newKey] = jsonRecord[key]; // Assignment
 					}
 				}
@@ -232,13 +235,7 @@ export const showAllSchedules = (req, res, next) => {
 		})
 		.catch((err) => console.log(err));
 };
-export const showBookedSchedules = (req, res, next) => {
-	models.BookedSchedule.findAll()
-		.then((bookedRecords) => {
-			return res.json(bookedRecords);
-		})
-		.catch((err) => console.log(err));
-};
+export const showBookedSchedules = (req, res, next) => {};
 export const createScheduleRecord = (req, res, next) => {
 	models.ScheduleRecord.create({
 		ProductID: req.body.productID,
@@ -284,7 +281,81 @@ export const createProduct = async (req, res, next) => {
 };
 //@ BOOKINGS
 export const showAllBookings = (req, res, next) => {
-	simpleListAllToTable(res, models.Booking);
+	const model = models.Booking;
+
+	// We create dynamic joint columns based on the map
+	const columnMap = columnMaps[model.name] || {};
+	const includeAttributes = [];
+
+	model
+		.findAll({
+			include: [
+				{
+					model: models.Customer,
+					attributes: [
+						[Sequelize.literal("CONCAT(FirstName, ' ', LastName)"), 'Imię Nazwisko'],
+					],
+				},
+				{
+					model: models.ScheduleRecord, //  ScheduleRecord
+					include: [
+						{
+							model: models.Product, // Product through ScheduleRecord
+							attributes: ['Name'],
+						},
+					],
+					attributes: ['ScheduleID'], // PK
+				},
+			],
+			attributes: {
+				include: includeAttributes, // Adding joint columns
+				exclude: ['Product'], // Deleting substituted ones
+			},
+		})
+		.then((records) => {
+			// Convert for records for different names
+			const formattedRecords = records.map((record) => {
+				const newRecord = {}; // Container for formatted data
+
+				const jsonRecord = record.toJSON();
+				// 🔄 Iterate after each column in user record
+				for (const key in jsonRecord) {
+					const newKey = columnMap[key] || key; // New or original name if not specified
+					if (key == 'Date') {
+						newRecord[newKey] = formatIsoDateTime(jsonRecord[key]);
+					} else if (key == 'Customer') {
+						newRecord['Imię Nazwisko'] = jsonRecord[key]['Imię Nazwisko'];
+					} else if (key === 'ScheduleRecords' && jsonRecord[key].length > 0) {
+						//ScheduleRecords and inside Product object
+						newRecord['Produkt'] = jsonRecord[key][0].Product?.Name;
+					} else {
+						newRecord[newKey] = jsonRecord[key]; // Assignment
+					}
+				}
+
+				return newRecord; // Return new record object
+			});
+
+			// New headers (keys from columnMap)
+			const totalHeaders = [
+				'ID',
+				'Data Rezerwacji',
+				'Imię Nazwisko',
+				'Produkt',
+				'Status',
+				'Kwota do zapłaty',
+				'Kwota zapłacona',
+				'Metoda płatności',
+				'Status płatności',
+			];
+
+			// ✅ Return response to frontend
+			res.json({
+				totalHeaders, // To render
+				content: formattedRecords, // With new names
+			});
+		})
+		.catch((err) => console.log(err));
 };
 //@ INVOICES
 export const showAllInvoices = (req, res, next) => {
