@@ -131,6 +131,7 @@
 		}
 		&__cells {
 			transition: map.get(var.$behavior, base-transition);
+
 			&:nth-child(2n) {
 				background-color: color.adjust(map.get(var.$colors, nav), $lightness: 15%);
 			}
@@ -138,6 +139,14 @@
 				transform: scale(1.05) translateY(0.5rem);
 				box-shadow: map.get(var.$shadows, tile-shadow);
 				border-radius: map.get(var.$sizes, border-radius);
+				.data-table__single-cell:first-child {
+					border-top-left-radius: map.get(var.$sizes, border-radius);
+					border-bottom-left-radius: map.get(var.$sizes, border-radius);
+				}
+				.data-table__single-cell:last-child {
+					border-top-right-radius: map.get(var.$sizes, border-radius);
+					border-bottom-right-radius: map.get(var.$sizes, border-radius);
+				}
 			}
 
 			&:first-child {
