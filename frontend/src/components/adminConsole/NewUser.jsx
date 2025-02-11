@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {createPortal} from 'react-dom';
 import NewUserForm from './UserForm.jsx';
 
-function ModalForm({visited, onClose}) {
+function NewUser({visited, onClose}) {
 	const [isVisible, setIsVisible] = useState(false);
 	const [isClosing, setIsClosing] = useState(false);
 
@@ -56,4 +56,4 @@ function ModalForm({visited, onClose}) {
 	);
 }
 
-export default ModalForm;
+export default NewUser;
