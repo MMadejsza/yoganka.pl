@@ -19,3 +19,23 @@ export async function fetchData(link) {
 	// return it
 	return data;
 }
+export async function create(link, formData) {
+	console.log(`link: ${link}`);
+	const response = await fetch(`/api${link}`, {
+		method: 'POST',
+		body: JSON.stringify(formData),
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});
+	if (!response.ok) {
+		const error = new Error('❌ An error occurred while creating the event');
+		error.code = response.status;
+		error.info = await response.json();
+		throw error;
+	}
+
+	const result = await response.json();
+	console.log('✅ Serwer:', result);
+	return result;
+}

@@ -20,7 +20,7 @@ router.get('/show-all-invoices', adminC.showAllInvoices);
 
 //@ POST
 //# CREATE
-router.post('/create-user', adminC.createUser);
+router.post('/add-user', adminC.createUser);
 //? router.post('/create-customer', adminC.createCustomer);
 //? router.post('/create-customer-phone', adminC.createCustomerPhone);
 router.post('/create-schedule-record', adminC.createScheduleRecord);
@@ -28,10 +28,7 @@ router.post('/create-schedule-record', adminC.createScheduleRecord);
 router.post('/create-product', adminC.createProduct);
 // router.post('/create-booking', adminC.createBooking);
 // router.post('/create-invoice', adminC.createInvoice);
-
-router.post('/ex', (req, res) => {
-	console.log('Got in backend:', req.body);
-	res.json({message: 'Backend go data!'});
-});
+//# EDIT
+router.post('/edit-product', adminC.editProduct);
 
 export default router;

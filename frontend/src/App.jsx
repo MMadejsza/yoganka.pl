@@ -22,8 +22,14 @@ const router = createBrowserRouter([
 			{path: 'wydarzenia/:link', element: <HomePage />},
 			// {path: 'zajecia', element: <ClassesPage />},
 			// {path: 'b2b', element: <B2BPage />},
-			{path: 'admin-console', element: <AdminPage />},
-			{path: 'admin-console/:link', element: <AdminPage />},
+			{
+				path: 'admin-console',
+				element: <AdminPage />,
+				children: [
+					{path: ':link', element: <AdminPage />},
+					{path: 'show-all-users/add-user', element: <AdminPage />},
+				],
+			},
 		],
 		errorElement: <ErrorPage />,
 	},

@@ -64,15 +64,15 @@ export const showAllUsers = (req, res, next) => {
 		.catch((err) => console.log(err));
 };
 export const createUser = (req, res, next) => {
+	console.log('📩 Otrzymane dane:', req.body);
 	models.User.create({
-		RegistrationDate: req.body.regDate,
+		RegistrationDate: req.body.registrationDate,
 		Login: req.body.login,
-		Location: req.body.location,
-		PasswordHash: req.body.pass,
-		LastLoginDate: req.body.loginDate,
-		Email: req.body.mail + Math.floor(Math.random() * 1000) + '@google.com',
+		PasswordHash: req.body.password,
+		LastLoginDate: 'logindate',
+		Email: req.body.email + Math.floor(Math.random() * 1000) + '@google.com',
 		Role: req.body.role,
-		ProfilePictureSrcSetJSON: req.body.profilePic,
+		ProfilePictureSrcSetJSON: req.body.profilePicture,
 	})
 		.then(() => {
 			console.log('✅ created');
@@ -361,6 +361,22 @@ export const createProduct = async (req, res, next) => {
 		TotalSpaces: req.body.totalSpaces,
 		StartDate: req.body.startDate,
 	})
+		.then(() => {
+			console.log('✅ created');
+		})
+		.catch((err) => console.log(err));
+};
+export const editProduct = async (req, res, next) => {
+	models.Product.findByPk()
+		.then({
+			Name: req.body.name,
+			Type: req.body.type,
+			Location: req.body.location,
+			Duration: req.body.duration,
+			Price: req.body.price,
+			TotalSpaces: req.body.totalSpaces,
+			StartDate: req.body.startDate,
+		})
 		.then(() => {
 			console.log('✅ created');
 		})

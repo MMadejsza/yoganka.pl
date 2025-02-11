@@ -1,7 +1,25 @@
-import React from 'react';
-import {NavLink} from 'react-router-dom';
+import React, {useState} from 'react';
+import {useNavigate, useLocation} from 'react-router-dom';
 
-function SideNav({menuSet, side, onTabClick}) {
+import {NavLink} from 'react-router-dom';
+import ModalForm from './ModalForm.jsx';
+
+function SideNav({menuSet, side}) {
+	const navigate = useNavigate();
+	const location = useLocation();
+
+	const isModalPath = location.pathname.includes('add-user');
+	const [isModalOpen, setIsModalOpen] = useState(isModalPath);
+
+	const handleOpenModal = (link) => {
+		setIsModalOpen(true);
+		navigate(`/admin-console/show-all-users/${link}`, {state: {background: location}});
+	};
+
+	const handleCloseModal = () => {
+		setIsModalOpen(false);
+		navigate(location.state?.background?.pathname, {replace: true});
+	};
 	return (
 		<aside className='side-nav'>
 			<nav className={`nav ${side}`}>
@@ -12,6 +30,12 @@ function SideNav({menuSet, side, onTabClick}) {
 							className='nav__item'>
 							<NavLink
 								to={li.link}
+								onClick={(e) => {
+									if (li.link === 'add-user') {
+										e.preventDefault();
+										handleOpenModal(li.link);
+									}
+								}}
 								className={({isActive}) =>
 									isActive ? 'nav__link active' : 'nav__link'
 								}>
@@ -31,6 +55,12 @@ function SideNav({menuSet, side, onTabClick}) {
 					))}
 				</ul>
 			</nav>
+			{isModalOpen && (
+				<ModalForm
+					visited={isModalOpen}
+					onClose={handleCloseModal}
+				/>
+			)}
 		</aside>
 	);
 }

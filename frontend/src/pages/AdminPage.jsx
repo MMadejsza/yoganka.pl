@@ -18,7 +18,7 @@ const sideNavActions = [
 	{
 		name: 'Dodaj',
 		icon: 'add_circle',
-		link: '',
+		link: 'add-user',
 	},
 	{
 		name: 'Edytuj',
@@ -31,6 +31,7 @@ const sideNavActions = [
 		link: '',
 	},
 ];
+const allowedPaths = sideNavTabs.map((tab) => tab.link);
 
 function AdminPage() {
 	const location = useLocation(); // fetch current path
@@ -41,7 +42,7 @@ function AdminPage() {
 		// definition of the code sending the actual request- must be returning the promise
 		queryFn: () => fetchData(location.pathname),
 		// only when location.pathname is set extra beyond admin panel:
-		enabled: location.pathname != '/admin-console',
+		enabled: allowedPaths.includes(location.pathname),
 		// stopping unnecessary requests when jumping tabs
 		staleTime: 10000,
 		// how long tada is cached (default 5 mins)
