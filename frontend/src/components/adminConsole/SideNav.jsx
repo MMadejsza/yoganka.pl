@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {useNavigate, useLocation} from 'react-router-dom';
 
 import {NavLink} from 'react-router-dom';
-import ModalForm from './ModalForm.jsx';
+import ModalForm from './NewUser.jsx';
 
 function SideNav({menuSet, side}) {
 	const navigate = useNavigate();

@@ -1,7 +1,7 @@
 import {useQuery} from '@tanstack/react-query';
 import {useLocation} from 'react-router-dom';
 import {fetchData} from '../utils/http.js';
-import SideNav from '../components/SideNav.jsx';
+import SideNav from '../components/adminConsole/SideNav.jsx';
 import Section from '../components/Section.jsx';
 
 const sideNavTabs = [

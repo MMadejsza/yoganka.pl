@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 
 import {useMutation} from '@tanstack/react-query';
-import {create} from '../utils/http.js';
+import {create} from '../../utils/http.js';
 
 const UserForm = ({closeModal}) => {
 	const location = useLocation(); // fetch current path

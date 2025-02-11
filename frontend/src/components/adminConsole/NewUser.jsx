@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {createPortal} from 'react-dom';
-import NewUserForm from './NewUserForm.jsx';
+import NewUserForm from './UserForm.jsx';
 
 function ModalForm({visited, onClose}) {
 	const [isVisible, setIsVisible] = useState(false);
