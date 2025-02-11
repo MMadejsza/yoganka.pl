@@ -41,13 +41,13 @@ function SideNav({menuSet, side}) {
 								}>
 								{({isActive}) => (
 									<>
+										{li.name}
 										<span
 											className={`${li.icon} nav__icon ${
 												isActive ? 'active' : ''
 											} material-symbols-rounded nav__icon`}>
 											{li.icon}
 										</span>
-										{li.name}
 									</>
 								)}
 							</NavLink>

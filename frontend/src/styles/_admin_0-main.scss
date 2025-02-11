@@ -37,8 +37,8 @@
 			position: fixed;
 			top: 50%;
 			transform: translateY(-50%);
-			right: 100%;
-			left: 0;
+			right: 50%;
+			left: -155px;
 			width: $width;
 			z-index: 5;
 
@@ -49,18 +49,31 @@
 
 			@include mixin.flex(row, $align: center);
 			flex-wrap: wrap;
+			&:hover {
+				left: 0;
+			}
 
 			&.right {
-				right: 0;
+				right: -85px;
 				left: auto;
 				border-top-right-radius: 0;
 				border-bottom-right-radius: 0;
 				border-top-left-radius: map.get(var.$sizes, border-radius);
 				border-bottom-left-radius: map.get(var.$sizes, border-radius);
+				&:hover {
+					right: 0;
+				}
+				.nav__list {
+					@include mixin.flex(column, $align: flex-start);
+				}
+				.nav__icon {
+					order: -1;
+					margin-right: 1rem;
+				}
 			}
 
 			&__list {
-				@include mixin.flex(column);
+				@include mixin.flex(column, $align: flex-end);
 				flex-wrap: wrap;
 				gap: 1rem;
 				margin-top: 0;
@@ -70,10 +83,11 @@
 				margin: 0 1rem;
 				line-height: 4.5rem;
 				font-size: 1.8rem;
+				text-align: right;
 
 				.nav__icon {
 					min-width: 33px;
-					margin-right: 1rem;
+					margin-right: 0rem;
 					font-size: 3rem;
 				}
 
@@ -85,6 +99,11 @@
 			}
 		}
 	}
+	%hover {
+		color: map.get(var.$colors, accent-bcg);
+		text-shadow: map.get(var.$shadows, active-text-icons-shadow);
+	}
+
 	.data-table {
 		width: 100%;
 		border-collapse: separate;
@@ -110,15 +129,25 @@
 		&__single-header:last-child {
 			border-top-right-radius: map.get(var.$sizes, border-radius);
 		}
+		&__cells {
+			transition: map.get(var.$behavior, base-transition);
+			&:nth-child(2n) {
+				background-color: color.adjust(map.get(var.$colors, nav), $lightness: 15%);
+			}
+			&:hover {
+				transform: scale(1.05) translateY(0.5rem);
+				box-shadow: map.get(var.$shadows, tile-shadow);
+				border-radius: map.get(var.$sizes, border-radius);
+			}
 
-		&__cells:first-child {
-			padding-top: 2rem;
+			&:first-child {
+				padding-top: 2rem;
+			}
 		}
 
 		&__single-cell {
 			width: min-content;
 			padding: 1rem;
-			border-bottom: 1px solid rgba(map.get(var.$colors, nav), 1);
 		}
 	}
 }

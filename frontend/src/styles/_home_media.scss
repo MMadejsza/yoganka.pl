@@ -141,14 +141,14 @@
 		&__item {
 			transition: map.get(var.$behavior, base-transition);
 
-			&:hover {
-				transform: scale(1.05) translateY(0.5rem);
-			}
-
 			%hover {
 				color: map.get(var.$colors, accent-bcg);
 				text-shadow: map.get(var.$shadows, active-text-icons-shadow);
 			}
+			&:hover {
+				transform: scale(1.05) translateY(0.5rem);
+			}
+
 			&:hover .nav__link {
 				@extend %hover;
 				span {
