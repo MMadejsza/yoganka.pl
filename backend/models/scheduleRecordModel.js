@@ -22,7 +22,7 @@ const ScheduleRecord = sequelizeDb.define(
 			allowNull: false,
 		},
 		StartTime: {
-			type: DataTypes.TIME,
+			type: DataTypes.STRING(5),
 			allowNull: false,
 		},
 		Location: {

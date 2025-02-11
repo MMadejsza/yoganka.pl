@@ -38,11 +38,13 @@ const columnMaps = {
 	},
 
 	ScheduleRecord: {
-		ScheduleID: 'ID harmonogramu',
+		ScheduleID: 'ID Terminu',
 		ProductID: 'ID produktu',
 		Date: 'Data',
 		StartTime: 'Godzina rozpoczęcia',
 		Location: 'Lokalizacja',
+		Type: 'Typ',
+		Name: 'Nazwa',
 	},
 
 	Booking: {
