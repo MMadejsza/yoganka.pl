@@ -121,6 +121,7 @@
 		}
 
 		&__single-header {
+			transition: map.get(var.$behavior, base-transition);
 			padding: 1rem;
 		}
 		&__single-header:first-child {
@@ -155,6 +156,7 @@
 		}
 
 		&__single-cell {
+			transition: map.get(var.$behavior, base-transition);
 			width: min-content;
 			padding: 1rem;
 		}
