@@ -28,6 +28,7 @@ const router = createBrowserRouter([
 				children: [
 					{path: ':link', element: <AdminPage />},
 					{path: 'show-all-users/add-user', element: <AdminPage />},
+					{path: 'show-all-users/:id', element: <AdminPage />},
 				],
 			},
 		],

@@ -1,7 +1,9 @@
 import {useQuery} from '@tanstack/react-query';
-import {useLocation} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
+import {useState} from 'react';
 import {fetchData} from '../utils/http.js';
 import SideNav from '../components/adminConsole/SideNav.jsx';
+import UserDetails from '../components/adminConsole/UserDetails.jsx';
 import Section from '../components/Section.jsx';
 
 const sideNavTabs = [
@@ -34,7 +36,20 @@ const sideNavActions = [
 const allowedPaths = sideNavTabs.map((tab) => tab.link);
 
 function AdminPage() {
+	const navigate = useNavigate();
 	const location = useLocation(); // fetch current path
+	const isModalPath = location.pathname.includes(false);
+	const [isModalOpen, setIsModalOpen] = useState(isModalPath);
+
+	const handleOpenModal = (userId) => {
+		setIsModalOpen(true);
+		navigate(`${location.pathname}/${userId}`, {state: {background: location}});
+	};
+
+	const handleCloseModal = () => {
+		setIsModalOpen(false);
+		navigate(location.state?.background?.pathname || '/', {replace: true});
+	};
 
 	const {data, isLoading, isError, error} = useQuery({
 		// as id for later caching received data to not send the same request again where location.pathname is key
@@ -83,6 +98,7 @@ function AdminPage() {
 								}
 								return (
 									<td
+										onClick={() => handleOpenModal(row.ID)}
 										className='data-table__single-cell'
 										key={headerIndex}>
 										{value || '-'}
@@ -107,6 +123,12 @@ function AdminPage() {
 				side='right'
 			/>
 			{content}
+			{isModalOpen && (
+				<UserDetails
+					visited={isModalOpen}
+					onClose={handleCloseModal}
+				/>
+			)}
 		</div>
 	);
 }
