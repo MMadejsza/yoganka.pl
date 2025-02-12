@@ -164,4 +164,58 @@
 			padding: 1rem;
 		}
 	}
+	.user-container {
+		width: 100%;
+		@include mixin.flex(row, space-evenly, center);
+		flex-wrap: wrap;
+		gap: 1.5rem;
+
+		&__actions-block {
+			flex-basis: 100%;
+			margin-right: 3rem;
+			@include mixin.flex(row, flex-end, space-evenly);
+			gap: 1.5rem;
+		}
+		&__action {
+			min-height: 32px;
+			flex-basis: 10%;
+			font-size: 1.5rem;
+			height: 1rem;
+			line-height: 1rem;
+		}
+		&__user-title {
+			flex-basis: 100%;
+		}
+		&__side-details-list {
+			@include mixin.flex(column, center);
+		}
+		&__section-title {
+			margin-bottom: 1.2rem;
+		}
+	}
+
+	.form {
+		@include mixin.flex(column, center, center);
+		gap: 1.5rem;
+
+		&__input-set {
+			width: 100%;
+			@include mixin.flex(row, space-between);
+			font-size: 1.8rem;
+			gap: 1.5rem;
+			label {
+				flex-basis: 35%;
+				text-align: right;
+			}
+			input {
+				flex-basis: 55%;
+				padding: 0.5rem 1.5rem;
+				font-family: 'EB Garamond', serif;
+				border-radius: map.get(var.$sizes, border-radius);
+			}
+		}
+		button:last-child {
+			margin-top: 1.2rem;
+		}
+	}
 }

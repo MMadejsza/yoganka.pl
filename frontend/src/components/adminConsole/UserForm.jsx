@@ -49,8 +49,11 @@ const UserForm = ({closeModal}) => {
 
 	return (
 		<>
-			<form onSubmit={(e) => handleSubmit(e, formData)}>
-				<div>
+			<form
+				className='form'
+				onSubmit={(e) => handleSubmit(e, formData)}>
+				<h2 className='user-container__section-title modal__title'>Uzupełnij dane:</h2>
+				<div className='form__input-set'>
 					<label htmlFor='registrationDate'>Data rejestracji:</label>
 					<input
 						type='datetime-local'
@@ -62,7 +65,7 @@ const UserForm = ({closeModal}) => {
 					/>
 				</div>
 
-				<div>
+				<div className='form__input-set'>
 					<label htmlFor='login'>Login:</label>
 					<input
 						type='text'
@@ -74,7 +77,7 @@ const UserForm = ({closeModal}) => {
 					/>
 				</div>
 
-				<div>
+				<div className='form__input-set'>
 					<label htmlFor='password'>Hasło:</label>
 					<input
 						type='password'
@@ -86,7 +89,7 @@ const UserForm = ({closeModal}) => {
 					/>
 				</div>
 
-				<div>
+				<div className='form__input-set'>
 					<label htmlFor='email'>Email:</label>
 					<input
 						type='text'
@@ -97,7 +100,7 @@ const UserForm = ({closeModal}) => {
 					/>
 				</div>
 
-				<div>
+				<div className='form__input-set'>
 					<label htmlFor='role'>Rola:</label>
 					<input
 						type='text'
@@ -108,7 +111,7 @@ const UserForm = ({closeModal}) => {
 					/>
 				</div>
 
-				<div>
+				<div className='form__input-set'>
 					<label htmlFor='profilePicture'>Link do zdjęcia profilowego:</label>
 					<input
 						type='text'
@@ -119,7 +122,15 @@ const UserForm = ({closeModal}) => {
 					/>
 				</div>
 
-				{!isPending ? <button type='submit'>Zapisz</button> : '📨 Sending...'}
+				{!isPending ? (
+					<button
+						type='submit'
+						className='user-container__action modal__btn'>
+						Zatwierdź
+					</button>
+				) : (
+					'📨 Sending...'
+				)}
 			</form>
 			{isError && `❌ Failed to create an event -> ${error.info?.message}`}
 		</>

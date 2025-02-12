@@ -5,6 +5,7 @@
 
 %action-btn {
 	@include mixin.flex(row, center, center);
+	font-family: 'EB Garamond', serif;
 	flex-wrap: wrap;
 	gap: 1rem;
 	width: 95%;
