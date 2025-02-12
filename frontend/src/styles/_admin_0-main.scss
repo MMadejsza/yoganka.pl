@@ -38,7 +38,7 @@
 			top: 50%;
 			transform: translateY(-50%);
 			right: 50%;
-			left: -155px;
+			left: -187px;
 			width: $width;
 			z-index: 5;
 
@@ -54,7 +54,7 @@
 			}
 
 			&.right {
-				right: -85px;
+				right: -105px;
 				left: auto;
 				border-top-right-radius: 0;
 				border-bottom-right-radius: 0;
@@ -63,12 +63,15 @@
 				&:hover {
 					right: 0;
 				}
+				.nav__link {
+					margin: 0 1rem 0 0;
+				}
 				.nav__list {
 					@include mixin.flex(column, $align: flex-start);
 				}
 				.nav__icon {
 					order: -1;
-					margin-right: 1rem;
+					margin: 0rem 1.5rem 0 1rem;
 				}
 			}
 
@@ -80,14 +83,14 @@
 			}
 
 			&__link {
-				margin: 0 1rem;
+				margin: 0 0 0 1rem;
 				line-height: 4.5rem;
 				font-size: 1.8rem;
 				text-align: right;
 
 				.nav__icon {
 					min-width: 33px;
-					margin-right: 0rem;
+					margin: 0rem 1rem 0 1.5rem;
 					font-size: 3rem;
 				}
 
