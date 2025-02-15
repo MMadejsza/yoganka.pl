@@ -38,6 +38,9 @@
 		background-color: rgba(map.get(var.$colors, base), 1);
 		box-shadow: map.get(var.$shadows, transitive-box-shadow);
 	}
+	.about__bio--description {
+		text-align: center;
+	}
 }
 .camps-benefits {
 	$padding: 1rem;

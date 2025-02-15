@@ -1,6 +1,6 @@
 import Section from '../Section.jsx';
 
-function CampsIntoSection({isMobile}) {
+function CampsIntoSection() {
 	return (
 		<Section
 			classy='camps-intro'
