@@ -32,7 +32,7 @@ function Tile({data, today, clickable}) {
 		navigate(location.state?.background?.pathname || '/', {replace: true});
 	};
 	// archive
-	if (isPast) data.modal.glance.price = '-';
+	if (isPast && data.modal) data.modal.glance.price = '-';
 
 	const imgPaths = [
 		{path: `${data.imgPath}/320_${data.fileName}_0.jpg`, size: '320w'},
@@ -110,7 +110,7 @@ function Tile({data, today, clickable}) {
 
 			{data.front.btnsContent?.length > 0 && renderBtns}
 
-			{isModalOpen && (
+			{isModalOpen && clickable && (
 				<Modal
 					visited={isModalOpen}
 					tile={data}

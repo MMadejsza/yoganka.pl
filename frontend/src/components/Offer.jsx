@@ -5,6 +5,7 @@ function Offer({id, specifier, header, data, today, limit, moreLink}) {
 	let classy = 'offer-type';
 	const modifier = specifier ? `offer-type--${specifier}` : null;
 	const products = limit ? data.slice(0, limit) : data;
+	const nonClickableTypes = ['class', 'b2b'];
 	return (
 		<article
 			id={id}
@@ -15,7 +16,7 @@ function Offer({id, specifier, header, data, today, limit, moreLink}) {
 					data={tileData}
 					key={index}
 					today={today}
-					clickable={tileData.type == 'class' ? false : true}
+					clickable={nonClickableTypes.includes(tileData.type) ? false : true}
 				/>
 			))}
 			{moreLink ? (

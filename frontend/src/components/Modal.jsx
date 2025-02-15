@@ -188,7 +188,7 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 							'modal__full-desc',
 							extraClass,
 						)} modal__full-desc--long-text`}>
-						{modal.fullDescTitle && (
+						{modal?.fullDescTitle && (
 							<h3 className='modal__title'>{modal.fullDescTitle}</h3>
 						)}
 						<p className=' modal__full-desc modal__full-desc--content'>
