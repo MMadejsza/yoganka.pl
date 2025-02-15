@@ -3,7 +3,7 @@ import {createPortal} from 'react-dom';
 import {Helmet} from 'react-helmet';
 import GlideContainer from './glide/GlideContainer.jsx';
 import CampGlance from './ModalGlance.jsx';
-import CampDay from './CampDay.jsx';
+import CampDay from './camps/CampDay.jsx';
 import ModalList from './ModalList.jsx';
 
 function Modal({visited, tile, singleImg, onClose, today}) {

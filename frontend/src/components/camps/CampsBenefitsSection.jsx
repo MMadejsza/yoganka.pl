@@ -1,5 +1,5 @@
-import Section from './Section.jsx';
-import {BENEFITS_DATA} from '../DATA/CAMPS_BENEFITS_DATA.js';
+import Section from '../Section.jsx';
+import {BENEFITS_DATA} from '../../DATA/CAMPS_BENEFITS_DATA.js';
 
 function CampsBenefitsSection() {
 	const classy = 'camps-benefits__';

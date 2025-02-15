@@ -1,4 +1,4 @@
-import Section from './Section.jsx';
+import Section from '../Section.jsx';
 
 function CampsIntoSection({isMobile}) {
 	return (
