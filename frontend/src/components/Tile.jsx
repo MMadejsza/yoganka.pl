@@ -4,8 +4,8 @@ import ImgDynamic from './imgsRelated/ImgDynamic.jsx';
 import Modal from './Modal.jsx';
 import {smoothScrollInto} from '../utils/utils.jsx';
 
-function Tile({data, today}) {
-	const clickable = data.type !== 'class';
+function Tile({data, today, clickable}) {
+	const clickableClass = data.type !== 'class';
 	const classes = data.type === 'class';
 	const isPast = data.date < today;
 	const navigate = useNavigate();
@@ -15,7 +15,7 @@ function Tile({data, today}) {
 
 	const conditionalClasses = [
 		'tile',
-		clickable ? 'clickable' : '',
+		clickableClass ? 'clickable' : '',
 		classes ? 'tile--classes' : '',
 		isPast ? 'past' : '',
 		data.extraClass ? `tile--${data.extraClass}` : '',
