@@ -1,6 +1,7 @@
 import React from 'react';
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
-import {QueryClientProvider, QueryClient} from '@tanstack/react-query';
+import {QueryClientProvider} from '@tanstack/react-query';
+import {queryClient} from './utils/http.js';
 import RootPage from './pages/RootPage.jsx';
 import HomePage from './pages/HomePage.jsx';
 import CampsPage from './pages/CampsPage.jsx';
@@ -9,7 +10,7 @@ import EventsPage from './pages/EventsPage.jsx';
 // import B2BPage from './pages/B2BPage.jsx';
 import ErrorPage from './pages/ErrorPage.jsx';
 import AdminPage from './pages/AdminPage.jsx';
-
+import UserDetails from './components/adminConsole/UserDetails.jsx';
 const router = createBrowserRouter([
 	{
 		path: '/',
@@ -28,7 +29,7 @@ const router = createBrowserRouter([
 				children: [
 					{path: ':link', element: <AdminPage />},
 					{path: 'show-all-users/add-user', element: <AdminPage />},
-					{path: 'show-all-users/:id', element: <AdminPage />},
+					{path: 'show-all-users/:id', element: <UserDetails />},
 				],
 			},
 		],
@@ -37,11 +38,11 @@ const router = createBrowserRouter([
 ]);
 
 // instantiating for tanstack query used in Admin Panel for HTTP requests
-const queryClient = new QueryClient();
+const queryClient2 = queryClient;
 
 function App() {
 	return (
-		<QueryClientProvider client={queryClient}>
+		<QueryClientProvider client={queryClient2}>
 			<RouterProvider router={router} />
 		</QueryClientProvider>
 	);

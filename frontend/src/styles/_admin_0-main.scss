@@ -166,7 +166,7 @@
 	}
 	.user-container {
 		width: 100%;
-		@include mixin.flex(row, space-evenly, center);
+		@include mixin.flex(row, space-evenly, flex-start);
 		flex-wrap: wrap;
 		gap: 1.5rem;
 
@@ -186,17 +186,28 @@
 		&__user-title {
 			flex-basis: 100%;
 		}
-		&__side-details-list {
+		.modal-checklist {
+			@include mixin.flex(column, flex-start, center);
+		}
+		&__details-list {
 			@include mixin.flex(column, center);
 		}
 		&__section-title {
 			margin-bottom: 1.2rem;
+			color: map.get(var.$colors, accent-bcg);
+		}
+		&__section-record-label {
+			font-weight: 600;
+		}
+		&__section-record-label {
+			font-weight: 600;
 		}
 	}
 
 	.form {
 		@include mixin.flex(column, center, center);
 		gap: 1.5rem;
+		max-width: 600px;
 
 		&__input-set {
 			width: 100%;

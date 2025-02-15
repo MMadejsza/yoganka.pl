@@ -1,5 +1,5 @@
 import {useQuery} from '@tanstack/react-query';
-import {useLocation, useNavigate} from 'react-router-dom';
+import {useLocation, useNavigate, useMatch} from 'react-router-dom';
 import {useState} from 'react';
 import {fetchData} from '../utils/http.js';
 import SideNav from '../components/adminConsole/SideNav.jsx';
@@ -36,10 +36,11 @@ const sideNavActions = [
 const allowedPaths = sideNavTabs.map((tab) => tab.link);
 
 function AdminPage() {
+	const modalMatch = useMatch('/admin-console/show-all-users/:id');
 	const navigate = useNavigate();
 	const location = useLocation(); // fetch current path
-	const isModalPath = location.pathname.includes(false);
-	const [isModalOpen, setIsModalOpen] = useState(isModalPath);
+
+	const [isModalOpen, setIsModalOpen] = useState(modalMatch);
 
 	const handleOpenModal = (userId) => {
 		setIsModalOpen(true);
@@ -50,7 +51,7 @@ function AdminPage() {
 		setIsModalOpen(false);
 		navigate(location.state?.background?.pathname || '/', {replace: true});
 	};
-
+	console.log(`location.pathname admin page: ${location.pathname}`);
 	const {data, isLoading, isError, error} = useQuery({
 		// as id for later caching received data to not send the same request again where location.pathname is key
 		queryKey: ['data', location.pathname],

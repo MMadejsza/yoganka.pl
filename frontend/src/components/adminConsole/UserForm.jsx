@@ -1,12 +1,9 @@
 import React, {useState} from 'react';
-import {useLocation, useNavigate} from 'react-router-dom';
 
 import {useMutation} from '@tanstack/react-query';
 import {create} from '../../utils/http.js';
 
 const UserForm = ({closeModal}) => {
-	const location = useLocation(); // fetch current path
-	const navigate = useNavigate();
 	const {mutate, isPending, isError, error} = useMutation({
 		// definition of the code sending the actual request- must be returning the promise
 		mutationFn: (data) => create(`/admin-console/add-user`, data),

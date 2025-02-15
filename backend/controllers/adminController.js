@@ -63,8 +63,27 @@ export const showAllUsers = (req, res, next) => {
 		})
 		.catch((err) => console.log(err));
 };
+export const showUserByID = (req, res, next) => {
+	const PK = req.params.id;
+	models.User.findByPk(PK, {
+		include: [
+			{
+				model: models.Customer, // Add Customer
+				required: false, // May not exist
+			},
+		],
+	})
+		.then((user) => {
+			if (!user) {
+				return res.redirect('/admin-console/show-all-users');
+			}
+			console.log('✅ user fetched');
+			return res.status(200).json({user});
+		})
+		.catch((err) => console.log(err));
+};
 export const createUser = (req, res, next) => {
-	console.log('📩 Otrzymane dane:', req.body);
+	// console.log('📩 Otrzymane dane:', req.body);
 	models.User.create({
 		RegistrationDate: req.body.registrationDate,
 		Login: req.body.login,
@@ -75,7 +94,7 @@ export const createUser = (req, res, next) => {
 		ProfilePictureSrcSetJSON: req.body.profilePicture,
 	})
 		.then(() => {
-			console.log('✅ created');
+			console.log('✅ user created');
 			res.status(201).json({message: '✅ User created'});
 		})
 		.catch((err) => console.log(err));

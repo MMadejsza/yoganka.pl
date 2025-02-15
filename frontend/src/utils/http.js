@@ -1,6 +1,10 @@
+import {QueryClient} from '@tanstack/react-query';
+export const queryClient = new QueryClient();
+
 // Util function for managing behavior of fetch for http requests
+
 export async function fetchData(link) {
-	console.log(`link: ${link}`);
+	console.log(`fetchData link: ${link}`);
 	// await promise solve
 	const response = await fetch(`/api${link}`);
 	// if error
@@ -20,7 +24,7 @@ export async function fetchData(link) {
 	return data;
 }
 export async function create(link, formData) {
-	console.log(`link: ${link}`);
+	console.log(`create link: ${link}`);
 	const response = await fetch(`/api${link}`, {
 		method: 'POST',
 		body: JSON.stringify(formData),
@@ -36,6 +40,38 @@ export async function create(link, formData) {
 	}
 
 	const result = await response.json();
-	console.log('✅ Serwer:', result);
+	// console.log('✅ Serwer:', result);
 	return result;
+}
+
+export async function fetchItem({id, signal}) {
+	const response = await fetch(`/api/admin-console/show-all-users/${id}?t=${Date.now()}`, {
+		signal,
+		cache: 'no-store',
+	});
+
+	if (!response.ok) {
+		const error = new Error('An error occurred while fetching the event');
+		error.code = response.status;
+		error.info = await response.json();
+		throw error;
+	}
+
+	const data = await response.json();
+	return data;
+}
+
+export async function deleteItem({id}) {
+	const response = await fetch(`api/show-all-users/${id}`, {
+		method: 'DELETE',
+	});
+
+	if (!response.ok) {
+		const error = new Error('An error occurred while deleting the event');
+		error.code = response.status;
+		error.info = await response.json();
+		throw error;
+	}
+
+	return response.json();
 }
