@@ -7,20 +7,6 @@ html {
 }
 //! NAV
 
-// .nav.highlighted::after {
-// 	position: absolute;
-// 	background-color: red;
-// 	height: 100vh;
-// 	width: 15%;
-// 	top: 0;
-// 	right: -15%;
-// 	content: '';
-// 	animation: 3s highlights ease-in-out;
-// 	// z-index: 1000;
-// 	border: 1px solid red;
-// 	overflow: hidden;
-// }
-
 .burger {
 	$bar-height: 0.4rem;
 	$bar-width: 3.5rem;
@@ -109,26 +95,39 @@ html {
 	background-color: map.get(var.$colors, nav);
 	transition: map.get(var.$behavior, base-transition);
 
-	@include mixin.flex(column, $align: center);
-
+	@include mixin.flex(column, space-between, center);
+	& .main-nav-container {
+		@include mixin.flex(column, center, center);
+	}
 	&__list {
 		@include mixin.flex(column);
 		margin-top: 1rem;
 		list-style: none;
+
+		&--side {
+			margin-bottom: 2rem;
+			@include mixin.flex(row);
+		}
 	}
 
 	&__item {
 		position: relative;
 		min-width: 50px;
 		overflow: hidden;
-
 		text-align: left;
+
+		&--side {
+			display: grid;
+
+			* {
+				place-self: center;
+			}
+		}
 	}
 
 	&__link {
 		display: flex;
 		align-items: center;
-		// width: 100%;
 		margin: 0 2rem;
 		cursor: pointer;
 
@@ -137,6 +136,10 @@ html {
 		text-decoration: none;
 		color: map.get(var.$colors, tile-text-muted);
 
+		&--side,
+		&--side span {
+			margin: 0;
+		}
 		.nav__icon {
 			min-width: 28.5px;
 			left: map.get(var.$sizes, icon-position);
@@ -149,6 +152,14 @@ html {
 			&::before {
 				margin: 0;
 				padding: 0;
+			}
+			&.account {
+				font-size: 4.5rem;
+			}
+			&--side {
+				margin: 0;
+
+				color: map.get(var.$colors, tile-text-muted);
 			}
 		}
 
@@ -171,7 +182,7 @@ html {
 		display: block;
 		min-width: 145px;
 		width: 25vw;
-		margin-top: 5rem;
+		margin-top: 3rem;
 		padding: 1rem;
 	}
 }

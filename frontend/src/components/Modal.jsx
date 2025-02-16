@@ -121,10 +121,6 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 					property='og:description'
 					content={`Dowiedz się wszystkiego o wyjeździe do: ${tile.front.location}. Kliknij teraz!`}
 				/>
-				{/* <meta
-					property='og:image'
-					content={metaImgUrl}
-				/> */}
 				<meta
 					property='og:url'
 					content={`https://yoganka.pl/${
