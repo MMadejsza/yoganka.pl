@@ -29,6 +29,11 @@
 		'motto motto motto motto motto';
 	transition: map.get(var.$behavior, base-transition);
 
+	@supports (-webkit-touch-callout: none) and (not (hover: hover)) {
+		//for ios
+		background-attachment: scroll;
+	}
+
 	&__header {
 		grid-area: title;
 		position: relative;

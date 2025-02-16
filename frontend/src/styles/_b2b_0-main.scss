@@ -14,8 +14,11 @@
 		'footer footer footer footer footer';
 
 	.camps-intro {
-		background-image: url('/imgs/b2b/480_b2b_0.jpg');
-
+		background-image: url(/imgs/b2b/480_b2b_0.jpg);
+		@supports (-webkit-touch-callout: none) and (not (hover: hover)) {
+			//for ios
+			background-attachment: scroll;
+		}
 		&__welcome-desc {
 			font-size: 2rem;
 			margin-bottom: 1rem;
@@ -95,7 +98,7 @@
 
 	@media (min-width: 480px) {
 		.camps-intro {
-			background-image: url('/imgs/b2b/768_b2b_0.jpg');
+			background-image: url(/imgs/b2b/768_b2b_0.jpg);
 			&__welcome-desc {
 				font-size: 2.2rem;
 			}
@@ -110,7 +113,7 @@
 	}
 	@media (min-width: 768px) {
 		.camps-intro {
-			background-image: url('/imgs/b2b/1024_b2b_0.jpg');
+			background-image: url(/imgs/b2b/1024_b2b_0.jpg);
 			&__welcome-desc {
 				font-size: 2.2rem;
 			}
@@ -130,7 +133,7 @@
 	}
 	@media (min-width: 1024px) {
 		.camps-intro {
-			background-image: url('/imgs/b2b/1400_b2b_0.jpg');
+			background-image: url(/imgs/b2b/1400_b2b_0.jpg);
 			&__welcome-desc {
 				font-size: 2.4rem;
 			}
@@ -163,7 +166,7 @@
 	}
 	@media (min-width: 1280px) {
 		.camps-intro {
-			background-image: url('/imgs/b2b/1600_b2b_0.jpg');
+			background-image: url(/imgs/b2b/1600_b2b_0.jpg);
 			&__welcome-desc {
 				font-size: 2.4rem;
 			}

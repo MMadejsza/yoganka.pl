@@ -18,8 +18,10 @@
 	background-size: cover;
 	background-position: center;
 	overflow: hidden;
-	z-index: -1;
-
+	@supports (-webkit-touch-callout: none) and (not (hover: hover)) {
+		//for ios
+		background-attachment: scroll;
+	}
 	&__header {
 		width: 100%;
 		margin-top: 7rem;
@@ -54,6 +56,7 @@
 	grid-area: about;
 	background-color: map.get(var.$colors, nav);
 	box-shadow: map.get(var.$shadows, transitive-box-shadow-nav);
+	z-index: 2;
 
 	&__header {
 		margin-bottom: 3rem;

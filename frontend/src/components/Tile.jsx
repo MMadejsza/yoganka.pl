@@ -5,7 +5,7 @@ import Modal from './Modal.jsx';
 import {smoothScrollInto} from '../utils/utils.jsx';
 
 function Tile({data, today, clickable}) {
-	const clickableClass = data.type !== 'class';
+	const clickableClass = clickable;
 	const classes = data.type === 'class';
 	const isPast = data.date < today;
 	const navigate = useNavigate();
