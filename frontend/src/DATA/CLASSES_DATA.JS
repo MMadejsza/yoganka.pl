@@ -16,7 +16,7 @@ export const CLASSES_DATA = [
 		eventType: ``,
 		extraClass: ``,
 		front: {
-			title: `Grupowe i\u00A0Indywidualne`,
+			title: `Stacjonarne Gdańsk`,
 			dates: [],
 			location: ``,
 			desc: ``,
