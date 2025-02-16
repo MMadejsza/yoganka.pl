@@ -72,6 +72,12 @@
 		position: relative;
 		z-index: 1;
 		border-radius: map.get(var.$sizes, border-radius);
+		&:hover,
+		&:focus {
+			span.click-suggestion {
+				opacity: 0;
+			}
+		}
 	}
 	&__bullet-container:hover &__bullet,
 	&__bullet-container:focus &__bullet {
@@ -326,6 +332,10 @@
 		&__bullet {
 			min-height: 250px;
 		}
+
+		.click-suggestion {
+			font-size: 2.2rem;
+		}
 	}
 	.camps-benefits + section.offer {
 		.tile {
@@ -352,6 +362,11 @@
 	.camps-intro {
 		&__welcome-desc {
 			font-size: 2.4rem;
+		}
+	}
+	.camps-benefits {
+		.click-suggestion {
+			font-size: 2.8rem;
 		}
 	}
 	.camps-benefits + section.offer {

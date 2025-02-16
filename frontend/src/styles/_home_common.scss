@@ -85,6 +85,15 @@ button {
 	color: map.get(var.$colors, tile-title);
 }
 
+span.click-suggestion {
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	bottom: 1%;
+	z-index: 2;
+	color: rgba(map.get(var.$colors, tile-title), 0.25);
+	transition: map.get(var.$behavior, base-transition);
+}
 .stopScroll {
 	overflow: hidden;
 }
