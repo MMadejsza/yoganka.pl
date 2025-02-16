@@ -35,11 +35,13 @@
 			box-shadow: map.get(var.$shadows, active-box-shadow);
 		}
 
-		&--cookies:focus .pop-ups__icon {
+		&--cookies:focus .pop-ups__icon,
+		&--cookies:active .pop-ups__icon {
 			line-height: 6rem;
 		}
 
-		&--cookies:focus .pop-ups__body {
+		&--cookies:focus .pop-ups__body,
+		&--cookies:active .pop-ups__body {
 			right: 0%;
 			background-color: rgba(map.get(var.$colors, accent-bcg), 0.95);
 			opacity: 1;

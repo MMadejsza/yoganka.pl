@@ -4,7 +4,7 @@ if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
 	iClass = {backgroundAttachment: 'scroll'};
 }
 
-function Section({classy, header, iSpecific, children}) {
+function Section({classy, modifier, header, iSpecific, children}) {
 	let headerContent;
 	if (header) {
 		headerContent = <header className={`${classy}__header section-header`}>{header}</header>;
@@ -12,7 +12,7 @@ function Section({classy, header, iSpecific, children}) {
 
 	return (
 		<section
-			className={classy}
+			className={`${classy} ${modifier}`}
 			style={iSpecific && iClass}>
 			{headerContent}
 			{children}

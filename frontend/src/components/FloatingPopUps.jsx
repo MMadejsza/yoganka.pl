@@ -92,7 +92,8 @@ function FloatingPopUps() {
 					// --cookies  required for scss opening on :focus
 					className={`pop-ups__single pop-ups__single--cookies`}
 					href='#'
-					onClick={(e) => e.preventDefault()}>
+					onClick={(e) => e.preventDefault()}
+					tabIndex='0'>
 					{/* <i className={`pop-ups__icon fas fa-cookie-bite fa-bounce`} /> */}
 					<span className='material-symbols-rounded pop-ups__icon'>cookie</span>
 					<div className={`pop-ups__body`}>
