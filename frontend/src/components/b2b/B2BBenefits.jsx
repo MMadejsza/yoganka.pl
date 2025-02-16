@@ -22,7 +22,7 @@ function B2BBenefits() {
 	return (
 		<Section
 			classy={'b2b-benefits'}
-			header='BENEFITY DLA FIRMY'>
+			header='BENEFITY DLA&nbsp;FIRMY'>
 			<section className={dynamicClass}>
 				<ul className='modal-checklist__list'>{content}</ul>
 			</section>

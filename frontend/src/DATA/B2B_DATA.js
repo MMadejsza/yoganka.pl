@@ -1,4 +1,5 @@
 const htmlToImgsPath = `/imgs`;
+const qrsPath = 'imgs/qrs';
 
 export const OFFER = [
 	// Add comments for each property
@@ -119,6 +120,8 @@ export const BTNS = {
 			text: `Zadzwoń`,
 			symbol: `phone`,
 			link: `tel:+48792891607`,
+			qr: `${qrsPath}/qrphone.png`,
+			qrAlt: `phone`,
 		},
 		{
 			action: 'classic',

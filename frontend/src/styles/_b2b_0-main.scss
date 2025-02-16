@@ -13,15 +13,18 @@
 		'space space space space space'
 		'footer footer footer footer footer';
 
-	.types__bullet-container {
-		flex-basis: 47%;
+	.camps-intro {
+		background-image: url('/imgs/b2b/480_b2b_0.jpg');
+
+		&__welcome-desc {
+			font-size: 2rem;
+			margin-bottom: 1rem;
+		}
 	}
-	.camps-intro__welcome-desc {
-		margin-bottom: 4.5rem;
-	}
-	section.offer,
-	section.camps-benefits {
-		margin-bottom: 9rem;
+
+	section.camps-benefits,
+	section.offer {
+		margin-bottom: 12rem;
 	}
 	#b2b_offer {
 		grid-column: 1/-1;
@@ -32,23 +35,27 @@
 	}
 	.b2b-benefits {
 		margin-top: 2rem;
+		margin-bottom: 0rem;
 		grid-column: 1/-1;
 		&__header {
-			// font-weight: bold;
 			margin-bottom: 2rem;
 		}
+		.modal-checklist {
+			@include mixin.flex(column, center, center);
+		}
 		.modal-checklist__list {
+			width: 95%;
 			align-items: center;
 			gap: 3rem;
 		}
 		.modal-checklist__li {
-			font-size: 3.5rem;
+			font-size: 2.5rem;
 			font-weight: 500;
 			color: map.get(var.$colors, tile-title);
 		}
 		.modal-checklist__icon {
 			color: #1c7993;
-			font-size: 3.5rem;
+			font-size: 2.5rem;
 			height: 3.5rem;
 			line-height: 3.5rem;
 			margin: 0;
@@ -57,20 +64,117 @@
 		}
 	}
 	.b2b-price {
-		margin-top: 2rem;
 		grid-column: 1/-1;
 		&__content {
 			margin-top: 2rem;
 			font-size: 2.2rem;
 			text-align: center;
 
-			@include mixin.flex(column, center, center);
-		}
-		&__btns {
-			width: 60%;
-			margin-top: 4rem;
 			@include mixin.flex(row, center, center);
-			gap: 3rem;
+			flex-wrap: wrap;
+			gap: 0 2rem;
+		}
+		.modal__btn {
+			&:first-of-type {
+				margin-top: 3.5rem;
+			}
+			margin-top: 2rem;
+		}
+	}
+
+	@media (min-width: 360px) {
+		.camps-intro {
+			&__welcome-desc {
+				font-size: 2.2rem;
+			}
+		}
+		.camps-benefits__bullet {
+			min-height: 190px;
+		}
+	}
+
+	@media (min-width: 480px) {
+		.camps-intro {
+			background-image: url('/imgs/b2b/768_b2b_0.jpg');
+			&__welcome-desc {
+				font-size: 2.2rem;
+			}
+		}
+		section.offer,
+		section.camps-benefits {
+			margin-bottom: 9rem;
+		}
+		.types__bullet-container {
+			flex-basis: 45%;
+		}
+	}
+	@media (min-width: 768px) {
+		.camps-intro {
+			background-image: url('/imgs/b2b/1024_b2b_0.jpg');
+			&__welcome-desc {
+				font-size: 2.2rem;
+			}
+		}
+		.camps-benefits__bullet-p {
+			font-size: 1.5rem;
+		}
+		.b2b-benefits {
+			.modal-checklist__list {
+				width: 85%;
+				align-self: auto;
+			}
+		}
+		.camps-benefits__bullet {
+			min-height: 245px;
+		}
+	}
+	@media (min-width: 1024px) {
+		.camps-intro {
+			background-image: url('/imgs/b2b/1400_b2b_0.jpg');
+			&__welcome-desc {
+				font-size: 2.4rem;
+			}
+		}
+		.camps-benefits__bullet-p {
+			font-size: 1.7rem;
+		}
+		.b2b-benefits {
+			.modal-checklist__list {
+				width: 85%;
+				align-self: auto;
+			}
+		}
+		.b2b-price {
+			&__content {
+				font-size: 2.4rem;
+			}
+			.modal__btn {
+				line-height: 4.5rem;
+				font-size: 2rem;
+				.nav__icon {
+					font-size: 3rem;
+				}
+				&:first-of-type {
+					margin-top: 4.5rem;
+				}
+				margin-top: 2.5rem;
+			}
+		}
+	}
+	@media (min-width: 1280px) {
+		.camps-intro {
+			background-image: url('/imgs/b2b/1600_b2b_0.jpg');
+			&__welcome-desc {
+				font-size: 2.4rem;
+			}
+		}
+		.camps-benefits__bullet-p {
+			font-size: 2rem;
+		}
+		.b2b-benefits {
+			.modal-checklist__list {
+				width: 100%;
+			}
 		}
 	}
 }
