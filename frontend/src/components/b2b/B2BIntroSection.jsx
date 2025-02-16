@@ -5,7 +5,7 @@ function B2BIntroSection() {
 		<Section
 			classy='camps-intro'
 			header={`Joga dla firm`}>
-			<article className='about__bio--content camps-intro__welcome-desc'>
+			<article className='about__bio--content camps-intro__welcome-desc b2b-intro'>
 				<p className='about__bio--description'>Twój biznes musi się&nbsp;ruszać!</p>
 				<p className='about__bio--description'>
 					W&nbsp;dynamicznym środowisku pracy joga staje się&nbsp;nieocenionym wsparciem

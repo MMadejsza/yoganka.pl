@@ -6,8 +6,9 @@ function B2BBenefitsSection() {
 	return (
 		<Section
 			classy='camps-benefits'
-			header='ZORGANIZUJĘ JAKO:'>
-			<main className='camps-benefits__bullets-container'>
+			header='ZORGANIZUJĘ JAKO:'
+			iSpecific={true}>
+			<main className='camps-benefits__bullets-container b2b-types'>
 				{TYPES.map((benefit, index) => {
 					return (
 						<div

@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {Outlet} from 'react-router-dom';
-import {Helmet} from 'react-helmet';
 
 import Burger from '../components/nav/Burger.jsx';
 import Nav from '../components/nav/Nav.jsx';

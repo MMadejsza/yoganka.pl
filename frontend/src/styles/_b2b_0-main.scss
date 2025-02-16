@@ -1,3 +1,76 @@
-.types__bullet-container {
-	flex-basis: 47%;
+@use 'sass:map';
+@use 'sass:color';
+@use 'sass:math';
+@use '_global_variables-templates' as var;
+@use '_global_mixins-keyframes' as mixin;
+.wrapper.b2b {
+	grid-template-areas:
+		'header header header header header'
+		'offer offer offer offer offer'
+		'about about about about about'
+		'cert cert cert cert cert'
+		'partners partners partners partners partners'
+		'space space space space space'
+		'footer footer footer footer footer';
+
+	.types__bullet-container {
+		flex-basis: 47%;
+	}
+	.camps-intro__welcome-desc {
+		margin-bottom: 4.5rem;
+	}
+	section.offer,
+	section.camps-benefits {
+		margin-bottom: 9rem;
+	}
+	#b2b_offer {
+		grid-column: 1/-1;
+	}
+	.modal-checklist {
+		grid-area: cert;
+		margin: 0 auto;
+	}
+	.b2b-benefits {
+		margin-top: 2rem;
+		grid-column: 1/-1;
+		&__header {
+			// font-weight: bold;
+			margin-bottom: 2rem;
+		}
+		.modal-checklist__list {
+			align-items: center;
+			gap: 3rem;
+		}
+		.modal-checklist__li {
+			font-size: 3.5rem;
+			font-weight: 500;
+			color: map.get(var.$colors, tile-title);
+		}
+		.modal-checklist__icon {
+			color: #1c7993;
+			font-size: 3.5rem;
+			height: 3.5rem;
+			line-height: 3.5rem;
+			margin: 0;
+			min-width: 3.5rem;
+			text-align: center;
+		}
+	}
+	.b2b-price {
+		margin-top: 2rem;
+		grid-column: 1/-1;
+		&__content {
+			margin-top: 2rem;
+			font-size: 2.2rem;
+			text-align: center;
+
+			@include mixin.flex(column, center, center);
+		}
+		&__btns {
+			width: 60%;
+			margin-top: 4rem;
+			@include mixin.flex(row, center, center);
+			gap: 3rem;
+		}
+	}
 }

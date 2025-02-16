@@ -103,3 +103,29 @@ export const TYPES = [
 		text: 'Tygodniowe/miesięczne spersonalizowane programy wellbeingowe, które\u00A0mogą obejmować jogę, mindfulness i\u00A0techniki relaksacyjne',
 	},
 ];
+export const BENEFITS = {
+	listType: 'included',
+	list: [
+		`Zdrowsi pracownicy to\u00A0niższe koszty operacyjne`,
+		`Większe zaangażowanie i\u00A0motywacja zespołu`,
+		`Employer branding -\u00A0pokazujesz, że\u00A0dbasz o\u00A0zespół`,
+	],
+};
+export const BTNS = {
+	btnsContent: [
+		{
+			action: 'classic',
+			title: `Zadzwoń lub wyświetl numer`,
+			text: `Zadzwoń`,
+			symbol: `phone`,
+			link: `tel:+48792891607`,
+		},
+		{
+			action: 'classic',
+			title: `Wyślij maila w aplikacji`,
+			text: `Wyślij Maila`,
+			symbol: 'mail',
+			link: 'mailto:kontakt@yoganka.pl',
+		},
+	],
+};
