@@ -7,12 +7,12 @@
 .camps-intro {
 	position: relative;
 	grid-area: header;
-	min-height: 100vh;
+	// min-height: 1150px;
 
 	@include mixin.flex(column, space-between);
 	flex-wrap: wrap;
 	gap: 55vh;
-	background-image: url(/imgs/320_wyjazdy-bcg.jpg);
+
 	background-attachment: fixed;
 	background-repeat: no-repeat;
 	background-size: cover;
@@ -21,6 +21,9 @@
 	@supports (-webkit-touch-callout: none) and (not (hover: hover)) {
 		//for ios
 		background-attachment: scroll;
+	}
+	&.camps {
+		background-image: url(/imgs/320_wyjazdy-bcg.jpg);
 	}
 	&__header {
 		width: 100%;
@@ -241,7 +244,9 @@
 }
 @media (min-width: 360px) {
 	.camps-intro {
-		background-image: url(/imgs/480_wyjazdy-bcg.jpg);
+		&.camps {
+			background-image: url(/imgs/480_wyjazdy-bcg.jpg);
+		}
 
 		&__welcome-desc {
 			font-size: 2rem;
@@ -290,7 +295,9 @@
 }
 @media (min-width: 480px) {
 	.camps-intro {
-		background-image: url(/imgs/768_wyjazdy-bcg.jpg);
+		&.camps {
+			background-image: url(/imgs/768_wyjazdy-bcg.jpg);
+		}
 	}
 
 	.camps-benefits {
@@ -313,7 +320,10 @@
 
 @media (min-width: 768px) {
 	.camps-intro {
-		background-image: url(/imgs/1024_wyjazdy-bcg.jpg);
+		background-position: 50% 25%;
+		&.camps {
+			background-image: url(/imgs/1024_wyjazdy-bcg.jpg);
+		}
 		&__welcome-desc {
 			padding: 2rem;
 		}
@@ -382,7 +392,8 @@
 		margin-top: 7rem;
 		@include mixin.flex(row, center);
 		flex-wrap: wrap;
-
+		background-size: 1000px;
+		background-position: 50% 25%;
 		&__header {
 			flex-basis: 100%;
 		}
@@ -436,6 +447,7 @@
 @media (min-width: 1280px) {
 	.camps-intro {
 		background-position: center 20%;
+		background-size: 1200px;
 	}
 	.camps-benefits {
 		&__bullet-container {
