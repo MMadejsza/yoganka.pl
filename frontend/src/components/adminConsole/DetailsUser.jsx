@@ -59,7 +59,7 @@ function DetailsUser({data}) {
 						</h2>
 						<ul className='user-container__details-list modal-checklist__list'>
 							<li className='user-container__section-record modal-checklist__li'>
-								<p className='user-container__section-record-label'>Pozycja:</p>
+								<p className='user-container__section-record-label'>Układ:</p>
 								<p className='user-container__section-record-content'>
 									{user.Handedness == 'Left' ? 'Leworęczny' : 'Praworęczny'}
 								</p>
