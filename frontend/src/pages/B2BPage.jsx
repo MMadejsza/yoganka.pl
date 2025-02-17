@@ -16,6 +16,12 @@ function B2BPage() {
 		if (wrapper) {
 			wrapper.classList.add('b2b');
 		}
+		return () => {
+			// deleting on unmount
+			if (wrapper) {
+				wrapper.classList.remove('b2b');
+			}
+		};
 	}, []);
 
 	return (
