@@ -142,6 +142,20 @@ function DetailsUser({data}) {
 								{customer.Loyalty}
 							</p>
 						</li>
+						<li className='user-container__section-record modal-checklist__li modal-checklist__li--phone'>
+							<p className='user-container__section-record-label'>Numer telefonu:</p>
+							<div className='user-container__section-record-content'>
+								<ul>
+									{customer.CustomerPhones.map((phoneRecord) => (
+										<li
+											key={phoneRecord.CustomerMobile[0]}
+											className='user-container__section-record-content user-container__section-record-content--phone'>
+											{phoneRecord.CustomerMobile}
+										</li>
+									))}
+								</ul>
+							</div>
+						</li>
 					</ul>
 				</div>
 			)}

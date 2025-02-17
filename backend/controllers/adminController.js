@@ -64,6 +64,7 @@ export const showAllUsers = (req, res, next) => {
 		.catch((err) => console.log(err));
 };
 export const showUserByID = (req, res, next) => {
+	console.log(`called showUserByID`);
 	const PK = req.params.id;
 	models.User.findByPk(PK, {
 		include: [
@@ -178,6 +179,37 @@ export const showAllCustomers = (req, res, next) => {
 				totalHeaders, // To render
 				content: formattedRecords, // With new names
 			});
+		})
+		.catch((err) => console.log(err));
+};
+export const showCustomerByID = (req, res, next) => {
+	console.log(`called showCustomerByID`);
+
+	const PK = req.params.id;
+	models.Customer.findByPk(PK, {
+		include: [
+			{
+				model: models.CustomerPhones, // Customer phone numbers
+				required: false,
+			},
+			{
+				model: models.User, // Add Customer
+				required: false, // May not exist
+				include: [
+					{
+						model: models.UserPrefSettings, // Customer phone numbers
+						required: false,
+					},
+				],
+			},
+		],
+	})
+		.then((customer) => {
+			if (!customer) {
+				return res.redirect('/admin-console/show-all-users');
+			}
+			console.log('✅ user fetched');
+			return res.status(200).json({customer});
 		})
 		.catch((err) => console.log(err));
 };

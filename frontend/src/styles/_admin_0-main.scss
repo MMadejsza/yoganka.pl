@@ -189,6 +189,11 @@
 		.modal-checklist {
 			@include mixin.flex(column, flex-start, center);
 			gap: 0.5rem;
+			&__li {
+				&--phone {
+					flex-wrap: wrap;
+				}
+			}
 		}
 		&__details-list {
 			@include mixin.flex(column, center);
@@ -201,8 +206,13 @@
 		&__section-record-label {
 			font-weight: 600;
 		}
-		&__section-record-label {
-			font-weight: 600;
+		&__section-record-content {
+			ul {
+				@include mixin.flex(column);
+			}
+			&--phone {
+				// flex-basis: 100%;
+			}
 		}
 	}
 

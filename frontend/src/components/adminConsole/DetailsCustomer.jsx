@@ -1,23 +1,68 @@
 import {calculateAge} from '../../utils/age.js';
 
 function DetailsCustomer({data}) {
-	const {user} = data;
-	const customer = user.Customer;
+	const {
+		customer,
+		customer: {User: user},
+	} = data;
+	// const customer = data;
 	// console.log(`data query:`, user);
 	console.log(
 		`📝 
-        user object from backend:`,
-		user,
+        customer object from backend:`,
+		customer,
 	);
 	return (
 		<>
 			<h1 className='user-container__user-title modal__title'>
-				{customer ? `${customer.FirstName} ${customer.LastName}` : user.Login}
+				{`${customer.FirstName} ${customer.LastName}`}
 			</h1>
 			<div className='user-container__main-details modal-checklist'>
 				<h2 className='user-container__section-title modal__title--day'>
+					{`Dane klienta (ID ${customer.CustomerID}):`}
+				</h2>
+				<ul className='user-container__details-list modal-checklist__list'>
+					<li className='user-container__section-record modal-checklist__li'>
+						<p className='user-container__section-record-label'>Imię/Nazwisko</p>
+						<p className='user-container__section-record-content'>{`${customer.FirstName} ${customer.LastName}`}</p>
+					</li>
+					<li className='user-container__section-record modal-checklist__li'>
+						<p className='user-container__section-record-label'>Typ:</p>
+						<p className='user-container__section-record-content'>{`${customer.CustomerType}`}</p>
+					</li>
+					<li className='user-container__section-record modal-checklist__li'>
+						<p className='user-container__section-record-label'>Wiek:</p>
+						<p className='user-container__section-record-content'>{`${calculateAge(
+							customer.DoB,
+						)}   |  (${customer.DoB})`}</p>
+					</li>
+					<li className='user-container__section-record modal-checklist__li'>
+						<p className='user-container__section-record-label'>Z polecenia:</p>
+						<p className='user-container__section-record-content'>
+							{customer.ReferralSource}
+						</p>
+					</li>
+					<li className='user-container__section-record modal-checklist__li'>
+						<p className='user-container__section-record-label'>Kontakt przez:</p>
+						<p className='user-container__section-record-content'>
+							{customer.PreferredContactMethod}
+						</p>
+					</li>
+					<li className='user-container__section-record modal-checklist__li'>
+						<p className='user-container__section-record-label'>Notatki:</p>
+						<p className='user-container__section-record-content'>{customer.Notes}</p>
+					</li>
+					<li className='user-container__section-record modal-checklist__li'>
+						<p className='user-container__section-record-label'>Lojalność:</p>
+						<p className='user-container__section-record-content'>{customer.Loyalty}</p>
+					</li>
+				</ul>
+			</div>
+			<div className='user-container__side-details modal-checklist'>
+				<h2 className='user-container__section-title modal__title--day'>
 					{`Dane użytkownika (ID ${user.UserID}):`}
 				</h2>
+
 				<ul className='user-container__details-list modal-checklist__list'>
 					<li className='user-container__section-record modal-checklist__li'>
 						<p className='user-container__section-record-label'>Login:</p>
@@ -98,53 +143,6 @@ function DetailsCustomer({data}) {
 					</>
 				)}
 			</div>
-			{customer && (
-				<div className='user-container__side-details modal-checklist'>
-					<h2 className='user-container__section-title modal__title--day'>
-						{`Dane klienta (ID ${customer.CustomerID}):`}
-					</h2>
-					<ul className='user-container__details-list modal-checklist__list'>
-						<li className='user-container__section-record modal-checklist__li'>
-							<p className='user-container__section-record-label'>Imię/Nazwisko</p>
-							<p className='user-container__section-record-content'>{`${customer.FirstName} ${customer.LastName}`}</p>
-						</li>
-						<li className='user-container__section-record modal-checklist__li'>
-							<p className='user-container__section-record-label'>Typ:</p>
-							<p className='user-container__section-record-content'>{`${customer.CustomerType}`}</p>
-						</li>
-						<li className='user-container__section-record modal-checklist__li'>
-							<p className='user-container__section-record-label'>Wiek:</p>
-							<p className='user-container__section-record-content'>{`${calculateAge(
-								customer.DoB,
-							)}   |  (${customer.DoB})`}</p>
-						</li>
-						<li className='user-container__section-record modal-checklist__li'>
-							<p className='user-container__section-record-label'>Z polecenia:</p>
-							<p className='user-container__section-record-content'>
-								{customer.ReferralSource}
-							</p>
-						</li>
-						<li className='user-container__section-record modal-checklist__li'>
-							<p className='user-container__section-record-label'>Kontakt przez:</p>
-							<p className='user-container__section-record-content'>
-								{customer.PreferredContactMethod}
-							</p>
-						</li>
-						<li className='user-container__section-record modal-checklist__li'>
-							<p className='user-container__section-record-label'>Notatki:</p>
-							<p className='user-container__section-record-content'>
-								{customer.Notes}
-							</p>
-						</li>
-						<li className='user-container__section-record modal-checklist__li'>
-							<p className='user-container__section-record-label'>Lojalność:</p>
-							<p className='user-container__section-record-content'>
-								{customer.Loyalty}
-							</p>
-						</li>
-					</ul>
-				</div>
-			)}
 		</>
 	);
 }
