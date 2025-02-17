@@ -3,7 +3,7 @@ import {useLocation, useNavigate, useMatch} from 'react-router-dom';
 import {useState} from 'react';
 import {fetchData} from '../utils/http.js';
 import SideNav from '../components/adminConsole/SideNav.jsx';
-import UserDetails from '../components/adminConsole/UserDetails.jsx';
+import DetailsFrame from '../components/adminConsole/DetailsFrame.jsx';
 import Section from '../components/Section.jsx';
 
 const sideNavTabs = [
@@ -42,15 +42,29 @@ function AdminPage() {
 
 	const [isModalOpen, setIsModalOpen] = useState(modalMatch);
 
-	const handleOpenModal = (userId) => {
+	const handleOpenModal = (row) => {
+		const recordId = row.ID;
+		console.log(row);
 		setIsModalOpen(true);
-		navigate(`${location.pathname}/${userId}`, {state: {background: location}});
+		navigate(`${location.pathname}/${recordId}`, {state: {background: location}});
 	};
 
 	const handleCloseModal = () => {
 		setIsModalOpen(false);
 		navigate(location.state?.background?.pathname || '/', {replace: true});
 	};
+
+	const pickModifier = (path) => {
+		let modifier;
+		switch (path) {
+			case '/admin-console/show-all-customers':
+				return (modifier = 'customer');
+
+			default:
+				return (modifier = 'user');
+		}
+	};
+
 	console.log(`location.pathname admin page: ${location.pathname}`);
 	const {data, isLoading, isError, error} = useQuery({
 		// as id for later caching received data to not send the same request again where location.pathname is key
@@ -71,7 +85,7 @@ function AdminPage() {
 		window.alert(error.info?.message || 'Failed to fetch');
 	}
 	if (data) {
-		console.clear();
+		// console.clear();
 		console.log(`✅ Data: `);
 		console.log(data);
 		content = (
@@ -99,7 +113,9 @@ function AdminPage() {
 								}
 								return (
 									<td
-										onClick={() => handleOpenModal(row.ID)}
+										onClick={() => {
+											handleOpenModal(row);
+										}}
 										className='data-table__single-cell'
 										key={headerIndex}>
 										{value || '-'}
@@ -125,7 +141,8 @@ function AdminPage() {
 			/>
 			{content}
 			{isModalOpen && (
-				<UserDetails
+				<DetailsFrame
+					modifier={pickModifier(location.pathname)}
 					visited={isModalOpen}
 					onClose={handleCloseModal}
 				/>

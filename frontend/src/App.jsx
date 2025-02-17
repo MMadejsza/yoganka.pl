@@ -10,7 +10,7 @@ import EventsPage from './pages/EventsPage.jsx';
 // import B2BPage from './pages/B2BPage.jsx';
 import ErrorPage from './pages/ErrorPage.jsx';
 import AdminPage from './pages/AdminPage.jsx';
-import UserDetails from './components/adminConsole/UserDetails.jsx';
+import DetailsFrame from './components/adminConsole/DetailsFrame.jsx';
 const router = createBrowserRouter([
 	{
 		path: '/',
@@ -29,7 +29,8 @@ const router = createBrowserRouter([
 				children: [
 					{path: ':link', element: <AdminPage />},
 					{path: 'show-all-users/add-user', element: <AdminPage />},
-					{path: 'show-all-users/:id', element: <UserDetails />},
+					{path: 'show-all-users/:id', element: <DetailsFrame />},
+					{path: 'show-all-customers/:id', element: <DetailsFrame />},
 				],
 			},
 		],

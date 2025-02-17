@@ -14,7 +14,7 @@ const columnMaps = {
 	},
 
 	Customer: {
-		CustomerID: 'ID klienta',
+		CustomerID: 'ID',
 		UserID: 'ID użytkownika',
 		CustomerType: 'Typ klienta',
 		FirstName: 'Imię',
@@ -27,7 +27,7 @@ const columnMaps = {
 	},
 
 	Product: {
-		ProductID: 'ID produktu',
+		ProductID: 'ID',
 		Name: 'Nazwa',
 		Type: 'Typ',
 		Location: 'Lokalizacja',
@@ -38,7 +38,7 @@ const columnMaps = {
 	},
 
 	ScheduleRecord: {
-		ScheduleID: 'ID Terminu',
+		ScheduleID: 'ID',
 		ProductID: 'ID produktu',
 		Date: 'Data',
 		StartTime: 'Godzina rozpoczęcia',
@@ -62,7 +62,7 @@ const columnMaps = {
 	},
 
 	Invoice: {
-		InvoiceID: 'ID FV',
+		InvoiceID: 'ID',
 		BookingID: 'ID Rezerwacji',
 		InvoiceDate: 'Data faktury',
 		DueDate: 'Termin płatności',
@@ -80,7 +80,7 @@ const columnMaps = {
 	},
 
 	Feedback: {
-		FeedbackID: 'ID Opinii',
+		FeedbackID: 'ID',
 		CustomerID: 'ID Klienta',
 		ScheduleID: 'ID Terminu',
 		SubmissionDate: 'Data Zgłoszenia',

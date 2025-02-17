@@ -44,8 +44,8 @@ export async function create(link, formData) {
 	return result;
 }
 
-export async function fetchItem({id, signal}) {
-	const response = await fetch(`/api/admin-console/show-all-users/${id}`, {
+export async function fetchItem(callPath, {signal}) {
+	const response = await fetch(`/api${callPath}`, {
 		signal,
 		cache: 'no-store',
 	});

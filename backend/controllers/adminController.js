@@ -142,7 +142,7 @@ export const showAllCustomers = (req, res, next) => {
 		.findAll({
 			attributes: {
 				include: includeAttributes, // Adding joint columns
-				exclude: ['CustomerID', 'UserID', 'FirstName', 'LastName'], // Deleting substituted ones
+				exclude: ['UserID', 'FirstName', 'LastName'], // Deleting substituted ones
 			},
 		})
 		.then((records) => {
