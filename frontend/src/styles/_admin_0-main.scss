@@ -188,12 +188,14 @@
 		}
 		.modal-checklist {
 			@include mixin.flex(column, flex-start, center);
+			gap: 0.5rem;
 		}
 		&__details-list {
 			@include mixin.flex(column, center);
+			margin-bottom: 1rem;
 		}
 		&__section-title {
-			margin-bottom: 1.2rem;
+			// margin-bottom: 1.2rem;
 			color: map.get(var.$colors, accent-bcg);
 		}
 		&__section-record-label {

@@ -37,7 +37,7 @@ function UserDetails({visited, onClose}) {
 		const {user} = data;
 		const customer = user.Customer;
 		// console.log(`data query:`, user);
-		console.log(`customer:`, customer);
+		console.log(`user:`, user);
 		dataDisplay = (
 			<>
 				<h1 className='user-container__user-title modal__title'>
@@ -45,13 +45,9 @@ function UserDetails({visited, onClose}) {
 				</h1>
 				<div className='user-container__main-details modal-checklist'>
 					<h2 className='user-container__section-title modal__title--day'>
-						Dane użytkownika:
+						{`Dane użytkownika (ID ${user.UserID}):`}
 					</h2>
 					<ul className='user-container__details-list modal-checklist__list'>
-						<li className='user-container__section-record modal-checklist__li'>
-							<p className='user-container__section-record-label'>ID:</p>
-							<p className='user-container__section-record-content'>{user.UserID}</p>
-						</li>
 						<li className='user-container__section-record modal-checklist__li'>
 							<p className='user-container__section-record-label'>Login:</p>
 							<p className='user-container__section-record-content'>{user.Login}</p>
@@ -89,19 +85,60 @@ function UserDetails({visited, onClose}) {
 							</p>
 						</li>
 					</ul>
+					{user.UserPrefSetting && (
+						<>
+							<h2 className='user-container__section-title modal__title--day'>
+								{`Ustawienia strony (ID ${user.UserPrefSetting.UserPrefID}):`}
+							</h2>
+							<ul className='user-container__details-list modal-checklist__list'>
+								<li className='user-container__section-record modal-checklist__li'>
+									<p className='user-container__section-record-label'>Pozycja:</p>
+									<p className='user-container__section-record-content'>
+										{user.Handedness == 'Left' ? 'Leworęczny' : 'Praworęczny'}
+									</p>
+								</li>
+								<li className='user-container__section-record modal-checklist__li'>
+									<p className='user-container__section-record-label'>
+										Rozmiar czcionki:
+									</p>
+									<p className='user-container__section-record-content'>
+										{user.UserPrefSetting.FontSize}
+									</p>
+								</li>
+								<li className='user-container__section-record modal-checklist__li'>
+									<p className='user-container__section-record-label'>
+										Powiadomienia:
+									</p>
+									<p className='user-container__section-record-content'>
+										{user.UserPrefSetting.Notifications ? 'On' : 'Off'}
+									</p>
+								</li>
+								<li className='user-container__section-record modal-checklist__li'>
+									<p className='user-container__section-record-label'>
+										Animacje:
+									</p>
+									<p className='user-container__section-record-content'>
+										{user.UserPrefSetting.Animation ? 'On' : 'Off'}
+									</p>
+								</li>
+								<li className='user-container__section-record modal-checklist__li'>
+									<p className='user-container__section-record-label'>Motyw:</p>
+									<p className='user-container__section-record-content'>
+										{user.UserPrefSetting.Theme == 'Dark'
+											? 'Ciemny'
+											: 'Standardowy'}
+									</p>
+								</li>
+							</ul>
+						</>
+					)}
 				</div>
 				{customer && (
 					<div className='user-container__side-details modal-checklist'>
 						<h2 className='user-container__section-title modal__title--day'>
-							Dane klienta:
+							{`Dane klienta (ID ${customer.CustomerID}):`}
 						</h2>
 						<ul className='user-container__details-list modal-checklist__list'>
-							<li className='user-container__section-record modal-checklist__li'>
-								<p className='user-container__section-record-label'>ID:</p>
-								<p className='user-container__section-record-content'>
-									{customer.CustomerID}
-								</p>
-							</li>
 							<li className='user-container__section-record modal-checklist__li'>
 								<p className='user-container__section-record-label'>
 									Imię/Nazwisko
@@ -126,7 +163,7 @@ function UserDetails({visited, onClose}) {
 							</li>
 							<li className='user-container__section-record modal-checklist__li'>
 								<p className='user-container__section-record-label'>
-									Preferencje dot. kontaktu:
+									Kontakt przez:
 								</p>
 								<p className='user-container__section-record-content'>
 									{customer.PreferredContactMethod}

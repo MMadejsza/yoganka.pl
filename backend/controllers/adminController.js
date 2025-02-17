@@ -70,6 +70,16 @@ export const showUserByID = (req, res, next) => {
 			{
 				model: models.Customer, // Add Customer
 				required: false, // May not exist
+				include: [
+					{
+						model: models.CustomerPhones, // Customer phone numbers
+						required: false,
+					},
+				],
+			},
+			{
+				model: models.UserPrefSettings, // User settings if exist
+				required: false,
 			},
 		],
 	})

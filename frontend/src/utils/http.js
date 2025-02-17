@@ -45,7 +45,7 @@ export async function create(link, formData) {
 }
 
 export async function fetchItem({id, signal}) {
-	const response = await fetch(`/api/admin-console/show-all-users/${id}?t=${Date.now()}`, {
+	const response = await fetch(`/api/admin-console/show-all-users/${id}`, {
 		signal,
 		cache: 'no-store',
 	});

@@ -21,6 +21,11 @@ Customer.belongsTo(User, {foreignKey: 'UserID'});
 User.hasOne(UserPrefSettings, {foreignKey: 'UserID', onDelete: 'CASCADE'});
 UserPrefSettings.belongsTo(User, {foreignKey: 'UserID'});
 
+//@ Customer and his phones (1:M, total participation on phones)
+//@ --------------------------------------------------------------------
+Customer.hasMany(CustomerPhones, {foreignKey: 'CustomerID', onDelete: 'CASCADE'});
+CustomerPhones.belongsTo(Customer, {foreignKey: 'CustomerID'});
+
 //@ Customer and Bookings (1:M, total participation on Bookings)
 //@ ------------------------------------------------------------
 Customer.hasMany(Booking, {foreignKey: 'CustomerID', onDelete: 'CASCADE'});
