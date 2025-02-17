@@ -56,8 +56,8 @@ function AdminPage() {
 
 	const pickModifier = (path) => {
 		let modifier;
-		switch (path) {
-			case '/admin-console/show-all-customers':
+		switch (true) {
+			case path.includes('show-all-customers'):
 				return (modifier = 'customer');
 
 			default:
