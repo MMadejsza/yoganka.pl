@@ -3,7 +3,7 @@ import {useLocation, useNavigate, useMatch} from 'react-router-dom';
 import {useState} from 'react';
 import {fetchData} from '../utils/http.js';
 import SideNav from '../components/adminConsole/SideNav.jsx';
-import DetailsFrame from '../components/adminConsole/DetailsFrame.jsx';
+import ViewFrame from '../components/adminConsole/ViewFrame.jsx';
 import Section from '../components/Section.jsx';
 
 const sideNavTabs = [
@@ -141,7 +141,7 @@ function AdminPage() {
 			/>
 			{content}
 			{isModalOpen && (
-				<DetailsFrame
+				<ViewFrame
 					modifier={pickModifier(location.pathname)}
 					visited={isModalOpen}
 					onClose={handleCloseModal}

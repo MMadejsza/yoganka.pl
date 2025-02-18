@@ -7,6 +7,7 @@ import formatIsoDateTime from '../utils/formatDateTime.js';
 
 //@ USERS
 export const showAllUsers = (req, res, next) => {
+	console.log(`➡️ called showAllUsers`);
 	const model = models.User;
 	model
 		.findAll({
@@ -64,7 +65,7 @@ export const showAllUsers = (req, res, next) => {
 		.catch((err) => console.log(err));
 };
 export const showUserByID = (req, res, next) => {
-	console.log(`called showUserByID`);
+	console.log(`➡️ called showUserByID`);
 	const PK = req.params.id;
 	models.User.findByPk(PK, {
 		include: [
@@ -129,6 +130,7 @@ export const showAllUserSettings = (req, res, next) => {
 };
 //@ CUSTOMERS
 export const showAllCustomers = (req, res, next) => {
+	console.log(`➡️ called showAllCustomers`);
 	const model = models.Customer;
 
 	// We create dynamic joint columns based on the map
@@ -183,7 +185,7 @@ export const showAllCustomers = (req, res, next) => {
 		.catch((err) => console.log(err));
 };
 export const showCustomerByID = (req, res, next) => {
-	console.log(`called showCustomerByID`);
+	console.log(`➡️ called showCustomerByID`);
 
 	const PK = req.params.id;
 	models.Customer.findByPk(PK, {
@@ -202,13 +204,43 @@ export const showCustomerByID = (req, res, next) => {
 					},
 				],
 			},
+			{
+				model: models.Booking, // His reservations
+				required: false,
+				include: [
+					{
+						model: models.Invoice, // eventual invoices
+						required: false,
+					},
+					{
+						model: models.ScheduleRecord, // schedules trough booked schedule
+						required: false,
+						through: {attributes: []}, // deleting if not necessary from middle table
+						include: [
+							{
+								model: models.Product, //schedule's product
+								required: false,
+							},
+						],
+						attributes: {
+							exclude: ['ProductID'], // Usuwamy starą kolumnę
+						},
+					},
+				],
+				attributes: {
+					exclude: ['ProductID', 'CustomerID'], // Usuwamy starą kolumnę
+				},
+			},
 		],
+		attributes: {
+			exclude: [, 'UserID'], // Usuwamy starą kolumnę
+		},
 	})
 		.then((customer) => {
 			if (!customer) {
 				return res.redirect('/admin-console/show-all-users');
 			}
-			console.log('✅ user fetched');
+			console.log('✅ customer fetched');
 			return res.status(200).json({customer});
 		})
 		.catch((err) => console.log(err));

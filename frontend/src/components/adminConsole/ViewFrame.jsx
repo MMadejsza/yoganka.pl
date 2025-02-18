@@ -4,11 +4,11 @@ import {useParams, useLocation} from 'react-router-dom';
 import {fetchItem} from '../../utils/http.js';
 import {useQuery} from '@tanstack/react-query';
 import ModalFrame from './ModalFrame.jsx';
-import DetailsUser from './DetailsUser.jsx';
-import DetailsCustomer from './DetailsCustomer.jsx';
+import ViewUser from './ViewUser.jsx';
+import ViewCustomer from './ViewCustomer.jsx';
 import UserForm from './UserForm.jsx';
 
-function DetailsFrame({modifier, visited, onClose}) {
+function ViewFrame({modifier, visited, onClose}) {
 	const params = useParams();
 	const location = useLocation();
 	const callPath = location.pathname;
@@ -31,11 +31,11 @@ function DetailsFrame({modifier, visited, onClose}) {
 		let controller = {};
 		switch (modifier) {
 			case 'user':
-				controller.recordDisplay = <DetailsUser data={data} />;
+				controller.recordDisplay = <ViewUser data={data} />;
 				controller.recordEditor = <UserForm />;
 				return controller;
 			case 'customer':
-				controller.recordDisplay = <DetailsCustomer data={data} />;
+				controller.recordDisplay = <ViewCustomer data={data} />;
 				controller.recordEditor = '';
 				return controller;
 			default:
@@ -79,4 +79,4 @@ function DetailsFrame({modifier, visited, onClose}) {
 	);
 }
 
-export default DetailsFrame;
+export default ViewFrame;

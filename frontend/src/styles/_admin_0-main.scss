@@ -5,6 +5,12 @@
 @use '_global_mixins-keyframes' as mixin;
 
 @media (min-width: 1025px) or (min-width: 1400px) {
+	body:has(.admin-console) {
+		.modal.visible {
+			width: 98vw;
+			max-width: 1200px;
+		}
+	}
 	.wrapper:has(.admin-console) {
 		grid-template-rows: auto auto 1fr auto;
 		grid-template-areas:
@@ -166,7 +172,12 @@
 	}
 	.user-container {
 		width: 100%;
+		height: auto;
+		max-height: 90vh;
+		padding-bottom: 5rem;
+		overflow-y: auto;
 		@include mixin.flex(row, space-evenly, flex-start);
+		align-content: flex-start;
 		flex-wrap: wrap;
 		gap: 1.5rem;
 
@@ -195,12 +206,42 @@
 				}
 			}
 		}
+		&__side-details {
+			opacity: 0.5;
+		}
+		.schedules {
+			flex-basis: 100%;
+			gap: 1.5rem;
+			&__summary,
+			&__records {
+				width: 100%;
+				font-size: 1.8rem;
+				@include mixin.flex(row, space-evenly);
+				flex-wrap: wrap;
+				&-label {
+					font-weight: bold;
+				}
+			}
+			&__record {
+				flex-basis: 100%;
+				@include mixin.flex(row, space-evenly);
+				&:nth-child(odd) {
+					background-color: color.adjust(map.get(var.$colors, nav), $lightness: 8%);
+				}
+				&--header {
+					font-weight: bold;
+				}
+				&-content {
+					width: 20%;
+				}
+			}
+		}
 		&__details-list {
 			@include mixin.flex(column, center);
 			margin-bottom: 1rem;
 		}
 		&__section-title {
-			// margin-bottom: 1.2rem;
+			font-size: 2.2rem;
 			color: map.get(var.$colors, accent-bcg);
 		}
 		&__section-record-label {
