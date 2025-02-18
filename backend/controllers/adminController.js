@@ -445,6 +445,67 @@ export const showAllSubscribedNewsletters = (req, res, next) => {
 export const showAllProducts = (req, res, next) => {
 	simpleListAllToTable(res, models.Product);
 };
+export const showProductByID = (req, res, next) => {
+	console.log(`➡️ called showProductByID`);
+
+	const PK = req.params.id;
+	models.Customer.findByPk(PK, {
+		include: [
+			{
+				model: models.CustomerPhones, // Customer phone numbers
+				required: false,
+			},
+			{
+				model: models.User, // Add Customer
+				required: false, // May not exist
+				include: [
+					{
+						model: models.UserPrefSettings, // Customer phone numbers
+						required: false,
+					},
+				],
+			},
+			{
+				model: models.Booking, // His reservations
+				required: false,
+				include: [
+					{
+						model: models.Invoice, // eventual invoices
+						required: false,
+					},
+					{
+						model: models.ScheduleRecord, // schedules trough booked schedule
+						required: false,
+						through: {attributes: []}, // deleting if not necessary from middle table
+						include: [
+							{
+								model: models.Product, //schedule's product
+								required: false,
+							},
+						],
+						attributes: {
+							exclude: ['ProductID'], // Usuwamy starą kolumnę
+						},
+					},
+				],
+				attributes: {
+					exclude: ['ProductID', 'CustomerID'], // Usuwamy starą kolumnę
+				},
+			},
+		],
+		attributes: {
+			exclude: [, 'UserID'], // Usuwamy starą kolumnę
+		},
+	})
+		.then((customer) => {
+			if (!customer) {
+				return res.redirect('/admin-console/show-all-users');
+			}
+			console.log('✅ customer fetched');
+			return res.status(200).json({customer});
+		})
+		.catch((err) => console.log(err));
+};
 export const createProduct = async (req, res, next) => {
 	models.Product.create({
 		Name: req.body.name,

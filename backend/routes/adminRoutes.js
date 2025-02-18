@@ -17,6 +17,7 @@ router.get('/show-all-participants-feedback', adminC.showAllParticipantsFeedback
 router.get('/show-all-newsletters', adminC.showAllNewsletters);
 router.get('/show-all-subscribed-newsletters', adminC.showAllSubscribedNewsletters);
 router.get('/show-all-products', adminC.showAllProducts);
+router.get('/show-all-products/:id', adminC.showProductByID);
 router.get('/show-all-bookings', adminC.showAllBookings);
 router.get('/show-all-invoices', adminC.showAllInvoices);
 

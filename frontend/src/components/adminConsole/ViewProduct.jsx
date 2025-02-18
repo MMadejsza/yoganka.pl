@@ -1,16 +1,12 @@
 import DetailsUser from './DetailsUser.jsx';
-import DetailsUserSettings from './DetailsUserSettings.jsx';
-import DetailsCustomer from './DetailsCustomer.jsx';
-import DetailsCustomerInvoices from './DetailsCustomerInvoices.jsx';
-import DetailsCustomerSchedulesAndStats from './DetailsCustomerSchedulesAndStats.jsx';
 
-import {calculateStats} from '../../utils/customerViewsUtils.js';
+// import {calculateStats} from '../../utils/productViewsUtils.js';
 
-function ViewCustomer({data}) {
+function ViewProduct({data}) {
 	console.clear();
 	console.log(
 		`📝 
-        customer object from backend:`,
+        Product object from backend:`,
 		data,
 	);
 
@@ -61,4 +57,4 @@ function ViewCustomer({data}) {
 	);
 }
 
-export default ViewCustomer;
+export default ViewProduct;

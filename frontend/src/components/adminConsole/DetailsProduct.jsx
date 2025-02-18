@@ -1,6 +1,6 @@
 import {calculateAge} from '../../utils/age.js';
 
-function DetailsUser({data}) {
+function DetailsProduct({data}) {
 	const {user} = data;
 	const customer = user.Customer;
 	// console.log(`data query:`, user);
@@ -149,4 +149,4 @@ function DetailsUser({data}) {
 	);
 }
 
-export default DetailsUser;
+export default DetailsProduct;
