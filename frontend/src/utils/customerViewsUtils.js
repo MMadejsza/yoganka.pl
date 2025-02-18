@@ -10,24 +10,46 @@ export function calculateAge(dateString) {
 	}
 	return age;
 }
+export const calculateMode = (agesArray) => {
+	const frequency = {};
+	let maxFreq = 0;
+	let mode = null;
+
+	// Zlicz częstotliwość występowania każdego wieku
+	agesArray.forEach((age) => {
+		frequency[age] = (frequency[age] || 0) + 1;
+		if (frequency[age] > maxFreq) {
+			maxFreq = frequency[age];
+			mode = age;
+		}
+	});
+
+	return mode;
+};
 
 //@ stats helpers
-function durationToSeconds(durationStr) {
+export function durationToSeconds(durationStr) {
 	const [hours, minutes, seconds] = durationStr.split(':').map(Number);
 	return hours * 3600 + minutes * 60 + seconds;
 }
 
-function secondsToDuration(totalSeconds) {
+export function secondsToDuration(totalSeconds) {
+	const days = Math.floor(totalSeconds / (24 * 3600));
+	totalSeconds %= 24 * 3600;
 	const hours = Math.floor(totalSeconds / 3600);
 	totalSeconds %= 3600;
 	const minutes = Math.floor(totalSeconds / 60);
 	const seconds = totalSeconds % 60;
-	// leading zero
+
+	// Leading zeros
+	const dd = String(days).padStart(2, '0');
 	const hh = String(hours).padStart(2, '0');
 	const mm = String(minutes).padStart(2, '0');
 	const ss = String(seconds).padStart(2, '0');
-	return `${hh}:${mm}:${ss}`;
+
+	return {days: dd, hours: hh, minutes: mm, seconds: ss};
 }
+
 //@ stats helper for calculation
 export const calculateStats = (customer) => {
 	const scheduleRecords = [];
@@ -108,6 +130,7 @@ export const calculateStats = (customer) => {
 		// console.groupEnd();
 	}
 
+	const splitDuration = secondsToDuration(totalTimeInSeconds);
 	const stats = {
 		records: scheduleRecords,
 		invoices: invoices,
@@ -121,7 +144,7 @@ export const calculateStats = (customer) => {
 				camps: totalCampsAmount,
 			},
 		},
-		totalHours: secondsToDuration(totalTimeInSeconds),
+		totalHours: `${splitDuration.hours}:${splitDuration.minutes}`,
 	};
 	return stats;
 };

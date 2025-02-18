@@ -31,6 +31,7 @@ const router = createBrowserRouter([
 					{path: 'show-all-users/add-user', element: <AdminPage />},
 					{path: 'show-all-users/:id', element: <ViewFrame />},
 					{path: 'show-all-customers/:id', element: <ViewFrame />},
+					{path: 'show-all-products/:id', element: <ViewFrame />},
 				],
 			},
 		],

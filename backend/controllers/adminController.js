@@ -449,60 +449,43 @@ export const showProductByID = (req, res, next) => {
 	console.log(`➡️ called showProductByID`);
 
 	const PK = req.params.id;
-	models.Customer.findByPk(PK, {
+	models.Product.findByPk(PK, {
 		include: [
 			{
-				model: models.CustomerPhones, // Customer phone numbers
-				required: false,
-			},
-			{
-				model: models.User, // Add Customer
-				required: false, // May not exist
-				include: [
-					{
-						model: models.UserPrefSettings, // Customer phone numbers
-						required: false,
-					},
-				],
-			},
-			{
-				model: models.Booking, // His reservations
+				model: models.ScheduleRecord,
 				required: false,
 				include: [
 					{
-						model: models.Invoice, // eventual invoices
+						model: models.Booking, // Booking which has relation through BookedSchedule
+						through: {attributes: []}, // omit data from mid table
 						required: false,
-					},
-					{
-						model: models.ScheduleRecord, // schedules trough booked schedule
-						required: false,
-						through: {attributes: []}, // deleting if not necessary from middle table
+						attributes: {
+							exclude: ['Product', 'CustomerID'],
+						},
 						include: [
 							{
-								model: models.Product, //schedule's product
-								required: false,
+								model: models.Customer,
+								attributes: {exclude: ['UserID']},
 							},
 						],
-						attributes: {
-							exclude: ['ProductID'], // Usuwamy starą kolumnę
-						},
+					},
+					{
+						model: models.Feedback,
+						required: false,
 					},
 				],
 				attributes: {
-					exclude: ['ProductID', 'CustomerID'], // Usuwamy starą kolumnę
+					exclude: ['ProductID'],
 				},
 			},
 		],
-		attributes: {
-			exclude: [, 'UserID'], // Usuwamy starą kolumnę
-		},
 	})
-		.then((customer) => {
-			if (!customer) {
-				return res.redirect('/admin-console/show-all-users');
+		.then((product) => {
+			if (!product) {
+				return res.redirect('/admin-console/show-all-products');
 			}
-			console.log('✅ customer fetched');
-			return res.status(200).json({customer});
+			console.log('✅ product fetched');
+			return res.status(200).json({product});
 		})
 		.catch((err) => console.log(err));
 };

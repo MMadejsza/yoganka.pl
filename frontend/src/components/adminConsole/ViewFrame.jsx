@@ -7,6 +7,7 @@ import ModalFrame from './ModalFrame.jsx';
 import ViewUser from './ViewUser.jsx';
 import ViewCustomer from './ViewCustomer.jsx';
 import UserForm from './UserForm.jsx';
+import ViewProduct from './ViewProduct.jsx';
 
 function ViewFrame({modifier, visited, onClose}) {
 	const params = useParams();
@@ -36,6 +37,10 @@ function ViewFrame({modifier, visited, onClose}) {
 				return controller;
 			case 'customer':
 				controller.recordDisplay = <ViewCustomer data={data} />;
+				controller.recordEditor = '';
+				return controller;
+			case 'product':
+				controller.recordDisplay = <ViewProduct data={data} />;
 				controller.recordEditor = '';
 				return controller;
 			default:

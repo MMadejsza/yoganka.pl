@@ -44,7 +44,6 @@ function AdminPage() {
 
 	const handleOpenModal = (row) => {
 		const recordId = row.ID;
-		console.log(row);
 		setIsModalOpen(true);
 		navigate(`${location.pathname}/${recordId}`, {state: {background: location}});
 	};
@@ -59,13 +58,15 @@ function AdminPage() {
 		switch (true) {
 			case path.includes('show-all-customers'):
 				return (modifier = 'customer');
+			case path.includes('show-all-products'):
+				return (modifier = 'product');
 
 			default:
 				return (modifier = 'user');
 		}
 	};
 
-	console.log(`location.pathname admin page: ${location.pathname}`);
+	// console.log(`location.pathname admin page: ${location.pathname}`);
 	const {data, isLoading, isError, error} = useQuery({
 		// as id for later caching received data to not send the same request again where location.pathname is key
 		queryKey: ['data', location.pathname],

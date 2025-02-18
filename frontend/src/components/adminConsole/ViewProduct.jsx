@@ -1,58 +1,36 @@
-import DetailsUser from './DetailsUser.jsx';
+import DetailsProduct from './DetailsProduct.jsx';
+import DetailsProductStats from './DetailsProductStats.jsx';
 
 // import {calculateStats} from '../../utils/productViewsUtils.js';
 
 function ViewProduct({data}) {
-	console.clear();
-	console.log(
-		`📝 
-        Product object from backend:`,
-		data,
-	);
-
-	const user = data.customer.User;
-	const customer = data.customer;
-	const name = customer ? `${customer.FirstName} ${customer.LastName}` : user.Login;
-
-	const customerStats = calculateStats(customer);
-	const noInvoices = customerStats.invoices.length > 0 ? false : true;
+	// console.clear();
+	// console.log(
+	// 	`📝
+	//     Product object from backend:`,
+	// 	data,
+	// );
+	const {product} = data;
 
 	return (
 		<>
-			<h1 className='user-container__user-title modal__title'>{name}</h1>
+			<h1 className='user-container__user-title modal__title'>{`${product.Name} (ID:${product.ProductID})`}</h1>
 
-			{/*//@ Personal-customer details */}
+			{/*//@ Product main details */}
 			<div className='user-container__main-details modal-checklist'>
-				<DetailsCustomer customerData={customer} />
+				<DetailsProduct data={product} />
 			</div>
 
-			{/*//@ Personal-user details */}
-			<div className='user-container__side-details modal-checklist'>
-				<DetailsUser
-					userData={user}
-					customerView={true}
-				/>
-
-				{user.UserPrefSetting && (
-					<DetailsUserSettings settingsData={user.UserPrefSetting} />
-				)}
+			{/*//@ Product business details */}
+			<div className='user-container__main-details modal-checklist'>
+				<DetailsProductStats data={product} />
 			</div>
 
-			{/*//@ Schedules */}
-			<div className='user-container__main-details user-container__side-details--schedules schedules modal-checklist'>
-				<DetailsCustomerSchedulesAndStats customerStats={customerStats} />
-			</div>
+			{/*//@ Generic stats */}
+			<div className='user-container__main-details  schedules modal-checklist'></div>
 
-			{/*//@ Invoices */}
-			<div
-				className={`user-container__${
-					noInvoices ? 'side' : 'main'
-				}-details user-container__side-details--schedules schedules modal-checklist`}>
-				<DetailsCustomerInvoices
-					invoicesArray={customerStats.invoices}
-					noInvoices={noInvoices}
-				/>
-			</div>
+			{/*//@ Schedules booked? */}
+			<div className={'user-container__main-details schedules modal-checklist'}></div>
 		</>
 	);
 }
