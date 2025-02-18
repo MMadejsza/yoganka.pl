@@ -3,9 +3,10 @@ import DetailsCustomer from './DetailsCustomer.jsx';
 import DetailsUserSettings from './DetailsUserSettings.jsx';
 
 function ViewUser({data}) {
+	console.clear();
 	console.log(
-		`📝 
-        user object from backend:`,
+		`📝 user object from backend:
+		`,
 		data,
 	);
 	const user = data.user || data.customer.User;

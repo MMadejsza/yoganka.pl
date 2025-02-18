@@ -13,7 +13,7 @@ function ViewFrame({modifier, visited, onClose}) {
 	const location = useLocation();
 	const callPath = location.pathname;
 	const {data, isPending, isError, error} = useQuery({
-		queryKey: ['user', params.id],
+		queryKey: ['query', location.pathname],
 		queryFn: ({signal}) => fetchItem(callPath, {signal}),
 		staleTime: 0,
 		refetchOnMount: true,
