@@ -1,4 +1,4 @@
-import {calculateAge} from '../../utils/age.js';
+import {calculateAge} from '../../utils/customerViewsUtils.js';
 
 function DetailsCustomer({customerData}) {
 	return (
