@@ -4,7 +4,7 @@ import DetailsCustomer from './DetailsCustomer.jsx';
 import DetailsCustomerInvoices from './DetailsCustomerInvoices.jsx';
 import DetailsCustomerSchedulesAndStats from './DetailsCustomerSchedulesAndStats.jsx';
 
-import {stats} from '../../utils/customerViewsUtils.js';
+import {calculateStats} from '../../utils/customerViewsUtils.js';
 
 function ViewCustomer({data}) {
 	console.clear();
