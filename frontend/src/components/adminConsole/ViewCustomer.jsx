@@ -26,9 +26,13 @@ function ViewCustomer({data}) {
 	return (
 		<>
 			<h1 className='user-container__user-title modal__title'>{name}</h1>
+
+			{/*//@ Personal-customer details */}
 			<div className='user-container__main-details modal-checklist'>
 				<DetailsCustomer customerData={customer} />
 			</div>
+
+			{/*//@ Personal-user details */}
 			<div className='user-container__side-details modal-checklist'>
 				<DetailsUser
 					userData={user}
@@ -44,8 +48,8 @@ function ViewCustomer({data}) {
 			<div className='user-container__main-details user-container__side-details--schedules schedules modal-checklist'>
 				<DetailsCustomerSchedulesAndStats customerStats={customerStats} />
 			</div>
-			{/*//@ Invoices */}
 
+			{/*//@ Invoices */}
 			<div
 				className={`user-container__${
 					noInvoices ? 'side' : 'main'
