@@ -5,7 +5,7 @@ function DetailsProductStats({data, prodStats}) {
         data object from DetailsProductStats:`,
 		data,
 	);
-
+	console.log('stats:', prodStats);
 	return (
 		<>
 			<h2 className='user-container__section-title modal__title--day'>{`Dotychczasowe statystyki:`}</h2>

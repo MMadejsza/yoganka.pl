@@ -27,6 +27,7 @@ export const calculateProductStats = (data) => {
 			date: schedule.Date,
 			time: schedule.StartTime,
 			location: schedule.Location,
+			bookingsNumber: schedule.Bookings.length,
 		});
 
 		if (schedule.Bookings.length > 0) {
@@ -38,8 +39,10 @@ export const calculateProductStats = (data) => {
 
 			bookings.push({
 				id: booking.BookingID,
+				date: booking.Date,
 				customer: `${booking.Customer.FirstName} ${booking.Customer.LastName}`,
 				value: booking.AmountPaid,
+				method: booking.PaymentMethod,
 			});
 
 			totalRevenue += parseFloat(booking.AmountPaid);
@@ -67,16 +70,21 @@ export const calculateProductStats = (data) => {
 	}
 
 	const modeAge = participantAges.length > 0 ? calculateMode(participantAges) : 'Brak danych';
+	const bookedScheduleRecords = scheduleRecords.filter((record) => record.bookingsNumber > 0);
 
 	const stats = {
+		totalScheduleRecords: scheduleRecords,
+		totalBookings: bookings,
 		totalSchedulesAmount: totalAmount,
 		totalTime: formattedDuration,
 		revenue: `${Math.round(totalRevenue * 100) / 100}zł`,
 		totalParticipantsAmount: totalParticipantsAmount,
-		avgParticipantsAmount: totalAmount ? Math.floor(totalParticipantsAmount / totalAmount) : 0,
-		avgAttendancePercentage: `${
-			(totalParticipantsAmount / (data.TotalSpaces * totalAmount)) * 100
-		}%`,
+		avgParticipantsAmount: totalAmount
+			? Math.round((totalParticipantsAmount / bookedScheduleRecords.length) * 100) / 100
+			: 0,
+		avgAttendancePercentage: `${Math.round(
+			(totalParticipantsAmount / (data.TotalSpaces * bookedScheduleRecords.length)) * 100,
+		)}%`,
 		avgReviewersPercentage: `${Math.round((totalReviews / totalParticipantsAmount) * 100)}%`,
 		modeParticipantsAge: modeAge,
 		avgFeedbackScore: avgFeedbackScore,

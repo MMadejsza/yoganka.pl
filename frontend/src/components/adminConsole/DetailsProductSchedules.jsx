@@ -1,4 +1,11 @@
-function DetailsProductSchedules({schedulesArray, spots, type}) {
+function DetailsProductSchedules({spots, type, stats}) {
+	const notPublished = (
+		<>
+			<h2 className='user-container__section-title modal__title--day'>Terminy:</h2>
+			<div style={{fontWeight: 'bold', fontSize: '2rem'}}>Nie opublikowano</div>
+		</>
+	);
+
 	const table = (
 		<>
 			<h2 className='user-container__section-title modal__title--day'>Terminy:</h2>
@@ -11,46 +18,28 @@ function DetailsProductSchedules({schedulesArray, spots, type}) {
 					<div className='schedules__record-content'>Lokacja</div>
 					<div className='schedules__record-content'>Frekwencja</div>
 				</li>
-				{schedulesArray.map((schedule, index) => (
-					<li
-						key={index}
-						className='schedules__record'>
-						<div className='schedules__record-content'>{schedule.ScheduleID}</div>
-						<div className='schedules__record-content'>{schedule.Date}</div>
-						<div className='schedules__record-content'>Dzień</div>
-						<div className='schedules__record-content'>{schedule.StartTime}</div>
-						<div className='schedules__record-content'>{schedule.Location}</div>
-						<div className='schedules__record-content'>{`${
-							schedule.Bookings.length
-						}/${spots} (${Math.round(schedule.Bookings.length / spots) * 100}%)`}</div>
-					</li>
-				))}
+				{stats.totalScheduleRecords.map((schedule, index) => {
+					const attendancePercentage = Math.round(
+						(schedule.bookingsNumber / spots) * 100,
+					);
+					return (
+						<li
+							key={index}
+							className='schedules__record'>
+							<div className='schedules__record-content'>{schedule.id}</div>
+							<div className='schedules__record-content'>{schedule.date}</div>
+							<div className='schedules__record-content'>Dzień</div>
+							<div className='schedules__record-content'>{schedule.time}</div>
+							<div className='schedules__record-content'>{schedule.location}</div>
+							<div className='schedules__record-content'>{`${schedule.bookingsNumber}/${spots} (${attendancePercentage}%)`}</div>
+						</li>
+					);
+				})}
 			</ul>
 		</>
 	);
-	const justAttendance = (
-		<>
-			<h2 className='user-container__section-title modal__title--day'>Frekwencja:</h2>
-			<div className='schedules__record-content'>{`${
-				schedulesArray[0].Bookings.length
-			}/${spots} (${Math.round((schedulesArray[0].Bookings.length / spots) * 100)}%)`}</div>
-		</>
-	);
-	const notPublished = (
-		<>
-			<h2 className='user-container__section-title modal__title--day'>Terminy:</h2>
-			<div style={{fontWeight: 'bold', fontSize: '2rem'}}>Nie opublikowano</div>
-		</>
-	);
-	return (
-		<>
-			{schedulesArray.length > 0
-				? type === 'Camp' || type === 'Event'
-					? justAttendance
-					: table
-				: notPublished}
-		</>
-	);
+
+	return <>{stats.totalScheduleRecords.length > 0 ? table : notPublished}</>;
 }
 
 export default DetailsProductSchedules;
