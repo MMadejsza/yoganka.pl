@@ -3,6 +3,7 @@ import DetailsUserSettings from './DetailsUserSettings.jsx';
 import DetailsCustomer from './DetailsCustomer.jsx';
 import DetailsCustomerInvoices from './DetailsCustomerInvoices.jsx';
 import DetailsCustomerSchedulesAndStats from './DetailsCustomerSchedulesAndStats.jsx';
+import DetailsCustomerReviews from './DetailsCustomerReviews.jsx';
 
 import {calculateStats} from '../../utils/customerViewsUtils.js';
 
@@ -56,6 +57,10 @@ function ViewCustomer({data}) {
 					invoicesArray={customerStats.invoices}
 					noInvoices={noInvoices}
 				/>
+			</div>
+			{/*//@ Reviews */}
+			<div className='user-container__main-details user-container__side-details--schedules schedules modal-checklist'>
+				<DetailsCustomerReviews reviews={customerStats.reviews} />
 			</div>
 		</>
 	);

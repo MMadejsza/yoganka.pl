@@ -221,19 +221,25 @@ export const showCustomerByID = (req, res, next) => {
 								model: models.Product, //schedule's product
 								required: false,
 							},
+							{
+								model: models.Feedback, // harmonogram -> opinie
+								required: false,
+								where: {CustomerID: req.params.id}, // but only for particular customer
+							},
 						],
 						attributes: {
-							exclude: ['ProductID'], // Usuwamy starą kolumnę
+							exclude: ['ProductID'], // deleting
 						},
 					},
 				],
+				where: {CustomerID: req.params.id},
 				attributes: {
-					exclude: ['ProductID', 'CustomerID'], // Usuwamy starą kolumnę
+					exclude: ['ProductID', 'CustomerID'], // deleting
 				},
 			},
 		],
 		attributes: {
-			exclude: [, 'UserID'], // Usuwamy starą kolumnę
+			exclude: [, 'UserID'], // deleting
 		},
 	})
 		.then((customer) => {

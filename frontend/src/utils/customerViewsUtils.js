@@ -49,11 +49,16 @@ export function secondsToDuration(totalSeconds) {
 
 	return {days: dd, hours: hh, minutes: mm, seconds: ss};
 }
-
+export const getWeekDay = (dateStr) => {
+	const date = new Date(dateStr);
+	const days = ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'];
+	return days[date.getDay()];
+};
 //@ stats helper for calculation
 export const calculateStats = (customer) => {
 	const scheduleRecords = [];
 	const invoices = [];
+	const reviews = [];
 	let totalRevenue = 0;
 	let totalTimeInSeconds = 0;
 	let totalCampsAmount = 0;
@@ -62,6 +67,7 @@ export const calculateStats = (customer) => {
 	let totalOnlineAmount = 0;
 	let totalSchedulesAmount =
 		totalCampsAmount + totalEventsAmount + totalClassesAmount + totalOnlineAmount;
+
 	for (let booking of customer.Bookings) {
 		// console.group(`booking: ${booking}`);
 		totalRevenue += parseFloat(booking.AmountPaid);
@@ -126,6 +132,24 @@ export const calculateStats = (customer) => {
 			totalTimeInSeconds += durationToSeconds(productDuration);
 			// console.log(`totalTimeInSeconds: ${totalTimeInSeconds}`);
 			// console.groupEnd();
+
+			if (schedule.Feedbacks && schedule.Feedbacks.length > 0) {
+				const feedback = schedule.Feedbacks[0];
+				reviews.push({
+					id: feedback.FeedbackID,
+					product: schedule.Product.Name,
+					schedule: `
+					(ID: ${scheduleID})
+					${scheduleDate}
+					${getWeekDay(scheduleDate)}
+					${scheduleStartTime}
+					`,
+					date: feedback.SubmissionDate,
+					rating: feedback.Rating,
+					review: feedback.Text,
+					delay: feedback.Delay,
+				});
+			}
 		}
 		// console.groupEnd();
 	}
@@ -133,6 +157,7 @@ export const calculateStats = (customer) => {
 	const splitDuration = secondsToDuration(totalTimeInSeconds);
 	const stats = {
 		records: scheduleRecords,
+		reviews: reviews,
 		invoices: invoices,
 		revenue: `${Math.round(totalRevenue * 100) / 100}zł`,
 		schedulesAmount: {
