@@ -196,6 +196,11 @@
 		}
 		&__user-title {
 			flex-basis: 100%;
+			margin: 0;
+		}
+		&__user-status {
+			font-size: 1.5rem;
+			flex-basis: 100%;
 		}
 		.modal-checklist {
 			@include mixin.flex(column, flex-start, center);

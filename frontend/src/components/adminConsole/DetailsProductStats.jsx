@@ -1,13 +1,11 @@
-import {calculateProductStats} from '../../utils/productViewsUtils.js';
-
-function DetailsProductStats({data}) {
+function DetailsProductStats({data, prodStats}) {
 	console.clear();
 	console.log(
 		`📝 
         data object from DetailsProductStats:`,
 		data,
 	);
-	const prodStats = calculateProductStats(data);
+
 	return (
 		<>
 			<h2 className='user-container__section-title modal__title--day'>{`Dotychczasowe statystyki:`}</h2>
@@ -21,7 +19,7 @@ function DetailsProductStats({data}) {
 				</li>
 				<li className='user-container__section-record modal-checklist__li'>
 					<p className='user-container__section-record-label'>
-						Czas przeprowadzonych zajęć:
+						Łączny czas odbytych zajęć:
 					</p>
 					<p className='user-container__section-record-content'>{prodStats.totalTime}</p>
 				</li>

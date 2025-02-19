@@ -38,6 +38,10 @@ const Product = sequelizeDb.define(
 			type: DataTypes.DATEONLY, //  YYYY-MM-DD
 			allowNull: true,
 		},
+		Status: {
+			type: DataTypes.STRING(50),
+			allowNull: true,
+		},
 	},
 	{
 		tableName: 'products', // exact mysql table name

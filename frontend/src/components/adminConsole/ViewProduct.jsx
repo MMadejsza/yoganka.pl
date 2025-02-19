@@ -1,6 +1,7 @@
 import DetailsProduct from './DetailsProduct.jsx';
 import DetailsProductStats from './DetailsProductStats.jsx';
-
+import DetailsProductSchedules from './DetailsProductSchedules.jsx';
+import {calculateProductStats} from '../../utils/productViewsUtils.js';
 // import {calculateStats} from '../../utils/productViewsUtils.js';
 
 function ViewProduct({data}) {
@@ -11,10 +12,11 @@ function ViewProduct({data}) {
 	// 	data,
 	// );
 	const {product} = data;
-
+	const prodStats = calculateProductStats(product);
 	return (
 		<>
 			<h1 className='user-container__user-title modal__title'>{`${product.Name} (ID:${product.ProductID})`}</h1>
+			<h3 className='user-container__user-status modal__title'>{product.Status}</h3>
 
 			{/*//@ Product main details */}
 			<div className='user-container__main-details modal-checklist'>
@@ -23,11 +25,20 @@ function ViewProduct({data}) {
 
 			{/*//@ Product business details */}
 			<div className='user-container__main-details modal-checklist'>
-				<DetailsProductStats data={product} />
+				<DetailsProductStats
+					data={product}
+					prodStats
+				/>
 			</div>
 
-			{/*//@ Generic stats */}
-			<div className='user-container__main-details  schedules modal-checklist'></div>
+			{/*//@ Schedules */}
+			<div className='user-container__main-details  schedules modal-checklist'>
+				<DetailsProductSchedules
+					schedulesArray={product.ScheduleRecords}
+					spots={product.TotalSpaces}
+					type={product.Type}
+				/>
+			</div>
 
 			{/*//@ Schedules booked? */}
 			<div className={'user-container__main-details schedules modal-checklist'}></div>
