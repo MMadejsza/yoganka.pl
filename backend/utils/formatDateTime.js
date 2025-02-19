@@ -1,4 +1,4 @@
-const formatIsoDateTime = (isoString) => {
+export const formatIsoDateTime = (isoString) => {
 	// Create object Date
 	const date = new Date(isoString);
 
@@ -20,4 +20,8 @@ const formatIsoDateTime = (isoString) => {
 	// Concat
 	return `${formattedDate} ${formattedTime}`;
 };
-export default formatIsoDateTime;
+export const getWeekDay = (dateStr) => {
+	const date = new Date(dateStr);
+	const days = ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'];
+	return days[date.getDay()];
+};

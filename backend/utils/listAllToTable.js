@@ -1,5 +1,5 @@
 import columnMaps from './columnsMapping.js';
-import formatIsoDateTime from './formatDateTime.js';
+import {formatIsoDateTime} from './formatDateTime.js';
 
 export const simpleListAllToTable = (res, model) => {
 	model

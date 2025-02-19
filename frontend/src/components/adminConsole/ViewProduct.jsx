@@ -3,6 +3,7 @@ import DetailsProductStats from './DetailsProductStats.jsx';
 import DetailsProductSchedules from './DetailsProductSchedules.jsx';
 import {calculateProductStats} from '../../utils/productViewsUtils.js';
 import DetailsProductBookings from './DetailsProductBookings.jsx';
+import DetailsProductReviews from './DetailsProductReviews.jsx';
 
 // import {calculateStats} from '../../utils/productViewsUtils.js';
 
@@ -40,7 +41,6 @@ function ViewProduct({data}) {
 				<div className='user-container__main-details  schedules modal-checklist'>
 					<DetailsProductSchedules
 						spots={product.TotalSpaces}
-						type={type}
 						stats={prodStats}
 					/>
 				</div>
@@ -55,7 +55,9 @@ function ViewProduct({data}) {
 			</div>
 
 			{/*//@ Feedback */}
-			<div className='user-container__main-details  schedules modal-checklist'></div>
+			<div className='user-container__main-details  schedules modal-checklist'>
+				<DetailsProductReviews stats={prodStats} />
+			</div>
 		</>
 	);
 }

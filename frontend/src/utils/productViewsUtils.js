@@ -5,11 +5,39 @@ import {
 	calculateMode,
 } from './customerViewsUtils.js';
 
+export const getWeekDay = (dateStr) => {
+	const date = new Date(dateStr);
+	const days = ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'];
+	return days[date.getDay()];
+};
+export const formatIsoDateTime = (isoString) => {
+	// Create object Date
+	const date = new Date(isoString);
+
+	// format [date] [time (hh:mm)]
+	const formattedDate = date.toLocaleString('pl-PL', {
+		year: 'numeric',
+		month: '2-digit',
+		day: '2-digit',
+	});
+	let formattedTime;
+	if (isoString?.length != 10) {
+		formattedTime = date.toLocaleString('pl-PL', {
+			hour: '2-digit',
+			minute: '2-digit',
+			hour12: false,
+		});
+	} else formattedTime = '';
+
+	// Concat
+	return `${formattedDate} ${formattedTime}`;
+};
 export const calculateProductStats = (data) => {
 	console.log(`data.ScheduleRecords: `, data.ScheduleRecords);
 
 	const scheduleRecords = [];
 	const bookings = [];
+	const reviews = [];
 	const participantAges = [];
 	let totalRevenue = 0;
 	let totalTimeInSeconds = 0;
@@ -55,6 +83,14 @@ export const calculateProductStats = (data) => {
 			for (let feedback of schedule.Feedbacks) {
 				sumFeedbackRating += feedback.Rating;
 				feedbackCount++;
+				reviews.push({
+					id: feedback.FeedbackID,
+					date: feedback.SubmissionDate,
+					customer: `${feedback.Customer.FirstName} ${feedback.Customer.LastName}`,
+					rating: feedback.Rating,
+					review: feedback.Text,
+					delay: feedback.Delay,
+				});
 			}
 		}
 	}
@@ -75,6 +111,7 @@ export const calculateProductStats = (data) => {
 	const stats = {
 		totalScheduleRecords: scheduleRecords,
 		totalBookings: bookings,
+		reviews: reviews,
 		totalSchedulesAmount: totalAmount,
 		totalTime: formattedDuration,
 		revenue: `${Math.round(totalRevenue * 100) / 100}zł`,

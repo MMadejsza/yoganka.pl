@@ -1,4 +1,5 @@
-function DetailsProductSchedules({spots, type, stats}) {
+import {getWeekDay, formatIsoDateTime} from '../../utils/productViewsUtils.js';
+function DetailsProductSchedules({spots, stats}) {
 	const notPublished = (
 		<>
 			<h2 className='user-container__section-title modal__title--day'>Terminy:</h2>
@@ -28,7 +29,9 @@ function DetailsProductSchedules({spots, type, stats}) {
 							className='schedules__record'>
 							<div className='schedules__record-content'>{schedule.id}</div>
 							<div className='schedules__record-content'>{schedule.date}</div>
-							<div className='schedules__record-content'>Dzień</div>
+							<div className='schedules__record-content'>
+								{getWeekDay(schedule.date)}
+							</div>
 							<div className='schedules__record-content'>{schedule.time}</div>
 							<div className='schedules__record-content'>{schedule.location}</div>
 							<div className='schedules__record-content'>{`${schedule.bookingsNumber}/${spots} (${attendancePercentage}%)`}</div>

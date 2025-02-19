@@ -12,17 +12,20 @@ function DetailsProductBookings({type, stats}) {
 					<div className='schedules__record-content'>Zadatek</div>
 					<div className='schedules__record-content'>Metoda płatności</div>
 				</li>
-				{bookingsArray.map((booking, index) => (
-					<li
-						key={index}
-						className='schedules__record'>
-						<div className='schedules__record-content'>{booking.id}</div>
-						<div className='schedules__record-content'>{booking.date}</div>
-						<div className='schedules__record-content'>{booking.customer}</div>
-						<div className='schedules__record-content'>{booking.value}</div>
-						<div className='schedules__record-content'>{booking.method}</div>
-					</li>
-				))}
+				{bookingsArray.map((booking, index) => {
+					const isoDate = new Date(booking.date).toISOString().slice(0, 10);
+					return (
+						<li
+							key={index}
+							className='schedules__record'>
+							<div className='schedules__record-content'>{booking.id}</div>
+							<div className='schedules__record-content'>{isoDate}</div>
+							<div className='schedules__record-content'>{booking.customer}</div>
+							<div className='schedules__record-content'>{booking.value}</div>
+							<div className='schedules__record-content'>{booking.method}</div>
+						</li>
+					);
+				})}
 			</ul>
 		</>
 	);

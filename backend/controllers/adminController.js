@@ -3,7 +3,7 @@ import {Sequelize} from 'sequelize';
 
 import {simpleListAllToTable, listAllToTable} from '../utils/listAllToTable.js';
 import columnMaps from '../utils/columnsMapping.js';
-import formatIsoDateTime from '../utils/formatDateTime.js';
+import {formatIsoDateTime, getWeekDay} from '../utils/formatDateTime.js';
 
 //@ USERS
 export const showAllUsers = (req, res, next) => {
@@ -312,14 +312,15 @@ export const showAllSchedules = (req, res, next) => {
 						newRecord[newKey] = jsonRecord[key]; // Assignment
 					}
 				}
-
+				newRecord['Dzień'] = getWeekDay(jsonRecord['Date']);
 				return newRecord; // Return new record object
 			});
 
 			// New headers (keys from columnMap)
 			const totalHeaders = [
-				'ID Terminu',
+				'ID',
 				'Data',
+				'Dzień',
 				'Godzina rozpoczęcia',
 				'Typ',
 				'Nazwa',
@@ -472,6 +473,13 @@ export const showProductByID = (req, res, next) => {
 					{
 						model: models.Feedback,
 						required: false,
+						include: [
+							{
+								model: models.Customer,
+								attributes: {exclude: ['UserID']},
+							},
+						],
+						attributes: {exclude: ['CustomerID']},
 					},
 				],
 				attributes: {
