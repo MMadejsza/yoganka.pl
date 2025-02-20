@@ -8,6 +8,7 @@ import ViewUser from './ViewUser.jsx';
 import ViewCustomer from './ViewCustomer.jsx';
 import UserForm from './UserForm.jsx';
 import ViewProduct from './ViewProduct.jsx';
+import ViewSchedule from './ViewSchedule.jsx';
 
 function ViewFrame({modifier, visited, onClose}) {
 	const params = useParams();
