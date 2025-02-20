@@ -63,7 +63,7 @@ function AdminPage() {
 			case path.includes('show-all-schedules'):
 				return (modifier = 'schedule');
 			case path.includes('show-all-bookings'):
-				return (modifier = 'bookings');
+				return (modifier = 'booking');
 
 			default:
 				return (modifier = 'user');
