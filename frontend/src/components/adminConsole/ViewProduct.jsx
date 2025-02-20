@@ -41,7 +41,7 @@ function ViewProduct({data}) {
 				<div className='user-container__main-details  schedules modal-checklist'>
 					<DetailsProductSchedules
 						spots={product.TotalSpaces}
-						stats={prodStats}
+						scheduleRecords={prodStats.totalScheduleRecords}
 					/>
 				</div>
 			)}

@@ -51,10 +51,10 @@ export const calculateProductStats = (product, schedules) => {
 		totalAmount += 1;
 
 		scheduleRecords.push({
-			id: schedule.ScheduleID,
-			date: schedule.Date,
-			time: schedule.StartTime,
-			location: schedule.Location,
+			ScheduleID: schedule.ScheduleID,
+			Date: schedule.Date,
+			StartTime: schedule.StartTime,
+			Location: schedule.Location,
 			bookingsNumber: schedule.Bookings.length,
 		});
 

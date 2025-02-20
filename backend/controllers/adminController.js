@@ -665,48 +665,39 @@ export const showAllBookings = (req, res, next) => {
 		.catch((err) => console.error('Błąd w pobieraniu rezerwacji:', err));
 };
 export const showBookingByID = (req, res, next) => {
-	console.log(`➡️ called showScheduleByID`);
+	console.log(`➡️ called showBookingByID`);
 
 	const PK = req.params.id;
-	models.ScheduleRecord.findByPk(PK, {
+	models.Booking.findByPk(PK, {
+		through: {attributes: []}, // omit data from mid table
+		required: false,
+		attributes: {
+			exclude: ['Product', 'CustomerID'],
+		},
 		include: [
 			{
-				model: models.Product,
-				required: true,
+				model: models.Customer,
+				attributes: {exclude: []},
 			},
 			{
-				model: models.Booking, // Booking which has relation through BookedSchedule
+				model: models.ScheduleRecord,
+				attributes: {exclude: ['UserID']},
 				through: {attributes: []}, // omit data from mid table
-				required: false,
-				attributes: {
-					exclude: ['Product', 'CustomerID'],
-				},
 				include: [
 					{
-						model: models.Customer,
-						attributes: {exclude: ['UserID']},
+						model: models.Product,
+						attributes: {exclude: []},
 					},
 				],
-			},
-			{
-				model: models.Feedback,
-				required: false,
-				include: [
-					{
-						model: models.Customer,
-						attributes: {exclude: ['UserID']},
-					},
-				],
-				attributes: {exclude: ['CustomerID']},
 			},
 		],
 	})
-		.then((schedule) => {
-			if (!schedule) {
-				return res.redirect('/admin-console/show-all-schedules');
+		.then((booking) => {
+			if (!booking) {
+				return res.redirect('/admin-console/show-all-bookings');
 			}
 			console.log('✅ Schedule fetched');
-			return res.status(200).json({schedule});
+			return res.status(200).json({booking});
 		})
 		.catch((err) => console.log(err));
 };

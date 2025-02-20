@@ -1,5 +1,6 @@
-import DetailsSchedule from './DetailsSchedule.jsx';
-import DetailsProduct from './DetailsProduct.jsx';
+import DetailsCustomer from './DetailsCustomer.jsx';
+import DetailsBooking from './DetailsBooking.jsx';
+import DetailsProductSchedules from './DetailsProductSchedules.jsx';
 import DetailsProductStats from './DetailsProductStats.jsx';
 import DetailsProductBookings from './DetailsProductBookings.jsx';
 import DetailsProductReviews from './DetailsProductReviews.jsx';
@@ -11,51 +12,39 @@ function ViewBooking({data}) {
 	console.clear();
 	console.log(
 		`📝
-	    Schedule object from backend:`,
+	    Booking object from backend:`,
 		data,
 	);
-	const {schedule} = data;
-	const {Product: product} = schedule;
-	const type = product.Type;
-	const prodStats = calculateProductStats(product, [schedule]);
+	const {booking} = data;
+	const {Customer: customer} = booking;
+	const {ScheduleRecords: schedules} = booking;
+	// const {Product: product} = schedule;
+	// const type = product.Type;
+	// const prodStats = calculateProductStats(product, [schedule]);
 
 	return (
 		<>
-			<h1 className='user-container__user-title modal__title'>{`Termin (ID:${schedule.ScheduleID})`}</h1>
-			<h1 className='user-container__user-status modal__title'>{`Dla: "${product.Name} (ID:${product.ProductID})"`}</h1>
+			<h1 className='user-container__user-title modal__title'>{`Rezerwacja (ID:${booking.BookingID})`}</h1>
+			<h2 className='user-container__user-title modal__title'>{` ${customer.FirstName} ${customer.LastName}`}</h2>
 
-			{/*//@ Schedule main details */}
+			{/*//@ Customer main details */}
 			<div className='user-container__main-details modal-checklist'>
-				<DetailsSchedule data={schedule} />
+				<DetailsCustomer customerData={customer} />
 			</div>
-			{/*//@ Product main details */}
-			<div className='user-container__main-details modal-checklist'>
-				<DetailsProduct
+			{/*//@ Booking main details */}
+			{/* <div className='user-container__main-details modal-checklist'>
+				<DetailsBooking
 					data={product}
 					placement={'schedule'}
 				/>
-			</div>
+			</div> */}
 
-			{/*//@ Product stats */}
-			<div className='user-container__main-details modal-checklist'>
-				<DetailsProductStats
-					data={product}
-					prodStats={prodStats}
-					placement={'schedule'}
-				/>
-			</div>
-
-			{/*//@ all bookings if not event/camp? */}
+			{/*//@ Schedules included */}
 			<div className='user-container__main-details  schedules modal-checklist'>
-				<DetailsProductBookings
-					stats={prodStats}
-					type={type}
+				<DetailsProductSchedules
+					scheduleRecords={schedules}
+					placement='booking'
 				/>
-			</div>
-
-			{/*//@ Feedback */}
-			<div className='user-container__main-details  schedules modal-checklist'>
-				<DetailsProductReviews stats={prodStats} />
 			</div>
 		</>
 	);

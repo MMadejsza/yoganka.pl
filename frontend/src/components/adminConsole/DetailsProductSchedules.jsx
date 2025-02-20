@@ -1,5 +1,5 @@
-import {getWeekDay, formatIsoDateTime} from '../../utils/productViewsUtils.js';
-function DetailsProductSchedules({spots, stats}) {
+import {getWeekDay} from '../../utils/productViewsUtils.js';
+function DetailsProductSchedules({spots, scheduleRecords, placement}) {
 	const notPublished = (
 		<>
 			<h2 className='user-container__section-title modal__title--day'>Terminy:</h2>
@@ -13,28 +13,41 @@ function DetailsProductSchedules({spots, stats}) {
 			<ul className='schedules__records'>
 				<li className='schedules__record schedules__record--header'>
 					<div className='schedules__record-content'>ID</div>
+					{placement == 'booking' && (
+						<div className='schedules__record-content'>Produkt</div>
+					)}
 					<div className='schedules__record-content'>Data</div>
 					<div className='schedules__record-content'>Dzień</div>
 					<div className='schedules__record-content'>Godzina</div>
 					<div className='schedules__record-content'>Lokacja</div>
-					<div className='schedules__record-content'>Frekwencja</div>
+					{placement != 'booking' && (
+						<div className='schedules__record-content'>Frekwencja</div>
+					)}
 				</li>
-				{stats.totalScheduleRecords.map((schedule, index) => {
+				{scheduleRecords.map((schedule, index) => {
 					const attendancePercentage = Math.round(
 						(schedule.bookingsNumber / spots) * 100,
 					);
+
 					return (
 						<li
 							key={index}
 							className='schedules__record'>
-							<div className='schedules__record-content'>{schedule.id}</div>
-							<div className='schedules__record-content'>{schedule.date}</div>
+							<div className='schedules__record-content'>{schedule.ScheduleID}</div>
+							{placement == 'booking' && (
+								<div className='schedules__record-content'>
+									{schedule.Product.Name}
+								</div>
+							)}
+							<div className='schedules__record-content'>{schedule.Date}</div>
 							<div className='schedules__record-content'>
-								{getWeekDay(schedule.date)}
+								{getWeekDay(schedule.Date)}
 							</div>
-							<div className='schedules__record-content'>{schedule.time}</div>
-							<div className='schedules__record-content'>{schedule.location}</div>
-							<div className='schedules__record-content'>{`${schedule.bookingsNumber}/${spots} (${attendancePercentage}%)`}</div>
+							<div className='schedules__record-content'>{schedule.StartTime}</div>
+							<div className='schedules__record-content'>{schedule.Location}</div>
+							{placement != 'booking' && (
+								<div className='schedules__record-content'>{`${bookingsNumber}/${spots} (${attendancePercentage}%)`}</div>
+							)}
 						</li>
 					);
 				})}
@@ -42,7 +55,7 @@ function DetailsProductSchedules({spots, stats}) {
 		</>
 	);
 
-	return <>{stats.totalScheduleRecords.length > 0 ? table : notPublished}</>;
+	return <>{scheduleRecords.length > 0 ? table : notPublished}</>;
 }
 
 export default DetailsProductSchedules;
