@@ -1,13 +1,13 @@
 import DetailsProduct from './DetailsProduct.jsx';
 import DetailsProductStats from './DetailsProductStats.jsx';
 import DetailsProductSchedules from './DetailsProductSchedules.jsx';
-import {calculateProductStats} from '../../utils/productViewsUtils.js';
 import DetailsProductBookings from './DetailsProductBookings.jsx';
 import DetailsProductReviews from './DetailsProductReviews.jsx';
+import {calculateProductStats} from '../../utils/productViewsUtils.js';
 
 // import {calculateStats} from '../../utils/productViewsUtils.js';
 
-function ViewProduct({data}) {
+function ViewSchedule({data}) {
 	console.clear();
 	console.log(
 		`📝
@@ -62,4 +62,4 @@ function ViewProduct({data}) {
 	);
 }
 
-export default ViewProduct;
+export default ViewSchedule;

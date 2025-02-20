@@ -60,6 +60,8 @@ function AdminPage() {
 				return (modifier = 'customer');
 			case path.includes('show-all-products'):
 				return (modifier = 'product');
+			case path.includes('show-all-schedules'):
+				return (modifier = 'schedule');
 
 			default:
 				return (modifier = 'user');

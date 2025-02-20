@@ -341,6 +341,57 @@ export const showAllSchedules = (req, res, next) => {
 		})
 		.catch((err) => console.log(err));
 };
+export const showScheduleByID = (req, res, next) => {
+	console.log(`➡️ called showScheduleByID`);
+
+	const PK = req.params.id;
+	models.Product.findByPk(PK, {
+		include: [
+			{
+				model: models.ScheduleRecord,
+				required: false,
+				include: [
+					{
+						model: models.Booking, // Booking which has relation through BookedSchedule
+						through: {attributes: []}, // omit data from mid table
+						required: false,
+						attributes: {
+							exclude: ['Product', 'CustomerID'],
+						},
+						include: [
+							{
+								model: models.Customer,
+								attributes: {exclude: ['UserID']},
+							},
+						],
+					},
+					{
+						model: models.Feedback,
+						required: false,
+						include: [
+							{
+								model: models.Customer,
+								attributes: {exclude: ['UserID']},
+							},
+						],
+						attributes: {exclude: ['CustomerID']},
+					},
+				],
+				attributes: {
+					exclude: ['ProductID'],
+				},
+			},
+		],
+	})
+		.then((product) => {
+			if (!product) {
+				return res.redirect('/admin-console/show-all-products');
+			}
+			console.log('✅ product fetched');
+			return res.status(200).json({product});
+		})
+		.catch((err) => console.log(err));
+};
 export const showBookedSchedules = (req, res, next) => {};
 export const createScheduleRecord = (req, res, next) => {
 	models.ScheduleRecord.create({

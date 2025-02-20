@@ -12,6 +12,7 @@ router.get('/show-all-customers', adminC.showAllCustomers);
 router.get('/show-all-customers/:id', adminC.showCustomerByID);
 router.get('/show-all-customers-phones', adminC.showAllCustomersPhones);
 router.get('/show-all-schedules', adminC.showAllSchedules);
+router.get('/show-all-schedules/:id', adminC.showScheduleByID);
 router.get('/show-booked-schedules', adminC.showBookedSchedules);
 router.get('/show-all-participants-feedback', adminC.showAllParticipantsFeedback);
 router.get('/show-all-newsletters', adminC.showAllNewsletters);

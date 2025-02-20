@@ -43,6 +43,10 @@ function ViewFrame({modifier, visited, onClose}) {
 				controller.recordDisplay = <ViewProduct data={data} />;
 				controller.recordEditor = '';
 				return controller;
+			case 'schedule':
+				controller.recordDisplay = <ViewSchedule data={data} />;
+				controller.recordEditor = '';
+				return controller;
 			default:
 				break;
 		}
