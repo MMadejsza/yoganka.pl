@@ -46,7 +46,7 @@ function DetailsProductSchedules({spots, scheduleRecords, placement}) {
 							<div className='schedules__record-content'>{schedule.StartTime}</div>
 							<div className='schedules__record-content'>{schedule.Location}</div>
 							{placement != 'booking' && (
-								<div className='schedules__record-content'>{`${bookingsNumber}/${spots} (${attendancePercentage}%)`}</div>
+								<div className='schedules__record-content'>{`${schedule.bookingsNumber}/${spots} (${attendancePercentage}%)`}</div>
 							)}
 						</li>
 					);
