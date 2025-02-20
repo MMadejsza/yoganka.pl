@@ -16,7 +16,7 @@ function ViewProduct({data}) {
 	);
 	const {product} = data;
 	const type = product.Type;
-	const prodStats = calculateProductStats(product);
+	const prodStats = calculateProductStats(product, product.ScheduleRecords);
 
 	return (
 		<>

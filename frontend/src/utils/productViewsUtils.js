@@ -32,8 +32,8 @@ export const formatIsoDateTime = (isoString) => {
 	// Concat
 	return `${formattedDate} ${formattedTime}`;
 };
-export const calculateProductStats = (data) => {
-	console.log(`data.ScheduleRecords: `, data.ScheduleRecords);
+export const calculateProductStats = (product, schedules) => {
+	console.log(`schedules: `, schedules);
 
 	const scheduleRecords = [];
 	const bookings = [];
@@ -47,7 +47,7 @@ export const calculateProductStats = (data) => {
 	let sumFeedbackRating = 0;
 	let feedbackCount = 0;
 
-	for (let schedule of data.ScheduleRecords) {
+	for (let schedule of schedules) {
 		totalAmount += 1;
 
 		scheduleRecords.push({
@@ -59,7 +59,7 @@ export const calculateProductStats = (data) => {
 		});
 
 		if (schedule.Bookings.length > 0) {
-			totalTimeInSeconds += durationToSeconds(data.Duration);
+			totalTimeInSeconds += durationToSeconds(product.Duration);
 		}
 
 		for (let booking of schedule.Bookings) {
@@ -120,7 +120,7 @@ export const calculateProductStats = (data) => {
 			? Math.round((totalParticipantsAmount / bookedScheduleRecords.length) * 100) / 100
 			: 0,
 		avgAttendancePercentage: `${Math.round(
-			(totalParticipantsAmount / (data.TotalSpaces * bookedScheduleRecords.length)) * 100,
+			(totalParticipantsAmount / (product.TotalSpaces * bookedScheduleRecords.length)) * 100,
 		)}%`,
 		avgReviewersPercentage: `${Math.round((totalReviews / totalParticipantsAmount) * 100)}%`,
 		modeParticipantsAge: modeAge,

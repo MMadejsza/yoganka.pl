@@ -1,3 +1,4 @@
+import DetailsSchedule from './DetailsSchedule.jsx';
 import DetailsProduct from './DetailsProduct.jsx';
 import DetailsProductStats from './DetailsProductStats.jsx';
 import DetailsProductSchedules from './DetailsProductSchedules.jsx';
@@ -11,40 +12,39 @@ function ViewSchedule({data}) {
 	console.clear();
 	console.log(
 		`📝
-	    Product object from backend:`,
+	    Schedule object from backend:`,
 		data,
 	);
-	const {product} = data;
+	const {schedule} = data;
+	const {Product: product} = schedule;
 	const type = product.Type;
-	const prodStats = calculateProductStats(product);
+	const prodStats = calculateProductStats(product, [schedule]);
 
 	return (
 		<>
-			<h1 className='user-container__user-title modal__title'>{`${product.Name} (ID:${product.ProductID})`}</h1>
-			<h3 className='user-container__user-status modal__title'>{product.Status}</h3>
+			<h1 className='user-container__user-title modal__title'>{`Termin (ID:${schedule.ScheduleID})`}</h1>
+			<h1 className='user-container__user-status modal__title'>{`Dla: "${product.Name} (ID:${product.ProductID})"`}</h1>
 
+			{/*//@ Schedule main details */}
+			<div className='user-container__main-details modal-checklist'>
+				<DetailsSchedule data={schedule} />
+			</div>
 			{/*//@ Product main details */}
 			<div className='user-container__main-details modal-checklist'>
-				<DetailsProduct data={product} />
+				<DetailsProduct
+					data={product}
+					placement={'schedule'}
+				/>
 			</div>
 
-			{/*//@ Product business details */}
+			{/*//@ Product stats */}
 			<div className='user-container__main-details modal-checklist'>
 				<DetailsProductStats
 					data={product}
 					prodStats={prodStats}
+					placement={'schedule'}
 				/>
 			</div>
-
-			{/*//@ Schedules */}
-			{type !== 'Camp' && type !== 'Event' && (
-				<div className='user-container__main-details  schedules modal-checklist'>
-					<DetailsProductSchedules
-						spots={product.TotalSpaces}
-						stats={prodStats}
-					/>
-				</div>
-			)}
 
 			{/*//@ all bookings if not event/camp? */}
 			<div className='user-container__main-details  schedules modal-checklist'>

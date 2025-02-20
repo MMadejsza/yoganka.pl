@@ -1,4 +1,4 @@
-function DetailsProductStats({data, prodStats}) {
+function DetailsProductStats({data, prodStats, placement}) {
 	console.clear();
 	console.log(
 		`📝 
@@ -6,23 +6,35 @@ function DetailsProductStats({data, prodStats}) {
 		data,
 	);
 	console.log('stats:', prodStats);
+
 	return (
 		<>
-			<h2 className='user-container__section-title modal__title--day'>{`Dotychczasowe statystyki:`}</h2>
+			<h2 className='user-container__section-title modal__title--day'>
+				{placement == 'schedule' ? 'Statystyki terminu:' : `Dotychczasowe statystyki:`}
+			</h2>
 
 			<ul className='user-container__details-list modal-checklist__list'>
-				<li className='user-container__section-record modal-checklist__li'>
-					<p className='user-container__section-record-label'>Ilość edycji/klas:</p>
-					<p className='user-container__section-record-content'>
-						{prodStats.totalSchedulesAmount}
-					</p>
-				</li>
-				<li className='user-container__section-record modal-checklist__li'>
-					<p className='user-container__section-record-label'>
-						Łączny czas odbytych zajęć:
-					</p>
-					<p className='user-container__section-record-content'>{prodStats.totalTime}</p>
-				</li>
+				{placement != 'schedule' && (
+					<>
+						<li className='user-container__section-record modal-checklist__li'>
+							<p className='user-container__section-record-label'>
+								Ilość edycji/klas:
+							</p>
+							<p className='user-container__section-record-content'>
+								{prodStats.totalSchedulesAmount}
+							</p>
+						</li>
+
+						<li className='user-container__section-record modal-checklist__li'>
+							<p className='user-container__section-record-label'>
+								Łączny czas odbytych zajęć:
+							</p>
+							<p className='user-container__section-record-content'>
+								{prodStats.totalTime}
+							</p>
+						</li>
+					</>
+				)}
 				<li className='user-container__section-record modal-checklist__li'>
 					<p className='user-container__section-record-label'>Dochód:</p>
 					<p className='user-container__section-record-content'>{prodStats.revenue}</p>
@@ -41,22 +53,28 @@ function DetailsProductStats({data, prodStats}) {
 						{prodStats.modeParticipantsAge} lat
 					</p>
 				</li>
+				{placement != 'schedule' && (
+					<li className='user-container__section-record modal-checklist__li'>
+						<p className='user-container__section-record-label'>
+							Średnia liczba uczestników:
+						</p>
+						<p className='user-container__section-record-content'>
+							{prodStats.avgParticipantsAmount}
+						</p>
+					</li>
+				)}
 				<li className='user-container__section-record modal-checklist__li'>
 					<p className='user-container__section-record-label'>
-						Średnia liczba uczestników:
+						{placement == 'schedule' ? 'Frekwencja:' : 'Średnia frekwencja:'}
 					</p>
-					<p className='user-container__section-record-content'>
-						{prodStats.avgParticipantsAmount}
-					</p>
-				</li>
-				<li className='user-container__section-record modal-checklist__li'>
-					<p className='user-container__section-record-label'>Średnia frekwencja:</p>
 					<p className='user-container__section-record-content'>
 						{prodStats.avgAttendancePercentage}
 					</p>
 				</li>
 				<li className='user-container__section-record modal-checklist__li'>
-					<p className='user-container__section-record-label'>Średni % opinii:</p>
+					<p className='user-container__section-record-label'>
+						{placement == 'schedule' ? '% opinii:' : 'Średni % opinii:'}
+					</p>
 					<p className='user-container__section-record-content'>
 						{prodStats.avgReviewersPercentage}
 					</p>

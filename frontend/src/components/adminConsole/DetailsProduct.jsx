@@ -1,6 +1,6 @@
 import {durationToSeconds, secondsToDuration} from '../../utils/customerViewsUtils.js';
 
-function DetailsProduct({data}) {
+function DetailsProduct({data, placement}) {
 	console.log(
 		`📝 
         product object from backend:`,
@@ -21,20 +21,39 @@ function DetailsProduct({data}) {
 					<p className='user-container__section-record-label'>Typ:</p>
 					<p className='user-container__section-record-content'>{product.Type}</p>
 				</li>
-				<li className='user-container__section-record modal-checklist__li'>
-					<p className='user-container__section-record-label'>Lokacja:</p>
-					<p className='user-container__section-record-content'>{product.Location}</p>
-				</li>
-				<li className='user-container__section-record modal-checklist__li'>
-					<p className='user-container__section-record-label'>
-						{product.Type == 'Camp' || product.Type == 'Event' ? 'Data:' : 'Wdrożony:'}
-					</p>
-					<p className='user-container__section-record-content'>{product.StartDate}</p>
-				</li>
-				<li className='user-container__section-record modal-checklist__li'>
-					<p className='user-container__section-record-label'>Czas trwania:</p>
-					<p className='user-container__section-record-content'>{formattedDuration}</p>
-				</li>
+				{placement == 'schedule' && (
+					<li className='user-container__section-record modal-checklist__li'>
+						<p className='user-container__section-record-label'>Nazwa:</p>
+						<p className='user-container__section-record-content'>{product.Name}</p>
+					</li>
+				)}
+				{placement != 'schedule' && (
+					<>
+						<li className='user-container__section-record modal-checklist__li'>
+							<p className='user-container__section-record-label'>
+								{product.Type == 'Camp' || product.Type == 'Event'
+									? 'Data:'
+									: 'Wdrożony:'}
+							</p>
+							<p className='user-container__section-record-content'>
+								{product.StartDate}
+							</p>
+						</li>
+						<li className='user-container__section-record modal-checklist__li'>
+							<p className='user-container__section-record-label'>Lokacja:</p>
+							<p className='user-container__section-record-content'>
+								{product.Location}
+							</p>
+						</li>
+
+						<li className='user-container__section-record modal-checklist__li'>
+							<p className='user-container__section-record-label'>Czas trwania:</p>
+							<p className='user-container__section-record-content'>
+								{formattedDuration}
+							</p>
+						</li>
+					</>
+				)}
 				<li className='user-container__section-record modal-checklist__li'>
 					<p className='user-container__section-record-label'>Miejsc:</p>
 					<p className='user-container__section-record-content'>{product.TotalSpaces}</p>

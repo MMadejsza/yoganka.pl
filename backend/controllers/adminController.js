@@ -345,50 +345,45 @@ export const showScheduleByID = (req, res, next) => {
 	console.log(`➡️ called showScheduleByID`);
 
 	const PK = req.params.id;
-	models.Product.findByPk(PK, {
+	models.ScheduleRecord.findByPk(PK, {
 		include: [
 			{
-				model: models.ScheduleRecord,
+				model: models.Product,
+				required: true,
+			},
+			{
+				model: models.Booking, // Booking which has relation through BookedSchedule
+				through: {attributes: []}, // omit data from mid table
+				required: false,
+				attributes: {
+					exclude: ['Product', 'CustomerID'],
+				},
+				include: [
+					{
+						model: models.Customer,
+						attributes: {exclude: ['UserID']},
+					},
+				],
+			},
+			{
+				model: models.Feedback,
 				required: false,
 				include: [
 					{
-						model: models.Booking, // Booking which has relation through BookedSchedule
-						through: {attributes: []}, // omit data from mid table
-						required: false,
-						attributes: {
-							exclude: ['Product', 'CustomerID'],
-						},
-						include: [
-							{
-								model: models.Customer,
-								attributes: {exclude: ['UserID']},
-							},
-						],
-					},
-					{
-						model: models.Feedback,
-						required: false,
-						include: [
-							{
-								model: models.Customer,
-								attributes: {exclude: ['UserID']},
-							},
-						],
-						attributes: {exclude: ['CustomerID']},
+						model: models.Customer,
+						attributes: {exclude: ['UserID']},
 					},
 				],
-				attributes: {
-					exclude: ['ProductID'],
-				},
+				attributes: {exclude: ['CustomerID']},
 			},
 		],
 	})
-		.then((product) => {
-			if (!product) {
-				return res.redirect('/admin-console/show-all-products');
+		.then((schedule) => {
+			if (!schedule) {
+				return res.redirect('/admin-console/show-all-schedules');
 			}
-			console.log('✅ product fetched');
-			return res.status(200).json({product});
+			console.log('✅ Schedule fetched');
+			return res.status(200).json({schedule});
 		})
 		.catch((err) => console.log(err));
 };
