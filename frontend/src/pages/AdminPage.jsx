@@ -71,6 +71,9 @@ function AdminPage() {
 			case path.includes('show-all-bookings'):
 				modifier = 'booking';
 				return modifier;
+			case path.includes('show-all-participants-feedback'):
+				modifier = 'feedback';
+				return modifier;
 
 			default:
 				return (modifier = '');

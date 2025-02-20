@@ -1,6 +1,5 @@
 import * as models from '../models/_index.js';
-import {Sequelize} from 'sequelize';
-
+import {Sequelize, Op} from 'sequelize';
 import {simpleListAllToTable, listAllToTable} from '../utils/listAllToTable.js';
 import columnMaps from '../utils/columnsMapping.js';
 import {formatIsoDateTime, getWeekDay} from '../utils/formatDateTime.js';
@@ -465,11 +464,11 @@ export const showAllParticipantsFeedback = (req, res, next) => {
 
 			// New headers (keys from columnMap)
 			const totalHeaders = [
+				'ID',
 				'Ocena (1-5)',
 				'Treść Opinii',
 				'Data Zgłoszenia',
 				'Opóźnienie',
-				'ID Opinii',
 				'ID Klienta',
 				'Imię Nazwisko',
 				'ID Terminu',
@@ -482,6 +481,61 @@ export const showAllParticipantsFeedback = (req, res, next) => {
 			res.json({
 				totalHeaders, // To render
 				content: formattedRecords, // With new names
+			});
+		})
+		.catch((err) => console.log(err));
+};
+export const showAllParticipantsFeedbackByID = (req, res, next) => {
+	console.log(`➡️ called showAllParticipantsFeedbackByID`);
+
+	const PK = req.params.id;
+	models.Feedback.findByPk(PK, {
+		include: [
+			{
+				model: models.Customer,
+				attributes: {exclude: []},
+			},
+			{
+				model: models.ScheduleRecord,
+				attributes: {exclude: ['ProductID']},
+				include: [
+					{
+						model: models.Product,
+						attributes: {exclude: []},
+					},
+				],
+			},
+		],
+		attributes: {exclude: ['CustomerID', 'ScheduleID']},
+	})
+		.then((review) => {
+			if (!review) {
+				return res.redirect('/admin-console/show-all-participants-feedback');
+			}
+			const customerId = review.Customer.CustomerID;
+
+			return models.Feedback.findAll({
+				where: {
+					CustomerID: customerId,
+					// op from sequelize means not equal
+					FeedbackID: {[Op.ne]: PK},
+				},
+				include: [
+					{
+						model: models.ScheduleRecord,
+						attributes: {exclude: ['ProductID']},
+						include: [
+							{
+								model: models.Product,
+								attributes: {exclude: []},
+							},
+						],
+					},
+				],
+				attributes: {exclude: ['CustomerID', 'ScheduleID']},
+			}).then((otherReviews) => {
+				console.log('✅ Feedback fetched');
+				return res.status(200).json({review, otherReviews});
 			});
 		})
 		.catch((err) => console.log(err));

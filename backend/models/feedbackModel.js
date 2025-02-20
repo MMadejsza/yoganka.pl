@@ -1,5 +1,5 @@
 import {DataTypes} from 'sequelize';
-import sequelizeDb from '../utils/db.js'; // Zakładając, że `sequelizeDb` to Twoja instancja Sequelize
+import sequelizeDb from '../utils/db.js';
 
 export const Feedback = sequelizeDb.define(
 	'Feedback',
@@ -14,14 +14,14 @@ export const Feedback = sequelizeDb.define(
 			allowNull: false,
 			references: {
 				model: 'Customer',
-				key: 'CustomerID', // Zakładając, że kolumna w tabeli `customers` to `customerID`
+				key: 'CustomerID',
 			},
 		},
 		ScheduleID: {
 			type: DataTypes.INTEGER(11),
 			allowNull: false,
 			references: {
-				model: 'ScheduleRecord', // zakładając, że masz tabelę `schedules`
+				model: 'ScheduleRecord',
 				key: 'ScheduleID',
 			},
 		},

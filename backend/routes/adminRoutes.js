@@ -15,6 +15,7 @@ router.get('/show-all-schedules', adminC.showAllSchedules);
 router.get('/show-all-schedules/:id', adminC.showScheduleByID);
 router.get('/show-booked-schedules', adminC.showBookedSchedules);
 router.get('/show-all-participants-feedback', adminC.showAllParticipantsFeedback);
+router.get('/show-all-participants-feedback/:id', adminC.showAllParticipantsFeedbackByID);
 router.get('/show-all-newsletters', adminC.showAllNewsletters);
 router.get('/show-all-subscribed-newsletters', adminC.showAllSubscribedNewsletters);
 router.get('/show-all-products', adminC.showAllProducts);

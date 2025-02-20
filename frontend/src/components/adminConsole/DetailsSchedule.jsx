@@ -15,7 +15,7 @@ function DetailsSchedule({data}) {
 	} ${splitDuration.minutes != '00' ? splitDuration.minutes + ' minut' : ''}`;
 	return (
 		<>
-			<h2 className='user-container__section-title modal__title--day'>{`Szczegóły:`}</h2>
+			<h2 className='user-container__section-title modal__title--day'>{`Szczegóły terminu:`}</h2>
 			<ul className='user-container__details-list modal-checklist__list'>
 				<li className='user-container__section-record modal-checklist__li'>
 					<p className='user-container__section-record-label'>Data:</p>

@@ -34,6 +34,10 @@ const router = createBrowserRouter([
 					{path: 'show-all-products/:id', element: <ViewFrame modifier='product' />},
 					{path: 'show-all-schedules/:id', element: <ViewFrame modifier='product' />},
 					{path: 'show-all-bookings/:id', element: <ViewFrame modifier='booking' />},
+					{
+						path: 'show-all-participants-feedback/:id',
+						element: <ViewFrame modifier='feedback' />,
+					},
 				],
 			},
 		],
