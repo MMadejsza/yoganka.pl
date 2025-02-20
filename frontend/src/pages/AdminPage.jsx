@@ -56,19 +56,27 @@ function AdminPage() {
 	const pickModifier = (path) => {
 		let modifier;
 		switch (true) {
+			case path.includes('show-all-users'):
+				modifier = 'user';
+				return modifier;
 			case path.includes('show-all-customers'):
-				return (modifier = 'customer');
+				modifier = 'customer';
+				return modifier;
 			case path.includes('show-all-products'):
-				return (modifier = 'product');
+				modifier = 'product';
+				return modifier;
 			case path.includes('show-all-schedules'):
-				return (modifier = 'schedule');
+				modifier = 'schedule';
+				return modifier;
 			case path.includes('show-all-bookings'):
-				return (modifier = 'booking');
+				modifier = 'booking';
+				return modifier;
 
 			default:
-				return (modifier = 'user');
+				return (modifier = '');
 		}
 	};
+	const pickedModifier = pickModifier(location.pathname);
 
 	// console.log(`location.pathname admin page: ${location.pathname}`);
 	const {data, isLoading, isError, error} = useQuery({
@@ -109,7 +117,7 @@ function AdminPage() {
 				<tbody>
 					{data.content.map((row, rowIndex) => (
 						<tr
-							className='data-table__cells'
+							className={`data-table__cells ${pickedModifier ? 'active' : ''}`}
 							key={rowIndex}>
 							{data.totalHeaders.map((header, headerIndex) => {
 								let value = row[header];
@@ -118,9 +126,13 @@ function AdminPage() {
 								}
 								return (
 									<td
-										onClick={() => {
-											handleOpenModal(row);
-										}}
+										onClick={
+											pickedModifier
+												? () => {
+														handleOpenModal(row);
+												  }
+												: null
+										}
 										className='data-table__single-cell'
 										key={headerIndex}>
 										{value || '-'}
@@ -147,7 +159,7 @@ function AdminPage() {
 			{content}
 			{isModalOpen && (
 				<ViewFrame
-					modifier={pickModifier(location.pathname)}
+					modifier={pickedModifier}
 					visited={isModalOpen}
 					onClose={handleCloseModal}
 				/>

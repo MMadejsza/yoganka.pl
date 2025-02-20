@@ -62,7 +62,7 @@ const columnMaps = {
 	},
 
 	Invoice: {
-		InvoiceID: 'ID',
+		InvoiceID: 'ID FV',
 		BookingID: 'ID Rezerwacji',
 		InvoiceDate: 'Data faktury',
 		DueDate: 'Termin płatności',

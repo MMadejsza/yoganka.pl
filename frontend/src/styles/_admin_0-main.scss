@@ -145,7 +145,7 @@
 			&:nth-child(2n) {
 				background-color: color.adjust(map.get(var.$colors, nav), $lightness: 15%);
 			}
-			&:hover {
+			&.active:hover {
 				transform: scale(1.05) translateY(0.5rem);
 				box-shadow: map.get(var.$shadows, tile-shadow);
 				border-radius: map.get(var.$sizes, border-radius);
