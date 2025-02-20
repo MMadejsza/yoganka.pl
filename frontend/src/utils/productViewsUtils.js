@@ -30,7 +30,7 @@ export const formatIsoDateTime = (isoString) => {
 	} else formattedTime = '';
 
 	// Concat
-	return `${formattedDate} ${formattedTime}`;
+	return `${formattedDate} | ${formattedTime}`;
 };
 export const calculateProductStats = (product, schedules) => {
 	console.log(`schedules: `, schedules);

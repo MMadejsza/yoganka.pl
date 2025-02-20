@@ -20,8 +20,10 @@ function DetailsProductSchedules({spots, scheduleRecords, placement}) {
 					<div className='schedules__record-content'>Dzień</div>
 					<div className='schedules__record-content'>Godzina</div>
 					<div className='schedules__record-content'>Lokacja</div>
-					{placement != 'booking' && (
+					{placement != 'booking' ? (
 						<div className='schedules__record-content'>Frekwencja</div>
+					) : (
+						<div className='schedules__record-content'>Zadatek</div>
 					)}
 				</li>
 				{scheduleRecords.map((schedule, index) => {
@@ -45,8 +47,12 @@ function DetailsProductSchedules({spots, scheduleRecords, placement}) {
 							</div>
 							<div className='schedules__record-content'>{schedule.StartTime}</div>
 							<div className='schedules__record-content'>{schedule.Location}</div>
-							{placement != 'booking' && (
+							{placement != 'booking' ? (
 								<div className='schedules__record-content'>{`${schedule.bookingsNumber}/${spots} (${attendancePercentage}%)`}</div>
+							) : (
+								<div className='schedules__record-content'>
+									{schedule.Product.Price}
+								</div>
 							)}
 						</li>
 					);

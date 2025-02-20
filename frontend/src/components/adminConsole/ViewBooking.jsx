@@ -18,9 +18,6 @@ function ViewBooking({data}) {
 	const {booking} = data;
 	const {Customer: customer} = booking;
 	const {ScheduleRecords: schedules} = booking;
-	// const {Product: product} = schedule;
-	// const type = product.Type;
-	// const prodStats = calculateProductStats(product, [schedule]);
 
 	return (
 		<>
@@ -32,12 +29,12 @@ function ViewBooking({data}) {
 				<DetailsCustomer customerData={customer} />
 			</div>
 			{/*//@ Booking main details */}
-			{/* <div className='user-container__main-details modal-checklist'>
+			<div className='user-container__main-details modal-checklist'>
 				<DetailsBooking
-					data={product}
-					placement={'schedule'}
+					bookingData={booking}
+					placement={'booking'}
 				/>
-			</div> */}
+			</div>
 
 			{/*//@ Schedules included */}
 			<div className='user-container__main-details  schedules modal-checklist'>

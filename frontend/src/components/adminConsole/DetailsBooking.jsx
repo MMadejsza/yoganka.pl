@@ -1,39 +1,37 @@
-import {durationToSeconds, secondsToDuration, getWeekDay} from '../../utils/customerViewsUtils.js';
+import {formatIsoDateTime, getWeekDay} from '../../utils/productViewsUtils.js';
 
-function DetailsBooking({data}) {
-	// console.log(
-	// 	`📝
-	//     Schedule object from backend:`,
-	// 	data,
-	// );
-	const schedule = data;
-	const product = data.Product;
-	const totalSeconds = durationToSeconds(product.Duration);
-	const splitDuration = secondsToDuration(totalSeconds);
-	const formattedDuration = `${splitDuration.days != '00' ? splitDuration.days + ' dni' : ''} ${
-		splitDuration.hours != '00' ? splitDuration.hours + ' godzin' : ''
-	} ${splitDuration.minutes != '00' ? splitDuration.minutes + ' minut' : ''}`;
+function DetailsBooking({bookingData}) {
+	const booking = bookingData;
+	console.log(
+		`📝
+	    Schedule object from backend:`,
+		bookingData,
+	);
+
 	return (
 		<>
 			<h2 className='user-container__section-title modal__title--day'>{`Szczegóły:`}</h2>
 			<ul className='user-container__details-list modal-checklist__list'>
 				<li className='user-container__section-record modal-checklist__li'>
-					<p className='user-container__section-record-label'>Data:</p>
+					<p className='user-container__section-record-label'>Data rezerwacji:</p>
 					<p className='user-container__section-record-content'>
-						{`${getWeekDay(schedule.Date)} (${schedule.Date})`}
+						{`${formatIsoDateTime(booking.Date)}
+                        (${getWeekDay(booking.Date)})`}
 					</p>
 				</li>
 				<li className='user-container__section-record modal-checklist__li'>
-					<p className='user-container__section-record-label'>Godzina:</p>
-					<p className='user-container__section-record-content'>{schedule.StartTime}</p>
+					<p className='user-container__section-record-label'>Kwota:</p>
+					<p className='user-container__section-record-content'>{booking.AmountPaid}</p>
 				</li>
 				<li className='user-container__section-record modal-checklist__li'>
-					<p className='user-container__section-record-label'>Długość:</p>
-					<p className='user-container__section-record-content'>{`${formattedDuration} (${product.Type})`}</p>
+					<p className='user-container__section-record-label'>Metoda Płatności:</p>
+					<p className='user-container__section-record-content'>
+						{booking.PaymentMethod}
+					</p>
 				</li>
 				<li className='user-container__section-record modal-checklist__li'>
-					<p className='user-container__section-record-label'>Miejsce:</p>
-					<p className='user-container__section-record-content'>{schedule.Location}</p>
+					<p className='user-container__section-record-label'>Status:</p>
+					<p className='user-container__section-record-content'>{booking.Status}</p>
 				</li>
 			</ul>
 		</>
