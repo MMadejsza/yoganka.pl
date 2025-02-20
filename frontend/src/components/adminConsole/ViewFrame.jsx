@@ -9,6 +9,7 @@ import ViewCustomer from './ViewCustomer.jsx';
 import UserForm from './UserForm.jsx';
 import ViewProduct from './ViewProduct.jsx';
 import ViewSchedule from './ViewSchedule.jsx';
+import ViewBooking from './ViewBooking.jsx';
 
 function ViewFrame({modifier, visited, onClose}) {
 	const params = useParams();
@@ -46,6 +47,10 @@ function ViewFrame({modifier, visited, onClose}) {
 				return controller;
 			case 'schedule':
 				controller.recordDisplay = <ViewSchedule data={data} />;
+				controller.recordEditor = '';
+				return controller;
+			case 'booking':
+				controller.recordDisplay = <ViewBooking data={data} />;
 				controller.recordEditor = '';
 				return controller;
 			default:

@@ -7,7 +7,7 @@ import {calculateProductStats} from '../../utils/productViewsUtils.js';
 
 // import {calculateStats} from '../../utils/productViewsUtils.js';
 
-function ViewSchedule({data}) {
+function ViewBooking({data}) {
 	console.clear();
 	console.log(
 		`📝
@@ -61,4 +61,4 @@ function ViewSchedule({data}) {
 	);
 }
 
-export default ViewSchedule;
+export default ViewBooking;

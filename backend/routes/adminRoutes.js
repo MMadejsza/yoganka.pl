@@ -20,6 +20,7 @@ router.get('/show-all-subscribed-newsletters', adminC.showAllSubscribedNewslette
 router.get('/show-all-products', adminC.showAllProducts);
 router.get('/show-all-products/:id', adminC.showProductByID);
 router.get('/show-all-bookings', adminC.showAllBookings);
+router.get('/show-all-bookings/:id', adminC.showBookingByID);
 router.get('/show-all-invoices', adminC.showAllInvoices);
 
 //@ POST

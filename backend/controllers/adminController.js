@@ -664,6 +664,52 @@ export const showAllBookings = (req, res, next) => {
 		})
 		.catch((err) => console.error('Błąd w pobieraniu rezerwacji:', err));
 };
+export const showBookingByID = (req, res, next) => {
+	console.log(`➡️ called showScheduleByID`);
+
+	const PK = req.params.id;
+	models.ScheduleRecord.findByPk(PK, {
+		include: [
+			{
+				model: models.Product,
+				required: true,
+			},
+			{
+				model: models.Booking, // Booking which has relation through BookedSchedule
+				through: {attributes: []}, // omit data from mid table
+				required: false,
+				attributes: {
+					exclude: ['Product', 'CustomerID'],
+				},
+				include: [
+					{
+						model: models.Customer,
+						attributes: {exclude: ['UserID']},
+					},
+				],
+			},
+			{
+				model: models.Feedback,
+				required: false,
+				include: [
+					{
+						model: models.Customer,
+						attributes: {exclude: ['UserID']},
+					},
+				],
+				attributes: {exclude: ['CustomerID']},
+			},
+		],
+	})
+		.then((schedule) => {
+			if (!schedule) {
+				return res.redirect('/admin-console/show-all-schedules');
+			}
+			console.log('✅ Schedule fetched');
+			return res.status(200).json({schedule});
+		})
+		.catch((err) => console.log(err));
+};
 //@ INVOICES
 export const showAllInvoices = (req, res, next) => {
 	const model = models.Invoice;
