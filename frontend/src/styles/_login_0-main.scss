@@ -10,11 +10,10 @@
 	width: 50vw;
 	min-width: 300px;
 	max-width: 550px;
-	// height: 60vh;
 	min-height: 400px;
-	// max-height: 700px;
+	margin: 8rem 0;
+
 	padding: 2%;
-	margin: 15rem 0;
 	border-radius: map.get(var.$sizes, border-radius);
 	background-color: rgba(map.get(var.$colors, nav), 0.5);
 	box-shadow: map.get(var.$shadows, tile-shadow);
@@ -24,9 +23,12 @@
 	section {
 		width: 100%;
 		height: 40%;
+		@include mixin.flex(column, space-evenly, center);
+		gap: 2.5rem;
 	}
 
 	form {
+		width: 100%;
 		@include mixin.flex(column, space-evenly, center);
 		gap: 1.5rem;
 	}
@@ -36,6 +38,7 @@
 	h3 {
 		color: map.get(var.$colors, tile-title);
 		font-size: 2.5rem;
+		transition: map.get(var.$behavior, base-transition);
 	}
 
 	.input-pair {
@@ -64,7 +67,7 @@
 		background-color: rgba(map.get(var.$colors, base), 1);
 		border: none;
 		outline: none;
-		transition: 0.3s ease-in-out;
+		transition: map.get(var.$behavior, base-transition);
 
 		&:hover,
 		&:focus:not([type='checkbox']) {
@@ -101,12 +104,17 @@
 		}
 	}
 
-	.login-btn {
-		width: 40%;
-		font-size: 2rem;
+	.form-switch-btn {
+		font-size: 1.2rem;
+		min-height: auto;
+		height: 2.5rem;
+		line-height: 2.5rem;
+		opacity: 0.5;
 	}
+}
 
-	.hide-btn {
-		display: none;
+@media (min-width: 1025px) {
+	.loginBox {
+		margin: 15rem 0;
 	}
 }
