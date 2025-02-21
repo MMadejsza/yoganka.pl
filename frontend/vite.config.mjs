@@ -1,7 +1,8 @@
 // vite.config.js pre-ready for React
 import {defineConfig} from 'vite';
+import path from 'path';
 import react from '@vitejs/plugin-react';
-const viteImagemin = await import('vite-plugin-imagemin').then((m) => m.default || m);
+// import viteImagemin from 'vite-plugin-imagemin';
 import autoprefixer from 'autoprefixer';
 import cssnano from 'cssnano';
 import postcssDiscardComments from 'postcss-discard-comments';
@@ -12,16 +13,19 @@ export default defineConfig({
 			removeAll: true,
 		}),
 		react(),
-		viteImagemin.default({
-			gifsicle: {optimizationLevel: 7},
-			optipng: {optimizationLevel: 7},
-			svgo: {
-				plugins: [{removeViewBox: false}],
-			},
-			mozjpeg: {quality: 65},
-			webp: {quality: 65},
-		}),
+		// viteImagemin({
+		// 	gifsicle: {optimizationLevel: 7},
+		// 	optipng: {optimizationLevel: 7},
+		// 	svgo: {
+		// 		plugins: [{removeViewBox: false}],
+		// 	},
+		// 	mozjpeg: {quality: 65},
+		// 	webp: {quality: 65},
+		// }),
 	],
+	optimizeDeps: {
+		include: ['@material/web/switch/switch.js'],
+	},
 	// root: 'public',  // Main folder to src
 	publicDir: 'public',
 	build: {
@@ -56,6 +60,7 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			'@': '/src', // alias @ for routes staring from 'src',
+			'@material/switch': path.resolve(__dirname, 'node_modules/@material/web/switch'),
 		},
 	},
 	css: {

@@ -13,10 +13,6 @@ function LoginPage() {
 			</Helmet>
 			<main className='loginBox'>
 				<LoginFrom type='login' />
-				<LoginFrom
-					type='register'
-					regQuestion={true}
-				/>
 			</main>
 		</>
 	);
