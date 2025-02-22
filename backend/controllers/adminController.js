@@ -125,7 +125,7 @@ export const editUser = (req, res, next) => {
 		.catch((err) => console.log(err));
 };
 export const showAllUserSettings = (req, res, next) => {
-	listAllToTable(res, models.UserSettings, null);
+	listAllToTable(res, models.UserPrefSettings, null);
 };
 //@ CUSTOMERS
 export const showAllCustomers = (req, res, next) => {

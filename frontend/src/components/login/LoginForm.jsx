@@ -96,10 +96,12 @@ function LoginFrom() {
 		<>
 			<section className={formType}>
 				<form
-					action=''
+					action='/api/login-pass/login-check'
+					method='POST'
 					onSubmit={(e) => handleSubmit(e, formDataState)}
 					className={`${formType}-form`}>
 					<h1 className='form__title'>{title}</h1>
+					{/* names are for FormData and id for labels */}
 					<InputLogin
 						formType={formType}
 						type='email'
@@ -133,21 +135,23 @@ function LoginFrom() {
 						didEdit={passwordDidEdit}
 						isFocused={passwordIsFocused}
 					/>
-					<InputLogin
-						formType={formType}
-						type='password'
-						id='confirmedPassword'
-						name='confirmedPassword'
-						label='Powtórz hasło'
-						value={confirmedPasswordValue}
-						onFocus={handleConfirmedPasswordFocus}
-						onBlur={handleConfirmedPasswordBlur}
-						onChange={handleConfirmedPasswordChange}
-						required
-						validationResults={confirmedPasswordValidationResults}
-						didEdit={confirmedPasswordDidEdit}
-						isFocused={confirmedPasswordIsFocused}
-					/>
+					{firstTime && (
+						<InputLogin
+							formType={formType}
+							type='password'
+							id='confirmedPassword'
+							name='confirmedPassword'
+							label='Powtórz hasło'
+							value={confirmedPasswordValue}
+							onFocus={handleConfirmedPasswordFocus}
+							onBlur={handleConfirmedPasswordBlur}
+							onChange={handleConfirmedPasswordChange}
+							required
+							validationResults={confirmedPasswordValidationResults}
+							didEdit={confirmedPasswordDidEdit}
+							isFocused={confirmedPasswordIsFocused}
+						/>
+					)}
 					<button
 						type='reset'
 						onClick={handleReset}

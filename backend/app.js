@@ -1,4 +1,5 @@
 import express from 'express';
+import authRoutes from './routes/authRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import customerRoutes from './routes/customerRoutes.js';
 import userRoutes from './routes/userRoutes.js';
@@ -11,6 +12,7 @@ app.use(express.urlencoded({extended: true}));
 // app.use(express.static(path.join(rootDir, '../../frontend/public')));
 
 // Filtering that works only for /admin/*
+app.use(`/login-pass`, authRoutes);
 app.use(`/admin-console`, adminRoutes);
 app.use(`/customer`, customerRoutes);
 app.use(`/user`, userRoutes);
