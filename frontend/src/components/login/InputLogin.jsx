@@ -1,15 +1,16 @@
-function InputLogin({formType, id, label, didEdit, validationResults, ...props}) {
+function InputLogin({formType, id, label, value, isFocused, didEdit, validationResults, ...props}) {
 	return (
 		<div className='input-pair'>
 			<label htmlFor={id}>{label}</label>
 			<input
 				id={id}
+				value={value}
 				{...props}
 				className={`${formType}-form__${id}-input`}
 			/>
 
 			{/* After editing */}
-			{didEdit && (
+			{(isFocused || didEdit) && (
 				<div className='control-error'>
 					{validationResults.map((result, index) => (
 						// List all the rules and messages
@@ -20,7 +21,14 @@ function InputLogin({formType, id, label, didEdit, validationResults, ...props})
 								result.valid ? 'control-error msg-valid' : 'control-error msg-error'
 							}>
 							{/* Assign proper symbol */}
-							{result.valid ? 'OK:' : 'X:'} {result.message}
+							{
+								<>
+									<span className='material-symbols-rounded'>
+										{!value ? 'help' : result.valid ? 'check_circle' : 'error'}
+									</span>
+									{result.message}
+								</>
+							}
 						</p>
 					))}
 				</div>
