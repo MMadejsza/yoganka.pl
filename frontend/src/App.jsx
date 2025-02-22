@@ -7,8 +7,6 @@ import HomePage from './pages/HomePage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import CampsPage from './pages/CampsPage.jsx';
 import EventsPage from './pages/EventsPage.jsx';
-// import ClassesPage from './pages/ClassesPage.jsx';
-// import B2BPage from './pages/B2BPage.jsx';
 import ErrorPage from './pages/ErrorPage.jsx';
 import AdminPage from './pages/AdminPage.jsx';
 import ViewFrame from './components/adminConsole/ViewFrame.jsx';
@@ -18,7 +16,7 @@ const router = createBrowserRouter([
 		element: <RootPage />,
 		children: [
 			{index: true, element: <HomePage />},
-			{path: 'zaloguj-sie', element: <LoginPage />},
+			{path: 'login', element: <LoginPage />},
 			{path: 'wyjazdy', element: <CampsPage />},
 			{path: 'wyjazdy/:link', element: <CampsPage />},
 			{path: 'wydarzenia', element: <EventsPage />},

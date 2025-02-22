@@ -294,6 +294,17 @@
 
 	&__btn {
 		@extend %action-btn;
+
+		&--secondary {
+			min-height: auto;
+			height: 2.5rem;
+			line-height: 2.5rem;
+			font-size: 1.2rem;
+			color: map.get(var.$colors, tile-text-muted);
+			background-color: transparent;
+			border: 1px solid map.get(var.$colors, accent-bcg);
+			opacity: 0.6;
+		}
 	}
 	&__summary {
 		grid-column: 1 /-1;
