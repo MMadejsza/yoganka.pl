@@ -11,14 +11,18 @@ function InputLogin({formType, id, label, value, isFocused, didEdit, validationR
 
 			{/* After editing */}
 			{(isFocused || didEdit) && (
-				<div className='control-error'>
+				<ul className='control-error'>
 					{validationResults.map((result, index) => (
 						// List all the rules and messages
-						<p
+						<li
 							key={index}
 							className={
 								// assign proper class
-								result.valid ? 'control-error msg-valid' : 'control-error msg-error'
+								!value
+									? 'control-error__msg msg-help'
+									: result.valid
+									? 'control-error__msg msg-valid'
+									: 'control-error__msg msg-error'
 							}>
 							{/* Assign proper symbol */}
 							{
@@ -29,9 +33,9 @@ function InputLogin({formType, id, label, value, isFocused, didEdit, validationR
 									{result.message}
 								</>
 							}
-						</p>
+						</li>
 					))}
-				</div>
+				</ul>
 			)}
 		</div>
 	);
