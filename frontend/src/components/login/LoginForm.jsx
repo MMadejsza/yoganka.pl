@@ -1,35 +1,46 @@
 import {useState} from 'react';
-import {isEmail, isNotEmpty, hasMinLength, equalsToOtherValue} from '../../utils/validation.js';
+import {emailValidations, passwordValidations, equalsToOtherValue} from '../../utils/validation.js';
 import {useInput} from '../../hooks/useInput.js';
 import InputLogin from './InputLogin.jsx';
 
 function LoginFrom() {
 	const [firstTime, setFirstTime] = useState(false);
 
-	//using custom hook with extracting and reassigning its 'return' for particular inputs and assign validation methods from imported utils
+	//using custom hook with extracting and reassigning its 'return' for particular inputs and assign validation methods from imported utils. Every inout has its won state now
 	const {
 		value: emailValue,
 		handleChange: handleEmailChange,
 		handleBlur: handleEmailBlur,
-		hasError: emailHasError,
 		handleReset: handleEmailReset,
-	} = useInput('', (value) => isEmail(value) && isNotEmpty(value));
+		didEdit: emailDidEdit,
+		validationResults: emailValidationResults,
+		hasError: emailHasError,
+	} = useInput('', emailValidations);
 
 	const {
 		value: passwordValue,
 		handleChange: handlePasswordChange,
 		handleBlur: handlePasswordBlur,
-		hasError: passwordHasError,
 		handleReset: handlePasswordReset,
-	} = useInput('', (value) => hasMinLength(value, 8));
+		didEdit: passwordDidEdit,
+		validationResults: passwordValidationResults,
+		hasError: passwordHasError,
+	} = useInput('', passwordValidations);
 
 	const {
 		value: confirmedPasswordValue,
 		handleChange: handleConfirmedPasswordChange,
 		handleBlur: handleConfirmedPasswordBlur,
-		hasError: confirmedPasswordHasError,
 		handleReset: handleConfirmedPasswordReset,
-	} = useInput('', (value) => equalsToOtherValue(value, passwordValue));
+		didEdit: confirmedPasswordDidEdit,
+		validationResults: confirmedPasswordValidationResults,
+		hasError: confirmedPasswordHasError,
+	} = useInput('', [
+		{
+			rule: (value) => equalsToOtherValue(value, passwordValue),
+			message: 'Hasła nie są identyczne',
+		},
+	]);
 
 	// Decide ig http request is Get or Post
 	const handleFormSwitch = (e) => {
@@ -57,7 +68,7 @@ function LoginFrom() {
 		console.log(data);
 		handleReset();
 
-		// assign registration date
+		//! assign registration date
 	};
 
 	// Dynamically set descriptive names when switching from login in to registration
@@ -96,7 +107,8 @@ function LoginFrom() {
 						placeholder='(Wyślemy link aktywacyjny)'
 						autoComplete='email'
 						required
-						error={emailHasError && 'Podaj prawidłowy email razem z "@"'}
+						validationResults={emailValidationResults}
+						didEdit={emailDidEdit}
 					/>
 					<InputLogin
 						formType={formType}
@@ -109,7 +121,8 @@ function LoginFrom() {
 						onChange={handlePasswordChange}
 						autoComplete='current-password'
 						required
-						error={passwordHasError && 'Hasło musi mieć min 8 znaków'}
+						validationResults={passwordValidationResults}
+						didEdit={passwordDidEdit}
 					/>
 					<InputLogin
 						formType={formType}
@@ -121,7 +134,8 @@ function LoginFrom() {
 						onBlur={handleConfirmedPasswordBlur}
 						onChange={handleConfirmedPasswordChange}
 						required
-						error={confirmedPasswordHasError && 'Hasła nie są identyczne'}
+						validationResults={confirmedPasswordValidationResults}
+						didEdit={confirmedPasswordDidEdit}
 					/>
 					<button
 						type='reset'
