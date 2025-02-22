@@ -24,10 +24,12 @@ export const passwordValidations = [
 		message: 'Przynajmniej 8 znaków',
 	},
 	{
+		// if at least 1x capital letter
 		rule: (value) => /[A-Z]/.test(value),
 		message: 'Przynajmniej jedna wielka litera',
 	},
 	{
+		// if at least 1x special character (^ negation -> of a-z, A-Z and umbers what defines character)
 		rule: (value) => /[^a-zA-Z0-9]/.test(value),
 		message: 'Przynajmniej jeden znak specjalny',
 	},
