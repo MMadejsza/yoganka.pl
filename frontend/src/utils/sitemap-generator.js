@@ -14,6 +14,7 @@ function fetchUrls() {
 		{url: '/wydarzenia/yoga&sound', changefreq: 'weekly', priority: 0.75},
 		{url: '/wydarzenia/sup-yoga', changefreq: 'weekly', priority: 0.75},
 		{url: '/wydarzenia/sniadanie-z-yoga', changefreq: 'weekly', priority: 0.75},
+		{url: '/yoga-dla-firm', changefreq: 'monthly', priority: 0.9},
 	];
 }
 

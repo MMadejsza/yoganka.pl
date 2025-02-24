@@ -20,7 +20,7 @@ export const CAMPS_DATA = [
 			Joga |\u00A0Glina |\u00A0Góry`,
 			dates: [`05-10.08.2025`],
 			location: `Beskid Wyspowy`,
-			desc: `...`,
+			desc: ``,
 			btnsContent: [],
 		},
 		modal: {
@@ -137,7 +137,7 @@ export const CAMPS_DATA = [
 					|\u00A0Aromaterapia`,
 			dates: [`24-26.10.2025`],
 			location: `Mazury`,
-			desc: `...`,
+			desc: ``,
 			btnsContent: [],
 		},
 		modal: {
@@ -244,7 +244,7 @@ export const CAMPS_DATA = [
 			Joga |\u00A0SPA |\u00A0Ajurweda`,
 			dates: [`09-11.05.2025`],
 			location: `Warmia`,
-			desc: `...`,
+			desc: ``,
 			btnsContent: [],
 		},
 		modal: {
@@ -355,7 +355,7 @@ export const CAMPS_DATA = [
 			Joga |\u00A0Biżuteria z\u00A0kamieni |\u00A0Relaks`,
 			dates: [`27-30.06.2025`],
 			location: `Warmia`,
-			desc: `...`,
+			desc: ``,
 			btnsContent: [],
 		},
 		modal: {
@@ -485,7 +485,7 @@ export const CAMPS_DATA = [
 					| Ecstatic Dance`,
 			dates: [`07-09.03.2025`],
 			location: `Mazury`,
-			desc: `...`,
+			desc: ``,
 			btnsContent: [],
 		},
 		modal: {
@@ -608,7 +608,7 @@ export const CAMPS_DATA = [
 		   | SPA | SkinCare`,
 			dates: [`11-13/10/2024`],
 			location: `Kaszuby`,
-			desc: `...`,
+			desc: ``,
 			btnsContent: [],
 		},
 		modal: {
@@ -731,7 +731,7 @@ export const CAMPS_DATA = [
 		   | Misy\u00A0i\u00A0gongi`,
 			dates: [`08-11.11.2024`],
 			location: `Warmia`,
-			desc: `...`,
+			desc: ``,
 			btnsContent: [],
 		},
 

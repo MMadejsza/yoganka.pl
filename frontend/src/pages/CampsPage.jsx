@@ -1,9 +1,9 @@
 import {Helmet} from 'react-helmet';
-import CampsIntoSection from '../components/CampsIntoSection.jsx';
-import CampsBenefitsSection from '../components/CampsBenefitsSection.jsx';
+import CampsIntoSection from '../components/camps/CampsIntoSection.jsx';
+import CampsBenefitsSection from '../components/camps/CampsBenefitsSection.jsx';
 import OfferSection from '../components/OfferSection.jsx';
-import CampsReviewsSection from '../components/CampsReviewsSection.jsx';
-import CampsGalerySection from '../components/CampsGalerySection.jsx';
+import CampsReviewsSection from '../components/camps/CampsReviewsSection.jsx';
+import CampsGalerySection from '../components/camps/CampsGalerySection.jsx';
 import {CAMPS_DATA} from '../DATA/CAMPS_DATA.js';
 
 const products = [{id: 'wyjazdy', header: `Wybierz swój wyjazd`, data: CAMPS_DATA, limit: 0}];

@@ -1,6 +1,6 @@
-import Section from './Section.jsx';
-import GlideContainer from './glide/GlideContainer.jsx';
-import {REVIEWS_DATA} from '../DATA/REVIEWS_DATA.js';
+import Section from '../Section.jsx';
+import GlideContainer from '../glide/GlideContainer.jsx';
+import {REVIEWS_DATA} from '../../DATA/REVIEWS_DATA.js';
 
 function CampsReviewsSection() {
 	const leadingClass = 'reviews';

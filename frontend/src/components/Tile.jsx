@@ -4,8 +4,8 @@ import ImgDynamic from './imgsRelated/ImgDynamic.jsx';
 import Modal from './Modal.jsx';
 import {smoothScrollInto} from '../utils/utils.jsx';
 
-function Tile({data, today}) {
-	const clickable = data.type !== 'class';
+function Tile({data, today, clickable}) {
+	const clickableClass = clickable;
 	const classes = data.type === 'class';
 	const isPast = data.date < today;
 	const navigate = useNavigate();
@@ -15,7 +15,7 @@ function Tile({data, today}) {
 
 	const conditionalClasses = [
 		'tile',
-		clickable ? 'clickable' : '',
+		clickableClass ? 'clickable' : '',
 		classes ? 'tile--classes' : '',
 		isPast ? 'past' : '',
 		data.extraClass ? `tile--${data.extraClass}` : '',
@@ -32,7 +32,7 @@ function Tile({data, today}) {
 		navigate(location.state?.background?.pathname || '/', {replace: true});
 	};
 	// archive
-	if (isPast) data.modal.glance.price = '-';
+	if (isPast && data.modal) data.modal.glance.price = '-';
 
 	const imgPaths = [
 		{path: `${data.imgPath}/320_${data.fileName}_0.jpg`, size: '320w'},
@@ -106,11 +106,29 @@ function Tile({data, today}) {
 
 			{data.front.location && <h4 className='tile__location'>{data.front.location}</h4>}
 
-			{data.front.desc && <p className='tile__desc'>{data.front.desc}</p>}
+			{clickable ? (
+				data.front.desc ? (
+					<p className='tile__desc'>
+						{data.front.desc}
+						<span className='material-symbols-rounded click-suggestion'>
+							web_traffic
+						</span>
+					</p>
+				) : (
+					<p className='tile__desc'>
+						{data.front.desc}
+						<span className='material-symbols-rounded click-suggestion'>
+							web_traffic
+						</span>
+					</p>
+				)
+			) : (
+				<p className='tile__desc'>{data.front.desc}</p>
+			)}
 
 			{data.front.btnsContent?.length > 0 && renderBtns}
 
-			{isModalOpen && (
+			{isModalOpen && clickable && (
 				<Modal
 					visited={isModalOpen}
 					tile={data}

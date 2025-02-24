@@ -3,7 +3,7 @@ import {createPortal} from 'react-dom';
 import {Helmet} from 'react-helmet';
 import GlideContainer from './glide/GlideContainer.jsx';
 import CampGlance from './ModalGlance.jsx';
-import CampDay from './CampDay.jsx';
+import CampDay from './camps/CampDay.jsx';
 import ModalList from './ModalList.jsx';
 
 function Modal({visited, tile, singleImg, onClose, today}) {
@@ -121,10 +121,6 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 					property='og:description'
 					content={`Dowiedz się wszystkiego o wyjeździe do: ${tile.front.location}. Kliknij teraz!`}
 				/>
-				{/* <meta
-					property='og:image'
-					content={metaImgUrl}
-				/> */}
 				<meta
 					property='og:url'
 					content={`https://yoganka.pl/${
@@ -188,7 +184,7 @@ function Modal({visited, tile, singleImg, onClose, today}) {
 							'modal__full-desc',
 							extraClass,
 						)} modal__full-desc--long-text`}>
-						{modal.fullDescTitle && (
+						{modal?.fullDescTitle && (
 							<h3 className='modal__title'>{modal.fullDescTitle}</h3>
 						)}
 						<p className=' modal__full-desc modal__full-desc--content'>

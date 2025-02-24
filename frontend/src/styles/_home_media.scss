@@ -8,6 +8,13 @@
 		--section-padding-y: 2rem;
 		font-size: 9px;
 	}
+	.nav {
+		&__list {
+			&--side {
+				gap: 1rem;
+			}
+		}
+	}
 	.motto {
 		letter-spacing: 0px;
 	}
@@ -154,6 +161,16 @@
 				span {
 					@extend %hover;
 				}
+			}
+		}
+		&__list {
+			&--side {
+				gap: 2.5rem;
+			}
+		}
+		.nav__icon {
+			&.account {
+				font-size: 4.5rem;
 			}
 		}
 	}
@@ -508,10 +525,11 @@
 		border-bottom-left-radius: map.get(var.$sizes, border-radius);
 		border-bottom-right-radius: map.get(var.$sizes, border-radius);
 
-		flex-direction: row;
-		justify-content: center;
-		gap: 3rem;
-
+		& .main-nav-container {
+			order: 2;
+			@include mixin.flex(row, center, center);
+			gap: 2.5rem;
+		}
 		&__logo-container {
 			height: 6rem;
 		}
@@ -534,9 +552,14 @@
 		&__list {
 			width: max-content;
 			margin: 0;
-
 			flex-direction: row;
 			gap: 2rem;
+
+			&--side {
+				align-self: flex-end;
+				margin-right: 2rem;
+				gap: 0rem;
+			}
 		}
 
 		&__link {
@@ -551,8 +574,16 @@
 				box-shadow: map.get(var.$shadows, active-logo-shadow);
 				transition: map.get(var.$behavior, base-transition);
 			}
+
 			.nav__icon {
 				color: map.get(var.$colors, tile-title);
+				&--side {
+					font-size: 2.5rem;
+					color: rgba(map.get(var.$colors, tile-text-muted), 0.5);
+				}
+				&.account {
+					font-size: 3.1rem;
+				}
 			}
 		}
 	}
@@ -693,9 +724,14 @@
 	.about {
 		max-width: 1200px;
 	}
-	.nav {
-		gap: 4rem;
+
+	.main-nav-container {
+		.nav__list {
+			margin-left: 4rem;
+			gap: 4rem;
+		}
 	}
+
 	.about {
 		&__img-container {
 			width: 31%;
@@ -732,9 +768,11 @@
 	}
 }
 @media (min-width: 1400px) {
-	.nav,
-	.nav__list {
-		gap: 5.5rem;
+	.main-nav-container {
+		.nav__list {
+			margin-left: 5.5rem;
+			gap: 5.5rem;
+		}
 	}
 }
 @media (min-width: 1920px) {

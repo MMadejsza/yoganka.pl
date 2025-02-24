@@ -1,6 +1,6 @@
-import Section from './Section.jsx';
-import GlideContainer from './glide/GlideContainer.jsx';
-import {renderJointGalery} from '../utils/utils.jsx';
+import Section from '../Section.jsx';
+import GlideContainer from '../glide/GlideContainer.jsx';
+import {renderJointGalery} from '../../utils/utils.jsx';
 
 function CampsGalerySection({camps, isMobile}) {
 	const leadingClass = 'galery';

@@ -1,10 +1,16 @@
-import Section from './Section.jsx';
+import Section from '../Section.jsx';
+import {useLocation} from 'react-router-dom';
 
-function CampsIntoSection({isMobile}) {
+function CampsIntoSection() {
+	const location = useLocation();
+
 	return (
 		<Section
 			classy='camps-intro'
-			header={`Kobiece Wyjazdy z\u00a0Jogą`}>
+			modifier='camps'
+			header={`Kobiece Wyjazdy z\u00a0Jogą`}
+			iSpecific={true}
+			key={location.pathname}>
 			<article className='about__bio--content camps-intro__welcome-desc'>
 				<p className='about__bio--description'>
 					Zapraszam Cię na moje autorskie, rozwojowe weekendy z jogą w roli głównej. Campy
