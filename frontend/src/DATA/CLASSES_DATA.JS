@@ -51,10 +51,10 @@ export const CLASSES_DATA = [
 			btnsContent: [
 				{
 					action: 'classic',
-					icon: 'fa-brands fa-whatsapp',
-					text: `WhatsApp`,
-					link: whatsAppTemplate(),
-					title: `Wiadomość WhatsApp`,
+					// symbol: 'exit_to_app',
+					symbol: 'calendar_month',
+					text: `Fitssey`,
+					link: 'https://app.fitssey.com/yoganka/frontoffice',
 				},
 			],
 		},
