@@ -1,13 +1,42 @@
 import {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {useMutation} from '@tanstack/react-query';
+import {useInput} from '../../hooks/useInput.js';
+import InputLogin from './InputLogin.jsx';
 import {
 	emailValidations,
 	passwordValidations,
 	getConfirmedPasswordValidations,
 } from '../../utils/validation.js';
-import {useInput} from '../../hooks/useInput.js';
-import InputLogin from './InputLogin.jsx';
+import {formatIsoDateTime} from '../../utils/productViewsUtils.js';
 
 function LoginFrom() {
+	const navigate = useNavigate();
+
+	const {mutate, isPending, isError, error} = useMutation({
+		mutationFn: (formData) => {
+			return fetch('/api/login-pass/login-check', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(formData),
+				credentials: 'include', // include cookies
+			}).then((response) => {
+				if (!response.ok) {
+					throw new Error('Błąd logowania');
+				}
+				return response.json();
+			});
+		},
+		onSuccess: () => {
+			navigate('/admin-console/show-all-users');
+		},
+		onError: (error) => {
+			window.alert(error.message);
+		},
+	});
+
 	const [firstTime, setFirstTime] = useState(false); // state to switch between registration and login in term of labels and http request method
 
 	// using custom hook with extracting and reassigning its 'return' for particular inputs and assign validation methods from imported utils. Every inout has its won state now
@@ -63,14 +92,18 @@ function LoginFrom() {
 	// Submit handling
 	const handleSubmit = async (e) => {
 		e.preventDefault(); // No reloading
+		console.log('Submit triggered');
 
-		if (emailHasError || passwordHasError || confirmedPasswordHasError) {
+		if (emailHasError || passwordHasError || (firstTime && confirmedPasswordHasError)) {
 			return;
 		}
+		console.log('Submit passed errors');
 
 		const fd = new FormData(e.target);
 		const data = Object.fromEntries(fd.entries());
-		console.log(data);
+		data.date = formatIsoDateTime(new Date().toISOString());
+		console.log('sent data:', data);
+		mutate(data);
 		handleReset();
 
 		//! assign registration date
@@ -92,13 +125,19 @@ function LoginFrom() {
 	// Extract values only
 	const {formType, title, switchTitle, actionTitle} = formLabels;
 
-	return (
-		<>
+	let content;
+
+	if (isPending) {
+		content = 'Wysyłanie...';
+	} else if (isError) {
+		content = `Błąd logowania: ${error}'`;
+	} else
+		content = (
 			<section className={formType}>
 				<form
 					action='/api/login-pass/login-check'
 					method='POST'
-					onSubmit={(e) => handleSubmit(e, formDataState)}
+					onSubmit={handleSubmit}
 					className={`${formType}-form`}>
 					<h1 className='form__title'>{title}</h1>
 					{/* names are for FormData and id for labels */}
@@ -164,11 +203,16 @@ function LoginFrom() {
 						onClick={handleFormSwitch}>
 						{switchTitle}
 					</button>
-					<button className={`form-action-btn modal__btn`}>{actionTitle}</button>
+					<button
+						type='submit'
+						className={`form-action-btn modal__btn`}>
+						{actionTitle}
+					</button>
 				</form>
 			</section>
-		</>
-	);
+		);
+
+	return <>{content}</>;
 }
 
 export default LoginFrom;

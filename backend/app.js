@@ -1,5 +1,6 @@
 import express from 'express';
 import session from 'express-session';
+import MySQLStoreFactory from 'express-mysql-session';
 import authRoutes from './routes/authRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import customerRoutes from './routes/customerRoutes.js';
@@ -10,16 +11,35 @@ const app = express();
 // middleware funnels
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
-// secret is used for signing the hash, resave:false - session will not be saved on every request, saveUninitialized: false - that it won't be saved if nothing has changed
+
+const options = {
+	host: 'localhost',
+	port: 3306,
+	user: 'admin1',
+	password: 'admin1',
+	database: 'yoganka',
+};
+
+const MySQLStore = MySQLStoreFactory(session);
+const sessionStore = new MySQLStore(options);
+
 app.use(
 	session({
+		key: 'session_CID',
+		// secret is used for signing the hash, resave:false - session will not be saved on every request, saveUninitialized: false - that it won't be saved if nothing is stored in this session
+		// ! to change
 		secret: 'my secret',
 		resave: false,
 		saveUninitialized: false,
-		cookie: {maxAge: 86400000}, // 1 day in milliseconds
+		store: sessionStore,
+		cookie: {
+			maxAge: 86400000, // 1 day in milisekundach
+			// httpOnly: true,    // Protect from the access from the JavaScript
+			// secure: false,     // Set to true if you use HTTPS
+			// sameSite: 'lax'    // Extra security from CSRF
+		},
 	}),
 );
-// app.use(express.static(path.join(rootDir, '../../frontend/public')));
 
 // Filtering that works only for /admin/*
 app.use(`/login-pass`, authRoutes);

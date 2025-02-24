@@ -57,6 +57,7 @@ export const showAllUsers = (req, res, next) => {
 
 			// ✅ Return response to frontend
 			res.json({
+				isLoggedIn: req.session.isLoggedIn,
 				totalHeaders, // To render
 				content: formattedRecords, // With new names
 			});
@@ -89,7 +90,8 @@ export const showUserByID = (req, res, next) => {
 				return res.redirect('/admin-console/show-all-users');
 			}
 			console.log('✅ user fetched');
-			return res.status(200).json({user});
+
+			return res.status(200).json({isLoggedIn: req.session.isLoggedIn, user});
 		})
 		.catch((err) => console.log(err));
 };
@@ -106,7 +108,10 @@ export const createUser = (req, res, next) => {
 	})
 		.then(() => {
 			console.log('✅ user created');
-			res.status(201).json({message: '✅ User created'});
+			res.status(201).json({
+				isLoggedIn: req.session.isLoggedIn,
+				message: '✅ User created',
+			});
 		})
 		.catch((err) => console.log(err));
 };
@@ -174,9 +179,9 @@ export const showAllCustomers = (req, res, next) => {
 				'Źródło polecenia',
 				'Notatki',
 			];
-
 			// ✅ Return response to frontend
 			res.json({
+				isLoggedIn: req.session.isLoggedIn,
 				totalHeaders, // To render
 				content: formattedRecords, // With new names
 			});
@@ -246,7 +251,7 @@ export const showCustomerByID = (req, res, next) => {
 				return res.redirect('/admin-console/show-all-users');
 			}
 			console.log('✅ customer fetched');
-			return res.status(200).json({customer});
+			return res.status(200).json({isLoggedIn: req.session.isLoggedIn, customer});
 		})
 		.catch((err) => console.log(err));
 };
@@ -331,9 +336,9 @@ export const showAllSchedules = (req, res, next) => {
 				'Nazwa',
 				'Lokalizacja',
 			];
-
 			// ✅ Return response to frontend
 			res.json({
+				isLoggedIn: req.session.isLoggedIn,
 				totalHeaders, // To render
 				content: formattedRecords, // With new names
 			});
@@ -381,8 +386,7 @@ export const showScheduleByID = (req, res, next) => {
 			if (!schedule) {
 				return res.redirect('/admin-console/show-all-schedules');
 			}
-			console.log('✅ Schedule fetched');
-			return res.status(200).json({schedule});
+			return res.status(200).json({isLoggedIn: req.session.isLoggedIn, schedule});
 		})
 		.catch((err) => console.log(err));
 };
@@ -479,6 +483,7 @@ export const showAllParticipantsFeedback = (req, res, next) => {
 
 			// ✅ Return response to frontend
 			res.json({
+				isLoggedIn: req.session.isLoggedIn,
 				totalHeaders, // To render
 				content: formattedRecords, // With new names
 			});
@@ -535,7 +540,9 @@ export const showAllParticipantsFeedbackByID = (req, res, next) => {
 				attributes: {exclude: ['CustomerID', 'ScheduleID']},
 			}).then((otherReviews) => {
 				console.log('✅ Feedback fetched');
-				return res.status(200).json({review, otherReviews});
+				return res
+					.status(200)
+					.json({isLoggedIn: req.session.isLoggedIn, review, otherReviews});
 			});
 		})
 		.catch((err) => console.log(err));
@@ -599,7 +606,7 @@ export const showProductByID = (req, res, next) => {
 				return res.redirect('/admin-console/show-all-products');
 			}
 			console.log('✅ product fetched');
-			return res.status(200).json({product});
+			return res.status(200).json({isLoggedIn: req.session.isLoggedIn, product});
 		})
 		.catch((err) => console.log(err));
 };
@@ -640,7 +647,6 @@ export const showAllBookings = (req, res, next) => {
 
 	// We create dynamic joint columns based on the map
 	const columnMap = columnMaps[model.name] || {};
-	const includeAttributes = [];
 
 	model
 		.findAll({
@@ -709,9 +715,10 @@ export const showAllBookings = (req, res, next) => {
 				'Metoda płatności',
 				'Status płatności',
 			];
-
+			req.session.isLoggedIn = true;
 			// ✅ Zwrócenie odpowiedzi do frontendu
 			res.json({
+				isLoggedIn: req.session.isLoggedIn,
 				totalHeaders,
 				content: formattedRecords,
 			});
@@ -751,7 +758,7 @@ export const showBookingByID = (req, res, next) => {
 				return res.redirect('/admin-console/show-all-bookings');
 			}
 			console.log('✅ Schedule fetched');
-			return res.status(200).json({booking});
+			return res.status(200).json({isLoggedIn: req.session.isLoggedIn, booking});
 		})
 		.catch((err) => console.log(err));
 };
@@ -823,9 +830,10 @@ export const showAllInvoices = (req, res, next) => {
 				'Kwota całkowita',
 				'Status płatności',
 			];
-
+			req.session.isLoggedIn = true;
 			// ✅ Return response to frontend
 			res.json({
+				isLoggedIn: req.session.isLoggedIn,
 				totalHeaders, // To render
 				content: formattedRecords, // With new names
 			});
