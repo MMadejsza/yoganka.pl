@@ -13,15 +13,6 @@ export default defineConfig({
 			removeAll: true,
 		}),
 		react(),
-		// viteImagemin({
-		// 	gifsicle: {optimizationLevel: 7},
-		// 	optipng: {optimizationLevel: 7},
-		// 	svgo: {
-		// 		plugins: [{removeViewBox: false}],
-		// 	},
-		// 	mozjpeg: {quality: 65},
-		// 	webp: {quality: 65},
-		// }),
 	],
 	optimizeDeps: {
 		include: ['@material/web/switch/switch.js'],

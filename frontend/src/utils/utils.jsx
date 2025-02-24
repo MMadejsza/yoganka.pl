@@ -7,7 +7,6 @@ export const smoothScrollInto = (e, navigate, location) => {
 	setTimeout(() => {
 		// fetch prop href from clicked menu tile
 		const targetSelector = e.target.getAttribute('data-scroll');
-		console.log(targetSelector);
 		// Find in Dom first element matching href
 		const targetSection = document.querySelector(targetSelector);
 		// If section exists - scroll to it

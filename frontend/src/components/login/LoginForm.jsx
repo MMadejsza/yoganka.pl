@@ -1,6 +1,7 @@
 import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useMutation} from '@tanstack/react-query';
+import {queryClient} from '../../utils/http.js';
 import {useInput} from '../../hooks/useInput.js';
 import InputLogin from './InputLogin.jsx';
 import {
@@ -30,6 +31,7 @@ function LoginFrom() {
 			});
 		},
 		onSuccess: () => {
+			queryClient.invalidateQueries(['authStatus']);
 			navigate('/admin-console/show-all-users');
 		},
 		onError: (error) => {

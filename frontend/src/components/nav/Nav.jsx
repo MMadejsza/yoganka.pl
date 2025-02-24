@@ -1,4 +1,6 @@
 import React, {useState, useEffect} from 'react';
+import {useQuery, useMutation} from '@tanstack/react-query';
+import {fetchStatus, queryClient} from '../../utils/http.js';
 import {Link, NavLink, useNavigate, useLocation} from 'react-router-dom';
 import Logo from '../Logo.jsx';
 import {smoothScrollInto} from '../../utils/utils.jsx';
@@ -56,16 +58,50 @@ const menuSideSet = [
 		scroll: '#wydarzenia',
 	},
 	{
+		auth: true,
+		name: 'Zaloguj',
+		symbol: 'login',
+		link: '/login',
+		text: 'Zaloguj',
+	},
+	{
+		auth: true,
 		name: 'Konto',
 		symbol: 'account_circle',
 		link: '/login',
-		// scroll: '.certificates',
+	},
+	{
+		auth: true,
+		name: 'Wyloguj',
+		symbol: 'logout',
+		link: '/login-pass/logout',
+		// text: 'Wyloguj',
 	},
 ];
 
 function Nav({setIsNavOpen}) {
 	const navigate = useNavigate();
 	const location = useLocation();
+
+	const {data, isLoading, isError, error} = useQuery({
+		queryKey: ['authStatus'],
+		queryFn: fetchStatus,
+	});
+	const logoutMutation = useMutation({
+		mutationFn: async () =>
+			await fetch('/api/login-pass/logout', {
+				method: 'POST',
+				credentials: 'include',
+			}).then((res) => {
+				if (!res.ok) throw new Error('Wylogowanie nie powiodło się');
+				return res.json();
+			}),
+		onSuccess: () => {
+			// Invalidate query to reload layout
+			queryClient.invalidateQueries(['authStatus']);
+			navigate('/');
+		},
+	});
 
 	const [isMobile, setIsMobile] = useState(false);
 
@@ -92,6 +128,74 @@ function Nav({setIsNavOpen}) {
 		return () => mediaQuery.removeEventListener('change', handleMediaChange);
 	}, []);
 
+	const handleLogout = () => {
+		logoutMutation.mutate();
+	};
+
+	const liContent = (li) => {
+		// For restricted content
+		if (li.auth) {
+			// If logged In
+			if (data?.isLoggedIn) {
+				// Hide LogIn option
+				if (li.name === 'Zaloguj') {
+					return null;
+				}
+				// Logout turn into btn triggering fetch
+				if (li.name === 'Wyloguj') {
+					return (
+						<li
+							key={li.name}
+							className='nav__item nav__item--side'>
+							<button
+								onClick={handleLogout}
+								className='nav__link nav__link--side'>
+								{li.symbol ? (
+									<span className='material-symbols-rounded nav__icon nav__icon--side account'>
+										{li.symbol}
+									</span>
+								) : li.icon ? (
+									<i
+										className={`${li.icon} nav__icon nav__icon--side`}
+										aria-hidden='true'></i>
+								) : null}
+								{li.text ?? li.name}
+							</button>
+						</li>
+					);
+				}
+			} else {
+				// If NOT logged in, both account and logout tabs are hidden
+				if (li.name === 'Konto' || li.name === 'Wyloguj') {
+					return null;
+				}
+			}
+		}
+		// Rest of elements
+		return (
+			<li
+				key={li.name}
+				className='nav__item nav__item--side'>
+				<Link
+					onClick={() => window.scrollTo(0, 0)}
+					to={li.link}
+					className='nav__link nav__link--side'>
+					{li.symbol ? (
+						<span className='material-symbols-rounded nav__icon nav__icon--side account'>
+							{li.symbol}
+						</span>
+					) : li.icon ? (
+						<i
+							className={`${li.icon} nav__icon nav__icon--side`}
+							aria-hidden='true'></i>
+					) : null}
+					{li.text ?? null}
+				</Link>
+			</li>
+		);
+	};
+
+	console.log(data?.isLoggedIn);
 	return (
 		<nav className='nav'>
 			<div className='main-nav-container'>
@@ -162,28 +266,7 @@ function Nav({setIsNavOpen}) {
 					))}
 				</ul>
 			</div>
-			<ul className='nav__list nav__list--side'>
-				{menuSideSet.map((li) => (
-					<li
-						key={li.name}
-						className='nav__item nav__item--side'>
-						<Link
-							onClick={() => window.scrollTo(0, 0)}
-							to={li.link}
-							className='nav__link nav__link--side'>
-							{li.symbol ? (
-								<span className='material-symbols-rounded nav__icon nav__icon--side account'>
-									{li.symbol}
-								</span>
-							) : li.icon ? (
-								<i
-									className={`${li.icon} nav__icon nav__icon--side`}
-									aria-hidden='true'></i>
-							) : null}
-						</Link>
-					</li>
-				))}
-			</ul>
+			<ul className='nav__list nav__list--side'>{menuSideSet.map((li) => liContent(li))}</ul>
 		</nav>
 	);
 }

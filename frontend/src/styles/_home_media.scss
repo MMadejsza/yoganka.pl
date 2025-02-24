@@ -585,6 +585,10 @@
 					font-size: 3.1rem;
 				}
 			}
+			&--side {
+				font-size: 1.5rem;
+				line-height: 150%;
+			}
 		}
 	}
 	.logo-writing__container {
@@ -711,6 +715,9 @@
 @media (min-width: 1080px) {
 	.nav__link {
 		font-size: 2rem;
+		&--side {
+			font-size: 1.5rem;
+		}
 	}
 }
 @media (min-width: 1280px) {
@@ -749,9 +756,6 @@
 		padding: 1.5rem 4rem;
 	}
 	.partners {
-		.glide__track {
-			// height: 50vh;
-		}
 		&__gallery-slide {
 			&::before {
 				width: 5vw;
