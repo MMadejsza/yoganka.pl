@@ -12,15 +12,15 @@ export default defineConfig({
 			removeAll: true,
 		}),
 		react(),
-		viteImagemin.default({
-			gifsicle: {optimizationLevel: 7},
-			optipng: {optimizationLevel: 7},
-			svgo: {
-				plugins: [{removeViewBox: false}],
-			},
-			mozjpeg: {quality: 65},
-			webp: {quality: 65},
-		}),
+		// viteImagemin.default({
+		// 	gifsicle: {optimizationLevel: 7},
+		// 	optipng: {optimizationLevel: 7},
+		// 	svgo: {
+		// 		plugins: [{removeViewBox: false}],
+		// 	},
+		// 	mozjpeg: {quality: 65},
+		// 	webp: {quality: 65},
+		// }),
 	],
 	// root: 'public',  // Main folder to src
 	publicDir: 'public',
