@@ -209,6 +209,15 @@ function LoginFrom() {
 						{actionTitle}
 					</button>
 				</form>
+				<form
+					action='/api/login-pass/logout'
+					method='POST'>
+					<button
+						type='submit'
+						className={`form-action-btn modal__btn`}>
+						Wyloguj
+					</button>
+				</form>
 			</section>
 		);
 
