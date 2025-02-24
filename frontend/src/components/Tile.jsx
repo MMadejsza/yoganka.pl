@@ -106,25 +106,12 @@ function Tile({data, today, clickable}) {
 
 			{data.front.location && <h4 className='tile__location'>{data.front.location}</h4>}
 
-			{clickable ? (
-				data.front.desc ? (
-					<p className='tile__desc'>
-						{data.front.desc}
-						<span className='material-symbols-rounded click-suggestion'>
-							web_traffic
-						</span>
-					</p>
-				) : (
-					<p className='tile__desc'>
-						{data.front.desc}
-						<span className='material-symbols-rounded click-suggestion'>
-							web_traffic
-						</span>
-					</p>
-				)
-			) : (
-				<p className='tile__desc'>{data.front.desc}</p>
-			)}
+			<p className='tile__desc'>
+				{data.front.desc.normalize('NFC') ?? null}
+				{clickable && (
+					<span className='material-symbols-rounded click-suggestion'>web_traffic</span>
+				)}
+			</p>
 
 			{data.front.btnsContent?.length > 0 && renderBtns}
 

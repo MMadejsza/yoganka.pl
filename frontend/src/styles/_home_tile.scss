@@ -128,6 +128,7 @@
 	&__desc {
 		font-size: 1.9rem;
 		white-space: pre-line;
+		font-family: 'EB Garamond', serif;
 		color: map.get(var.$colors, tile-text-muted);
 	}
 

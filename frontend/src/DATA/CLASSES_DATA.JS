@@ -19,7 +19,7 @@ export const CLASSES_DATA = [
 			title: `Stacjonarne Gdańsk`,
 			dates: [],
 			location: ``,
-			desc: ``,
+			desc: 'Sprawdź, gdzie możesz ze\u00A0mną poćwiczyć',
 			btnsContent: [
 				{
 					action: 'classic',
@@ -47,13 +47,13 @@ export const CLASSES_DATA = [
 			title: `Online`,
 			dates: [],
 			location: ``,
-			desc: ``,
+			desc: 'Ćwiczysz ze\u00A0mną z\u00A0dowolnego miejsca:\n\n ZOOM |\u00A0GOOGLE\u00A0MEET',
 			btnsContent: [
 				{
 					action: 'classic',
 					// symbol: 'exit_to_app',
 					symbol: 'calendar_month',
-					text: `Fitssey`,
+					text: `Grafik`,
 					link: 'https://app.fitssey.com/yoganka/frontoffice',
 				},
 			],
