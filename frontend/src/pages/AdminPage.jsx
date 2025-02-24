@@ -81,7 +81,6 @@ function AdminPage() {
 	};
 	const pickedModifier = pickModifier(location.pathname);
 
-	// console.log(`location.pathname admin page: ${location.pathname}`);
 	const {data, isLoading, isError, error} = useQuery({
 		// as id for later caching received data to not send the same request again where location.pathname is key
 		queryKey: ['data', location.pathname],

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {NavLink, useNavigate, useLocation} from 'react-router-dom';
+import {Link, NavLink, useNavigate, useLocation} from 'react-router-dom';
 import Logo from '../Logo.jsx';
 import {smoothScrollInto} from '../../utils/utils.jsx';
 const menuSet = [
@@ -55,12 +55,12 @@ const menuSideSet = [
 		link: 'https://www.facebook.com/profile.php?id=100094192084948',
 		scroll: '#wydarzenia',
 	},
-	// {
-	// 	name: 'Konto',
-	// 	symbol: 'account_circle',
-	// 	link: '/',
-	// 	scroll: '.certificates',
-	// },
+	{
+		name: 'Konto',
+		symbol: 'account_circle',
+		link: '/login',
+		// scroll: '.certificates',
+	},
 ];
 
 function Nav({setIsNavOpen}) {
@@ -138,7 +138,7 @@ function Nav({setIsNavOpen}) {
 							) : (
 								<NavLink
 									to={li.link}
-									onClick={(e) => {
+									onClick={() => {
 										closeDrawer();
 										window.scrollTo(0, 0);
 									}}
@@ -167,14 +167,10 @@ function Nav({setIsNavOpen}) {
 					<li
 						key={li.name}
 						className='nav__item nav__item--side'>
-						<a
-							onClick={(e) => {
-								li.action(e, navigate, location);
-								closeDrawer();
-							}}
-							href={li.link}
-							className='nav__link nav__link--side'
-							data-scroll={li.scroll}>
+						<Link
+							onClick={() => window.scrollTo(0, 0)}
+							to={li.link}
+							className='nav__link nav__link--side'>
 							{li.symbol ? (
 								<span className='material-symbols-rounded nav__icon nav__icon--side account'>
 									{li.symbol}
@@ -184,7 +180,7 @@ function Nav({setIsNavOpen}) {
 									className={`${li.icon} nav__icon nav__icon--side`}
 									aria-hidden='true'></i>
 							) : null}
-						</a>
+						</Link>
 					</li>
 				))}
 			</ul>
