@@ -300,7 +300,7 @@ export const showAllSchedules = (req, res, next) => {
 			include: [
 				{
 					model: models.Product,
-					attributes: ['Type', 'Name'],
+					attributes: ['Type', 'Name', 'Price'],
 				},
 				bookingInclude,
 			],
@@ -330,13 +330,14 @@ export const showAllSchedules = (req, res, next) => {
 					} else if (key === 'Product' && jsonRecord[key]) {
 						newRecord['Typ'] = jsonRecord[key].Type; //  flatten object
 						newRecord['Nazwa'] = jsonRecord[key].Name;
-					} else if (key === 'Bookings') {
+					} else if (key === 'Bookings' && req.user.Customer) {
 						newRecord.bookedByUser = (jsonRecord.Bookings || []).length > 0;
 					} else {
 						newRecord[newKey] = jsonRecord[key]; // Assignment
 					}
 				}
 				newRecord['Dzień'] = getWeekDay(jsonRecord['Date']);
+				newRecord['Zadatek'] = jsonRecord.Product.Price;
 				return newRecord; // Return new record object
 			});
 
@@ -353,7 +354,7 @@ export const showAllSchedules = (req, res, next) => {
 			];
 			// ✅ Return response to frontend
 			res.json({
-				isLoggedIn: req.session.isLoggedIn,
+				isLoggedIn: req.session.isLoggedIn || false,
 				totalHeaders, // To render
 				content: formattedRecords, // With new names
 			});

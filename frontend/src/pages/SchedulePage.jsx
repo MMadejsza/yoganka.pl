@@ -1,9 +1,10 @@
 import {useQuery} from '@tanstack/react-query';
 import {useLocation, useNavigate, useMatch} from 'react-router-dom';
 import {useState} from 'react';
-import {fetchData} from '../utils/http.js';
+import {fetchData, queryClient} from '../utils/http.js';
 import ViewFrame from '../components/adminConsole/ViewFrame.jsx';
 import Section from '../components/Section.jsx';
+import {useMutation} from '@tanstack/react-query';
 
 function SchedulePage() {
 	const modalMatch = useMatch('/grafik/:id');
@@ -20,6 +21,7 @@ function SchedulePage() {
 
 	const handleCloseModal = () => {
 		setIsModalOpen(false);
+		reset(); // resets mutation state and flags
 		navigate(location.state?.background?.pathname || '/', {replace: true});
 	};
 
@@ -34,6 +36,42 @@ function SchedulePage() {
 		staleTime: 10000,
 		// how long tada is cached (default 5 mins)
 		// gcTime:30000
+	});
+	const {
+		mutate,
+		isError: isMutateError,
+		error: mutateError,
+		reset,
+	} = useMutation({
+		mutationFn: async ({scheduleID, productName, productPrice}) =>
+			await fetch(`/api/grafik/book/${scheduleID}`, {
+				method: 'POST',
+				body: JSON.stringify({
+					schedule: scheduleID,
+					date: new Date().toISOString().split('T')[0],
+					product: productName,
+					status: 'Paid',
+					amountPaid: productPrice,
+					amountDue: 0,
+					paymentMethod: 'Credit Card',
+					paymentStatus: 'Completed',
+				}),
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				credentials: 'include',
+			}).then((response) => {
+				if (!response.ok) {
+					return response.json().then((errorData) => {
+						throw new Error(errorData.error || 'Błąd podczas rezerwacji');
+					});
+				}
+				return response.json();
+			}),
+		onSuccess: () => {
+			queryClient.invalidateQueries(['data', location.pathname]);
+			navigate('/grafik');
+		},
 	});
 
 	let content;
@@ -64,13 +102,38 @@ function SchedulePage() {
 					{data.content.map((row, rowIndex) => (
 						<tr
 							className={`data-table__cells schedule active ${
-								row.bookedByUser ? 'booked' : ''
+								row.bookedByUser && data.isLoggedIn ? 'booked' : ''
 							}`}
 							key={rowIndex}>
 							{headers.map((header, headerIndex) => {
 								let value = row[header];
 								if (typeof value === 'object' && value !== null) {
 									value = Object.values(value);
+								}
+
+								if (header == '') {
+									value = (
+										<span
+											onClick={
+												!row.bookedByUser && data.isLoggedIn
+													? (e) => {
+															e.stopPropagation();
+															mutate({
+																scheduleID: row['ID'],
+																productName: row['Nazwa'],
+																productPrice: row['Zadatek'],
+															});
+													  }
+													: null
+											}
+											className='material-symbols-rounded nav__icon nav__icon--side account'>
+											{data.isLoggedIn
+												? row.bookedByUser
+													? 'check'
+													: 'shopping_bag_speed'
+												: 'lock_person'}
+										</span>
+									);
 								}
 								return (
 									<td
@@ -100,6 +163,7 @@ function SchedulePage() {
 					modifier='schedule'
 					visited={isModalOpen}
 					onClose={handleCloseModal}
+					bookingOps={{onBook: mutate, isError: isMutateError, error: mutateError}}
 				/>
 			)}
 		</div>

@@ -16,19 +16,8 @@ export const showScheduleByID = (req, res, next) => {
 				through: {attributes: []}, // omit data from mid table
 				required: false,
 				attributes: {
-					exclude: ['Product', 'CustomerID'],
+					exclude: ['Product'],
 				},
-			},
-			{
-				model: models.Feedback,
-				required: false,
-				include: [
-					{
-						model: models.Customer,
-						attributes: {exclude: ['UserID']},
-					},
-				],
-				attributes: {exclude: ['CustomerID']},
 			},
 		],
 	})
@@ -39,10 +28,17 @@ export const showScheduleByID = (req, res, next) => {
 
 			// Convert to JSON
 			const schedule = scheduleData.toJSON();
+			let bookedByUser = false;
 
 			// We substitute bookings content for security
 			if (schedule.Bookings) {
+				if (req.user && req.user.Customer) {
+					bookedByUser = schedule.Bookings.some(
+						(booking) => booking.CustomerID === req.user.Customer.CustomerID,
+					);
+				}
 				schedule.Bookings = schedule.Bookings.length;
+				schedule.bookedByUser = bookedByUser;
 			}
 
 			return res

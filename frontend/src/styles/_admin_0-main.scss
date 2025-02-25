@@ -162,6 +162,15 @@
 			&:first-child {
 				padding-top: 2rem;
 			}
+
+			&:not(.booked) span {
+				cursor: pointer;
+				color: map.get(var.$colors, accent-bcg);
+				text-shadow: map.get(var.$shadows, active-text-icons-shadow);
+			}
+			&.booked span {
+				color: green;
+			}
 		}
 
 		&__single-cell {
@@ -264,7 +273,7 @@
 			}
 		}
 		.modal__btn.book {
-			flex-basis: 55%;
+			flex-basis: 60%;
 			margin-top: 3rem;
 		}
 	}

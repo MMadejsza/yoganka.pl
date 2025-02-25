@@ -12,7 +12,7 @@ import ViewSchedule from './ViewSchedule.jsx';
 import ViewBooking from './ViewBooking.jsx';
 import ViewReview from './ViewReview.jsx';
 
-function ViewFrame({modifier, visited, onClose}) {
+function ViewFrame({modifier, visited, onClose, bookingOps}) {
 	const params = useParams();
 	const location = useLocation();
 	const callPath = location.pathname;
@@ -47,7 +47,12 @@ function ViewFrame({modifier, visited, onClose}) {
 				controller.recordEditor = '';
 				return controller;
 			case 'schedule':
-				controller.recordDisplay = <ViewSchedule data={data} />;
+				controller.recordDisplay = (
+					<ViewSchedule
+						data={data}
+						bookingOps={bookingOps}
+					/>
+				);
 				controller.recordEditor = '';
 				return controller;
 			case 'booking':
