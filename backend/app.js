@@ -5,6 +5,8 @@ import authRoutes from './routes/authRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import customerRoutes from './routes/customerRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import * as models from './models/_index.js';
+import db from './utils/db.js';
 
 const app = express();
 
@@ -41,6 +43,22 @@ app.use(
 	}),
 );
 
+app.use((req, res, next) => {
+	models.User.findByPk(1, {
+		include: [
+			{
+				model: models.Customer, // Add Customer
+				required: false,
+			},
+		],
+	}) // May not exist)
+		.then((user) => {
+			req.user = user;
+			next();
+		})
+		.catch((err) => console.log(err));
+});
+
 // Filtering that works only for /admin/*
 app.use(`/login-pass`, authRoutes);
 app.use(`/admin-console`, adminRoutes);
@@ -51,4 +69,11 @@ app.use((req, res) => {
 	res.status(404).send(`<h1>Page not found</h1>`);
 });
 
-app.listen(3000, () => console.log('🚀 Backend works on http://localhost:3000'));
+db.sync()
+	.then((result) => {
+		return models.Customer.findByPk(1);
+	})
+	.then((customer) => {
+		console.log(customer);
+		app.listen(3000, () => console.log('🚀 Backend works on http://localhost:3000'));
+	});

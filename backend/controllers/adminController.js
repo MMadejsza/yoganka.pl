@@ -7,6 +7,7 @@ import {formatIsoDateTime, getWeekDay} from '../utils/formatDateTime.js';
 //@ USERS
 export const showAllUsers = (req, res, next) => {
 	console.log(`➡️ called showAllUsers`);
+	console.log(`➡️ called showAllUsers`, req.user);
 	const model = models.User;
 	model
 		.findAll({

@@ -18,20 +18,18 @@ const menuSet = [
 		scroll: '#wydarzenia',
 		action: smoothScrollInto, //to delete
 	},
-	{
-		name: 'Certyfikaty',
-		symbol: 'verified', // Badge reflects achievements and certificates in a subtle way
-		link: '/',
-		scroll: '.certificates',
-		action: smoothScrollInto,
-	},
 	// {
-	// 	name: 'Kontakt',
-	// 	symbol: 'chat', // Light and informal symbol for easy communication
+	// 	name: 'Certyfikaty',
+	// 	symbol: 'verified', // Badge reflects achievements and certificates in a subtle way
 	// 	link: '/',
-	// 	scroll: '.footer__socials',
+	// 	scroll: '.certificates',
 	// 	action: smoothScrollInto,
 	// },
+	{
+		name: 'Grafik',
+		symbol: 'event', // Light and informal symbol for easy communication
+		link: '/grafik',
+	},
 	{
 		name: 'Dla firm',
 		symbol: 'work',
