@@ -1,0 +1,107 @@
+import {useQuery} from '@tanstack/react-query';
+import {useLocation, useNavigate, useMatch} from 'react-router-dom';
+import {useState} from 'react';
+import {fetchData} from '../utils/http.js';
+import ViewFrame from '../components/adminConsole/ViewFrame.jsx';
+import Section from '../components/Section.jsx';
+
+function SchedulePage() {
+	const modalMatch = useMatch('/grafik/:id');
+	const navigate = useNavigate();
+	const location = useLocation(); // fetch current path
+
+	const [isModalOpen, setIsModalOpen] = useState(modalMatch);
+
+	const handleOpenModal = (row) => {
+		const recordId = row.ID;
+		setIsModalOpen(true);
+		navigate(`${location.pathname}/${recordId}`, {state: {background: location}});
+	};
+
+	const handleCloseModal = () => {
+		setIsModalOpen(false);
+		navigate(location.state?.background?.pathname || '/', {replace: true});
+	};
+
+	const {data, isLoading, isError, error} = useQuery({
+		// as id for later caching received data to not send the same request again where location.pathname is key
+		queryKey: ['data', location.pathname],
+		// definition of the code sending the actual request- must be returning the promise
+		queryFn: () => fetchData('/grafik'),
+		// only when location.pathname is set extra beyond admin panel:
+		// enabled: location.pathname.includes('grafik'),
+		// stopping unnecessary requests when jumping tabs
+		staleTime: 10000,
+		// how long tada is cached (default 5 mins)
+		// gcTime:30000
+	});
+
+	let content;
+
+	if (isError) {
+		window.alert(error.info?.message || 'Failed to fetch');
+	}
+	if (data) {
+		// console.clear();
+		console.log(`✅ Data: `);
+		console.log(data);
+
+		const headers = data.totalHeaders.slice(1);
+		content = (
+			<table className='data-table'>
+				<thead className='data-table__headers'>
+					<tr>
+						{headers.map((header, index) => (
+							<th
+								className='data-table__single-header'
+								key={index}>
+								{header}
+							</th>
+						))}
+					</tr>
+				</thead>
+				<tbody>
+					{data.content.map((row, rowIndex) => (
+						<tr
+							className={`data-table__cells schedule active`}
+							key={rowIndex}>
+							{headers.map((header, headerIndex) => {
+								let value = row[header];
+								if (typeof value === 'object' && value !== null) {
+									value = Object.values(value);
+								}
+								return (
+									<td
+										onClick={() => handleOpenModal(row)}
+										className='data-table__single-cell'
+										key={headerIndex}>
+										{value || '-'}
+									</td>
+								);
+							})}
+						</tr>
+					))}
+				</tbody>
+			</table>
+		);
+	}
+
+	return (
+		<div className='admin-console'>
+			<Section
+				classy='admin-intro'
+				header={`Campy/Wydarzenia/Zajęcia online`}
+			/>
+			{content}
+			{isModalOpen && (
+				<ViewFrame
+					modifier='schedule'
+					visited={isModalOpen}
+					onClose={handleCloseModal}
+				/>
+			)}
+		</div>
+	);
+}
+
+export default SchedulePage;

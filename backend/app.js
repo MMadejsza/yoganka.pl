@@ -63,7 +63,7 @@ app.use((req, res, next) => {
 app.use(`/login-pass`, authRoutes);
 app.use(`/admin-console`, adminRoutes);
 app.use(`/customer`, customerRoutes);
-app.use(`/user`, userRoutes);
+app.use(`/`, userRoutes);
 
 app.use((req, res) => {
 	res.status(404).send(`<h1>Page not found</h1>`);

@@ -1,5 +1,5 @@
 function DetailsProductStats({data, prodStats, placement}) {
-	console.clear();
+	// console.clear();
 	console.log(
 		`📝 
         data object from DetailsProductStats:`,

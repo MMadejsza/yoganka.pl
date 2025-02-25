@@ -1,6 +1,6 @@
 import {durationToSeconds, secondsToDuration, getWeekDay} from '../../utils/customerViewsUtils.js';
 
-function DetailsSchedule({data}) {
+function DetailsSchedule({data, userAccessed}) {
 	// console.log(
 	// 	`📝
 	//     Schedule object from backend:`,
@@ -13,10 +13,19 @@ function DetailsSchedule({data}) {
 	const formattedDuration = `${splitDuration.days != '00' ? splitDuration.days + ' dni' : ''} ${
 		splitDuration.hours != '00' ? splitDuration.hours + ' godzin' : ''
 	} ${splitDuration.minutes != '00' ? splitDuration.minutes + ' minut' : ''}`;
+
 	return (
 		<>
 			<h2 className='user-container__section-title modal__title--day'>{`Szczegóły terminu:`}</h2>
 			<ul className='user-container__details-list modal-checklist__list'>
+				<li className='user-container__section-record modal-checklist__li'>
+					<p className='user-container__section-record-label'>Uczestnicy:</p>
+					<p className='user-container__section-record-content'>
+						{`${userAccessed ? schedule.Bookings : schedule.Bookings.length} / ${
+							product.TotalSpaces
+						}`}
+					</p>
+				</li>
 				<li className='user-container__section-record modal-checklist__li'>
 					<p className='user-container__section-record-label'>Data:</p>
 					<p className='user-container__section-record-content'>

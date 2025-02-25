@@ -197,6 +197,9 @@
 		&__user-title {
 			flex-basis: 100%;
 			margin: 0;
+			&:nth-last-of-type(1) {
+				margin-bottom: 3rem;
+			}
 		}
 		&__user-status {
 			font-size: 1.5rem;
@@ -259,6 +262,10 @@
 			&--phone {
 				// flex-basis: 100%;
 			}
+		}
+		.modal__btn.book {
+			flex-basis: 55%;
+			margin-top: 3rem;
 		}
 	}
 

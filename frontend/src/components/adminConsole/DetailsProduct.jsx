@@ -1,6 +1,6 @@
 import {durationToSeconds, secondsToDuration} from '../../utils/customerViewsUtils.js';
 
-function DetailsProduct({data, placement}) {
+function DetailsProduct({data, placement, userAccessed}) {
 	console.log(
 		`📝 
         product object from backend:`,
@@ -14,14 +14,14 @@ function DetailsProduct({data, placement}) {
 	} ${splitDuration.minutes != '00' ? splitDuration.minutes + ' minut' : ''}`;
 	return (
 		<>
-			<h2 className='user-container__section-title modal__title--day'>{`Dane Produktu:`}</h2>
+			<h2 className='user-container__section-title modal__title--day'>{`Szczegóły zajęć:`}</h2>
 
 			<ul className='user-container__details-list modal-checklist__list'>
 				<li className='user-container__section-record modal-checklist__li'>
 					<p className='user-container__section-record-label'>Typ:</p>
 					<p className='user-container__section-record-content'>{product.Type}</p>
 				</li>
-				{placement == 'schedule' && (
+				{placement == 'schedule' && !userAccessed && (
 					<li className='user-container__section-record modal-checklist__li'>
 						<p className='user-container__section-record-label'>Nazwa:</p>
 						<p className='user-container__section-record-content'>{product.Name}</p>
@@ -54,10 +54,14 @@ function DetailsProduct({data, placement}) {
 						</li>
 					</>
 				)}
-				<li className='user-container__section-record modal-checklist__li'>
-					<p className='user-container__section-record-label'>Miejsc:</p>
-					<p className='user-container__section-record-content'>{product.TotalSpaces}</p>
-				</li>
+				{!userAccessed && (
+					<li className='user-container__section-record modal-checklist__li'>
+						<p className='user-container__section-record-label'>Miejsc:</p>
+						<p className='user-container__section-record-content'>
+							{product.TotalSpaces}
+						</p>
+					</li>
+				)}
 				<li className='user-container__section-record modal-checklist__li'>
 					<p className='user-container__section-record-label'>Zadatek:</p>
 					<p className='user-container__section-record-content'>{product.Price}zł</p>
