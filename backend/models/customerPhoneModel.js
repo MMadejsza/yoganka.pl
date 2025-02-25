@@ -11,7 +11,7 @@ const CustomerPhones = sequelizeDb.define(
 			primaryKey: true,
 
 			references: {
-				model: 'Customer', // The name of the target table
+				model: 'customers', // The name of the target table
 				key: 'CustomerID', // The name of the column in the target table
 			},
 		},

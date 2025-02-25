@@ -14,7 +14,7 @@ const Booking = sequelizeDb.define(
 			type: DataTypes.INTEGER,
 			allowNull: false,
 			references: {
-				model: 'Customer', // The name of the target table
+				model: 'customers', // The name of the target table
 				key: 'CustomerID', // The name of the column in the target table
 			},
 		},

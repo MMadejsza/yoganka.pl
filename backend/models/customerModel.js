@@ -13,7 +13,7 @@ const Customer = sequelizeDb.define(
 			type: DataTypes.INTEGER,
 			allowNull: false,
 			references: {
-				model: 'User', // The name of the target table
+				model: 'users', // The name of the target table
 				key: 'UserID', // The name of the column in the target table
 			},
 		},

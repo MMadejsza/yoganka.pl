@@ -13,7 +13,7 @@ const ScheduleRecord = sequelizeDb.define(
 			type: DataTypes.INTEGER,
 			allowNull: false,
 			references: {
-				model: 'Product', // The name of the target table
+				model: 'products', // The name of the target table
 				key: 'ProductID', // The name of the column in the target table
 			},
 		},

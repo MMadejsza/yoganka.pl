@@ -46,7 +46,7 @@ function SchedulePage() {
 		console.log(`✅ Data: `);
 		console.log(data);
 
-		const headers = data.totalHeaders.slice(1);
+		const headers = data.totalHeaders; //.slice(1);
 		content = (
 			<table className='data-table'>
 				<thead className='data-table__headers'>
@@ -63,7 +63,9 @@ function SchedulePage() {
 				<tbody>
 					{data.content.map((row, rowIndex) => (
 						<tr
-							className={`data-table__cells schedule active`}
+							className={`data-table__cells schedule active ${
+								row.bookedByUser ? 'booked' : ''
+							}`}
 							key={rowIndex}>
 							{headers.map((header, headerIndex) => {
 								let value = row[header];

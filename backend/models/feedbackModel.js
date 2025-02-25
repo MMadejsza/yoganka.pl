@@ -13,7 +13,7 @@ export const Feedback = sequelizeDb.define(
 			type: DataTypes.INTEGER(11),
 			allowNull: false,
 			references: {
-				model: 'Customer',
+				model: 'customers',
 				key: 'CustomerID',
 			},
 		},
@@ -21,7 +21,7 @@ export const Feedback = sequelizeDb.define(
 			type: DataTypes.INTEGER(11),
 			allowNull: false,
 			references: {
-				model: 'ScheduleRecord',
+				model: 'schedule_records',
 				key: 'ScheduleID',
 			},
 		},

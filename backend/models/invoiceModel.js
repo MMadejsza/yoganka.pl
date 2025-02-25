@@ -13,7 +13,7 @@ const Invoice = sequelizeDb.define(
 			type: DataTypes.INTEGER,
 			allowNull: false,
 			references: {
-				model: 'Booking', // The name of the target table
+				model: 'bookings', // The name of the target table
 				key: 'BookingID', // The name of the column in the target table
 			},
 		},

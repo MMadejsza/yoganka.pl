@@ -13,6 +13,7 @@ import SchedulePage from './pages/SchedulePage.jsx';
 import ErrorPage from './pages/ErrorPage.jsx';
 import AdminPage from './pages/AdminPage.jsx';
 import ViewFrame from './components/adminConsole/ViewFrame.jsx';
+
 const router = createBrowserRouter([
 	{
 		path: '/',
@@ -28,6 +29,7 @@ const router = createBrowserRouter([
 			{path: 'yoga-dla-firm', element: <B2BPage />},
 			{path: 'grafik', element: <SchedulePage />},
 			{path: 'grafik/:id', element: <SchedulePage />},
+			{path: 'grafik/book/:id', element: <SchedulePage />},
 			{
 				path: 'admin-console',
 				element: <AdminPage />,

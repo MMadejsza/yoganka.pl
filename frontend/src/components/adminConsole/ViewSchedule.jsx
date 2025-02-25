@@ -5,10 +5,11 @@ import DetailsProductBookings from './DetailsProductBookings.jsx';
 import DetailsProductReviews from './DetailsProductReviews.jsx';
 import {calculateProductStats} from '../../utils/productViewsUtils.js';
 import {useMutation} from '@tanstack/react-query';
-
+import {useNavigate} from 'react-router-dom';
 // import {calculateStats} from '../../utils/productViewsUtils.js';
 
 function ViewSchedule({data}) {
+	const navigate = useNavigate();
 	// console.clear();
 	console.log(
 		`📝
@@ -24,25 +25,55 @@ function ViewSchedule({data}) {
 
 	if (!userAccessed) prodStats = calculateProductStats(product, [schedule]);
 
-	const {mutate} = useMutation({
+	const {mutate, isError, error} = useMutation({
 		mutationFn: async () =>
-			await fetch('/api/login-pass/logout', {
+			await fetch(`/api/grafik/book/${schedule.ScheduleID}`, {
 				method: 'POST',
+				body: JSON.stringify({
+					schedule: schedule.ScheduleID,
+					date: new Date().toISOString().split('T')[0],
+					product: product.Name,
+					status: 'Paid',
+					amountPaid: product.Price,
+					amountDue: 0,
+					paymentMethod: 'Credit Card',
+					paymentStatus: 'Completed',
+				}),
+				headers: {
+					'Content-Type': 'application/json',
+				},
 				credentials: 'include',
-			}).then((res) => {
-				if (!res.ok) throw new Error('Wylogowanie nie powiodło się');
-				return res.json();
+			}).then((response) => {
+				if (!response.ok) {
+					return response.json().then((errorData) => {
+						throw new Error(errorData.error || 'Błąd podczas rezerwacji');
+					});
+				}
+				return response.json();
 			}),
 		onSuccess: () => {
-			// Invalidate query to reload layout
-			queryClient.invalidateQueries(['authStatus']);
-			navigate('/');
+			navigate('/grafik');
 		},
 	});
 
 	const handleBooking = () => {
 		mutate();
 	};
+
+	let btn = (
+		<button
+			onClick={handleBooking}
+			className='book modal__btn'>
+			<span className='material-symbols-rounded nav__icon nav__icon--side account'>
+				shopping_bag_speed
+			</span>
+			Rezerwuj
+		</button>
+	);
+
+	if (isError) {
+		btn = error.message;
+	}
 
 	return (
 		<>
@@ -100,7 +131,10 @@ function ViewSchedule({data}) {
 					</div>
 				</>
 			)}
-			{userAccessed && (
+
+			{isError && <div className='error-box'>{error.message}</div>}
+
+			{!isError && userAccessed && (
 				<button
 					onClick={handleBooking}
 					className='book modal__btn'>

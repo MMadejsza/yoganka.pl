@@ -69,7 +69,7 @@ app.use((req, res) => {
 	res.status(404).send(`<h1>Page not found</h1>`);
 });
 
-db.sync()
+db.sync({alter: true})
 	.then((result) => {
 		return models.Customer.findByPk(1);
 	})

@@ -23,10 +23,20 @@ const BookedSchedule = sequelizeDb.define(
 				key: 'BookingID', // The name of the column in the target table
 			},
 		},
+		CustomerID: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+		},
 	},
 	{
 		tableName: 'booked_schedules', // exact mysql table name
 		timestamps: false, // turn off `createdAt` and `updatedAt`
+		indexes: [
+			{
+				unique: true,
+				fields: ['CustomerID', 'ScheduleID'], //unique key for combination of  CustomerID i ScheduleID
+			},
+		],
 	},
 );
 export default BookedSchedule;

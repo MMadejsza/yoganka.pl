@@ -285,6 +285,16 @@ export const showAllSchedules = (req, res, next) => {
 	const columnMap = columnMaps[model.name] || {};
 	const includeAttributes = [];
 
+	// If logged In and is Customer - we want to check his booked schedules to flag them later
+	const bookingInclude = {
+		model: models.Booking,
+		required: false,
+		attributes: ['BookingID'], //booking Id is enough
+
+		where:
+			req.user && req.user.Customer ? {CustomerID: req.user.Customer.CustomerID} : undefined, // Filter
+	};
+
 	model
 		.findAll({
 			include: [
@@ -292,6 +302,7 @@ export const showAllSchedules = (req, res, next) => {
 					model: models.Product,
 					attributes: ['Type', 'Name'],
 				},
+				bookingInclude,
 			],
 			attributes: {
 				include: includeAttributes, // Adding joint columns
@@ -319,6 +330,8 @@ export const showAllSchedules = (req, res, next) => {
 					} else if (key === 'Product' && jsonRecord[key]) {
 						newRecord['Typ'] = jsonRecord[key].Type; //  flatten object
 						newRecord['Nazwa'] = jsonRecord[key].Name;
+					} else if (key === 'Bookings') {
+						newRecord.bookedByUser = (jsonRecord.Bookings || []).length > 0;
 					} else {
 						newRecord[newKey] = jsonRecord[key]; // Assignment
 					}
@@ -329,6 +342,7 @@ export const showAllSchedules = (req, res, next) => {
 
 			// New headers (keys from columnMap)
 			const totalHeaders = [
+				'',
 				'ID',
 				'Data',
 				'Dzień',
