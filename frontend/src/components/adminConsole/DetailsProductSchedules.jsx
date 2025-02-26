@@ -1,4 +1,6 @@
 import {getWeekDay} from '../../utils/productViewsUtils.js';
+import ModalTable from './ModalTable';
+
 function DetailsProductSchedules({spots, scheduleRecords, placement}) {
 	const notPublished = (
 		<>
@@ -7,61 +9,53 @@ function DetailsProductSchedules({spots, scheduleRecords, placement}) {
 		</>
 	);
 
-	const table = (
+	let processedScheduleRecordsArr = scheduleRecords;
+	let headers = ['ID', 'Data', 'Dzień', 'Godzina', 'Lokacja', 'Frekwencja'];
+	let keys = ['id', 'date', 'day', 'time', 'location', 'attendance'];
+
+	if (placement == 'booking') {
+		headers = ['ID', 'Produkt', 'Data', 'Dzień', 'Godzina', 'Lokacja', 'Zadatek'];
+		keys = ['id', 'product', 'date', 'day', 'time', 'location', 'price'];
+		processedScheduleRecordsArr = scheduleRecords.map((schedule) => {
+			return {
+				id: schedule.ScheduleID,
+				product: schedule.Product.Name,
+				date: schedule.Date,
+				day: getWeekDay(schedule.Date),
+				time: schedule.StartTime,
+				location: schedule.Location,
+				price: schedule.Product.Price,
+			};
+		});
+	} else {
+		processedScheduleRecordsArr = scheduleRecords.map((schedule) => {
+			const attendancePercentage = Math.round((schedule.bookingsNumber / spots) * 100);
+			return {
+				id: schedule.ScheduleID,
+				date: schedule.Date,
+				day: getWeekDay(schedule.Date),
+				time: schedule.StartTime,
+				location: schedule.Location,
+				attendance: `${schedule.bookingsNumber}/${spots} (${attendancePercentage}%)`,
+			};
+		});
+	}
+
+	return (
 		<>
 			<h2 className='user-container__section-title modal__title--day'>Terminy:</h2>
-			<ul className='schedules__records'>
-				<li className='schedules__record schedules__record--header'>
-					<div className='schedules__record-content'>ID</div>
-					{placement == 'booking' && (
-						<div className='schedules__record-content'>Produkt</div>
-					)}
-					<div className='schedules__record-content'>Data</div>
-					<div className='schedules__record-content'>Dzień</div>
-					<div className='schedules__record-content'>Godzina</div>
-					<div className='schedules__record-content'>Lokacja</div>
-					{placement != 'booking' ? (
-						<div className='schedules__record-content'>Frekwencja</div>
-					) : (
-						<div className='schedules__record-content'>Zadatek</div>
-					)}
-				</li>
-				{scheduleRecords.map((schedule, index) => {
-					const attendancePercentage = Math.round(
-						(schedule.bookingsNumber / spots) * 100,
-					);
-
-					return (
-						<li
-							key={index}
-							className='schedules__record'>
-							<div className='schedules__record-content'>{schedule.ScheduleID}</div>
-							{placement == 'booking' && (
-								<div className='schedules__record-content'>
-									{schedule.Product.Name}
-								</div>
-							)}
-							<div className='schedules__record-content'>{schedule.Date}</div>
-							<div className='schedules__record-content'>
-								{getWeekDay(schedule.Date)}
-							</div>
-							<div className='schedules__record-content'>{schedule.StartTime}</div>
-							<div className='schedules__record-content'>{schedule.Location}</div>
-							{placement != 'booking' ? (
-								<div className='schedules__record-content'>{`${schedule.bookingsNumber}/${spots} (${attendancePercentage}%)`}</div>
-							) : (
-								<div className='schedules__record-content'>
-									{schedule.Product.Price}
-								</div>
-							)}
-						</li>
-					);
-				})}
-			</ul>
+			{scheduleRecords.length > 0 ? (
+				<ModalTable
+					headers={headers}
+					keys={keys}
+					content={processedScheduleRecordsArr}
+					active={false}
+				/>
+			) : (
+				notPublished
+			)}
 		</>
 	);
-
-	return <>{scheduleRecords.length > 0 ? table : notPublished}</>;
 }
 
 export default DetailsProductSchedules;

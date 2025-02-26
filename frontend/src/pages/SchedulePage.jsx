@@ -155,7 +155,7 @@ function SchedulePage() {
 		<div className='admin-console'>
 			<Section
 				classy='admin-intro'
-				header={`Campy/Wydarzenia/Zajęcia online`}
+				header={`Campy/Wydarzenia/Zajęcia`}
 			/>
 			{content}
 			{isModalOpen && (

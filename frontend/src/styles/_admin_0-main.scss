@@ -28,7 +28,7 @@
 		grid-template-rows: auto auto auto auto auto 1fr auto;
 	}
 	.admin-intro {
-		margin-top: 8rem;
+		margin-top: 11rem;
 
 		&__header {
 			width: 100%;
@@ -174,9 +174,10 @@
 		}
 
 		&__single-cell {
-			transition: map.get(var.$behavior, base-transition);
 			width: min-content;
 			padding: 1rem;
+			transition: map.get(var.$behavior, base-transition);
+			white-space: preserve;
 		}
 	}
 	.user-container {

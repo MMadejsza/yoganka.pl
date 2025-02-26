@@ -2,7 +2,8 @@ import DetailsUser from './DetailsUser.jsx';
 import DetailsUserSettings from './DetailsUserSettings.jsx';
 import DetailsCustomer from './DetailsCustomer.jsx';
 import DetailsCustomerInvoices from './DetailsCustomerInvoices.jsx';
-import DetailsCustomerSchedulesAndStats from './DetailsCustomerSchedulesAndStats.jsx';
+import DetailsCustomerSchedules from './DetailsCustomerSchedules.jsx';
+import DetailsCustomerStats from './DetailsCustomerStats.jsx';
 import DetailsCustomerReviews from './DetailsCustomerReviews.jsx';
 
 import {calculateStats} from '../../utils/customerViewsUtils.js';
@@ -43,9 +44,14 @@ function ViewCustomer({data}) {
 				)}
 			</div>
 
+			{/*//@ Stats */}
+			<div className='user-container__main-details user-container__side-details--schedules schedules modal-checklist'>
+				<DetailsCustomerStats customerStats={customerStats} />
+			</div>
+
 			{/*//@ Schedules */}
 			<div className='user-container__main-details user-container__side-details--schedules schedules modal-checklist'>
-				<DetailsCustomerSchedulesAndStats customerStats={customerStats} />
+				<DetailsCustomerSchedules customerStats={customerStats} />
 			</div>
 
 			{/*//@ Invoices */}
