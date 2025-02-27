@@ -14,11 +14,11 @@ const menuSet = [
 		symbol: 'library_books',
 		link: 'rezerwacje',
 	},
-	{
-		name: 'Faktury',
-		symbol: 'receipt_long',
-		link: 'faktury',
-	},
+	// {
+	// 	name: 'Faktury',
+	// 	symbol: 'receipt_long',
+	// 	link: 'faktury',
+	// },
 	{
 		name: 'Ustawienia',
 		symbol: 'settings',

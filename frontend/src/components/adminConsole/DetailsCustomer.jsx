@@ -10,16 +10,18 @@ function DetailsCustomer({customerData, isUserAccountPage}) {
 			<div className='user-container__main-details modal-checklist'>
 				<h2 className='user-container__section-title modal__title--day'>{title}</h2>
 				<ul className='user-container__details-list modal-checklist__list'>
-					<li className='user-container__section-record modal-checklist__li'>
-						<p className='user-container__section-record-label'>Numer telefonu:</p>
-						{customerData.CustomerPhones.map((phone, index) => (
-							<p
-								className='user-container__section-record-content'
-								key={index}>
-								{phone.CustomerMobile}
-							</p>
-						))}
-					</li>
+					{customerData.CustomerPhones && (
+						<li className='user-container__section-record modal-checklist__li'>
+							<p className='user-container__section-record-label'>Numer telefonu:</p>
+							{customerData.CustomerPhones.map((phone, index) => (
+								<p
+									className='user-container__section-record-content'
+									key={index}>
+									{phone.CustomerMobile}
+								</p>
+							))}
+						</li>
+					)}
 					{!isUserAccountPage && (
 						<>
 							<li className='user-container__section-record modal-checklist__li'>

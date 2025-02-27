@@ -67,7 +67,12 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 				controller.recordEditor = '';
 				return controller;
 			case 'booking':
-				controller.recordDisplay = <ViewBooking data={data} />;
+				controller.recordDisplay = (
+					<ViewBooking
+						data={data}
+						isUserAccountPage={false}
+					/>
+				);
 				controller.recordEditor = '';
 				return controller;
 			case 'feedback':

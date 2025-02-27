@@ -185,7 +185,7 @@
 		height: auto;
 		max-height: 90vh;
 		padding-bottom: 5rem;
-		overflow-y: auto;
+		overflow-x: visible;
 		@include mixin.flex(row, space-evenly, flex-start);
 		align-content: flex-start;
 		flex-wrap: wrap;

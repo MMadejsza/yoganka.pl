@@ -11,7 +11,7 @@
 		flex-wrap: wrap;
 		gap: 3rem;
 		&__item {
-			padding: 0.2rem 1rem;
+			padding: 0.2rem 3rem;
 			border-radius: map.get(var.$sizes, border-radius);
 			background-color: rgba(map.get(var.$colors, nav), 0.3);
 			box-shadow: map.get(var.$shadows, tile-shadow);
@@ -26,7 +26,6 @@
 		}
 	}
 	.data-table--user {
-		width: 95%;
 		margin: 3rem 0;
 	}
 	.user-container__section-record {

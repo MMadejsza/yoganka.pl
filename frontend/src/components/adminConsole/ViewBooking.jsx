@@ -8,7 +8,7 @@ import {calculateProductStats} from '../../utils/productViewsUtils.js';
 
 // import {calculateStats} from '../../utils/productViewsUtils.js';
 
-function ViewBooking({data}) {
+function ViewBooking({data, isUserAccountPage}) {
 	console.clear();
 	console.log(
 		`📝
@@ -26,13 +26,17 @@ function ViewBooking({data}) {
 
 			{/*//@ Customer main details */}
 			<div className='user-container__main-details modal-checklist'>
-				<DetailsCustomer customerData={customer} />
+				<DetailsCustomer
+					customerData={customer}
+					isUserAccountPage={isUserAccountPage}
+				/>
 			</div>
 			{/*//@ Booking main details */}
 			<div className='user-container__main-details modal-checklist'>
 				<DetailsBooking
 					bookingData={booking}
 					placement={'booking'}
+					isUserAccountPage={isUserAccountPage}
 				/>
 			</div>
 

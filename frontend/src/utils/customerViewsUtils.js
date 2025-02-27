@@ -65,6 +65,7 @@ export const getWeekDay = (dateStr) => {
 export const calculateStats = (customer) => {
 	const today = new Date().toISOString().split('T')[0];
 	const scheduleRecords = [];
+	const totalBookings = [];
 	const invoices = [];
 	const reviews = [];
 	let totalRevenue = 0;
@@ -79,6 +80,17 @@ export const calculateStats = (customer) => {
 	for (let booking of customer.Bookings) {
 		totalRevenue += parseFloat(booking.AmountPaid);
 		// console.log(`totalRevenue: ${totalRevenue}`);
+
+		totalBookings.push({
+			id: booking.BookingID,
+			date: booking.Date,
+			classes: booking.ScheduleRecords.reduce((acc, record) => {
+				return acc ? acc + ', ' + record.Product.Name : record.Product.Name;
+			}, ''),
+			totalValue: booking.AmountPaid,
+			method: booking.PaymentMethod,
+			status: booking.PaymentStatus,
+		});
 
 		const invoice = booking.Invoice;
 		if (invoice) {
@@ -168,6 +180,7 @@ export const calculateStats = (customer) => {
 	const splitDuration = secondsToDuration(totalTimeInSeconds, 'hours');
 	const stats = {
 		records: scheduleRecords,
+		bookings: totalBookings,
 		recordsKeys: ['', 'id', 'date', 'day', 'time', 'type', 'name', 'location'],
 		reviews: reviews,
 		invoices: invoices,
