@@ -1,5 +1,3 @@
-import {Link} from 'react-router-dom';
-
 const menuSet = [
 	{
 		name: 'Statystyki',
@@ -9,7 +7,7 @@ const menuSet = [
 	{
 		name: 'Historia zajęć',
 		symbol: 'history', // Lotus flower symbolizes yoga, harmony, and relaxation
-		link: 'rezerwacje',
+		link: 'zajecia',
 	},
 	{
 		name: 'Rezerwacje',

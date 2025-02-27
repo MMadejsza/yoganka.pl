@@ -18,7 +18,7 @@ function DetailsCustomerStats({customerStats, altTitle, userAccountPage}) {
 					</li>
 				)}
 				<li className='schedules__summary-datum'>
-					<div className='schedules__summary-label'>Ilość zajęć:</div>
+					<div className='schedules__summary-label'>Ilość odbytych zajęć:</div>
 					<div className='schedules__summary-content'>
 						{customerStats.schedulesAmount.total}
 					</div>

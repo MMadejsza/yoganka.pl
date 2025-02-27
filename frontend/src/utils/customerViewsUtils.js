@@ -63,6 +63,7 @@ export const getWeekDay = (dateStr) => {
 };
 //@ stats helper for calculation
 export const calculateStats = (customer) => {
+	const today = new Date().toISOString().split('T')[0];
 	const scheduleRecords = [];
 	const invoices = [];
 	const reviews = [];
@@ -74,9 +75,8 @@ export const calculateStats = (customer) => {
 	let totalOnlineAmount = 0;
 	let totalSchedulesAmount =
 		totalCampsAmount + totalEventsAmount + totalClassesAmount + totalOnlineAmount;
-
+	console.log(customer.Bookings);
 	for (let booking of customer.Bookings) {
-		// console.group(`booking: ${booking}`);
 		totalRevenue += parseFloat(booking.AmountPaid);
 		// console.log(`totalRevenue: ${totalRevenue}`);
 
@@ -122,25 +122,27 @@ export const calculateStats = (customer) => {
 				bookedByUser: true,
 			});
 
-			totalSchedulesAmount += 1;
-			// console.log(`totalSchedulesAmount: ${totalSchedulesAmount}`);
-			if (productType === 'Class') {
-				totalClassesAmount += 1;
-				// console.log(`totalClassesAmount: ${totalClassesAmount}`);
-			} else if (productType === 'Online') {
-				totalOnlineAmount += 1;
-				// console.log(`totalOnlineAmount: ${totalOnlineAmount}`);
-			} else if (productType === 'Event') {
-				totalEventsAmount += 1;
-				// console.log(`totalEventsAmount: ${totalEventsAmount}`);
-			} else if (productType === 'Camp') {
-				totalCampsAmount += 1;
-				// console.log(`totalCampsAmount: ${totalCampsAmount}`);
+			console.log(`scheduleDate >= today ${scheduleDate} ${today}`);
+			if (scheduleDate <= today) {
+				totalSchedulesAmount += 1;
+				// console.log(`totalSchedulesAmount: ${totalSchedulesAmount}`);
+				if (productType === 'Class') {
+					totalClassesAmount += 1;
+					// console.log(`totalClassesAmount: ${totalClassesAmount}`);
+				} else if (productType === 'Online') {
+					totalOnlineAmount += 1;
+					// console.log(`totalOnlineAmount: ${totalOnlineAmount}`);
+				} else if (productType === 'Event') {
+					totalEventsAmount += 1;
+					// console.log(`totalEventsAmount: ${totalEventsAmount}`);
+				} else if (productType === 'Camp') {
+					totalCampsAmount += 1;
+					// console.log(`totalCampsAmount: ${totalCampsAmount}`);
+				}
+				totalTimeInSeconds += durationToSeconds(productDuration);
+				// console.log(`totalTimeInSeconds: ${totalTimeInSeconds}`);
+				// console.groupEnd();
 			}
-
-			totalTimeInSeconds += durationToSeconds(productDuration);
-			// console.log(`totalTimeInSeconds: ${totalTimeInSeconds}`);
-			// console.groupEnd();
 
 			if (schedule.Feedbacks && schedule.Feedbacks.length > 0) {
 				const feedback = schedule.Feedbacks[0];

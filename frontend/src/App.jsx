@@ -35,9 +35,8 @@ const router = createBrowserRouter([
 				children: [
 					{path: 'grafik/:id', element: <AccountPage />},
 					{path: 'statystyki', element: <AccountPage />},
-					{path: 'rezerwacje', element: <AccountPage />},
+					{path: 'zajecia', element: <AccountPage />},
 					{path: 'faktury', element: <AccountPage />},
-					{path: 'dane-uczestnika', element: <AccountPage />},
 					{path: 'ustawienia', element: <AccountPage />},
 				],
 			},

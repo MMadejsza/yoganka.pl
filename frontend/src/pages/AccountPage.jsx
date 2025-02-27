@@ -84,10 +84,10 @@ function AccountPage() {
 			case path.includes('statystyki'):
 				modifier = 'statistics';
 				return modifier;
-			case path.includes('rezerwacje'):
+			case path.includes('zajecia'):
 				modifier = 'customerSchedules';
 				return modifier;
-			case path.includes('platnosci'):
+			case path.includes('rezerwacje'):
 				modifier = 'customerBookings';
 				return modifier;
 			case path.includes('faktury'):
@@ -114,7 +114,7 @@ function AccountPage() {
 	let stats;
 	let tableTitle;
 	let table;
-
+	let customerStats;
 	if (data) {
 		// console.clear();
 		console.log(`✅ Data: `);
@@ -122,7 +122,7 @@ function AccountPage() {
 		if (data.customer) {
 			customer = data.customer;
 			name = `${customer.FirstName} ${customer.LastName}`;
-			const customerStats = calculateStats(data.customer);
+			customerStats = calculateStats(data.customer);
 			const headers = ['ID', 'Data', 'Dzień', 'Godzina', 'Typ', 'Zajęcia', 'Miejsce'];
 			const content = customerStats.records;
 			const keys = customerStats.recordsKeys.splice(1);
@@ -233,6 +233,7 @@ function AccountPage() {
 					visited={isModalOpen}
 					onClose={handleCloseModal}
 					userAccountPage={true}
+					customer={customer}
 				/>
 			)}
 		</div>

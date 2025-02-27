@@ -11,20 +11,24 @@ import ViewProduct from './ViewProduct.jsx';
 import ViewSchedule from './ViewSchedule.jsx';
 import ViewBooking from './ViewBooking.jsx';
 import ViewReview from './ViewReview.jsx';
+import ViewUserTotalSchedules from './ViewUserTotalSchedules.jsx';
 
-function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage}) {
+function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, customer}) {
 	const params = useParams();
 	const location = useLocation();
 	const callPath = location.pathname;
+
 	console.log('ViewFrame callPath: ', callPath);
+
 	const {data, isPending, isError, error} = useQuery({
 		queryKey: ['query', location.pathname],
 		queryFn: ({signal}) => fetchItem(callPath, {signal}),
 		staleTime: 0,
 		refetchOnMount: true,
-		// enabled: !!params.id,
+		enabled: !!params.id || location.pathname.includes('ustawienia'),
 	});
 	console.log('ViewFrame data: ', data);
+	const effectiveData = location.pathname.includes('ustawienia') ? data : customer;
 
 	const [editingState, setEditingState] = useState(false);
 
@@ -34,7 +38,7 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage}) {
 	const handleCloseEditing = () => {
 		setEditingState(false);
 	};
-	const resolveModifier = (data) => {
+	const resolveModifier = () => {
 		let controller = {};
 		switch (modifier) {
 			case 'user':
@@ -67,19 +71,19 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage}) {
 				controller.recordEditor = '';
 				return controller;
 			case 'statistics':
-				controller.recordDisplay = <ViewCustomerStatistics data={data} />;
+				controller.recordDisplay = <ViewCustomerStatistics data={customer} />;
 				controller.recordEditor = '';
 				return controller;
 			case 'customerSchedules':
-				controller.recordDisplay = <ViewReview data={data} />;
+				controller.recordDisplay = <ViewUserTotalSchedules data={customer} />;
 				controller.recordEditor = '';
 				return controller;
 			case 'customerBookings':
-				controller.recordDisplay = <ViewReview data={data} />;
+				controller.recordDisplay = <ViewReview data={customer} />;
 				controller.recordEditor = '';
 				return controller;
 			case 'invoices':
-				controller.recordDisplay = <ViewReview data={data} />;
+				controller.recordDisplay = <ViewReview data={customer} />;
 				controller.recordEditor = '';
 				return controller;
 			case 'settings':
@@ -105,8 +109,10 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage}) {
 	if (isError) {
 		dataDisplay = 'Error in UserDetails fetch...';
 	}
-	if (data) {
-		const {recordDisplay, recordEditor} = resolveModifier(data);
+
+	console.log(`ViewFrame customer: `, customer);
+	if (effectiveData) {
+		const {recordDisplay, recordEditor} = resolveModifier();
 		dataDisplay = recordDisplay;
 		dataEditor = recordEditor;
 	}
