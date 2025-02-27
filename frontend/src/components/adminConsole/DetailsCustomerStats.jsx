@@ -24,8 +24,8 @@ function DetailsCustomerStats({customerStats, altTitle, userAccountPage}) {
 					</div>
 				</li>
 				<li className='schedules__summary-datum'>
-					<div className='schedules__summary-label'>Campy/Eventy/Zajęcia/Online:</div>
-					<div className='schedules__summary-content'>{`${campsNumber}/${eventsNumber}/${classesNumber}/${onlineNumber}`}</div>
+					<div className='schedules__summary-label'>Campy/Eventy/Online:</div>
+					<div className='schedules__summary-content'>{`${campsNumber}/${eventsNumber}/${onlineNumber}`}</div>
 				</li>
 				<li className='schedules__summary-datum'>
 					<div className='schedules__summary-label'>Ilość godzin yogi:</div>

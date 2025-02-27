@@ -13,7 +13,7 @@ function AccountPage() {
 	const modalMatch = useMatch('/konto/ustawienia');
 	const navigate = useNavigate();
 	const location = useLocation(); // fetch current path
-
+	const today = new Date().toISOString().split('T')[0];
 	const {data, isPending, isError, error} = useQuery({
 		queryKey: ['account'],
 		queryFn: ({signal}) => fetchItem('/account', {signal}),
@@ -160,49 +160,51 @@ function AccountPage() {
 						</tr>
 					</thead>
 					<tbody>
-						{content.map((row, rowIndex) => (
-							<tr
-								className={`data-table__cells data-table__cells--user active ${
-									row.bookedByUser && data.isLoggedIn ? 'booked' : ''
-								}`}
-								key={rowIndex}>
-								{keys.map((key, headerIndex) => {
-									let value = row[key];
-									if (typeof value === 'object' && value !== null) {
-										value = Object.values(value);
-									}
+						{content
+							.filter((schedule) => schedule.date >= today)
+							.map((row, rowIndex) => (
+								<tr
+									className={`data-table__cells data-table__cells--user active ${
+										row.bookedByUser && data.isLoggedIn ? 'booked' : ''
+									}`}
+									key={rowIndex}>
+									{keys.map((key, headerIndex) => {
+										let value = row[key];
+										if (typeof value === 'object' && value !== null) {
+											value = Object.values(value);
+										}
 
-									// if (key == '') {
-									// 	value = (
-									// 		<span
-									// 			onClick={
-									// 				!row.bookedByUser
-									// 					? (e) => {
-									// 							e.stopPropagation();
-									// 							mutate({
-									// 								scheduleID: row['ID'],
-									// 								productName: row['Nazwa'],
-									// 								productPrice: row['Zadatek'],
-									// 							});
-									// 					  }
-									// 					: null
-									// 			}
-									// 			className='material-symbols-rounded nav__icon nav__icon--side account'>
-									// 			check
-									// 		</span>
-									// 	);
-									// }
-									return (
-										<td
-											onClick={() => handleOpenScheduleModal(row.id)}
-											className='data-table__single-cell data-table__single-cell--user'
-											key={headerIndex}>
-											{value || '-'}
-										</td>
-									);
-								})}
-							</tr>
-						))}
+										// if (key == '') {
+										// 	value = (
+										// 		<span
+										// 			onClick={
+										// 				!row.bookedByUser
+										// 					? (e) => {
+										// 							e.stopPropagation();
+										// 							mutate({
+										// 								scheduleID: row['ID'],
+										// 								productName: row['Nazwa'],
+										// 								productPrice: row['Zadatek'],
+										// 							});
+										// 					  }
+										// 					: null
+										// 			}
+										// 			className='material-symbols-rounded nav__icon nav__icon--side account'>
+										// 			check
+										// 		</span>
+										// 	);
+										// }
+										return (
+											<td
+												onClick={() => handleOpenScheduleModal(row.id)}
+												className='data-table__single-cell data-table__single-cell--user'
+												key={headerIndex}>
+												{value || '-'}
+											</td>
+										);
+									})}
+								</tr>
+							))}
 					</tbody>
 				</table>
 			);

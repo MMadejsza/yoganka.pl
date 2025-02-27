@@ -1,7 +1,6 @@
-import DetailsCustomerStats from './DetailsCustomerStats.jsx';
 import {calculateStats} from '../../utils/customerViewsUtils.js';
 
-function ViewUserTotalSchedules({data}) {
+function ViewCustomerTotalBookings({data}) {
 	// console.clear();
 	console.log(
 		`📝 
@@ -9,7 +8,6 @@ function ViewUserTotalSchedules({data}) {
 		data,
 	);
 
-	let stats;
 	let table;
 
 	const customerStats = calculateStats(data);
@@ -20,16 +18,6 @@ function ViewUserTotalSchedules({data}) {
 	// console.log(`✅ content: `, content);
 	// console.log(`✅ keys: `, keys);
 	console.log(`✅ customerStats: `, customerStats);
-
-	stats = (
-		<div className='user-container schedules'>
-			<DetailsCustomerStats
-				customerStats={customerStats}
-				altTitle={'W liczbach:'}
-				userAccountPage={true}
-			/>
-		</div>
-	);
 
 	table = (
 		<table className='data-table data-table--user'>
@@ -73,11 +61,11 @@ function ViewUserTotalSchedules({data}) {
 
 	return (
 		<>
-			<h1 className='user-container__user-title modal__title'>Historia zajęć</h1>
-			{stats}
+			<h1 className='user-container__user-title modal__title'>Historia rezerwacji</h1>
+
 			{table}
 		</>
 	);
 }
 
-export default ViewUserTotalSchedules;
+export default ViewCustomerTotalBookings;

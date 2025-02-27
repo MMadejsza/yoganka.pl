@@ -1,23 +1,22 @@
 const menuSet = [
-	{
-		name: 'Statystyki',
-		symbol: 'bar_chart', // Represents travel in nature; peaceful and connected to retreats
-		link: 'statystyki',
-	},
+	// {
+	// 	name: 'Statystyki',
+	// 	symbol: 'bar_chart',
+	// 	link: 'statystyki',
+	// },
 	{
 		name: 'Historia zajęć',
-		symbol: 'history', // Lotus flower symbolizes yoga, harmony, and relaxation
+		symbol: 'history',
 		link: 'zajecia',
 	},
 	{
 		name: 'Rezerwacje',
-		symbol: 'library_books', // Lotus flower symbolizes yoga, harmony, and relaxation
+		symbol: 'library_books',
 		link: 'rezerwacje',
 	},
 	{
 		name: 'Faktury',
-		symbol: 'receipt_long', // Bell symbolizes mindfulness and yoga-related events
-		// link: '/wydarzenia',
+		symbol: 'receipt_long',
 		link: 'faktury',
 	},
 	{

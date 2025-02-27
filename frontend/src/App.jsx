@@ -36,6 +36,7 @@ const router = createBrowserRouter([
 					{path: 'grafik/:id', element: <AccountPage />},
 					{path: 'statystyki', element: <AccountPage />},
 					{path: 'zajecia', element: <AccountPage />},
+					{path: 'rezerwacje', element: <AccountPage />},
 					{path: 'faktury', element: <AccountPage />},
 					{path: 'ustawienia', element: <AccountPage />},
 				],

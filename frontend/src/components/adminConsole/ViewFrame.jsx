@@ -11,12 +11,14 @@ import ViewProduct from './ViewProduct.jsx';
 import ViewSchedule from './ViewSchedule.jsx';
 import ViewBooking from './ViewBooking.jsx';
 import ViewReview from './ViewReview.jsx';
-import ViewUserTotalSchedules from './ViewUserTotalSchedules.jsx';
+import ViewCustomerTotalSchedules from './ViewCustomerTotalSchedules.jsx';
+import ViewCustomerTotalBookings from './ViewCustomerTotalBookings.jsx';
 
 function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, customer}) {
 	const params = useParams();
 	const location = useLocation();
 	const callPath = location.pathname;
+	const noFetchPaths = ['statystyki', 'zajecia', 'rezerwacje', 'faktury'];
 
 	console.log('ViewFrame callPath: ', callPath);
 
@@ -28,7 +30,9 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 		enabled: !!params.id || location.pathname.includes('ustawienia'),
 	});
 	console.log('ViewFrame data: ', data);
-	const effectiveData = location.pathname.includes('ustawienia') ? data : customer;
+	const effectiveData = noFetchPaths.some((pathPart) => location.pathname.includes(pathPart))
+		? customer
+		: data;
 
 	const [editingState, setEditingState] = useState(false);
 
@@ -75,11 +79,11 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 				controller.recordEditor = '';
 				return controller;
 			case 'customerSchedules':
-				controller.recordDisplay = <ViewUserTotalSchedules data={customer} />;
+				controller.recordDisplay = <ViewCustomerTotalSchedules data={customer} />;
 				controller.recordEditor = '';
 				return controller;
 			case 'customerBookings':
-				controller.recordDisplay = <ViewReview data={customer} />;
+				controller.recordDisplay = <ViewCustomerTotalBookings data={customer} />;
 				controller.recordEditor = '';
 				return controller;
 			case 'invoices':
