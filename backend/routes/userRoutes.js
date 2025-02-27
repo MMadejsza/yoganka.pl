@@ -6,6 +6,9 @@ const router = express.Router();
 
 router.get('/grafik', adminC.showAllSchedules);
 router.get('/grafik/:id', userC.showScheduleByID);
+router.get('/konto/grafik/:id', userC.showScheduleByID);
+router.get('/account', userC.showAccount);
+
 router.post('/grafik/book/:id', userC.bookSchedule);
 
 export default router;

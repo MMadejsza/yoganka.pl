@@ -305,6 +305,10 @@
 			border: 1px solid map.get(var.$colors, accent-bcg);
 			opacity: 0.6;
 		}
+
+		&--cancel {
+			background-color: rgba(color.adjust(red, $lightness: -13%), 0.45);
+		}
 	}
 	&__summary {
 		grid-column: 1 /-1;

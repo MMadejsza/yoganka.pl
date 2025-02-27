@@ -12,6 +12,7 @@ import B2BPage from './pages/B2BPage.jsx';
 import SchedulePage from './pages/SchedulePage.jsx';
 import ErrorPage from './pages/ErrorPage.jsx';
 import AdminPage from './pages/AdminPage.jsx';
+import AccountPage from './pages/AccountPage.jsx';
 import ViewFrame from './components/adminConsole/ViewFrame.jsx';
 
 const router = createBrowserRouter([
@@ -27,6 +28,9 @@ const router = createBrowserRouter([
 			{path: 'wydarzenia/:link', element: <HomePage />},
 			// {path: 'zajecia', element: <ClassesPage />},
 			{path: 'yoga-dla-firm', element: <B2BPage />},
+
+			{path: 'konto', element: <AccountPage />},
+			{path: 'konto/grafik/:id', element: <AccountPage />},
 			{path: 'grafik', element: <SchedulePage />},
 			{path: 'grafik/:id', element: <SchedulePage />},
 			{path: 'grafik/book/:id', element: <SchedulePage />},

@@ -229,10 +229,11 @@
 		}
 		.schedules {
 			flex-basis: 100%;
-			gap: 1.5rem;
+			gap: 0;
 			&__summary,
 			&__records {
 				width: 100%;
+				margin-top: 3rem;
 				font-size: 1.8rem;
 				@include mixin.flex(row, space-evenly);
 				flex-wrap: wrap;
@@ -274,7 +275,7 @@
 			}
 		}
 		.modal__btn.book {
-			flex-basis: 60%;
+			flex-basis: 65%;
 			margin-top: 3rem;
 		}
 	}

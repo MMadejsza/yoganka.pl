@@ -65,7 +65,14 @@ const menuSideSet = [
 	{
 		auth: true,
 		name: 'Konto',
+		// symbol: 'person',
 		symbol: 'account_circle',
+		link: '/konto',
+	},
+	{
+		auth: true,
+		name: 'Admin Panel',
+		symbol: 'admin_panel_settings',
 		link: '/admin-console/show-all-users',
 	},
 	{

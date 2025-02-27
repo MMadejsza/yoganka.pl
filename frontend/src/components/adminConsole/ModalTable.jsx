@@ -1,6 +1,6 @@
-function ModalTable({headers, content, keys, active}) {
+function ModalTable({headers, content, keys, active, classModifier}) {
 	return (
-		<table className='data-table'>
+		<table className={`data-table ${classModifier ? `data-table--${classModifier}` : ''}`}>
 			<thead className='data-table__headers'>
 				<tr>
 					{headers.map((header, index) => (
@@ -15,7 +15,9 @@ function ModalTable({headers, content, keys, active}) {
 			<tbody>
 				{content.map((row, rowIndex) => (
 					<tr
-						className={`data-table__cells ${active ? 'active' : ''}`}
+						className={`data-table__cells ${active ? 'active' : ''}  ${
+							classModifier ? `data-table__cells--${classModifier}` : ''
+						}`}
 						key={rowIndex}>
 						{keys.map((key, keyIndex) => {
 							let value = row[key];
@@ -31,7 +33,11 @@ function ModalTable({headers, content, keys, active}) {
 											  }
 											: null
 									}
-									className='data-table__single-cell'
+									className={`data-table__single-cell ${
+										classModifier
+											? `data-table__single-cell--${classModifier}`
+											: ''
+									}`}
 									key={keyIndex}>
 									{value || '-'}
 								</td>

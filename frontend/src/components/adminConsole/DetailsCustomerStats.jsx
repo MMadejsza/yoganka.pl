@@ -1,4 +1,4 @@
-function DetailsCustomerStats({customerStats}) {
+function DetailsCustomerStats({customerStats, altTitle, userAccountPage}) {
 	const campsNumber = customerStats.schedulesAmount.breakdown.camps;
 	const eventsNumber = customerStats.schedulesAmount.breakdown.events;
 	const classesNumber = customerStats.schedulesAmount.breakdown.classes;
@@ -7,14 +7,18 @@ function DetailsCustomerStats({customerStats}) {
 	return (
 		<>
 			{/*PODSUMOWANIE Kasa total, terminy total, campy/eventy/clasy total, godziny total  */}
-			<h2 className='user-container__section-title modal__title--day'>Statystyki:</h2>
+			<h2 className='user-container__section-title modal__title--day'>
+				{altTitle ?? 'Statystyki:'}
+			</h2>
 			<ul className='schedules__summary'>
+				{!userAccountPage && (
+					<li className='schedules__summary-datum'>
+						<div className='schedules__summary-label'>Całkowity dochód:</div>
+						<div className='schedules__summary-content'>{customerStats.revenue}</div>
+					</li>
+				)}
 				<li className='schedules__summary-datum'>
-					<div className='schedules__summary-label'>Całkowity dochód:</div>
-					<div className='schedules__summary-content'>{customerStats.revenue}</div>
-				</li>
-				<li className='schedules__summary-datum'>
-					<div className='schedules__summary-label'>Ilość terminów:</div>
+					<div className='schedules__summary-label'>Ilość zajęć:</div>
 					<div className='schedules__summary-content'>
 						{customerStats.schedulesAmount.total}
 					</div>

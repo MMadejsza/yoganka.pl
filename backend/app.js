@@ -14,6 +14,11 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
+app.use((req, res, next) => {
+	console.log(`➡️➡️➡️  Request: ${req.method} ${req.url}`);
+	next();
+});
+
 const options = {
 	host: 'localhost',
 	port: 3306,
@@ -48,15 +53,29 @@ app.use((req, res, next) => {
 		include: [
 			{
 				model: models.Customer, // Add Customer
+				required: false, // May not exist
+				include: [
+					{
+						model: models.CustomerPhones, // Customer phone numbers
+						required: false,
+					},
+				],
+			},
+			{
+				model: models.UserPrefSettings, // User settings if exist
 				required: false,
 			},
 		],
 	}) // May not exist)
 		.then((user) => {
+			console.log('✅✅✅ Found user:', user);
 			req.user = user;
 			next();
 		})
-		.catch((err) => console.log(err));
+		.catch((err) => {
+			console.log(err);
+			next(err);
+		});
 });
 
 // Filtering that works only for /admin/*

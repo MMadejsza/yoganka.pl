@@ -33,19 +33,26 @@ export function durationToSeconds(durationStr) {
 	return hours * 3600 + minutes * 60 + seconds;
 }
 
-export function secondsToDuration(totalSeconds) {
-	const days = Math.floor(totalSeconds / (24 * 3600));
-	totalSeconds %= 24 * 3600;
+export function secondsToDuration(totalSeconds, limiter) {
+	let days;
+	if (limiter != 'hours') {
+		days = Math.floor(totalSeconds / (24 * 3600));
+		totalSeconds %= 24 * 3600;
+	}
 	const hours = Math.floor(totalSeconds / 3600);
 	totalSeconds %= 3600;
 	const minutes = Math.floor(totalSeconds / 60);
 	const seconds = totalSeconds % 60;
 
 	// Leading zeros
-	const dd = String(days).padStart(2, '0');
-	const hh = String(hours).padStart(2, '0');
-	const mm = String(minutes).padStart(2, '0');
-	const ss = String(seconds).padStart(2, '0');
+	const dd = String(days); //.padStart(2, '0');
+	const hh = String(hours); //.padStart(2, '0');
+	const mm = String(minutes); //.padStart(2, '0');
+	const ss = String(seconds); //.padStart(2, '0');
+
+	if (limiter == 'hours') {
+		return {hours: hh, minutes: mm, seconds: ss};
+	}
 
 	return {days: dd, hours: hh, minutes: mm, seconds: ss};
 }
@@ -107,10 +114,12 @@ export const calculateStats = (customer) => {
 			scheduleRecords.push({
 				id: scheduleID,
 				date: scheduleDate,
+				day: getWeekDay(scheduleDate),
 				time: scheduleStartTime,
 				location: scheduleLocation,
 				type: productType,
 				name: productName,
+				bookedByUser: true,
 			});
 
 			totalSchedulesAmount += 1;
@@ -154,9 +163,10 @@ export const calculateStats = (customer) => {
 		// console.groupEnd();
 	}
 
-	const splitDuration = secondsToDuration(totalTimeInSeconds);
+	const splitDuration = secondsToDuration(totalTimeInSeconds, 'hours');
 	const stats = {
 		records: scheduleRecords,
+		recordsKeys: ['', 'id', 'date', 'day', 'time', 'type', 'name', 'location'],
 		reviews: reviews,
 		invoices: invoices,
 		revenue: `${Math.round(totalRevenue * 100) / 100}zł`,

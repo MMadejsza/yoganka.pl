@@ -4,7 +4,7 @@ import DetailsProductStats from './DetailsProductStats.jsx';
 import DetailsProductBookings from './DetailsProductBookings.jsx';
 import DetailsProductReviews from './DetailsProductReviews.jsx';
 import {calculateProductStats} from '../../utils/productViewsUtils.js';
-// import {calculateStats} from '../../utils/productViewsUtils.js';
+import {useLocation} from 'react-router-dom';
 
 function ViewSchedule({data, bookingOps}) {
 	// console.clear();
@@ -13,6 +13,8 @@ function ViewSchedule({data, bookingOps}) {
 	    Schedule object from backend:`,
 		data,
 	);
+	const location = useLocation();
+	const userAccountPage = location.pathname.includes('konto');
 	const {schedule} = data;
 	const {Product: product} = schedule;
 	const type = product.Type;
@@ -28,6 +30,13 @@ function ViewSchedule({data, bookingOps}) {
 			productName: product.Name,
 			productPrice: product.Price,
 		});
+	};
+	const handleCancellation = () => {
+		// bookingOps.onBook({
+		// 	scheduleID: schedule.ScheduleID,
+		// 	productName: product.Name,
+		// 	productPrice: product.Price,
+		// });
 	};
 
 	return (
@@ -93,10 +102,18 @@ function ViewSchedule({data, bookingOps}) {
 				<button
 					onClick={handleBooking}
 					className='book modal__btn'>
-					<span className='material-symbols-rounded nav__icon nav__icon--side account'>
-						shopping_bag_speed
-					</span>
+					<span className='material-symbols-rounded nav__icon '>shopping_bag_speed</span>
 					Rezerwuj
+				</button>
+			)}
+			{!bookingOps?.isError && userAccessed && schedule.bookedByUser && userAccountPage && (
+				<button
+					onClick={handleCancellation}
+					className='book modal__btn modal__btn--cancel'>
+					<span className='material-symbols-rounded nav__icon '>
+						sentiment_dissatisfied
+					</span>
+					Daj znać, że nie przyjdziesz...
 				</button>
 			)}
 		</>

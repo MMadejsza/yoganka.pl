@@ -1,10 +1,10 @@
 import ModalTable from './ModalTable';
 
-function DetailsCustomerSchedules({customerStats}) {
+function DetailsCustomerSchedules({customerStats, classModifier, altTitle}) {
 	return (
 		<>
 			<h2 className='user-container__section-title modal__title--day'>
-				Zarezerwowane terminy:
+				{altTitle ?? 'Zarezerwowane terminy:'}
 			</h2>
 			{/*REKORDY data godzina miejsce typ productNazwa  */}
 			<ModalTable
@@ -12,6 +12,7 @@ function DetailsCustomerSchedules({customerStats}) {
 				keys={['id', 'date', 'time', 'location', 'type', 'name']}
 				content={customerStats.records}
 				active={false}
+				classModifier={classModifier}
 			/>
 		</>
 	);

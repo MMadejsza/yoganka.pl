@@ -71,7 +71,7 @@ export async function fetchItem(callPath, {signal}) {
 	});
 
 	if (!response.ok) {
-		const error = new Error('An error occurred while fetching the event');
+		const error = new Error('An error occurred while fetching the item');
 		error.code = response.status;
 		error.info = await response.json();
 		throw error;

@@ -190,7 +190,7 @@ export const showAllCustomers = (req, res, next) => {
 		.catch((err) => console.log(err));
 };
 export const showCustomerByID = (req, res, next) => {
-	console.log(`➡️ called showCustomerByID`);
+	console.log(`➡️ called showCustomerByID`, new Date().toISOString());
 
 	const PK = req.params.id;
 	models.Customer.findByPk(PK, {
@@ -244,7 +244,7 @@ export const showCustomerByID = (req, res, next) => {
 			},
 		],
 		attributes: {
-			exclude: [, 'UserID'], // deleting
+			exclude: ['UserID'], // deleting
 		},
 	})
 		.then((customer) => {

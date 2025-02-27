@@ -9,10 +9,15 @@ function DetailsSchedule({data, userAccessed}) {
 	const schedule = data;
 	const product = data.Product;
 	const totalSeconds = durationToSeconds(product.Duration);
-	const splitDuration = secondsToDuration(totalSeconds);
-	const formattedDuration = `${splitDuration.days != '00' ? splitDuration.days + ' dni' : ''} ${
-		splitDuration.hours != '00' ? splitDuration.hours + ' godzin' : ''
-	} ${splitDuration.minutes != '00' ? splitDuration.minutes + ' minut' : ''}`;
+	const splitDuration =
+		product.Type == 'Camp'
+			? secondsToDuration(totalSeconds)
+			: secondsToDuration(totalSeconds, 'hours');
+	const formattedDuration = `${
+		splitDuration.days != '0' && splitDuration.days ? splitDuration.days + ' dni' : ''
+	} ${splitDuration.hours != '0' ? splitDuration.hours + ' h' : ''} ${
+		splitDuration.minutes != '0' ? splitDuration.minutes + ' minut' : ''
+	}`;
 
 	return (
 		<>
@@ -38,7 +43,7 @@ function DetailsSchedule({data, userAccessed}) {
 				</li>
 				<li className='user-container__section-record modal-checklist__li'>
 					<p className='user-container__section-record-label'>Długość:</p>
-					<p className='user-container__section-record-content'>{`${formattedDuration} (${product.Type})`}</p>
+					<p className='user-container__section-record-content'>{`${formattedDuration}`}</p>
 				</li>
 				<li className='user-container__section-record modal-checklist__li'>
 					<p className='user-container__section-record-label'>Miejsce:</p>
