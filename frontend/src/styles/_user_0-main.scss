@@ -28,4 +28,17 @@
 	.data-table--user {
 		margin: 3rem 0;
 	}
+	.user-container__section-record {
+		@include mixin.flex(row, space-evenly, center);
+	}
+	.modal__btn--password {
+		line-height: 150%;
+		height: 2.5rem;
+		&-change {
+			background-color: rgba(yellow, 0.1);
+		}
+		&-reset {
+			background-color: rgba(red, 0.1);
+		}
+	}
 }

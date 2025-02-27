@@ -60,10 +60,9 @@ function AccountPage() {
 
 	const [isModalOpen, setIsModalOpen] = useState(modalMatch);
 
-	const handleOpenModal = (row) => {
-		const recordId = row.ID;
+	const handleOpenModal = (extraPath) => {
 		setIsModalOpen(true);
-		navigate(`${location.pathname}/${recordId}`, {state: {background: location}});
+		navigate(`${extraPath}`, {state: {background: location}});
 	};
 
 	const handleOpenScheduleModal = (id) => {
@@ -82,23 +81,20 @@ function AccountPage() {
 			case path.includes('grafik'):
 				modifier = 'schedule';
 				return modifier;
-			case path.includes('dane-uczestnika'):
-				modifier = 'customer';
-				return modifier;
 			case path.includes('statystyki'):
-				modifier = 'feedback';
+				modifier = 'statistics';
 				return modifier;
 			case path.includes('rezerwacje'):
-				modifier = 'product';
+				modifier = 'customerSchedules';
 				return modifier;
 			case path.includes('platnosci'):
-				modifier = 'schedule';
+				modifier = 'customerBookings';
 				return modifier;
 			case path.includes('faktury'):
-				modifier = 'booking';
+				modifier = 'invoices';
 				return modifier;
 			case path.includes('ustawienia'):
-				modifier = 'user';
+				modifier = 'settings';
 				return modifier;
 
 			default:
@@ -127,9 +123,9 @@ function AccountPage() {
 			customer = data.customer;
 			name = `${customer.FirstName} ${customer.LastName}`;
 			const customerStats = calculateStats(data.customer);
-			const headers = ['', 'ID', 'Data', 'Dzień', 'Godzina', 'Typ', 'Zajęcia', 'Miejsce'];
+			const headers = ['ID', 'Data', 'Dzień', 'Godzina', 'Typ', 'Zajęcia', 'Miejsce'];
 			const content = customerStats.records;
-			const keys = customerStats.recordsKeys;
+			const keys = customerStats.recordsKeys.splice(1);
 			// console.log(`✅ content: `, content);
 			// console.log(`✅ keys: `, keys);
 			console.log(`✅ customerStats: `, customerStats);
@@ -176,26 +172,26 @@ function AccountPage() {
 										value = Object.values(value);
 									}
 
-									if (key == '') {
-										value = (
-											<span
-												onClick={
-													!row.bookedByUser
-														? (e) => {
-																e.stopPropagation();
-																mutate({
-																	scheduleID: row['ID'],
-																	productName: row['Nazwa'],
-																	productPrice: row['Zadatek'],
-																});
-														  }
-														: null
-												}
-												className='material-symbols-rounded nav__icon nav__icon--side account'>
-												check
-											</span>
-										);
-									}
+									// if (key == '') {
+									// 	value = (
+									// 		<span
+									// 			onClick={
+									// 				!row.bookedByUser
+									// 					? (e) => {
+									// 							e.stopPropagation();
+									// 							mutate({
+									// 								scheduleID: row['ID'],
+									// 								productName: row['Nazwa'],
+									// 								productPrice: row['Zadatek'],
+									// 							});
+									// 					  }
+									// 					: null
+									// 			}
+									// 			className='material-symbols-rounded nav__icon nav__icon--side account'>
+									// 			check
+									// 		</span>
+									// 	);
+									// }
 									return (
 										<td
 											onClick={() => handleOpenScheduleModal(row.id)}
@@ -226,7 +222,7 @@ function AccountPage() {
 				header={name}
 			/>
 
-			<UserTabs />
+			<UserTabs onOpen={handleOpenModal} />
 
 			{stats}
 			{tableTitle}
@@ -236,6 +232,7 @@ function AccountPage() {
 					modifier={pickedModifier}
 					visited={isModalOpen}
 					onClose={handleCloseModal}
+					userAccountPage={true}
 				/>
 			)}
 		</div>

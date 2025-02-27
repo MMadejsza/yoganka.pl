@@ -68,7 +68,7 @@ app.use((req, res, next) => {
 		],
 	}) // May not exist)
 		.then((user) => {
-			console.log('✅✅✅ Found user:', user);
+			console.log('✅✅✅ Found user:');
 			req.user = user;
 			next();
 		})
@@ -93,6 +93,6 @@ db.sync({alter: true})
 		return models.Customer.findByPk(1);
 	})
 	.then((customer) => {
-		console.log(customer);
+		// console.log(customer);
 		app.listen(3000, () => console.log('🚀 Backend works on http://localhost:3000'));
 	});

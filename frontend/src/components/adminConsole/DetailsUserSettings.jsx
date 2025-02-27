@@ -1,14 +1,15 @@
-function DetailsUserSettings({settingsData}) {
+function DetailsUserSettings({settingsData, isUserAccountPage}) {
+	const title = isUserAccountPage
+		? `Preferencje:`
+		: `Preferencje użytkownika (ID ${settingsData.UserID}):`;
 	return (
 		<>
-			<h2 className='user-container__section-title modal__title--day'>
-				{`Ustawienia strony (ID ${settingsData.UserPrefID}):`}
-			</h2>
+			<h2 className='user-container__section-title modal__title--day'>{title}</h2>
 			<ul className='user-container__details-list modal-checklist__list'>
 				<li className='user-container__section-record modal-checklist__li'>
-					<p className='user-container__section-record-label'>Pozycja:</p>
+					<p className='user-container__section-record-label'>Pozycja menu:</p>
 					<p className='user-container__section-record-content'>
-						{settingsData.Handedness == 'Left' ? 'Leworęczny' : 'Praworęczny'}
+						{settingsData.Handedness == 'Left' ? 'Po lewej' : 'Po prawej'}
 					</p>
 				</li>
 				<li className='user-container__section-record modal-checklist__li'>

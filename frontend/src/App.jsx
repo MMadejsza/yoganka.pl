@@ -29,8 +29,18 @@ const router = createBrowserRouter([
 			// {path: 'zajecia', element: <ClassesPage />},
 			{path: 'yoga-dla-firm', element: <B2BPage />},
 
-			{path: 'konto', element: <AccountPage />},
-			{path: 'konto/grafik/:id', element: <AccountPage />},
+			{
+				path: 'konto',
+				element: <AccountPage />,
+				children: [
+					{path: 'grafik/:id', element: <AccountPage />},
+					{path: 'statystyki', element: <AccountPage />},
+					{path: 'rezerwacje', element: <AccountPage />},
+					{path: 'faktury', element: <AccountPage />},
+					{path: 'dane-uczestnika', element: <AccountPage />},
+					{path: 'ustawienia', element: <AccountPage />},
+				],
+			},
 			{path: 'grafik', element: <SchedulePage />},
 			{path: 'grafik/:id', element: <SchedulePage />},
 			{path: 'grafik/book/:id', element: <SchedulePage />},

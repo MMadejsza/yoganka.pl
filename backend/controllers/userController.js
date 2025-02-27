@@ -1,6 +1,37 @@
 import * as models from '../models/_index.js';
 import db from '../utils/db.js';
 
+export const showUserByID = (req, res, next) => {
+	console.log(`➡️➡️➡️ called showUserByID`);
+	const PK = req.user.UserID;
+	models.User.findByPk(PK, {
+		include: [
+			{
+				model: models.Customer, // Add Customer
+				required: false, // May not exist
+				include: [
+					{
+						model: models.CustomerPhones, // Customer phone numbers
+						required: false,
+					},
+				],
+			},
+			{
+				model: models.UserPrefSettings, // User settings if exist
+				required: false,
+			},
+		],
+	})
+		.then((user) => {
+			if (!user) {
+				return res.redirect('/konto');
+			}
+			console.log('✅ user fetched');
+
+			return res.status(200).json({isLoggedIn: req.session.isLoggedIn, user});
+		})
+		.catch((err) => console.log(err));
+};
 export const showScheduleByID = (req, res, next) => {
 	console.log(`➡️ called user showScheduleByID`);
 

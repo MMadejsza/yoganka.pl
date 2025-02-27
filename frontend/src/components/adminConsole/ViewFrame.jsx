@@ -12,17 +12,20 @@ import ViewSchedule from './ViewSchedule.jsx';
 import ViewBooking from './ViewBooking.jsx';
 import ViewReview from './ViewReview.jsx';
 
-function ViewFrame({modifier, visited, onClose, bookingOps}) {
+function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage}) {
 	const params = useParams();
 	const location = useLocation();
 	const callPath = location.pathname;
+	console.log('ViewFrame callPath: ', callPath);
 	const {data, isPending, isError, error} = useQuery({
 		queryKey: ['query', location.pathname],
 		queryFn: ({signal}) => fetchItem(callPath, {signal}),
 		staleTime: 0,
 		refetchOnMount: true,
-		enabled: !!params.id,
+		// enabled: !!params.id,
 	});
+	console.log('ViewFrame data: ', data);
+
 	const [editingState, setEditingState] = useState(false);
 
 	const handleStartEditing = () => {
@@ -63,6 +66,31 @@ function ViewFrame({modifier, visited, onClose, bookingOps}) {
 				controller.recordDisplay = <ViewReview data={data} />;
 				controller.recordEditor = '';
 				return controller;
+			case 'statistics':
+				controller.recordDisplay = <ViewCustomerStatistics data={data} />;
+				controller.recordEditor = '';
+				return controller;
+			case 'customerSchedules':
+				controller.recordDisplay = <ViewReview data={data} />;
+				controller.recordEditor = '';
+				return controller;
+			case 'customerBookings':
+				controller.recordDisplay = <ViewReview data={data} />;
+				controller.recordEditor = '';
+				return controller;
+			case 'invoices':
+				controller.recordDisplay = <ViewReview data={data} />;
+				controller.recordEditor = '';
+				return controller;
+			case 'settings':
+				controller.recordDisplay = (
+					<ViewUser
+						data={data}
+						isUserAccountPage={true}
+					/>
+				);
+				controller.recordEditor = '';
+				return controller;
 			default:
 				break;
 		}
@@ -94,7 +122,7 @@ function ViewFrame({modifier, visited, onClose, bookingOps}) {
 						onClick={editingState == false ? handleStartEditing : handleCloseEditing}>
 						{editingState == false ? 'Edytuj' : 'Wróć'}
 					</button>
-					{!editingState && (
+					{!editingState && !userAccountPage && (
 						<button className='user-container__action modal__btn'>Usuń</button>
 					)}
 				</div>

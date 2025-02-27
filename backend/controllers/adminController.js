@@ -66,8 +66,8 @@ export const showAllUsers = (req, res, next) => {
 		.catch((err) => console.log(err));
 };
 export const showUserByID = (req, res, next) => {
-	console.log(`➡️ called showUserByID`);
-	const PK = req.params.id;
+	console.log(`➡️➡️➡️ called showUserByID`);
+	const PK = req.params.id || req.user.UserID;
 	models.User.findByPk(PK, {
 		include: [
 			{

@@ -1,19 +1,15 @@
-function DetailsUser({userData, customerView}) {
+function DetailsUser({userData, customerView, isUserAccountPage}) {
+	console.log(isUserAccountPage);
+	const title = isUserAccountPage ? `Dane konta:` : `Dane użytkownika (ID ${userData.UserID}):`;
 	return (
 		<>
-			<h2 className='user-container__section-title modal__title--day'>
-				{`Dane użytkownika (ID ${userData.UserID}):`}
-			</h2>
+			<h2 className='user-container__section-title modal__title--day'>{title}</h2>
 
 			<ul className='user-container__details-list modal-checklist__list'>
 				<li className='user-container__section-record modal-checklist__li'>
-					<p className='user-container__section-record-label'>Login:</p>
-					<p className='user-container__section-record-content'>{userData.Login}</p>
-				</li>
-				<li className='user-container__section-record modal-checklist__li'>
-					<p className='user-container__section-record-label'>Kod Hasła:</p>
+					<p className='user-container__section-record-label'>Utworzono:</p>
 					<p className='user-container__section-record-content'>
-						{userData.PasswordHash}
+						{userData.RegistrationDate}
 					</p>
 				</li>
 				<li className='user-container__section-record modal-checklist__li'>
@@ -26,12 +22,21 @@ function DetailsUser({userData, customerView}) {
 						<p className='user-container__section-record-content'>{userData.Role}</p>
 					</li>
 				)}
+
 				<li className='user-container__section-record modal-checklist__li'>
-					<p className='user-container__section-record-label'>Zarejestrowany:</p>
-					<p className='user-container__section-record-content'>
-						{userData.RegistrationDate}
-					</p>
+					<p className='user-container__section-record-label'>Hasło:</p>
+					<button
+						type='button'
+						className='modal__btn modal__btn--secondary modal__btn--password modal__btn--password-change'>
+						Zmień hasło
+					</button>
+					<button
+						type='button'
+						className='modal__btn modal__btn--secondary modal__btn--password modal__btn--password-reset'>
+						Resetuj hasło
+					</button>
 				</li>
+
 				{!customerView && !userData.Customer && (
 					<li className='user-container__section-record modal-checklist__li'>
 						<p className='user-container__section-record-label'>Aktywność:</p>
