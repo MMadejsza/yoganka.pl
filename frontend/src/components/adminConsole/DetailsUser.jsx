@@ -1,3 +1,4 @@
+import {formatIsoDateTime} from '../../utils/productViewsUtils.js';
 function DetailsUser({userData, customerView, isUserAccountPage}) {
 	console.log(isUserAccountPage);
 	const title = isUserAccountPage ? `Dane konta:` : `Dane użytkownika (ID ${userData.UserID}):`;
@@ -9,20 +10,13 @@ function DetailsUser({userData, customerView, isUserAccountPage}) {
 				<li className='user-container__section-record modal-checklist__li'>
 					<p className='user-container__section-record-label'>Utworzono:</p>
 					<p className='user-container__section-record-content'>
-						{userData.RegistrationDate}
+						{formatIsoDateTime(userData.RegistrationDate)}
 					</p>
 				</li>
 				<li className='user-container__section-record modal-checklist__li'>
 					<p className='user-container__section-record-label'>Email:</p>
 					<p className='user-container__section-record-content'>{userData.Email}</p>
 				</li>
-				{userData.Role == 'Admin' && (
-					<li className='user-container__section-record modal-checklist__li'>
-						<p className='user-container__section-record-label'>Typ:</p>
-						<p className='user-container__section-record-content'>{userData.Role}</p>
-					</li>
-				)}
-
 				<li className='user-container__section-record modal-checklist__li'>
 					<p className='user-container__section-record-label'>Hasło:</p>
 					<button

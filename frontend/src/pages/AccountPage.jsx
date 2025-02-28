@@ -188,7 +188,7 @@ function AccountPage() {
 				) : (
 					<div
 						className='dimmed'
-						style={{fontSize: '2rem'}}>
+						style={{fontSize: '2rem', marginBottom: '3rem'}}>
 						Brak nowych rezerwacji
 					</div>
 				);
