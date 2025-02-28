@@ -109,13 +109,14 @@ function AccountPage() {
 		);
 	}
 
-	let user, customer;
-	let name;
-	let stats;
-	let tableTitle;
-	let table;
-	let customerStats;
+	let user, customer, userTabs, name, stats, tableTitle, table, customerStats;
 	if (data) {
+		userTabs = (
+			<UserTabs
+				onOpen={handleOpenModal}
+				person={data}
+			/>
+		);
 		// console.clear();
 		console.log(`✅ Data: `);
 		console.log(data);
@@ -125,6 +126,9 @@ function AccountPage() {
 			customerStats = calculateStats(data.customer);
 			const headers = ['ID', 'Data', 'Dzień', 'Godzina', 'Typ', 'Zajęcia', 'Miejsce'];
 			const content = customerStats.records;
+			const contentUpcoming = content.filter((schedule) => schedule.date >= today);
+
+			console.log(`✅ contentUpcoming: `, contentUpcoming);
 			const keys = customerStats.recordsKeys.splice(1);
 			// console.log(`✅ content: `, content);
 			// console.log(`✅ keys: `, keys);
@@ -140,29 +144,24 @@ function AccountPage() {
 				</div>
 			);
 
-			tableTitle = (
-				<h2 className='user-container__section-title modal__title--day'>
-					Nadchodzące zajęcia:
-				</h2>
-			);
+			tableTitle = <h2 className='user-container__section-title'>Nadchodzące zajęcia:</h2>;
 
-			table = (
-				<table className='data-table data-table--user'>
-					<thead className='data-table__headers'>
-						<tr>
-							{headers.map((header, index) => (
-								<th
-									className='data-table__single-header'
-									key={index}>
-									{header}
-								</th>
-							))}
-						</tr>
-					</thead>
-					<tbody>
-						{content
-							.filter((schedule) => schedule.date >= today)
-							.map((row, rowIndex) => (
+			table =
+				contentUpcoming && contentUpcoming.length > 0 ? (
+					<table className='data-table data-table--user'>
+						<thead className='data-table__headers'>
+							<tr>
+								{headers.map((header, index) => (
+									<th
+										className='data-table__single-header'
+										key={index}>
+										{header}
+									</th>
+								))}
+							</tr>
+						</thead>
+						<tbody>
+							{contentUpcoming.map((row, rowIndex) => (
 								<tr
 									className={`data-table__cells data-table__cells--user active ${
 										row.bookedByUser && data.isLoggedIn ? 'booked' : ''
@@ -173,27 +172,6 @@ function AccountPage() {
 										if (typeof value === 'object' && value !== null) {
 											value = Object.values(value);
 										}
-
-										// if (key == '') {
-										// 	value = (
-										// 		<span
-										// 			onClick={
-										// 				!row.bookedByUser
-										// 					? (e) => {
-										// 							e.stopPropagation();
-										// 							mutate({
-										// 								scheduleID: row['ID'],
-										// 								productName: row['Nazwa'],
-										// 								productPrice: row['Zadatek'],
-										// 							});
-										// 					  }
-										// 					: null
-										// 			}
-										// 			className='material-symbols-rounded nav__icon nav__icon--side account'>
-										// 			check
-										// 		</span>
-										// 	);
-										// }
 										return (
 											<td
 												onClick={() => handleOpenScheduleModal(row.id)}
@@ -205,15 +183,24 @@ function AccountPage() {
 									})}
 								</tr>
 							))}
-					</tbody>
-				</table>
-			);
+						</tbody>
+					</table>
+				) : (
+					<div
+						className='dimmed'
+						style={{fontSize: '2rem'}}>
+						Brak nowych rezerwacji
+					</div>
+				);
 		} else {
 			user = data.user;
-			name = user.Login;
-			table = (
-				<h2 className='user-container__section-title modal__title--day'>Brak rezerwacji</h2>
+			name = user.Email;
+			stats = (
+				<h2 className='user-container__section-title dimmed'>
+					Brak statystyk do wyświetlenia
+				</h2>
 			);
+			table = <h2 className='user-container__section-title dimmed'>Brak rezerwacji</h2>;
 		}
 	}
 
@@ -223,9 +210,7 @@ function AccountPage() {
 				classy='admin-intro'
 				header={name}
 			/>
-
-			<UserTabs onOpen={handleOpenModal} />
-
+			{userTabs}
 			{stats}
 			{tableTitle}
 			{table}

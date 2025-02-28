@@ -138,10 +138,11 @@ export const calculateStats = (customer) => {
 			if (scheduleDate <= today) {
 				totalSchedulesAmount += 1;
 				// console.log(`totalSchedulesAmount: ${totalSchedulesAmount}`);
-				if (productType === 'Class') {
-					totalClassesAmount += 1;
-					// console.log(`totalClassesAmount: ${totalClassesAmount}`);
-				} else if (productType === 'Online') {
+				// if (productType === 'Class') {
+				// 	totalClassesAmount += 1;
+				// 	// console.log(`totalClassesAmount: ${totalClassesAmount}`);
+				// } else
+				if (productType === 'Online' || productType === 'Class') {
 					totalOnlineAmount += 1;
 					// console.log(`totalOnlineAmount: ${totalOnlineAmount}`);
 				} else if (productType === 'Event') {

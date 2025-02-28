@@ -169,7 +169,7 @@ export const showAccount = (req, res, next) => {
 		return res.status(200).json({isLoggedIn: req.session.isLoggedIn, user});
 	} else {
 		let PK = req.user.Customer.CustomerID;
-
+		console.log('✅ customer fetched');
 		models.Customer.findByPk(PK, {
 			include: [
 				{

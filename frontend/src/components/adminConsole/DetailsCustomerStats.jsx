@@ -7,9 +7,7 @@ function DetailsCustomerStats({customerStats, altTitle, userAccountPage}) {
 	return (
 		<>
 			{/*PODSUMOWANIE Kasa total, terminy total, campy/eventy/clasy total, godziny total  */}
-			<h2 className='user-container__section-title modal__title--day'>
-				{altTitle ?? 'Statystyki:'}
-			</h2>
+			<h2 className='user-container__section-title '>{altTitle ?? 'Statystyki:'}</h2>
 			<ul className='schedules__summary'>
 				{!userAccountPage && (
 					<li className='schedules__summary-datum'>

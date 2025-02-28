@@ -5,6 +5,9 @@
 @use '_global_mixins-keyframes' as mixin;
 
 @media (min-width: 1025px) or (min-width: 1400px) {
+	.dimmed {
+		color: rgba(map.get(var.$colors, accent-bcg), 0.5);
+	}
 	.userTabs {
 		margin: 4rem 0;
 		@include mixin.flex(row, center);

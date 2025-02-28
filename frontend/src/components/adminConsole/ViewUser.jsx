@@ -16,7 +16,7 @@ function ViewUser({data, isUserAccountPage}) {
 	);
 	const user = data.user || data.customer.User;
 	const customer = data.customer || data.user.Customer;
-	const name = customer ? `${customer.FirstName} ${customer.LastName}` : user.Login;
+	const name = customer ? `${customer.FirstName} ${customer.LastName}` : user.Email;
 	return (
 		<>
 			<h1 className='user-container__user-title modal__title'>{name}</h1>
@@ -26,12 +26,12 @@ function ViewUser({data, isUserAccountPage}) {
 					customerView={false}
 					isUserAccountPage={isUserAccountPage}
 				/>
-				{user.UserPrefSetting && (
-					<DetailsUserSettings
-						settingsData={user.UserPrefSetting}
-						isUserAccountPage={isUserAccountPage}
-					/>
-				)}
+			</div>
+			<div className='user-container__main-details modal-checklist'>
+				<DetailsUserSettings
+					settingsData={user.UserPrefSetting}
+					isUserAccountPage={isUserAccountPage}
+				/>
 			</div>
 			{customer && (
 				<div

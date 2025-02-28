@@ -49,7 +49,7 @@ app.use(
 );
 
 app.use((req, res, next) => {
-	models.User.findByPk(1, {
+	models.User.findByPk(2, {
 		include: [
 			{
 				model: models.Customer, // Add Customer
