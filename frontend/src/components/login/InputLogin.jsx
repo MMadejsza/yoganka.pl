@@ -1,18 +1,69 @@
-function InputLogin({formType, id, label, value, isFocused, didEdit, validationResults, ...props}) {
-	return (
-		<div className='input-pair'>
-			<label htmlFor={id}>{label}</label>
+function InputLogin({
+	formType,
+	embedded,
+	id,
+	label,
+	value,
+	isFocused,
+	didEdit,
+	validationResults,
+	...props
+}) {
+	let input;
+	if (props.type === 'checkbox') {
+		input = (
+			<input
+				id={id}
+				type='checkbox'
+				checked={value}
+				{...props}
+				className={`${formType}-form__${id}-input`}
+			/>
+		);
+	} else {
+		input = (
 			<input
 				id={id}
 				value={value}
 				{...props}
 				className={`${formType}-form__${id}-input`}
 			/>
+		);
+	}
+	if (props.type == 'select') {
+		input = (
+			<select
+				name={id}
+				id={id}
+				value={value}
+				{...props}>
+				{props.options.map((option) => (
+					<option
+						key={option.value}
+						value={option.value}>
+						{option.label}
+					</option>
+				))}
+			</select>
+		);
+	}
+	return (
+		<div
+			className={`${
+				embedded ? 'user-container__section-record modal-checklist__li' : 'input-pair'
+			} ${props.type == 'tel' && 'phone'}`}>
+			<label
+				htmlFor={id}
+				className={`${embedded ? 'user-container__section-record-label' : ''}`}>
+				{label}
+			</label>
+
+			{input}
 
 			{/* After editing */}
-			{(isFocused || didEdit) && (
+			{validationResults && (isFocused || didEdit) && (
 				<ul className='control-error'>
-					{validationResults.map((result, index) => (
+					{validationResults?.map((result, index) => (
 						// List all the rules and messages
 						<li
 							key={index}

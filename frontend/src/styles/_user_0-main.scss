@@ -32,11 +32,20 @@
 		margin: 3rem 0;
 	}
 	.user-container__section-record {
-		@include mixin.flex(row, space-evenly, center);
+		width: 100%;
+
+		@include mixin.flex(row, space-between, center);
+		flex-wrap: wrap;
+		&.phone {
+			// flex-direction: column;
+		}
 	}
-	.modal__btn--password {
-		line-height: 150%;
+
+	.modal__btn--small {
 		height: 2.5rem;
+		min-height: auto;
+		line-height: 150%;
+		font-size: 1.4rem;
 		&-change {
 			background-color: rgba(yellow, 0.1);
 		}

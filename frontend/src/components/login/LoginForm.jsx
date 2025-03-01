@@ -132,7 +132,7 @@ function LoginFrom() {
 	if (isPending) {
 		content = 'Wysyłanie...';
 	} else if (isError) {
-		content = `Błąd logowania: ${error}'`;
+		content = `Błąd: ${error}'`;
 	} else
 		content = (
 			<section className={formType}>

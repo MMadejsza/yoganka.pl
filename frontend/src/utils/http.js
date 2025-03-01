@@ -65,7 +65,7 @@ export async function create(link, formData) {
 }
 
 export async function fetchItem(callPath, {signal}) {
-	console.log('✅✅✅ fetchItem Called');
+	// console.log('✅✅✅ fetchItem Called');
 	const response = await fetch(`/api${callPath}`, {
 		signal,
 		cache: 'no-store',

@@ -50,9 +50,10 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 					<ViewUser
 						data={data}
 						isUserAccountPage={location.pathname.includes('ustawienia') ?? false}
+						isEditing={editingState}
 					/>
 				);
-				controller.recordEditor = <UserForm />;
+				// controller.recordEditor = <UserForm />;
 				return controller;
 			case 'customer':
 				controller.recordDisplay = <ViewCustomer data={data} />;
@@ -105,6 +106,7 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 					<ViewUser
 						data={data}
 						isUserAccountPage={true}
+						isEditing={editingState}
 					/>
 				);
 				controller.recordEditor = '';
@@ -146,7 +148,7 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 						<button className='user-container__action modal__btn'>Usuń</button>
 					)}
 				</div>
-				{editingState == false ? dataDisplay : dataEditor}
+				{dataDisplay}
 			</div>
 		</ModalFrame>
 	);

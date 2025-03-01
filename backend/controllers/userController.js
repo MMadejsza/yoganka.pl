@@ -234,3 +234,21 @@ export const showAccount = (req, res, next) => {
 			.catch((err) => console.log(err));
 	}
 };
+
+export const getEditSettings = (req, res, next) => {
+	console.log(`➡️➡️➡️ called getEditSettings`);
+
+	const PK = req.user.UserPrefSetting?.UserPrefID;
+
+	models.UserPrefSettings.findByPk(PK)
+		.then((preferences) => {
+			return res.status(200).json({preferences});
+		})
+		.catch((err) => console.log(err));
+};
+export const getEditCustomer = (req, res, next) => {
+	console.log(`➡️➡️➡️ called getEditCustomer`);
+	const customer = req.user.Customer;
+	console.log(customer);
+	return res.status(200).json({customer});
+};

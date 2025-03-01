@@ -9,7 +9,7 @@ import Section from '../components/Section.jsx';
 import DetailsCustomerStats from '../components/adminConsole/DetailsCustomerStats.jsx';
 
 function AccountPage() {
-	console.log(`✅ AccountPAge: `);
+	// console.log(`✅ AccountPAge: `);
 	const modalMatch = useMatch('/konto/ustawienia');
 	const navigate = useNavigate();
 	const location = useLocation(); // fetch current path

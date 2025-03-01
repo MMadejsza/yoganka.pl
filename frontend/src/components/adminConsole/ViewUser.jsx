@@ -2,7 +2,7 @@ import DetailsUser from './DetailsUser.jsx';
 import DetailsCustomer from './DetailsCustomer.jsx';
 import DetailsUserSettings from './DetailsUserSettings.jsx';
 
-function ViewUser({data, isUserAccountPage}) {
+function ViewUser({data, isUserAccountPage, isEditing}) {
 	console.clear();
 	console.log(
 		`📝 user object from backend:
@@ -13,6 +13,11 @@ function ViewUser({data, isUserAccountPage}) {
 		`📝 isUserAccountPage:
 		`,
 		isUserAccountPage,
+	);
+	console.log(
+		`📝 isEditing:
+		`,
+		isEditing,
 	);
 	const user = data.user || data.customer.User;
 	const customer = data.customer || data.user.Customer;
@@ -34,6 +39,7 @@ function ViewUser({data, isUserAccountPage}) {
 				<DetailsUserSettings
 					settingsData={user.UserPrefSetting}
 					isUserAccountPage={isUserAccountPage}
+					isEditing={isEditing}
 				/>
 			</div>
 			{customer && (
@@ -44,6 +50,7 @@ function ViewUser({data, isUserAccountPage}) {
 					<DetailsCustomer
 						customerData={customer}
 						isUserAccountPage={isUserAccountPage}
+						isEditing={isEditing}
 					/>
 				</div>
 			)}

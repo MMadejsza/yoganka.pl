@@ -33,64 +33,6 @@
 		gap: 1.5rem;
 	}
 
-	h1,
-	h2,
-	h3 {
-		color: map.get(var.$colors, tile-title);
-		font-size: 2.5rem;
-		transition: map.get(var.$behavior, base-transition);
-
-		&.form__title {
-			margin-bottom: 2rem;
-		}
-	}
-
-	.input-pair {
-		width: 70%;
-		@include mixin.flex(column, space-evenly, flex-start);
-		gap: 0.5rem;
-
-		label {
-			font-size: 1.8rem;
-		}
-
-		&--checkbox {
-			@include mixin.flex(row, center, center);
-			gap: 2rem;
-
-			line-height: 4rem;
-		}
-	}
-
-	input {
-		width: 100%;
-		padding-left: 1.5rem;
-		line-height: 3rem;
-		font-family: inherit;
-		border-radius: map.get(var.$sizes, border-radius);
-		background-color: rgba(map.get(var.$colors, base), 1);
-		border: none;
-		outline: none;
-		transition: map.get(var.$behavior, base-transition);
-
-		&:hover,
-		&:focus:not([type='checkbox']) {
-			box-shadow: map.get(var.$shadows, active-box-shadow);
-		}
-
-		&[type='checkbox'] {
-			cursor: pointer;
-			width: 2rem;
-			height: 2rem;
-			padding: 0.1rem;
-
-			font-size: 2rem;
-			border-radius: map.get(var.$sizes, border-radius);
-
-			@include mixin.flex(row, center, center);
-		}
-	}
-
 	.register {
 		&__question-block {
 			align-self: center;
@@ -113,31 +55,97 @@
 			margin-top: 2rem;
 		}
 	}
-	.control-error {
-		width: 100%;
-		margin-top: 1.5rem;
-		font-size: 1.5rem;
-		text-align: left;
-		@include mixin.flex(column);
-		opacity: 0.6;
+}
+h1,
+h2,
+h3 {
+	color: map.get(var.$colors, tile-title);
+	font-size: 2.5rem;
+	transition: map.get(var.$behavior, base-transition);
 
-		span {
-			&:last-of-type {
-				align-self: flex-start;
-			}
-			font-size: 1.8rem;
+	&.form__title {
+		margin-bottom: 2rem;
+	}
+}
+
+.input-pair {
+	width: 70%;
+	@include mixin.flex(column, space-evenly, flex-start);
+	gap: 0.5rem;
+
+	label {
+		font-size: 1.8rem;
+	}
+
+	&--checkbox {
+		@include mixin.flex(row, center, center);
+		gap: 2rem;
+
+		line-height: 4rem;
+	}
+}
+
+input {
+	width: 100%;
+	padding-left: 1.5rem;
+	line-height: 3rem;
+	font-family: inherit;
+	border-radius: map.get(var.$sizes, border-radius);
+	background-color: rgba(map.get(var.$colors, base), 1);
+	border: none;
+	outline: none;
+	transition: map.get(var.$behavior, base-transition);
+
+	&:hover,
+	&:focus:not([type='checkbox']) {
+		box-shadow: map.get(var.$shadows, active-box-shadow);
+	}
+
+	&[type='checkbox'] {
+		cursor: pointer;
+		width: 2rem;
+		height: 2rem;
+		padding: 0.1rem;
+
+		font-size: 2rem;
+		border-radius: map.get(var.$sizes, border-radius);
+
+		@include mixin.flex(row, center, center);
+	}
+	&.settings-form__font-input {
+		width: min-content;
+	}
+	&.settings-form__phone-input {
+		width: max-content;
+		flex-basis: 20%;
+	}
+}
+
+.control-error {
+	width: 50%;
+	margin-top: 1.5rem;
+	line-height: 150%;
+	font-size: 1.5rem;
+	text-align: left;
+	@include mixin.flex(column);
+	opacity: 0.6;
+
+	span {
+		&:last-of-type {
+			align-self: flex-start;
 		}
+		font-size: 1.8rem;
+	}
 
-		&__msg {
-			@include mixin.flex(row, flex-start, center);
-			gap: 1rem;
+	&__msg {
+		@include mixin.flex(row, flex-start, center);
+		gap: 1rem;
 
-			&.msg-error {
-				color: #e25822;
-			}
-			&.msg-valid {
-				color: green;
-			}
+		&.msg-error {
+			color: #e25822;
+		}
+		&.msg-valid {
+			color: green;
 		}
 	}
 }

@@ -76,7 +76,7 @@ export const calculateStats = (customer) => {
 	let totalOnlineAmount = 0;
 	let totalSchedulesAmount =
 		totalCampsAmount + totalEventsAmount + totalClassesAmount + totalOnlineAmount;
-	console.log(customer.Bookings);
+	// console.log(customer.Bookings);
 	for (let booking of customer.Bookings) {
 		totalRevenue += parseFloat(booking.AmountPaid);
 		// console.log(`totalRevenue: ${totalRevenue}`);
@@ -134,7 +134,7 @@ export const calculateStats = (customer) => {
 				bookedByUser: true,
 			});
 
-			console.log(`scheduleDate >= today ${scheduleDate} ${today}`);
+			// console.log(`scheduleDate >= today ${scheduleDate} ${today}`);
 			if (scheduleDate <= today) {
 				totalSchedulesAmount += 1;
 				// console.log(`totalSchedulesAmount: ${totalSchedulesAmount}`);

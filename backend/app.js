@@ -68,7 +68,7 @@ app.use((req, res, next) => {
 		],
 	}) // May not exist)
 		.then((user) => {
-			console.log('✅✅✅ Found user:');
+			console.log('✅✅✅ Found user:', user);
 			req.user = user;
 			next();
 		})

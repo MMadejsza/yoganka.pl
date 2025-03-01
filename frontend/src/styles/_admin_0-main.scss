@@ -257,21 +257,25 @@
 		}
 		&__details-list {
 			@include mixin.flex(column, center);
+			width: max-content;
 			margin-bottom: 1rem;
+			& button:not(.password) {
+				margin-top: 1rem;
+				align-self: center;
+			}
 		}
 		&__section-title {
 			font-size: 2.2rem;
 			color: map.get(var.$colors, accent-bcg);
 		}
-		&__section-record-label {
-			font-weight: 600;
-		}
-		&__section-record-content {
-			ul {
-				@include mixin.flex(column);
+		&__section-record {
+			&-label {
+				font-weight: 600;
 			}
-			&--phone {
-				// flex-basis: 100%;
+			&-content {
+				ul {
+					@include mixin.flex(column);
+				}
 			}
 		}
 		.modal__btn.book {

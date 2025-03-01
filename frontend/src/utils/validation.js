@@ -1,3 +1,30 @@
+//! PHONE RULESET
+export const phoneValidations = [
+	{
+		// sprawdza, czy numer zawiera tylko dozwolone znaki: cyfry, spacje, myślniki, nawiasy i znak +
+		rule: (value) => /^[+\d\s()-]+$/.test(value),
+		message: 'Tylko cyfry, spacje, -, (), +',
+	},
+	{
+		// wymuszamy podanie kierunkowego, czyli numer musi zaczynać się od "+"
+		// wymuszamy podanie kierunkowego, czyli numer musi zaczynać się od "+"
+		// i sprawdzamy, czy kierunkowy ma od 1 do 3 cyfr
+		rule: (value) => {
+			const trimmed = value.trim();
+			const match = trimmed.match(/^\+(\d{1,3})/);
+			return match !== null;
+		},
+		message: 'Numer kierunkowy (np. +48)',
+	},
+	{
+		// walidacja długości numeru: liczymy same cyfry, wymagamy ich od 8 do 15
+		rule: (value) => {
+			const digits = value.replace(/\D/g, '');
+			return digits.length >= 8 && digits.length <= 15;
+		},
+		message: '8 do 15 cyfr',
+	},
+];
 //! EMAIL RULESET
 export const emailValidations = [
 	{
