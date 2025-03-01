@@ -46,7 +46,12 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 		let controller = {};
 		switch (modifier) {
 			case 'user':
-				controller.recordDisplay = <ViewUser data={data} />;
+				controller.recordDisplay = (
+					<ViewUser
+						data={data}
+						isUserAccountPage={location.pathname.includes('ustawienia') ?? false}
+					/>
+				);
 				controller.recordEditor = <UserForm />;
 				return controller;
 			case 'customer':

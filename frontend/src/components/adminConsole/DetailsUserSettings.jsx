@@ -14,7 +14,9 @@ function DetailsUserSettings({settingsData, isUserAccountPage}) {
 
 	const title = isUserAccountPage
 		? `Preferencje:`
-		: `Preferencje użytkownika (ID ${settingsData.UserID}):`;
+		: `Preferencje użytkownika  ${
+				settingsData?.UserID ? '(ID ' + settingsData?.UserID + '):' : '(Domyślne)'
+		  }`;
 	return (
 		<>
 			<h2 className='user-container__section-title modal__title--day'>{title}</h2>

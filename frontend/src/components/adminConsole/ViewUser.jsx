@@ -16,7 +16,7 @@ function ViewUser({data, isUserAccountPage}) {
 	);
 	const user = data.user || data.customer.User;
 	const customer = data.customer || data.user.Customer;
-	const isAdmin = data.user.Role == 'Admin' || data.customer.User.Role == 'Admin';
+	const isAdmin = data.user.Role == 'Admin'; //|| data.user.User?.Role == 'Admin';
 	const name = customer ? `${customer.FirstName} ${customer.LastName}` : user.Email;
 	return (
 		<>

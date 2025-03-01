@@ -22,12 +22,12 @@ function DetailsUser({userData, customerView, isUserAccountPage}) {
 					<button
 						type='button'
 						className='modal__btn modal__btn--secondary modal__btn--password modal__btn--password-change'>
-						Zmień hasło
+						Zmień
 					</button>
 					<button
 						type='button'
 						className='modal__btn modal__btn--secondary modal__btn--password modal__btn--password-reset'>
-						Resetuj hasło
+						Resetuj
 					</button>
 				</li>
 
