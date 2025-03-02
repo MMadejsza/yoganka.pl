@@ -18,6 +18,8 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 	const params = useParams();
 	const location = useLocation();
 	const callPath = location.pathname;
+	const isAdminPanel = location.pathname.includes('admin-console');
+	const isUserSettings = location.pathname.includes('konto/ustawienia');
 	const noFetchPaths = ['statystyki', 'zajecia', 'rezerwacje', 'faktury'];
 
 	console.log('ViewFrame callPath: ', callPath);
@@ -140,12 +142,16 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 			onClose={onClose}>
 			<div className='user-container modal__summary'>
 				<div className='user-container__actions-block'>
-					<button
-						className='user-container__action modal__btn'
-						onClick={editingState == false ? handleStartEditing : handleCloseEditing}>
-						{editingState == false ? 'Edytuj' : 'Wróć'}
-					</button>
-					{!editingState && !userAccountPage && (
+					{(isAdminPanel || isUserSettings) && (
+						<button
+							className='user-container__action modal__btn'
+							onClick={
+								editingState == false ? handleStartEditing : handleCloseEditing
+							}>
+							{editingState == false ? 'Edytuj' : 'Wróć'}
+						</button>
+					)}
+					{!editingState && isAdminPanel && (
 						<button className='user-container__action modal__btn'>Usuń</button>
 					)}
 				</div>

@@ -4,7 +4,9 @@ import DetailsProductStats from './DetailsProductStats.jsx';
 import DetailsProductBookings from './DetailsProductBookings.jsx';
 import DetailsProductReviews from './DetailsProductReviews.jsx';
 import {calculateProductStats} from '../../utils/productViewsUtils.js';
-import {useLocation} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
+import {useQuery} from '@tanstack/react-query';
+import {fetchStatus} from '../../utils/http.js';
 
 function ViewSchedule({data, bookingOps}) {
 	// console.clear();
@@ -13,7 +15,12 @@ function ViewSchedule({data, bookingOps}) {
 	    Schedule object from backend:`,
 		data,
 	);
+	const {data: userStatus} = useQuery({
+		queryKey: ['authStatus'],
+		queryFn: fetchStatus,
+	});
 	const location = useLocation();
+	const navigate = useNavigate();
 	const userAccountPage = location.pathname.includes('konto');
 	const {schedule} = data;
 	const {Product: product} = schedule;
@@ -21,7 +28,7 @@ function ViewSchedule({data, bookingOps}) {
 	let prodStats = null;
 
 	const userAccessed = typeof schedule.Bookings == 'number';
-
+	const {isLoggedIn} = userStatus;
 	if (!userAccessed) prodStats = calculateProductStats(product, [schedule]);
 
 	const handleBooking = () => {
@@ -38,6 +45,22 @@ function ViewSchedule({data, bookingOps}) {
 		// 	productPrice: product.Price,
 		// });
 	};
+
+	const bookingBtn = isLoggedIn ? (
+		<button
+			onClick={handleBooking}
+			className='book modal__btn'>
+			<span className='material-symbols-rounded nav__icon '>shopping_bag_speed</span>
+			Rezerwuj
+		</button>
+	) : (
+		<button
+			onClick={() => navigate('/login')}
+			className='book modal__btn'>
+			<span className='material-symbols-rounded nav__icon '>login</span>
+			Zaloguj się
+		</button>
+	);
 
 	return (
 		<>
@@ -98,15 +121,8 @@ function ViewSchedule({data, bookingOps}) {
 
 			{bookingOps?.isError && <div className='error-box'>{bookingOps.error.message}</div>}
 
-			{!bookingOps?.isError && userAccessed && !schedule.bookedByUser && (
-				<button
-					onClick={handleBooking}
-					className='book modal__btn'>
-					<span className='material-symbols-rounded nav__icon '>shopping_bag_speed</span>
-					Rezerwuj
-				</button>
-			)}
-			{!bookingOps?.isError && userAccessed && schedule.bookedByUser && userAccountPage && (
+			{!bookingOps?.isError && !schedule.bookedByUser && bookingBtn}
+			{!bookingOps?.isError && isLoggedIn && schedule.bookedByUser && userAccountPage && (
 				<button
 					onClick={handleCancellation}
 					className='book modal__btn modal__btn--cancel'>

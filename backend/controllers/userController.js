@@ -1,5 +1,7 @@
-import * as models from '../models/_index.js';
 import db from '../utils/db.js';
+import * as models from '../models/_index.js';
+import columnMaps from '../utils/columnsMapping.js';
+import {formatIsoDateTime, getWeekDay} from '../utils/formatDateTime.js';
 
 export const showUserByID = (req, res, next) => {
 	console.log(`➡️➡️➡️ called showUserByID`);
@@ -32,8 +34,94 @@ export const showUserByID = (req, res, next) => {
 		})
 		.catch((err) => console.log(err));
 };
+export const showAllSchedules = (req, res, next) => {
+	const model = models.ScheduleRecord;
+	const isUser = !!req.user;
+	const isCustomer = !!req.Customer;
+
+	// We create dynamic joint columns based on the map
+	const columnMap = columnMaps[model.name] || {};
+	const includeAttributes = [];
+
+	// If logged In and is Customer - we want to check his booked schedules to flag them later
+	const bookingInclude = {
+		model: models.Booking,
+		required: false,
+		attributes: ['BookingID'], //booking Id is enough
+
+		where: isUser && isCustomer ? {CustomerID: req.user.Customer.CustomerID} : undefined, // Filter
+	};
+
+	model
+		.findAll({
+			include: [
+				{
+					model: models.Product,
+					attributes: ['Type', 'Name', 'Price'],
+				},
+				bookingInclude,
+			],
+			attributes: {
+				include: includeAttributes, // Adding joint columns
+				exclude: ['ProductID'], // Deleting substituted ones
+			},
+		})
+		.then((records) => {
+			// Convert for records for different names
+			const formattedRecords = records.map((record) => {
+				const newRecord = {}; // Container for formatted data
+
+				const attributes = model.getAttributes();
+				const jsonRecord = record.toJSON();
+
+				// 🔄 Iterate after each column in user record
+				for (const key in jsonRecord) {
+					const newKey = columnMap[key] || key; // New or original name if not specified
+					const attributeType = attributes[key]?.type.constructor.key?.toUpperCase();
+					if (
+						attributeType === 'DATE' ||
+						attributeType === 'DATEONLY' ||
+						attributeType === 'DATETIME'
+					) {
+						newRecord[newKey] = formatIsoDateTime(jsonRecord[key]);
+					} else if (key === 'Product' && jsonRecord[key]) {
+						newRecord['Typ'] = jsonRecord[key].Type; //  flatten object
+						newRecord['Nazwa'] = jsonRecord[key].Name;
+					} else if (key === 'Bookings' && req.user?.Customer) {
+						newRecord.bookedByUser = (jsonRecord.Bookings || []).length > 0;
+					} else {
+						newRecord[newKey] = jsonRecord[key]; // Assignment
+					}
+				}
+				newRecord['Dzień'] = getWeekDay(jsonRecord['Date']);
+				newRecord['Zadatek'] = jsonRecord.Product.Price;
+				return newRecord; // Return new record object
+			});
+
+			// New headers (keys from columnMap)
+			const totalHeaders = [
+				'',
+				'ID',
+				'Data',
+				'Dzień',
+				'Godzina rozpoczęcia',
+				'Typ',
+				'Nazwa',
+				'Lokalizacja',
+			];
+			// ✅ Return response to frontend
+			res.json({
+				isLoggedIn: req.session.isLoggedIn || false,
+				totalHeaders, // To render
+				content: formattedRecords, // With new names
+			});
+		})
+		.catch((err) => console.log(err));
+};
 export const showScheduleByID = (req, res, next) => {
 	console.log(`➡️ called user showScheduleByID`);
+	const isUser = !!req.user;
+	const isCustomer = !!req.Customer;
 
 	const PK = req.params.id;
 	models.ScheduleRecord.findByPk(PK, {
@@ -63,7 +151,7 @@ export const showScheduleByID = (req, res, next) => {
 
 			// We substitute bookings content for security
 			if (schedule.Bookings) {
-				if (req.user && req.user.Customer) {
+				if (isUser && isCustomer) {
 					bookedByUser = schedule.Bookings.some(
 						(booking) => booking.CustomerID === req.user.Customer.CustomerID,
 					);

@@ -1,11 +1,10 @@
 import express from 'express';
-import * as adminC from '../controllers/adminController.js';
 import * as userC from '../controllers/userController.js';
 
 const router = express.Router();
 
 router.get('/grafik/:id', userC.showScheduleByID);
-router.get('/grafik', adminC.showAllSchedules);
+router.get('/grafik', userC.showAllSchedules);
 router.get('/konto/grafik/:id', userC.showScheduleByID);
 router.get('/konto/ustawienia/preferencje', userC.getEditSettings);
 router.get('/konto/ustawienia/uczestnik', userC.getEditCustomer);
