@@ -9,7 +9,6 @@ import {
 	passwordValidations,
 	getConfirmedPasswordValidations,
 } from '../../utils/validation.js';
-import {formatIsoDateTime} from '../../utils/productViewsUtils.js';
 
 function LoginFrom() {
 	const navigate = useNavigate();
@@ -24,10 +23,13 @@ function LoginFrom() {
 				body: JSON.stringify(formData),
 				credentials: 'include', // include cookies
 			}).then((response) => {
-				if (!response.ok) {
-					throw new Error('Błąd logowania');
-				}
-				return response.json();
+				return response.json().then((data) => {
+					if (!response.ok) {
+						// reject with backend data
+						return Promise.reject(data);
+					}
+					return data;
+				});
 			});
 		},
 		onSuccess: (res) => {
@@ -36,17 +38,23 @@ function LoginFrom() {
 				if (res.code == 303) {
 					navigate('/login');
 					setFirstTime(!firstTime);
-					console.log(res.message);
+					console.log(res);
 				} else if (res.code == 200) {
 					navigate('/login');
 					setFirstTime(!firstTime);
-					console.log(res.message);
+					console.log(res);
 				}
 			}
-			navigate('/login');
+			navigate('/');
 		},
 		onError: (error) => {
-			window.alert(error.message);
+			if (error.code == 404) {
+				navigate('/login');
+				if (error.type != 'login') {
+					setFirstTime(!firstTime);
+				}
+				console.log(error);
+			}
 		},
 	});
 
@@ -141,11 +149,14 @@ function LoginFrom() {
 	const {formType, title, switchTitle, actionTitle} = formLabels;
 
 	let content;
+	let errorMsg;
+	let userIsEditing = confirmedPasswordIsFocused || emailIsFocused || passwordIsFocused;
 
+	if (isError) {
+		errorMsg = `${error.message}`;
+	}
 	if (isPending) {
 		content = 'Wysyłanie...';
-	} else if (isError) {
-		content = `Błąd: ${error}'`;
 	} else
 		content = (
 			<section className={formType}>
@@ -166,7 +177,7 @@ function LoginFrom() {
 						onFocus={handleEmailFocus}
 						onBlur={handleEmailBlur}
 						onChange={handleEmailChange}
-						placeholder='(Wyślemy link aktywacyjny)'
+						placeholder={`${firstTime ? '(Wyślemy link aktywacyjny)' : ''}`}
 						autoComplete='email'
 						required
 						validationResults={emailValidationResults}
@@ -206,6 +217,9 @@ function LoginFrom() {
 							isFocused={confirmedPasswordIsFocused}
 						/>
 					)}
+
+					{!userIsEditing && errorMsg}
+
 					<button
 						type='reset'
 						onClick={handleReset}

@@ -49,7 +49,11 @@ app.use(
 );
 
 app.use((req, res, next) => {
-	models.User.findByPk(1, {
+	if (!req.session.user) {
+		return next();
+	}
+
+	models.User.findByPk(req.session.user.UserID, {
 		include: [
 			{
 				model: models.Customer, // Add Customer
@@ -66,17 +70,43 @@ app.use((req, res, next) => {
 				required: false,
 			},
 		],
-	}) // May not exist)
+	})
 		.then((user) => {
-			console.log('✅✅✅ Found user:');
 			req.user = user;
 			next();
 		})
-		.catch((err) => {
-			console.log(err);
-			next(err);
-		});
+		.catch((err) => console.log(err));
 });
+
+// app.use((req, res, next) => {
+// 	models.User.findByPk(1, {
+// 		include: [
+// 			{
+// 				model: models.Customer, // Add Customer
+// 				required: false, // May not exist
+// 				include: [
+// 					{
+// 						model: models.CustomerPhones, // Customer phone numbers
+// 						required: false,
+// 					},
+// 				],
+// 			},
+// 			{
+// 				model: models.UserPrefSettings, // User settings if exist
+// 				required: false,
+// 			},
+// 		],
+// 	}) // May not exist)
+// 		.then((user) => {
+// 			console.log('✅✅✅ Found user:');
+// 			req.user = user;
+// 			next();
+// 		})
+// 		.catch((err) => {
+// 			console.log(err);
+// 			next(err);
+// 		});
+// });
 
 // Filtering that works only for /admin/*
 app.use(`/login-pass`, authRoutes);

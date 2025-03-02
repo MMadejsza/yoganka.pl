@@ -50,7 +50,7 @@ function DetailsUserSettingsForm() {
 		},
 	});
 	// Fallback to feed custom hooks when data isn't available
-	const phoneDefault = data?.customer.CustomerPhones[0].CustomerMobile || ' ';
+	const phoneDefault = data?.customer.CustomerPhones[0]?.CustomerMobile || ' ';
 
 	const methodDefault = data?.customer.PreferredContactMethod || ' ';
 

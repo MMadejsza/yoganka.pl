@@ -1,8 +1,9 @@
 import * as models from '../models/_index.js';
+import bcrypt from 'bcryptjs';
 
 export const getStatus = (req, res, next) => {
-	if (req.session.isLoggedIn) {
-		return res.json({isLoggedIn: true});
+	if (req.session?.isLoggedIn) {
+		return res.json({isLoggedIn: req.session.isLoggedIn, role: req.session.role});
 	}
 	res.json({isLoggedIn: false});
 };
@@ -14,25 +15,33 @@ export const postSignup = (req, res, next) => {
 	models.User.findOne({where: {email}})
 		.then((user) => {
 			if (user) {
-				return res
-					.status(200)
-					.json({type: 'signup', code: 303, message: 'Użytkownik już istnieje.'});
+				return res.status(404).json({
+					type: 'signup',
+					code: 404,
+					message: 'Użytkownik już istnieje',
+				});
 			}
-			const newUser = models.User.create({
-				RegistrationDate: date,
-				PasswordHash: password,
-				LastLoginDate: date,
-				Email: email,
-				Role: 'user',
-				ProfilePictureSrcSetJSON: null,
-			});
 
-			return res.status(200).json({
-				type: 'signup',
-				code: 200,
-				message: 'Zarejestrowano pomyślnie',
-				user: newUser,
-			});
+			// it returns the promise
+			return bcrypt
+				.hash(password, 12)
+				.then((passwordHashed) => {
+					return models.User.create({
+						RegistrationDate: date,
+						PasswordHash: passwordHashed,
+						LastLoginDate: date,
+						Email: email,
+						Role: 'user',
+						ProfilePictureSrcSetJSON: null,
+					});
+				})
+				.then((newUser) => {
+					return res.status(200).json({
+						type: 'signup',
+						code: 200,
+						message: 'Zarejestrowano pomyślnie',
+					});
+				});
 		})
 		.catch((err) => {
 			console.log(err);
@@ -45,17 +54,34 @@ export const postLogin = (req, res, next) => {
 
 	models.User.findOne({where: {email}})
 		.then((user) => {
-			if (user) {
-				return res
-					.status(200)
-					.json({type: 'login', code: 404, message: 'Użytkownik nie istnieje.'});
+			if (!user) {
+				return res.status(404).json({
+					type: 'login',
+					code: 404,
+					message: 'Użytkownik nie istnieje',
+				});
 			}
 
-			return res.status(200).json({
-				type: 'login',
-				code: 200,
-				message: 'Zalogowano pomyślnie',
-				user: user,
+			// regardless match or mismatch catch takes only if something is wrong with bcrypt itself. otherwise it goes to the next block with promise as boolean
+			bcrypt.compare(password, user.PasswordHash).then((doMatch) => {
+				if (doMatch) {
+					console.log('match');
+					req.session.isLoggedIn = true;
+					req.session.user = user;
+					req.session.role = user.Role;
+					return res.status(200).json({
+						type: 'login',
+						code: 200,
+						message: 'Zalogowano pomyślnie',
+					});
+				} else {
+					console.log('no match');
+					return res.status(404).json({
+						type: 'login',
+						code: 404,
+						message: 'Hasło nieprawidłowe',
+					});
+				}
 			});
 		})
 		.catch((err) => {

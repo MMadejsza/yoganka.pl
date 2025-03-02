@@ -146,6 +146,10 @@ function Nav({setIsNavOpen}) {
 				if (li.name === 'Zaloguj') {
 					return null;
 				}
+				if (li.name === 'Admin Panel' && data.role != 'admin') {
+					return null;
+				}
+
 				// Logout turn into btn triggering fetch
 				if (li.name === 'Wyloguj') {
 					return (
