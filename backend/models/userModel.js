@@ -13,10 +13,6 @@ const User = sequelizeDb.define(
 			type: DataTypes.DATE,
 			allowNull: false,
 		},
-		Login: {
-			type: DataTypes.STRING(255),
-			allowNull: false,
-		},
 		PasswordHash: {
 			type: DataTypes.STRING(255),
 			allowNull: false,

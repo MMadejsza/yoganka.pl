@@ -88,11 +88,6 @@ app.use((req, res) => {
 	res.status(404).send(`<h1>Page not found</h1>`);
 });
 
-db.sync({alter: true})
-	.then((result) => {
-		return models.Customer.findByPk(1);
-	})
-	.then((customer) => {
-		// console.log(customer);
-		app.listen(3000, () => console.log('🚀 Backend works on http://localhost:3000'));
-	});
+db.sync({alter: true}).then(() => {
+	app.listen(3000, () => console.log('🚀 Backend works on http://localhost:3000'));
+});

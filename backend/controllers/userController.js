@@ -261,7 +261,6 @@ export const postEditSettings = (req, res, next) => {
 	const notifications = !!req.body.notifications || false;
 	const animation = !!req.body.animation || false;
 	const theme = !!req.body.theme || false;
-	const userPrefID = req.user.UserPrefSetting?.UserPrefID;
 
 	// if preferences don't exist - create new ones:
 	models.UserPrefSettings.findOrCreate({

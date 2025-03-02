@@ -15,8 +15,8 @@ function LoginFrom() {
 	const navigate = useNavigate();
 
 	const {mutate, isPending, isError, error} = useMutation({
-		mutationFn: (formData) => {
-			return fetch('/api/login-pass/login-check', {
+		mutationFn: ({formData, modifier}) => {
+			return fetch(`/api/login-pass/${modifier}`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -30,9 +30,20 @@ function LoginFrom() {
 				return response.json();
 			});
 		},
-		onSuccess: () => {
+		onSuccess: (res) => {
 			queryClient.invalidateQueries(['authStatus']);
-			navigate('/admin-console/show-all-users');
+			if (res.type == 'signup') {
+				if (res.code == 303) {
+					navigate('/login');
+					setFirstTime(!firstTime);
+					console.log(res.message);
+				} else if (res.code == 200) {
+					navigate('/login');
+					setFirstTime(!firstTime);
+					console.log(res.message);
+				}
+			}
+			navigate('/login');
 		},
 		onError: (error) => {
 			window.alert(error.message);
@@ -103,12 +114,14 @@ function LoginFrom() {
 
 		const fd = new FormData(e.target);
 		const data = Object.fromEntries(fd.entries());
-		data.date = formatIsoDateTime(new Date().toISOString());
+		data.date = new Date().toISOString();
 		console.log('sent data:', data);
-		mutate(data);
+		if (firstTime) {
+			mutate({formData: data, modifier: 'signup'});
+		} else {
+			mutate({formData: data, modifier: 'login'});
+		}
 		handleReset();
-
-		//! assign registration date
 	};
 
 	// Dynamically set descriptive names when switching from login in to registration
@@ -137,7 +150,7 @@ function LoginFrom() {
 		content = (
 			<section className={formType}>
 				<form
-					action='/api/login-pass/login-check'
+					// action='/api/login-pass/login'
 					method='POST'
 					onSubmit={handleSubmit}
 					className={`${formType}-form`}>
@@ -209,15 +222,6 @@ function LoginFrom() {
 						type='submit'
 						className={`form-action-btn modal__btn`}>
 						{actionTitle}
-					</button>
-				</form>
-				<form
-					action='/api/login-pass/logout'
-					method='POST'>
-					<button
-						type='submit'
-						className={`form-action-btn modal__btn`}>
-						Wyloguj
 					</button>
 				</form>
 			</section>
