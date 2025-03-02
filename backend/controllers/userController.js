@@ -249,6 +249,84 @@ export const getEditSettings = (req, res, next) => {
 export const getEditCustomer = (req, res, next) => {
 	console.log(`➡️➡️➡️ called getEditCustomer`);
 	const customer = req.user.Customer;
-	console.log(customer);
+	// console.log(customer);
 	return res.status(200).json({customer});
+};
+
+export const postEditSettings = (req, res, next) => {
+	console.log(`➡️➡️➡️ called postEditSettings`);
+	const userID = req.user.UserID;
+	const handedness = !!req.body.handedness || false;
+	const font = req.body.font || 14;
+	const notifications = !!req.body.notifications || false;
+	const animation = !!req.body.animation || false;
+	const theme = !!req.body.theme || false;
+	const userPrefID = req.user.UserPrefSetting?.UserPrefID;
+
+	// if preferences don't exist - create new ones:
+	models.UserPrefSettings.findOrCreate({
+		where: {UserID: userID},
+		defaults: {
+			UserID: userID,
+			Handedness: handedness,
+			FontSize: font,
+			Notifications: notifications,
+			Animation: animation,
+			Theme: theme,
+		},
+	})
+		.then(([preferences, created]) => {
+			if (!created) {
+				// They exist so just update
+				preferences.Handedness = handedness;
+				preferences.FontSize = font;
+				preferences.Notifications = notifications;
+				preferences.Animation = animation;
+				preferences.Theme = theme;
+				return preferences.save();
+			}
+			return preferences;
+		})
+		.then((result) => {
+			console.log('✅✅✅ Preferences Updated or Created');
+			return res.status(200).json({result});
+		})
+		.catch((err) => console.log(err));
+};
+
+export const postEditCustomer = (req, res, next) => {
+	console.log(`➡️➡️➡️ called postEditSettings`);
+	db.transaction()
+		.then((t) => {
+			const customerId = req.user.Customer.CustomerID;
+			const newPhone = req.body.phone;
+			const newContactMethod = req.body.cMethod;
+
+			return models.CustomerPhones.update(
+				{CustomerMobile: newPhone},
+				{where: {CustomerID: customerId}, transaction: t},
+			)
+				.then(() => {
+					return models.Customer.update(
+						{PreferredContactMethod: newContactMethod},
+						{where: {CustomerID: customerId}, transaction: t},
+					);
+				})
+				.then(() => {
+					return t.commit().then(() => {
+						console.log('Transaction committed, updates successful');
+						return res.status(200).json({confirmation: 1});
+					});
+				})
+				.catch((err) => {
+					return t.rollback().then(() => {
+						console.log('Transaction rollback, error:', err);
+						return res.status(500).json({error: err.message});
+					});
+				});
+		})
+		.catch((err) => {
+			console.log('Error starting transaction:', err);
+			return res.status(500).json({error: err.message});
+		});
 };

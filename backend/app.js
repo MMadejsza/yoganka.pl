@@ -49,7 +49,7 @@ app.use(
 );
 
 app.use((req, res, next) => {
-	models.User.findByPk(2, {
+	models.User.findByPk(72, {
 		include: [
 			{
 				model: models.Customer, // Add Customer
@@ -68,7 +68,7 @@ app.use((req, res, next) => {
 		],
 	}) // May not exist)
 		.then((user) => {
-			console.log('✅✅✅ Found user:', user);
+			console.log('✅✅✅ Found user:');
 			req.user = user;
 			next();
 		})

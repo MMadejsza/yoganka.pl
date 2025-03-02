@@ -1,12 +1,11 @@
 import React, {useState} from 'react';
-import {useParams, useLocation} from 'react-router-dom';
+import {useParams, useLocation, useNavigate} from 'react-router-dom';
 
 import {fetchItem} from '../../utils/http.js';
 import {useQuery} from '@tanstack/react-query';
 import ModalFrame from './ModalFrame.jsx';
 import ViewUser from './ViewUser.jsx';
 import ViewCustomer from './ViewCustomer.jsx';
-import UserForm from './UserForm.jsx';
 import ViewProduct from './ViewProduct.jsx';
 import ViewSchedule from './ViewSchedule.jsx';
 import ViewBooking from './ViewBooking.jsx';
@@ -15,6 +14,7 @@ import ViewCustomerTotalSchedules from './ViewCustomerTotalSchedules.jsx';
 import ViewCustomerTotalBookings from './ViewCustomerTotalBookings.jsx';
 
 function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, customer}) {
+	const navigate = useNavigate();
 	const params = useParams();
 	const location = useLocation();
 	const callPath = location.pathname;
@@ -38,6 +38,7 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 
 	const handleStartEditing = () => {
 		setEditingState(true);
+		navigate('/konto/ustawienia');
 	};
 	const handleCloseEditing = () => {
 		setEditingState(false);

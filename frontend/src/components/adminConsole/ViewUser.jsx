@@ -3,7 +3,7 @@ import DetailsCustomer from './DetailsCustomer.jsx';
 import DetailsUserSettings from './DetailsUserSettings.jsx';
 
 function ViewUser({data, isUserAccountPage, isEditing}) {
-	console.clear();
+	// console.clear();
 	console.log(
 		`📝 user object from backend:
 		`,

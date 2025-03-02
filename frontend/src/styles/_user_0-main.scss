@@ -39,6 +39,10 @@
 		&.phone {
 			// flex-direction: column;
 		}
+		&.confirmation {
+			justify-content: center;
+			color: green;
+		}
 	}
 
 	.modal__btn--small {

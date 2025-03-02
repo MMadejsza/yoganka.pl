@@ -1,4 +1,4 @@
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, useLocation} from 'react-router-dom';
 import {useQuery, useMutation} from '@tanstack/react-query';
 import {queryClient, fetchItem} from '../../utils/http.js';
 import {useInput} from '../../hooks/useInput.js';
@@ -6,6 +6,9 @@ import InputLogin from '../login/InputLogin.jsx';
 import {phoneValidations} from '../../utils/validation.js';
 function DetailsUserSettingsForm() {
 	const navigate = useNavigate();
+	const location = useLocation();
+	const params = new URLSearchParams(location.search);
+	const customerConfirmation = params.get('customerConfirmation');
 
 	const {
 		data,
@@ -13,7 +16,7 @@ function DetailsUserSettingsForm() {
 		isError: isCustomerError,
 	} = useQuery({
 		queryKey: ['formFilling', 'editCustomer'],
-		queryFn: ({signal}) => fetchItem('/konto/ustawienia/get-customer', {signal}),
+		queryFn: ({signal}) => fetchItem('/konto/ustawienia/uczestnik', {signal}),
 		staleTime: 0,
 		refetchOnMount: true,
 		enabled: location.pathname.includes('ustawienia'),
@@ -35,8 +38,8 @@ function DetailsUserSettingsForm() {
 			});
 		},
 		onSuccess: () => {
-			queryClient.invalidateQueries(['settings']);
-			navigate('/konto/ustawienia');
+			queryClient.invalidateQueries(['query', '/konto/ustawienia']);
+			navigate('/konto/ustawienia?customerConfirmation=1');
 		},
 		onError: (error) => {
 			window.alert(error.message);
@@ -94,8 +97,9 @@ function DetailsUserSettingsForm() {
 		console.log('Submit passed errors');
 
 		const fd = new FormData(e.target);
-		console.log('sent data:', fd);
-		mutate(fd);
+		const formDataObj = Object.fromEntries(fd.entries());
+		console.log('sent data:', formDataObj);
+		mutate(formDataObj);
 		handleReset();
 
 		//! assign registration date
@@ -119,7 +123,7 @@ function DetailsUserSettingsForm() {
 	} else
 		content = (
 			<form
-				action='/api/konto/ustawienia/update/customer'
+				action='/api/konto/ustawienia/update/uczestnik'
 				method='POST'
 				onSubmit={handleSubmit}
 				className={`user-container__details-list modal-checklist__list`}>
@@ -147,8 +151,8 @@ function DetailsUserSettingsForm() {
 					formType={formType}
 					type='select'
 					options={[
-						{label: 'Telefon', value: 'telefon'},
-						{label: 'Email', value: 'email'},
+						{label: 'Telefon', value: 'Telefon'},
+						{label: 'Email', value: 'Email'},
 					]}
 					id='cMethod'
 					name='cMethod'
@@ -173,6 +177,11 @@ function DetailsUserSettingsForm() {
 					className={`form-action-btn modal__btn modal__btn--small`}>
 					{actionTitle}
 				</button>
+				{customerConfirmation && (
+					<div className='user-container__section-record modal-checklist__li confirmation'>
+						Zmiany zatwierdzone
+					</div>
+				)}
 			</form>
 		);
 
