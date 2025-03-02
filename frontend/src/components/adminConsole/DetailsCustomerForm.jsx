@@ -37,9 +37,13 @@ function DetailsUserSettingsForm() {
 				return response.json();
 			});
 		},
-		onSuccess: () => {
+		onSuccess: (res) => {
 			queryClient.invalidateQueries(['query', '/konto/ustawienia']);
-			navigate('/konto/ustawienia?customerConfirmation=1');
+			if (res.confirmation) {
+				navigate('/konto/ustawienia?customerConfirmation=1');
+			} else {
+				navigate('/konto/ustawienia?customerConfirmation=0');
+			}
 		},
 		onError: (error) => {
 			window.alert(error.message);
@@ -177,11 +181,15 @@ function DetailsUserSettingsForm() {
 					className={`form-action-btn modal__btn modal__btn--small`}>
 					{actionTitle}
 				</button>
-				{customerConfirmation && (
+				{customerConfirmation == 1 ? (
 					<div className='user-container__section-record modal-checklist__li confirmation'>
 						Zmiany zatwierdzone
 					</div>
-				)}
+				) : customerConfirmation == 0 ? (
+					<div className='user-container__section-record modal-checklist__li dimmed'>
+						Brak zmian
+					</div>
+				) : null}
 			</form>
 		);
 

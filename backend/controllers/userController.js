@@ -306,16 +306,25 @@ export const postEditCustomer = (req, res, next) => {
 				{CustomerMobile: newPhone},
 				{where: {CustomerID: customerId}, transaction: t},
 			)
-				.then(() => {
+				.then((phoneResult) => {
 					return models.Customer.update(
 						{PreferredContactMethod: newContactMethod},
 						{where: {CustomerID: customerId}, transaction: t},
-					);
+					).then((customerResult) => {
+						return {phoneResult, customerResult};
+					});
 				})
-				.then(() => {
+				.then((results) => {
 					return t.commit().then(() => {
 						console.log('Transaction committed, updates successful');
-						return res.status(200).json({confirmation: 1});
+						const affectedPhoneRows = results.phoneResult[0];
+						const affectedCustomerRows = results.customerResult[0];
+						const status = affectedPhoneRows >= 1 || affectedCustomerRows >= 1;
+						return res.status(200).json({
+							confirmation: status,
+							affectedPhoneRows,
+							affectedCustomerRows,
+						});
 					});
 				})
 				.catch((err) => {

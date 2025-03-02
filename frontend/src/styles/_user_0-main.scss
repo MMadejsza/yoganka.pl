@@ -6,6 +6,7 @@
 
 @media (min-width: 1025px) or (min-width: 1400px) {
 	.dimmed {
+		justify-content: center !important;
 		color: rgba(map.get(var.$colors, accent-bcg), 0.5);
 	}
 	.userTabs {
