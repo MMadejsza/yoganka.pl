@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {useMutation} from '@tanstack/react-query';
-import {queryClient} from '../../utils/http.js';
+import {useMutation, useQuery} from '@tanstack/react-query';
+import {queryClient, fetchStatus} from '../../utils/http.js';
 import {useInput} from '../../hooks/useInput.js';
 import InputLogin from './InputLogin.jsx';
 import {
@@ -13,12 +13,18 @@ import {
 function LoginFrom() {
 	const navigate = useNavigate();
 
+	const {data: status} = useQuery({
+		queryKey: ['authStatus'],
+		queryFn: fetchStatus,
+	});
+
 	const {mutate, isPending, isError, error} = useMutation({
 		mutationFn: ({formData, modifier}) => {
 			return fetch(`/api/login-pass/${modifier}`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
+					'CSRF-Token': status.token,
 				},
 				body: JSON.stringify(formData),
 				credentials: 'include', // include cookies

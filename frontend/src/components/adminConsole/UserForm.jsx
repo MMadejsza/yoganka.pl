@@ -1,12 +1,17 @@
 import React, {useState} from 'react';
 
-import {useMutation} from '@tanstack/react-query';
-import {create} from '../../utils/http.js';
+import {useMutation, useQuery} from '@tanstack/react-query';
+import {create, fetchStatus} from '../../utils/http.js';
 
 const UserForm = ({closeModal}) => {
+	const {data: status} = useQuery({
+		queryKey: ['authStatus'],
+		queryFn: fetchStatus,
+	});
+
 	const {mutate, isPending, isError, error} = useMutation({
 		// definition of the code sending the actual request- must be returning the promise
-		mutationFn: (data) => create(`/admin-console/add-user`, data),
+		mutationFn: (data) => create(`/admin-console/add-user`, status, data),
 		onSuccess: () => {
 			closeModal();
 		},

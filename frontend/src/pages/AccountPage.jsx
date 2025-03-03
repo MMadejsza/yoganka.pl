@@ -7,6 +7,7 @@ import ViewFrame from '../components/adminConsole/ViewFrame.jsx';
 import UserTabs from '../components/adminConsole/UserTabs.jsx';
 import Section from '../components/Section.jsx';
 import DetailsCustomerStats from '../components/adminConsole/DetailsCustomerStats.jsx';
+import {queryClient, fetchStatus} from '../utils/http.js';
 
 function AccountPage() {
 	// console.log(`✅ AccountPAge: `);
@@ -14,6 +15,12 @@ function AccountPage() {
 	const navigate = useNavigate();
 	const location = useLocation(); // fetch current path
 	const today = new Date().toISOString().split('T')[0];
+
+	const {data: status} = useQuery({
+		queryKey: ['authStatus'],
+		queryFn: fetchStatus,
+	});
+
 	const {data, isPending, isError, error} = useQuery({
 		queryKey: ['account'],
 		queryFn: ({signal}) => fetchItem('/account', {signal}),
@@ -42,6 +49,7 @@ function AccountPage() {
 				}),
 				headers: {
 					'Content-Type': 'application/json',
+					'CSRF-Token': status.token,
 				},
 				credentials: 'include',
 			}).then((response) => {

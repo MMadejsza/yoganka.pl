@@ -1,6 +1,6 @@
 import {useNavigate, useLocation} from 'react-router-dom';
 import {useQuery, useMutation} from '@tanstack/react-query';
-import {queryClient, fetchItem} from '../../utils/http.js';
+import {queryClient, fetchItem, fetchStatus} from '../../utils/http.js';
 import {useInput} from '../../hooks/useInput.js';
 import InputLogin from '../login/InputLogin.jsx';
 
@@ -9,6 +9,11 @@ function DetailsUserSettingsForm() {
 	const location = useLocation();
 	const params = new URLSearchParams(location.search);
 	const settingsConfirmation = params.get('settingsConfirmation');
+
+	const {data: status} = useQuery({
+		queryKey: ['authStatus'],
+		queryFn: fetchStatus,
+	});
 
 	const {
 		data,
@@ -22,12 +27,14 @@ function DetailsUserSettingsForm() {
 		enabled: location.pathname.includes('ustawienia'),
 	});
 	console.log(data);
+
 	const {mutate, isPending, isError, error} = useMutation({
 		mutationFn: (formData) => {
 			return fetch('/api/konto/ustawienia/update/preferencje', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
+					'CSRF-Token': status.token,
 				},
 				body: JSON.stringify(formData),
 				credentials: 'include', // include cookies

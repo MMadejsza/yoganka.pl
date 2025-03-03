@@ -7,6 +7,7 @@ import customerRoutes from './routes/customerRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import * as models from './models/_index.js';
 import db from './utils/db.js';
+import csurf from 'csurf';
 
 const app = express();
 
@@ -18,6 +19,8 @@ app.use((req, res, next) => {
 	console.log(`➡️➡️➡️  Request: ${req.method} ${req.url}`);
 	next();
 });
+
+const csrfProtection = csurf();
 
 const options = {
 	host: 'localhost',
@@ -47,6 +50,8 @@ app.use(
 		},
 	}),
 );
+// All the 'post' methods will be looking for the token now
+app.use(csrfProtection);
 
 app.use((req, res, next) => {
 	if (!req.session.user) {
@@ -76,6 +81,13 @@ app.use((req, res, next) => {
 			next();
 		})
 		.catch((err) => console.log(err));
+});
+
+app.use((req, res, next) => {
+	res.locals.isLoggedIn = req.session.isLoggedIn;
+	res.locals.role = req.session.role;
+	res.locals.csrfToken = req.csrfToken();
+	next();
 });
 
 // app.use((req, res, next) => {

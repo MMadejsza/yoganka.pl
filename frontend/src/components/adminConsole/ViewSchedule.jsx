@@ -15,7 +15,7 @@ function ViewSchedule({data, bookingOps}) {
 	    Schedule object from backend:`,
 		data,
 	);
-	const {data: userStatus} = useQuery({
+	const {data: status} = useQuery({
 		queryKey: ['authStatus'],
 		queryFn: fetchStatus,
 	});
@@ -30,7 +30,8 @@ function ViewSchedule({data, bookingOps}) {
 	const userAccessed = typeof schedule.Bookings == 'number';
 	const isAlreadyBooked = schedule.bookedByUser;
 	console.log(`isAlreadyBooked`, isAlreadyBooked);
-	const {isLoggedIn} = userStatus;
+	console.log(`status`, status);
+	const {isLoggedIn} = status;
 	if (!userAccessed) prodStats = calculateProductStats(product, [schedule]);
 
 	const handleBooking = () => {

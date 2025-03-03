@@ -37,7 +37,7 @@ export const showUserByID = (req, res, next) => {
 export const showAllSchedules = (req, res, next) => {
 	const model = models.ScheduleRecord;
 	const isUser = !!req.user;
-	const isCustomer = !!req.user.Customer;
+	const isCustomer = !!req.user?.Customer;
 
 	// We create dynamic joint columns based on the map
 	const columnMap = columnMaps[model.name] || {};
@@ -122,7 +122,7 @@ export const showScheduleByID = (req, res, next) => {
 	console.log(`➡️ called user showScheduleByID`);
 
 	const isUser = !!req.user;
-	const isCustomer = !!req.user.Customer;
+	const isCustomer = !!req.user?.Customer;
 
 	const PK = req.params.id;
 	models.ScheduleRecord.findByPk(PK, {

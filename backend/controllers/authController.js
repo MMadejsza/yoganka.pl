@@ -2,10 +2,11 @@ import * as models from '../models/_index.js';
 import bcrypt from 'bcryptjs';
 
 export const getStatus = (req, res, next) => {
-	if (req.session?.isLoggedIn) {
-		return res.status(200).json({isLoggedIn: req.session.isLoggedIn, role: req.session.role});
-	}
-	res.status(200).json({isLoggedIn: false});
+	return res.status(200).json({
+		isLoggedIn: res.locals.isLoggedIn || false,
+		role: res.locals.role,
+		token: res.locals.csrfToken,
+	});
 };
 export const postSignup = (req, res, next) => {
 	console.log(`➡️➡️➡️ called postSignup`);
@@ -60,14 +61,16 @@ export const postLogin = (req, res, next) => {
 					message: 'Użytkownik nie istnieje',
 				});
 			}
-
+			return user.update({LastLoginDate: date});
+		})
+		.then((fetchedUser) => {
 			// regardless match or mismatch catch takes only if something is wrong with bcrypt itself. otherwise it goes to the next block with promise as boolean
-			bcrypt.compare(password, user.PasswordHash).then((doMatch) => {
+			bcrypt.compare(password, fetchedUser.PasswordHash).then((doMatch) => {
 				if (doMatch) {
 					console.log('match');
 					req.session.isLoggedIn = true;
-					req.session.user = user;
-					req.session.role = user.Role;
+					req.session.user = fetchedUser;
+					req.session.role = fetchedUser.Role.toUpperCase();
 					return res.status(200).json({
 						type: 'login',
 						code: 200,

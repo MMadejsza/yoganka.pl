@@ -88,15 +88,20 @@ function Nav({setIsNavOpen}) {
 	const navigate = useNavigate();
 	const location = useLocation();
 
-	const {data} = useQuery({
+	const {data: status} = useQuery({
 		queryKey: ['authStatus'],
 		queryFn: fetchStatus,
 	});
+
+	console.log('nav data', status);
 	const logoutMutation = useMutation({
 		mutationFn: async () =>
 			await fetch('/api/login-pass/logout', {
 				method: 'POST',
 				credentials: 'include',
+				headers: {
+					'CSRF-Token': status.token,
+				},
 			}).then((res) => {
 				if (!res.ok) throw new Error('Wylogowanie nie powiodło się');
 				return res.json();
@@ -141,12 +146,12 @@ function Nav({setIsNavOpen}) {
 		// For restricted content
 		if (li.auth) {
 			// If logged In
-			if (data?.isLoggedIn) {
+			if (status?.isLoggedIn) {
 				// Hide LogIn option
 				if (li.name === 'Zaloguj') {
 					return null;
 				}
-				if (li.name === 'Admin Panel' && data.role != 'admin') {
+				if (li.name === 'Admin Panel' && status.role != 'admin') {
 					return null;
 				}
 
@@ -204,7 +209,6 @@ function Nav({setIsNavOpen}) {
 		);
 	};
 
-	console.log(data?.isLoggedIn);
 	return (
 		<nav className='nav'>
 			<div className='main-nav-container'>

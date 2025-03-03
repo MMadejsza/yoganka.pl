@@ -1,9 +1,9 @@
 export default (req, res, next) => {
 	if (
-		!req.session.isLoggedIn &&
-		(req.session.role.toUpperCase() != 'USER' ||
-			req.session.role.toUpperCase() != 'CUSTOMER' ||
-			req.session.role.toUpperCase() != 'ADMIN')
+		!res.locals.isLoggedIn &&
+		(res.locals.role.toUpperCase() != 'USER' ||
+			res.locals.role.toUpperCase() != 'CUSTOMER' ||
+			res.locals.role.toUpperCase() != 'ADMIN')
 	) {
 		return res.status(401).json({message: 'unauthorized'});
 	}

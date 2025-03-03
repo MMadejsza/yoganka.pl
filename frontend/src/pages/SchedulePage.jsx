@@ -1,7 +1,7 @@
 import {useQuery} from '@tanstack/react-query';
 import {useLocation, useNavigate, useMatch} from 'react-router-dom';
 import {useState} from 'react';
-import {fetchData, queryClient} from '../utils/http.js';
+import {fetchData, fetchStatus, queryClient} from '../utils/http.js';
 import ViewFrame from '../components/adminConsole/ViewFrame.jsx';
 import Section from '../components/Section.jsx';
 import {useMutation} from '@tanstack/react-query';
@@ -13,17 +13,10 @@ function SchedulePage() {
 
 	const [isModalOpen, setIsModalOpen] = useState(modalMatch);
 
-	const handleOpenModal = (row) => {
-		const recordId = row.ID;
-		setIsModalOpen(true);
-		navigate(`${location.pathname}/${recordId}`, {state: {background: location}});
-	};
-
-	const handleCloseModal = () => {
-		setIsModalOpen(false);
-		reset(); // resets mutation state and flags
-		navigate(location.state?.background?.pathname || '/', {replace: true});
-	};
+	const {data: status} = useQuery({
+		queryKey: ['authStatus'],
+		queryFn: fetchStatus,
+	});
 
 	const {data, isError, error} = useQuery({
 		// as id for later caching received data to not send the same request again where location.pathname is key
@@ -37,6 +30,7 @@ function SchedulePage() {
 		// how long tada is cached (default 5 mins)
 		// gcTime:30000
 	});
+
 	const {
 		mutate,
 		isError: isMutateError,
@@ -58,6 +52,7 @@ function SchedulePage() {
 				}),
 				headers: {
 					'Content-Type': 'application/json',
+					'CSRF-Token': status.token,
 				},
 				credentials: 'include',
 			}).then((response) => {
@@ -73,6 +68,18 @@ function SchedulePage() {
 			navigate('/grafik');
 		},
 	});
+
+	const handleOpenModal = (row) => {
+		const recordId = row.ID;
+		setIsModalOpen(true);
+		navigate(`${location.pathname}/${recordId}`, {state: {background: location}});
+	};
+
+	const handleCloseModal = () => {
+		setIsModalOpen(false);
+		reset(); // resets mutation state and flags
+		navigate(location.state?.background?.pathname || '/', {replace: true});
+	};
 
 	let content;
 

@@ -43,13 +43,14 @@ export async function fetchData(link) {
 	// return it
 	return data;
 }
-export async function create(link, formData) {
+export async function create(link, status, formData) {
 	console.log(`create link: ${link}`);
 	const response = await fetch(`/api${link}`, {
 		method: 'POST',
 		body: JSON.stringify(formData),
 		headers: {
 			'Content-Type': 'application/json',
+			'CSRF-Token': status.token,
 		},
 	});
 	if (!response.ok) {
