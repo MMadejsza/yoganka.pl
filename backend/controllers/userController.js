@@ -41,28 +41,25 @@ export const showAllSchedules = (req, res, next) => {
 
 	// We create dynamic joint columns based on the map
 	const columnMap = columnMaps[model.name] || {};
-	const includeAttributes = [];
 
 	// If logged In and is Customer - we want to check his booked schedules to flag them later
-	const bookingInclude = {
-		model: models.Booking,
-		required: false,
-		attributes: ['BookingID'], //booking Id is enough
-
-		where: isUser && isCustomer ? {CustomerID: req.user.Customer.CustomerID} : undefined, // Filter
-	};
 
 	model
 		.findAll({
 			include: [
 				{
 					model: models.Product,
-					attributes: ['Type', 'Name', 'Price'],
+					attributes: ['Type', 'Name', 'Price', 'TotalSpaces'],
 				},
-				bookingInclude,
+				{
+					model: models.Booking,
+					required: false,
+					attributes: ['BookingID'], //booking Id is enough
+
+					// where: isUser && isCustomer ? {CustomerID: req.user.Customer.CustomerID} : undefined, // Filter
+				},
 			],
 			attributes: {
-				include: includeAttributes, // Adding joint columns
 				exclude: ['ProductID'], // Deleting substituted ones
 			},
 		})
@@ -73,6 +70,7 @@ export const showAllSchedules = (req, res, next) => {
 
 				const attributes = model.getAttributes();
 				const jsonRecord = record.toJSON();
+				console.log('jsonRecord', jsonRecord);
 
 				// 🔄 Iterate after each column in user record
 				for (const key in jsonRecord) {
@@ -87,21 +85,27 @@ export const showAllSchedules = (req, res, next) => {
 					} else if (key === 'Product' && jsonRecord[key]) {
 						newRecord['Typ'] = jsonRecord[key].Type; //  flatten object
 						newRecord['Nazwa'] = jsonRecord[key].Name;
-					} else if (key === 'Bookings' && req.user?.Customer) {
-						newRecord.bookedByUser = (jsonRecord.Bookings || []).length > 0;
+					} else if (key === 'Bookings') {
+						newRecord.bookedByUser = jsonRecord.Bookings.some(
+							(booking) =>
+								booking.BookedSchedule.CustomerID == req.user?.Customer.CustomerID,
+						);
 					} else {
 						newRecord[newKey] = jsonRecord[key]; // Assignment
 					}
 				}
 				newRecord['Dzień'] = getWeekDay(jsonRecord['Date']);
 				newRecord['Zadatek'] = jsonRecord.Product.Price;
+				newRecord[
+					'Miejsca'
+				] = `${jsonRecord.Bookings.length}/${jsonRecord.Product.TotalSpaces}`;
 				return newRecord; // Return new record object
 			});
 
 			// New headers (keys from columnMap)
 			const totalHeaders = [
 				'',
-				'ID',
+				'Miejsca',
 				'Data',
 				'Dzień',
 				'Godzina rozpoczęcia',
@@ -111,7 +115,6 @@ export const showAllSchedules = (req, res, next) => {
 			];
 			// ✅ Return response to frontend
 			res.json({
-				records: records,
 				totalHeaders, // To render
 				content: formattedRecords, // With new names
 			});
@@ -167,7 +170,7 @@ export const showScheduleByID = (req, res, next) => {
 };
 
 export const showAccount = (req, res, next) => {
-	console.log(`➡️ called showAccount`, new Date().toISOString());
+	console.log(`➡️➡️➡️ called showAccount`, new Date().toISOString());
 	// return res.status(401).json({});
 
 	// @ Fetching USER
@@ -179,11 +182,11 @@ export const showAccount = (req, res, next) => {
 	// if only user
 	if (!req.user.Customer) {
 		const user = req.user;
-		console.log('✅ user fetched');
+		console.log('✅✅✅ user fetched');
 		return res.status(200).json({user});
 	} else {
 		let PK = req.user.Customer.CustomerID;
-		console.log('✅ customer fetched');
+		console.log('✅✅✅ customer fetched');
 		models.Customer.findByPk(PK, {
 			include: [
 				{
@@ -193,6 +196,33 @@ export const showAccount = (req, res, next) => {
 				{
 					model: models.BookedSchedule,
 					required: false,
+					include: [
+						{
+							model: models.ScheduleRecord, // schedules trough booked schedule
+							required: false,
+
+							include: [
+								{
+									model: models.Product, //schedule's product
+									required: false,
+								},
+								{
+									model: models.Feedback, // harmonogram -> opinie
+									required: false,
+									where: {CustomerID: req.user.Customer.CustomerID}, // but only for particular customer
+									attributes: {
+										exclude: ['CustomerID', 'ScheduleID'], // deleting
+									},
+								},
+							],
+							attributes: {
+								exclude: ['ProductID'], // deleting
+							},
+						},
+					],
+					attributes: {
+						exclude: ['CustomerID', 'ScheduleID'], // deleting
+					},
 				},
 				{
 					model: models.User, // Add Customer
@@ -201,6 +231,9 @@ export const showAccount = (req, res, next) => {
 						{
 							model: models.UserPrefSettings, // Customer phone numbers
 							required: false,
+							attributes: {
+								exclude: ['UserID'], // deleting
+							},
 						},
 					],
 				},
@@ -211,24 +244,8 @@ export const showAccount = (req, res, next) => {
 						{
 							model: models.Invoice, // eventual invoices
 							required: false,
-						},
-						{
-							model: models.ScheduleRecord, // schedules trough booked schedule
-							required: false,
-							through: {attributes: []}, //deleting if not necessary from middle table
-							include: [
-								{
-									model: models.Product, //schedule's product
-									required: false,
-								},
-								{
-									model: models.Feedback, // harmonogram -> opinie
-									required: false,
-									where: {CustomerID: req.user.Customer.CustomerID}, // but only for particular customer
-								},
-							],
 							attributes: {
-								exclude: ['ProductID'], // deleting
+								exclude: ['BookingID'], // deleting
 							},
 						},
 					],
@@ -246,7 +263,7 @@ export const showAccount = (req, res, next) => {
 				if (!customer) {
 					return res.redirect('/');
 				}
-				console.log('✅ showAccount customer fetched', customer);
+				console.log('✅✅✅ showAccount customer fetched');
 				return res.status(200).json({customer});
 			})
 			.catch((err) => console.log(err));

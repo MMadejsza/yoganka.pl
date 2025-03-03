@@ -63,7 +63,7 @@ export const getWeekDay = (dateStr) => {
 };
 //@ stats helper for calculation
 export const calculateStats = (customer) => {
-	console.log(`calculateStats passed customer`, customer);
+	// console.log(`calculateStats passed customer`, customer);
 	const today = new Date().toISOString().split('T')[0];
 	const scheduleRecords = [];
 	// const scheduleRecords = [];
@@ -86,9 +86,7 @@ export const calculateStats = (customer) => {
 		totalBookings.push({
 			id: booking.BookingID,
 			date: booking.Date,
-			classes: booking.ScheduleRecords.reduce((acc, record) => {
-				return acc ? acc + ', ' + record.Product.Name : record.Product.Name;
-			}, ''),
+			classes: booking.Product,
 			totalValue: booking.AmountPaid,
 			method: booking.PaymentMethod,
 			status: booking.PaymentStatus,
@@ -113,71 +111,72 @@ export const calculateStats = (customer) => {
 			});
 		}
 
-		for (let schedule of booking.ScheduleRecords) {
-			// console.group(`schedule: ${schedule}`);
-
-			const scheduleID = schedule.ScheduleID;
-			const scheduleDate = schedule.Date;
-			const scheduleStartTime = schedule.StartTime;
-			const scheduleLocation = schedule.Location;
-
-			const productType = schedule.Product.Type;
-			const productName = schedule.Product.Name;
-			const productDuration = schedule.Product.Duration;
-
-			scheduleRecords.push({
-				id: scheduleID,
-				date: scheduleDate,
-				day: getWeekDay(scheduleDate),
-				time: scheduleStartTime,
-				location: scheduleLocation,
-				type: productType,
-				name: productName,
-				bookedByUser: true,
-			});
-
-			// console.log(`scheduleDate >= today ${scheduleDate} ${today}`);
-			if (scheduleDate <= today) {
-				totalSchedulesAmount += 1;
-				// console.log(`totalSchedulesAmount: ${totalSchedulesAmount}`);
-				// if (productType === 'Class') {
-				// 	totalClassesAmount += 1;
-				// 	// console.log(`totalClassesAmount: ${totalClassesAmount}`);
-				// } else
-				if (productType === 'Online' || productType === 'Class') {
-					totalOnlineAmount += 1;
-					// console.log(`totalOnlineAmount: ${totalOnlineAmount}`);
-				} else if (productType === 'Event') {
-					totalEventsAmount += 1;
-					// console.log(`totalEventsAmount: ${totalEventsAmount}`);
-				} else if (productType === 'Camp') {
-					totalCampsAmount += 1;
-					// console.log(`totalCampsAmount: ${totalCampsAmount}`);
-				}
-				totalTimeInSeconds += durationToSeconds(productDuration);
-				// console.log(`totalTimeInSeconds: ${totalTimeInSeconds}`);
-				// console.groupEnd();
-			}
-
-			if (schedule.Feedbacks && schedule.Feedbacks.length > 0) {
-				const feedback = schedule.Feedbacks[0];
-				reviews.push({
-					id: feedback.FeedbackID,
-					product: schedule.Product.Name,
-					schedule: `
-					(ID: ${scheduleID})
-					${scheduleDate}
-					${getWeekDay(scheduleDate)}
-					${scheduleStartTime}
-					`,
-					date: feedback.SubmissionDate,
-					rating: feedback.Rating,
-					review: feedback.Text,
-					delay: feedback.Delay,
-				});
-			}
-		}
 		// console.groupEnd();
+	}
+
+	for (let bookedSchedule of customer.BookedSchedules) {
+		// console.group(`schedule: ${schedule}`);
+		const {ScheduleRecord: schedule} = bookedSchedule;
+		const scheduleID = schedule.ScheduleID;
+		const scheduleDate = schedule.Date;
+		const scheduleStartTime = schedule.StartTime;
+		const scheduleLocation = schedule.Location;
+
+		const productType = schedule.Product.Type;
+		const productName = schedule.Product.Name;
+		const productDuration = schedule.Product.Duration;
+
+		scheduleRecords.push({
+			id: scheduleID,
+			date: scheduleDate,
+			day: getWeekDay(scheduleDate),
+			time: scheduleStartTime,
+			location: scheduleLocation,
+			type: productType,
+			name: productName,
+			bookedByUser: true,
+		});
+
+		// console.log(`scheduleDate >= today ${scheduleDate} ${today}`);
+		if (scheduleDate <= today) {
+			totalSchedulesAmount += 1;
+			// console.log(`totalSchedulesAmount: ${totalSchedulesAmount}`);
+			// if (productType === 'Class') {
+			// 	totalClassesAmount += 1;
+			// 	// console.log(`totalClassesAmount: ${totalClassesAmount}`);
+			// } else
+			if (productType === 'Online' || productType === 'Class') {
+				totalOnlineAmount += 1;
+				// console.log(`totalOnlineAmount: ${totalOnlineAmount}`);
+			} else if (productType === 'Event') {
+				totalEventsAmount += 1;
+				// console.log(`totalEventsAmount: ${totalEventsAmount}`);
+			} else if (productType === 'Camp') {
+				totalCampsAmount += 1;
+				// console.log(`totalCampsAmount: ${totalCampsAmount}`);
+			}
+			totalTimeInSeconds += durationToSeconds(productDuration);
+			// console.log(`totalTimeInSeconds: ${totalTimeInSeconds}`);
+			// console.groupEnd();
+		}
+
+		if (schedule.Feedbacks && schedule.Feedbacks.length > 0) {
+			const feedback = schedule.Feedbacks[0];
+			reviews.push({
+				id: feedback.FeedbackID,
+				product: schedule.Product.Name,
+				schedule: `
+				(ID: ${scheduleID})
+				${scheduleDate}
+				${getWeekDay(scheduleDate)}
+				${scheduleStartTime}
+				`,
+				date: feedback.SubmissionDate,
+				rating: feedback.Rating,
+				review: feedback.Text,
+				delay: feedback.Delay,
+			});
+		}
 	}
 
 	const splitDuration = secondsToDuration(totalTimeInSeconds, 'hours');

@@ -142,7 +142,7 @@ function AccountPage() {
 			const content = customerStats.records;
 			const contentUpcoming = content.filter((schedule) => schedule.date >= today);
 
-			console.log(`✅ contentUpcoming: `, contentUpcoming);
+			// console.log(`✅ contentUpcoming: `, contentUpcoming);
 			const keys = customerStats.recordsKeys.splice(1);
 			// console.log(`✅ content: `, content);
 			// console.log(`✅ keys: `, keys);

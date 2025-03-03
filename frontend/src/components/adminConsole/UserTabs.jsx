@@ -29,7 +29,7 @@ const menuSet = [
 ];
 
 function UserTabs({onOpen, person}) {
-	console.log(`UserTabs person: `, person);
+	// console.log(`UserTabs person: `, person);
 	return (
 		<ul className='userTabs'>
 			{menuSet.map((tab, index) => {

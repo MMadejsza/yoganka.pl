@@ -36,7 +36,7 @@ Booking.belongsTo(Customer, {foreignKey: 'CustomerID'});
 Customer.hasMany(BookedSchedule, {foreignKey: 'CustomerID', onDelete: 'CASCADE'});
 BookedSchedule.belongsTo(Customer, {foreignKey: 'CustomerID'});
 
-//@ Feedback and Schedule
+//@ Feedback and ScheduleRecord
 //@ ------------------------------------------------------------
 Feedback.belongsTo(ScheduleRecord, {foreignKey: 'ScheduleID'});
 ScheduleRecord.hasMany(Feedback, {foreignKey: 'ScheduleID'});
@@ -79,6 +79,9 @@ User.belongsToMany(Newsletter, {
 //@ -----------------------------------------------------------------------
 Product.hasMany(ScheduleRecord, {foreignKey: 'ProductID', onDelete: 'CASCADE'});
 ScheduleRecord.belongsTo(Product, {foreignKey: 'ProductID'});
+
+BookedSchedule.belongsTo(ScheduleRecord, {foreignKey: 'ScheduleID'});
+ScheduleRecord.hasMany(BookedSchedule, {foreignKey: 'ScheduleID'});
 
 export {
 	User,
