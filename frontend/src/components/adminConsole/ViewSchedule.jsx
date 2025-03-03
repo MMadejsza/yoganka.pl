@@ -5,7 +5,7 @@ import DetailsProductBookings from './DetailsProductBookings.jsx';
 import DetailsProductReviews from './DetailsProductReviews.jsx';
 import {calculateProductStats} from '../../utils/productViewsUtils.js';
 import {useLocation, useNavigate} from 'react-router-dom';
-import {useQuery} from '@tanstack/react-query';
+import {useQuery, useMutation} from '@tanstack/react-query';
 import {fetchStatus} from '../../utils/http.js';
 
 function ViewSchedule({data, bookingOps}) {
@@ -15,14 +15,47 @@ function ViewSchedule({data, bookingOps}) {
 	    Schedule object from backend:`,
 		data,
 	);
+	const location = useLocation();
+	const navigate = useNavigate();
+	const userAccountPage = location.pathname.includes('konto');
+
 	const {data: status} = useQuery({
 		queryKey: ['authStatus'],
 		queryFn: fetchStatus,
 	});
-	const location = useLocation();
-	const navigate = useNavigate();
-	const userAccountPage = location.pathname.includes('konto');
+
+	const {
+		mutate: cancel,
+		isError: isCancelError,
+		error: cancelError,
+		reset: cancelReset,
+	} = useMutation({
+		mutationFn: async () =>
+			await fetch(`/api/customer/grafik/cancel/${scheduleID}`, {
+				method: 'POST',
+
+				headers: {
+					'Content-Type': 'application/json',
+					'CSRF-Token': status.token,
+				},
+				credentials: 'include',
+			}).then((response) => {
+				if (!response.ok) {
+					return response.json().then((errorData) => {
+						throw new Error(errorData.error || 'Błąd podczas anulacji');
+					});
+				}
+				return response.json();
+			}),
+		onSuccess: (res) => {
+			queryClient.invalidateQueries(['data', ' /grafik']);
+			navigate('/konto');
+			console.log(res.message);
+		},
+	});
+
 	const {schedule} = data;
+	const {ScheduleID: scheduleID} = schedule;
 	const {Product: product} = schedule;
 	const type = product.Type;
 	let prodStats = null;
@@ -42,11 +75,7 @@ function ViewSchedule({data, bookingOps}) {
 		});
 	};
 	const handleCancellation = () => {
-		// bookingOps.onBook({
-		// 	scheduleID: schedule.ScheduleID,
-		// 	productName: product.Name,
-		// 	productPrice: product.Price,
-		// });
+		cancel();
 	};
 
 	const bookingBtn = isLoggedIn ? (

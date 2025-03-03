@@ -32,7 +32,7 @@ function SchedulePage() {
 	});
 
 	const {
-		mutate,
+		mutate: book,
 		isError: isMutateError,
 		error: mutateError,
 		reset,
@@ -130,7 +130,7 @@ function SchedulePage() {
 												!row.bookedByUser && status.isLoggedIn
 													? (e) => {
 															e.stopPropagation();
-															mutate({
+															book({
 																scheduleID: row['ID'],
 																productName: row['Nazwa'],
 																productPrice: row['Zadatek'],
@@ -175,7 +175,7 @@ function SchedulePage() {
 					modifier='schedule'
 					visited={isModalOpen}
 					onClose={handleCloseModal}
-					bookingOps={{onBook: mutate, isError: isMutateError, error: mutateError}}
+					bookingOps={{onBook: book, isError: isMutateError, error: mutateError}}
 				/>
 			)}
 		</div>

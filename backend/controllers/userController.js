@@ -111,6 +111,7 @@ export const showAllSchedules = (req, res, next) => {
 			];
 			// ✅ Return response to frontend
 			res.json({
+				records: records,
 				totalHeaders, // To render
 				content: formattedRecords, // With new names
 			});
@@ -190,6 +191,10 @@ export const showAccount = (req, res, next) => {
 					required: false,
 				},
 				{
+					model: models.BookedSchedule,
+					required: false,
+				},
+				{
 					model: models.User, // Add Customer
 					required: false, // May not exist
 					include: [
@@ -210,7 +215,7 @@ export const showAccount = (req, res, next) => {
 						{
 							model: models.ScheduleRecord, // schedules trough booked schedule
 							required: false,
-							through: {attributes: []}, // deleting if not necessary from middle table
+							through: {attributes: []}, //deleting if not necessary from middle table
 							include: [
 								{
 									model: models.Product, //schedule's product
@@ -241,7 +246,7 @@ export const showAccount = (req, res, next) => {
 				if (!customer) {
 					return res.redirect('/');
 				}
-				console.log('✅ customer fetched');
+				console.log('✅ showAccount customer fetched', customer);
 				return res.status(200).json({customer});
 			})
 			.catch((err) => console.log(err));

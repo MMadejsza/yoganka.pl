@@ -31,6 +31,11 @@ CustomerPhones.belongsTo(Customer, {foreignKey: 'CustomerID'});
 Customer.hasMany(Booking, {foreignKey: 'CustomerID', onDelete: 'CASCADE'});
 Booking.belongsTo(Customer, {foreignKey: 'CustomerID'});
 
+//@ Customer and schedules (1:M, total participation on schedules)
+//@ ------------------------------------------------------------
+Customer.hasMany(BookedSchedule, {foreignKey: 'CustomerID', onDelete: 'CASCADE'});
+BookedSchedule.belongsTo(Customer, {foreignKey: 'CustomerID'});
+
 //@ Feedback and Schedule
 //@ ------------------------------------------------------------
 Feedback.belongsTo(ScheduleRecord, {foreignKey: 'ScheduleID'});

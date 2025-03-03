@@ -93,7 +93,7 @@ function Nav({setIsNavOpen}) {
 		queryFn: fetchStatus,
 	});
 
-	console.log('nav data', status);
+	// console.log('nav data', status);
 	const logoutMutation = useMutation({
 		mutationFn: async () =>
 			await fetch('/api/login-pass/logout', {

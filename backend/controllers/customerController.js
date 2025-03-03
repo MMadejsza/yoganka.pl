@@ -74,6 +74,30 @@ export const bookSchedule = (req, res, next) => {
 			next(err);
 		});
 };
+export const postCancelSchedule = (req, res, next) => {
+	const scheduleID = req.params.id;
+	models.BookedSchedule.destroy({
+		where: {
+			ScheduleID: scheduleID,
+			CustomerID: req.user.Customer.CustomerID,
+		},
+	})
+		.then((deletedCount) => {
+			if (deletedCount > 0) {
+				return res
+					.status(200)
+					.json({message: 'Miejsce zwolnione - dziękujemy za informację :)'});
+			} else {
+				return res
+					.status(404)
+					.json({message: 'Nie znaleziono terminu do zwolnienia miejsca'});
+			}
+		})
+		.catch((err) => {
+			console.error(err);
+			next(err);
+		});
+};
 export const getEditCustomer = (req, res, next) => {
 	console.log(`➡️➡️➡️ called getEditCustomer`);
 	const customer = req.user.Customer;

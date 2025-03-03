@@ -63,8 +63,10 @@ export const getWeekDay = (dateStr) => {
 };
 //@ stats helper for calculation
 export const calculateStats = (customer) => {
+	console.log(`calculateStats passed customer`, customer);
 	const today = new Date().toISOString().split('T')[0];
 	const scheduleRecords = [];
+	// const scheduleRecords = [];
 	const totalBookings = [];
 	const invoices = [];
 	const reviews = [];
