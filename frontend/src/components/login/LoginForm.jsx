@@ -13,6 +13,8 @@ import {
 function LoginFrom() {
 	const navigate = useNavigate();
 
+	const [firstTime, setFirstTime] = useState(false); // state to switch between registration and login in term of labels and http request method
+
 	const {data: status} = useQuery({
 		queryKey: ['authStatus'],
 		queryFn: fetchStatus,
@@ -40,20 +42,14 @@ function LoginFrom() {
 		},
 		onSuccess: (res) => {
 			queryClient.invalidateQueries(['authStatus']);
-			if (res.type == 'signup') {
-				if (res.code == 303) {
-					navigate('/login');
-					setFirstTime(!firstTime);
-					console.log(res);
-				} else if (res.code == 200) {
-					navigate('/login');
-					setFirstTime(!firstTime);
-					console.log(res);
-				}
+			if (res.type == 'signup' && (res.code == 303 || res.code == 200)) {
+				navigate('/login');
+				setFirstTime(!firstTime);
+				console.log(res);
 			}
 			navigate('/');
 		},
-		onError: (error) => {
+		onError: () => {
 			if (error.code == 404) {
 				navigate('/login');
 				if (error.type != 'login') {
@@ -63,8 +59,6 @@ function LoginFrom() {
 			}
 		},
 	});
-
-	const [firstTime, setFirstTime] = useState(false); // state to switch between registration and login in term of labels and http request method
 
 	// using custom hook with extracting and reassigning its 'return' for particular inputs and assign validation methods from imported utils. Every inout has its won state now
 	const {
@@ -156,10 +150,16 @@ function LoginFrom() {
 
 	let content;
 	let errorMsg;
-	let userIsEditing = confirmedPasswordIsFocused || emailIsFocused || passwordIsFocused;
+	let userIsEditing =
+		confirmedPasswordIsFocused ||
+		emailIsFocused ||
+		passwordIsFocused ||
+		confirmedPasswordDidEdit ||
+		emailDidEdit ||
+		passwordDidEdit;
 
 	if (isError) {
-		errorMsg = `${error.message}`;
+		errorMsg = <div className='error-box'>{error.message}</div>;
 	}
 	if (isPending) {
 		content = 'Wysyłanie...';
@@ -189,6 +189,7 @@ function LoginFrom() {
 						validationResults={emailValidationResults}
 						didEdit={emailDidEdit}
 						isFocused={emailIsFocused}
+						isLogin={!firstTime}
 					/>
 					<InputLogin
 						formType={formType}
@@ -205,6 +206,7 @@ function LoginFrom() {
 						validationResults={passwordValidationResults}
 						didEdit={passwordDidEdit}
 						isFocused={passwordIsFocused}
+						isLogin={!firstTime}
 					/>
 					{firstTime && (
 						<InputLogin
@@ -221,6 +223,7 @@ function LoginFrom() {
 							validationResults={confirmedPasswordValidationResults}
 							didEdit={confirmedPasswordDidEdit}
 							isFocused={confirmedPasswordIsFocused}
+							isLogin={!firstTime}
 						/>
 					)}
 

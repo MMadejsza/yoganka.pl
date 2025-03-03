@@ -55,15 +55,20 @@ export const postLogin = (req, res, next) => {
 	models.User.findOne({where: {email}})
 		.then((user) => {
 			if (!user) {
-				return res.status(404).json({
+				res.status(404).json({
 					type: 'login',
 					code: 404,
 					message: 'Użytkownik nie istnieje',
 				});
+				return null;
 			}
-			return user.update({LastLoginDate: date});
+			user.update({LastLoginDate: date});
+			return user;
 		})
 		.then((fetchedUser) => {
+			if (!fetchedUser) {
+				return;
+			}
 			// regardless match or mismatch catch takes only if something is wrong with bcrypt itself. otherwise it goes to the next block with promise as boolean
 			bcrypt.compare(password, fetchedUser.PasswordHash).then((doMatch) => {
 				if (doMatch) {

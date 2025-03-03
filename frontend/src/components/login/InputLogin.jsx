@@ -7,6 +7,7 @@ function InputLogin({
 	isFocused,
 	didEdit,
 	validationResults,
+	isLogin,
 	...props
 }) {
 	let input;
@@ -61,7 +62,7 @@ function InputLogin({
 			{input}
 
 			{/* After editing */}
-			{validationResults && (isFocused || didEdit) && (
+			{!isLogin && validationResults && (isFocused || didEdit) && (
 				<ul className='control-error'>
 					{validationResults?.map((result, index) => (
 						// List all the rules and messages
