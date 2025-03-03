@@ -114,7 +114,7 @@ function SchedulePage() {
 					{data.content.map((row, rowIndex) => (
 						<tr
 							className={`data-table__cells schedule active ${
-								row.bookedByUser && data.isLoggedIn ? 'booked' : ''
+								row.bookedByUser && status.isLoggedIn ? 'booked' : ''
 							}`}
 							key={rowIndex}>
 							{headers.map((header, headerIndex) => {
@@ -127,7 +127,7 @@ function SchedulePage() {
 									value = (
 										<span
 											onClick={
-												!row.bookedByUser && data.isLoggedIn
+												!row.bookedByUser && status.isLoggedIn
 													? (e) => {
 															e.stopPropagation();
 															mutate({
@@ -139,7 +139,7 @@ function SchedulePage() {
 													: null
 											}
 											className='material-symbols-rounded nav__icon nav__icon--side account'>
-											{data.isLoggedIn
+											{status.isLoggedIn
 												? row.bookedByUser
 													? 'check'
 													: 'shopping_bag_speed'
