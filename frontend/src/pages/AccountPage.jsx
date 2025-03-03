@@ -104,9 +104,15 @@ function AccountPage() {
 	const pickedModifier = pickModifier(location.pathname);
 
 	if (isError) {
-		window.alert(
-			error.info?.message || 'Błąd serwera - pobieranie danych uczestnika przerwane',
-		);
+		console.log(error.code);
+		if (error.code == 401) {
+			navigate('/login');
+			console.log(error.message);
+		} else {
+			window.alert(
+				error.info?.message || 'Błąd serwera - pobieranie danych uczestnika przerwane',
+			);
+		}
 	}
 
 	let user, customer, userTabs, name, stats, tableTitle, table, customerStats;

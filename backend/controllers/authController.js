@@ -3,13 +3,12 @@ import bcrypt from 'bcryptjs';
 
 export const getStatus = (req, res, next) => {
 	if (req.session?.isLoggedIn) {
-		return res.json({isLoggedIn: req.session.isLoggedIn, role: req.session.role});
+		return res.status(200).json({isLoggedIn: req.session.isLoggedIn, role: req.session.role});
 	}
-	res.json({isLoggedIn: false});
+	res.status(200).json({isLoggedIn: false});
 };
 export const postSignup = (req, res, next) => {
 	console.log(`➡️➡️➡️ called postSignup`);
-	req.session.isLoggedIn = true;
 	const {email, password, confirmedPassword, date} = req.body;
 
 	models.User.findOne({where: {email}})

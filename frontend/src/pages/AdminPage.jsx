@@ -81,7 +81,7 @@ function AdminPage() {
 	};
 	const pickedModifier = pickModifier(location.pathname);
 
-	const {data, isLoading, isError, error} = useQuery({
+	const {data, isError, error} = useQuery({
 		// as id for later caching received data to not send the same request again where location.pathname is key
 		queryKey: ['data', location.pathname],
 		// definition of the code sending the actual request- must be returning the promise
@@ -97,7 +97,12 @@ function AdminPage() {
 	let content;
 
 	if (isError) {
-		window.alert(error.info?.message || 'Failed to fetch');
+		if (error.code == 401) {
+			navigate('/login');
+			console.log(error.message);
+		} else {
+			window.alert(error.info?.message || 'Failed to fetch');
+		}
 	}
 	if (data) {
 		// console.clear();

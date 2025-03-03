@@ -167,7 +167,12 @@ function DetailsUserSettingsForm() {
 	if (isPending) {
 		content = 'Wysyłanie...';
 	} else if (isError) {
-		content = `Błąd: ${error}'`;
+		if (error.code == 401) {
+			navigate('/login');
+			console.log(error.message);
+		} else {
+			content = `Błąd: ${error}'`;
+		}
 	} else
 		content = (
 			<form

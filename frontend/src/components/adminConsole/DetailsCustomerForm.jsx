@@ -16,14 +16,14 @@ function DetailsUserSettingsForm() {
 		isError: isCustomerError,
 	} = useQuery({
 		queryKey: ['formFilling', 'editCustomer'],
-		queryFn: ({signal}) => fetchItem('/konto/ustawienia/uczestnik', {signal}),
+		queryFn: ({signal}) => fetchItem('customer/konto/ustawienia/uczestnik', {signal}),
 		staleTime: 0,
 		refetchOnMount: true,
 		enabled: location.pathname.includes('ustawienia'),
 	});
 	const {mutate, isPending, isError, error} = useMutation({
 		mutationFn: (formData) => {
-			return fetch('/api/konto/ustawienia/update/uczestnik', {
+			return fetch('/api/customer/konto/ustawienia/update/uczestnik', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -123,7 +123,12 @@ function DetailsUserSettingsForm() {
 	if (isPending) {
 		content = 'Wysyłanie...';
 	} else if (isError) {
-		content = `Błąd: ${error}'`;
+		if (error.code == 401) {
+			navigate('/login');
+			console.log(error.message);
+		} else {
+			content = `Błąd: ${error}'`;
+		}
 	} else
 		content = (
 			<form

@@ -32,6 +32,7 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 		enabled: !!params.id || location.pathname.includes('ustawienia'),
 	});
 	console.log('ViewFrame data: ', data);
+
 	const effectiveData = noFetchPaths.some((pathPart) => location.pathname.includes(pathPart))
 		? customer
 		: data;
@@ -126,7 +127,11 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 		dataDisplay = 'Loading...';
 	}
 	if (isError) {
-		dataDisplay = 'Error in UserDetails fetch...';
+		if (error.code == 401) {
+			navigate('/login');
+		} else {
+			dataDisplay = 'Error in UserDetails fetch...';
+		}
 	}
 
 	console.log(`ViewFrame customer: `, customer);

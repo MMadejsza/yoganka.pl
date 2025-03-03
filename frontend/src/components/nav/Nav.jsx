@@ -88,7 +88,7 @@ function Nav({setIsNavOpen}) {
 	const navigate = useNavigate();
 	const location = useLocation();
 
-	const {data, isLoading, isError, error} = useQuery({
+	const {data} = useQuery({
 		queryKey: ['authStatus'],
 		queryFn: fetchStatus,
 	});

@@ -28,6 +28,8 @@ function ViewSchedule({data, bookingOps}) {
 	let prodStats = null;
 
 	const userAccessed = typeof schedule.Bookings == 'number';
+	const isAlreadyBooked = schedule.bookedByUser;
+	console.log(`isAlreadyBooked`, isAlreadyBooked);
 	const {isLoggedIn} = userStatus;
 	if (!userAccessed) prodStats = calculateProductStats(product, [schedule]);
 
@@ -121,8 +123,8 @@ function ViewSchedule({data, bookingOps}) {
 
 			{bookingOps?.isError && <div className='error-box'>{bookingOps.error.message}</div>}
 
-			{!bookingOps?.isError && !schedule.bookedByUser && bookingBtn}
-			{!bookingOps?.isError && isLoggedIn && schedule.bookedByUser && userAccountPage && (
+			{!bookingOps?.isError && !isAlreadyBooked && bookingBtn}
+			{!bookingOps?.isError && isLoggedIn && isAlreadyBooked && userAccountPage && (
 				<button
 					onClick={handleCancellation}
 					className='book modal__btn modal__btn--cancel'>

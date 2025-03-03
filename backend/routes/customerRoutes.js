@@ -1,18 +1,11 @@
 import express from 'express';
-import path from 'path';
-import rootDir from '../utils/dirPath.js';
+import * as customerC from '../controllers/customerController.js';
+import isAuth from '../middleware/is-auth-customer.js';
 
 const router = express.Router();
+router.get('/konto/ustawienia/uczestnik', isAuth, customerC.getEditCustomer);
 
-// router.use('/ex', (req, res) => {
-// 	console.log('__dirname:', rootDir);
-// 	console.log('path.join:', path.join(rootDir, '../views/1.html'));
-
-// 	res.sendFile(path.join(rootDir, '..', 'views/1.html'));
-// });
-
-// router.get('/', (req, res) => {
-// 	res.send(`<a href='/add-product'>express</a>`);
-// });
+router.post('/grafik/book/:id', isAuth, customerC.bookSchedule);
+router.post('/konto/ustawienia/update/uczestnik', isAuth, customerC.postEditCustomer);
 
 export default router;
