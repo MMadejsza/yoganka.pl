@@ -10,11 +10,11 @@ import {fetchStatus} from '../../utils/http.js';
 
 function ViewSchedule({data, bookingOps}) {
 	// console.clear();
-	console.log(
-		`📝
-	    Schedule object from backend:`,
-		data,
-	);
+	// console.log(
+	// 	`📝
+	//     Schedule object from backend:`,
+	// 	data,
+	// );
 	const location = useLocation();
 	const navigate = useNavigate();
 	const userAccountPage = location.pathname.includes('konto');
@@ -58,11 +58,12 @@ function ViewSchedule({data, bookingOps}) {
 	const {ScheduleID: scheduleID} = schedule;
 	const {Product: product} = schedule;
 	const type = product.Type;
+	const bookedSuccessfully = bookingOps.confirmation == true;
 	let prodStats = null;
 
-	const userAccessed = typeof schedule.Bookings == 'number';
+	const userAccessed = status.role != 'ADMIN';
 	const isAlreadyBooked = schedule.bookedByUser;
-	console.log(`isAlreadyBooked`, isAlreadyBooked);
+	// console.log(`isAlreadyBooked`, isAlreadyBooked);
 	console.log(`status`, status);
 	const {isLoggedIn} = status;
 	if (!userAccessed) prodStats = calculateProductStats(product, [schedule]);
@@ -92,6 +93,11 @@ function ViewSchedule({data, bookingOps}) {
 			<span className='material-symbols-rounded nav__icon '>login</span>
 			Zaloguj się
 		</button>
+	);
+	const feedbackBox = (
+		<div className='feedback-box feedback-box--success'>
+			Miejsce zaklepane - do zobaczenia ;)
+		</div>
 	);
 
 	return (
@@ -151,9 +157,14 @@ function ViewSchedule({data, bookingOps}) {
 				</>
 			)}
 
-			{bookingOps?.isError && <div className='error-box'>{bookingOps.error.message}</div>}
+			{bookingOps?.isError && (
+				<div className='feedback-box feedback-box--error'>{bookingOps.error.message}</div>
+			)}
 
-			{!bookingOps?.isError && !isAlreadyBooked && bookingBtn}
+			{bookedSuccessfully
+				? feedbackBox
+				: !bookingOps?.isError && !isAlreadyBooked && bookingBtn}
+
 			{!bookingOps?.isError && isLoggedIn && isAlreadyBooked && userAccountPage && (
 				<button
 					onClick={handleCancellation}

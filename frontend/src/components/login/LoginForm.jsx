@@ -47,7 +47,7 @@ function LoginFrom() {
 				setFirstTime(!firstTime);
 				console.log(res);
 			}
-			navigate('/');
+			navigate(-1);
 		},
 		onError: () => {
 			if (error.code == 404) {
@@ -159,7 +159,7 @@ function LoginFrom() {
 		passwordDidEdit;
 
 	if (isError) {
-		errorMsg = <div className='error-box'>{error.message}</div>;
+		errorMsg = <div className='feedback-box feedback-box--error'>{error.message}</div>;
 	}
 	if (isPending) {
 		content = 'Wysyłanie...';

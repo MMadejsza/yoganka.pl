@@ -24,7 +24,7 @@ export async function fetchStatus() {
 }
 
 export async function fetchData(link) {
-	console.log(`fetchData link: ${link}`);
+	// console.log(`fetchData link: ${link}`);
 	// await promise solve
 	const response = await fetch(`/api${link}`);
 	// if error

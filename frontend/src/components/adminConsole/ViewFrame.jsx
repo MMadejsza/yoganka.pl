@@ -130,6 +130,7 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 		if (error.code == 401) {
 			navigate('/login');
 		} else {
+			console.log(error, error.code, error.message);
 			dataDisplay = 'Error in UserDetails fetch...';
 		}
 	}

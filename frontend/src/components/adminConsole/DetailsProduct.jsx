@@ -1,11 +1,11 @@
 import {durationToSeconds, secondsToDuration} from '../../utils/customerViewsUtils.js';
 
 function DetailsProduct({data, placement, userAccessed}) {
-	console.log(
-		`📝 
-        product object from backend:`,
-		data,
-	);
+	// console.log(
+	// 	`📝
+	//     product object from backend:`,
+	// 	data,
+	// );
 	const product = data;
 	const totalSeconds = durationToSeconds(product.Duration);
 	const splitDuration = secondsToDuration(totalSeconds);

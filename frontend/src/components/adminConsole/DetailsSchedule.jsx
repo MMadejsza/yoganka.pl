@@ -24,11 +24,13 @@ function DetailsSchedule({data, userAccessed}) {
 			<h2 className='user-container__section-title modal__title--day'>{`Szczegóły terminu:`}</h2>
 			<ul className='user-container__details-list modal-checklist__list'>
 				<li className='user-container__section-record modal-checklist__li'>
+					<p className='user-container__section-record-label'>ID:</p>
+					<p className='user-container__section-record-content'>{schedule.ScheduleID}</p>
+				</li>
+				<li className='user-container__section-record modal-checklist__li'>
 					<p className='user-container__section-record-label'>Uczestnicy:</p>
 					<p className='user-container__section-record-content'>
-						{`${userAccessed ? schedule.Bookings : schedule.Bookings.length} / ${
-							product.TotalSpaces
-						}`}
+						{`${userAccessed && schedule.BookedSchedules} / ${product.TotalSpaces}`}
 					</p>
 				</li>
 				<li className='user-container__section-record modal-checklist__li'>

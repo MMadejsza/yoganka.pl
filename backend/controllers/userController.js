@@ -70,7 +70,7 @@ export const showAllSchedules = (req, res, next) => {
 
 				const attributes = model.getAttributes();
 				const jsonRecord = record.toJSON();
-				console.log('jsonRecord', jsonRecord);
+				// console.log('jsonRecord', jsonRecord);
 
 				// 🔄 Iterate after each column in user record
 				for (const key in jsonRecord) {
@@ -135,8 +135,12 @@ export const showScheduleByID = (req, res, next) => {
 				required: true,
 			},
 			{
+				model: models.BookedSchedule,
+				required: false,
+			},
+			{
 				model: models.Booking, // Booking which has relation through BookedSchedule
-				through: {attributes: []}, // omit data from mid table
+				through: {}, // attributes: [] omit data from mid table
 				required: false,
 				attributes: {
 					exclude: ['Product'],
@@ -154,17 +158,19 @@ export const showScheduleByID = (req, res, next) => {
 			let bookedByUser = false;
 
 			// We substitute bookings content for security
-			if (schedule.Bookings) {
+			if (schedule.BookedSchedules && schedule.BookedSchedules?.length > 0) {
 				if (isUser && isCustomer) {
-					bookedByUser = schedule.Bookings.some(
-						(booking) => booking.CustomerID === req.user.Customer.CustomerID,
+					bookedByUser = schedule.BookedSchedules.some(
+						(bookedSchedule) =>
+							bookedSchedule.CustomerID === req.user.Customer.CustomerID,
 					);
 				}
-				schedule.Bookings = schedule.Bookings.length;
+				schedule.Bookings = schedule.BookedSchedules.length;
 				schedule.bookedByUser = bookedByUser;
 			}
-
+			schedule.BookedSchedules = schedule.BookedSchedules.length;
 			return res.status(200).json({schedule, user: req.user});
+			// return res.status(200).json({schedule});
 		})
 		.catch((err) => console.log(err));
 };

@@ -1,6 +1,6 @@
 import {useQuery} from '@tanstack/react-query';
 import {useLocation, useNavigate, useMatch} from 'react-router-dom';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {fetchData, fetchStatus, queryClient} from '../utils/http.js';
 import ViewFrame from '../components/adminConsole/ViewFrame.jsx';
 import Section from '../components/Section.jsx';
@@ -12,6 +12,7 @@ function SchedulePage() {
 	const location = useLocation(); // fetch current path
 
 	const [isModalOpen, setIsModalOpen] = useState(modalMatch);
+	const [isBookedSuccessfully, setIsBookedSuccessfully] = useState(false);
 
 	const {data: status} = useQuery({
 		queryKey: ['authStatus'],
@@ -65,9 +66,23 @@ function SchedulePage() {
 			}),
 		onSuccess: () => {
 			queryClient.invalidateQueries(['data', location.pathname]);
-			navigate('/grafik');
+			setIsBookedSuccessfully(true);
 		},
 	});
+
+	// To handle timeout for feedback box in the child viewSchedule + cleanup
+	useEffect(() => {
+		if (isBookedSuccessfully) {
+			const timer = setTimeout(() => {
+				reset();
+				if (isModalOpen) handleCloseModal();
+				navigate('/grafik');
+				setIsBookedSuccessfully(false);
+			}, 1000);
+
+			return () => clearTimeout(timer);
+		}
+	}, [isBookedSuccessfully, reset, navigate]);
 
 	const handleOpenModal = (row) => {
 		const recordId = row.ID;
@@ -78,11 +93,10 @@ function SchedulePage() {
 	const handleCloseModal = () => {
 		setIsModalOpen(false);
 		reset(); // resets mutation state and flags
-		navigate(location.state?.background?.pathname || '/', {replace: true});
+		navigate(-1);
 	};
 
 	let content;
-
 	if (isError) {
 		if (error.code == 401) {
 			navigate('/login');
@@ -175,7 +189,12 @@ function SchedulePage() {
 					modifier='schedule'
 					visited={isModalOpen}
 					onClose={handleCloseModal}
-					bookingOps={{onBook: book, isError: isMutateError, error: mutateError}}
+					bookingOps={{
+						onBook: book,
+						isError: isMutateError,
+						error: mutateError,
+						confirmation: isBookedSuccessfully,
+					}}
 				/>
 			)}
 		</div>

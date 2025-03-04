@@ -16,6 +16,8 @@ function AccountPage() {
 	const location = useLocation(); // fetch current path
 	const today = new Date().toISOString().split('T')[0];
 
+	const [isModalOpen, setIsModalOpen] = useState(modalMatch);
+
 	const {data: status} = useQuery({
 		queryKey: ['authStatus'],
 		queryFn: fetchStatus,
@@ -65,8 +67,6 @@ function AccountPage() {
 			navigate('/grafik');
 		},
 	});
-
-	const [isModalOpen, setIsModalOpen] = useState(modalMatch);
 
 	const handleOpenModal = (extraPath) => {
 		setIsModalOpen(true);

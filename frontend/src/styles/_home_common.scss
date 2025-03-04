@@ -121,17 +121,23 @@ footer {
 	text-align: center;
 }
 // box
-.error-box {
+.feedback-box {
 	width: 80%;
 	margin-top: 3rem;
 	height: 8vh;
 	text-align: center;
 	font-size: 2rem;
-	color: red;
-	background-color: rgba(red, 0.2);
 	border-radius: map.get(var.$sizes, border-radius);
 	box-shadow: map.get(var.$shadows, box-shadow);
 	@include mixin.flex(row, center, center);
+	&--error {
+		color: red;
+		background-color: rgba(red, 0.2);
+	}
+	&--success {
+		color: green;
+		background-color: rgba(green, 0.2);
+	}
 }
 
 //! COMMON BLOCKS END
