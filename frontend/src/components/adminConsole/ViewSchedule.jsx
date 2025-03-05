@@ -4,11 +4,13 @@ import DetailsProductStats from './DetailsProductStats.jsx';
 import DetailsProductBookings from './DetailsProductBookings.jsx';
 import DetailsProductReviews from './DetailsProductReviews.jsx';
 import {calculateProductStats} from '../../utils/productViewsUtils.js';
-import {useLocation, useNavigate} from 'react-router-dom';
-import {useQuery, useMutation} from '@tanstack/react-query';
-import {fetchStatus} from '../../utils/http.js';
+import React, {useState, useEffect} from 'react';
 
-function ViewSchedule({data, bookingOps}) {
+import {useLocation, useNavigate, useMatch} from 'react-router-dom';
+import {useQuery, useMutation} from '@tanstack/react-query';
+import {fetchStatus, queryClient} from '../../utils/http.js';
+
+function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
 	// console.clear();
 	// console.log(
 	// 	`📝
@@ -18,6 +20,7 @@ function ViewSchedule({data, bookingOps}) {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const userAccountPage = location.pathname.includes('konto');
+	const [isCancelledSuccessfully, setIsCancelledSuccessfully] = useState(false);
 
 	const {data: status} = useQuery({
 		queryKey: ['authStatus'],
@@ -48,17 +51,32 @@ function ViewSchedule({data, bookingOps}) {
 				return response.json();
 			}),
 		onSuccess: (res) => {
-			queryClient.invalidateQueries(['data', ' /grafik']);
-			navigate('/konto');
-			console.log(res.message);
+			queryClient.invalidateQueries(['data', '/grafik']);
+			queryClient.invalidateQueries(['account']);
+			setIsCancelledSuccessfully(true);
 		},
 	});
+
+	useEffect(() => {
+		if (isCancelledSuccessfully) {
+			const timer = setTimeout(() => {
+				cancelReset();
+				// if (isModalOpen) onClose();
+				onClose();
+				navigate('/konto');
+				setIsCancelledSuccessfully(false);
+			}, 1000);
+
+			return () => clearTimeout(timer);
+		}
+	}, [isCancelledSuccessfully, cancelReset, navigate, isModalOpen, onClose]);
 
 	const {schedule} = data;
 	const {ScheduleID: scheduleID} = schedule;
 	const {Product: product} = schedule;
 	const type = product.Type;
-	const bookedSuccessfully = bookingOps.confirmation == true;
+	const bookedSuccessfully = !userAccountPage && bookingOps.confirmation;
+	const isSuccessNotification = bookedSuccessfully || isCancelledSuccessfully;
 	let prodStats = null;
 
 	const userAccessed = status.role != 'ADMIN';
@@ -81,24 +99,38 @@ function ViewSchedule({data, bookingOps}) {
 
 	const bookingBtn = isLoggedIn ? (
 		<button
-			onClick={handleBooking}
+			onClick={() =>
+				bookingOps.onBook({
+					scheduleID: schedule.ScheduleID,
+					productName: product.Name,
+					productPrice: product.Price,
+				})
+			}
 			className='book modal__btn'>
-			<span className='material-symbols-rounded nav__icon '>shopping_bag_speed</span>
+			<span className='material-symbols-rounded nav__icon'>shopping_bag_speed</span>
 			Rezerwuj
 		</button>
 	) : (
 		<button
 			onClick={() => navigate('/login')}
 			className='book modal__btn'>
-			<span className='material-symbols-rounded nav__icon '>login</span>
+			<span className='material-symbols-rounded nav__icon'>login</span>
 			Zaloguj się
 		</button>
 	);
+
 	const feedbackBox = (
 		<div className='feedback-box feedback-box--success'>
-			Miejsce zaklepane - do zobaczenia ;)
+			{isCancelledSuccessfully
+				? 'Miejsce zwolnione - dziękujemy za informacje :)'
+				: 'Miejsce zaklepane - do zobaczenia ;)'}
 		</div>
 	);
+
+	const shouldShowFeedback = isSuccessNotification;
+	const shouldShowCancelBtn =
+		isLoggedIn && isAlreadyBooked && userAccountPage && !shouldShowFeedback;
+	const shouldShowBookBtn = isLoggedIn && !isAlreadyBooked && !bookingOps?.isError;
 
 	return (
 		<>
@@ -161,15 +193,13 @@ function ViewSchedule({data, bookingOps}) {
 				<div className='feedback-box feedback-box--error'>{bookingOps.error.message}</div>
 			)}
 
-			{bookedSuccessfully
-				? feedbackBox
-				: !bookingOps?.isError && !isAlreadyBooked && bookingBtn}
+			{shouldShowFeedback ? feedbackBox : shouldShowBookBtn ? bookingBtn : null}
 
-			{!bookingOps?.isError && isLoggedIn && isAlreadyBooked && userAccountPage && (
+			{shouldShowCancelBtn && (
 				<button
 					onClick={handleCancellation}
 					className='book modal__btn modal__btn--cancel'>
-					<span className='material-symbols-rounded nav__icon '>
+					<span className='material-symbols-rounded nav__icon'>
 						sentiment_dissatisfied
 					</span>
 					Daj znać, że nie przyjdziesz...

@@ -59,7 +59,7 @@ function SchedulePage() {
 			}).then((response) => {
 				if (!response.ok) {
 					return response.json().then((errorData) => {
-						throw new Error(errorData.error || 'Błąd podczas rezerwacji');
+						throw new Error(errorData.message || 'Błąd podczas rezerwacji');
 					});
 				}
 				return response.json();

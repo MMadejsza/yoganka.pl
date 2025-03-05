@@ -30,43 +30,43 @@ function AccountPage() {
 		refetchOnMount: true,
 	});
 
-	const {
-		mutate,
-		isError: isMutateError,
-		error: mutateError,
-		reset,
-	} = useMutation({
-		mutationFn: async ({scheduleID, productName, productPrice}) =>
-			await fetch(`/api/grafik/book/${scheduleID}`, {
-				method: 'POST',
-				body: JSON.stringify({
-					schedule: scheduleID,
-					date: new Date().toISOString().split('T')[0],
-					product: productName,
-					status: 'Paid',
-					amountPaid: productPrice,
-					amountDue: 0,
-					paymentMethod: 'Credit Card',
-					paymentStatus: 'Completed',
-				}),
-				headers: {
-					'Content-Type': 'application/json',
-					'CSRF-Token': status.token,
-				},
-				credentials: 'include',
-			}).then((response) => {
-				if (!response.ok) {
-					return response.json().then((errorData) => {
-						throw new Error(errorData.error || 'Błąd podczas rezerwacji');
-					});
-				}
-				return response.json();
-			}),
-		onSuccess: () => {
-			queryClient.invalidateQueries(['data', location.pathname]);
-			navigate('/grafik');
-		},
-	});
+	// const {
+	// 	mutate,
+	// 	isError: isMutateError,
+	// 	error: mutateError,
+	// 	reset,
+	// } = useMutation({
+	// 	mutationFn: async ({scheduleID, productName, productPrice}) =>
+	// 		await fetch(`/api/grafik/book/${scheduleID}`, {
+	// 			method: 'POST',
+	// 			body: JSON.stringify({
+	// 				schedule: scheduleID,
+	// 				date: new Date().toISOString().split('T')[0],
+	// 				product: productName,
+	// 				status: 'Paid',
+	// 				amountPaid: productPrice,
+	// 				amountDue: 0,
+	// 				paymentMethod: 'Credit Card',
+	// 				paymentStatus: 'Completed',
+	// 			}),
+	// 			headers: {
+	// 				'Content-Type': 'application/json',
+	// 				'CSRF-Token': status.token,
+	// 			},
+	// 			credentials: 'include',
+	// 		}).then((response) => {
+	// 			if (!response.ok) {
+	// 				return response.json().then((errorData) => {
+	// 					throw new Error(errorData.error || 'Błąd podczas rezerwacji');
+	// 				});
+	// 			}
+	// 			return response.json();
+	// 		}),
+	// 	onSuccess: () => {
+	// 		queryClient.invalidateQueries(['data', location.pathname]);
+	// 		navigate('/grafik');
+	// 	},
+	// });
 
 	const handleOpenModal = (extraPath) => {
 		setIsModalOpen(true);
@@ -80,7 +80,7 @@ function AccountPage() {
 
 	const handleCloseModal = () => {
 		setIsModalOpen(false);
-		navigate(location.state?.background?.pathname || '/konto', {replace: true});
+		navigate(-1);
 	};
 
 	const pickModifier = (path) => {

@@ -72,6 +72,8 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 					<ViewSchedule
 						data={data}
 						bookingOps={bookingOps}
+						onClose={onClose}
+						isModalOpen={visited}
 					/>
 				);
 				controller.recordEditor = '';

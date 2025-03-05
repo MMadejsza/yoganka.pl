@@ -29,6 +29,9 @@ const ScheduleRecord = sequelizeDb.define(
 			type: DataTypes.STRING(255),
 			allowNull: true,
 		},
+		Capacity: {
+			type: DataTypes.INTEGER,
+		},
 	},
 	{
 		tableName: 'schedule_records',
