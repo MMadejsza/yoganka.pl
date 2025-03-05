@@ -33,7 +33,6 @@ const columnMaps = {
 		Location: 'Lokalizacja',
 		Duration: 'Czas trwania',
 		Price: 'Cena',
-		TotalSpaces: 'Ilość miejsc',
 		StartDate: 'Data rozpoczęcia',
 	},
 

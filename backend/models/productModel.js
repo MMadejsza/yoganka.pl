@@ -30,10 +30,7 @@ const Product = sequelizeDb.define(
 			type: DataTypes.DECIMAL(10, 2),
 			allowNull: true,
 		},
-		TotalSpaces: {
-			type: DataTypes.INTEGER,
-			allowNull: true,
-		},
+
 		StartDate: {
 			type: DataTypes.DATEONLY, //  YYYY-MM-DD
 			allowNull: true,

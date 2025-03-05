@@ -49,7 +49,7 @@ export const showAllSchedules = (req, res, next) => {
 			include: [
 				{
 					model: models.Product,
-					attributes: ['Type', 'Name', 'Price', 'TotalSpaces'],
+					attributes: ['Type', 'Name', 'Price'],
 				},
 				{
 					model: models.Booking,
@@ -96,9 +96,7 @@ export const showAllSchedules = (req, res, next) => {
 				}
 				newRecord['Dzień'] = getWeekDay(jsonRecord['Date']);
 				newRecord['Zadatek'] = jsonRecord.Product.Price;
-				newRecord[
-					'Miejsca'
-				] = `${jsonRecord.Bookings.length}/${jsonRecord.Product.TotalSpaces}`;
+				newRecord['Miejsca'] = `${jsonRecord.Bookings.length}/${jsonRecord.Capacity}`;
 				return newRecord; // Return new record object
 			});
 
@@ -115,6 +113,7 @@ export const showAllSchedules = (req, res, next) => {
 			];
 			// ✅ Return response to frontend
 			res.json({
+				records: records,
 				totalHeaders, // To render
 				content: formattedRecords, // With new names
 			});

@@ -54,14 +54,14 @@ function DetailsProduct({data, placement, userAccessed}) {
 						</li>
 					</>
 				)}
-				{!userAccessed && (
+				{/* {!userAccessed && (
 					<li className='user-container__section-record modal-checklist__li'>
 						<p className='user-container__section-record-label'>Miejsc:</p>
 						<p className='user-container__section-record-content'>
 							{product.TotalSpaces}
 						</p>
 					</li>
-				)}
+				)} */}
 				<li className='user-container__section-record modal-checklist__li'>
 					<p className='user-container__section-record-label'>Zadatek:</p>
 					<p className='user-container__section-record-content'>{product.Price}zł</p>

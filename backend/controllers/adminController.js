@@ -633,7 +633,6 @@ export const createProduct = async (req, res, next) => {
 		Location: req.body.location,
 		Duration: req.body.duration,
 		Price: req.body.price,
-		TotalSpaces: req.body.totalSpaces,
 		StartDate: req.body.startDate,
 	})
 		.then(() => {
@@ -649,7 +648,6 @@ export const editProduct = async (req, res, next) => {
 			Location: req.body.location,
 			Duration: req.body.duration,
 			Price: req.body.price,
-			TotalSpaces: req.body.totalSpaces,
 			StartDate: req.body.startDate,
 		})
 		.then(() => {
