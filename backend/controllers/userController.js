@@ -97,6 +97,7 @@ export const showAllSchedules = (req, res, next) => {
 				newRecord['Dzień'] = getWeekDay(jsonRecord['Date']);
 				newRecord['Zadatek'] = jsonRecord.Product.Price;
 				newRecord['Miejsca'] = `${jsonRecord.Bookings.length}/${jsonRecord.Capacity}`;
+				newRecord.full = jsonRecord.Bookings.length >= jsonRecord.Capacity;
 				return newRecord; // Return new record object
 			});
 
@@ -166,6 +167,7 @@ export const showScheduleByID = (req, res, next) => {
 				}
 				schedule.Bookings = schedule.BookedSchedules.length;
 				schedule.bookedByUser = bookedByUser;
+				schedule.full = schedule.BookedSchedules.length >= schedule.Capacity;
 			}
 			schedule.BookedSchedules = schedule.BookedSchedules.length;
 			return res.status(200).json({schedule, user: req.user});

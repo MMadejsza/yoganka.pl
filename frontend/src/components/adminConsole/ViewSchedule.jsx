@@ -11,12 +11,12 @@ import {useQuery, useMutation} from '@tanstack/react-query';
 import {fetchStatus, queryClient} from '../../utils/http.js';
 
 function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
-	// console.clear();
-	// console.log(
-	// 	`📝
-	//     Schedule object from backend:`,
-	// 	data,
-	// );
+	console.clear();
+	console.log(
+		`📝
+	    Schedule object from backend:`,
+		data,
+	);
 	const location = useLocation();
 	const navigate = useNavigate();
 	const userAccountPage = location.pathname.includes('konto');
@@ -75,6 +75,7 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
 	const {ScheduleID: scheduleID} = schedule;
 	const {Product: product} = schedule;
 	const type = product.Type;
+	const isFull = schedule.full;
 	const bookedSuccessfully = !userAccountPage && bookingOps.confirmation;
 	const isSuccessNotification = bookedSuccessfully || isCancelledSuccessfully;
 	let prodStats = null;
@@ -97,18 +98,29 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
 		cancel();
 	};
 
+	const shouldShowFeedback = isSuccessNotification;
+	const shouldShowCancelBtn =
+		isLoggedIn && isAlreadyBooked && userAccountPage && !shouldShowFeedback;
+	const shouldShowBookBtn = !isAlreadyBooked && !bookingOps?.isError;
+	const shouldDisableBookBtn = isFull && shouldShowBookBtn;
+
 	const bookingBtn = isLoggedIn ? (
 		<button
-			onClick={() =>
-				bookingOps.onBook({
-					scheduleID: schedule.ScheduleID,
-					productName: product.Name,
-					productPrice: product.Price,
-				})
+			onClick={
+				!shouldDisableBookBtn
+					? () =>
+							bookingOps.onBook({
+								scheduleID: schedule.ScheduleID,
+								productName: product.Name,
+								productPrice: product.Price,
+							})
+					: null
 			}
-			className='book modal__btn'>
-			<span className='material-symbols-rounded nav__icon'>shopping_bag_speed</span>
-			Rezerwuj
+			className={`book modal__btn ${shouldDisableBookBtn && 'disabled'}`}>
+			<span className='material-symbols-rounded nav__icon'>
+				{shouldDisableBookBtn ? 'block' : 'shopping_bag_speed'}
+			</span>
+			{shouldDisableBookBtn ? 'Brak Miejsc' : 'Rezerwuj'}
 		</button>
 	) : (
 		<button
@@ -126,11 +138,6 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
 				: 'Miejsce zaklepane - do zobaczenia ;)'}
 		</div>
 	);
-
-	const shouldShowFeedback = isSuccessNotification;
-	const shouldShowCancelBtn =
-		isLoggedIn && isAlreadyBooked && userAccountPage && !shouldShowFeedback;
-	const shouldShowBookBtn = isLoggedIn && !isAlreadyBooked && !bookingOps?.isError;
 
 	return (
 		<>

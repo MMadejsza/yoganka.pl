@@ -295,6 +295,19 @@
 	&__btn {
 		@extend %action-btn;
 
+		&--small {
+			height: 2.5rem;
+			min-height: auto;
+			line-height: 150%;
+			font-size: 1.4rem;
+			&-change {
+				background-color: rgba(yellow, 0.1);
+			}
+			&-reset {
+				background-color: rgba(red, 0.1);
+			}
+		}
+
 		&--secondary {
 			min-height: auto;
 			height: 2.5rem;
@@ -308,6 +321,16 @@
 
 		&--cancel {
 			background-color: rgba(color.adjust(red, $lightness: -13%), 0.45);
+		}
+
+		&.book {
+			flex-basis: 65%;
+			margin-top: 3rem;
+		}
+
+		&.disabled {
+			cursor: not-allowed;
+			opacity: 0.5;
 		}
 	}
 	&__summary {

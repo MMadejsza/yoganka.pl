@@ -246,9 +246,8 @@
 	.modal {
 		max-width: 95vw;
 
-		&__btn:hover {
+		&__btn:hover:not(.disabled) {
 			transform: scale(1.05) translateY(0.5rem);
-
 			box-shadow: var.$active-box-shadow;
 		}
 

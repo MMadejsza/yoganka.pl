@@ -129,7 +129,7 @@ function SchedulePage() {
 						<tr
 							className={`data-table__cells schedule active ${
 								row.bookedByUser && status.isLoggedIn ? 'booked' : ''
-							}`}
+							} ${row.full && 'full'}`}
 							key={rowIndex}>
 							{headers.map((header, headerIndex) => {
 								let value = row[header];
@@ -156,6 +156,8 @@ function SchedulePage() {
 											{status.isLoggedIn
 												? row.bookedByUser
 													? 'check'
+													: row.full
+													? 'block'
 													: 'shopping_bag_speed'
 												: 'lock_person'}
 										</span>
