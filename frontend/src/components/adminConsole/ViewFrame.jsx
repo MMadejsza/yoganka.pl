@@ -13,7 +13,15 @@ import ViewReview from './ViewReview.jsx';
 import ViewCustomerTotalSchedules from './ViewCustomerTotalSchedules.jsx';
 import ViewCustomerTotalBookings from './ViewCustomerTotalBookings.jsx';
 
-function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, customer}) {
+function ViewFrame({
+	modifier,
+	visited,
+	onClose,
+	bookingOps,
+	userAccountPage,
+	customer,
+	minRightsPrefix,
+}) {
 	const navigate = useNavigate();
 	const params = useParams();
 	const location = useLocation();
@@ -23,17 +31,21 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 	const noFetchPaths = ['statystyki', 'zajecia', 'rezerwacje', 'faktury'];
 
 	console.log('ViewFrame callPath: ', callPath);
+	console.log('ViewFrame minRightsPrefix: ', minRightsPrefix);
 
 	const {data, isPending, isError, error} = useQuery({
 		queryKey: ['query', location.pathname],
-		queryFn: ({signal}) => fetchItem(callPath, {signal}),
+		queryFn: ({signal}) => fetchItem(callPath, {signal}, minRightsPrefix),
 		staleTime: 0,
 		refetchOnMount: true,
 		enabled: !!params.id || location.pathname.includes('ustawienia'),
 	});
-	console.log('ViewFrame data: ', data);
-
-	const effectiveData = noFetchPaths.some((pathPart) => location.pathname.includes(pathPart))
+	if (data) {
+		console.log('ViewFrame data: ', data);
+	}
+	const effectiveData = noFetchPaths.some((pathPart) =>
+		location.pathname.split('/').pop().includes(pathPart),
+	)
 		? customer
 		: data;
 
@@ -82,7 +94,9 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 				controller.recordDisplay = (
 					<ViewBooking
 						data={data}
-						isUserAccountPage={false}
+						isUserAccountPage={userAccountPage}
+						onClose={onClose}
+						isModalOpen={visited}
 					/>
 				);
 				controller.recordEditor = '';

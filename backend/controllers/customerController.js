@@ -171,13 +171,13 @@ export const postCancelSchedule = (req, res, next) => {
 };
 
 export const getEditCustomer = (req, res, next) => {
-	console.log(`➡️➡️➡️ called getEditCustomer`);
+	console.log(`\n➡️➡️➡️ called getEditCustomer`);
 	const customer = req.user.Customer;
 	// console.log(customer);
 	return res.status(200).json({customer});
 };
 export const postEditCustomer = (req, res, next) => {
-	console.log(`➡️➡️➡️ called postEditSettings`);
+	console.log(`\n➡️➡️➡️ called postEditSettings`);
 	db.transaction()
 		.then((t) => {
 			const customerId = req.user.Customer.CustomerID;
@@ -220,4 +220,43 @@ export const postEditCustomer = (req, res, next) => {
 			console.log('Error starting transaction:', err);
 			return res.status(500).json({error: err.message});
 		});
+};
+
+export const getShowBookingByID = (req, res, next) => {
+	console.log(`\n➡️➡️➡️ customer called showBookingByID`);
+
+	const PK = req.params.id;
+
+	models.Booking.findByPk(PK, {
+		through: {attributes: []}, // omit data from mid table
+		required: false,
+		attributes: {
+			exclude: ['Product', 'CustomerID'],
+		},
+		include: [
+			{
+				model: models.Customer,
+				attributes: {exclude: []},
+			},
+			{
+				model: models.ScheduleRecord,
+				attributes: {exclude: ['UserID']},
+				through: {attributes: []}, // omit data from mid table
+				include: [
+					{
+						model: models.Product,
+						attributes: {exclude: []},
+					},
+				],
+			},
+		],
+	})
+		.then((booking) => {
+			if (!booking) {
+				return res.redirect('/admin-console/show-all-bookings');
+			}
+			console.log('\n✅✅✅ Booking fetched');
+			return res.status(200).json({isLoggedIn: req.session.isLoggedIn, booking});
+		})
+		.catch((err) => console.log(err));
 };

@@ -1,6 +1,6 @@
 import {calculateStats} from '../../utils/customerViewsUtils.js';
 import ModalTable from './ModalTable';
-import {useState, useEffect} from 'react';
+import {useState} from 'react';
 import {useLocation, useNavigate, useMatch} from 'react-router-dom';
 import ViewFrame from './ViewFrame.jsx';
 
@@ -13,8 +13,7 @@ function ViewCustomerTotalBookings({data}) {
 	);
 	const navigate = useNavigate();
 	const location = useLocation();
-	const modalMatch = !!useMatch('/konto/rezerwacje/:id');
-	const [isModalOpen, setIsModalOpen] = useState(modalMatch);
+	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	const background = {
 		pathname: location.pathname,
@@ -62,9 +61,11 @@ function ViewCustomerTotalBookings({data}) {
 			{table}
 			{isModalOpen && (
 				<ViewFrame
-					modifier='schedule'
+					modifier='booking'
 					visited={isModalOpen}
 					onClose={handleCloseModal}
+					userAccountPage={true}
+					minRightsPrefix='/customer'
 				/>
 			)}
 		</>

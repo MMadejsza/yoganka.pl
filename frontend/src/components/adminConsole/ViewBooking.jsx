@@ -9,10 +9,10 @@ import {calculateProductStats} from '../../utils/productViewsUtils.js';
 // import {calculateStats} from '../../utils/productViewsUtils.js';
 
 function ViewBooking({data, isUserAccountPage}) {
-	console.clear();
+	// console.clear();
 	console.log(
 		`📝
-	    Booking object from backend:`,
+	    ViewBooking object from backend:`,
 		data,
 	);
 	const {booking} = data;
