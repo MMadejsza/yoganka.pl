@@ -3,7 +3,7 @@ import * as models from '../models/_index.js';
 import columnMaps from '../utils/columnsMapping.js';
 import {formatIsoDateTime, getWeekDay} from '../utils/formatDateTime.js';
 
-export const showUserByID = (req, res, next) => {
+export const getShowUserByID = (req, res, next) => {
 	console.log(`➡️➡️➡️ called showUserByID`);
 	const PK = req.user.UserID;
 	models.User.findByPk(PK, {
@@ -34,7 +34,7 @@ export const showUserByID = (req, res, next) => {
 		})
 		.catch((err) => console.log(err));
 };
-export const showAllSchedules = (req, res, next) => {
+export const getShowAllSchedules = (req, res, next) => {
 	const model = models.ScheduleRecord;
 	const isUser = !!req.user;
 	const isCustomer = !!req.user?.Customer;
@@ -121,7 +121,7 @@ export const showAllSchedules = (req, res, next) => {
 		})
 		.catch((err) => console.log(err));
 };
-export const showScheduleByID = (req, res, next) => {
+export const getShowScheduleByID = (req, res, next) => {
 	console.log(`➡️ called user showScheduleByID`);
 
 	const isUser = !!req.user;
@@ -176,7 +176,7 @@ export const showScheduleByID = (req, res, next) => {
 		.catch((err) => console.log(err));
 };
 
-export const showAccount = (req, res, next) => {
+export const getShowAccount = (req, res, next) => {
 	console.log(`➡️➡️➡️ called showAccount`, new Date().toISOString());
 	// return res.status(401).json({});
 

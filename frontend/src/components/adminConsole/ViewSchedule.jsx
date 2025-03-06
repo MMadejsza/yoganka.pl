@@ -55,6 +55,7 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
 			setIsCancelledSuccessfully(true);
 		},
 	});
+
 	useEffect(() => {
 		if (isCancelledSuccessfully) {
 			const timer = setTimeout(() => {
@@ -74,14 +75,18 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
 	const {Product: product} = schedule;
 	const type = product.Type;
 	const isFull = schedule.full;
+	const isAlreadyBooked = schedule.bookedByUser;
+
+	const today = new Date();
+	const scheduleDateTime = new Date(`${schedule.Date}T${schedule.StartTime}:00`);
+	const isArchived = scheduleDateTime < today;
+
 	const bookedSuccessfully = !userAccountPage && bookingOps.confirmation;
 	const isSuccessNotification = bookedSuccessfully || isCancelledSuccessfully;
 	let prodStats = null;
 
 	const userAccessed = status.role != 'ADMIN';
-	const isAlreadyBooked = schedule.bookedByUser;
-	// console.log(`isAlreadyBooked`, isAlreadyBooked);
-	console.log(`status`, status);
+
 	const {isLoggedIn} = status;
 	if (!userAccessed) prodStats = calculateProductStats(product, [schedule]);
 
@@ -92,7 +97,7 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
 	const shouldShowFeedback = isSuccessNotification;
 	const shouldShowCancelBtn =
 		isLoggedIn && isAlreadyBooked && userAccountPage && !shouldShowFeedback;
-	const shouldShowBookBtn = !isAlreadyBooked && !bookingOps?.isError;
+	const shouldShowBookBtn = !isArchived && !isAlreadyBooked && !bookingOps?.isError;
 	const shouldDisableBookBtn = isFull && shouldShowBookBtn;
 
 	const bookingBtn = isLoggedIn ? (

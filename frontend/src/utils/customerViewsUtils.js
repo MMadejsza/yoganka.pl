@@ -15,7 +15,7 @@ export const calculateMode = (agesArray) => {
 	let maxFreq = 0;
 	let mode = null;
 
-	// Zlicz częstotliwość występowania każdego wieku
+	// Count frequency of each age
 	agesArray.forEach((age) => {
 		frequency[age] = (frequency[age] || 0) + 1;
 		if (frequency[age] > maxFreq) {
@@ -61,6 +61,7 @@ export const getWeekDay = (dateStr) => {
 	const days = ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'];
 	return days[date.getDay()];
 };
+
 //@ stats helper for calculation
 export const calculateStats = (customer) => {
 	// console.log(`calculateStats passed customer`, customer);

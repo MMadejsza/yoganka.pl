@@ -16,14 +16,14 @@ function ModalTable({headers, content, keys, active, classModifier, onOpen, onQu
 			</thead>
 			<tbody>
 				{content.map((row, rowIndex) => {
-					const archived = new Date(row.Data?.split('.').reverse().join('-')) < today;
+					const isArchived = new Date(row.Data?.split('.').reverse().join('-')) < today;
 
 					return (
 						<tr
 							className={`data-table__cells ${active ? 'active' : ''}  ${
 								classModifier ? `data-table__cells--${classModifier}` : ''
-							} ${
-								(row.bookedByUser && status?.isLoggedIn) || archived ? 'booked' : ''
+							} ${row.bookedByUser && status?.isLoggedIn ? 'booked' : ''} ${
+								isArchived ? 'archived' : ''
 							} ${row.full && 'full'}`}
 							key={rowIndex}>
 							{keys.map((key, keyIndex) => {
@@ -35,7 +35,9 @@ function ModalTable({headers, content, keys, active, classModifier, onOpen, onQu
 									value = (
 										<span
 											onClick={
-												!row.bookedByUser && status?.isLoggedIn && !archived
+												!row.bookedByUser &&
+												status?.isLoggedIn &&
+												!isArchived
 													? (e) => {
 															e.stopPropagation();
 															onQuickBook({
@@ -50,7 +52,7 @@ function ModalTable({headers, content, keys, active, classModifier, onOpen, onQu
 											{status.isLoggedIn
 												? row.bookedByUser
 													? 'check'
-													: row.full || archived
+													: row.full || isArchived
 													? 'block'
 													: 'shopping_bag_speed'
 												: 'lock_person'}

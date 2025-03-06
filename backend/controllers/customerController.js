@@ -1,7 +1,7 @@
 import db from '../utils/db.js';
 import * as models from '../models/_index.js';
 
-export const bookSchedule = (req, res, next) => {
+export const postBookSchedule = (req, res, next) => {
 	// @ Fetching USER
 	// check if there is logged in User
 	if (!req.user) {
@@ -169,13 +169,13 @@ export const postCancelSchedule = (req, res, next) => {
 			next(err);
 		});
 };
+
 export const getEditCustomer = (req, res, next) => {
 	console.log(`➡️➡️➡️ called getEditCustomer`);
 	const customer = req.user.Customer;
 	// console.log(customer);
 	return res.status(200).json({customer});
 };
-
 export const postEditCustomer = (req, res, next) => {
 	console.log(`➡️➡️➡️ called postEditSettings`);
 	db.transaction()

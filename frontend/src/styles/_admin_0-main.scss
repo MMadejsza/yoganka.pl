@@ -171,19 +171,21 @@
 				color: map.get(var.$colors, accent-bcg);
 				text-shadow: map.get(var.$shadows, active-text-icons-shadow);
 			}
-			&.full {
-				background-color: map.get(var.$colors, nav);
-				opacity: 0.5;
-				& span {
-					color: inherit;
-				}
-			}
+
 			&.booked {
 				background-color: color.adjust(green, $lightness: 80%);
-				opacity: 0.5;
+				opacity: 0.6;
 			}
 			&.booked span {
 				color: green;
+			}
+			&.full,
+			&.archived {
+				background-color: map.get(var.$colors, nav);
+				opacity: 0.25;
+				& span {
+					color: inherit;
+				}
 			}
 		}
 
