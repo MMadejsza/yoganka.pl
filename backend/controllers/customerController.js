@@ -41,6 +41,12 @@ export const bookSchedule = (req, res, next) => {
 					console.log('❗❗❗if (!scheduleRecord) {');
 					throw new Error('Nie znaleziono terminu');
 				}
+				const scheduleDateTime = new Date(
+					`${scheduleRecord.Date}T${scheduleRecord.StartTime}:00`,
+				);
+				if (scheduleDateTime < new Date()) {
+					throw new Error('Nie można rezerwować terminu, który już minął.');
+				}
 				// console.log('scheduleRecord', scheduleRecord);
 				// Count the current amount of reservations
 				return models.BookedSchedule.count({
@@ -102,7 +108,10 @@ export const bookSchedule = (req, res, next) => {
 				return res.status(409).json({message: err.message});
 			}
 
-			if (err.message === 'Użytkownik nie jest zalogowany.') {
+			if (
+				err.message === 'Użytkownik nie jest zalogowany.' ||
+				err.message === 'Nie można rezerwować terminu, który już minął.'
+			) {
 				console.log('❗❗❗if (err.message === Brak wolnych miejsc na ten termin');
 				return res.status(401).json({message: err.message});
 			}
@@ -121,24 +130,41 @@ export const bookSchedule = (req, res, next) => {
 };
 export const postCancelSchedule = (req, res, next) => {
 	const scheduleID = req.params.id;
-	models.BookedSchedule.destroy({
-		where: {
-			ScheduleID: scheduleID,
-			CustomerID: req.user.Customer.CustomerID,
-		},
-	})
-		.then((deletedCount) => {
-			if (deletedCount > 0) {
-				return res
-					.status(200)
-					.json({message: 'Miejsce zwolnione - dziękujemy za informację :)'});
-			} else {
-				return res
-					.status(404)
-					.json({message: 'Nie znaleziono terminu do zwolnienia miejsca'});
+
+	models.ScheduleRecord.findOne({where: {ScheduleID: scheduleID}})
+		.then((scheduleRecord) => {
+			if (!scheduleRecord) {
+				throw new Error('Nie znaleziono terminu.');
 			}
+			const scheduleDateTime = new Date(
+				`${scheduleRecord.Date}T${scheduleRecord.StartTime}:00`,
+			);
+
+			if (scheduleDateTime < new Date()) {
+				throw new Error('Nie można zwolnić miejsca dla minionego terminu.');
+			}
+			return models.BookedSchedule.destroy({
+				where: {
+					ScheduleID: scheduleID,
+					CustomerID: req.user.Customer.CustomerID,
+				},
+			}).then((deletedCount) => {
+				if (deletedCount > 0) {
+					return res
+						.status(200)
+						.json({message: 'Miejsce zwolnione - dziękujemy za informację :)'});
+				} else {
+					throw new Error('Nie znaleziono terminu.');
+				}
+			});
 		})
 		.catch((err) => {
+			if (err.message === 'Nie znaleziono terminu.') {
+				return res.status(404).json({message: err.message});
+			}
+			if (err.message == 'Nie można zwolnić miejsca dla minionego terminu.') {
+				return res.status(409).json({message: err.message});
+			}
 			console.error(err);
 			next(err);
 		});

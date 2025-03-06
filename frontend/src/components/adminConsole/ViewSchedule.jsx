@@ -36,7 +36,6 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
 		mutationFn: async () =>
 			await fetch(`/api/customer/grafik/cancel/${scheduleID}`, {
 				method: 'POST',
-
 				headers: {
 					'Content-Type': 'application/json',
 					'CSRF-Token': status.token,
@@ -45,7 +44,7 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
 			}).then((response) => {
 				if (!response.ok) {
 					return response.json().then((errorData) => {
-						throw new Error(errorData.error || 'Błąd podczas anulacji');
+						throw new Error(errorData.message || 'Błąd podczas anulacji');
 					});
 				}
 				return response.json();
@@ -56,7 +55,6 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
 			setIsCancelledSuccessfully(true);
 		},
 	});
-
 	useEffect(() => {
 		if (isCancelledSuccessfully) {
 			const timer = setTimeout(() => {
@@ -87,13 +85,6 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
 	const {isLoggedIn} = status;
 	if (!userAccessed) prodStats = calculateProductStats(product, [schedule]);
 
-	const handleBooking = () => {
-		bookingOps.onBook({
-			scheduleID: schedule.ScheduleID,
-			productName: product.Name,
-			productPrice: product.Price,
-		});
-	};
 	const handleCancellation = () => {
 		cancel();
 	};
@@ -196,9 +187,12 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
 				</>
 			)}
 
-			{bookingOps?.isError && (
-				<div className='feedback-box feedback-box--error'>{bookingOps.error.message}</div>
-			)}
+			{bookingOps?.isError ||
+				(isCancelError && (
+					<div className='feedback-box feedback-box--error'>
+						{bookingOps.error?.message || cancelError.message}
+					</div>
+				))}
 
 			{shouldShowFeedback ? feedbackBox : shouldShowBookBtn ? bookingBtn : null}
 

@@ -1,4 +1,4 @@
-import {useQuery, useMutation} from '@tanstack/react-query';
+import {useQuery} from '@tanstack/react-query';
 import {useLocation, useNavigate, useMatch} from 'react-router-dom';
 import {useState} from 'react';
 import {fetchItem} from '../utils/http.js';
@@ -7,7 +7,7 @@ import ViewFrame from '../components/adminConsole/ViewFrame.jsx';
 import UserTabs from '../components/adminConsole/UserTabs.jsx';
 import Section from '../components/Section.jsx';
 import DetailsCustomerStats from '../components/adminConsole/DetailsCustomerStats.jsx';
-import {queryClient, fetchStatus} from '../utils/http.js';
+import ModalTable from '../components/adminConsole/ModalTable';
 
 function AccountPage() {
 	// console.log(`✅ AccountPAge: `);
@@ -18,64 +18,21 @@ function AccountPage() {
 
 	const [isModalOpen, setIsModalOpen] = useState(modalMatch);
 
-	const {data: status} = useQuery({
-		queryKey: ['authStatus'],
-		queryFn: fetchStatus,
-	});
-
-	const {data, isPending, isError, error} = useQuery({
+	const {data, isError, error} = useQuery({
 		queryKey: ['account'],
 		queryFn: ({signal}) => fetchItem('/account', {signal}),
 		staleTime: 0,
 		refetchOnMount: true,
 	});
 
-	// const {
-	// 	mutate,
-	// 	isError: isMutateError,
-	// 	error: mutateError,
-	// 	reset,
-	// } = useMutation({
-	// 	mutationFn: async ({scheduleID, productName, productPrice}) =>
-	// 		await fetch(`/api/grafik/book/${scheduleID}`, {
-	// 			method: 'POST',
-	// 			body: JSON.stringify({
-	// 				schedule: scheduleID,
-	// 				date: new Date().toISOString().split('T')[0],
-	// 				product: productName,
-	// 				status: 'Paid',
-	// 				amountPaid: productPrice,
-	// 				amountDue: 0,
-	// 				paymentMethod: 'Credit Card',
-	// 				paymentStatus: 'Completed',
-	// 			}),
-	// 			headers: {
-	// 				'Content-Type': 'application/json',
-	// 				'CSRF-Token': status.token,
-	// 			},
-	// 			credentials: 'include',
-	// 		}).then((response) => {
-	// 			if (!response.ok) {
-	// 				return response.json().then((errorData) => {
-	// 					throw new Error(errorData.error || 'Błąd podczas rezerwacji');
-	// 				});
-	// 			}
-	// 			return response.json();
-	// 		}),
-	// 	onSuccess: () => {
-	// 		queryClient.invalidateQueries(['data', location.pathname]);
-	// 		navigate('/grafik');
-	// 	},
-	// });
-
 	const handleOpenModal = (extraPath) => {
 		setIsModalOpen(true);
 		navigate(`${extraPath}`, {state: {background: location}});
 	};
 
-	const handleOpenScheduleModal = (id) => {
+	const handleOpenScheduleModal = (row) => {
 		setIsModalOpen(true);
-		navigate(`grafik/${id}`, {state: {background: location}});
+		navigate(`grafik/${row.id}`, {state: {background: location}});
 	};
 
 	const handleCloseModal = () => {
@@ -162,43 +119,14 @@ function AccountPage() {
 
 			table =
 				contentUpcoming && contentUpcoming.length > 0 ? (
-					<table className='data-table data-table--user'>
-						<thead className='data-table__headers'>
-							<tr>
-								{headers.map((header, index) => (
-									<th
-										className='data-table__single-header'
-										key={index}>
-										{header}
-									</th>
-								))}
-							</tr>
-						</thead>
-						<tbody>
-							{contentUpcoming.map((row, rowIndex) => (
-								<tr
-									className={`data-table__cells data-table__cells--user active ${
-										row.bookedByUser && data.isLoggedIn ? 'booked' : ''
-									}`}
-									key={rowIndex}>
-									{keys.map((key, headerIndex) => {
-										let value = row[key];
-										if (typeof value === 'object' && value !== null) {
-											value = Object.values(value);
-										}
-										return (
-											<td
-												onClick={() => handleOpenScheduleModal(row.id)}
-												className='data-table__single-cell data-table__single-cell--user'
-												key={headerIndex}>
-												{value || '-'}
-											</td>
-										);
-									})}
-								</tr>
-							))}
-						</tbody>
-					</table>
+					<ModalTable
+						headers={headers}
+						keys={['id', 'date', 'day', 'time', 'type', 'name', 'location']}
+						content={contentUpcoming}
+						active={true}
+						onOpen={handleOpenScheduleModal}
+						// classModifier={classModifier}
+					/>
 				) : (
 					<div
 						className='dimmed'

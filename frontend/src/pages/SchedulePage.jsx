@@ -5,6 +5,7 @@ import {fetchData, fetchStatus, queryClient} from '../utils/http.js';
 import ViewFrame from '../components/adminConsole/ViewFrame.jsx';
 import Section from '../components/Section.jsx';
 import {useMutation} from '@tanstack/react-query';
+import ModalTable from '../components/adminConsole/ModalTable';
 
 function SchedulePage() {
 	const modalMatch = useMatch('/grafik/:id');
@@ -96,7 +97,6 @@ function SchedulePage() {
 		navigate(-1);
 	};
 
-	let content;
 	if (isError) {
 		if (error.code == 401) {
 			navigate('/login');
@@ -105,77 +105,41 @@ function SchedulePage() {
 			window.alert(error.info?.message || 'Failed to fetch');
 		}
 	}
+
+	let table;
+
 	if (data) {
 		// console.clear();
 		console.log(`✅ Data: `);
 		console.log(data);
 
+		let content = data.content.sort((a, b) => {
+			const dateA = new Date(a.Data.split('.').reverse().join('-'));
+			const dateB = new Date(b.Data.split('.').reverse().join('-'));
+			return dateA - dateB;
+		});
 		const headers = data.totalHeaders; //.slice(1);
-		content = (
-			<table className='data-table'>
-				<thead className='data-table__headers'>
-					<tr>
-						{headers.map((header, index) => (
-							<th
-								className='data-table__single-header'
-								key={index}>
-								{header}
-							</th>
-						))}
-					</tr>
-				</thead>
-				<tbody>
-					{data.content.map((row, rowIndex) => (
-						<tr
-							className={`data-table__cells schedule active ${
-								row.bookedByUser && status.isLoggedIn ? 'booked' : ''
-							} ${row.full && 'full'}`}
-							key={rowIndex}>
-							{headers.map((header, headerIndex) => {
-								let value = row[header];
-								if (typeof value === 'object' && value !== null) {
-									value = Object.values(value);
-								}
 
-								if (header == '') {
-									value = (
-										<span
-											onClick={
-												!row.bookedByUser && status.isLoggedIn
-													? (e) => {
-															e.stopPropagation();
-															book({
-																scheduleID: row['ID'],
-																productName: row['Nazwa'],
-																productPrice: row['Zadatek'],
-															});
-													  }
-													: null
-											}
-											className='material-symbols-rounded nav__icon nav__icon--side account'>
-											{status.isLoggedIn
-												? row.bookedByUser
-													? 'check'
-													: row.full
-													? 'block'
-													: 'shopping_bag_speed'
-												: 'lock_person'}
-										</span>
-									);
-								}
-								return (
-									<td
-										onClick={() => handleOpenModal(row)}
-										className='data-table__single-cell'
-										key={headerIndex}>
-										{value || '-'}
-									</td>
-								);
-							})}
-						</tr>
-					))}
-				</tbody>
-			</table>
+		table = (
+			<ModalTable
+				headers={headers}
+				keys={[
+					'',
+					'Miejsca',
+					'Data',
+					'Dzień',
+					'Godzina rozpoczęcia',
+					'Typ',
+					'Nazwa',
+					'Lokalizacja',
+				]}
+				content={content}
+				active={true}
+				status={status}
+				onOpen={handleOpenModal}
+				onQuickBook={book}
+				// classModifier={classModifier}
+			/>
 		);
 	}
 
@@ -185,7 +149,7 @@ function SchedulePage() {
 				classy='admin-intro'
 				header={`Campy/Wydarzenia/Zajęcia`}
 			/>
-			{content}
+			{table}
 			{isModalOpen && (
 				<ViewFrame
 					modifier='schedule'

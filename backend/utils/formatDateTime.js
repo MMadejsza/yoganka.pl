@@ -18,7 +18,7 @@ export const formatIsoDateTime = (isoString) => {
 	} else formattedTime = '';
 
 	// Concat
-	return `${formattedDate} ${formattedTime}`;
+	return `${formattedDate}${formattedTime}`;
 };
 export const getWeekDay = (dateStr) => {
 	const date = new Date(dateStr);
