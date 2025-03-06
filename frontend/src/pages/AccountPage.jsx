@@ -11,7 +11,11 @@ import ModalTable from '../components/adminConsole/ModalTable';
 
 function AccountPage() {
 	// console.log(`✅ AccountPAge: `);
-	const modalMatch = useMatch('/konto/ustawienia');
+	const matchUstawienia = useMatch('/konto/ustawienia');
+	const matchRezerwacje = useMatch('/konto/rezerwacje');
+	const matchZajecia = useMatch('/konto/zajecia');
+	const modalMatch = !!(matchUstawienia || matchRezerwacje || matchZajecia);
+
 	const navigate = useNavigate();
 	const location = useLocation(); // fetch current path
 	const today = new Date().toISOString().split('T')[0];
@@ -25,14 +29,19 @@ function AccountPage() {
 		refetchOnMount: true,
 	});
 
+	const background = {
+		pathname: location.pathname,
+		search: location.search,
+		hash: location.hash,
+	};
 	const handleOpenModal = (extraPath) => {
 		setIsModalOpen(true);
-		navigate(`${extraPath}`, {state: {background: location}});
+		navigate(`${extraPath}`, {state: {background}});
 	};
 
 	const handleOpenScheduleModal = (row) => {
 		setIsModalOpen(true);
-		navigate(`grafik/${row.id}`, {state: {background: location}});
+		navigate(`grafik/${row.id}`, {state: {background}});
 	};
 
 	const handleCloseModal = () => {

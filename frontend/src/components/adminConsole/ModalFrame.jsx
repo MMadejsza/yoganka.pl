@@ -1,16 +1,16 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
+import {useModal} from '../../hooks/useModal';
+
 import {createPortal} from 'react-dom';
 
 function ModalFrame({visited, onClose, children}) {
-	const [isVisible, setIsVisible] = useState(false);
-	const [isClosing, setIsClosing] = useState(false);
+	const {isOpen, isVisible, isClosing, openModal, closeModal} = useModal(false);
 
 	useEffect(() => {
 		if (visited) {
-			const delay = setTimeout(() => setIsVisible(true), 5);
-			return () => clearTimeout(delay);
+			openModal();
 		}
-	}, [visited]);
+	}, [visited, isOpen, openModal]);
 
 	useEffect(() => {
 		if (isVisible) {
@@ -25,12 +25,10 @@ function ModalFrame({visited, onClose, children}) {
 	}, [isVisible]);
 
 	const handleClose = () => {
-		setIsClosing(true);
-		setTimeout(() => {
-			setIsVisible(false); // hide modal but let animate
-			onClose();
-		}, 400); // delete modal
+		closeModal(onClose);
 	};
+
+	if (!isOpen) return null;
 
 	return createPortal(
 		<>

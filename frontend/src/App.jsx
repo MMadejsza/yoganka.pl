@@ -33,10 +33,11 @@ const router = createBrowserRouter([
 				path: 'konto',
 				element: <AccountPage />,
 				children: [
-					{path: 'grafik/:id', element: <AccountPage />},
+					{path: 'grafik/:id', element: <ViewFrame />},
 					{path: 'statystyki', element: <AccountPage />},
 					{path: 'zajecia', element: <AccountPage />},
 					{path: 'rezerwacje', element: <AccountPage />},
+					{path: 'rezerwacje/:id', element: <AccountPage />},
 					{path: 'faktury', element: <AccountPage />},
 					{path: 'ustawienia', element: <AccountPage />},
 				],

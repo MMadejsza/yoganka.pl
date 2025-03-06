@@ -1,6 +1,6 @@
 function ModalTable({headers, content, keys, active, classModifier, onOpen, onQuickBook, status}) {
 	const today = new Date();
-
+	console.log('ModalTable content', content);
 	return (
 		<table className={`data-table ${classModifier ? `data-table--${classModifier}` : ''}`}>
 			<thead className='data-table__headers'>

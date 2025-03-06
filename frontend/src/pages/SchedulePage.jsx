@@ -8,10 +8,10 @@ import {useMutation} from '@tanstack/react-query';
 import ModalTable from '../components/adminConsole/ModalTable';
 
 function SchedulePage() {
-	const modalMatch = useMatch('/grafik/:id');
 	const navigate = useNavigate();
 	const location = useLocation(); // fetch current path
 
+	const modalMatch = !!useMatch('/grafik/:id');
 	const [isModalOpen, setIsModalOpen] = useState(modalMatch);
 	const [isBookedSuccessfully, setIsBookedSuccessfully] = useState(false);
 
@@ -85,10 +85,15 @@ function SchedulePage() {
 		}
 	}, [isBookedSuccessfully, reset, navigate]);
 
+	const background = {
+		pathname: location.pathname,
+		search: location.search,
+		hash: location.hash,
+	};
 	const handleOpenModal = (row) => {
 		const recordId = row.ID;
 		setIsModalOpen(true);
-		navigate(`${location.pathname}/${recordId}`, {state: {background: location}});
+		navigate(`${location.pathname}/${recordId}`, {state: {background}});
 	};
 
 	const handleCloseModal = () => {

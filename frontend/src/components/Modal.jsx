@@ -5,40 +5,23 @@ import GlideContainer from './glide/GlideContainer.jsx';
 import CampGlance from './ModalGlance.jsx';
 import CampDay from './camps/CampDay.jsx';
 import ModalList from './ModalList.jsx';
+import {useModal} from '../hooks/useModal';
 
 function Modal({visited, tile, singleImg, onClose, today}) {
-	const [isVisible, setIsVisible] = useState(false);
-	const [isClosing, setIsClosing] = useState(false);
+	const {isOpen, isVisible, isClosing, openModal, closeModal} = useModal(false);
 	const {type, modal, gallerySize, galleryPath, fileName, extraClass} = tile;
 	let isUpToDate = tile.date > today;
 	let isCamp = type === 'camp';
 	let isEvent = type === 'event';
 
 	useEffect(() => {
-		if (visited) {
-			const delay = setTimeout(() => setIsVisible(true), 5);
-			return () => clearTimeout(delay);
+		if (visited && !isOpen) {
+			openModal();
 		}
-	}, [visited]);
-
-	useEffect(() => {
-		if (isVisible) {
-			document.body.classList.add('stopScroll');
-		} else {
-			document.body.classList.remove('stopScroll');
-		}
-
-		return () => {
-			document.body.classList.remove('stopScroll');
-		};
-	}, [isVisible]);
+	}, [visited, isOpen, openModal]);
 
 	const handleClose = () => {
-		setIsClosing(true);
-		setTimeout(() => {
-			setIsVisible(false); // hide modal but let animate
-			onClose();
-		}, 400); // delete modal
+		closeModal(onClose);
 	};
 
 	const dynamicClass = (baseClass, extraClass) =>

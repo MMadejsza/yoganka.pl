@@ -92,19 +92,43 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 				controller.recordEditor = '';
 				return controller;
 			case 'statistics':
-				controller.recordDisplay = <ViewCustomerStatistics data={customer} />;
+				controller.recordDisplay = (
+					<ViewCustomerStatistics
+						data={customer}
+						onClose={onClose}
+						isModalOpen={visited}
+					/>
+				);
 				controller.recordEditor = '';
 				return controller;
 			case 'customerSchedules':
-				controller.recordDisplay = <ViewCustomerTotalSchedules data={customer} />;
+				controller.recordDisplay = (
+					<ViewCustomerTotalSchedules
+						data={customer}
+						onClose={onClose}
+						isModalOpen={visited}
+					/>
+				);
 				controller.recordEditor = '';
 				return controller;
 			case 'customerBookings':
-				controller.recordDisplay = <ViewCustomerTotalBookings data={customer} />;
+				controller.recordDisplay = (
+					<ViewCustomerTotalBookings
+						data={customer}
+						onClose={onClose}
+						isModalOpen={visited}
+					/>
+				);
 				controller.recordEditor = '';
 				return controller;
 			case 'invoices':
-				controller.recordDisplay = <ViewReview data={customer} />;
+				controller.recordDisplay = (
+					<ViewReview
+						data={customer}
+						onClose={onClose}
+						isModalOpen={visited}
+					/>
+				);
 				controller.recordEditor = '';
 				return controller;
 			case 'settings':
