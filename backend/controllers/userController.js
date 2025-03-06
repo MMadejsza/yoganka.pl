@@ -2,6 +2,7 @@ import db from '../utils/db.js';
 import * as models from '../models/_index.js';
 import columnMaps from '../utils/columnsMapping.js';
 import {formatIsoDateTime, getWeekDay} from '../utils/formatDateTime.js';
+import {Sequelize, Op, fn, col} from 'sequelize';
 
 export const getShowUserByID = (req, res, next) => {
 	console.log(`➡️➡️➡️ called showUserByID`);
@@ -36,14 +37,11 @@ export const getShowUserByID = (req, res, next) => {
 };
 export const getShowAllSchedules = (req, res, next) => {
 	const model = models.ScheduleRecord;
-	const isUser = !!req.user;
-	const isCustomer = !!req.user?.Customer;
 
 	// We create dynamic joint columns based on the map
 	const columnMap = columnMaps[model.name] || {};
-
 	// If logged In and is Customer - we want to check his booked schedules to flag them later
-
+	const now = new Date();
 	model
 		.findAll({
 			include: [
@@ -62,6 +60,16 @@ export const getShowAllSchedules = (req, res, next) => {
 			attributes: {
 				exclude: ['ProductID'], // Deleting substituted ones
 			},
+			where: Sequelize.where(
+				fn(
+					'CONCAT',
+					col('ScheduleRecord.Date'),
+					'T',
+					col('ScheduleRecord.StartTime'),
+					':00',
+				),
+				{[Op.gte]: now.toISOString()},
+			),
 		})
 		.then((records) => {
 			// Convert for records for different names

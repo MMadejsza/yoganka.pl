@@ -12,7 +12,7 @@ function ViewCustomerTotalSchedules({data}) {
 
 	const headers = ['ID', 'Data', 'Dzień', 'Godzina', 'Typ', 'Zajęcia', 'Miejsce'];
 	const customerStats = calculateStats(data);
-	const content = customerStats.records;
+	const content = customerStats.records.sort((a, b) => new Date(b.date) - new Date(a.date));
 	// console.log(`✅ content: `, content);
 	// console.log(`✅ keys: `, keys);
 	// console.log(`✅ customerStats: `, customerStats);

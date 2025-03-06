@@ -32,7 +32,7 @@ function ViewCustomerTotalBookings({data}) {
 	};
 
 	const customerStats = calculateStats(data);
-	const content = customerStats.bookings;
+	const content = customerStats.bookings.sort((a, b) => new Date(b.date) - new Date(a.date));
 	// console.log(`✅ content: `, content);
 	// console.log(`✅ keys: `, keys);
 	// console.log(`✅ customerStats: `, customerStats);
