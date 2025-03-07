@@ -1,26 +1,25 @@
 import {useQuery} from '@tanstack/react-query';
-import {useLocation, useNavigate, useMatch} from 'react-router-dom';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {fetchItem} from '../utils/http.js';
-import {calculateStats} from '../utils/customerViewsUtils.js';
-import ViewFrame from '../components/adminConsole/ViewFrame.jsx';
+import {useLocation} from 'react-router-dom';
+
 import UserTabs from '../components/adminConsole/UserTabs.jsx';
 import Section from '../components/Section.jsx';
-import DetailsCustomerStats from '../components/adminConsole/DetailsCustomerStats.jsx';
-import ModalTable from '../components/adminConsole/ModalTable';
+import AccountDashboard from '../components/adminConsole/AccountDashboard.jsx';
+import AccountSettings from '../components/adminConsole/AccountSettings.jsx';
+import AccountSchedulesHistory from '../components/adminConsole/AccountSchedulesHistory.jsx';
+import AccountBookings from '../components/adminConsole/AccountBookings.jsx';
 
 function AccountPage() {
 	// console.log(`✅ AccountPAge: `);
-	const matchUstawienia = useMatch('/konto/ustawienia');
-	const matchRezerwacje = useMatch('/konto/rezerwacje');
-	const matchZajecia = useMatch('/konto/zajecia');
-	const modalMatch = !!(matchUstawienia || matchRezerwacje || matchZajecia);
+	const location = useLocation();
+	const accountTab = location.pathname.split('/').pop();
+	console.log(accountTab);
+	const [isChosenContent, setIsChosenContent] = useState(accountTab);
 
-	const navigate = useNavigate();
-	const location = useLocation(); // fetch current path
-	const today = new Date().toISOString().split('T')[0];
-
-	const [isModalOpen, setIsModalOpen] = useState(modalMatch);
+	// useEffect(() => {
+	// 	setIsChosenContent(accountTab);
+	// }, [accountTab]);
 
 	const {data, isError, error} = useQuery({
 		queryKey: ['account'],
@@ -29,129 +28,47 @@ function AccountPage() {
 		refetchOnMount: true,
 	});
 
-	const background = {
-		pathname: location.pathname,
-		search: location.search,
-		hash: location.hash,
-	};
-	const handleOpenModal = (extraPath) => {
-		setIsModalOpen(true);
-		navigate(`${extraPath}`, {state: {background}});
-	};
+	let user, userTabs, name, content, customer;
 
-	const handleOpenScheduleModal = (row) => {
-		setIsModalOpen(true);
-		navigate(`grafik/${row.id}`, {state: {background}});
-	};
-
-	const handleCloseModal = () => {
-		setIsModalOpen(false);
-		navigate(-1);
-	};
-
-	const pickModifier = (path) => {
-		let modifier;
-		switch (true) {
-			case path.includes('grafik'):
-				modifier = 'schedule';
-				return modifier;
-			case path.includes('statystyki'):
-				modifier = 'statistics';
-				return modifier;
-			case path.includes('zajecia'):
-				modifier = 'customerSchedules';
-				return modifier;
-			case path.includes('rezerwacje'):
-				modifier = 'customerBookings';
-				return modifier;
-			case path.includes('faktury'):
-				modifier = 'invoices';
-				return modifier;
-			case path.includes('ustawienia'):
-				modifier = 'settings';
-				return modifier;
-
-			default:
-				return (modifier = '');
-		}
-	};
-	const pickedModifier = pickModifier(location.pathname);
-
-	if (isError) {
-		console.log(error.code);
-		if (error.code == 401) {
-			navigate('/login');
-			console.log(error.message);
-		} else {
-			window.alert(
-				error.info?.message || 'Błąd serwera - pobieranie danych uczestnika przerwane',
-			);
-		}
-	}
-
-	let user, customer, userTabs, name, stats, tableTitle, table, customerStats;
 	if (data) {
-		userTabs = (
-			<UserTabs
-				onOpen={handleOpenModal}
-				person={data}
-			/>
-		);
-		// console.clear();
-		console.log(`✅ Data: `);
-		console.log(data);
 		if (data.customer) {
 			customer = data.customer;
 			name = `${customer.FirstName} ${customer.LastName}`;
-			customerStats = calculateStats(data.customer);
-			const headers = ['ID', 'Data', 'Dzień', 'Godzina', 'Typ', 'Zajęcia', 'Miejsce'];
-			const content = customerStats.records;
-			const contentUpcoming = content.filter((schedule) => schedule.date >= today);
-
-			// console.log(`✅ contentUpcoming: `, contentUpcoming);
-			const keys = customerStats.recordsKeys.splice(1);
-			// console.log(`✅ content: `, content);
-			// console.log(`✅ keys: `, keys);
-			console.log(`✅ customerStats: `, customerStats);
-
-			stats = (
-				<div className='user-container schedules'>
-					<DetailsCustomerStats
-						customerStats={customerStats}
-						altTitle={'Moja przygoda z jogą:'}
-						userAccountPage={true}
-					/>
-				</div>
-			);
-
-			tableTitle = <h2 className='user-container__section-title'>Nadchodzące zajęcia:</h2>;
-
-			table =
-				contentUpcoming && contentUpcoming.length > 0 ? (
-					<ModalTable
-						headers={headers}
-						keys={['id', 'date', 'day', 'time', 'type', 'name', 'location']}
-						content={contentUpcoming}
-						active={true}
-						onOpen={handleOpenScheduleModal}
-						// classModifier={classModifier}
-					/>
-				) : (
-					<div
-						className='dimmed'
-						style={{fontSize: '2rem', marginBottom: '3rem'}}>
-						Brak nowych rezerwacji
-					</div>
-				);
 		} else {
-			user = data.user;
 			name = user.Email;
-			stats = (
-				<h2 className='user-container__section-title dimmed'>
-					Brak statystyk do wyświetlenia
-				</h2>
-			);
-			table = <h2 className='user-container__section-title dimmed'>Brak rezerwacji</h2>;
+		}
+
+		userTabs = (
+			<UserTabs
+				onClick={setIsChosenContent}
+				person={data}
+			/>
+		);
+
+		switch (isChosenContent) {
+			case 'zajecia':
+				content = <AccountSchedulesHistory data={customer} />;
+				break;
+			case 'rezerwacje':
+				content = <AccountBookings data={customer} />;
+				break;
+			case 'ustawienia':
+				content = (
+					<AccountSettings
+						data={data}
+						queryStatus={{isError: isError, error: error}}
+					/>
+				);
+				break;
+
+			default:
+				content = (
+					<AccountDashboard
+						data={data}
+						queryStatus={{isError: isError, error: error}}
+					/>
+				);
+				break;
 		}
 	}
 
@@ -162,18 +79,7 @@ function AccountPage() {
 				header={name}
 			/>
 			{userTabs}
-			{stats}
-			{tableTitle}
-			{table}
-			{isModalOpen && (
-				<ViewFrame
-					modifier={pickedModifier}
-					visited={isModalOpen}
-					onClose={handleCloseModal}
-					userAccountPage={true}
-					customer={customer}
-				/>
-			)}
+			<div className='user-container user-container--account modal__summary'>{content}</div>
 		</div>
 	);
 }

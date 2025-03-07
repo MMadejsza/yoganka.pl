@@ -116,13 +116,14 @@ input {
 		width: min-content;
 	}
 	&.settings-form__phone-input {
-		width: max-content;
+		width: min-content;
 		flex-basis: 20%;
+		padding-left: 0.5rem;
 	}
 }
 
 .control-error {
-	width: 50%;
+	// width: 50%;
 	margin-top: 1.5rem;
 	line-height: 150%;
 	font-size: 1.5rem;

@@ -11,7 +11,7 @@ import {useQuery, useMutation} from '@tanstack/react-query';
 import {fetchStatus, queryClient} from '../../utils/http.js';
 
 function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
-	console.clear();
+	// console.clear();
 	console.log(
 		`📝
 	    Schedule object from backend:`,

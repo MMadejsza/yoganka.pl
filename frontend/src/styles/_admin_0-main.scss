@@ -207,6 +207,10 @@
 		flex-wrap: wrap;
 		gap: 1.5rem;
 
+		&--account {
+			max-height: none;
+			overflow: visible;
+		}
 		&__actions-block {
 			flex-basis: 100%;
 			margin-right: 3rem;
@@ -214,11 +218,15 @@
 			gap: 1.5rem;
 		}
 		&__action {
-			min-height: 32px;
-			flex-basis: 10%;
-			font-size: 1.5rem;
-			height: 1rem;
-			line-height: 1rem;
+			@include mixin.flex(row, center);
+			flex-basis: 100%;
+			& .modal__btn {
+				flex-basis: 10%;
+				min-height: 32px;
+				font-size: 1.5rem;
+				height: 1rem;
+				line-height: 1rem;
+			}
 		}
 		&__user-title {
 			flex-basis: 100%;
@@ -233,8 +241,13 @@
 		}
 		.modal-checklist {
 			@include mixin.flex(column, flex-start, center);
+			flex-basis: 30%;
 			gap: 0.5rem;
+			&--booking {
+				flex-basis: 40%;
+			}
 			&__li {
+				gap: 1rem;
 				&--phone {
 					flex-wrap: wrap;
 				}
@@ -273,7 +286,7 @@
 		}
 		&__details-list {
 			@include mixin.flex(column, center);
-			width: max-content;
+			width: 100%;
 			margin-bottom: 1rem;
 			& button:not(.password) {
 				margin-top: 1rem;

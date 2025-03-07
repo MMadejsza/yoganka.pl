@@ -231,7 +231,7 @@ export const getShowBookingByID = (req, res, next) => {
 		through: {attributes: []}, // omit data from mid table
 		required: false,
 		attributes: {
-			exclude: ['Product', 'CustomerID'],
+			exclude: ['CustomerID'],
 		},
 		include: [
 			{

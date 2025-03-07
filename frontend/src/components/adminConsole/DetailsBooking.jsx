@@ -15,8 +15,7 @@ function DetailsBooking({bookingData}) {
 				<li className='user-container__section-record modal-checklist__li'>
 					<p className='user-container__section-record-label'>Data rezerwacji:</p>
 					<p className='user-container__section-record-content'>
-						{`${formatIsoDateTime(booking.Date)}
-                        (${getWeekDay(booking.Date)})`}
+						{`${formatIsoDateTime(booking.Date)} ${getWeekDay(booking.Date)}`}
 					</p>
 				</li>
 				<li className='user-container__section-record modal-checklist__li'>

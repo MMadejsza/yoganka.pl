@@ -1,3 +1,5 @@
+import {NavLink} from 'react-router-dom';
+
 const menuSet = [
 	// {
 	// 	name: 'Statystyki',
@@ -5,14 +7,19 @@ const menuSet = [
 	// 	link: 'statystyki',
 	// },
 	{
+		name: 'Konto',
+		symbol: 'home',
+		link: '/konto',
+	},
+	{
 		name: 'Historia zajęć',
 		symbol: 'history',
 		link: 'zajecia',
 		limitedTo: 'customer',
 	},
 	{
-		name: 'Rezerwacje',
-		symbol: 'library_books',
+		name: 'Płatności',
+		symbol: 'payments',
 		link: 'rezerwacje',
 		limitedTo: 'customer',
 	},
@@ -28,7 +35,7 @@ const menuSet = [
 	},
 ];
 
-function UserTabs({onOpen, person}) {
+function UserTabs({onClick, person}) {
 	// console.log(`UserTabs person: `, person);
 	return (
 		<ul className='userTabs'>
@@ -40,9 +47,10 @@ function UserTabs({onOpen, person}) {
 					<li
 						key={index}
 						className='userTabs__item nav__item'>
-						<div
-							onClick={() => onOpen(tab.link)}
-							// to={tab.link}
+						<NavLink
+							onClick={() => onClick(tab.link.toLowerCase())}
+							to={tab.link}
+							end={tab.link === '/konto'}
 							className='userTabs__link nav__link'>
 							{tab.symbol ? (
 								<span className='material-symbols-rounded userTabs__icon nav__icon  '>
@@ -54,7 +62,7 @@ function UserTabs({onOpen, person}) {
 									aria-hidden='true'></i>
 							) : null}
 							{tab.name ?? null}
-						</div>
+						</NavLink>
 					</li>
 				);
 			})}

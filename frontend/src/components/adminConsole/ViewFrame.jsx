@@ -13,29 +13,22 @@ import ViewReview from './ViewReview.jsx';
 import ViewCustomerTotalSchedules from './ViewCustomerTotalSchedules.jsx';
 import ViewCustomerTotalBookings from './ViewCustomerTotalBookings.jsx';
 
-function ViewFrame({
-	modifier,
-	visited,
-	onClose,
-	bookingOps,
-	userAccountPage,
-	customer,
-	minRightsPrefix,
-}) {
+function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, customer}) {
 	const navigate = useNavigate();
 	const params = useParams();
 	const location = useLocation();
 	const callPath = location.pathname;
 	const isAdminPanel = location.pathname.includes('admin-console');
 	const isUserSettings = location.pathname.includes('konto/ustawienia');
+	const isCustomerQuery = location.pathname.includes('konto/rezerwacje') ? '/customer' : '';
 	const noFetchPaths = ['statystyki', 'zajecia', 'rezerwacje', 'faktury'];
 
 	console.log('ViewFrame callPath: ', callPath);
-	console.log('ViewFrame minRightsPrefix: ', minRightsPrefix);
+	console.log('ViewFrame isCustomerQuery: ', isCustomerQuery);
 
 	const {data, isPending, isError, error} = useQuery({
 		queryKey: ['query', location.pathname],
-		queryFn: ({signal}) => fetchItem(callPath, {signal}, minRightsPrefix),
+		queryFn: ({signal}) => fetchItem(callPath, {signal}, isCustomerQuery),
 		staleTime: 0,
 		refetchOnMount: true,
 		enabled: !!params.id || location.pathname.includes('ustawienia'),
@@ -150,7 +143,7 @@ function ViewFrame({
 					<ViewUser
 						data={data}
 						isUserAccountPage={true}
-						isEditing={editingState}
+						// isEditing={editingState}
 					/>
 				);
 				controller.recordEditor = '';

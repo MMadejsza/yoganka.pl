@@ -1,4 +1,3 @@
-import db from '../utils/db.js';
 import * as models from '../models/_index.js';
 import columnMaps from '../utils/columnsMapping.js';
 import {formatIsoDateTime, getWeekDay} from '../utils/formatDateTime.js';

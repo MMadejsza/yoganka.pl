@@ -4,7 +4,6 @@ import ModalTable from './ModalTable';
 function DetailsProductSchedules({spots, scheduleRecords, placement}) {
 	const notPublished = (
 		<>
-			<h2 className='user-container__section-title modal__title--day'>Terminy:</h2>
 			<div style={{fontWeight: 'bold', fontSize: '2rem'}}>Nie opublikowano</div>
 		</>
 	);
@@ -43,7 +42,9 @@ function DetailsProductSchedules({spots, scheduleRecords, placement}) {
 
 	return (
 		<>
-			<h2 className='user-container__section-title modal__title--day'>Terminy:</h2>
+			<h2 className='user-container__section-title modal__title--day'>
+				Zarezerwowane zajęcia:
+			</h2>
 			{scheduleRecords.length > 0 ? (
 				<ModalTable
 					headers={headers}
