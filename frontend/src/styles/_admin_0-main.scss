@@ -335,5 +335,14 @@
 		button:last-child {
 			margin-top: 1.2rem;
 		}
+
+		&.new-customer {
+			max-width: 50%;
+
+			select {
+				width: 100%;
+				padding-left: 5rem;
+			}
+		}
 	}
 }

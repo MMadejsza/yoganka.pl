@@ -1,7 +1,7 @@
 import {useQuery} from '@tanstack/react-query';
 import {useLocation, useNavigate, useMatch} from 'react-router-dom';
 import {useState} from 'react';
-import {fetchData} from '../utils/http.js';
+import {fetchData, fetchStatus} from '../utils/http.js';
 import SideNav from '../components/adminConsole/SideNav.jsx';
 import ViewFrame from '../components/adminConsole/ViewFrame.jsx';
 import Section from '../components/Section.jsx';
@@ -94,6 +94,12 @@ function AdminPage() {
 		// gcTime:30000
 	});
 
+	const {data: status} = useQuery({
+		queryKey: ['authStatus'],
+		queryFn: fetchStatus,
+		cache: 'no-store',
+	});
+
 	let content;
 
 	if (isError) {
@@ -104,7 +110,7 @@ function AdminPage() {
 			window.alert(error.info?.message || 'Failed to fetch');
 		}
 	}
-	if (data) {
+	if (data && status.role === 'ADMIN') {
 		// console.clear();
 		console.log(`✅ Data: `);
 		console.log(data);
@@ -155,14 +161,18 @@ function AdminPage() {
 
 	return (
 		<div className='admin-console'>
-			<Section
-				classy='admin-intro'
-				header={`Admin Panel`}></Section>
-			<SideNav menuSet={sideNavTabs} />
-			<SideNav
-				menuSet={sideNavActions}
-				side='right'
-			/>
+			{status.role === 'ADMIN' && (
+				<>
+					<Section
+						classy='admin-intro'
+						header={`Admin Panel`}></Section>
+					<SideNav menuSet={sideNavTabs} />
+					<SideNav
+						menuSet={sideNavActions}
+						side='right'
+					/>
+				</>
+			)}
 			{content}
 			{isModalOpen && (
 				<ViewFrame

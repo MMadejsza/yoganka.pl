@@ -115,7 +115,7 @@ export const getShowAllSchedules = (req, res, next) => {
 						newRecord[newKey] = jsonRecord[key]; // Assignment
 					}
 				}
-				console.log(jsonRecord);
+				// console.log(jsonRecord);
 				const activeBookings = jsonRecord.Bookings.filter(
 					(booking) =>
 						booking.BookedSchedule &&
@@ -142,7 +142,6 @@ export const getShowAllSchedules = (req, res, next) => {
 			];
 			// ✅ Return response to frontend
 			res.json({
-				records: records,
 				totalHeaders, // To render
 				content: formattedRecords, // With new names
 			});

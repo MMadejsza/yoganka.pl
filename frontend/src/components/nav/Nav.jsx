@@ -91,9 +91,10 @@ function Nav({setIsNavOpen}) {
 	const {data: status} = useQuery({
 		queryKey: ['authStatus'],
 		queryFn: fetchStatus,
+		cache: 'no-store',
 	});
 
-	// console.log('nav data', status);
+	console.log('nav data', status);
 	const logoutMutation = useMutation({
 		mutationFn: async () =>
 			await fetch('/api/login-pass/logout', {
@@ -180,7 +181,7 @@ function Nav({setIsNavOpen}) {
 				}
 			} else {
 				// If NOT logged in, both account and logout tabs are hidden
-				if (li.name === 'Konto' || li.name === 'Wyloguj') {
+				if (li.name === 'Konto' || li.name === 'Wyloguj' || li.name === 'Admin Panel') {
 					return null;
 				}
 			}

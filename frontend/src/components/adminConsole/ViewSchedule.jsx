@@ -3,6 +3,7 @@ import DetailsProduct from './DetailsProduct.jsx';
 import DetailsProductStats from './DetailsProductStats.jsx';
 import DetailsProductBookings from './DetailsProductBookings.jsx';
 import DetailsProductReviews from './DetailsProductReviews.jsx';
+import ViewScheduleNewCustomerForm from './ViewScheduleNewCustomerForm.jsx';
 import {calculateProductStats} from '../../utils/productViewsUtils.js';
 import React, {useState, useEffect} from 'react';
 
@@ -20,7 +21,6 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const userAccountPage = location.pathname.includes('konto');
-	const [isCancelledSuccessfully, setIsCancelledSuccessfully] = useState(false);
 
 	const {data: status} = useQuery({
 		queryKey: ['authStatus'],
@@ -55,6 +55,13 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
 			setIsCancelledSuccessfully(true);
 		},
 	});
+
+	const [isCancelledSuccessfully, setIsCancelledSuccessfully] = useState(false);
+	const [contactDetails, setContactDetails] = useState({
+		isFirstTimeBuyer: !!status.role != 'CUSTOMER' || !!status.role != 'ADMIN',
+	});
+	const [isFillingTheForm, setIsFillingTheForm] = useState(false);
+	console.log(`contactDetails: `, contactDetails);
 
 	useEffect(() => {
 		if (isCancelledSuccessfully) {
@@ -104,12 +111,16 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
 		<button
 			onClick={
 				!shouldDisableBookBtn
-					? () =>
-							bookingOps.onBook({
-								scheduleID: schedule.ScheduleID,
-								productName: product.Name,
-								productPrice: product.Price,
-							})
+					? isFillingTheForm
+						? null
+						: contactDetails.isFirstTimeBuyer
+						? () => setIsFillingTheForm(true)
+						: () =>
+								bookingOps.onBook({
+									scheduleID: schedule.ScheduleID,
+									productName: product.Name,
+									productPrice: product.Price,
+								})
 					: null
 			}
 			className={`book modal__btn ${shouldDisableBookBtn && 'disabled'}`}>
@@ -157,20 +168,26 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
 			)}
 
 			{/*//@ Schedule main details */}
-			<div className='user-container__main-details modal-checklist'>
-				<DetailsSchedule
-					data={schedule}
-					userAccessed={userAccessed}
-				/>
-			</div>
-			{/*//@ Product main details */}
-			<div className='user-container__main-details modal-checklist'>
-				<DetailsProduct
-					data={product}
-					placement={'schedule'}
-					userAccessed={userAccessed}
-				/>
-			</div>
+			{!isFillingTheForm ? (
+				<>
+					<div className='user-container__main-details modal-checklist'>
+						<DetailsSchedule
+							data={schedule}
+							userAccessed={userAccessed}
+						/>
+					</div>
+					{/*//@ Product main details */}
+					<div className='user-container__main-details modal-checklist'>
+						<DetailsProduct
+							data={product}
+							placement={'schedule'}
+							userAccessed={userAccessed}
+						/>
+					</div>
+				</>
+			) : (
+				<ViewScheduleNewCustomerForm />
+			)}
 
 			{/*//@ Product stats */}
 			{!userAccessed && (

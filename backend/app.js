@@ -8,6 +8,7 @@ import userRoutes from './routes/userRoutes.js';
 import * as models from './models/_index.js';
 import db from './utils/db.js';
 import csurf from 'csurf';
+import isAuth from './middleware/is-auth-admin.js';
 
 const app = express();
 
@@ -122,7 +123,7 @@ app.use((req, res, next) => {
 
 // Filtering that works only for /admin/*
 app.use(`/login-pass`, authRoutes);
-app.use(`/admin-console`, adminRoutes);
+app.use(`/admin-console`, isAuth, adminRoutes);
 app.use(`/customer`, customerRoutes);
 app.use(`/`, userRoutes);
 
