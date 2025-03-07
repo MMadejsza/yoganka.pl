@@ -187,16 +187,19 @@ export const getShowScheduleByID = (req, res, next) => {
 
 			// We substitute bookings content for security
 			if (schedule.BookedSchedules && schedule.BookedSchedules?.length > 0) {
+				let wasUserReserved;
 				const beingAttendedSchedules = schedule.BookedSchedules.filter(
 					(schedule) => schedule.Attendance == 1 || schedule.Attendance == true,
 				);
-				const wasUserReserved = schedule.BookedSchedules.some(
-					(bookedSchedule) => bookedSchedule.CustomerID === req.user?.Customer.CustomerID,
-				);
-				isUserGoing = beingAttendedSchedules.some(
-					(bookedSchedule) => bookedSchedule.CustomerID === req.user.Customer.CustomerID,
-				);
 				if (isUser && isCustomer) {
+					wasUserReserved = schedule.BookedSchedules.some(
+						(bookedSchedule) =>
+							bookedSchedule.CustomerID === req.user?.Customer.CustomerID,
+					);
+					isUserGoing = beingAttendedSchedules.some(
+						(bookedSchedule) =>
+							bookedSchedule.CustomerID === req.user.Customer.CustomerID,
+					);
 					schedule.BookedSchedules = beingAttendedSchedules.length;
 				}
 				schedule.Attendance = beingAttendedSchedules.length;
