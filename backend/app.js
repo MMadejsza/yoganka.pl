@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 app.use((req, res, next) => {
-	console.log(`➡️➡️➡️  Request: ${req.method} ${req.url}`);
+	console.log(`\n➡️➡️➡️  Request: ${req.method} ${req.url}`);
 	next();
 });
 

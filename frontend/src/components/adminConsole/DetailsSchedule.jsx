@@ -30,7 +30,7 @@ function DetailsSchedule({data, userAccessed}) {
 				<li className='user-container__section-record modal-checklist__li'>
 					<p className='user-container__section-record-label'>Uczestnicy:</p>
 					<p className='user-container__section-record-content'>
-						{`${userAccessed && schedule.BookedSchedules} / ${schedule.Capacity}`}
+						{`${userAccessed && schedule.Attendance} / ${schedule.Capacity}`}
 					</p>
 				</li>
 				<li className='user-container__section-record modal-checklist__li'>

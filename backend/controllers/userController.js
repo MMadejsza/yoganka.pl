@@ -4,7 +4,7 @@ import {formatIsoDateTime, getWeekDay} from '../utils/formatDateTime.js';
 import {Sequelize, Op, fn, col} from 'sequelize';
 
 export const getShowUserByID = (req, res, next) => {
-	console.log(`➡️➡️➡️ called showUserByID`);
+	console.log(`\n➡️➡️➡️ called showUserByID`);
 	const PK = req.user.UserID;
 	models.User.findByPk(PK, {
 		include: [
@@ -52,6 +52,9 @@ export const getShowAllSchedules = (req, res, next) => {
 					model: models.Booking,
 					required: false,
 					attributes: ['BookingID'], //booking Id is enough
+					through: {
+						attributes: ['Attendance', 'CustomerID'], // dołącz dodatkowe atrybuty
+					},
 
 					// where: isUser && isCustomer ? {CustomerID: req.user.Customer.CustomerID} : undefined, // Filter
 				},
@@ -93,18 +96,36 @@ export const getShowAllSchedules = (req, res, next) => {
 						newRecord['Typ'] = jsonRecord[key].Type; //  flatten object
 						newRecord['Nazwa'] = jsonRecord[key].Name;
 					} else if (key === 'Bookings') {
-						newRecord.bookedByUser = jsonRecord.Bookings.some(
+						newRecord.wasUserReserved = jsonRecord.Bookings.some(
 							(booking) =>
-								booking.BookedSchedule.CustomerID == req.user?.Customer.CustomerID,
+								booking.BookedSchedule.CustomerID ===
+								req.user?.Customer?.CustomerID,
 						);
+						newRecord.isUserGoing = jsonRecord.Bookings.some((booking) => {
+							const isBooked = booking.BookedSchedule;
+							const customerID = booking.BookedSchedule.CustomerID;
+							const loggedInID = req.user?.Customer?.CustomerID;
+							const isGoing =
+								booking.BookedSchedule.Attendance === 1 ||
+								booking.BookedSchedule.Attendance === true;
+
+							return isBooked && customerID == loggedInID && isGoing;
+						});
 					} else {
 						newRecord[newKey] = jsonRecord[key]; // Assignment
 					}
 				}
+				console.log(jsonRecord);
+				const activeBookings = jsonRecord.Bookings.filter(
+					(booking) =>
+						booking.BookedSchedule &&
+						(booking.BookedSchedule.Attendance === 1 ||
+							booking.BookedSchedule.Attendance === true),
+				);
 				newRecord['Dzień'] = getWeekDay(jsonRecord['Date']);
 				newRecord['Zadatek'] = jsonRecord.Product.Price;
-				newRecord['Miejsca'] = `${jsonRecord.Bookings.length}/${jsonRecord.Capacity}`;
-				newRecord.full = jsonRecord.Bookings.length >= jsonRecord.Capacity;
+				newRecord['Miejsca'] = `${activeBookings.length}/${jsonRecord.Capacity}`;
+				newRecord.full = activeBookings.length >= jsonRecord.Capacity;
 				return newRecord; // Return new record object
 			});
 
@@ -129,7 +150,7 @@ export const getShowAllSchedules = (req, res, next) => {
 		.catch((err) => console.log(err));
 };
 export const getShowScheduleByID = (req, res, next) => {
-	console.log(`➡️ called user showScheduleByID`);
+	console.log(`\n➡️➡️➡️ called user showScheduleByID`);
 
 	const isUser = !!req.user;
 	const isCustomer = !!req.user?.Customer;
@@ -145,14 +166,14 @@ export const getShowScheduleByID = (req, res, next) => {
 				model: models.BookedSchedule,
 				required: false,
 			},
-			{
-				model: models.Booking, // Booking which has relation through BookedSchedule
-				through: {}, // attributes: [] omit data from mid table
-				required: false,
-				attributes: {
-					exclude: ['Product'],
-				},
-			},
+			// {
+			// 	model: models.Booking, // Booking which has relation through BookedSchedule
+			// 	through: {}, // attributes: [] omit data from mid table
+			// 	required: false,
+			// 	attributes: {
+			// 		exclude: ['Product'],
+			// 	},
+			// },
 		],
 	})
 		.then((scheduleData) => {
@@ -162,21 +183,27 @@ export const getShowScheduleByID = (req, res, next) => {
 
 			// Convert to JSON
 			const schedule = scheduleData.toJSON();
-			let bookedByUser = false;
+			let isUserGoing = false;
 
 			// We substitute bookings content for security
 			if (schedule.BookedSchedules && schedule.BookedSchedules?.length > 0) {
+				const beingAttendedSchedules = schedule.BookedSchedules.filter(
+					(schedule) => schedule.Attendance == 1 || schedule.Attendance == true,
+				);
+				const wasUserReserved = schedule.BookedSchedules.some(
+					(bookedSchedule) => bookedSchedule.CustomerID === req.user?.Customer.CustomerID,
+				);
+				isUserGoing = beingAttendedSchedules.some(
+					(bookedSchedule) => bookedSchedule.CustomerID === req.user.Customer.CustomerID,
+				);
 				if (isUser && isCustomer) {
-					bookedByUser = schedule.BookedSchedules.some(
-						(bookedSchedule) =>
-							bookedSchedule.CustomerID === req.user.Customer.CustomerID,
-					);
+					schedule.BookedSchedules = beingAttendedSchedules.length;
 				}
-				schedule.Bookings = schedule.BookedSchedules.length;
-				schedule.bookedByUser = bookedByUser;
-				schedule.full = schedule.BookedSchedules.length >= schedule.Capacity;
+				schedule.Attendance = beingAttendedSchedules.length;
+				schedule.isUserGoing = isUserGoing;
+				schedule.wasUserReserved = wasUserReserved;
+				schedule.full = beingAttendedSchedules.length >= schedule.Capacity;
 			}
-			schedule.BookedSchedules = schedule.BookedSchedules.length;
 			return res.status(200).json({schedule, user: req.user});
 			// return res.status(200).json({schedule});
 		})
@@ -184,7 +211,7 @@ export const getShowScheduleByID = (req, res, next) => {
 };
 
 export const getShowAccount = (req, res, next) => {
-	console.log(`➡️➡️➡️ called showAccount`, new Date().toISOString());
+	console.log(`\n➡️➡️➡️ called showAccount`, new Date().toISOString());
 	// return res.status(401).json({});
 
 	// @ Fetching USER
@@ -196,11 +223,11 @@ export const getShowAccount = (req, res, next) => {
 	// if only user
 	if (!req.user.Customer) {
 		const user = req.user;
-		console.log('✅✅✅ user fetched');
+		console.log('\n✅✅✅ user fetched');
 		return res.status(200).json({user});
 	} else {
 		let PK = req.user.Customer.CustomerID;
-		console.log('✅✅✅ customer fetched');
+		console.log('\n✅✅✅ customer fetched');
 		models.Customer.findByPk(PK, {
 			include: [
 				{
@@ -277,7 +304,7 @@ export const getShowAccount = (req, res, next) => {
 				if (!customer) {
 					return res.redirect('/');
 				}
-				console.log('✅✅✅ showAccount customer fetched');
+				console.log('\n✅✅✅ showAccount customer fetched');
 				return res.status(200).json({customer});
 			})
 			.catch((err) => console.log(err));
@@ -285,7 +312,7 @@ export const getShowAccount = (req, res, next) => {
 };
 
 export const getEditSettings = (req, res, next) => {
-	console.log(`➡️➡️➡️ called getEditSettings`);
+	console.log(`\n➡️➡️➡️ called getEditSettings`);
 
 	const PK = req.user.UserPrefSetting?.UserPrefID;
 
@@ -296,14 +323,14 @@ export const getEditSettings = (req, res, next) => {
 		.catch((err) => console.log(err));
 };
 // export const getEditCustomer = (req, res, next) => {
-// 	console.log(`➡️➡️➡️ called getEditCustomer`);
+// 	console.log(`\n➡️➡️➡️ called getEditCustomer`);
 // 	const customer = req.user.Customer;
 // 	// console.log(customer);
 // 	return res.status(200).json({customer});
 // };
 
 export const postEditSettings = (req, res, next) => {
-	console.log(`➡️➡️➡️ called postEditSettings`);
+	console.log(`\n➡️➡️➡️ called postEditSettings`);
 	const userID = req.user.UserID;
 	const handedness = !!req.body.handedness || false;
 	const font = req.body.font || 14;
@@ -336,7 +363,7 @@ export const postEditSettings = (req, res, next) => {
 			return preferences;
 		})
 		.then((result) => {
-			console.log('✅✅✅ Preferences Updated or Created');
+			console.log('\n✅✅✅ Preferences Updated or Created');
 			return res.status(200).json({result});
 		})
 		.catch((err) => console.log(err));

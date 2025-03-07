@@ -27,6 +27,11 @@ const BookedSchedule = sequelizeDb.define(
 			type: DataTypes.INTEGER,
 			allowNull: false,
 		},
+		Attendance: {
+			type: DataTypes.BOOLEAN,
+			allowNull: false,
+			defaultValue: true,
+		},
 	},
 	{
 		tableName: 'booked_schedules', // exact mysql table name

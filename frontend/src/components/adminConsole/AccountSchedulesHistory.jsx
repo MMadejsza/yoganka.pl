@@ -12,7 +12,12 @@ function AccountSchedulesHistory({data}) {
 
 	const headers = ['ID', 'Data', 'Dzień', 'Godzina', 'Typ', 'Zajęcia', 'Miejsce'];
 	const customerStats = calculateStats(data);
-	const content = customerStats.records.sort((a, b) => new Date(b.date) - new Date(a.date));
+	const content = customerStats.records
+		.filter((record) => {
+			const scheduleDateTime = new Date(`${record.date}T${record.time}:00`);
+			return scheduleDateTime < new Date();
+		})
+		.sort((a, b) => new Date(b.date) - new Date(a.date));
 	// console.log(`✅ content: `, content);
 	// console.log(`✅ keys: `, keys);
 	// console.log(`✅ customerStats: `, customerStats);
@@ -30,15 +35,18 @@ function AccountSchedulesHistory({data}) {
 
 	tableTitle = <h2 className='user-container__section-title'>Ukończone zajęcia:</h2>;
 
-	table = (
-		<ModalTable
-			headers={headers}
-			keys={['id', 'date', 'day', 'time', 'type', 'name', 'location']}
-			content={content}
-			active={false}
-			// classModifier={classModifier}
-		/>
-	);
+	table =
+		content.length > 0 ? (
+			<ModalTable
+				headers={headers}
+				keys={['id', 'date', 'day', 'time', 'type', 'name', 'location']}
+				content={content}
+				active={false}
+				// classModifier={classModifier}
+			/>
+		) : (
+			<h2 className='user-container__section-title dimmed'>Brak</h2>
+		);
 
 	return (
 		<>

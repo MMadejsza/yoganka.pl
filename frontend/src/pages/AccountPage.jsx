@@ -1,5 +1,5 @@
 import {useQuery} from '@tanstack/react-query';
-import {useState, useEffect} from 'react';
+import {useState} from 'react';
 import {fetchItem} from '../utils/http.js';
 import {useLocation} from 'react-router-dom';
 
@@ -28,14 +28,16 @@ function AccountPage() {
 		refetchOnMount: true,
 	});
 
-	let user, userTabs, name, content, customer;
+	let userTabs, name, content, customer;
 
 	if (data) {
+		console.log('AccountPage data: ', data);
 		if (data.customer) {
 			customer = data.customer;
 			name = `${customer.FirstName} ${customer.LastName}`;
 		} else {
-			name = user.Email;
+			name = data.user.Email;
+			console.log(name);
 		}
 
 		userTabs = (

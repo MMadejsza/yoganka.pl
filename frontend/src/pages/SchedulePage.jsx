@@ -152,7 +152,7 @@ function SchedulePage() {
 		<div className='admin-console'>
 			<Section
 				classy='admin-intro'
-				header={`Campy/Wydarzenia/Zajęcia`}
+				header={`Wyjazdy | Wydarzenia | Online`}
 			/>
 			{table}
 			{isModalOpen && (

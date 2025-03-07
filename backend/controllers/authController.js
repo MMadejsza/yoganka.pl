@@ -9,7 +9,7 @@ export const getStatus = (req, res, next) => {
 	});
 };
 export const postSignup = (req, res, next) => {
-	console.log(`➡️➡️➡️ called postSignup`);
+	console.log(`\n➡️➡️➡️ called postSignup`);
 	const {email, password, confirmedPassword, date} = req.body;
 
 	models.User.findOne({where: {email}})
@@ -49,7 +49,7 @@ export const postSignup = (req, res, next) => {
 		});
 };
 export const postLogin = (req, res, next) => {
-	console.log(`➡️➡️➡️ called postLogin`);
+	console.log(`\n➡️➡️➡️ called postLogin`);
 	const {email, password, date} = req.body;
 
 	models.User.findOne({where: {email}})

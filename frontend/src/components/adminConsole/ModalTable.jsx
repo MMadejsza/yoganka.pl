@@ -22,7 +22,7 @@ function ModalTable({headers, content, keys, active, classModifier, onOpen, onQu
 						<tr
 							className={`data-table__cells ${active ? 'active' : ''}  ${
 								classModifier ? `data-table__cells--${classModifier}` : ''
-							} ${row.bookedByUser && status?.isLoggedIn ? 'booked' : ''} ${
+							} ${row.isUserGoing && status?.isLoggedIn ? 'booked' : ''} ${
 								isArchived ? 'archived' : ''
 							} ${row.full && 'full'}`}
 							key={rowIndex}>
@@ -35,7 +35,7 @@ function ModalTable({headers, content, keys, active, classModifier, onOpen, onQu
 									value = (
 										<span
 											onClick={
-												!row.bookedByUser &&
+												!row.isUserGoing &&
 												status?.isLoggedIn &&
 												!isArchived
 													? (e) => {
@@ -50,10 +50,12 @@ function ModalTable({headers, content, keys, active, classModifier, onOpen, onQu
 											}
 											className='material-symbols-rounded nav__icon nav__icon--side account'>
 											{status.isLoggedIn
-												? row.bookedByUser
+												? row.isUserGoing
 													? 'check'
 													: row.full || isArchived
 													? 'block'
+													: row.wasUserReserved
+													? 'cycle'
 													: 'shopping_bag_speed'
 												: 'lock_person'}
 										</span>

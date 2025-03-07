@@ -115,7 +115,9 @@ export const calculateStats = (customer) => {
 		// console.groupEnd();
 	}
 
-	for (let bookedSchedule of customer.BookedSchedules) {
+	for (let bookedSchedule of customer.BookedSchedules.filter(
+		(schedule) => schedule.Attendance == 1 || schedule.Attendance == true,
+	)) {
 		// console.group(`schedule: ${schedule}`);
 		const {ScheduleRecord: schedule} = bookedSchedule;
 		const scheduleID = schedule.ScheduleID;
@@ -135,7 +137,7 @@ export const calculateStats = (customer) => {
 			location: scheduleLocation,
 			type: productType,
 			name: productName,
-			bookedByUser: true,
+			isUserGoing: true,
 		});
 
 		// console.log(`scheduleDate >= today ${scheduleDate} ${today}`);

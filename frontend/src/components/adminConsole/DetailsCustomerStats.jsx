@@ -16,13 +16,13 @@ function DetailsCustomerStats({customerStats, altTitle, userAccountPage}) {
 					</li>
 				)}
 				<li className='schedules__summary-datum'>
-					<div className='schedules__summary-label'>Ilość odbytych zajęć:</div>
+					<div className='schedules__summary-label'>Ilość ukończonych zajęć:</div>
 					<div className='schedules__summary-content'>
 						{customerStats.schedulesAmount.total}
 					</div>
 				</li>
 				<li className='schedules__summary-datum'>
-					<div className='schedules__summary-label'>Campy/Eventy/Online:</div>
+					<div className='schedules__summary-label'>Wyjazdy/Wydarzenia/Online:</div>
 					<div className='schedules__summary-content'>{`${campsNumber}/${eventsNumber}/${onlineNumber}`}</div>
 				</li>
 				<li className='schedules__summary-datum'>

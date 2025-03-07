@@ -6,8 +6,8 @@ import {formatIsoDateTime, getWeekDay} from '../utils/formatDateTime.js';
 
 //@ USERS
 export const showAllUsers = (req, res, next) => {
-	console.log(`➡️ called showAllUsers`);
-	console.log(`➡️ called showAllUsers`, req.user);
+	console.log(`\n➡️ called showAllUsers`);
+	console.log(`\n➡️ called showAllUsers`, req.user);
 	const model = models.User;
 	model
 		.findAll({
@@ -66,7 +66,7 @@ export const showAllUsers = (req, res, next) => {
 		.catch((err) => console.log(err));
 };
 export const showUserByID = (req, res, next) => {
-	console.log(`➡️➡️➡️ called showUserByID`);
+	console.log(`\n➡️➡️➡️ called showUserByID`);
 	const PK = req.params.id || req.user.UserID;
 	models.User.findByPk(PK, {
 		include: [
@@ -135,7 +135,7 @@ export const showAllUserSettings = (req, res, next) => {
 };
 //@ CUSTOMERS
 export const showAllCustomers = (req, res, next) => {
-	console.log(`➡️ called showAllCustomers`);
+	console.log(`\n➡️ called showAllCustomers`);
 	const model = models.Customer;
 
 	// We create dynamic joint columns based on the map
@@ -190,7 +190,7 @@ export const showAllCustomers = (req, res, next) => {
 		.catch((err) => console.log(err));
 };
 export const showCustomerByID = (req, res, next) => {
-	console.log(`➡️ called showCustomerByID`, new Date().toISOString());
+	console.log(`\n➡️ called showCustomerByID`, new Date().toISOString());
 
 	const PK = req.params.id;
 	models.Customer.findByPk(PK, {
@@ -331,7 +331,7 @@ export const showAllSchedules = (req, res, next) => {
 						newRecord['Typ'] = jsonRecord[key].Type; //  flatten object
 						newRecord['Nazwa'] = jsonRecord[key].Name;
 					} else if (key === 'Bookings' && req.user.Customer) {
-						newRecord.bookedByUser = (jsonRecord.Bookings || []).length > 0;
+						newRecord.isUserGoing = (jsonRecord.Bookings || []).length > 0;
 					} else {
 						newRecord[newKey] = jsonRecord[key]; // Assignment
 					}
@@ -362,7 +362,7 @@ export const showAllSchedules = (req, res, next) => {
 		.catch((err) => console.log(err));
 };
 export const showScheduleByID = (req, res, next) => {
-	console.log(`➡️ called showScheduleByID`);
+	console.log(`\n➡️ called showScheduleByID`);
 
 	const PK = req.params.id;
 	models.ScheduleRecord.findByPk(PK, {
@@ -507,7 +507,7 @@ export const showAllParticipantsFeedback = (req, res, next) => {
 		.catch((err) => console.log(err));
 };
 export const showAllParticipantsFeedbackByID = (req, res, next) => {
-	console.log(`➡️ called showAllParticipantsFeedbackByID`);
+	console.log(`\n➡️ called showAllParticipantsFeedbackByID`);
 
 	const PK = req.params.id;
 	models.Feedback.findByPk(PK, {
@@ -576,7 +576,7 @@ export const showAllProducts = (req, res, next) => {
 	simpleListAllToTable(res, models.Product);
 };
 export const showProductByID = (req, res, next) => {
-	console.log(`➡️ called showProductByID`);
+	console.log(`\n➡️ called showProductByID`);
 
 	const PK = req.params.id;
 	models.Product.findByPk(PK, {
@@ -740,7 +740,7 @@ export const showAllBookings = (req, res, next) => {
 		.catch((err) => console.error('Błąd w pobieraniu rezerwacji:', err));
 };
 export const showBookingByID = (req, res, next) => {
-	console.log(`➡️ called showBookingByID`);
+	console.log(`\n➡️ called showBookingByID`);
 
 	const PK = req.params.id;
 	models.Booking.findByPk(PK, {

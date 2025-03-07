@@ -32,7 +32,7 @@ function AccountDashboard({data, queryStatus}) {
 	console.log(`✅ Data: `);
 	console.log(data);
 
-	let name, customer, customerStats, statsBlock, tableTitle, table;
+	let name, customer, stats, customerStats, statsBlock, tableTitle, table;
 
 	if (data.customer) {
 		const customer = data.customer;
@@ -57,7 +57,9 @@ function AccountDashboard({data, queryStatus}) {
 			</div>
 		);
 
-		tableTitle = <h2 className='user-container__section-title'>Nadchodzące zajęcia:</h2>;
+		tableTitle = (
+			<h2 className='user-container__section-title'>{`Nadchodzące zajęcia (${contentUpcoming.length})`}</h2>
+		);
 
 		table =
 			contentUpcoming && contentUpcoming.length > 0 ? (
@@ -77,8 +79,6 @@ function AccountDashboard({data, queryStatus}) {
 				</div>
 			);
 	} else {
-		user = data.user;
-		name = user.Email;
 		stats = (
 			<h2 className='user-container__section-title dimmed'>Brak statystyk do wyświetlenia</h2>
 		);

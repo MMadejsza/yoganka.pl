@@ -36,7 +36,8 @@ function AccountBookings({data}) {
 	// console.log(`✅ keys: `, keys);
 	// console.log(`✅ customerStats: `, customerStats);
 
-	let table;
+	let table, tableTitle;
+	tableTitle = <h2 className='user-container__section-title'>Historia rezerwacji:</h2>;
 	table = (
 		<ModalTable
 			headers={[
@@ -56,8 +57,7 @@ function AccountBookings({data}) {
 
 	return (
 		<>
-			<h1 className='user-container__user-title modal__title'>Historia rezerwacji</h1>
-
+			{/* {tableTitle} */}
 			{table}
 			{isModalOpen && (
 				<ViewFrame

@@ -75,12 +75,12 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
 	const {Product: product} = schedule;
 	const type = product.Type;
 	const isFull = schedule.full;
-	const isAlreadyBooked = schedule.bookedByUser;
+	const wasPreviouslyReserved = schedule.wasUserReserved;
+	const isAlreadyBooked = schedule.isUserGoing;
 
 	const today = new Date();
 	const scheduleDateTime = new Date(`${schedule.Date}T${schedule.StartTime}:00`);
 	const isArchived = scheduleDateTime < today;
-
 	const bookedSuccessfully = !userAccountPage && bookingOps.confirmation;
 	const isSuccessNotification = bookedSuccessfully || isCancelledSuccessfully;
 	let prodStats = null;
@@ -114,9 +114,17 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
 			}
 			className={`book modal__btn ${shouldDisableBookBtn && 'disabled'}`}>
 			<span className='material-symbols-rounded nav__icon'>
-				{shouldDisableBookBtn ? 'block' : 'shopping_bag_speed'}
+				{shouldDisableBookBtn
+					? 'block'
+					: wasPreviouslyReserved
+					? 'cycle'
+					: 'shopping_bag_speed'}
 			</span>
-			{shouldDisableBookBtn ? 'Brak Miejsc' : 'Rezerwuj'}
+			{shouldDisableBookBtn
+				? 'Brak Miejsc'
+				: wasPreviouslyReserved
+				? 'Wróć na zajęcia'
+				: 'Rezerwuj'}
 		</button>
 	) : (
 		<button
