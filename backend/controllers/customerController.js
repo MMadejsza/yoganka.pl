@@ -11,13 +11,19 @@ export const postBookSchedule = (req, res, next) => {
 	// If it's not a Customer yet
 	let customerPromise;
 	if (!req.user.Customer) {
-		console.log('Użytkownik nie jest klientem, tworzymy rekord Customer...');
+		const cDetails = req.body.customerDetails;
+		console.log('❗❗❗Użytkownik nie jest klientem, tworzymy rekord Customer...');
+		console.log('cDetails', cDetails);
 		customerPromise = models.Customer.create({
+			CustomerType: cDetails.cType,
 			UserID: req.user.UserID,
-			CustomerType: 'Indywidualny',
-			FirstName: 'Imię',
-			LastName: 'Nazwisko',
-			DoB: new Date().toISOString().split('T')[0], // todays dummy date
+			FirstName: cDetails.fname,
+			LastName: cDetails.lname,
+			DoB: cDetails.dob,
+			Phone: cDetails.phone,
+			PreferredContactMethod: cDetails.cMethod,
+			ReferralSource: cDetails.rSource,
+			Notes: cDetails.notes,
 		});
 	} else {
 		customerPromise = Promise.resolve(req.user.Customer);

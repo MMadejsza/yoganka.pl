@@ -39,10 +39,11 @@ function SchedulePage() {
 		error: mutateError,
 		reset,
 	} = useMutation({
-		mutationFn: async ({scheduleID, productName, productPrice}) =>
+		mutationFn: async ({scheduleID, productName, productPrice, customerDetails}) =>
 			await fetch(`/api/customer/grafik/book/${scheduleID}`, {
 				method: 'POST',
 				body: JSON.stringify({
+					customerDetails: customerDetails,
 					schedule: scheduleID,
 					date: new Date().toISOString().split('T')[0],
 					product: productName,

@@ -57,11 +57,11 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
 	});
 
 	const [isCancelledSuccessfully, setIsCancelledSuccessfully] = useState(false);
-	const [contactDetails, setContactDetails] = useState({
+	const [newCustomerDetails, setNewCustomerDetails] = useState({
 		isFirstTimeBuyer: !!status.role != 'CUSTOMER' || !!status.role != 'ADMIN',
 	});
 	const [isFillingTheForm, setIsFillingTheForm] = useState(false);
-	console.log(`contactDetails: `, contactDetails);
+	console.log(`newCustomerDetails: `, newCustomerDetails);
 
 	useEffect(() => {
 		if (isCancelledSuccessfully) {
@@ -100,26 +100,29 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
 	const handleCancellation = () => {
 		cancel();
 	};
+	const handleFormSave = (details) => {
+		setNewCustomerDetails(details);
+		setIsFillingTheForm(false);
+	};
 
 	const shouldShowFeedback = isSuccessNotification;
 	const shouldShowCancelBtn =
 		isLoggedIn && isAlreadyBooked && userAccountPage && !shouldShowFeedback;
 	const shouldShowBookBtn = !isArchived && !isAlreadyBooked && !bookingOps?.isError;
-	const shouldDisableBookBtn = isFull && shouldShowBookBtn;
+	const shouldDisableBookBtn = (isFull && shouldShowBookBtn) || isFillingTheForm;
 
 	const bookingBtn = isLoggedIn ? (
 		<button
 			onClick={
 				!shouldDisableBookBtn
-					? isFillingTheForm
-						? null
-						: contactDetails.isFirstTimeBuyer
+					? newCustomerDetails.isFirstTimeBuyer
 						? () => setIsFillingTheForm(true)
 						: () =>
 								bookingOps.onBook({
 									scheduleID: schedule.ScheduleID,
 									productName: product.Name,
 									productPrice: product.Price,
+									customerDetails: newCustomerDetails,
 								})
 					: null
 			}
@@ -132,7 +135,9 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
 					: 'shopping_bag_speed'}
 			</span>
 			{shouldDisableBookBtn
-				? 'Brak Miejsc'
+				? isFillingTheForm
+					? 'Wypełnij formularz'
+					: 'Brak Miejsc'
 				: wasPreviouslyReserved
 				? 'Wróć na zajęcia'
 				: 'Rezerwuj'}
@@ -186,7 +191,7 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
 					</div>
 				</>
 			) : (
-				<ViewScheduleNewCustomerForm />
+				<ViewScheduleNewCustomerForm onSave={handleFormSave} />
 			)}
 
 			{/*//@ Product stats */}
