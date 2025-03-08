@@ -354,19 +354,44 @@ export const postEditSettings = (req, res, next) => {
 	})
 		.then(([preferences, created]) => {
 			if (!created) {
-				// They exist so just update
-				preferences.Handedness = handedness;
-				preferences.FontSize = font;
-				preferences.Notifications = notifications;
-				preferences.Animation = animation;
-				preferences.Theme = theme;
-				return preferences.save();
+				// Nothing changed
+				if (
+					preferences.Handedness === handedness &&
+					preferences.FontSize === font &&
+					preferences.Notifications === notifications &&
+					preferences.Animation === animation &&
+					preferences.Theme === theme
+				) {
+					// Nothing changed
+					console.log('\n❓❓❓ Preferences no change');
+					return {confirmation: 0, message: 'Brak zmian'};
+				} else {
+					// Update
+					preferences.Handedness = handedness;
+					preferences.FontSize = font;
+					preferences.Notifications = notifications;
+					preferences.Animation = animation;
+					preferences.Theme = theme;
+					return preferences.save().then(() => {
+						console.log('\n✅✅✅ Preferences Updated');
+						return {confirmation: 1, message: 'Ustawienia zostały zaktualizowane'};
+					});
+				}
+			} else {
+				// New preferences created
+				console.log('\n✅✅✅ Preferences Created');
+				return {confirmation: 1, message: 'Ustawienia zostały utworzone'};
 			}
-			return preferences;
 		})
 		.then((result) => {
-			console.log('\n✅✅✅ Preferences Updated or Created');
-			return res.status(200).json({result});
+			console.log('\n✅✅✅ Preferences Result sent back');
+			return res.status(200).json({
+				confirmation: result.confirmation,
+				message: result.message,
+			});
 		})
-		.catch((err) => console.log(err));
+		.catch((err) => {
+			console.log('❌❌❌ Error in postEditSettings:', err);
+			return res.status(500).json({error: err.message});
+		});
 };

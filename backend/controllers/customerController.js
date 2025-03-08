@@ -13,7 +13,28 @@ export const postBookSchedule = (req, res, next) => {
 	if (!req.user.Customer) {
 		const cDetails = req.body.customerDetails;
 		console.log('❗❗❗Użytkownik nie jest klientem, tworzymy rekord Customer...');
-		console.log('cDetails', cDetails);
+
+		if (!cDetails) {
+			console.log('❌❌❌ Brak danych klienta');
+			return res.status(400).json({message: 'Brak danych klienta'});
+		}
+		if (!cDetails.fname || !cDetails.fname.trim()) {
+			console.log('❌❌❌ Imię nie może być puste');
+			return res.status(400).json({message: 'Imię nie może być puste'});
+		}
+		if (!cDetails.lname || !cDetails.lname.trim()) {
+			console.log('❌❌❌ Nazwisko nie może być puste');
+			return res.status(400).json({message: 'Nazwisko nie może być puste'});
+		}
+		if (!cDetails.dob || !cDetails.dob.trim()) {
+			console.log('❌❌❌ Data urodzenia nie może być puste');
+			return res.status(400).json({message: 'Data urodzenia nie może być pusta'});
+		}
+		if (!cDetails.phone || !cDetails.phone.trim()) {
+			console.log('❌❌❌ Telefon nie może być puste');
+			return res.status(400).json({message: 'Numer telefonu nie może być pusty'});
+		}
+
 		customerPromise = models.Customer.create({
 			CustomerType: cDetails.cType,
 			UserID: req.user.UserID,
@@ -22,7 +43,7 @@ export const postBookSchedule = (req, res, next) => {
 			DoB: cDetails.dob,
 			Phone: cDetails.phone,
 			PreferredContactMethod: cDetails.cMethod || '-',
-			ReferralSource: cDetails.rSource,
+			ReferralSource: cDetails.rSource || '-',
 			Notes: cDetails.notes,
 		});
 	} else {
@@ -220,7 +241,10 @@ export const postEditCustomer = (req, res, next) => {
 	const customerId = req.user.Customer.CustomerID;
 	const newPhone = req.body.phone;
 	const newContactMethod = req.body.cMethod;
-
+	if (!newPhone || !newPhone.trim()) {
+		console.log('❌❌❌ Error postEditCustomer:', 'No phone');
+		return res.status(400).json({message: 'Numer telefonu nie może być pusty'});
+	}
 	models.Customer.update(
 		{Phone: newPhone, PreferredContactMethod: newContactMethod},
 		{where: {CustomerID: customerId}},

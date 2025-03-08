@@ -15,9 +15,9 @@ function InputLogin({
 		input = (
 			<input
 				id={id}
+				{...props}
 				type='checkbox'
 				checked={value}
-				{...props}
 				className={`${formType}-form__${id}-input`}
 			/>
 		);
@@ -25,8 +25,8 @@ function InputLogin({
 		input = (
 			<input
 				id={id}
-				value={value}
 				{...props}
+				value={value}
 				className={`${formType}-form__${id}-input`}
 			/>
 		);
@@ -34,10 +34,10 @@ function InputLogin({
 	if (props.type == 'select') {
 		input = (
 			<select
-				name={id}
 				id={id}
-				value={value}
-				{...props}>
+				name={id}
+				{...props}
+				value={value}>
 				{props.options.map((option) => (
 					<option
 						key={option.value}

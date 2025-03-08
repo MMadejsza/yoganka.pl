@@ -132,6 +132,8 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
 					? 'block'
 					: wasPreviouslyReserved
 					? 'cycle'
+					: newCustomerDetails.isFirstTimeBuyer
+					? 'edit'
 					: 'shopping_bag_speed'}
 			</span>
 			{shouldDisableBookBtn
@@ -140,6 +142,8 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
 					: 'Brak Miejsc'
 				: wasPreviouslyReserved
 				? 'Wróć na zajęcia'
+				: newCustomerDetails.isFirstTimeBuyer
+				? 'Uzupełnij dane osobowe'
 				: 'Rezerwuj'}
 		</button>
 	) : (

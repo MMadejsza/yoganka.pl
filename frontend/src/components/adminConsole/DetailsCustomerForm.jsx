@@ -1,14 +1,16 @@
-import {useNavigate, useLocation} from 'react-router-dom';
+import React, {useState} from 'react';
+import {useLocation} from 'react-router-dom';
 import {useQuery, useMutation} from '@tanstack/react-query';
 import {queryClient, fetchItem, fetchStatus} from '../../utils/http.js';
 import {useInput} from '../../hooks/useInput.js';
-import InputLogin from '../login/InputLogin.jsx';
 import {phoneValidations} from '../../utils/validation.js';
+import InputLogin from '../login/InputLogin.jsx';
+import UserFeedbackBox from './UserFeedbackBox.jsx';
+
 function DetailsUserSettingsForm() {
-	const navigate = useNavigate();
 	const location = useLocation();
-	const params = new URLSearchParams(location.search);
-	const customerConfirmation = params.get('customerConfirmation');
+	let initialFeedbackConfirmation;
+	const [feedbackConfirmation, setFeedbackConfirmation] = useState(initialFeedbackConfirmation);
 
 	const {data: status} = useQuery({
 		queryKey: ['authStatus'],
@@ -47,13 +49,10 @@ function DetailsUserSettingsForm() {
 		onSuccess: (res) => {
 			queryClient.invalidateQueries(['query', '/konto/ustawienia']);
 			if (res.confirmation) {
-				navigate('/konto/ustawienia?customerConfirmation=1');
+				setFeedbackConfirmation(1);
 			} else {
-				navigate('/konto/ustawienia?customerConfirmation=0');
+				setFeedbackConfirmation(0);
 			}
-		},
-		onError: (error) => {
-			window.alert(error.message);
 		},
 	});
 	// Fallback to feed custom hooks when data isn't available
@@ -93,6 +92,7 @@ function DetailsUserSettingsForm() {
 
 	// Reset all te inputs
 	const handleReset = () => {
+		setFeedbackConfirmation(undefined);
 		handlePhoneReset();
 		handleCMethodReset();
 	};
@@ -125,38 +125,18 @@ function DetailsUserSettingsForm() {
 	// Extract values only
 	const {formType, title, actionTitle} = formLabels;
 
-	let content;
-	let feedback;
-	if (customerConfirmation == 1) {
-		feedback = (
-			<div className='feedback-box feedback-box--success feedback-box--small'>
-				Zmiany zatwierdzone
-			</div>
-		);
-	} else if (customerConfirmation == 0) {
-		feedback = (
-			<div className='feedback-box feedback-box--neutral feedback-box--small'>Brak zmian</div>
-		);
-	} else if (isPending) {
-		feedback = (
-			<div className='feedback-box feedback-box--neutral feedback-box--small'>
-				Wysyłanie...
-			</div>
-		);
-	} else if (isError) {
-		if (error.code == 401) {
-			navigate('/login');
-			console.log(error.message);
-		} else {
-			feedback = (
-				<div className='feedback-box feedback-box--error feedback-box--small'>
-					{error.message}
-				</div>
-			);
-		}
-	}
+	let form;
+	let feedback = feedbackConfirmation !== undefined && (
+		<UserFeedbackBox
+			status={feedbackConfirmation}
+			isPending={isPending}
+			isError={isError}
+			error={error}
+			size='small'
+		/>
+	);
 
-	content = (
+	form = (
 		<form
 			action='/api/konto/ustawienia/update/uczestnik'
 			method='POST'
@@ -216,7 +196,7 @@ function DetailsUserSettingsForm() {
 	);
 	return (
 		<>
-			{content} {feedback}
+			{form} {feedback}
 		</>
 	);
 }

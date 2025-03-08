@@ -37,7 +37,9 @@ function ModalTable({headers, content, keys, active, classModifier, onOpen, onQu
 											onClick={
 												!row.isUserGoing &&
 												status?.isLoggedIn &&
-												!isArchived
+												!isArchived &&
+												(status.Role == 'CUSTOMER' ||
+													status.Role == 'ADMIN')
 													? (e) => {
 															e.stopPropagation();
 															onQuickBook({
@@ -49,7 +51,8 @@ function ModalTable({headers, content, keys, active, classModifier, onOpen, onQu
 													: null
 											}
 											className='material-symbols-rounded nav__icon nav__icon--side account'>
-											{status.isLoggedIn
+											{status.isLoggedIn &&
+											(status.Role == 'CUSTOMER' || status.Role == 'ADMIN')
 												? row.isUserGoing
 													? 'check'
 													: row.full || isArchived
