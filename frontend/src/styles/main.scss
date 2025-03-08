@@ -5,3 +5,13 @@
 @forward '_admin_0-main';
 @forward '_login_0-main';
 @forward '_user_0-main';
+@font-face {
+	font-family: 'Material Symbols Rounded';
+	font-style: normal;
+	font-weight: 400;
+	/* Opcjonalnie dodaj lokalne nazwy, żeby przeglądarka mogła spróbować użyć ich, jeśli są dostępne */
+	src: local('Material Symbols Rounded'), local('MaterialSymbolsRounded-Regular'),
+		url(https://fonts.gstatic.com/s/materialsymbolsrounded/v55/cIf3bK3a1sN66ja42QF3bK3a1sN66ja42Q.woff2)
+			format('woff2');
+	font-display: fallback;
+}
