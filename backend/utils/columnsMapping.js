@@ -3,14 +3,14 @@
 const columnMaps = {
 	User: {
 		UserID: 'ID',
-		RegistrationDate: 'Data rejestracji',
-		Login: 'Login',
-		PasswordHash: 'Hasło (hash)',
-		LastLoginDate: 'Ostatnie logowanie',
 		Email: 'E-mail',
-		Role: 'Rola',
-		ProfilePictureSrcSetJSON: 'Zdjęcie profilowe',
-		UserPrefSetting: 'Ustawienia użytkownika',
+		PasswordHash: 'Hasło (szyfr)',
+		LastLoginDate: 'Ostatni login',
+		RegistrationDate: 'Zarejestrowany',
+		Role: 'Uprawnienia',
+		UserPrefSetting: 'Preferencje',
+		ProfilePictureSrcSetJSON: 'Zdjęcie',
+		// Login: 'Login',
 	},
 
 	Customer: {

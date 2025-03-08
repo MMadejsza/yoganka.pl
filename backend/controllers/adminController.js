@@ -6,8 +6,7 @@ import {formatIsoDateTime, getWeekDay} from '../utils/formatDateTime.js';
 
 //@ USERS
 export const showAllUsers = (req, res, next) => {
-	console.log(`\n➡️ called showAllUsers`);
-	console.log(`\n➡️ called showAllUsers`, req.user);
+	console.log(`\n➡️➡️➡️ called showAllUsers`);
 	const model = models.User;
 	model
 		.findAll({
@@ -19,9 +18,10 @@ export const showAllUsers = (req, res, next) => {
 			],
 		})
 		.then((records) => {
+			if (!records) throw new Error({message: 'Nie znaleziono użytkowników.'});
 			// fetching map for User table or empty object
 			const columnMap = columnMaps[model.name] || {};
-
+			const keysForHeaders = Object.values(columnMap);
 			// Convert for records for different names
 			const formattedRecords = records.map((record) => {
 				const newRecord = {}; // Container for formatted data
@@ -44,26 +44,20 @@ export const showAllUsers = (req, res, next) => {
 			});
 
 			// New headers (keys from columnMap)
-			const totalHeaders = [
-				'ID',
-				'Data rejestracji',
-				'Ostatnie logowanie',
-				'Login',
-				'Hasło (hash)',
-				'E-mail',
-				// 'Rola',
-				'Zdjęcie profilowe',
-				'Ustawienia użytkownika',
-			];
+			const totalHeaders = keysForHeaders;
 
 			// ✅ Return response to frontend
+			console.log('\n✅✅✅ Fetched showAllUsers');
 			res.json({
 				isLoggedIn: req.session.isLoggedIn,
 				totalHeaders, // To render
 				content: formattedRecords, // With new names
 			});
 		})
-		.catch((err) => console.log(err));
+		.catch((err) => {
+			console.log('\n❌❌❌ Error showAllUsers', err);
+			return res.status(404).json({message: err.message});
+		});
 };
 export const showUserByID = (req, res, next) => {
 	console.log(`\n➡️➡️➡️ called showUserByID`);

@@ -392,6 +392,6 @@ export const postEditSettings = (req, res, next) => {
 		})
 		.catch((err) => {
 			console.log('❌❌❌ Error in postEditSettings:', err);
-			return res.status(500).json({error: err.message});
+			return res.status(500).json({message: err.message});
 		});
 };

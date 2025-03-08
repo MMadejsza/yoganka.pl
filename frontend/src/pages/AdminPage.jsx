@@ -5,6 +5,7 @@ import {fetchData, fetchStatus} from '../utils/http.js';
 import SideNav from '../components/adminConsole/SideNav.jsx';
 import ViewFrame from '../components/adminConsole/ViewFrame.jsx';
 import Section from '../components/Section.jsx';
+import ModalTable from '../components/adminConsole/ModalTable.jsx';
 
 const sideNavTabs = [
 	{name: 'Użytkownicy', icon: 'group', link: '/admin-console/show-all-users'},
@@ -94,13 +95,17 @@ function AdminPage() {
 		// gcTime:30000
 	});
 
-	const {data: status} = useQuery({
+	const {data: status, isLoading: isStatusLoading} = useQuery({
 		queryKey: ['authStatus'],
 		queryFn: fetchStatus,
 		cache: 'no-store',
 	});
 
-	let content;
+	if (isStatusLoading) {
+		return <div>Loading...</div>;
+	}
+
+	let table;
 
 	if (isError) {
 		if (error.code == 401) {
@@ -110,52 +115,18 @@ function AdminPage() {
 			window.alert(error.info?.message || 'Failed to fetch');
 		}
 	}
-	if (data && status.role === 'ADMIN') {
+	if (data && status?.role === 'ADMIN') {
 		// console.clear();
 		console.log(`✅ Data: `);
 		console.log(data);
-		content = (
-			<table className='data-table'>
-				<thead className='data-table__headers'>
-					<tr>
-						{data.totalHeaders.map((header, index) => (
-							<th
-								className='data-table__single-header'
-								key={index}>
-								{header}
-							</th>
-						))}
-					</tr>
-				</thead>
-				<tbody>
-					{data.content.map((row, rowIndex) => (
-						<tr
-							className={`data-table__cells ${pickedModifier ? 'active' : ''}`}
-							key={rowIndex}>
-							{data.totalHeaders.map((header, headerIndex) => {
-								let value = row[header];
-								if (typeof value === 'object' && value !== null) {
-									value = Object.values(value);
-								}
-								return (
-									<td
-										onClick={
-											pickedModifier
-												? () => {
-														handleOpenModal(row);
-												  }
-												: null
-										}
-										className='data-table__single-cell'
-										key={headerIndex}>
-										{value || '-'}
-									</td>
-								);
-							})}
-						</tr>
-					))}
-				</tbody>
-			</table>
+		table = (
+			<ModalTable
+				headers={data.totalHeaders}
+				keys={data.totalHeaders}
+				content={data.content}
+				active={true}
+				onOpen={handleOpenModal}
+			/>
 		);
 	}
 
@@ -173,7 +144,7 @@ function AdminPage() {
 					/>
 				</>
 			)}
-			{content}
+			{table}
 			{isModalOpen && (
 				<ViewFrame
 					modifier={pickedModifier}

@@ -2,6 +2,11 @@ import * as models from '../models/_index.js';
 import bcrypt from 'bcryptjs';
 
 export const getStatus = (req, res, next) => {
+	console.log(`\n✅✅✅ getStatus`, {
+		isLoggedIn: res.locals.isLoggedIn || false,
+		role: res.locals.role,
+		token: res.locals.csrfToken,
+	});
 	return res.status(200).json({
 		isLoggedIn: res.locals.isLoggedIn || false,
 		role: res.locals.role,

@@ -33,6 +33,11 @@ function UserFeedbackBox({status, isPending, isError, error, size}) {
 			setTimeout(() => {
 				navigate('/login');
 			}, 1000);
+		} else if (error.code == 404) {
+			setTimeout(() => {
+				navigate('/login');
+			}, 1000);
+			console.log(error);
 		} else {
 			statusMsg = error.message;
 		}
