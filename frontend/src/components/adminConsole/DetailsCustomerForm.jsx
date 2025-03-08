@@ -57,7 +57,7 @@ function DetailsUserSettingsForm() {
 		},
 	});
 	// Fallback to feed custom hooks when data isn't available
-	const phoneDefault = data?.customer.CustomerPhones[0]?.CustomerMobile || ' ';
+	const phoneDefault = data?.customer.Phone || ' ';
 
 	const methodDefault = data?.customer.PreferredContactMethod || ' ';
 
@@ -126,86 +126,99 @@ function DetailsUserSettingsForm() {
 	const {formType, title, actionTitle} = formLabels;
 
 	let content;
-
-	if (isPending) {
-		content = 'Wysyłanie...';
+	let feedback;
+	if (customerConfirmation == 1) {
+		feedback = (
+			<div className='feedback-box feedback-box--success feedback-box--small'>
+				Zmiany zatwierdzone
+			</div>
+		);
+	} else if (customerConfirmation == 0) {
+		feedback = (
+			<div className='feedback-box feedback-box--neutral feedback-box--small'>Brak zmian</div>
+		);
+	} else if (isPending) {
+		feedback = (
+			<div className='feedback-box feedback-box--neutral feedback-box--small'>
+				Wysyłanie...
+			</div>
+		);
 	} else if (isError) {
 		if (error.code == 401) {
 			navigate('/login');
 			console.log(error.message);
 		} else {
-			content = `Błąd: ${error}'`;
+			feedback = (
+				<div className='feedback-box feedback-box--error feedback-box--small'>
+					{error.message}
+				</div>
+			);
 		}
-	} else
-		content = (
-			<form
-				action='/api/konto/ustawienia/update/uczestnik'
-				method='POST'
-				onSubmit={handleSubmit}
-				className={`user-container__details-list modal-checklist__list`}>
-				<h1 className='form__title'>{title}</h1>
-				{/* names are for FormData and id for labels */}
-				<InputLogin
-					embedded={true}
-					formType={formType}
-					type='tel'
-					id='phone'
-					name='phone'
-					label='Numer telefonu:'
-					value={phoneValue}
-					onFocus={handlePhoneFocus}
-					onBlur={handlePhoneBlur}
-					onChange={handlePhoneChange}
-					autoComplete='phone'
-					required
-					validationResults={phoneValidationResults}
-					didEdit={phoneDidEdit}
-					isFocused={phoneIsFocused}
-				/>
-				<InputLogin
-					embedded={true}
-					formType={formType}
-					type='select'
-					options={[
-						{label: 'Telefon', value: 'Telefon'},
-						{label: 'Email', value: 'Email'},
-					]}
-					id='cMethod'
-					name='cMethod'
-					label='Kontaktuj się przez:'
-					value={cMethodValue}
-					onFocus={handleCMethodFocus}
-					onBlur={handleCMethodBlur}
-					onChange={handleCMethodChange}
-					validationResults={cMethodValidationResults}
-					didEdit={cMethodDidEdit}
-					isFocused={cMethodIsFocused}
-				/>
+	}
 
-				<button
-					type='reset'
-					onClick={handleReset}
-					className='form-switch-btn modal__btn  modal__btn--secondary modal__btn--small'>
-					Resetuj
-				</button>
-				<button
-					type='submit'
-					className={`form-action-btn modal__btn modal__btn--small`}>
-					{actionTitle}
-				</button>
-				{customerConfirmation == 1 ? (
-					<div className='user-container__section-record modal-checklist__li confirmation'>
-						Zmiany zatwierdzone
-					</div>
-				) : customerConfirmation == 0 ? (
-					<div className='user-container__section-record modal-checklist__li dimmed'>
-						Brak zmian
-					</div>
-				) : null}
-			</form>
-		);
+	content = (
+		<form
+			action='/api/konto/ustawienia/update/uczestnik'
+			method='POST'
+			onSubmit={handleSubmit}
+			className={`user-container__details-list modal-checklist__list`}>
+			<h1 className='form__title'>{title}</h1>
+			{/* names are for FormData and id for labels */}
+			<InputLogin
+				embedded={true}
+				formType={formType}
+				type='tel'
+				id='phone'
+				name='phone'
+				label='Numer telefonu:'
+				value={phoneValue}
+				onFocus={handlePhoneFocus}
+				onBlur={handlePhoneBlur}
+				onChange={handlePhoneChange}
+				autoComplete='phone'
+				required
+				validationResults={phoneValidationResults}
+				didEdit={phoneDidEdit}
+				isFocused={phoneIsFocused}
+			/>
+			<InputLogin
+				embedded={true}
+				formType={formType}
+				type='select'
+				options={[
+					{label: 'Telefon', value: 'Telefon'},
+					{label: 'Email', value: 'Email'},
+				]}
+				id='cMethod'
+				name='cMethod'
+				label='Kontaktuj się przez:'
+				value={cMethodValue}
+				onFocus={handleCMethodFocus}
+				onBlur={handleCMethodBlur}
+				onChange={handleCMethodChange}
+				validationResults={cMethodValidationResults}
+				didEdit={cMethodDidEdit}
+				isFocused={cMethodIsFocused}
+			/>
 
-	return <>{content}</>;
+			<button
+				type='reset'
+				onClick={handleReset}
+				className='form-switch-btn modal__btn  modal__btn--secondary modal__btn--small'>
+				Resetuj
+			</button>
+			<button
+				type='submit'
+				className={`form-action-btn modal__btn modal__btn--small`}>
+				{actionTitle}
+			</button>
+		</form>
+	);
+	return (
+		<>
+			{content} {feedback}
+		</>
+	);
 }
 
 export default DetailsUserSettingsForm;

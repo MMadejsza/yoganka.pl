@@ -10,18 +10,11 @@ function DetailsCustomer({customerData, isUserAccountPage, isEditing}) {
 		<DetailsCustomerForm />
 	) : (
 		<ul className='user-container__details-list modal-checklist__list'>
-			{customerData.CustomerPhones && (
-				<li className='user-container__section-record modal-checklist__li'>
-					<p className='user-container__section-record-label'>Numer telefonu:</p>
-					{customerData.CustomerPhones.map((phone, index) => (
-						<p
-							className='user-container__section-record-content'
-							key={index}>
-							{phone.CustomerMobile}
-						</p>
-					))}
-				</li>
-			)}
+			<li className='user-container__section-record modal-checklist__li'>
+				<p className='user-container__section-record-label'>Numer telefonu:</p>
+				<p className='user-container__section-record-content'>{customerData.Phone}</p>
+			</li>
+
 			{!isUserAccountPage && (
 				<>
 					<li className='user-container__section-record modal-checklist__li'>

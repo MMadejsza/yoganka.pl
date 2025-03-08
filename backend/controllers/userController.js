@@ -11,12 +11,12 @@ export const getShowUserByID = (req, res, next) => {
 			{
 				model: models.Customer, // Add Customer
 				required: false, // May not exist
-				include: [
-					{
-						model: models.CustomerPhones, // Customer phone numbers
-						required: false,
-					},
-				],
+				// include: [
+				// 	{
+				// 		model: models.CustomerPhones, // Customer phone numbers
+				// 		required: false,
+				// 	},
+				// ],
 			},
 			{
 				model: models.UserPrefSettings, // User settings if exist
@@ -232,10 +232,10 @@ export const getShowAccount = (req, res, next) => {
 		console.log('\n✅✅✅ customer fetched');
 		models.Customer.findByPk(PK, {
 			include: [
-				{
-					model: models.CustomerPhones, // Customer phone numbers
-					required: false,
-				},
+				// {
+				// 	model: models.CustomerPhones, // Customer phone numbers
+				// 	required: false,
+				// },
 				{
 					model: models.BookedSchedule,
 					required: false,

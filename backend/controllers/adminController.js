@@ -73,12 +73,12 @@ export const showUserByID = (req, res, next) => {
 			{
 				model: models.Customer, // Add Customer
 				required: false, // May not exist
-				include: [
-					{
-						model: models.CustomerPhones, // Customer phone numbers
-						required: false,
-					},
-				],
+				// include: [
+				// 	{
+				// 		model: models.CustomerPhones, // Customer phone numbers
+				// 		required: false,
+				// 	},
+				// ],
 			},
 			{
 				model: models.UserPrefSettings, // User settings if exist
@@ -195,10 +195,10 @@ export const showCustomerByID = (req, res, next) => {
 	const PK = req.params.id;
 	models.Customer.findByPk(PK, {
 		include: [
-			{
-				model: models.CustomerPhones, // Customer phone numbers
-				required: false,
-			},
+			// {
+			// 	model: models.CustomerPhones, // Customer phone numbers
+			// 	required: false,
+			// },
 			{
 				model: models.User, // Add Customer
 				required: false, // May not exist

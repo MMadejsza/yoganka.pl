@@ -1,4 +1,4 @@
-// import {useLocation} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import DetailsUser from './DetailsUser.jsx';
 import React, {useState} from 'react';
 
@@ -8,10 +8,11 @@ import DetailsUserSettings from './DetailsUserSettings.jsx';
 function ViewUser({data, isUserAccountPage, isEditing}) {
 	// const location = useLocation();
 	// const isUserSettings = location.pathname.includes('konto/ustawienia');
+	const navigate = useNavigate();
 	const [editingState, setEditingState] = useState(false);
 	const handleStartEditing = () => {
 		setEditingState(true);
-		navigate('/konto/ustawienia');
+		// navigate('/konto/ustawienia');
 	};
 	const handleCloseEditing = () => {
 		setEditingState(false);

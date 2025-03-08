@@ -21,7 +21,7 @@ export const postBookSchedule = (req, res, next) => {
 			LastName: cDetails.lname,
 			DoB: cDetails.dob,
 			Phone: cDetails.phone,
-			PreferredContactMethod: cDetails.cMethod,
+			PreferredContactMethod: cDetails.cMethod || '-',
 			ReferralSource: cDetails.rSource,
 			Notes: cDetails.notes,
 		});
@@ -129,14 +129,14 @@ export const postBookSchedule = (req, res, next) => {
 			});
 	})
 		.then((booking) => {
-			console.log('Rezerwacja utworzona pomyślnie');
+			console.log('✅✅✅ Rezerwacja utworzona pomyślnie');
 			res.status(201).json({message: 'Rezerwacja utworzona pomyślnie', booking});
 		})
 		.catch((err) => {
 			console.error(err);
 			// If no enough spaces
 			if (err.message === 'Brak wolnych miejsc na ten termin.') {
-				console.log('❗❗❗if (err.message === Brak wolnych miejsc na ten termin');
+				console.log('❌❌❌ if (err.message === Brak wolnych miejsc na ten termin');
 				return res.status(409).json({message: err.message});
 			}
 
@@ -144,7 +144,7 @@ export const postBookSchedule = (req, res, next) => {
 				err.message === 'Użytkownik nie jest zalogowany.' ||
 				err.message === 'Nie można rezerwować terminu, który już minął.'
 			) {
-				console.log('❗❗❗if (err.message === Brak wolnych miejsc na ten termin');
+				console.log('❌❌❌ if (err.message === Brak wolnych miejsc na ten termin');
 				return res.status(401).json({message: err.message});
 			}
 			// if the same customer tries to book the schedule
@@ -152,11 +152,12 @@ export const postBookSchedule = (req, res, next) => {
 				err.name === 'SequelizeUniqueConstraintError' ||
 				err.parent?.code === 'ER_DUP_ENTRY'
 			) {
-				console.log('❗❗❗if (SequelizeUniqueConstraintError');
+				console.log('❌❌❌ if (SequelizeUniqueConstraintError');
 				return res.status(409).json({
 					message: 'Ten termin został już opłacony przez tego klienta.',
 				});
 			}
+			console.log('❌❌❌ Error postBookSchedule:', err.message);
 			return res.status(500).json({message: err.message});
 		});
 };
@@ -185,6 +186,7 @@ export const postCancelSchedule = (req, res, next) => {
 				},
 			).then(([updatedCount]) => {
 				if (updatedCount > 0) {
+					console.log('✅✅✅ postCancelSchedule Update successful');
 					return res
 						.status(200)
 						.json({message: 'Miejsce zwolnione - dziękujemy za informację :)'});
@@ -200,7 +202,8 @@ export const postCancelSchedule = (req, res, next) => {
 			if (err.message == 'Nie można zwolnić miejsca dla minionego terminu.') {
 				return res.status(409).json({message: err.message});
 			}
-			console.error(err);
+			console.log('❌❌❌ Error postCancelSchedule:', err);
+
 			next(err);
 		});
 };
@@ -212,47 +215,30 @@ export const getEditCustomer = (req, res, next) => {
 	return res.status(200).json({customer});
 };
 export const postEditCustomer = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called postEditSettings`);
-	db.transaction()
-		.then((t) => {
-			const customerId = req.user.Customer.CustomerID;
-			const newPhone = req.body.phone;
-			const newContactMethod = req.body.cMethod;
+	console.log(`\n➡️➡️➡️ called postEditCustomer`);
 
-			return models.CustomerPhones.update(
-				{CustomerMobile: newPhone},
-				{where: {CustomerID: customerId}, transaction: t},
-			)
-				.then((phoneResult) => {
-					return models.Customer.update(
-						{PreferredContactMethod: newContactMethod},
-						{where: {CustomerID: customerId}, transaction: t},
-					).then((customerResult) => {
-						return {phoneResult, customerResult};
-					});
-				})
-				.then((results) => {
-					return t.commit().then(() => {
-						console.log('Transaction committed, updates successful');
-						const affectedPhoneRows = results.phoneResult[0];
-						const affectedCustomerRows = results.customerResult[0];
-						const status = affectedPhoneRows >= 1 || affectedCustomerRows >= 1;
-						return res.status(200).json({
-							confirmation: status,
-							affectedPhoneRows,
-							affectedCustomerRows,
-						});
-					});
-				})
-				.catch((err) => {
-					return t.rollback().then(() => {
-						console.log('Transaction rollback, error:', err);
-						return res.status(500).json({error: err.message});
-					});
-				});
+	const customerId = req.user.Customer.CustomerID;
+	const newPhone = req.body.phone;
+	const newContactMethod = req.body.cMethod;
+
+	models.Customer.update(
+		{Phone: newPhone, PreferredContactMethod: newContactMethod},
+		{where: {CustomerID: customerId}},
+	)
+		.then((customerResult) => {
+			return {customerResult};
+		})
+		.then((results) => {
+			console.log('✅✅✅ postEditCustomer Update successful');
+			const affectedCustomerRows = results.customerResult[0];
+			const status = affectedCustomerRows >= 1;
+			return res.status(200).json({
+				confirmation: status,
+				affectedCustomerRows,
+			});
 		})
 		.catch((err) => {
-			console.log('Error starting transaction:', err);
+			console.log('❌❌❌ Error postEditCustomer:', err);
 			return res.status(500).json({error: err.message});
 		});
 };
@@ -293,5 +279,8 @@ export const getShowBookingByID = (req, res, next) => {
 			console.log('\n✅✅✅ Booking fetched');
 			return res.status(200).json({isLoggedIn: req.session.isLoggedIn, booking});
 		})
-		.catch((err) => console.log(err));
+		.catch((err) => {
+			console.log('❌❌❌ Error fetching the booking:', err);
+			return res.status(500).json({error: err.message});
+		});
 };

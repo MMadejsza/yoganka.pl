@@ -33,6 +33,10 @@ const Customer = sequelizeDb.define(
 			type: DataTypes.DATEONLY, // YYYY-MM-DD
 			allowNull: false,
 		},
+		Phone: {
+			type: DataTypes.STRING(16),
+			allowNull: false,
+		},
 		PreferredContactMethod: {
 			type: DataTypes.STRING(50),
 			allowNull: true,

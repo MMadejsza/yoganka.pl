@@ -138,6 +138,14 @@ footer {
 		color: green;
 		background-color: rgba(green, 0.2);
 	}
+	&--neutral {
+		color: map.get(var.$colors, tile-title);
+		background-color: rgba(map.get(var.$colors, nav), 0.2);
+	}
+	&--small {
+		margin-top: 1.5rem;
+		height: 3rem;
+	}
 }
 
 //! COMMON BLOCKS END

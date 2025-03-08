@@ -1,7 +1,7 @@
 import User from './userModel.js';
 import UserPrefSettings from './userSettingsModel.js';
 import Customer from './customerModel.js';
-import CustomerPhones from './customerPhoneModel.js';
+// import CustomerPhones from './customerPhoneModel.js';
 import Feedback from './feedbackModel.js';
 import Product from './productModel.js';
 import ScheduleRecord from './scheduleRecordModel.js';
@@ -21,10 +21,10 @@ Customer.belongsTo(User, {foreignKey: 'UserID'});
 User.hasOne(UserPrefSettings, {foreignKey: 'UserID', onDelete: 'CASCADE'});
 UserPrefSettings.belongsTo(User, {foreignKey: 'UserID'});
 
-//@ Customer and his phones (1:M, total participation on phones)
-//@ --------------------------------------------------------------------
-Customer.hasMany(CustomerPhones, {foreignKey: 'CustomerID', onDelete: 'CASCADE'});
-CustomerPhones.belongsTo(Customer, {foreignKey: 'CustomerID'});
+// //@ Customer and his phones (1:M, total participation on phones)
+// //@ --------------------------------------------------------------------
+// Customer.hasMany(CustomerPhones, {foreignKey: 'CustomerID', onDelete: 'CASCADE'});
+// CustomerPhones.belongsTo(Customer, {foreignKey: 'CustomerID'});
 
 //@ Customer and Bookings (1:M, total participation on Bookings)
 //@ ------------------------------------------------------------
@@ -87,7 +87,7 @@ export {
 	User,
 	UserPrefSettings,
 	Customer,
-	CustomerPhones,
+	// CustomerPhones,
 	Feedback,
 	Product,
 	ScheduleRecord,
