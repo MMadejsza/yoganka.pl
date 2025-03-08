@@ -152,7 +152,7 @@ function Nav({setIsNavOpen}) {
 				if (li.name === 'Zaloguj') {
 					return null;
 				}
-				if (li.name === 'Admin Panel' && status.role != 'admin') {
+				if (li.name === 'Admin Panel' && status.role != 'ADMIN') {
 					return null;
 				}
 

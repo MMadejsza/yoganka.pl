@@ -11,12 +11,6 @@ export const getShowUserByID = (req, res, next) => {
 			{
 				model: models.Customer, // Add Customer
 				required: false, // May not exist
-				// include: [
-				// 	{
-				// 		model: models.CustomerPhones, // Customer phone numbers
-				// 		required: false,
-				// 	},
-				// ],
 			},
 			{
 				model: models.UserPrefSettings, // User settings if exist
@@ -26,15 +20,20 @@ export const getShowUserByID = (req, res, next) => {
 	})
 		.then((user) => {
 			if (!user) {
-				return res.redirect('/konto');
+				throw new Error({message: 'Nie znaleziono użytkownika.'});
 			}
-			console.log('✅ user fetched');
 
+			console.log('\n✅✅✅ getShowUserByID user fetched');
 			return res.status(200).json({user});
 		})
-		.catch((err) => console.log(err));
+		.catch((err) => {
+			console.log('\n❌❌❌ Error fetching the user:', err.message);
+			return res.status(404).json({message: err.message}).redirect('/konto');
+		});
 };
 export const getShowAllSchedules = (req, res, next) => {
+	console.log(`\n➡️➡️➡️ called user getShowAllSchedules`);
+
 	const model = models.ScheduleRecord;
 
 	// We create dynamic joint columns based on the map
@@ -74,6 +73,7 @@ export const getShowAllSchedules = (req, res, next) => {
 			),
 		})
 		.then((records) => {
+			if (!records) throw new Error({message: 'Nie znaleziono terminów.'});
 			// Convert for records for different names
 			const formattedRecords = records.map((record) => {
 				const newRecord = {}; // Container for formatted data
@@ -135,18 +135,23 @@ export const getShowAllSchedules = (req, res, next) => {
 				'Miejsca',
 				'Data',
 				'Dzień',
-				'Godzina rozpoczęcia',
+				'Godzina',
 				'Typ',
 				'Nazwa',
 				'Lokalizacja',
 			];
+
 			// ✅ Return response to frontend
+			console.log('✅✅✅ user getShowAllSchedules schedules fetched');
 			res.json({
 				totalHeaders, // To render
 				content: formattedRecords, // With new names
 			});
 		})
-		.catch((err) => console.log(err));
+		.catch((err) => {
+			console.log('\n❌❌❌ Error user getShowAllSchedules', err);
+			return res.status(404).json({message: err.message}).redirect('/');
+		});
 };
 export const getShowScheduleByID = (req, res, next) => {
 	console.log(`\n➡️➡️➡️ called user showScheduleByID`);
@@ -177,7 +182,7 @@ export const getShowScheduleByID = (req, res, next) => {
 	})
 		.then((scheduleData) => {
 			if (!scheduleData) {
-				return res.redirect('/grafik');
+				throw new Error({message: 'Nie znaleziono rezerwacji.'});
 			}
 
 			// Convert to JSON
@@ -206,10 +211,15 @@ export const getShowScheduleByID = (req, res, next) => {
 				schedule.wasUserReserved = wasUserReserved;
 				schedule.full = beingAttendedSchedules.length >= schedule.Capacity;
 			}
+
+			console.log('\n✅✅✅ getShowScheduleByID schedule fetched');
 			return res.status(200).json({schedule, user: req.user});
 			// return res.status(200).json({schedule});
 		})
-		.catch((err) => console.log(err));
+		.catch((err) => {
+			console.log('\n❌❌❌ Error fetching the schedule:', err.message);
+			return res.status(404).json({message: err.message}).redirect('/grafik');
+		});
 };
 
 export const getShowAccount = (req, res, next) => {
@@ -225,17 +235,46 @@ export const getShowAccount = (req, res, next) => {
 	// if only user
 	if (!req.user.Customer) {
 		const user = req.user;
-		console.log('\n✅✅✅ user fetched');
+		console.log('\n✅✅✅ getShowAccount user fetched');
 		return res.status(200).json({user});
 	} else {
 		let PK = req.user.Customer.CustomerID;
-		console.log('\n✅✅✅ customer fetched');
-		models.Customer.findByPk(PK, {
+		return models.Customer.findByPk(PK, {
 			include: [
 				// {
 				// 	model: models.CustomerPhones, // Customer phone numbers
 				// 	required: false,
 				// },
+				{
+					model: models.User, // Add Customer
+					required: false, // May not exist
+					include: [
+						{
+							model: models.UserPrefSettings, // Customer phone numbers
+							required: false,
+							attributes: {
+								exclude: ['UserID'], // deleting
+							},
+						},
+					],
+				},
+				{
+					model: models.Booking, // His reservations
+					required: false,
+					include: [
+						{
+							model: models.Invoice, // eventual invoices
+							required: false,
+							attributes: {
+								exclude: ['BookingID'], // deleting
+							},
+						},
+					],
+					where: {CustomerID: req.user.Customer.CustomerID},
+					attributes: {
+						exclude: ['ProductID', 'CustomerID'], // deleting
+					},
+				},
 				{
 					model: models.BookedSchedule,
 					required: false,
@@ -267,36 +306,6 @@ export const getShowAccount = (req, res, next) => {
 						exclude: ['CustomerID', 'ScheduleID'], // deleting
 					},
 				},
-				{
-					model: models.User, // Add Customer
-					required: false, // May not exist
-					include: [
-						{
-							model: models.UserPrefSettings, // Customer phone numbers
-							required: false,
-							attributes: {
-								exclude: ['UserID'], // deleting
-							},
-						},
-					],
-				},
-				{
-					model: models.Booking, // His reservations
-					required: false,
-					include: [
-						{
-							model: models.Invoice, // eventual invoices
-							required: false,
-							attributes: {
-								exclude: ['BookingID'], // deleting
-							},
-						},
-					],
-					where: {CustomerID: req.user.Customer.CustomerID},
-					attributes: {
-						exclude: ['ProductID', 'CustomerID'], // deleting
-					},
-				},
 			],
 			attributes: {
 				exclude: ['UserID'], // deleting
@@ -304,12 +313,15 @@ export const getShowAccount = (req, res, next) => {
 		})
 			.then((customer) => {
 				if (!customer) {
-					return res.redirect('/');
+					throw new Error({message: 'Nie pobrano danych uczestnika.'});
 				}
 				console.log('\n✅✅✅ showAccount customer fetched');
 				return res.status(200).json({customer});
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => {
+				console.log('\n❌❌❌ Error fetching the account:', err.message);
+				return res.status(404).json({message: err.message});
+			});
 	}
 };
 
@@ -320,16 +332,17 @@ export const getEditSettings = (req, res, next) => {
 
 	models.UserPrefSettings.findByPk(PK)
 		.then((preferences) => {
+			if (!preferences) {
+				throw new Error({message: 'Nie pobrano ustawień.'});
+			}
+			console.log('\n✅✅✅ getEditSettings fetched');
 			return res.status(200).json({preferences});
 		})
-		.catch((err) => console.log(err));
+		.catch((err) => {
+			console.log('\n❌❌❌ Error fetching the settings:', err.message);
+			return res.status(404).json({message: err.message});
+		});
 };
-// export const getEditCustomer = (req, res, next) => {
-// 	console.log(`\n➡️➡️➡️ called getEditCustomer`);
-// 	const customer = req.user.Customer;
-// 	// console.log(customer);
-// 	return res.status(200).json({customer});
-// };
 
 export const postEditSettings = (req, res, next) => {
 	console.log(`\n➡️➡️➡️ called postEditSettings`);
@@ -391,7 +404,7 @@ export const postEditSettings = (req, res, next) => {
 			});
 		})
 		.catch((err) => {
-			console.log('❌❌❌ Error in postEditSettings:', err);
+			console.log('\n❌❌❌ Error in postEditSettings:', err);
 			return res.status(500).json({message: err.message});
 		});
 };

@@ -5,7 +5,7 @@ function DetailsCustomer({customerData, isUserAccountPage, isEditing}) {
 	console.log('customerData', customerData);
 	const title = isUserAccountPage
 		? `Dane kontaktowe:`
-		: `Dane klienta (ID ${customerData.CustomerID}):`;
+		: `Uczestnik (ID ${customerData.CustomerID}):`;
 	let content = isEditing ? (
 		<DetailsCustomerForm />
 	) : (

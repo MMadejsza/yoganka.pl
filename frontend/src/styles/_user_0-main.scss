@@ -31,12 +31,19 @@
 	}
 	.data-table {
 		margin: 3rem 0;
+		& .hash {
+			max-width: 100px;
+			overflow: hidden;
+		}
 	}
 	.user-container__section-record {
 		width: 100%;
 
 		@include mixin.flex(row, space-between, center);
 		flex-wrap: wrap;
+		&-label.password {
+			flex-basis: 100%;
+		}
 		&.phone {
 			// flex-direction: column;
 		}
@@ -47,6 +54,8 @@
 	}
 
 	.modal__btn--small {
+		width: min-content;
+		flex-basis: auto;
 		height: 2.5rem;
 		min-height: auto;
 		line-height: 150%;

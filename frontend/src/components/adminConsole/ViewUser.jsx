@@ -40,6 +40,11 @@ function ViewUser({data, isUserAccountPage, isEditing}) {
 	return (
 		<>
 			{!isUserAccountPage && (
+				<h2 className='user-container__user-title modal__title dimmed'>
+					{JSON.parse(user.ProfilePictureSrcSetJSON).profile}
+				</h2>
+			)}
+			{!isUserAccountPage && (
 				<h1 className='user-container__user-title modal__title'>
 					{name} {isAdmin && '(Admin)'}
 				</h1>
@@ -59,16 +64,11 @@ function ViewUser({data, isUserAccountPage, isEditing}) {
 				/>
 			</div>
 			{customer && (
-				// <div
-				// 	className={`user-container__${
-				// 		isUserAccountPage ? 'main' : 'side'
-				// 	}-details modal-checklist`}>
 				<DetailsCustomer
 					customerData={customer}
 					isUserAccountPage={isUserAccountPage}
 					isEditing={editingState}
 				/>
-				// </div>
 			)}
 			{isUserAccountPage && (
 				<div className='user-container__action'>

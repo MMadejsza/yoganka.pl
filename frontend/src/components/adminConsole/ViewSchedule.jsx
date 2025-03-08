@@ -88,7 +88,7 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
 	const today = new Date();
 	const scheduleDateTime = new Date(`${schedule.Date}T${schedule.StartTime}:00`);
 	const isArchived = scheduleDateTime < today;
-	const bookedSuccessfully = !userAccountPage && bookingOps.confirmation;
+	const bookedSuccessfully = !userAccountPage && bookingOps?.confirmation;
 	const isSuccessNotification = bookedSuccessfully || isCancelledSuccessfully;
 	let prodStats = null;
 

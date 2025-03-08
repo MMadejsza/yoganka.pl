@@ -1,5 +1,5 @@
 import * as models from '../models/_index.js';
-import {Sequelize, Op} from 'sequelize';
+import {Sequelize, Op, fn, col} from 'sequelize';
 import {simpleListAllToTable, listAllToTable} from '../utils/listAllToTable.js';
 import columnMaps from '../utils/columnsMapping.js';
 import {formatIsoDateTime, getWeekDay} from '../utils/formatDateTime.js';
@@ -67,12 +67,6 @@ export const showUserByID = (req, res, next) => {
 			{
 				model: models.Customer, // Add Customer
 				required: false, // May not exist
-				// include: [
-				// 	{
-				// 		model: models.CustomerPhones, // Customer phone numbers
-				// 		required: false,
-				// 	},
-				// ],
 			},
 			{
 				model: models.UserPrefSettings, // User settings if exist
@@ -82,13 +76,17 @@ export const showUserByID = (req, res, next) => {
 	})
 		.then((user) => {
 			if (!user) {
-				return res.redirect('/admin-console/show-all-users');
+				throw new Error({message: 'Nie znaleziono użytkownika.'});
 			}
-			console.log('✅ user fetched');
+
+			console.log('✅✅✅ showUserByID user fetched');
 
 			return res.status(200).json({isLoggedIn: req.session.isLoggedIn, user});
 		})
-		.catch((err) => console.log(err));
+		.catch((err) => {
+			console.log('\n❌❌❌ Error showUserByID', err);
+			return res.status(404).json({message: err.message});
+		});
 };
 export const createUser = (req, res, next) => {
 	// console.log('📩 Otrzymane dane:', req.body);
@@ -129,11 +127,12 @@ export const showAllUserSettings = (req, res, next) => {
 };
 //@ CUSTOMERS
 export const showAllCustomers = (req, res, next) => {
-	console.log(`\n➡️ called showAllCustomers`);
+	console.log(`\n➡️➡️➡️ called showAllCustomers`);
 	const model = models.Customer;
 
 	// We create dynamic joint columns based on the map
 	const columnMap = columnMaps[model.name] || {};
+	const keysForHeaders = Object.values(columnMap);
 	const includeAttributes = [
 		//  FirstName + LastName => Name
 		[Sequelize.literal("CONCAT(CustomerID, '-', UserID)"), 'ID klienta-użytkownika'],
@@ -148,6 +147,7 @@ export const showAllCustomers = (req, res, next) => {
 			},
 		})
 		.then((records) => {
+			if (!records) throw new Error({message: 'Nie znaleziono użytkowników.'});
 			// Convert for records for different names
 			const formattedRecords = records.map((record) => {
 				const newRecord = {}; // Container for formatted data
@@ -164,24 +164,19 @@ export const showAllCustomers = (req, res, next) => {
 			});
 
 			// New headers (keys from columnMap)
-			const totalHeaders = [
-				'ID klienta-użytkownika',
-				'Imię Nazwisko',
-				'Typ klienta',
-				'Data urodzenia',
-				'Preferowany kontakt',
-				'Lojalność',
-				'Źródło polecenia',
-				'Notatki',
-			];
+			const totalHeaders = keysForHeaders;
 			// ✅ Return response to frontend
+			console.log('✅✅✅ showAllCustomers customers fetched');
 			res.json({
 				isLoggedIn: req.session.isLoggedIn,
 				totalHeaders, // To render
 				content: formattedRecords, // With new names
 			});
 		})
-		.catch((err) => console.log(err));
+		.catch((err) => {
+			console.log('\n❌❌❌ Error showAllCustomers', err);
+			return res.status(404).json({message: err.message});
+		});
 };
 export const showCustomerByID = (req, res, next) => {
 	console.log(`\n➡️ called showCustomerByID`, new Date().toISOString());
@@ -193,6 +188,49 @@ export const showCustomerByID = (req, res, next) => {
 			// 	model: models.CustomerPhones, // Customer phone numbers
 			// 	required: false,
 			// },
+			// {
+			// 	model: models.User, // Add Customer
+			// 	required: false, // May not exist
+			// 	include: [
+			// 		{
+			// 			model: models.UserPrefSettings, // Customer phone numbers
+			// 			required: false,
+			// 		},
+			// 	],
+			// },
+			// {
+			// 	model: models.Booking, // His reservations
+			// 	required: false,
+			// 	include: [
+			// 		{
+			// 			model: models.Invoice, // eventual invoices
+			// 			required: false,
+			// 		},
+			// 		{
+			// 			model: models.ScheduleRecord, // schedules trough booked schedule
+			// 			required: false,
+			// 			through: {attributes: []}, // deleting if not necessary from middle table
+			// 			include: [
+			// 				{
+			// 					model: models.Product, //schedule's product
+			// 					required: false,
+			// 				},
+			// 				{
+			// 					model: models.Feedback, // harmonogram -> opinie
+			// 					required: false,
+			// 					where: {CustomerID: req.params.id}, // but only for particular customer
+			// 				},
+			// 			],
+			// 			attributes: {
+			// 				// exclude: ['ProductID'], // deleting
+			// 			},
+			// 		},
+			// 	],
+			// 	where: {CustomerID: req.params.id},
+			// 	attributes: {
+			// 		exclude: ['ProductID', 'CustomerID'], // deleting
+			// 	},
+			// },
 			{
 				model: models.User, // Add Customer
 				required: false, // May not exist
@@ -200,6 +238,9 @@ export const showCustomerByID = (req, res, next) => {
 					{
 						model: models.UserPrefSettings, // Customer phone numbers
 						required: false,
+						attributes: {
+							exclude: ['UserID'], // deleting
+						},
 					},
 				],
 			},
@@ -210,11 +251,24 @@ export const showCustomerByID = (req, res, next) => {
 					{
 						model: models.Invoice, // eventual invoices
 						required: false,
+						attributes: {
+							exclude: ['BookingID'], // deleting
+						},
 					},
+				],
+				where: {CustomerID: req.user.Customer.CustomerID},
+				attributes: {
+					exclude: ['ProductID', 'CustomerID'], // deleting
+				},
+			},
+			{
+				model: models.BookedSchedule,
+				required: false,
+				include: [
 					{
 						model: models.ScheduleRecord, // schedules trough booked schedule
 						required: false,
-						through: {attributes: []}, // deleting if not necessary from middle table
+
 						include: [
 							{
 								model: models.Product, //schedule's product
@@ -223,7 +277,10 @@ export const showCustomerByID = (req, res, next) => {
 							{
 								model: models.Feedback, // harmonogram -> opinie
 								required: false,
-								where: {CustomerID: req.params.id}, // but only for particular customer
+								where: {CustomerID: req.user.Customer.CustomerID}, // but only for particular customer
+								attributes: {
+									exclude: ['CustomerID', 'ScheduleID'], // deleting
+								},
 							},
 						],
 						attributes: {
@@ -231,9 +288,8 @@ export const showCustomerByID = (req, res, next) => {
 						},
 					},
 				],
-				where: {CustomerID: req.params.id},
 				attributes: {
-					exclude: ['ProductID', 'CustomerID'], // deleting
+					exclude: ['CustomerID', 'ScheduleID'], // deleting
 				},
 			},
 		],
@@ -273,22 +329,15 @@ export const showAllCustomersPhones = (req, res, next) => {
 };
 //@ SCHEDULES
 export const showAllSchedules = (req, res, next) => {
+	console.log(`\n➡️➡️➡️ called admin getShowAllSchedules`);
 	const model = models.ScheduleRecord;
 
 	// We create dynamic joint columns based on the map
 	const columnMap = columnMaps[model.name] || {};
-	const includeAttributes = [];
+	const keysForHeaders = Object.values(columnMap);
 
 	// If logged In and is Customer - we want to check his booked schedules to flag them later
-	const bookingInclude = {
-		model: models.Booking,
-		required: false,
-		attributes: ['BookingID'], //booking Id is enough
-
-		where:
-			req.user && req.user.Customer ? {CustomerID: req.user.Customer.CustomerID} : undefined, // Filter
-	};
-
+	const now = new Date();
 	model
 		.findAll({
 			include: [
@@ -296,20 +345,30 @@ export const showAllSchedules = (req, res, next) => {
 					model: models.Product,
 					attributes: ['Type', 'Name', 'Price'],
 				},
-				bookingInclude,
+				{
+					model: models.Booking,
+					required: false,
+					attributes: ['BookingID'], //booking Id is enough
+					through: {
+						attributes: ['Attendance', 'CustomerID'], // dołącz dodatkowe atrybuty
+					},
+
+					// where: isUser && isCustomer ? {CustomerID: req.user.Customer.CustomerID} : undefined, // Filter
+				},
 			],
 			attributes: {
-				include: includeAttributes, // Adding joint columns
 				exclude: ['ProductID'], // Deleting substituted ones
 			},
 		})
 		.then((records) => {
+			if (!records) throw new Error({message: 'Nie znaleziono terminów.'});
 			// Convert for records for different names
 			const formattedRecords = records.map((record) => {
 				const newRecord = {}; // Container for formatted data
 
 				const attributes = model.getAttributes();
 				const jsonRecord = record.toJSON();
+				// console.log('jsonRecord', jsonRecord);
 
 				// 🔄 Iterate after each column in user record
 				for (const key in jsonRecord) {
@@ -324,36 +383,53 @@ export const showAllSchedules = (req, res, next) => {
 					} else if (key === 'Product' && jsonRecord[key]) {
 						newRecord['Typ'] = jsonRecord[key].Type; //  flatten object
 						newRecord['Nazwa'] = jsonRecord[key].Name;
-					} else if (key === 'Bookings' && req.user.Customer) {
-						newRecord.isUserGoing = (jsonRecord.Bookings || []).length > 0;
+					} else if (key === 'Bookings') {
+						newRecord.wasUserReserved = jsonRecord.Bookings.some(
+							(booking) =>
+								booking.BookedSchedule.CustomerID ===
+								req.user?.Customer?.CustomerID,
+						);
+						newRecord.isUserGoing = jsonRecord.Bookings.some((booking) => {
+							const isBooked = booking.BookedSchedule;
+							const customerID = booking.BookedSchedule.CustomerID;
+							const loggedInID = req.user?.Customer?.CustomerID;
+							const isGoing =
+								booking.BookedSchedule.Attendance === 1 ||
+								booking.BookedSchedule.Attendance === true;
+
+							return isBooked && customerID == loggedInID && isGoing;
+						});
 					} else {
 						newRecord[newKey] = jsonRecord[key]; // Assignment
 					}
 				}
+				// console.log(jsonRecord);
+				const activeBookings = jsonRecord.Bookings.filter(
+					(booking) =>
+						booking.BookedSchedule &&
+						(booking.BookedSchedule.Attendance === 1 ||
+							booking.BookedSchedule.Attendance === true),
+				);
 				newRecord['Dzień'] = getWeekDay(jsonRecord['Date']);
 				newRecord['Zadatek'] = jsonRecord.Product.Price;
+				newRecord['Miejsca'] = `${activeBookings.length}/${jsonRecord.Capacity}`;
+				newRecord.full = activeBookings.length >= jsonRecord.Capacity;
 				return newRecord; // Return new record object
 			});
 
 			// New headers (keys from columnMap)
-			const totalHeaders = [
-				'',
-				'ID',
-				'Data',
-				'Dzień',
-				'Godzina rozpoczęcia',
-				'Typ',
-				'Nazwa',
-				'Lokalizacja',
-			];
+			const totalHeaders = keysForHeaders;
 			// ✅ Return response to frontend
+			console.log('✅✅✅ admin getShowAllSchedules schedules fetched');
 			res.json({
-				isLoggedIn: req.session.isLoggedIn || false,
 				totalHeaders, // To render
 				content: formattedRecords, // With new names
 			});
 		})
-		.catch((err) => console.log(err));
+		.catch((err) => {
+			console.log('\n❌❌❌ Error admin getShowAllSchedules', err);
+			return res.status(404).json({message: err.message});
+		});
 };
 export const showScheduleByID = (req, res, next) => {
 	console.log(`\n➡️ called showScheduleByID`);
@@ -415,10 +491,13 @@ export const createScheduleRecord = (req, res, next) => {
 };
 //@ FEEDBACK
 export const showAllParticipantsFeedback = (req, res, next) => {
+	console.log(`\n➡️➡️➡️ called showAllParticipantsFeedback`);
+
 	const model = models.Feedback;
 
 	// We create dynamic joint columns based on the map
 	const columnMap = columnMaps[model.name] || {};
+
 	const includeAttributes = [];
 
 	model
@@ -447,6 +526,7 @@ export const showAllParticipantsFeedback = (req, res, next) => {
 			},
 		})
 		.then((records) => {
+			if (!records) throw new Error({message: 'Nie znaleziono opinii.'});
 			// Convert for records for different names
 			const formattedRecords = records.map((record) => {
 				const newRecord = {}; // Container for formatted data
@@ -463,12 +543,19 @@ export const showAllParticipantsFeedback = (req, res, next) => {
 					) {
 						newRecord[newKey] = formatIsoDateTime(jsonRecord[key]);
 					} else if (key == 'Customer') {
-						newRecord['Imię Nazwisko'] = jsonRecord[key]['Imię Nazwisko'];
+						const customer = jsonRecord[key]['Imię Nazwisko'];
+						const customerID = jsonRecord.CustomerID;
+						newRecord[newKey] = `${customer} (${customerID})`;
 					} else if (key == 'ScheduleRecord') {
-						newRecord['Data'] = jsonRecord[key]['Date'];
-						newRecord['Godzina'] = jsonRecord[key]['StartTime'];
-						//ScheduleRecords and inside Product object
-						newRecord['Produkt'] = jsonRecord[key].Product?.Name;
+						const dataKey = columnMap['Data'] || 'Data';
+						const startTimeKey = columnMap['Godzina'] || 'Godzina';
+						const nameKey = columnMap['Nazwa'] || 'Nazwa';
+
+						newRecord[dataKey] = formatIsoDateTime(jsonRecord[key]['Date']);
+						newRecord[startTimeKey] = jsonRecord[key]['StartTime'];
+						newRecord[
+							nameKey
+						] = `${jsonRecord[key].Product?.Name} (${jsonRecord[key].ScheduleID})`;
 					} else {
 						newRecord[newKey] = jsonRecord[key]; // Assignment
 					}
@@ -476,29 +563,23 @@ export const showAllParticipantsFeedback = (req, res, next) => {
 				return newRecord; // Return new record object
 			});
 
+			const keysForHeaders = Object.values(columnMap);
 			// New headers (keys from columnMap)
-			const totalHeaders = [
-				'ID',
-				'Ocena (1-5)',
-				'Treść Opinii',
-				'Data Zgłoszenia',
-				'Opóźnienie',
-				'ID Klienta',
-				'Imię Nazwisko',
-				'ID Terminu',
-				'Data',
-				'Godzina',
-				'Produkt',
-			];
+			const totalHeaders = keysForHeaders;
 
 			// ✅ Return response to frontend
+			console.log('✅✅✅ showAllParticipantsFeedback reviews fetched');
 			res.json({
 				isLoggedIn: req.session.isLoggedIn,
+				records: records,
 				totalHeaders, // To render
 				content: formattedRecords, // With new names
 			});
 		})
-		.catch((err) => console.log(err));
+		.catch((err) => {
+			console.log('\n❌❌❌ Error showAllCustomers', err);
+			return res.status(404).json({message: err.message});
+		});
 };
 export const showAllParticipantsFeedbackByID = (req, res, next) => {
 	console.log(`\n➡️ called showAllParticipantsFeedbackByID`);
@@ -559,6 +640,8 @@ export const showAllParticipantsFeedbackByID = (req, res, next) => {
 };
 //@ NEWSLETTERS
 export const showAllNewsletters = (req, res, next) => {
+	console.log(`\n➡️➡️➡️ called showAllNewsletters`);
+
 	simpleListAllToTable(res, models.Newsletter);
 };
 //# SUBS
@@ -567,6 +650,7 @@ export const showAllSubscribedNewsletters = (req, res, next) => {
 };
 //@ PRODUCTS
 export const showAllProducts = (req, res, next) => {
+	console.log(`\n➡️➡️➡️ called showAllProducts`);
 	simpleListAllToTable(res, models.Product);
 };
 export const showProductByID = (req, res, next) => {
@@ -651,10 +735,12 @@ export const editProduct = async (req, res, next) => {
 };
 //@ BOOKINGS
 export const showAllBookings = (req, res, next) => {
+	console.log(`\n➡️➡️➡️ called showAllBookings`);
 	const model = models.Booking;
 
 	// We create dynamic joint columns based on the map
 	const columnMap = columnMaps[model.name] || {};
+	const keysForHeaders = Object.values(columnMap);
 
 	model
 		.findAll({
@@ -667,21 +753,22 @@ export const showAllBookings = (req, res, next) => {
 				},
 				{
 					model: models.ScheduleRecord,
-					through: {model: models.BookedSchedule}, // M:N relacja
+					through: {model: models.BookedSchedule}, // M:N relation
 					include: [
 						{
 							model: models.Product,
 							attributes: ['Name'],
 						},
 					],
-					attributes: ['ScheduleID'], // Klucz dla referencji
+					attributes: ['ScheduleID'],
 				},
 			],
 			attributes: {
-				exclude: ['Product', 'ScheduleID'], // Usuwamy starą kolumnę
+				exclude: ['Product', 'ScheduleID'],
 			},
 		})
 		.then((records) => {
+			if (!records) throw new Error({message: 'Nie znaleziono rezerwacji.'});
 			const formattedRecords = records.map((record) => {
 				const attributes = model.getAttributes();
 				const newRecord = {};
@@ -694,14 +781,15 @@ export const showAllBookings = (req, res, next) => {
 					if (['DATE', 'DATEONLY', 'DATETIME'].includes(attributeType)) {
 						newRecord[newKey] = formatIsoDateTime(jsonRecord[key]);
 					} else if (key === 'Customer') {
-						newRecord['Klient'] = jsonRecord[key]['Imię Nazwisko'];
+						const customer = jsonRecord[key]['Imię Nazwisko'];
+						const customerID = jsonRecord.CustomerID;
+						newRecord[newKey] = `${customer} (${customerID})`;
 					} else if (key === 'ScheduleRecords') {
-						// 🔥 Główna poprawka: WYRAŹNE zbieranie WSZYSTKICH produktów
 						const products = jsonRecord[key]
-							.map((sr) => sr.Product?.Name)
+							.map((sr) => `${sr.Product?.Name} (${sr.BookedSchedule?.ScheduleID})`)
 							.filter(Boolean);
-
-						newRecord['Produkt'] =
+						newRecord['Terminy'] = jsonRecord[key];
+						newRecord['Produkty'] =
 							products.length > 0 ? products.join(', ') : 'Brak danych';
 					} else {
 						newRecord[newKey] = jsonRecord[key];
@@ -712,29 +800,24 @@ export const showAllBookings = (req, res, next) => {
 			});
 
 			// Nagłówki
-			const totalHeaders = [
-				'ID',
-				'Data Rezerwacji',
-				'Klient',
-				'Produkt',
-				'Status',
-				'Kwota do zapłaty',
-				'Kwota zapłacona',
-				'Metoda płatności',
-				'Status płatności',
-			];
+			const totalHeaders = keysForHeaders;
 			req.session.isLoggedIn = true;
-			// ✅ Zwrócenie odpowiedzi do frontendu
+			// ✅ Zwrócenie odpowiedzi do frontend
+			console.log('✅✅✅ getShowAllBookings bookings fetched');
 			res.json({
 				isLoggedIn: req.session.isLoggedIn,
 				totalHeaders,
+				records: records,
 				content: formattedRecords,
 			});
 		})
-		.catch((err) => console.error('Błąd w pobieraniu rezerwacji:', err));
+		.catch((err) => {
+			console.log('\n❌❌❌ Error admin getShowAllSchedules', err);
+			return res.status(404).json({message: err.message});
+		});
 };
 export const showBookingByID = (req, res, next) => {
-	console.log(`\n➡️ called showBookingByID`);
+	console.log(`\n➡️➡️➡️ called showBookingByID`);
 
 	const PK = req.params.id;
 	models.Booking.findByPk(PK, {
@@ -772,10 +855,14 @@ export const showBookingByID = (req, res, next) => {
 };
 //@ INVOICES
 export const showAllInvoices = (req, res, next) => {
+	console.log(`\n➡️➡️➡️ called showAllInvoices`);
+
 	const model = models.Invoice;
 
 	// We create dynamic joint columns based on the map
 	const columnMap = columnMaps[model.name] || {};
+	const keysForHeaders = Object.values(columnMap);
+
 	const includeAttributes = [];
 
 	model
@@ -802,6 +889,7 @@ export const showAllInvoices = (req, res, next) => {
 			},
 		})
 		.then((records) => {
+			if (!records) throw new Error({message: 'Nie znaleziono faktur.'});
 			// Convert for records for different names
 			const formattedRecords = records.map((record) => {
 				const newRecord = {}; // Container for formatted data
@@ -819,7 +907,7 @@ export const showAllInvoices = (req, res, next) => {
 						newRecord[newKey] = formatIsoDateTime(jsonRecord[key]);
 					} else if (key === 'Booking' && jsonRecord[key]) {
 						//# Name
-						newRecord['Klient'] = jsonRecord[key].Customer?.['Imię Nazwisko'];
+						newRecord[newKey] = jsonRecord[key].Customer?.['Imię Nazwisko'];
 					} else {
 						newRecord[newKey] = jsonRecord[key];
 					}
@@ -829,22 +917,18 @@ export const showAllInvoices = (req, res, next) => {
 			});
 
 			// New headers (keys from columnMap)
-			const totalHeaders = [
-				'ID FV',
-				'ID Rezerwacji',
-				'Klient',
-				'Data faktury',
-				'Termin płatności',
-				'Kwota całkowita',
-				'Status płatności',
-			];
+			const totalHeaders = keysForHeaders;
 			req.session.isLoggedIn = true;
 			// ✅ Return response to frontend
+			console.log('✅✅✅ showAllInvoices invoices fetched');
 			res.json({
 				isLoggedIn: req.session.isLoggedIn,
 				totalHeaders, // To render
 				content: formattedRecords, // With new names
 			});
 		})
-		.catch((err) => console.log(err));
+		.catch((err) => {
+			console.log('\n❌❌❌ Error admin showAllInvoices', err);
+			return res.status(404).json({message: err.message});
+		});
 };

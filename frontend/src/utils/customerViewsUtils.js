@@ -115,7 +115,7 @@ export const calculateStats = (customer) => {
 		// console.groupEnd();
 	}
 
-	for (let bookedSchedule of customer.BookedSchedules.filter(
+	for (let bookedSchedule of customer.BookedSchedules?.filter(
 		(schedule) => schedule.Attendance == 1 || schedule.Attendance == true,
 	)) {
 		// console.group(`schedule: ${schedule}`);

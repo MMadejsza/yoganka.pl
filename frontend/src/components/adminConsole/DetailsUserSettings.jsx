@@ -16,7 +16,7 @@ function DetailsUserSettings({settingsData, isUserAccountPage, isEditing}) {
 
 	const title = isUserAccountPage
 		? `Preferencje:`
-		: `Preferencje użytkownika  ${
+		: `Ustawienia strony  ${
 				settingsData?.UserID ? '(ID ' + settingsData?.UserID + '):' : '(Domyślne)'
 		  }`;
 

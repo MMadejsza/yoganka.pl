@@ -40,7 +40,10 @@ function AdminPage() {
 	const modalMatch = useMatch('/admin-console/show-all-users/:id');
 	const navigate = useNavigate();
 	const location = useLocation(); // fetch current path
-
+	const isAdminPage = location.pathname.includes('admin-console') ?? false;
+	const isInactiveTable = ['invoices', 'newsletters', 'feedback'].some((path) =>
+		location.pathname.includes(path),
+	);
 	const [isModalOpen, setIsModalOpen] = useState(modalMatch);
 
 	const handleOpenModal = (row) => {
@@ -124,8 +127,10 @@ function AdminPage() {
 				headers={data.totalHeaders}
 				keys={data.totalHeaders}
 				content={data.content}
-				active={true}
+				active={!isInactiveTable}
 				onOpen={handleOpenModal}
+				status={status}
+				isAdminPage={isAdminPage}
 			/>
 		);
 	}

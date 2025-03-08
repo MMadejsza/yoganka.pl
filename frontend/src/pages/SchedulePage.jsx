@@ -129,16 +129,7 @@ function SchedulePage() {
 		table = (
 			<ModalTable
 				headers={headers}
-				keys={[
-					'',
-					'Miejsca',
-					'Data',
-					'Dzień',
-					'Godzina rozpoczęcia',
-					'Typ',
-					'Nazwa',
-					'Lokalizacja',
-				]}
+				keys={headers}
 				content={content}
 				active={true}
 				status={status}

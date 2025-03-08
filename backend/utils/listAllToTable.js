@@ -2,9 +2,14 @@ import columnMaps from './columnsMapping.js';
 import {formatIsoDateTime} from './formatDateTime.js';
 
 export const simpleListAllToTable = (res, model) => {
+	console.log(`\n➡️➡️➡️ called simpleListAllToTable`);
+
 	model
 		.findAll()
 		.then((records) => {
+			if (!records) {
+				throw new Error({message: 'Nie znaleziono rekordów.'});
+			}
 			// fetching map for User table or empty object
 			const columnMap = columnMaps[model.name] || {};
 
@@ -35,18 +40,25 @@ export const simpleListAllToTable = (res, model) => {
 			// New headers (keys from columnMap)
 			const totalHeaders = Object.keys(formattedRecords[0] || {});
 
+			console.log('✅✅✅ simpleListAllToTable fetched');
 			return res.json({
 				totalHeaders,
 				content: formattedRecords,
 			});
 		})
-		.catch((err) => console.log(err));
+		.catch((err) => {
+			console.log('\n❌❌❌ Error simpleListAllToTable', err);
+			return res.status(404).json({message: err.message});
+		});
 };
 
 export const listAllToTable = (res, model, references) => {
 	model
 		.findAll(references)
 		.then((records) => {
+			if (!records) {
+				throw new Error({message: 'Nie znaleziono rekordów.'});
+			}
 			// fetching map for User table or empty object
 			const columnMap = columnMaps[model.name] || {};
 
@@ -74,10 +86,14 @@ export const listAllToTable = (res, model, references) => {
 			const totalHeaders = Object.keys(formattedRecords[0] || {});
 
 			// ✅ Return response to frontend
+			console.log('✅✅✅ listAllToTable fetched');
 			res.json({
 				totalHeaders, // To render
 				content: formattedRecords, // With new names
 			});
 		})
-		.catch((err) => console.log(err));
+		.catch((err) => {
+			console.log('\n❌❌❌ Error listAllToTable', err);
+			return res.status(404).json({message: err.message});
+		});
 };
