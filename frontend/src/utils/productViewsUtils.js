@@ -58,14 +58,6 @@ export const calculateProductStats = (product, schedules) => {
 		totalSchedules += 1;
 		totalCapacity += schedule.Capacity;
 
-		scheduleRecords.push({
-			ScheduleID: schedule.ScheduleID,
-			Date: schedule.Date,
-			StartTime: schedule.StartTime,
-			Location: schedule.Location,
-			bookingsNumber: schedule.Bookings.length,
-		});
-
 		let sessionReviewsCount = 0;
 		if (schedule.Feedbacks && schedule.Feedbacks.length > 0) {
 			totalReviews += schedule.Feedbacks.length;
@@ -93,21 +85,23 @@ export const calculateProductStats = (product, schedules) => {
 
 			// # BOOKING Level
 			for (let booking of allBookings) {
-				if (booking.BookedSchedule?.Attendance == true) {
-					scheduleParticipantsAmount += 1;
-					totalParticipantsAmount += 1;
-				}
-
 				totalRevenue += parseFloat(booking.AmountPaid);
 				participantAges.push(calculateAge(booking.Customer.DoB));
-
-				bookings.push({
+				const precessedBooking = {
 					id: booking.BookingID,
 					date: booking.Date,
 					customer: `${booking.Customer.FirstName} ${booking.Customer.LastName}`,
 					value: booking.AmountPaid,
 					method: booking.PaymentMethod,
-				});
+					attended: 0,
+				};
+
+				if (booking.BookedSchedule?.Attendance == true) {
+					scheduleParticipantsAmount += 1;
+					totalParticipantsAmount += 1;
+					precessedBooking.attended = 1;
+				}
+				bookings.push(precessedBooking);
 			}
 			scheduleAttendance = Math.round((scheduleParticipantsAmount / schedule.Capacity) * 100);
 		}
@@ -118,6 +112,17 @@ export const calculateProductStats = (product, schedules) => {
 			sessionReviewersPercentage = (sessionReviewsCount / scheduleParticipantsAmount) * 100;
 		}
 		sessionReviewersPercentageArr.push(sessionReviewersPercentage);
+
+		scheduleRecords.push({
+			ScheduleID: schedule.ScheduleID,
+			Date: schedule.Date,
+			StartTime: schedule.StartTime,
+			Location: schedule.Location,
+			bookingsNumber: schedule.Bookings.length,
+			participants: scheduleParticipantsAmount,
+			capacity: schedule.Capacity,
+			attendance: scheduleAttendance,
+		});
 	}
 
 	const splitDuration = secondsToDuration(totalTimeInSeconds);
@@ -212,7 +217,7 @@ export const calculateScheduleStats = (product, schedule) => {
 	// Kluczowa zmiana:
 	// Używamy BookedSchedules (z atrybutem Attendance) do określenia faktycznego uczestnictwa
 	const attendedRecords = schedule
-		? schedule.BookedSchedules.filter((abs) => abs.Attendance === true || abs.Attendance === 1)
+		? schedule.BookedSchedules?.filter((abs) => abs.Attendance === true || abs.Attendance === 1)
 		: [];
 
 	schedule.BookedSchedules.forEach((bs) => {

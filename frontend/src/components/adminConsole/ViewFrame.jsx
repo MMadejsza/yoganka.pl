@@ -82,6 +82,7 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 						bookingOps={bookingOps}
 						onClose={onClose}
 						isModalOpen={visited}
+						isAdminPanel={isAdminPanel}
 					/>
 				);
 				controller.recordEditor = '';

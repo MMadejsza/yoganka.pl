@@ -1,7 +1,7 @@
 import {getWeekDay} from '../../utils/productViewsUtils.js';
 import ModalTable from './ModalTable';
 
-function DetailsProductSchedules({spots, scheduleRecords, placement}) {
+function DetailsProductSchedules({scheduleRecords, placement}) {
 	const notPublished = (
 		<>
 			<div style={{fontWeight: 'bold', fontSize: '2rem'}}>Nie opublikowano</div>
@@ -28,23 +28,20 @@ function DetailsProductSchedules({spots, scheduleRecords, placement}) {
 		});
 	} else {
 		processedScheduleRecordsArr = scheduleRecords.map((schedule) => {
-			const attendancePercentage = Math.round((schedule.bookingsNumber / spots) * 100);
 			return {
 				id: schedule.ScheduleID,
 				date: schedule.Date,
 				day: getWeekDay(schedule.Date),
 				time: schedule.StartTime,
 				location: schedule.Location,
-				attendance: `${schedule.bookingsNumber}/${spots} (${attendancePercentage}%)`,
+				attendance: `${schedule.participants}/${schedule.capacity} (${schedule.attendance}%)`,
 			};
 		});
 	}
 
 	return (
 		<>
-			<h2 className='user-container__section-title modal__title--day'>
-				Zarezerwowane zajęcia:
-			</h2>
+			<h2 className='user-container__section-title modal__title--day'>Terminy:</h2>
 			{scheduleRecords.length > 0 ? (
 				<ModalTable
 					headers={headers}

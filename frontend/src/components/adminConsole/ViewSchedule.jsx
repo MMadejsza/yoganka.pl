@@ -11,7 +11,7 @@ import {useLocation, useNavigate} from 'react-router-dom';
 import {useQuery, useMutation} from '@tanstack/react-query';
 import {fetchStatus, queryClient} from '../../utils/http.js';
 
-function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
+function ViewSchedule({data, bookingOps, onClose, isModalOpen, isAdminPanel}) {
 	// console.clear();
 	console.log(
 		`📝
@@ -57,11 +57,13 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
 	});
 
 	const [isCancelledSuccessfully, setIsCancelledSuccessfully] = useState(false);
+
+	console.log(`status.role`, status.role);
 	const [newCustomerDetails, setNewCustomerDetails] = useState({
-		isFirstTimeBuyer: !!status.role != 'CUSTOMER' || !!status.role != 'ADMIN',
+		isFirstTimeBuyer: status.role == 'USER',
 	});
-	const [isFillingTheForm, setIsFillingTheForm] = useState(false);
 	console.log(`newCustomerDetails: `, newCustomerDetails);
+	const [isFillingTheForm, setIsFillingTheForm] = useState(false);
 
 	useEffect(() => {
 		if (isCancelledSuccessfully) {
@@ -94,7 +96,7 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
 	const userAccessed = status.role != 'ADMIN';
 
 	const {isLoggedIn} = status;
-	if (!userAccessed) prodStats = calculateScheduleStats(product, schedule);
+	if (!userAccessed && isAdminPanel) prodStats = calculateScheduleStats(product, schedule);
 
 	const handleCancellation = () => {
 		cancel();
@@ -198,7 +200,7 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
 			)}
 
 			{/*//@ Product stats */}
-			{!userAccessed && (
+			{!userAccessed && isAdminPanel && (
 				<>
 					<div className='user-container__main-details modal-checklist'>
 						<DetailsScheduleStats

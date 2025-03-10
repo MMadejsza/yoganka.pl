@@ -34,25 +34,22 @@ function ViewProduct({data}) {
 				/>
 			</div>
 			{/*//@ Schedules if not event/camp*/}
-			{/* {type !== 'Camp' && type !== 'Event' && (
+			{prodStats.totalSchedulesAmount > 1 && (
 				<div className='user-container__main-details  schedules modal-checklist'>
-					<DetailsProductSchedules
-						spots={product.TotalSpaces}
-						scheduleRecords={prodStats.totalScheduleRecords}
-					/>
+					<DetailsProductSchedules scheduleRecords={prodStats.scheduleRecords} />
 				</div>
-			)} */}
+			)}
 			{/*//@ All bookings */}
-			{/* <div className='user-container__main-details  schedules modal-checklist'>
+			<div className='user-container__main-details  schedules modal-checklist'>
 				<DetailsProductBookings
 					stats={prodStats}
 					type={type}
 				/>
-			</div> */}
+			</div>
 			{/*//@ Feedback */}
-			{/* <div className='user-container__main-details  schedules modal-checklist'>
+			<div className='user-container__main-details  schedules modal-checklist'>
 				<DetailsProductReviews stats={prodStats} />
-			</div> */}
+			</div>
 		</>
 	);
 }
