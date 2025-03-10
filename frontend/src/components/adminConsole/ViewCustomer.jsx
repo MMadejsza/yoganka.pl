@@ -3,6 +3,7 @@ import DetailsUserSettings from './DetailsUserSettings.jsx';
 import DetailsCustomer from './DetailsCustomer.jsx';
 import DetailsCustomerInvoices from './DetailsCustomerInvoices.jsx';
 import DetailsCustomerSchedules from './DetailsCustomerSchedules.jsx';
+import ViewCustomerTotalBookings from './ViewCustomerTotalBookings.jsx';
 import DetailsCustomerStats from './DetailsCustomerStats.jsx';
 import DetailsCustomerReviews from './DetailsCustomerReviews.jsx';
 
@@ -53,6 +54,14 @@ function ViewCustomer({data}) {
 			<div className='user-container__main-details user-container__side-details--schedules schedules modal-checklist'>
 				<DetailsCustomerSchedules customerStats={customerStats} />
 			</div>
+			{/*//@ Reviews */}
+			<div className='user-container__main-details user-container__side-details--schedules schedules modal-checklist'>
+				<DetailsCustomerReviews reviews={customerStats.reviews} />
+			</div>
+			{/*//@ Bookings */}
+			<div className='user-container__main-details user-container__side-details--schedules schedules modal-checklist'>
+				<ViewCustomerTotalBookings data={customer} />
+			</div>
 
 			{/*//@ Invoices */}
 			<div
@@ -63,10 +72,6 @@ function ViewCustomer({data}) {
 					invoicesArray={customerStats.invoices}
 					noInvoices={noInvoices}
 				/>
-			</div>
-			{/*//@ Reviews */}
-			<div className='user-container__main-details user-container__side-details--schedules schedules modal-checklist'>
-				<DetailsCustomerReviews reviews={customerStats.reviews} />
 			</div>
 		</>
 	);

@@ -180,57 +180,10 @@ export const showAllCustomers = (req, res, next) => {
 };
 export const showCustomerByID = (req, res, next) => {
 	console.log(`\n➡️ called showCustomerByID`, new Date().toISOString());
-
+	// console.log(req.user);
 	const PK = req.params.id;
 	models.Customer.findByPk(PK, {
 		include: [
-			// {
-			// 	model: models.CustomerPhones, // Customer phone numbers
-			// 	required: false,
-			// },
-			// {
-			// 	model: models.User, // Add Customer
-			// 	required: false, // May not exist
-			// 	include: [
-			// 		{
-			// 			model: models.UserPrefSettings, // Customer phone numbers
-			// 			required: false,
-			// 		},
-			// 	],
-			// },
-			// {
-			// 	model: models.Booking, // His reservations
-			// 	required: false,
-			// 	include: [
-			// 		{
-			// 			model: models.Invoice, // eventual invoices
-			// 			required: false,
-			// 		},
-			// 		{
-			// 			model: models.ScheduleRecord, // schedules trough booked schedule
-			// 			required: false,
-			// 			through: {attributes: []}, // deleting if not necessary from middle table
-			// 			include: [
-			// 				{
-			// 					model: models.Product, //schedule's product
-			// 					required: false,
-			// 				},
-			// 				{
-			// 					model: models.Feedback, // harmonogram -> opinie
-			// 					required: false,
-			// 					where: {CustomerID: req.params.id}, // but only for particular customer
-			// 				},
-			// 			],
-			// 			attributes: {
-			// 				// exclude: ['ProductID'], // deleting
-			// 			},
-			// 		},
-			// 	],
-			// 	where: {CustomerID: req.params.id},
-			// 	attributes: {
-			// 		exclude: ['ProductID', 'CustomerID'], // deleting
-			// 	},
-			// },
 			{
 				model: models.User, // Add Customer
 				required: false, // May not exist
@@ -256,7 +209,6 @@ export const showCustomerByID = (req, res, next) => {
 						},
 					},
 				],
-				where: {CustomerID: req.user.Customer.CustomerID},
 				attributes: {
 					exclude: ['ProductID', 'CustomerID'], // deleting
 				},

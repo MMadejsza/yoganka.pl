@@ -49,14 +49,14 @@ function ViewCustomerTotalBookings({data}) {
 			]}
 			keys={['id', 'date', 'classes', 'totalValue', 'method', 'status']}
 			content={content}
-			active={true}
+			active={false}
 			onOpen={handleOpenModal}
 		/>
 	);
 
 	return (
 		<>
-			<h1 className='user-container__user-title modal__title'>Historia rezerwacji</h1>
+			<h2 className='user-container__section-title modal__title--day'>{`Historia rezerwacji (${customerStats.bookings.length}):`}</h2>
 
 			{table}
 			{isModalOpen && (

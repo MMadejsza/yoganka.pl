@@ -41,7 +41,7 @@ function ViewCustomerTotalSchedules({data}) {
 
 	return (
 		<>
-			<h1 className='user-container__user-title modal__title'>Historia zajęć</h1>
+			<h2 className='user-container__section-title modal__title--day'>Historia zajęć</h2>
 			{stats}
 			{table}
 		</>

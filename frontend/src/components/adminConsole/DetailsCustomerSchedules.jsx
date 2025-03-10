@@ -4,7 +4,7 @@ function DetailsCustomerSchedules({customerStats, classModifier, altTitle}) {
 	return (
 		<>
 			<h2 className='user-container__section-title modal__title--day'>
-				{altTitle ?? 'Zarezerwowane terminy:'}
+				{altTitle ?? `Odbyte zajęcia (${customerStats.schedulesAmount.total}):`}
 			</h2>
 			{/*REKORDY data godzina miejsce typ productNazwa  */}
 			<ModalTable
