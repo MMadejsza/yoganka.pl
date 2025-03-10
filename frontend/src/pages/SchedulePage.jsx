@@ -139,6 +139,23 @@ function SchedulePage() {
 			/>
 		);
 	}
+	let viewFrame;
+	if (data && status) {
+		viewFrame = (
+			<ViewFrame
+				modifier='schedule'
+				visited={isModalOpen}
+				onClose={handleCloseModal}
+				bookingOps={{
+					onBook: book,
+					isError: isMutateError,
+					error: mutateError,
+					confirmation: isBookedSuccessfully,
+				}}
+				role={status.role}
+			/>
+		);
+	}
 
 	return (
 		<div className='admin-console'>
@@ -147,19 +164,7 @@ function SchedulePage() {
 				header={`Wyjazdy | Wydarzenia | Online`}
 			/>
 			{table}
-			{isModalOpen && (
-				<ViewFrame
-					modifier='schedule'
-					visited={isModalOpen}
-					onClose={handleCloseModal}
-					bookingOps={{
-						onBook: book,
-						isError: isMutateError,
-						error: mutateError,
-						confirmation: isBookedSuccessfully,
-					}}
-				/>
-			)}
+			{isModalOpen && viewFrame}
 		</div>
 	);
 }

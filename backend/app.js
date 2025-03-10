@@ -132,5 +132,7 @@ app.use((req, res) => {
 });
 
 db.sync({alter: true}).then(() => {
-	app.listen(3000, () => console.log('🚀 Backend works on http://localhost:3000'));
+	app.listen(3000, () =>
+		console.log('🚀🚀🚀🚀🚀 Backend works on http://localhost:3000 🚀🚀🚀🚀🚀'),
+	);
 });

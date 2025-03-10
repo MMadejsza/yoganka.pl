@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {useParams, useLocation, useNavigate} from 'react-router-dom';
 
-import {fetchItem} from '../../utils/http.js';
+import {fetchItem, fetchStatus} from '../../utils/http.js';
 import {useQuery} from '@tanstack/react-query';
 import ModalFrame from './ModalFrame.jsx';
 import ViewUser from './ViewUser.jsx';
@@ -13,7 +13,7 @@ import ViewReview from './ViewReview.jsx';
 import ViewCustomerTotalSchedules from './ViewCustomerTotalSchedules.jsx';
 import ViewCustomerTotalBookings from './ViewCustomerTotalBookings.jsx';
 
-function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, customer}) {
+function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, customer, role}) {
 	const navigate = useNavigate();
 	const params = useParams();
 	const location = useLocation();
@@ -21,14 +21,17 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 	const isAdminPanel = location.pathname.includes('admin-console');
 	const isUserSettings = location.pathname.includes('konto/ustawienia');
 	const isCustomerQuery = location.pathname.includes('konto/rezerwacje') ? '/customer' : '';
+	const minRightsPrefix = role == 'ADMIN' ? 'admin-console' : '';
 	const noFetchPaths = ['statystyki', 'zajecia', 'rezerwacje', 'faktury'];
 
 	console.log('ViewFrame callPath: ', callPath);
 	console.log('ViewFrame isCustomerQuery: ', isCustomerQuery);
 
+	console.log('✅ role', role);
+
 	const {data, isPending, isError, error} = useQuery({
 		queryKey: ['query', location.pathname],
-		queryFn: ({signal}) => fetchItem(callPath, {signal}, isCustomerQuery),
+		queryFn: ({signal}) => fetchItem(callPath, {signal}, isCustomerQuery || minRightsPrefix),
 		staleTime: 0,
 		refetchOnMount: true,
 		enabled: !!params.id || location.pathname.includes('ustawienia'),

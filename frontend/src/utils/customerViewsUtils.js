@@ -26,6 +26,19 @@ export const calculateMode = (agesArray) => {
 
 	return mode;
 };
+export const calculateMedian = (agesArray) => {
+	if (agesArray.length === 0) return null; // No data
+	const sortedAges = [...agesArray].sort((a, b) => a - b); // Sort increasingly
+	const midIndex = Math.floor(sortedAges.length / 2);
+
+	// If odd array
+	if (sortedAges.length % 2 !== 0) {
+		return sortedAges[midIndex];
+	}
+
+	// If even
+	return (sortedAges[midIndex - 1] + sortedAges[midIndex]) / 2;
+};
 
 //@ stats helpers
 export function durationToSeconds(durationStr) {
@@ -62,7 +75,7 @@ export const getWeekDay = (dateStr) => {
 	return days[date.getDay()];
 };
 
-//@ stats helper for calculation
+//@ stats calculation
 export const calculateStats = (customer) => {
 	// console.log(`calculateStats passed customer`, customer);
 	const today = new Date().toISOString().split('T')[0];

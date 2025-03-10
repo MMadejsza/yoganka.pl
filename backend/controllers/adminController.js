@@ -433,7 +433,6 @@ export const showAllSchedules = (req, res, next) => {
 };
 export const showScheduleByID = (req, res, next) => {
 	console.log(`\n➡️ called showScheduleByID`);
-
 	const PK = req.params.id;
 	models.ScheduleRecord.findByPk(PK, {
 		include: [
@@ -442,16 +441,16 @@ export const showScheduleByID = (req, res, next) => {
 				required: true,
 			},
 			{
-				model: models.Booking, // Booking which has relation through BookedSchedule
-				through: {attributes: []}, // omit data from mid table
+				model: models.BookedSchedule,
 				required: false,
-				attributes: {
-					exclude: ['Product', 'CustomerID'],
-				},
 				include: [
 					{
 						model: models.Customer,
 						attributes: {exclude: ['UserID']},
+					},
+					{
+						model: models.Booking,
+						// attributes: {exclude: ['UserID']},
 					},
 				],
 			},
@@ -468,14 +467,163 @@ export const showScheduleByID = (req, res, next) => {
 			},
 		],
 	})
-		.then((schedule) => {
-			if (!schedule) {
+		.then((scheduleData) => {
+			if (!scheduleData) {
 				return res.redirect('/admin-console/show-all-schedules');
 			}
-			return res.status(200).json({isLoggedIn: req.session.isLoggedIn, schedule});
+			// Konwersja rekordu na zwykły obiekt
+			let schedule = scheduleData.toJSON();
+
+			// [Zmienione] Dodano logikę przetwarzania rezerwacji podobną do działającego kodu:
+			let isUserGoing = false;
+			if (schedule.BookedSchedules && schedule.BookedSchedules.length > 0) {
+				let wasUserReserved;
+				const beingAttendedSchedules = schedule.BookedSchedules.filter(
+					(bs) => bs.Attendance == 1 || bs.Attendance == true,
+				);
+				if (req.user && req.user.Customer) {
+					wasUserReserved = schedule.BookedSchedules.some(
+						(bs) => bs.CustomerID === req.user?.Customer.CustomerID,
+					);
+					isUserGoing = beingAttendedSchedules.some(
+						(bs) => bs.CustomerID === req.user.Customer.CustomerID,
+					);
+					schedule.attendanceCount = beingAttendedSchedules.length; // [Zmienione] – nowa właściwość
+				}
+				schedule.Attendance = beingAttendedSchedules.length;
+				schedule.isUserGoing = isUserGoing;
+				schedule.wasUserReserved = wasUserReserved;
+				schedule.full = beingAttendedSchedules.length >= schedule.Capacity;
+			}
+
+			// [Zmienione] Ustalanie statusu terminu (jak w działającym kodzie)
+			const scheduleDateTime = new Date(`${schedule.Date}T${schedule.StartTime}:00`);
+			const now = new Date();
+			schedule.isCompleted = scheduleDateTime <= now;
+
+			// Zwracamy pełen obiekt użytkownika (zgodnie z działającym kodem)
+			return res.status(200).json({schedule, user: req.user});
 		})
-		.catch((err) => console.log(err));
+		.catch((err) => {
+			console.log('\n❌❌❌ Error fetching the schedule:', err.message);
+			return res.status(404).json({message: err.message});
+		});
 };
+// export const showScheduleByID = (req, res, next) => {
+// 	console.log(`\n➡️ called showScheduleByID`);
+// 	const PK = req.params.id;
+// 	models.ScheduleRecord.findByPk(PK, {
+// 		include: [
+// 			{
+// 				model: models.Product,
+// 				required: true,
+// 			},
+// 			{
+// 				// Zamiast modelu Booking używamy BookedSchedule, który przechowuje informację o Attendance
+// 				model: models.BookedSchedule,
+// 				required: false,
+// 				// include: [
+// 				// 	{
+// 				// 		model: models.Customer,
+// 				// 		attributes: {exclude: ['UserID']},
+// 				// 	},
+// 				// 	{
+// 				// 		model: models.Booking,
+// 				// 		// attributes: {exclude: ['UserID']},
+// 				// 	},
+// 				// ],
+// 			},
+// 			{
+// 				model: models.Feedback,
+// 				required: false,
+// 				include: [
+// 					{
+// 						model: models.Customer,
+// 						attributes: {exclude: ['UserID']},
+// 					},
+// 				],
+// 				attributes: {exclude: ['CustomerID']},
+// 			},
+// 		],
+// 	})
+// 		.then((schedule) => {
+// 			if (!schedule) {
+// 				return res.redirect('/admin-console/show-all-schedules');
+// 			}
+// 			// Konwersja rekordu na zwykły obiekt
+// 			schedule = schedule.toJSON();
+
+// 			// Tworzymy obiekt daty dla terminu
+// 			const scheduleDateTime = new Date(`${schedule.Date}T${schedule.StartTime}:00`);
+// 			const now = new Date();
+
+// 			// Ustalamy, czy termin został już odbyte
+// 			schedule.isCompleted = scheduleDateTime <= now;
+
+// 			// Dla celów prezentacji – filtrujemy BookedSchedules, aby wyliczyć faktyczną liczbę uczestników
+// 			if (schedule.BookedSchedules && schedule.BookedSchedules.length > 0) {
+// 				const attended = schedule.BookedSchedules.filter(
+// 					(bs) => bs.Attendance === true || bs.Attendance === 1,
+// 				);
+// 				schedule.attendanceCount = attended.length;
+// 				schedule.full = attended.length >= schedule.Capacity;
+// 			} else {
+// 				schedule.attendanceCount = 0;
+// 				schedule.full = false;
+// 			}
+
+// 			return res.status(200).json({isLoggedIn: req.session.isLoggedIn, schedule});
+// 		})
+// 		.catch((err) => {
+// 			console.log('\n❌❌❌ Error fetching the schedule:', err.message);
+// 			return res.status(404).json({message: err.message});
+// 		});
+// };
+// export const showScheduleByID = (req, res, next) => {
+// 	console.log(`\n➡️ called showScheduleByID`);
+
+// 	const PK = req.params.id;
+// 	models.ScheduleRecord.findByPk(PK, {
+// 		include: [
+// 			{
+// 				model: models.Product,
+// 				required: true,
+// 			},
+// 			{
+// 				model: models.Booking, // Booking which has relation through BookedSchedule
+// 				through: {attributes: []}, // omit data from mid table
+// 				required: false,
+// 				attributes: {
+// 					exclude: ['Product', 'CustomerID'],
+// 				},
+// 				include: [
+// 					{
+// 						model: models.Customer,
+// 						attributes: {exclude: ['UserID']},
+// 					},
+// 				],
+// 			},
+// 			{
+// 				model: models.Feedback,
+// 				required: false,
+// 				include: [
+// 					{
+// 						model: models.Customer,
+// 						attributes: {exclude: ['UserID']},
+// 					},
+// 				],
+// 				attributes: {exclude: ['CustomerID']},
+// 			},
+// 		],
+// 	})
+// 		.then((schedule) => {
+// 			if (!schedule) {
+// 				return res.redirect('/admin-console/show-all-schedules');
+// 			}
+// 			return res.status(200).json({isLoggedIn: req.session.isLoggedIn, schedule});
+// 		})
+// 		.catch((err) => console.log(err));
+// };
 export const showBookedSchedules = (req, res, next) => {};
 export const createScheduleRecord = (req, res, next) => {
 	models.ScheduleRecord.create({
@@ -654,7 +802,7 @@ export const showAllProducts = (req, res, next) => {
 	simpleListAllToTable(res, models.Product);
 };
 export const showProductByID = (req, res, next) => {
-	console.log(`\n➡️ called showProductByID`);
+	console.log(`\n➡️➡️➡️ called showProductByID`);
 
 	const PK = req.params.id;
 	models.Product.findByPk(PK, {

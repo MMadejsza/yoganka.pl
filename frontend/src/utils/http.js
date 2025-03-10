@@ -68,9 +68,8 @@ export async function create(link, status, formData) {
 export async function fetchItem(callPath, {signal}, minRightsPrefix) {
 	console.log('✅✅✅ fetchItem Called');
 	console.log('✅✅✅ callPath ', callPath);
-	if (minRightsPrefix) {
-		console.log('✅✅✅ minRightsPrefix ', minRightsPrefix);
-	}
+	console.log('✅✅✅ minRightsPrefix ', minRightsPrefix);
+	console.log('✅✅✅ final fetchPath ', `/api${minRightsPrefix || ''}${callPath}`);
 
 	const response = await fetch(`/api${minRightsPrefix || ''}${callPath}`, {
 		signal,

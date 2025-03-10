@@ -1,13 +1,13 @@
 import DetailsSchedule from './DetailsSchedule.jsx';
 import DetailsProduct from './DetailsProduct.jsx';
-import DetailsProductStats from './DetailsProductStats.jsx';
+import DetailsScheduleStats from './DetailsScheduleStats.jsx';
 import DetailsProductBookings from './DetailsProductBookings.jsx';
 import DetailsProductReviews from './DetailsProductReviews.jsx';
 import ViewScheduleNewCustomerForm from './ViewScheduleNewCustomerForm.jsx';
-import {calculateProductStats} from '../../utils/productViewsUtils.js';
+import {calculateScheduleStats} from '../../utils/productViewsUtils.js';
 import React, {useState, useEffect} from 'react';
 
-import {useLocation, useNavigate, useMatch} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import {useQuery, useMutation} from '@tanstack/react-query';
 import {fetchStatus, queryClient} from '../../utils/http.js';
 
@@ -67,7 +67,6 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
 		if (isCancelledSuccessfully) {
 			const timer = setTimeout(() => {
 				cancelReset();
-				// if (isModalOpen) onClose();
 				onClose();
 				navigate('/konto');
 				setIsCancelledSuccessfully(false);
@@ -95,7 +94,7 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
 	const userAccessed = status.role != 'ADMIN';
 
 	const {isLoggedIn} = status;
-	if (!userAccessed) prodStats = calculateProductStats(product, [schedule]);
+	if (!userAccessed) prodStats = calculateScheduleStats(product, schedule);
 
 	const handleCancellation = () => {
 		cancel();
@@ -202,10 +201,9 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen}) {
 			{!userAccessed && (
 				<>
 					<div className='user-container__main-details modal-checklist'>
-						<DetailsProductStats
+						<DetailsScheduleStats
 							data={product}
 							prodStats={prodStats}
-							placement={'schedule'}
 						/>
 					</div>
 

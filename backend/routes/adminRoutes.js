@@ -4,6 +4,7 @@ const router = express.Router();
 
 //@ GET
 // filtering is on the Frontend side due to low number of total records
+router.get('/grafik/:id', adminC.showScheduleByID);
 router.get('/show-all-users', adminC.showAllUsers);
 router.get('/show-all-users/:id', adminC.showUserByID);
 router.get('/show-all-users-settings', adminC.showAllUserSettings);

@@ -40,9 +40,7 @@ function DetailsProductStats({data, prodStats, placement}) {
 					<p className='user-container__section-record-content'>{prodStats.revenue}</p>
 				</li>
 				<li className='user-container__section-record modal-checklist__li'>
-					<p className='user-container__section-record-label'>
-						Liczba Uczestników/Rezerwacji:
-					</p>
+					<p className='user-container__section-record-label'>Liczba Uczestników:</p>
 					<p className='user-container__section-record-content'>
 						{prodStats.totalParticipantsAmount}
 					</p>

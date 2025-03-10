@@ -1,6 +1,6 @@
 import ModalTable from './ModalTable';
 function DetailsProductBookings({type, stats}) {
-	const bookingsArray = stats.totalBookings;
+	const bookingsArray = stats.attendedBookings;
 	const totalBookings = bookingsArray.length;
 
 	const table = (
@@ -23,13 +23,13 @@ function DetailsProductBookings({type, stats}) {
 	);
 	const eventCampTableModule = (
 		<>
-			<h2 className='user-container__section-title modal__title--day'>{`Rezerwacje (${totalBookings}):`}</h2>
+			<h2 className='user-container__section-title modal__title--day'>{`Obecność (${totalBookings}):`}</h2>
 			{table}
 		</>
 	);
 	return (
 		<>
-			{stats.totalScheduleRecords.length > 0
+			{bookingsArray.length > 0
 				? type === 'Camp' || type === 'Event'
 					? eventCampTableModule
 					: commonTableModule

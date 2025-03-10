@@ -47,6 +47,8 @@ Booking.belongsToMany(ScheduleRecord, {
 	through: BookedSchedule,
 	foreignKey: 'BookingID',
 });
+BookedSchedule.belongsTo(Booking, {foreignKey: 'BookingID'});
+BookedSchedule.belongsTo(ScheduleRecord, {foreignKey: 'ScheduleID'});
 ScheduleRecord.belongsToMany(Booking, {
 	through: BookedSchedule,
 	foreignKey: 'ScheduleID',
