@@ -22,12 +22,10 @@ function ViewProduct({data}) {
 		<>
 			<h1 className='user-container__user-title modal__title'>{`${product.Name} (ID:${product.ProductID})`}</h1>
 			<h3 className='user-container__user-status modal__title'>{product.Status}</h3>
-
 			{/*//@ Product main details */}
 			<div className='user-container__main-details modal-checklist'>
 				<DetailsProduct data={product} />
 			</div>
-
 			{/*//@ Product business details */}
 			<div className='user-container__main-details modal-checklist'>
 				<DetailsProductStats
@@ -35,29 +33,26 @@ function ViewProduct({data}) {
 					prodStats={prodStats}
 				/>
 			</div>
-
-			{/*//@ Schedules */}
-			{type !== 'Camp' && type !== 'Event' && (
+			{/*//@ Schedules if not event/camp*/}
+			{/* {type !== 'Camp' && type !== 'Event' && (
 				<div className='user-container__main-details  schedules modal-checklist'>
 					<DetailsProductSchedules
 						spots={product.TotalSpaces}
 						scheduleRecords={prodStats.totalScheduleRecords}
 					/>
 				</div>
-			)}
-
-			{/*//@ all bookings if not event/camp? */}
-			<div className='user-container__main-details  schedules modal-checklist'>
+			)} */}
+			{/*//@ All bookings */}
+			{/* <div className='user-container__main-details  schedules modal-checklist'>
 				<DetailsProductBookings
 					stats={prodStats}
 					type={type}
 				/>
-			</div>
-
+			</div> */}
 			{/*//@ Feedback */}
-			<div className='user-container__main-details  schedules modal-checklist'>
+			{/* <div className='user-container__main-details  schedules modal-checklist'>
 				<DetailsProductReviews stats={prodStats} />
-			</div>
+			</div> */}
 		</>
 	);
 }

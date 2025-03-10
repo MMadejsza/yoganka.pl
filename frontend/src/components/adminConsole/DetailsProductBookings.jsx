@@ -1,6 +1,6 @@
 import ModalTable from './ModalTable';
 function DetailsProductBookings({type, stats}) {
-	const bookingsArray = stats.attendedBookings;
+	const bookingsArray = stats.attendedBookings || stats.totalBookings;
 	const totalBookings = bookingsArray.length;
 
 	const table = (
@@ -23,7 +23,7 @@ function DetailsProductBookings({type, stats}) {
 	);
 	const eventCampTableModule = (
 		<>
-			<h2 className='user-container__section-title modal__title--day'>{`Obecność (${totalBookings}):`}</h2>
+			<h2 className='user-container__section-title modal__title--day'>{`Obecność / Rezerwacje (${totalBookings}):`}</h2>
 			{table}
 		</>
 	);

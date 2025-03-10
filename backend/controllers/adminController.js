@@ -765,7 +765,7 @@ export const showProductByID = (req, res, next) => {
 				include: [
 					{
 						model: models.Booking, // Booking which has relation through BookedSchedule
-						through: {attributes: []}, // omit data from mid table
+						through: {}, // omit data from mid table
 						required: false,
 						attributes: {
 							exclude: ['Product', 'CustomerID'],

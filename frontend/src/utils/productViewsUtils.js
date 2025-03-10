@@ -33,125 +33,30 @@ export const formatIsoDateTime = (isoString) => {
 };
 
 //@ stats calculation
-// export const calculateProductStats = (product, schedules) => {
-// 	console.log(`schedules: `, schedules);
-
-// 	const scheduleRecords = [];
-// 	const bookings = [];
-// 	const reviews = [];
-// 	const participantAges = [];
-// 	let totalRevenue = 0;
-// 	let totalTimeInSeconds = 0;
-// 	let totalAmount = 0;
-// 	let totalParticipantsAmount = 0;
-// 	let totalReviews = 0;
-// 	let sumFeedbackRating = 0;
-// 	let feedbackCount = 0;
-
-// 	for (let schedule of schedules) {
-// 		totalAmount += 1;
-
-// 		scheduleRecords.push({
-// 			ScheduleID: schedule.ScheduleID,
-// 			Date: schedule.Date,
-// 			StartTime: schedule.StartTime,
-// 			Location: schedule.Location,
-// 			bookingsNumber: schedule.Bookings.length,
-// 		});
-
-// 		if (schedule.Bookings.length > 0) {
-// 			totalTimeInSeconds += durationToSeconds(product.Duration);
-// 		}
-
-// 		for (let booking of schedule.Bookings) {
-// 			totalParticipantsAmount += 1;
-
-// 			bookings.push({
-// 				id: booking.BookingID,
-// 				date: booking.Date,
-// 				customer: `${booking.Customer.FirstName} ${booking.Customer.LastName}`,
-// 				value: booking.AmountPaid,
-// 				method: booking.PaymentMethod,
-// 			});
-
-// 			totalRevenue += parseFloat(booking.AmountPaid);
-
-// 			participantAges.push(calculateAge(booking.Customer.DoB));
-// 		}
-
-// 		if (schedule.Feedbacks && schedule.Feedbacks.length > 0) {
-// 			totalReviews += schedule.Feedbacks.length;
-// 			for (let feedback of schedule.Feedbacks) {
-// 				sumFeedbackRating += feedback.Rating;
-// 				feedbackCount++;
-// 				reviews.push({
-// 					id: feedback.FeedbackID,
-// 					date: feedback.SubmissionDate,
-// 					customer: `${feedback.Customer.FirstName} ${feedback.Customer.LastName}`,
-// 					rating: feedback.Rating,
-// 					review: feedback.Text,
-// 					delay: feedback.Delay,
-// 				});
-// 			}
-// 		}
-// 	}
-
-// 	const splitDuration = secondsToDuration(totalTimeInSeconds);
-// 	const formattedDuration = `${splitDuration.days != '00' ? splitDuration.days + ' dni' : ''} ${
-// 		splitDuration.hours != '00' ? splitDuration.hours + ' godzin' : ''
-// 	} ${splitDuration.minutes != '00' ? splitDuration.minutes + ' minut' : ''}`;
-
-// 	let avgFeedbackScore = 0;
-// 	if (feedbackCount > 0) {
-// 		avgFeedbackScore = sumFeedbackRating / feedbackCount;
-// 	}
-
-// 	const modeAge = participantAges.length > 0 ? calculateMode(participantAges) : 'Brak danych';
-// 	const bookedScheduleRecords = scheduleRecords.filter((record) => record.bookingsNumber > 0);
-
-// 	const stats = {
-// 		totalBookings: scheduleRecords,
-// 		totalBookings: bookings,
-// 		reviews: reviews,
-// 		totalSchedulesAmount: totalAmount,
-// 		totalTime: formattedDuration,
-// 		revenue: `${Math.round(totalRevenue * 100) / 100}zł`,
-// 		totalParticipantsAmount: totalParticipantsAmount,
-// 		avgParticipantsAmount: totalAmount
-// 			? Math.round((totalParticipantsAmount / bookedScheduleRecords.length) * 100) / 100
-// 			: 0,
-// 		avgAttendancePercentage: `${Math.round(
-// 			(totalParticipantsAmount / (product.TotalSpaces * bookedScheduleRecords.length)) * 100,
-// 		)}%`,
-// 		avgReviewersPercentage: `${Math.round((totalReviews / totalParticipantsAmount) * 100)}%`,
-// 		modeParticipantsAge: modeAge,
-// 		avgFeedbackScore: avgFeedbackScore,
-// 	};
-// 	return stats;
-// };
 export const calculateProductStats = (product, schedules) => {
+	console.log(`schedules: `, schedules);
+
 	const scheduleRecords = [];
 	const bookings = [];
+	const attendances = [];
 	const reviews = [];
 	const participantAges = [];
+	const sessionParticipantsArr = [];
+	const sessionReviewersPercentageArr = [];
+
 	let totalRevenue = 0;
 	let totalTimeInSeconds = 0;
-	let totalCompletedSchedules = 0;
+	let totalSchedules = 0;
 	let totalParticipantsAmount = 0;
+	let totalCapacity = 0;
 	let totalReviews = 0;
 	let sumFeedbackRating = 0;
 	let feedbackCount = 0;
 
-	const now = new Date();
-
-	schedules.forEach((schedule) => {
-		// Data object for schedules joining time and date
-		const scheduleDateTime = new Date(`${schedule.Date}T${schedule.StartTime}:00`);
-		// If it's not passed yet - skip
-		if (scheduleDateTime > now) return;
-
-		// We allow in statistics empty schedules - its valuable indicator
-		totalCompletedSchedules++;
+	// @ SCHEDULE Level
+	for (let schedule of schedules) {
+		totalSchedules += 1;
+		totalCapacity += schedule.Capacity;
 
 		scheduleRecords.push({
 			ScheduleID: schedule.ScheduleID,
@@ -161,33 +66,14 @@ export const calculateProductStats = (product, schedules) => {
 			bookingsNumber: schedule.Bookings.length,
 		});
 
-		// We accumulate time of these which have only passed
-		if (schedule.Bookings.length > 0) {
-			totalTimeInSeconds += durationToSeconds(product.Duration);
-		}
-
-		schedule.Bookings.forEach((booking) => {
-			console.log(
-				`\n➡️➡️➡️ calculateProductStats schedule.Bookings.forEach booking`,
-				booking,
-			);
-			totalParticipantsAmount++;
-			bookings.push({
-				id: booking.BookingID,
-				date: booking.Date,
-				customer: `${booking.Customer.FirstName} ${booking.Customer.LastName}`,
-				value: booking.AmountPaid,
-				method: booking.PaymentMethod,
-			});
-			totalRevenue += parseFloat(booking.AmountPaid);
-			participantAges.push(calculateAge(booking.Customer.DoB));
-		});
-
+		let sessionReviewsCount = 0;
 		if (schedule.Feedbacks && schedule.Feedbacks.length > 0) {
 			totalReviews += schedule.Feedbacks.length;
-			schedule.Feedbacks.forEach((feedback) => {
+			sessionReviewsCount = schedule.Feedbacks.length;
+			for (let feedback of schedule.Feedbacks) {
 				sumFeedbackRating += feedback.Rating;
 				feedbackCount++;
+
 				reviews.push({
 					id: feedback.FeedbackID,
 					date: feedback.SubmissionDate,
@@ -196,54 +82,117 @@ export const calculateProductStats = (product, schedules) => {
 					review: feedback.Text,
 					delay: feedback.Delay,
 				});
-			});
+			}
 		}
-	});
+
+		const allBookings = schedule.Bookings ?? [];
+		let scheduleParticipantsAmount = 0;
+		let scheduleAttendance = 0;
+		if (allBookings.length > 0) {
+			totalTimeInSeconds += durationToSeconds(product.Duration);
+
+			// # BOOKING Level
+			for (let booking of allBookings) {
+				if (booking.BookedSchedule?.Attendance == true) {
+					scheduleParticipantsAmount += 1;
+					totalParticipantsAmount += 1;
+				}
+
+				totalRevenue += parseFloat(booking.AmountPaid);
+				participantAges.push(calculateAge(booking.Customer.DoB));
+
+				bookings.push({
+					id: booking.BookingID,
+					date: booking.Date,
+					customer: `${booking.Customer.FirstName} ${booking.Customer.LastName}`,
+					value: booking.AmountPaid,
+					method: booking.PaymentMethod,
+				});
+			}
+			scheduleAttendance = Math.round((scheduleParticipantsAmount / schedule.Capacity) * 100);
+		}
+		attendances.push(scheduleAttendance);
+		sessionParticipantsArr.push(scheduleParticipantsAmount);
+		let sessionReviewersPercentage = 0;
+		if (scheduleParticipantsAmount > 0) {
+			sessionReviewersPercentage = (sessionReviewsCount / scheduleParticipantsAmount) * 100;
+		}
+		sessionReviewersPercentageArr.push(sessionReviewersPercentage);
+	}
 
 	const splitDuration = secondsToDuration(totalTimeInSeconds);
-	const formattedDuration = `${splitDuration.days !== '00' ? splitDuration.days + ' dni ' : ''}${
-		splitDuration.hours !== '00' ? splitDuration.hours + ' godzin ' : ''
-	}${splitDuration.minutes !== '00' ? splitDuration.minutes + ' minut' : ''}`.trim();
+	const formattedDuration = `${splitDuration.days != '00' ? splitDuration.days + ' dni' : ''} ${
+		splitDuration.hours != '00' ? splitDuration.hours + ' godzin' : ''
+	} ${splitDuration.minutes != '00' ? splitDuration.minutes + ' minut' : ''}`;
 
-	const avgFeedbackScore = feedbackCount > 0 ? sumFeedbackRating / feedbackCount : 0;
-	const modeAge = participantAges.length > 0 ? calculateMode(participantAges) : 'Brak danych';
+	let avgFeedbackScore = 0;
+	if (feedbackCount > 0) {
+		avgFeedbackScore = sumFeedbackRating / feedbackCount;
+	}
 
-	// Liczymy statystyki tylko dla sesji, w których były rezerwacje
-	const schedulesWithBookings = scheduleRecords.filter((record) => record.bookingsNumber > 0);
-	const avgParticipantsAmount =
-		schedulesWithBookings.length > 0
-			? (totalParticipantsAmount / schedulesWithBookings.length).toFixed(2)
-			: 0;
-	const avgAttendancePercentage =
-		schedulesWithBookings.length > 0
+	// Global
+	const medianAge = participantAges.length > 0 ? calculateMedian(participantAges) : 'Brak danych';
+
+	// Per schedule
+	const avgParticipantsAmountPerSesh =
+		sessionParticipantsArr.length > 0
 			? Math.round(
-					(totalParticipantsAmount /
-						(product.TotalSpaces * schedulesWithBookings.length)) *
+					(sessionParticipantsArr.reduce((acc, cur) => acc + cur, 0) /
+						sessionParticipantsArr.length) *
 						100,
-			  )
+			  ) / 100
 			: 0;
-	const avgReviewersPercentage =
-		totalParticipantsAmount > 0
-			? Math.round((totalReviews / totalParticipantsAmount) * 100)
+	const medianParticipantsAmountPerSesh =
+		sessionParticipantsArr.length > 0
+			? Math.round(calculateMedian(sessionParticipantsArr) * 100) / 100
 			: 0;
+
+	const avgAttendancePercentagePerSeshValue =
+		attendances.length > 0
+			? Math.round(
+					(attendances.reduce((acc, cur) => acc + cur, 0) / attendances.length) * 100,
+			  ) / 100
+			: 0;
+	const avgAttendancePercentagePerSesh = `${avgAttendancePercentagePerSeshValue}%`;
+	const medianAttendancePercentagePerSeshValue =
+		attendances.length > 0 ? Math.round(calculateMedian(attendances) * 100) / 100 : 0;
+	const medianAttendancePerSesh = `${medianAttendancePercentagePerSeshValue}%`;
+
+	const avgReviewersPercentageValue =
+		sessionReviewersPercentageArr.length > 0
+			? Math.round(
+					(sessionReviewersPercentageArr.reduce((acc, cur) => acc + cur, 0) /
+						sessionReviewersPercentageArr.length) *
+						100,
+			  ) / 100
+			: 0;
+	const avgReviewersPercentage = `${avgReviewersPercentageValue}%`;
+	const medianReviewersPercentageValue =
+		sessionReviewersPercentageArr.length > 0
+			? Math.round(calculateMedian(sessionReviewersPercentageArr) * 100) / 100
+			: 0;
+	const medianReviewersPercentage = `${medianReviewersPercentageValue}%`;
 
 	const stats = {
-		totalBookings: scheduleRecords,
-		totalBookings: bookings,
+		scheduleRecords: scheduleRecords, // Podsumowanie sesji
+		bookings: bookings, // Lista rezerwacji
 		reviews: reviews,
-		totalSchedulesAmount: totalCompletedSchedules,
+		totalSchedulesAmount: totalSchedules,
 		totalTime: formattedDuration,
 		revenue: `${Math.round(totalRevenue * 100) / 100}zł`,
+		medianParticipantsAge: medianAge,
 		totalParticipantsAmount: totalParticipantsAmount,
-		avgParticipantsAmount: avgParticipantsAmount,
-		avgAttendancePercentage: `${avgAttendancePercentage}%`,
-		avgReviewersPercentage: `${avgReviewersPercentage}%`,
-		modeParticipantsAge: modeAge,
-		avgFeedbackScore: avgFeedbackScore,
+		avgParticipantsAmountPerSesh: avgParticipantsAmountPerSesh, // Średnia liczba uczestników/termin
+		medianParticipantsAmountPerSesh: medianParticipantsAmountPerSesh, // Mediana liczby uczestników/termin
+		avgAttendancePercentagePerSesh: avgAttendancePercentagePerSesh, // Średnia frekwencja/termin
+		medianAttendancePerSesh: medianAttendancePerSesh, // Mediana frekwencji/termin
+		avgReviewersPercentage: avgReviewersPercentage, // Średni % opinii/termin
+		medianReviewersPercentage: medianReviewersPercentage, // Mediana % opinii/termin
+		avgFeedbackScore: Math.round(avgFeedbackScore * 100) / 100,
 	};
-
 	return stats;
 };
+
 export const calculateScheduleStats = (product, schedule) => {
 	// Inicjalizacja zmiennych statystycznych
 	const attendedBookings = [];
