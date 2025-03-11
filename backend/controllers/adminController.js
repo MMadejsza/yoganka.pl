@@ -265,12 +265,64 @@ export const deleteCustomer = (req, res, next) => {
 		})
 		.catch((err) => console.log(err));
 };
-export const editCustomer = (req, res, next) => {
-	models.User.fetchAll()
-		.then(([rows, fieldData]) => {
-			return res.json(rows);
+export const getEditCustomer = (req, res, next) => {
+	console.log(`\n➡️➡️➡️ admin called getEditCustomer`);
+	models.Customer.findByPk(req.params.id)
+		.then((customer) => {
+			if (!customer) throw new Error({message: 'Nie znaleziono danych uczestnika.'});
+			console.log('\n✅✅✅ Fetched admin getEditCustomer customer');
+			return res.status(200).json({customer});
 		})
-		.catch((err) => console.log(err));
+		.catch((err) => {
+			console.log('\n❌❌❌ Error admin getEditCustomer', err);
+			return res.status(404).json({message: err.message});
+		});
+};
+export const postEditCustomer = (req, res, next) => {
+	console.log(`\n➡️➡️➡️ admin called postEditCustomer`);
+	const customerId = req.params.id;
+	const newPhone = req.body.phone;
+	const newContactMethod = req.body.cMethod;
+	if (!newPhone || !newPhone.trim()) {
+		console.log('\n❌❌❌ Error postEditCustomer:', 'No phone');
+		return res.status(400).json({message: 'Numer telefonu nie może być pusty'});
+	}
+
+	models.Customer.findByPk(customerId)
+		.then((customer) => {
+			if (!customer) throw new Error({message: 'Nie znaleziono danych uczestnika.'});
+			console.log('\n✅✅✅ Fetched admin postEditCustomer customer');
+			return customer;
+		})
+		.then((fetchedCustomer) => {
+			if (!fetchedCustomer)
+				throw new Error({message: 'Nie przekazano uczestnika do update.'});
+
+			models.Customer.update(
+				{Phone: newPhone, PreferredContactMethod: newContactMethod},
+				{where: {CustomerID: customerId}},
+			)
+				.then((customerResult) => {
+					return {customerResult};
+				})
+				.then((results) => {
+					console.log('\n✅✅✅ admin postEditCustomer UPDATE successful');
+					const affectedCustomerRows = results.customerResult[0];
+					const status = affectedCustomerRows >= 1;
+					return res.status(200).json({
+						confirmation: status,
+						affectedCustomerRows,
+					});
+				})
+				.catch((err) => {
+					console.log('\n❌❌❌ Error admin  postEditCustomer UPDATE:', err);
+					return res.status(500).json({error: err.message});
+				});
+		})
+		.catch((err) => {
+			console.log('\n❌❌❌ Error admin postEditCustomer', err);
+			return res.status(404).json({message: err.message});
+		});
 };
 export const showAllCustomersPhones = (req, res, next) => {
 	models.CustomerPhones.findAll()

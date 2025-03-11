@@ -6,6 +6,7 @@ function DetailsCustomer({customerData, isUserAccountPage, isEditing}) {
 	const title = isUserAccountPage
 		? `Dane kontaktowe:`
 		: `Uczestnik (ID ${customerData.CustomerID}):`;
+
 	let content = isEditing ? (
 		<DetailsCustomerForm />
 	) : (

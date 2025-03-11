@@ -212,9 +212,9 @@
 			overflow: visible;
 		}
 		&__actions-block {
+			margin-top: 2rem;
 			flex-basis: 100%;
-			margin-right: 3rem;
-			@include mixin.flex(row, flex-end, space-evenly);
+			@include mixin.flex(row, center, space-evenly);
 			gap: 1.5rem;
 		}
 		&__action {

@@ -60,10 +60,11 @@
 		min-height: auto;
 		line-height: 150%;
 		font-size: 1.4rem;
-		&-change {
+		&-warning {
 			background-color: rgba(yellow, 0.1);
 		}
-		&-reset {
+		&-danger {
+			color: rgba(red, 0.7);
 			background-color: rgba(red, 0.1);
 		}
 	}

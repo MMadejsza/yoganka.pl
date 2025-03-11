@@ -7,6 +7,9 @@ const router = express.Router();
 router.get('/grafik/:id', adminC.showScheduleByID);
 router.get('/show-all-users', adminC.showAllUsers);
 router.get('/show-all-users/:id', adminC.showUserByID);
+router.get('/show-customer-data/:id', adminC.getEditCustomer);
+router.post('/edit-customer-data/:id', adminC.postEditCustomer);
+
 router.get('/show-all-users-settings', adminC.showAllUserSettings);
 router.get('/show-all-customers', adminC.showAllCustomers);
 router.get('/show-all-customers/:id', adminC.showCustomerByID);

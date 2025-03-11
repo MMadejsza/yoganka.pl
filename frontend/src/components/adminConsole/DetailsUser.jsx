@@ -21,12 +21,12 @@ function DetailsUser({userData, customerView, isUserAccountPage}) {
 					<p className='user-container__section-record-label password'>Hasło:</p>
 					<button
 						type='button'
-						className='modal__btn modal__btn--secondary modal__btn--small modal__btn--small-change password'>
+						className='modal__btn modal__btn--secondary modal__btn--small modal__btn--small-warning password'>
 						Zmień
 					</button>
 					<button
 						type='button'
-						className='modal__btn modal__btn--secondary modal__btn--small modal__btn--small-reset password'>
+						className='modal__btn modal__btn--secondary modal__btn--small modal__btn--small-danger password'>
 						Resetuj
 					</button>
 				</li>

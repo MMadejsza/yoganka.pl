@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {useLocation} from 'react-router-dom';
+import {useLocation, useParams} from 'react-router-dom';
 import {useQuery, useMutation} from '@tanstack/react-query';
 import {queryClient, fetchItem, fetchStatus} from '../../utils/http.js';
 import {useInput} from '../../hooks/useInput.js';
@@ -9,6 +9,7 @@ import UserFeedbackBox from './UserFeedbackBox.jsx';
 
 function DetailsUserSettingsForm() {
 	const location = useLocation();
+	const params = useParams();
 	let initialFeedbackConfirmation;
 	const [feedbackConfirmation, setFeedbackConfirmation] = useState(initialFeedbackConfirmation);
 
@@ -17,21 +18,33 @@ function DetailsUserSettingsForm() {
 		queryFn: fetchStatus,
 	});
 
+	const customerAccessed = location.pathname.includes('ustawienia');
+	const adminAccessed = location.pathname.includes('admin-console/show-all-users/');
+	const queryKey = customerAccessed
+		? ['formFilling', 'editCustomer']
+		: ['formFilling', 'editCustomer', params.id];
+	const dynamicFetch = (signal) => {
+		if (customerAccessed) return fetchItem('customer/konto/ustawienia/uczestnik', {signal});
+		else return fetchItem(`admin-console/show-customer-data/${params.id}`, {signal});
+	};
 	const {
 		data,
 		isLoading: isCustomerLoading,
 		isError: isCustomerError,
 	} = useQuery({
-		queryKey: ['formFilling', 'editCustomer'],
-		queryFn: ({signal}) => fetchItem('customer/konto/ustawienia/uczestnik', {signal}),
+		queryKey: queryKey,
+		queryFn: ({signal}) => dynamicFetch(signal),
 		staleTime: 0,
 		refetchOnMount: true,
-		enabled: location.pathname.includes('ustawienia'),
+		enabled: customerAccessed || adminAccessed,
 	});
 
+	const dynamicMutationAddress = customerAccessed
+		? '/api/customer/konto/ustawienia/update/uczestnik'
+		: `/api/admin-console/edit-customer-data/${params.id}`;
 	const {mutate, isPending, isError, error} = useMutation({
 		mutationFn: (formData) => {
-			return fetch('/api/customer/konto/ustawienia/update/uczestnik', {
+			return fetch(dynamicMutationAddress, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',

@@ -1,9 +1,8 @@
+import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import DetailsUser from './DetailsUser.jsx';
-import React, {useState} from 'react';
-
-import DetailsCustomer from './DetailsCustomer.jsx';
 import DetailsUserSettings from './DetailsUserSettings.jsx';
+import DetailsCustomer from './DetailsCustomer.jsx';
 
 function ViewUser({data, isUserAccountPage, isEditing}) {
 	// const location = useLocation();
@@ -70,15 +69,13 @@ function ViewUser({data, isUserAccountPage, isEditing}) {
 					isEditing={editingState}
 				/>
 			)}
-			{isUserAccountPage && (
-				<div className='user-container__action'>
-					<button
-						className='modal__btn'
-						onClick={editingState == false ? handleStartEditing : handleCloseEditing}>
-						{editingState == false ? 'Edytuj' : 'Wróć'}
-					</button>
-				</div>
-			)}
+			<div className='user-container__action'>
+				<button
+					className='modal__btn'
+					onClick={editingState == false ? handleStartEditing : handleCloseEditing}>
+					{editingState == false ? 'Edytuj' : 'Wróć'}
+				</button>
+			</div>
 		</>
 	);
 }
