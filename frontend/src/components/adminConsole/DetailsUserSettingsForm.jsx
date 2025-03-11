@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
-import {useLocation} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 import {useQuery, useMutation} from '@tanstack/react-query';
 import {queryClient, fetchItem, fetchStatus} from '../../utils/http.js';
 import {useInput} from '../../hooks/useInput.js';
 import InputLogin from '../login/InputLogin.jsx';
 import UserFeedbackBox from './UserFeedbackBox.jsx';
 
-function DetailsUserSettingsForm() {
-	const location = useLocation();
+function DetailsUserSettingsForm({customerAccessed, adminAccessed}) {
+	const params = useParams();
 	let initialFeedbackConfirmation;
 	const [feedbackConfirmation, setFeedbackConfirmation] = useState(initialFeedbackConfirmation);
 
@@ -16,22 +16,38 @@ function DetailsUserSettingsForm() {
 		queryFn: fetchStatus,
 	});
 
+	const queryKey = customerAccessed
+		? ['formFilling', 'userSettings']
+		: adminAccessed
+		? ['formFilling', 'userSettings', params.id]
+		: null;
+	const dynamicFetchAddress = customerAccessed
+		? '/konto/ustawienia/preferencje'
+		: adminAccessed
+		? `/admin-console/show-user-settings/${params.id}`
+		: null;
 	const {
 		data,
 		isLoading: isFormLoading,
 		isError: isFormError,
 	} = useQuery({
-		queryKey: ['formFilling', 'userSettings'],
-		queryFn: ({signal}) => fetchItem('/konto/ustawienia/preferencje', {signal}),
+		queryKey: queryKey,
+		queryFn: ({signal}) => fetchItem(dynamicFetchAddress, {signal}),
 		staleTime: 0,
 		refetchOnMount: true,
-		enabled: location.pathname.includes('ustawienia'),
+		enabled: customerAccessed || adminAccessed,
 	});
 	console.log(data);
 
+	const dynamicMutationAddress = customerAccessed
+		? '/api/konto/ustawienia/update/preferencje'
+		: adminAccessed
+		? `/api/admin-console/edit-user-settings/${params.id}`
+		: null;
+	console.log('dynamicMutationAddress', dynamicMutationAddress);
 	const {mutate, isPending, isError, error} = useMutation({
 		mutationFn: (formData) => {
-			return fetch('/api/konto/ustawienia/update/preferencje', {
+			return fetch(dynamicMutationAddress, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -48,6 +64,7 @@ function DetailsUserSettingsForm() {
 		},
 		onSuccess: (res) => {
 			queryClient.invalidateQueries(['query', '/konto/ustawienia']);
+			queryClient.invalidateQueries(['query', `/admin-console/show-all-users/${params.id}`]);
 			if (res.confirmation) {
 				setFeedbackConfirmation(1);
 			} else {

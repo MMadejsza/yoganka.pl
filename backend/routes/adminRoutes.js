@@ -7,12 +7,12 @@ const router = express.Router();
 router.get('/grafik/:id', adminC.showScheduleByID);
 router.get('/show-all-users', adminC.showAllUsers);
 router.get('/show-all-users/:id', adminC.showUserByID);
-router.get('/show-customer-data/:id', adminC.getEditCustomer);
-router.post('/edit-customer-data/:id', adminC.postEditCustomer);
+router.get('/show-user-settings/:id', adminC.getEditSettings);
 
 router.get('/show-all-users-settings', adminC.showAllUserSettings);
 router.get('/show-all-customers', adminC.showAllCustomers);
 router.get('/show-all-customers/:id', adminC.showCustomerByID);
+router.get('/show-customer-data/:id', adminC.getEditCustomer);
 router.get('/show-all-customers-phones', adminC.showAllCustomersPhones);
 router.get('/show-all-schedules', adminC.showAllSchedules);
 router.get('/show-all-schedules/:id', adminC.showScheduleByID);
@@ -30,6 +30,7 @@ router.get('/show-all-invoices', adminC.showAllInvoices);
 //@ POST
 //# CREATE
 router.post('/add-user', adminC.createUser);
+router.post('/edit-user-settings/:id', adminC.postEditSettings);
 //? router.post('/create-customer', adminC.createCustomer);
 //? router.post('/create-customer-phone', adminC.createCustomerPhone);
 router.post('/create-schedule-record', adminC.createScheduleRecord);
@@ -38,6 +39,7 @@ router.post('/create-product', adminC.createProduct);
 // router.post('/create-booking', adminC.createBooking);
 // router.post('/create-invoice', adminC.createInvoice);
 //# EDIT
+router.post('/edit-customer-data/:id', adminC.postEditCustomer);
 router.post('/edit-product', adminC.editProduct);
 
 export default router;

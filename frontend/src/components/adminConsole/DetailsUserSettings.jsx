@@ -1,18 +1,20 @@
 import DetailsUserSettingsForm from './DetailsUserSettingsForm.jsx';
 
-function DetailsUserSettings({settingsData, isUserAccountPage, isEditing}) {
+function DetailsUserSettings({
+	settingsData,
+	isUserAccountPage,
+	isEditing,
+	customerAccessed,
+	adminAccessed,
+}) {
 	let handedness, fontSize, notifications, animation, theme;
 	const hasPrefs = !!settingsData;
 
-	handedness = hasPrefs
-		? settingsData.Handedness == 'Left'
-			? 'Po lewej'
-			: 'Po prawej'
-		: 'Po prawej';
+	handedness = hasPrefs ? (settingsData.Handedness == 1 ? 'On' : 'Off') : 'Off';
 	fontSize = settingsData?.FontSize || '12';
-	notifications = hasPrefs ? (settingsData.Notifications == 1 ? 'On' : 'Off') : 'Włączone';
-	animation = hasPrefs ? (settingsData.Animation == 1 ? 'On' : 'Off') : 'Włączone';
-	theme = hasPrefs ? (settingsData.Theme == 'Dark' ? 'Ciemny' : 'Jasny') : 'Jasny';
+	notifications = hasPrefs ? (settingsData.Notifications == 1 ? 'On' : 'Off') : 'Off';
+	animation = hasPrefs ? (settingsData.Animation == 1 ? 'On' : 'Off') : 'Off';
+	theme = hasPrefs ? (settingsData.Theme == 1 ? 'On' : 'Off') : 'Off';
 
 	const title = isUserAccountPage
 		? `Preferencje:`
@@ -23,7 +25,7 @@ function DetailsUserSettings({settingsData, isUserAccountPage, isEditing}) {
 	const displayContent = (
 		<ul className='user-container__details-list modal-checklist__list'>
 			<li className='user-container__section-record modal-checklist__li'>
-				<p className='user-container__section-record-label'>Pozycja menu:</p>
+				<p className='user-container__section-record-label'>Menu po lewej:</p>
 				<p className='user-container__section-record-content'>{handedness}</p>
 			</li>
 			<li className='user-container__section-record modal-checklist__li'>
@@ -39,13 +41,18 @@ function DetailsUserSettings({settingsData, isUserAccountPage, isEditing}) {
 				<p className='user-container__section-record-content'>{animation}</p>
 			</li>
 			<li className='user-container__section-record modal-checklist__li'>
-				<p className='user-container__section-record-label'>Motyw:</p>
+				<p className='user-container__section-record-label'>Ciemny motyw:</p>
 				<p className='user-container__section-record-content'>{theme}</p>
 			</li>
 		</ul>
 	);
 
-	const onEditContent = <DetailsUserSettingsForm />;
+	const onEditContent = (
+		<DetailsUserSettingsForm
+			customerAccessed={customerAccessed}
+			adminAccessed={adminAccessed}
+		/>
+	);
 
 	return (
 		<>

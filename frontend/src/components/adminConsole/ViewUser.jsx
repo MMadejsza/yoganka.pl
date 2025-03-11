@@ -1,13 +1,12 @@
 import React, {useState} from 'react';
-import {useNavigate} from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 import DetailsUser from './DetailsUser.jsx';
 import DetailsUserSettings from './DetailsUserSettings.jsx';
 import DetailsCustomer from './DetailsCustomer.jsx';
 
 function ViewUser({data, isUserAccountPage, isEditing}) {
-	// const location = useLocation();
+	const location = useLocation();
 	// const isUserSettings = location.pathname.includes('konto/ustawienia');
-	const navigate = useNavigate();
 	const [editingState, setEditingState] = useState(false);
 	const handleStartEditing = () => {
 		setEditingState(true);
@@ -36,6 +35,11 @@ function ViewUser({data, isUserAccountPage, isEditing}) {
 	const customer = data.customer || data.user.Customer;
 	const isAdmin = data.user?.Role == 'Admin' || data.customer?.User.Role == 'Admin'; //|| data.user.User?.Role == 'Admin';
 	const name = customer ? `${customer.FirstName} ${customer.LastName}` : user.Email;
+	const customerAccessed = location.pathname.includes('ustawienia');
+	console.log('customerAccessed', customerAccessed);
+	const adminAccessed = location.pathname.includes('admin-console/show-all-users/');
+	console.log('adminAccessed', adminAccessed);
+
 	return (
 		<>
 			{!isUserAccountPage && (
@@ -60,6 +64,8 @@ function ViewUser({data, isUserAccountPage, isEditing}) {
 					settingsData={user.UserPrefSetting}
 					isUserAccountPage={isUserAccountPage}
 					isEditing={editingState}
+					customerAccessed={customerAccessed}
+					adminAccessed={adminAccessed}
 				/>
 			</div>
 			{customer && (
@@ -67,6 +73,8 @@ function ViewUser({data, isUserAccountPage, isEditing}) {
 					customerData={customer}
 					isUserAccountPage={isUserAccountPage}
 					isEditing={editingState}
+					customerAccessed={customerAccessed}
+					adminAccessed={adminAccessed}
 				/>
 			)}
 			<div className='user-container__action'>

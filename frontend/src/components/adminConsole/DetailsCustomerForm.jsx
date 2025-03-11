@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {useLocation, useParams} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 import {useQuery, useMutation} from '@tanstack/react-query';
 import {queryClient, fetchItem, fetchStatus} from '../../utils/http.js';
 import {useInput} from '../../hooks/useInput.js';
@@ -7,8 +7,8 @@ import {phoneValidations} from '../../utils/validation.js';
 import InputLogin from '../login/InputLogin.jsx';
 import UserFeedbackBox from './UserFeedbackBox.jsx';
 
-function DetailsUserSettingsForm() {
-	const location = useLocation();
+function DetailsCustomerForm({customerAccessed, adminAccessed}) {
+	console.log('customerAccessed adminAccessed', customerAccessed, adminAccessed);
 	const params = useParams();
 	let initialFeedbackConfirmation;
 	const [feedbackConfirmation, setFeedbackConfirmation] = useState(initialFeedbackConfirmation);
@@ -18,11 +18,11 @@ function DetailsUserSettingsForm() {
 		queryFn: fetchStatus,
 	});
 
-	const customerAccessed = location.pathname.includes('ustawienia');
-	const adminAccessed = location.pathname.includes('admin-console/show-all-users/');
 	const queryKey = customerAccessed
 		? ['formFilling', 'editCustomer']
-		: ['formFilling', 'editCustomer', params.id];
+		: adminAccessed
+		? ['formFilling', 'editCustomer', params.id]
+		: null;
 	const dynamicFetch = (signal) => {
 		if (customerAccessed) return fetchItem('customer/konto/ustawienia/uczestnik', {signal});
 		else return fetchItem(`admin-console/show-customer-data/${params.id}`, {signal});
@@ -40,8 +40,10 @@ function DetailsUserSettingsForm() {
 	});
 
 	const dynamicMutationAddress = customerAccessed
-		? '/api/customer/konto/ustawienia/update/uczestnik'
-		: `/api/admin-console/edit-customer-data/${params.id}`;
+		? '/api/konto/ustawienia/update/uczestnik'
+		: adminAccessed
+		? `/api/admin-console/edit-customer-data/${params.id}`
+		: null;
 	const {mutate, isPending, isError, error} = useMutation({
 		mutationFn: (formData) => {
 			return fetch(dynamicMutationAddress, {
@@ -61,6 +63,7 @@ function DetailsUserSettingsForm() {
 		},
 		onSuccess: (res) => {
 			queryClient.invalidateQueries(['query', '/konto/ustawienia']);
+			queryClient.invalidateQueries(['query', `/admin-console/show-all-users/${params.id}`]);
 			if (res.confirmation) {
 				setFeedbackConfirmation(1);
 			} else {
@@ -214,4 +217,4 @@ function DetailsUserSettingsForm() {
 	);
 }
 
-export default DetailsUserSettingsForm;
+export default DetailsCustomerForm;

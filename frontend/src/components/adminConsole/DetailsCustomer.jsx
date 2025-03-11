@@ -1,14 +1,23 @@
 import {calculateAge} from '../../utils/customerViewsUtils.js';
 import DetailsCustomerForm from './DetailsCustomerForm.jsx';
 
-function DetailsCustomer({customerData, isUserAccountPage, isEditing}) {
+function DetailsCustomer({
+	customerData,
+	isUserAccountPage,
+	isEditing,
+	customerAccessed,
+	adminAccessed,
+}) {
 	console.log('customerData', customerData);
 	const title = isUserAccountPage
 		? `Dane kontaktowe:`
 		: `Uczestnik (ID ${customerData.CustomerID}):`;
 
 	let content = isEditing ? (
-		<DetailsCustomerForm />
+		<DetailsCustomerForm
+			customerAccessed={customerAccessed}
+			adminAccessed={adminAccessed}
+		/>
 	) : (
 		<ul className='user-container__details-list modal-checklist__list'>
 			<li className='user-container__section-record modal-checklist__li'>

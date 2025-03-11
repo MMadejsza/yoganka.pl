@@ -115,12 +115,86 @@ export const deleteUser = (req, res, next) => {
 		})
 		.catch((err) => console.log(err));
 };
-export const editUser = (req, res, next) => {
-	models.User.fetchAll()
-		.then(([rows, fieldData]) => {
-			return res.json(rows);
+export const getEditSettings = (req, res, next) => {
+	console.log(`\n➡️➡️➡️ admin called getEditSettings`);
+
+	models.UserPrefSettings.findOne({where: {UserID: req.params.id}})
+		.then((preferences) => {
+			if (!preferences) {
+				throw new Error('Nie pobrano ustawień.');
+			}
+			console.log('\n✅✅✅ admin getEditSettings fetched');
+			return res.status(200).json({preferences});
 		})
-		.catch((err) => console.log(err));
+		.catch((err) => {
+			console.log('\n❌❌❌ Error admin fetching the settings:', err);
+			return res.status(404).json({message: err.message});
+		});
+};
+
+export const postEditSettings = (req, res, next) => {
+	console.log(`\n➡️➡️➡️ called Admin postEditSettings`);
+	const userID = req.params.id;
+	const handedness = !!req.body.handedness || false;
+	const font = req.body.font || 14;
+	const notifications = !!req.body.notifications || false;
+	const animation = !!req.body.animation || false;
+	const theme = !!req.body.theme || false;
+
+	// if preferences don't exist - create new ones:
+	models.UserPrefSettings.findOrCreate({
+		where: {UserID: userID},
+		defaults: {
+			UserID: userID,
+			Handedness: handedness,
+			FontSize: font,
+			Notifications: notifications,
+			Animation: animation,
+			Theme: theme,
+		},
+	})
+		.then(([preferences, created]) => {
+			if (!created) {
+				// Nothing changed
+				if (
+					preferences.Handedness === handedness &&
+					preferences.FontSize === font &&
+					preferences.Notifications === notifications &&
+					preferences.Animation === animation &&
+					preferences.Theme === theme
+				) {
+					// Nothing changed
+					console.log('\n❓❓❓ Admin Preferences no change');
+					return {confirmation: 0, message: 'Brak zmian'};
+				} else {
+					// Update
+					preferences.Handedness = handedness;
+					preferences.FontSize = font;
+					preferences.Notifications = notifications;
+					preferences.Animation = animation;
+					preferences.Theme = theme;
+					return preferences.save().then(() => {
+						console.log('\n✅✅✅ Admin Preferences Updated');
+						return {confirmation: 1, message: 'Ustawienia zostały zaktualizowane'};
+					});
+				}
+			} else {
+				// New preferences created
+				console.log('\n✅✅✅ Admin Preferences Created');
+				return {confirmation: 1, message: 'Ustawienia zostały utworzone'};
+			}
+		})
+		.then((result) => {
+			console.log('\n✅✅✅ Admin Preferences Result sent back');
+			return res.status(200).json({
+				confirmation: result.confirmation,
+				message: result.message,
+			});
+		})
+		.catch((err) => {
+			console.log('\n❌❌❌ Admin Error in postEditSettings:', err);
+			return res.status(500).json({message: err.message});
+		});
 };
 export const showAllUserSettings = (req, res, next) => {
 	listAllToTable(res, models.UserPrefSettings, null);
