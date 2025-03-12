@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useParams, useLocation, useNavigate} from 'react-router-dom';
-import {fetchItem, fetchStatus} from '../../utils/http.js';
+import {fetchItem, fetchStatus, queryClient} from '../../utils/http.js';
 import {useQuery, useMutation} from '@tanstack/react-query';
 import ModalFrame from './ModalFrame.jsx';
 import ViewUser from './ViewUser.jsx';
@@ -30,7 +30,7 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 	const [editingState, setEditingState] = useState(false);
 	const [deleteWarningTriggered, setDeleteWarningTriggered] = useState(false);
 	let initialFeedbackConfirmation;
-	const [feedbackConfirmation, setFeedbackConfirmation] = useState(initialFeedbackConfirmation);
+	const [deleteConfirmation, setDeleteConfirmation] = useState(initialFeedbackConfirmation);
 
 	const {data, isPending, isError, error} = useQuery({
 		queryKey: ['query', location.pathname],
@@ -55,10 +55,10 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 
 	let dataDeleteQuery;
 	const {
-		mutate,
-		isPending: isMutatePending,
-		isError: isMutateError,
-		error: mutateError,
+		mutate: deleteRecord,
+		isPending: isDeletePending,
+		isError: isDeleteError,
+		error: deleteError,
 	} = useMutation({
 		mutationFn: () => {
 			return fetch(`/api/admin-console/${dataDeleteQuery}`, {
@@ -75,16 +75,10 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 				return response.json();
 			});
 		},
-		// !!!!!!!!!!!!!!!!!!!!!!!!
-		// onSuccess: (res) => {
-		// 	queryClient.invalidateQueries(['query', '/konto/ustawienia']);
-		// 	queryClient.invalidateQueries(['query', `/admin-console/show-all-users/${params.id}`]);
-		// 	if (res.confirmation) {
-		// 		setFeedbackConfirmation(1);
-		// 	} else {
-		// 		setFeedbackConfirmation(0);
-		// 	}
-		// },
+		onSuccess: (res) => {
+			setDeleteConfirmation(res.confirmation ? 1 : 0);
+			queryClient.invalidateQueries(['query', `/admin-console/show-all-users/${params.id}`]);
+		},
 	});
 
 	// const handleStartEditing = () => {
@@ -100,7 +94,7 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 			console.log('❌ DELETED triggered ');
 			console.log('❌ dataDeleteQuery ', dataDeleteQuery);
 
-			mutate();
+			deleteRecord();
 		}
 		setDeleteWarningTriggered(true);
 	};
@@ -120,6 +114,7 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 				);
 				controller.deleteBtnTitle = 'Konto';
 				controller.deleteQuery = `delete-user/${data.user.UserID}`;
+				controller.redirectTo = '/admin-console/show-all-users';
 				controller.warnings = [
 					'Powiązanego profilu uczestnika',
 					'Wszystkich powiązanych rezerwacji',
@@ -136,6 +131,7 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 				controller.deleteBtnTitle = 'Profil Uczestnika';
 
 				controller.deleteQuery = `delete-customer/${data.customer.CustomerID}`;
+				controller.redirectTo = '/admin-console/show-all-customers';
 				controller.warnings = [
 					'Wszystkich powiązanych rezerwacji',
 					'Wszystkich powiązanych faktur',
@@ -148,6 +144,7 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 				controller.recordEditor = '';
 				controller.deleteBtnTitle = 'Produkt';
 				controller.deleteQuery = `delete-product/${data.product.ProductID}`;
+				controller.redirectTo = '/admin-console/show-all-products';
 				controller.warnings = [
 					'Wszystkich powiązanych terminów',
 					'Wszystkich powiązanych opinii',
@@ -166,6 +163,7 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 				controller.recordEditor = '';
 				controller.deleteBtnTitle = 'Termin';
 				controller.deleteQuery = `delete-schedule/${data.schedule.ScheduleID}`;
+				controller.redirectTo = '/admin-console/show-all-schedules';
 				controller.warnings = [
 					'Wszystkich powiązanych opinii',
 					'Wszystkich powiązanych z terminem obecności, a więc wpłynie na statystyki zajęć i użytkowników',
@@ -184,6 +182,7 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 				controller.recordEditor = '';
 				controller.deleteBtnTitle = 'Rezerwację';
 				controller.deleteQuery = `delete-booking/${data.booking.BookingID}`;
+				controller.redirectTo = '/admin-console/show-all-bookings';
 				controller.warnings = [
 					'Wszystkich powiązanych faktur',
 					'Wszystkich powiązanych z rezerwacją obecności, a więc wpłynie na statystyki zajęć i użytkowników',
@@ -201,6 +200,7 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 				controller.recordEditor = '';
 				controller.deleteBtnTitle = 'Opinię';
 				controller.deleteQuery = `delete-feedback/${data.feedback.FeedbackID}`;
+				controller.redirectTo = '/admin-console/show-all-participants-feedback';
 				controller.warnings = '';
 				return controller;
 
@@ -212,6 +212,7 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 	let dataDisplay;
 	let dataEditor;
 	let deleteWarnings;
+	let redirectToPage;
 
 	if (isPending) {
 		dataDisplay = 'Loading...';
@@ -228,13 +229,14 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 	console.log(`ViewFrame customer: `, customer);
 	let deleteTitle;
 	if (effectiveData) {
-		const {recordDisplay, recordEditor, deleteBtnTitle, warnings, deleteQuery} =
+		const {recordDisplay, recordEditor, deleteBtnTitle, warnings, deleteQuery, redirectTo} =
 			resolveModifier();
 		dataDisplay = recordDisplay;
 		dataEditor = recordEditor;
 		deleteTitle = deleteBtnTitle;
 		deleteWarnings = warnings;
 		dataDeleteQuery = deleteQuery;
+		redirectToPage = redirectTo;
 	}
 
 	const actionBtn = (onClick, type, symbol) => {
@@ -258,7 +260,15 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 				{!deleteWarningTriggered ? (
 					dataDisplay
 				) : (
-					<UserFeedbackBox warnings={deleteWarnings} />
+					<UserFeedbackBox
+						warnings={deleteWarnings}
+						status={deleteConfirmation}
+						isPending={isDeletePending}
+						isError={isDeleteError}
+						error={deleteError}
+						redirectTarget={redirectToPage}
+						onClose={onClose}
+					/>
 				)}
 				<div className='user-container__actions-block'>
 					{isAdminPanel && (

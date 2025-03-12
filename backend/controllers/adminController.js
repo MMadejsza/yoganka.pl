@@ -18,7 +18,7 @@ export const showAllUsers = (req, res, next) => {
 			],
 		})
 		.then((records) => {
-			if (!records) throw new Error({message: 'Nie znaleziono użytkowników.'});
+			if (!records) throw new Error('Nie znaleziono użytkowników.');
 			// fetching map for User table or empty object
 			const columnMap = columnMaps[model.name] || {};
 			const keysForHeaders = Object.values(columnMap);
@@ -56,7 +56,7 @@ export const showAllUsers = (req, res, next) => {
 		})
 		.catch((err) => {
 			console.log('\n❌❌❌ Error showAllUsers', err);
-			return res.status(404).json({message: err.message});
+			return res.status(404).json({message: err});
 		});
 };
 export const showUserByID = (req, res, next) => {
@@ -76,7 +76,7 @@ export const showUserByID = (req, res, next) => {
 	})
 		.then((user) => {
 			if (!user) {
-				throw new Error({message: 'Nie znaleziono użytkownika.'});
+				throw new Error('Nie znaleziono użytkownika.');
 			}
 
 			console.log('✅✅✅ showUserByID user fetched');
@@ -85,7 +85,7 @@ export const showUserByID = (req, res, next) => {
 		})
 		.catch((err) => {
 			console.log('\n❌❌❌ Error showUserByID', err);
-			return res.status(404).json({message: err.message});
+			return res.status(404).json({message: err});
 		});
 };
 export const createUser = (req, res, next) => {
@@ -111,6 +111,23 @@ export const createUser = (req, res, next) => {
 
 export const postDeleteUser = (req, res, next) => {
 	console.log(`\n➡️➡️➡️ called postDeleteUser`);
+	const id = req.params.id;
+	models.User.destroy({
+		where: {
+			UserID: id,
+		},
+	})
+		.then((deletedCount) => {
+			if (!deletedCount) {
+				throw new Error('\n❌ Nie usunięto użytkownika.');
+			}
+			console.log('\n✅✅✅ admin postDeleteUser deleted the user');
+			return res.status(200).json({confirmation: true});
+		})
+		.catch((err) => {
+			console.log('\n❌❌❌ Error admin postDeleteUser:', err);
+			return res.status(404).json({message: err});
+		});
 };
 export const getEditSettings = (req, res, next) => {
 	console.log(`\n➡️➡️➡️ admin called getEditSettings`);
@@ -125,7 +142,7 @@ export const getEditSettings = (req, res, next) => {
 		})
 		.catch((err) => {
 			console.log('\n❌❌❌ Error admin fetching the settings:', err);
-			return res.status(404).json({message: err.message});
+			return res.status(404).json({message: err});
 		});
 };
 
@@ -190,7 +207,7 @@ export const postEditSettings = (req, res, next) => {
 		})
 		.catch((err) => {
 			console.log('\n❌❌❌ Admin Error in postEditSettings:', err);
-			return res.status(500).json({message: err.message});
+			return res.status(500).json({message: err});
 		});
 };
 export const showAllUserSettings = (req, res, next) => {
@@ -218,7 +235,7 @@ export const showAllCustomers = (req, res, next) => {
 			},
 		})
 		.then((records) => {
-			if (!records) throw new Error({message: 'Nie znaleziono użytkowników.'});
+			if (!records) throw new Error('Nie znaleziono użytkowników.');
 			// Convert for records for different names
 			const formattedRecords = records.map((record) => {
 				const newRecord = {}; // Container for formatted data
@@ -246,7 +263,7 @@ export const showAllCustomers = (req, res, next) => {
 		})
 		.catch((err) => {
 			console.log('\n❌❌❌ Error showAllCustomers', err);
-			return res.status(404).json({message: err.message});
+			return res.status(404).json({message: err});
 		});
 };
 export const showCustomerByID = (req, res, next) => {
@@ -331,18 +348,35 @@ export const showCustomerByID = (req, res, next) => {
 };
 export const postDeleteCustomer = (req, res, next) => {
 	console.log(`\n➡️➡️➡️ called postDeleteCustomer`);
+	const id = req.params.id;
+	models.Customer.destroy({
+		where: {
+			CustomerID: id,
+		},
+	})
+		.then((deletedCount) => {
+			if (!deletedCount) {
+				throw new Error('\n❌ Nie usunięto profilu uczestnika.');
+			}
+			console.log('\n✅✅✅ admin postDeleteUser deleted the customer');
+			return res.status(200).json({confirmation: true});
+		})
+		.catch((err) => {
+			console.log('\n❌❌❌ Error admin postDeleteCustomer:', err);
+			return res.status(404).json({message: err});
+		});
 };
 export const getEditCustomer = (req, res, next) => {
 	console.log(`\n➡️➡️➡️ admin called getEditCustomer`);
 	models.Customer.findByPk(req.params.id)
 		.then((customer) => {
-			if (!customer) throw new Error({message: 'Nie znaleziono danych uczestnika.'});
+			if (!customer) throw new Error('Nie znaleziono danych uczestnika.');
 			console.log('\n✅✅✅ Fetched admin getEditCustomer customer');
 			return res.status(200).json({customer});
 		})
 		.catch((err) => {
 			console.log('\n❌❌❌ Error admin getEditCustomer', err);
-			return res.status(404).json({message: err.message});
+			return res.status(404).json({message: err});
 		});
 };
 export const postEditCustomer = (req, res, next) => {
@@ -357,13 +391,12 @@ export const postEditCustomer = (req, res, next) => {
 
 	models.Customer.findByPk(customerId)
 		.then((customer) => {
-			if (!customer) throw new Error({message: 'Nie znaleziono danych uczestnika.'});
+			if (!customer) throw new Error('Nie znaleziono danych uczestnika.');
 			console.log('\n✅✅✅ Fetched admin postEditCustomer customer');
 			return customer;
 		})
 		.then((fetchedCustomer) => {
-			if (!fetchedCustomer)
-				throw new Error({message: 'Nie przekazano uczestnika do update.'});
+			if (!fetchedCustomer) throw new Error('Nie przekazano uczestnika do update.');
 
 			models.Customer.update(
 				{Phone: newPhone, PreferredContactMethod: newContactMethod},
@@ -383,12 +416,12 @@ export const postEditCustomer = (req, res, next) => {
 				})
 				.catch((err) => {
 					console.log('\n❌❌❌ Error admin  postEditCustomer UPDATE:', err);
-					return res.status(500).json({error: err.message});
+					return res.status(500).json({error: err});
 				});
 		})
 		.catch((err) => {
 			console.log('\n❌❌❌ Error admin postEditCustomer', err);
-			return res.status(404).json({message: err.message});
+			return res.status(404).json({message: err});
 		});
 };
 export const showAllCustomersPhones = (req, res, next) => {
@@ -432,7 +465,7 @@ export const showAllSchedules = (req, res, next) => {
 			},
 		})
 		.then((records) => {
-			if (!records) throw new Error({message: 'Nie znaleziono terminów.'});
+			if (!records) throw new Error('Nie znaleziono terminów.');
 			// Convert for records for different names
 			const formattedRecords = records.map((record) => {
 				const newRecord = {}; // Container for formatted data
@@ -499,7 +532,7 @@ export const showAllSchedules = (req, res, next) => {
 		})
 		.catch((err) => {
 			console.log('\n❌❌❌ Error admin getShowAllSchedules', err);
-			return res.status(404).json({message: err.message});
+			return res.status(404).json({message: err});
 		});
 };
 export const showScheduleByID = (req, res, next) => {
@@ -576,125 +609,10 @@ export const showScheduleByID = (req, res, next) => {
 			return res.status(200).json({schedule, user: req.user});
 		})
 		.catch((err) => {
-			console.log('\n❌❌❌ Error fetching the schedule:', err.message);
-			return res.status(404).json({message: err.message});
+			console.log('\n❌❌❌ Error fetching the schedule:', err);
+			return res.status(404).json({message: err});
 		});
 };
-// export const showScheduleByID = (req, res, next) => {
-// 	console.log(`\n➡️ called showScheduleByID`);
-// 	const PK = req.params.id;
-// 	models.ScheduleRecord.findByPk(PK, {
-// 		include: [
-// 			{
-// 				model: models.Product,
-// 				required: true,
-// 			},
-// 			{
-// 				// Zamiast modelu Booking używamy BookedSchedule, który przechowuje informację o Attendance
-// 				model: models.BookedSchedule,
-// 				required: false,
-// 				// include: [
-// 				// 	{
-// 				// 		model: models.Customer,
-// 				// 		attributes: {exclude: ['UserID']},
-// 				// 	},
-// 				// 	{
-// 				// 		model: models.Booking,
-// 				// 		// attributes: {exclude: ['UserID']},
-// 				// 	},
-// 				// ],
-// 			},
-// 			{
-// 				model: models.Feedback,
-// 				required: false,
-// 				include: [
-// 					{
-// 						model: models.Customer,
-// 						attributes: {exclude: ['UserID']},
-// 					},
-// 				],
-// 				attributes: {exclude: ['CustomerID']},
-// 			},
-// 		],
-// 	})
-// 		.then((schedule) => {
-// 			if (!schedule) {
-// 				return res.redirect('/admin-console/show-all-schedules');
-// 			}
-// 			// Konwersja rekordu na zwykły obiekt
-// 			schedule = schedule.toJSON();
-
-// 			// Tworzymy obiekt daty dla terminu
-// 			const scheduleDateTime = new Date(`${schedule.Date}T${schedule.StartTime}:00`);
-// 			const now = new Date();
-
-// 			// Ustalamy, czy termin został już odbyte
-// 			schedule.isCompleted = scheduleDateTime <= now;
-
-// 			// Dla celów prezentacji – filtrujemy BookedSchedules, aby wyliczyć faktyczną liczbę uczestników
-// 			if (schedule.BookedSchedules && schedule.BookedSchedules.length > 0) {
-// 				const attended = schedule.BookedSchedules.filter(
-// 					(bs) => bs.Attendance === true || bs.Attendance === 1,
-// 				);
-// 				schedule.attendanceCount = attended.length;
-// 				schedule.full = attended.length >= schedule.Capacity;
-// 			} else {
-// 				schedule.attendanceCount = 0;
-// 				schedule.full = false;
-// 			}
-
-// 			return res.status(200).json({isLoggedIn: req.session.isLoggedIn, schedule});
-// 		})
-// 		.catch((err) => {
-// 			console.log('\n❌❌❌ Error fetching the schedule:', err.message);
-// 			return res.status(404).json({message: err.message});
-// 		});
-// };
-// export const showScheduleByID = (req, res, next) => {
-// 	console.log(`\n➡️ called showScheduleByID`);
-
-// 	const PK = req.params.id;
-// 	models.ScheduleRecord.findByPk(PK, {
-// 		include: [
-// 			{
-// 				model: models.Product,
-// 				required: true,
-// 			},
-// 			{
-// 				model: models.Booking, // Booking which has relation through BookedSchedule
-// 				through: {attributes: []}, // omit data from mid table
-// 				required: false,
-// 				attributes: {
-// 					exclude: ['Product', 'CustomerID'],
-// 				},
-// 				include: [
-// 					{
-// 						model: models.Customer,
-// 						attributes: {exclude: ['UserID']},
-// 					},
-// 				],
-// 			},
-// 			{
-// 				model: models.Feedback,
-// 				required: false,
-// 				include: [
-// 					{
-// 						model: models.Customer,
-// 						attributes: {exclude: ['UserID']},
-// 					},
-// 				],
-// 				attributes: {exclude: ['CustomerID']},
-// 			},
-// 		],
-// 	})
-// 		.then((schedule) => {
-// 			if (!schedule) {
-// 				return res.redirect('/admin-console/show-all-schedules');
-// 			}
-// 			return res.status(200).json({isLoggedIn: req.session.isLoggedIn, schedule});
-// 		})
-// 		.catch((err) => console.log(err));
-// };
 export const showBookedSchedules = (req, res, next) => {};
 export const createScheduleRecord = (req, res, next) => {
 	models.ScheduleRecord.create({
@@ -710,6 +628,36 @@ export const createScheduleRecord = (req, res, next) => {
 };
 export const postDeleteSchedule = (req, res, next) => {
 	console.log(`\n➡️➡️➡️ called postDeleteSchedule`);
+	const id = req.params.id;
+
+	models.ScheduleRecord.findOne({
+		where: {
+			ScheduleID: id,
+		},
+	})
+		.then((foundSchedule) => {
+			if (!foundSchedule) {
+				throw new Error('\n❌ Nie znaleziono terminu do usunięcia.');
+			} else if (
+				new Date(`${foundSchedule.Date}T${foundSchedule.StartTime}:00`) < new Date()
+			) {
+				throw new Error(
+					'\n❌ Nie można usunąć terminu który już minął. Posiada też wartość historyczną dla statystyk.',
+				);
+			}
+			return foundSchedule.destroy();
+		})
+		.then((deletedCount) => {
+			if (!deletedCount) {
+				throw new Error('\n❌ Nie usunięto terminu.');
+			}
+			console.log('\n✅✅✅ admin postDeleteSchedule deleted the schedule record');
+			return res.status(200).json({confirmation: true});
+		})
+		.catch((err) => {
+			console.log('\n❌❌❌ Error admin postDeleteSchedule:', err);
+			return res.status(404).json({message: err});
+		});
 };
 //@ FEEDBACK
 export const showAllParticipantsFeedback = (req, res, next) => {
@@ -748,7 +696,7 @@ export const showAllParticipantsFeedback = (req, res, next) => {
 			},
 		})
 		.then((records) => {
-			if (!records) throw new Error({message: 'Nie znaleziono opinii.'});
+			if (!records) throw new Error('Nie znaleziono opinii.');
 			// Convert for records for different names
 			const formattedRecords = records.map((record) => {
 				const newRecord = {}; // Container for formatted data
@@ -800,7 +748,7 @@ export const showAllParticipantsFeedback = (req, res, next) => {
 		})
 		.catch((err) => {
 			console.log('\n❌❌❌ Error showAllCustomers', err);
-			return res.status(404).json({message: err.message});
+			return res.status(404).json({message: err});
 		});
 };
 export const showAllParticipantsFeedbackByID = (req, res, next) => {
@@ -862,6 +810,23 @@ export const showAllParticipantsFeedbackByID = (req, res, next) => {
 };
 export const postDeleteFeedback = (req, res, next) => {
 	console.log(`\n➡️➡️➡️ called postDeleteFeedback`);
+	const id = req.params.id;
+	models.Feedback.destroy({
+		where: {
+			FeedbackID: id,
+		},
+	})
+		.then((deletedCount) => {
+			if (!deletedCount) {
+				throw new Error('\n❌ Nie usunięto opinii.');
+			}
+			console.log('\n✅✅✅ admin postDeleteFeedback deleted the feedback');
+			return res.status(200).json({confirmation: true});
+		})
+		.catch((err) => {
+			console.log('\n❌❌❌ Error admin postDeleteFeedback:', err);
+			return res.status(404).json({message: err});
+		});
 };
 //@ NEWSLETTERS
 export const showAllNewsletters = (req, res, next) => {
@@ -960,6 +925,23 @@ export const editProduct = async (req, res, next) => {
 };
 export const postDeleteProduct = (req, res, next) => {
 	console.log(`\n➡️➡️➡️ called postDeleteProduct`);
+	const id = req.params.id;
+	models.Product.destroy({
+		where: {
+			ProductID: id,
+		},
+	})
+		.then((deletedCount) => {
+			if (!deletedCount) {
+				throw new Error('\n❌ Nie usunięto zajęć.');
+			}
+			console.log('\n✅✅✅ admin postDeleteProduct deleted the product');
+			return res.status(200).json({confirmation: true});
+		})
+		.catch((err) => {
+			console.log('\n❌❌❌ Error admin postDeleteProduct:', err);
+			return res.status(404).json({message: err});
+		});
 };
 //@ BOOKINGS
 export const showAllBookings = (req, res, next) => {
@@ -996,7 +978,7 @@ export const showAllBookings = (req, res, next) => {
 			},
 		})
 		.then((records) => {
-			if (!records) throw new Error({message: 'Nie znaleziono rezerwacji.'});
+			if (!records) throw new Error('Nie znaleziono rezerwacji.');
 			const formattedRecords = records.map((record) => {
 				const attributes = model.getAttributes();
 				const newRecord = {};
@@ -1041,7 +1023,7 @@ export const showAllBookings = (req, res, next) => {
 		})
 		.catch((err) => {
 			console.log('\n❌❌❌ Error admin getShowAllSchedules', err);
-			return res.status(404).json({message: err.message});
+			return res.status(404).json({message: err});
 		});
 };
 export const showBookingByID = (req, res, next) => {
@@ -1083,6 +1065,23 @@ export const showBookingByID = (req, res, next) => {
 };
 export const postDeleteBooking = (req, res, next) => {
 	console.log(`\n➡️➡️➡️ called postDeleteBooking`);
+	const id = req.params.id;
+	models.Booking.destroy({
+		where: {
+			BookingID: id,
+		},
+	})
+		.then((deletedCount) => {
+			if (!deletedCount) {
+				throw new Error('\n❌ Nie usunięto rezerwacji.');
+			}
+			console.log('\n✅✅✅ admin postDeleteBooking deleted the feedback');
+			return res.status(200).json({confirmation: true});
+		})
+		.catch((err) => {
+			console.log('\n❌❌❌ Error admin postDeleteBooking:', err);
+			return res.status(404).json({message: err});
+		});
 };
 //@ INVOICES
 export const showAllInvoices = (req, res, next) => {
@@ -1120,7 +1119,7 @@ export const showAllInvoices = (req, res, next) => {
 			},
 		})
 		.then((records) => {
-			if (!records) throw new Error({message: 'Nie znaleziono faktur.'});
+			if (!records) throw new Error('Nie znaleziono faktur.');
 			// Convert for records for different names
 			const formattedRecords = records.map((record) => {
 				const newRecord = {}; // Container for formatted data
@@ -1160,6 +1159,6 @@ export const showAllInvoices = (req, res, next) => {
 		})
 		.catch((err) => {
 			console.log('\n❌❌❌ Error admin showAllInvoices', err);
-			return res.status(404).json({message: err.message});
+			return res.status(404).json({message: err});
 		});
 };

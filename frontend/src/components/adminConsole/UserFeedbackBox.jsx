@@ -1,6 +1,15 @@
 import {useNavigate} from 'react-router-dom';
 
-function UserFeedbackBox({warnings, status, isPending, isError, error, size}) {
+function UserFeedbackBox({
+	warnings,
+	status,
+	isPending,
+	isError,
+	error,
+	size,
+	redirectTarget,
+	onClose,
+}) {
 	// console.log('userFeedbackBox status', status);
 	// console.log('userFeedbackBox isPending', isPending);
 	// console.log('userFeedbackBox isError', isError);
@@ -8,20 +17,27 @@ function UserFeedbackBox({warnings, status, isPending, isError, error, size}) {
 	// console.log('userFeedbackBox size', size);
 	const navigate = useNavigate();
 
-	const statusClass =
-		isPending || status == 0
-			? 'neutral'
-			: isError || warnings
-			? 'error'
-			: status == 1
-			? 'success'
-			: 'neutral';
+	const statusClass = isPending
+		? 'neutral'
+		: isError
+		? 'error'
+		: status == 1
+		? 'success'
+		: warnings && warnings.length > 0
+		? 'error'
+		: 'neutral';
 	const sizeClass = size === 'small' ? 'feedback-box--small' : '';
 	const readyClasses = `feedback-box feedback-box--${statusClass} ${sizeClass}`;
 
 	let statusMsg;
 	if (status == 1) {
 		statusMsg = 'Zmiany zatwierdzone';
+		if (redirectTarget) {
+			setTimeout(() => {
+				navigate(redirectTarget);
+				onClose();
+			}, 1000);
+		}
 	} else if (status == 0) {
 		statusMsg = 'Brak zmian';
 	} else if (isPending) {

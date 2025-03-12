@@ -79,7 +79,7 @@ Invoice.belongsTo(Booking, {foreignKey: 'BookingID'});
 //!
 
 //@ ScheduleRecord and BookedSchedule (1:M, total participation on BookedSchedule)
-// Cascading deletion: Deleting a ScheduleRecord will delete all associated BookedSchedule records.
+// Deleting a ScheduleRecord will delete all associated BookedSchedule records.
 ScheduleRecord.hasMany(BookedSchedule, {foreignKey: 'ScheduleID', onDelete: 'CASCADE'});
 BookedSchedule.belongsTo(ScheduleRecord, {foreignKey: 'ScheduleID', onDelete: 'CASCADE'});
 
