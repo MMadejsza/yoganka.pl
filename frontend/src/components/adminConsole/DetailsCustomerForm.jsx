@@ -7,7 +7,7 @@ import {phoneValidations} from '../../utils/validation.js';
 import InputLogin from '../login/InputLogin.jsx';
 import UserFeedbackBox from './UserFeedbackBox.jsx';
 
-function DetailsCustomerForm({customerAccessed, adminAccessed}) {
+function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
 	console.log('customerAccessed adminAccessed', customerAccessed, adminAccessed);
 	const params = useParams();
 	let initialFeedbackConfirmation;
@@ -21,11 +21,14 @@ function DetailsCustomerForm({customerAccessed, adminAccessed}) {
 	const queryKey = customerAccessed
 		? ['formFilling', 'editCustomer']
 		: adminAccessed
-		? ['formFilling', 'editCustomer', params.id]
+		? ['formFilling', 'editCustomer', customerData.CustomerID]
 		: null;
 	const dynamicFetch = (signal) => {
 		if (customerAccessed) return fetchItem('customer/konto/ustawienia/uczestnik', {signal});
-		else return fetchItem(`admin-console/show-customer-data/${params.id}`, {signal});
+		else
+			return fetchItem(`admin-console/show-customer-data/${customerData.CustomerID}`, {
+				signal,
+			});
 	};
 	const {
 		data,
@@ -42,7 +45,7 @@ function DetailsCustomerForm({customerAccessed, adminAccessed}) {
 	const dynamicMutationAddress = customerAccessed
 		? '/api/konto/ustawienia/update/uczestnik'
 		: adminAccessed
-		? `/api/admin-console/edit-customer-data/${params.id}`
+		? `/api/admin-console/edit-customer-data/${customerData.CustomerID}`
 		: null;
 	const {mutate, isPending, isError, error} = useMutation({
 		mutationFn: (formData) => {
@@ -201,12 +204,12 @@ function DetailsCustomerForm({customerAccessed, adminAccessed}) {
 				type='reset'
 				onClick={handleReset}
 				className='form-switch-btn modal__btn  modal__btn--secondary modal__btn--small'>
-				Resetuj
+				<span className='material-symbols-rounded nav__icon'>restart_alt</span> Resetuj
 			</button>
 			<button
 				type='submit'
 				className={`form-action-btn modal__btn modal__btn--small`}>
-				{actionTitle}
+				<span className='material-symbols-rounded nav__icon'>check</span> {actionTitle}
 			</button>
 		</form>
 	);

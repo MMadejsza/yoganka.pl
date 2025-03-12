@@ -123,20 +123,24 @@ footer {
 // box
 .feedback-box {
 	width: 80%;
+	min-height: 8vh;
 	margin-top: 3rem;
-	height: 8vh;
+	padding: 1.5rem;
 	text-align: center;
 	font-size: 2rem;
 	border-radius: map.get(var.$sizes, border-radius);
 	box-shadow: map.get(var.$shadows, box-shadow);
 	@include mixin.flex(row, center, center);
+	flex-wrap: wrap;
+	gap: 1.5rem;
+
 	&--error {
-		color: red;
-		background-color: rgba(red, 0.2);
+		color: #c62828;
+		background-color: rgba(244, 67, 54, 0.25);
 	}
 	&--success {
-		color: green;
-		background-color: rgba(green, 0.2);
+		color: #2e7d32;
+		background-color: rgba(76, 175, 80, 0.25);
 	}
 	&--neutral {
 		color: map.get(var.$colors, tile-title);
@@ -145,6 +149,10 @@ footer {
 	&--small {
 		margin-top: 1.5rem;
 		height: 3rem;
+	}
+	&__title,
+	&__warning {
+		flex-basis: 100%;
 	}
 }
 

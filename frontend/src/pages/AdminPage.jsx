@@ -23,16 +23,16 @@ const sideNavActions = [
 		icon: 'add_circle',
 		link: 'add-user',
 	},
-	{
-		name: 'Edytuj',
-		icon: 'edit',
-		// link: '/wydarzenia',
-	},
-	{
-		name: 'Usuń',
-		icon: 'delete_forever',
-		link: '',
-	},
+	// {
+	// 	name: 'Edytuj',
+	// 	icon: 'edit',
+	// 	// link: '/wydarzenia',
+	// },
+	// {
+	// 	name: 'Usuń',
+	// 	icon: 'delete_forever',
+	// 	link: '',
+	// },
 ];
 const allowedPaths = sideNavTabs.map((tab) => tab.link);
 

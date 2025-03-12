@@ -108,17 +108,14 @@ export const createUser = (req, res, next) => {
 		})
 		.catch((err) => console.log(err));
 };
-export const deleteUser = (req, res, next) => {
-	models.User.fetchAll()
-		.then(([rows, fieldData]) => {
-			return res.json(rows);
-		})
-		.catch((err) => console.log(err));
+
+export const postDeleteUser = (req, res, next) => {
+	console.log(`\n➡️➡️➡️ called postDeleteUser`);
 };
 export const getEditSettings = (req, res, next) => {
 	console.log(`\n➡️➡️➡️ admin called getEditSettings`);
 
-	models.UserPrefSettings.findOne({where: {UserID: req.params.id}})
+	models.UserPrefSettings.findByPk(req.params.id)
 		.then((preferences) => {
 			if (!preferences) {
 				throw new Error('Nie pobrano ustawień.');
@@ -332,12 +329,8 @@ export const showCustomerByID = (req, res, next) => {
 		})
 		.catch((err) => console.log(err));
 };
-export const deleteCustomer = (req, res, next) => {
-	models.User.fetchAll()
-		.then(([rows, fieldData]) => {
-			return res.json(rows);
-		})
-		.catch((err) => console.log(err));
+export const postDeleteCustomer = (req, res, next) => {
+	console.log(`\n➡️➡️➡️ called postDeleteCustomer`);
 };
 export const getEditCustomer = (req, res, next) => {
 	console.log(`\n➡️➡️➡️ admin called getEditCustomer`);
@@ -715,6 +708,9 @@ export const createScheduleRecord = (req, res, next) => {
 		})
 		.catch((err) => console.log(err));
 };
+export const postDeleteSchedule = (req, res, next) => {
+	console.log(`\n➡️➡️➡️ called postDeleteSchedule`);
+};
 //@ FEEDBACK
 export const showAllParticipantsFeedback = (req, res, next) => {
 	console.log(`\n➡️➡️➡️ called showAllParticipantsFeedback`);
@@ -864,6 +860,9 @@ export const showAllParticipantsFeedbackByID = (req, res, next) => {
 		})
 		.catch((err) => console.log(err));
 };
+export const postDeleteFeedback = (req, res, next) => {
+	console.log(`\n➡️➡️➡️ called postDeleteFeedback`);
+};
 //@ NEWSLETTERS
 export const showAllNewsletters = (req, res, next) => {
 	console.log(`\n➡️➡️➡️ called showAllNewsletters`);
@@ -958,6 +957,9 @@ export const editProduct = async (req, res, next) => {
 			console.log('✅ created');
 		})
 		.catch((err) => console.log(err));
+};
+export const postDeleteProduct = (req, res, next) => {
+	console.log(`\n➡️➡️➡️ called postDeleteProduct`);
 };
 //@ BOOKINGS
 export const showAllBookings = (req, res, next) => {
@@ -1078,6 +1080,9 @@ export const showBookingByID = (req, res, next) => {
 			return res.status(200).json({isLoggedIn: req.session.isLoggedIn, booking});
 		})
 		.catch((err) => console.log(err));
+};
+export const postDeleteBooking = (req, res, next) => {
+	console.log(`\n➡️➡️➡️ called postDeleteBooking`);
 };
 //@ INVOICES
 export const showAllInvoices = (req, res, next) => {

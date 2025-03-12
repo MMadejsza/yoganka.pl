@@ -15,6 +15,7 @@ function DetailsCustomer({
 
 	let content = isEditing ? (
 		<DetailsCustomerForm
+			customerData={customerData}
 			customerAccessed={customerAccessed}
 			adminAccessed={adminAccessed}
 		/>

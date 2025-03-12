@@ -6,7 +6,7 @@ import {useInput} from '../../hooks/useInput.js';
 import InputLogin from '../login/InputLogin.jsx';
 import UserFeedbackBox from './UserFeedbackBox.jsx';
 
-function DetailsUserSettingsForm({customerAccessed, adminAccessed}) {
+function DetailsUserSettingsForm({settingsData, customerAccessed, adminAccessed}) {
 	const params = useParams();
 	let initialFeedbackConfirmation;
 	const [feedbackConfirmation, setFeedbackConfirmation] = useState(initialFeedbackConfirmation);
@@ -19,12 +19,12 @@ function DetailsUserSettingsForm({customerAccessed, adminAccessed}) {
 	const queryKey = customerAccessed
 		? ['formFilling', 'userSettings']
 		: adminAccessed
-		? ['formFilling', 'userSettings', params.id]
+		? ['formFilling', 'userSettings', settingsData.UserPrefID]
 		: null;
 	const dynamicFetchAddress = customerAccessed
 		? '/konto/ustawienia/preferencje'
 		: adminAccessed
-		? `/admin-console/show-user-settings/${params.id}`
+		? `/admin-console/show-user-settings/${settingsData.UserPrefID}`
 		: null;
 	const {
 		data,
@@ -42,7 +42,7 @@ function DetailsUserSettingsForm({customerAccessed, adminAccessed}) {
 	const dynamicMutationAddress = customerAccessed
 		? '/api/konto/ustawienia/update/preferencje'
 		: adminAccessed
-		? `/api/admin-console/edit-user-settings/${params.id}`
+		? `/api/admin-console/edit-user-settings/${settingsData.UserPrefID}`
 		: null;
 	console.log('dynamicMutationAddress', dynamicMutationAddress);
 	const {mutate, isPending, isError, error} = useMutation({
@@ -292,12 +292,12 @@ function DetailsUserSettingsForm({customerAccessed, adminAccessed}) {
 				type='reset'
 				onClick={handleReset}
 				className='form-switch-btn modal__btn  modal__btn--secondary modal__btn--small'>
-				Resetuj
+				<span className='material-symbols-rounded nav__icon'>restart_alt</span>Resetuj
 			</button>
 			<button
 				type='submit'
 				className={`form-action-btn modal__btn modal__btn--small`}>
-				{actionTitle}
+				<span className='material-symbols-rounded nav__icon'>check</span> {actionTitle}
 			</button>
 		</form>
 	);

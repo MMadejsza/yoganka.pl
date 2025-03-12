@@ -1,6 +1,6 @@
 import {useNavigate} from 'react-router-dom';
 
-function UserFeedbackBox({status, isPending, isError, error, size}) {
+function UserFeedbackBox({warnings, status, isPending, isError, error, size}) {
 	// console.log('userFeedbackBox status', status);
 	// console.log('userFeedbackBox isPending', isPending);
 	// console.log('userFeedbackBox isError', isError);
@@ -11,7 +11,7 @@ function UserFeedbackBox({status, isPending, isError, error, size}) {
 	const statusClass =
 		isPending || status == 0
 			? 'neutral'
-			: isError
+			: isError || warnings
 			? 'error'
 			: status == 1
 			? 'success'
@@ -41,6 +41,21 @@ function UserFeedbackBox({status, isPending, isError, error, size}) {
 		} else {
 			statusMsg = error.message;
 		}
+	} else if (warnings) {
+		statusMsg = (
+			<>
+				<h1 className='feedback-box__title'>
+					{!!warnings ? 'To spowoduje także usunięcie:' : 'Czy na pewno?'}
+				</h1>
+				{warnings.map((msg) => (
+					<p
+						className='feedback-box__warning'
+						key={msg}>
+						❌ {msg}
+					</p>
+				))}{' '}
+			</>
+		);
 	}
 
 	return <div className={readyClasses}>{statusMsg}</div>;

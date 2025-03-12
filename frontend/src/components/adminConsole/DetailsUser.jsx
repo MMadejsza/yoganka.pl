@@ -19,14 +19,11 @@ function DetailsUser({userData, customerView, isUserAccountPage}) {
 				</li>
 				<li className='user-container__section-record modal-checklist__li'>
 					<p className='user-container__section-record-label password'>Hasło:</p>
-					<button
-						type='button'
-						className='modal__btn modal__btn--secondary modal__btn--small modal__btn--small-warning password'>
-						Zmień
-					</button>
+
 					<button
 						type='button'
 						className='modal__btn modal__btn--secondary modal__btn--small modal__btn--small-danger password'>
+						<span className='material-symbols-rounded nav__icon'>restart_alt</span>{' '}
 						Resetuj
 					</button>
 				</li>

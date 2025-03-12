@@ -44,7 +44,7 @@ function ViewUser({data, isUserAccountPage, isEditing}) {
 		<>
 			{!isUserAccountPage && (
 				<h2 className='user-container__user-title modal__title dimmed'>
-					{JSON.parse(user.ProfilePictureSrcSetJSON).profile}
+					{JSON.parse(user.ProfilePictureSrcSetJSON)?.profile}
 				</h2>
 			)}
 			{!isUserAccountPage && (
@@ -81,7 +81,15 @@ function ViewUser({data, isUserAccountPage, isEditing}) {
 				<button
 					className='modal__btn'
 					onClick={editingState == false ? handleStartEditing : handleCloseEditing}>
-					{editingState == false ? 'Edytuj' : 'Wróć'}
+					{editingState == false ? (
+						<>
+							<span className='material-symbols-rounded nav__icon'>edit</span> Edytuj
+						</>
+					) : (
+						<>
+							<span className='material-symbols-rounded nav__icon'>undo</span> Wróć
+						</>
+					)}
 				</button>
 			</div>
 		</>

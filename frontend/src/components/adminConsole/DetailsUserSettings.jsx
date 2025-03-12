@@ -19,7 +19,7 @@ function DetailsUserSettings({
 	const title = isUserAccountPage
 		? `Preferencje:`
 		: `Ustawienia strony  ${
-				settingsData?.UserID ? '(ID ' + settingsData?.UserID + '):' : '(Domyślne)'
+				settingsData?.UserID ? '(ID ' + settingsData?.UserPrefID + '):' : '(Domyślne)'
 		  }`;
 
 	const displayContent = (
@@ -49,6 +49,7 @@ function DetailsUserSettings({
 
 	const onEditContent = (
 		<DetailsUserSettingsForm
+			settingsData={settingsData}
 			customerAccessed={customerAccessed}
 			adminAccessed={adminAccessed}
 		/>

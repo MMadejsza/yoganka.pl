@@ -41,12 +41,12 @@
 
 		@include mixin.flex(row, space-between, center);
 		flex-wrap: wrap;
-		&-label.password {
-			flex-basis: 100%;
-		}
-		&.phone {
-			// flex-direction: column;
-		}
+		// &-label.password {
+		// 	flex-basis: 100%;
+		// }
+		// &.phone {
+		// 	// flex-direction: column;
+		// }
 		&.confirmation {
 			justify-content: center;
 			color: green;
@@ -54,18 +54,23 @@
 	}
 
 	.modal__btn--small {
-		width: min-content;
+		width: max-content;
 		flex-basis: auto;
-		height: 2.5rem;
+		height: 3rem;
 		min-height: auto;
 		line-height: 150%;
 		font-size: 1.4rem;
 		&-warning {
-			background-color: rgba(yellow, 0.1);
+			color: #333;
+			background-color: rgba(255, 235, 59, 0.3);
 		}
 		&-danger {
-			color: rgba(red, 0.7);
-			background-color: rgba(red, 0.1);
+			color: #c62828;
+			background-color: rgba(244, 67, 54, 0.25);
+		}
+		&-success {
+			color: #2e7d32;
+			background-color: rgba(76, 175, 80, 0.25);
 		}
 	}
 

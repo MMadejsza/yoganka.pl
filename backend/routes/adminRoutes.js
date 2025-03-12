@@ -42,4 +42,11 @@ router.post('/create-product', adminC.createProduct);
 router.post('/edit-customer-data/:id', adminC.postEditCustomer);
 router.post('/edit-product', adminC.editProduct);
 
+// # DELETE
+router.post('/delete-user/:id', adminC.postDeleteUser);
+router.post('/delete-customer/:id', adminC.postDeleteCustomer);
+router.post('/delete-product/:id', adminC.postDeleteProduct);
+router.post('/delete-schedule/:id', adminC.postDeleteSchedule);
+router.post('/delete-booking/:id', adminC.postDeleteBooking);
+router.post('/delete-feedback/:id', adminC.postDeleteFeedback);
 export default router;
