@@ -325,12 +325,17 @@
 				flex-basis: 35%;
 				text-align: right;
 			}
-			input {
-				flex-basis: 55%;
-				padding: 0.5rem 1.5rem;
-				font-family: 'EB Garamond', serif;
-				border-radius: map.get(var.$sizes, border-radius);
-			}
+		}
+		input,
+		.settings-form__notes-textarea {
+			flex-basis: 55%;
+			padding: 0.5rem 1.5rem;
+			font-family: 'EB Garamond', serif;
+			border-radius: map.get(var.$sizes, border-radius);
+		}
+		.settings-form__notes-textarea {
+			flex-basis: 100%;
+			font-family: 'EB Garamond', serif;
 		}
 		button:last-child {
 			margin-top: 1.2rem;

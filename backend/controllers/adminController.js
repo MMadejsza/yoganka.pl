@@ -150,7 +150,7 @@ export const postEditSettings = (req, res, next) => {
 	console.log(`\n➡️➡️➡️ called Admin postEditSettings`);
 	const userID = req.params.id;
 	const handedness = !!req.body.handedness || false;
-	const font = req.body.font || 14;
+	const font = parseInt(req.body.font) || 14;
 	const notifications = !!req.body.notifications || false;
 	const animation = !!req.body.animation || false;
 	const theme = !!req.body.theme || false;
@@ -187,6 +187,7 @@ export const postEditSettings = (req, res, next) => {
 					preferences.Notifications = notifications;
 					preferences.Animation = animation;
 					preferences.Theme = theme;
+
 					return preferences.save().then(() => {
 						console.log('\n✅✅✅ Admin Preferences Updated');
 						return {confirmation: 1, message: 'Ustawienia zostały zaktualizowane'};
@@ -384,6 +385,9 @@ export const postEditCustomer = (req, res, next) => {
 	const customerId = req.params.id;
 	const newPhone = req.body.phone;
 	const newContactMethod = req.body.cMethod;
+	const newLoyalty = req.body.loyalty;
+	const newNotes = req.body.notes;
+
 	if (!newPhone || !newPhone.trim()) {
 		console.log('\n❌❌❌ Error postEditCustomer:', 'No phone');
 		return res.status(400).json({message: 'Numer telefonu nie może być pusty'});
@@ -399,7 +403,12 @@ export const postEditCustomer = (req, res, next) => {
 			if (!fetchedCustomer) throw new Error('Nie przekazano uczestnika do update.');
 
 			models.Customer.update(
-				{Phone: newPhone, PreferredContactMethod: newContactMethod},
+				{
+					Phone: newPhone,
+					PreferredContactMethod: newContactMethod,
+					Loyalty: newLoyalty,
+					Notes: newNotes,
+				},
 				{where: {CustomerID: customerId}},
 			)
 				.then((customerResult) => {

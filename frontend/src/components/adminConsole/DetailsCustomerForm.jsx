@@ -76,6 +76,8 @@ function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
 	});
 	// Fallback to feed custom hooks when data isn't available
 	const phoneDefault = data?.customer.Phone || ' ';
+	const loyaltyDefault = data?.customer.Loyalty || 5;
+	const notesDefault = data?.customer.Notes || ' ';
 
 	const methodDefault = data?.customer.PreferredContactMethod || ' ';
 
@@ -104,6 +106,30 @@ function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
 		hasError: cMethodHasError,
 	} = useInput(methodDefault);
 
+	const {
+		value: loyaltyValue,
+		handleChange: handleLoyaltyChange,
+		handleFocus: handleLoyaltyFocus,
+		handleBlur: handleLoyaltyBlur,
+		handleReset: handleLoyaltyReset,
+		didEdit: loyaltyDidEdit,
+		isFocused: loyaltyIsFocused,
+		validationResults: loyaltyValidationResults,
+		hasError: loyaltyHasError,
+	} = useInput(loyaltyDefault);
+
+	const {
+		value: notesValue,
+		handleChange: handleNotesChange,
+		handleFocus: handleNotesFocus,
+		handleBlur: handleNotesBlur,
+		handleReset: handleNotesReset,
+		didEdit: notesDidEdit,
+		isFocused: notesIsFocused,
+		validationResults: notesValidationResults,
+		hasError: notesHasError,
+	} = useInput(notesDefault);
+
 	if (isCustomerLoading) return <div>Ładowanie...</div>;
 	if (isCustomerError) return <div>Błąd ładowania ustawień.</div>;
 	console.log(data);
@@ -114,6 +140,8 @@ function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
 		setFeedbackConfirmation(undefined);
 		handlePhoneReset();
 		handleCMethodReset();
+		handleLoyaltyReset();
+		handleNotesReset();
 	};
 
 	// Submit handling
@@ -121,7 +149,7 @@ function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
 		e.preventDefault(); // No reloading
 		console.log('Submit triggered');
 
-		if (phoneHasError || cMethodHasError) {
+		if (phoneHasError || cMethodHasError || loyaltyHasError || notesHasError) {
 			return;
 		}
 		console.log('Submit passed errors');
@@ -160,7 +188,7 @@ function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
 			action='/api/konto/ustawienia/update/uczestnik'
 			method='POST'
 			onSubmit={handleSubmit}
-			className={`user-container__details-list modal-checklist__list`}>
+			className={`user-container__details-list modal-checklist__list form`}>
 			<h1 className='form__title'>{title}</h1>
 			{/* names are for FormData and id for labels */}
 			<InputLogin
@@ -199,6 +227,44 @@ function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
 				didEdit={cMethodDidEdit}
 				isFocused={cMethodIsFocused}
 			/>
+			{adminAccessed && (
+				<>
+					<InputLogin
+						embedded={true}
+						formType={formType}
+						type='number'
+						id='loyalty'
+						name='loyalty'
+						label='Lojalność:'
+						min='0'
+						max='10'
+						value={loyaltyValue}
+						onFocus={handleLoyaltyFocus}
+						onBlur={handleLoyaltyBlur}
+						onChange={handleLoyaltyChange}
+						validationResults={loyaltyValidationResults}
+						didEdit={loyaltyDidEdit}
+						isFocused={loyaltyIsFocused}
+					/>
+					<InputLogin
+						embedded={true}
+						formType={formType}
+						type='textarea'
+						id='notes'
+						name='notes'
+						label='Notatka:'
+						cols='40'
+						rows='10'
+						value={notesValue}
+						onFocus={handleNotesFocus}
+						onBlur={handleNotesBlur}
+						onChange={handleNotesChange}
+						validationResults={notesValidationResults}
+						didEdit={notesDidEdit}
+						isFocused={notesIsFocused}
+					/>
+				</>
+			)}
 
 			<button
 				type='reset'

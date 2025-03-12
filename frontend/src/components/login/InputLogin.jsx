@@ -21,17 +21,7 @@ function InputLogin({
 				className={`${formType}-form__${id}-input`}
 			/>
 		);
-	} else {
-		input = (
-			<input
-				id={id}
-				{...props}
-				value={value}
-				className={`${formType}-form__${id}-input`}
-			/>
-		);
-	}
-	if (props.type == 'select') {
+	} else if (props.type == 'select') {
 		input = (
 			<select
 				id={id}
@@ -47,12 +37,31 @@ function InputLogin({
 				))}
 			</select>
 		);
+	} else if (props.type == 'textarea') {
+		input = (
+			<textarea
+				id={id}
+				name={id}
+				{...props}
+				value={value}
+				className={`${formType}-form__${id}-textarea`}></textarea>
+		);
+	} else {
+		input = (
+			<input
+				id={id}
+				{...props}
+				value={value}
+				className={`${formType}-form__${id}-input`}
+			/>
+		);
 	}
+
 	return (
 		<div
 			className={`${
 				embedded ? 'user-container__section-record modal-checklist__li' : 'input-pair'
-			} ${props.type == 'tel' && 'phone'}`}>
+			} ${props.type == 'tel' ? 'phone' : ''}`}>
 			<label
 				htmlFor={id}
 				className={`${embedded ? 'user-container__section-record-label' : ''}`}>

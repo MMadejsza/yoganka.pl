@@ -18,7 +18,7 @@ const UserPrefSettings = sequelizeDb.define(
 			},
 		},
 		Handedness: {
-			type: DataTypes.STRING(50),
+			type: DataTypes.BOOLEAN,
 			allowNull: true,
 		},
 		FontSize: {
@@ -26,15 +26,15 @@ const UserPrefSettings = sequelizeDb.define(
 			allowNull: true,
 		},
 		Theme: {
-			type: DataTypes.STRING(50),
+			type: DataTypes.BOOLEAN,
 			allowNull: true,
 		},
 		Notifications: {
-			type: DataTypes.TINYINT(1),
+			type: DataTypes.BOOLEAN,
 			allowNull: true,
 		},
 		Animation: {
-			type: DataTypes.TINYINT(1),
+			type: DataTypes.BOOLEAN,
 			allowNull: true,
 		},
 	},
