@@ -45,7 +45,7 @@ function DetailsProduct({data, placement, userAccessed}) {
 						<p className='user-container__section-record-label'>
 							{product.Type == 'Camp' || product.Type == 'Event'
 								? 'Data:'
-								: 'Wdrożony:'}
+								: 'Wdrożono:'}
 						</p>
 						<p className='user-container__section-record-content'>
 							{product.StartDate}

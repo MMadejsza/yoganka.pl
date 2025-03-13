@@ -43,9 +43,7 @@ function DetailsProductStats({data, prodStats, placement}) {
 					</p>
 				</li>
 				<li className='user-container__section-record modal-checklist__li'>
-					<p className='user-container__section-record-label'>
-						Średnia Uczestników/termin:
-					</p>
+					<p className='user-container__section-record-label'>Śr. Uczestników/termin:</p>
 					<p className='user-container__section-record-content'>
 						{prodStats.avgParticipantsAmountPerSesh}
 					</p>
@@ -59,9 +57,7 @@ function DetailsProductStats({data, prodStats, placement}) {
 					</p>
 				</li>
 				<li className='user-container__section-record modal-checklist__li'>
-					<p className='user-container__section-record-label'>
-						Średnia frekwencja/termin:
-					</p>
+					<p className='user-container__section-record-label'>Śr. frekwencja/termin:</p>
 					<p className='user-container__section-record-content'>
 						{prodStats.avgAttendancePercentagePerSesh}
 					</p>
@@ -87,7 +83,7 @@ function DetailsProductStats({data, prodStats, placement}) {
 					</p>
 				</li>
 				<li className='user-container__section-record modal-checklist__li'>
-					<p className='user-container__section-record-label'>Średnia ocena:</p>
+					<p className='user-container__section-record-label'>Śr. ocena:</p>
 					<p className='user-container__section-record-content'>
 						{prodStats.avgFeedbackScore}
 					</p>

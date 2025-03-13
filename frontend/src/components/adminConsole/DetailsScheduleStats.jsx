@@ -43,7 +43,7 @@ function DetailsScheduleStats({data, prodStats}) {
 				</li>
 
 				<li className='user-container__section-record modal-checklist__li'>
-					<p className='user-container__section-record-label'>Średnia ocena:</p>
+					<p className='user-container__section-record-label'>Śr. ocena:</p>
 					<p className='user-container__section-record-content'>
 						{prodStats.avgFeedbackScore}
 					</p>
