@@ -1,11 +1,11 @@
-function DetailsScheduleStats({data, prodStats}) {
+function DetailsScheduleStats({data, scheduleStats}) {
 	// console.clear();
 	console.log(
 		`📝 
         data object from DetailsScheduleStats:`,
 		data,
 	);
-	console.log('stats:', prodStats);
+	console.log('stats:', scheduleStats);
 
 	return (
 		<>
@@ -14,38 +14,40 @@ function DetailsScheduleStats({data, prodStats}) {
 			<ul className='user-container__details-list modal-checklist__list'>
 				<li className='user-container__section-record modal-checklist__li'>
 					<p className='user-container__section-record-label'>Dochód:</p>
-					<p className='user-container__section-record-content'>{prodStats.revenue}</p>
+					<p className='user-container__section-record-content'>
+						{scheduleStats.revenue}
+					</p>
 				</li>
 				<li className='user-container__section-record modal-checklist__li'>
 					<p className='user-container__section-record-label'>Liczba Uczestników:</p>
 					<p className='user-container__section-record-content'>
-						{prodStats.totalParticipantsAmount}
+						{scheduleStats.totalParticipantsAmount}
 					</p>
 				</li>
 				<li className='user-container__section-record modal-checklist__li'>
 					<p className='user-container__section-record-label'>Mediana wieku:</p>
 					<p className='user-container__section-record-content'>
-						{prodStats.medianParticipantsAge} lat
+						{scheduleStats.medianParticipantsAge} lat
 					</p>
 				</li>
 
 				<li className='user-container__section-record modal-checklist__li'>
 					<p className='user-container__section-record-label'>Frekwencja:</p>
 					<p className='user-container__section-record-content'>
-						{prodStats.avgAttendancePercentage}
+						{scheduleStats.avgAttendancePercentage}
 					</p>
 				</li>
 				<li className='user-container__section-record modal-checklist__li'>
 					<p className='user-container__section-record-label'>% opinii:</p>
 					<p className='user-container__section-record-content'>
-						{prodStats.avgReviewersPercentage}
+						{scheduleStats.avgReviewersPercentage}
 					</p>
 				</li>
 
 				<li className='user-container__section-record modal-checklist__li'>
 					<p className='user-container__section-record-label'>Śr. ocena:</p>
 					<p className='user-container__section-record-content'>
-						{prodStats.avgFeedbackScore}
+						{scheduleStats.avgFeedbackScore}
 					</p>
 				</li>
 			</ul>

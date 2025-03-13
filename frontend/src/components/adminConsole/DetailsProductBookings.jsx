@@ -41,7 +41,7 @@ function DetailsProductBookings({type, stats}) {
 	);
 	const eventCampTableModule = (
 		<>
-			<h2 className='user-container__section-title modal__title--day'>{`Obecność / Rezerwacje (${bookingsArray.length}):`}</h2>
+			<h2 className='user-container__section-title modal__title--day'>{`Rezerwacje (${bookingsArray.length}):`}</h2>
 			{table}
 			{cancelledTable}
 		</>

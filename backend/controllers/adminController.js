@@ -602,6 +602,8 @@ export const showScheduleByID = (req, res, next) => {
 
 			// [Zmienione] Dodano logikę przetwarzania rezerwacji podobną do działającego kodu:
 			let isUserGoing = false;
+			schedule.Attendance = 0;
+
 			if (schedule.BookedSchedules && schedule.BookedSchedules.length > 0) {
 				let wasUserReserved;
 				const beingAttendedSchedules = schedule.BookedSchedules.filter(
@@ -621,7 +623,6 @@ export const showScheduleByID = (req, res, next) => {
 				schedule.wasUserReserved = wasUserReserved;
 				schedule.full = beingAttendedSchedules.length >= schedule.Capacity;
 			}
-
 			// [Zmienione] Ustalanie statusu terminu (jak w działającym kodzie)
 			const scheduleDateTime = new Date(`${schedule.Date}T${schedule.StartTime}:00`);
 			const now = new Date();

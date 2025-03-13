@@ -91,12 +91,12 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen, isAdminPanel}) {
 	const isArchived = scheduleDateTime < today;
 	const bookedSuccessfully = !userAccountPage && bookingOps?.confirmation;
 	const isSuccessNotification = bookedSuccessfully || isCancelledSuccessfully;
-	let prodStats = null;
+	let scheduleStats = null;
 
 	const userAccessed = status.role != 'ADMIN';
 
 	const {isLoggedIn} = status;
-	if (!userAccessed && isAdminPanel) prodStats = calculateScheduleStats(product, schedule);
+	if (!userAccessed && isAdminPanel) scheduleStats = calculateScheduleStats(product, schedule);
 
 	const handleCancellation = () => {
 		cancel();
@@ -206,7 +206,7 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen, isAdminPanel}) {
 					<div className='user-container__main-details modal-checklist'>
 						<DetailsScheduleStats
 							data={product}
-							prodStats={prodStats}
+							scheduleStats={scheduleStats}
 						/>
 					</div>
 
@@ -214,7 +214,13 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen, isAdminPanel}) {
 
 					<div className='user-container__main-details  schedules modal-checklist'>
 						<DetailsProductBookings
-							stats={prodStats}
+							stats={scheduleStats}
+							type={type}
+						/>
+					</div>
+					<div className='user-container__main-details  schedules modal-checklist'>
+						<DetailsProductBookings
+							stats={scheduleStats}
 							type={type}
 						/>
 					</div>
@@ -222,7 +228,7 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen, isAdminPanel}) {
 					{/*//@ Feedback */}
 
 					<div className='user-container__main-details  schedules modal-checklist'>
-						<DetailsProductReviews stats={prodStats} />
+						<DetailsProductReviews stats={scheduleStats} />
 					</div>
 				</>
 			)}

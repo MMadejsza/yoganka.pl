@@ -35,8 +35,8 @@ function SchedulePage() {
 
 	const {
 		mutate: book,
-		isError: isMutateError,
-		error: mutateError,
+		isError: isBookError,
+		error: bookError,
 		reset,
 	} = useMutation({
 		mutationFn: async ({scheduleID, productName, productPrice, customerDetails}) =>
@@ -148,8 +148,8 @@ function SchedulePage() {
 				onClose={handleCloseModal}
 				bookingOps={{
 					onBook: book,
-					isError: isMutateError,
-					error: mutateError,
+					isError: isBookError,
+					error: bookError,
 					confirmation: isBookedSuccessfully,
 				}}
 				role={status.role}
