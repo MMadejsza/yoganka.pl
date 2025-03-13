@@ -183,14 +183,15 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen, isAdminPanel}) {
 					<div className='user-container__main-details modal-checklist'>
 						<DetailsSchedule
 							data={schedule}
-							userAccessed={userAccessed}
+							placement={'scheduleView'}
+							isAdminPanel={isAdminPanel}
 						/>
 					</div>
 					{/*//@ Product main details */}
-					<div className='user-container__main-details modal-checklist'>
+					<div className='user-container__side-details modal-checklist'>
 						<DetailsProduct
 							data={product}
-							placement={'schedule'}
+							placement={'scheduleView'}
 							userAccessed={userAccessed}
 						/>
 					</div>

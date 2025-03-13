@@ -33,13 +33,13 @@ function DetailsProduct({data, placement, userAccessed}) {
 				<p className='user-container__section-record-label'>Typ:</p>
 				<p className='user-container__section-record-content'>{product.Type}</p>
 			</li>
-			{placement == 'schedule' && !userAccessed && (
+			{placement == 'scheduleView' && !userAccessed && (
 				<li className='user-container__section-record modal-checklist__li'>
 					<p className='user-container__section-record-label'>Nazwa:</p>
 					<p className='user-container__section-record-content'>{product.Name}</p>
 				</li>
 			)}
-			{placement != 'schedule' && (
+			{placement != 'scheduleView' && (
 				<>
 					<li className='user-container__section-record modal-checklist__li'>
 						<p className='user-container__section-record-label'>

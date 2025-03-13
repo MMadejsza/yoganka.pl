@@ -399,6 +399,19 @@ export const postEditCustomer = (req, res, next) => {
 			console.log('\n✅✅✅ Fetched admin postEditCustomer customer');
 			return customer;
 		})
+		.then((foundCustomer) => {
+			if (
+				foundCustomer.Phone == newPhone &&
+				foundCustomer.PreferredContactMethod == newContactMethod &&
+				foundCustomer.Loyalty == newLoyalty &&
+				foundCustomer.Notes == newNotes
+			) {
+				// Nothing changed
+				console.log('\n❓❓❓ Admin Customer no change');
+				return {confirmation: 0, message: 'Brak zmian'};
+			}
+			return foundCustomer;
+		})
 		.then((fetchedCustomer) => {
 			if (!fetchedCustomer) throw new Error('Nie przekazano uczestnika do update.');
 
@@ -666,6 +679,88 @@ export const postDeleteSchedule = (req, res, next) => {
 		.catch((err) => {
 			console.log('\n❌❌❌ Error admin postDeleteSchedule:', err);
 			return res.status(404).json({message: err});
+		});
+};
+export const postEditSchedule = async (req, res, next) => {
+	console.log(`\n➡️➡️➡️ called admin postEditSchedule`);
+	const scheduleId = req.params.id;
+	const newCapacity = req.body.capacity;
+	const newStartDate = req.body.date;
+	const newStartTime = req.body.startTime;
+	const newLocation = req.body.location;
+	console.log(scheduleId);
+	console.log(newCapacity);
+	console.log(newStartDate);
+	console.log(newStartTime);
+	console.log(newLocation);
+
+	if (
+		!newCapacity ||
+		!newStartDate ||
+		!newStartDate.trim() ||
+		!newLocation ||
+		!newLocation.trim() ||
+		!newStartTime ||
+		!newStartTime.trim()
+	) {
+		console.log('\n❌❌❌ Error postEditSchedule:', 'No enough data');
+		return res.status(400).json({message: 'Nie podano wszystkich danych.'});
+	}
+
+	models.ScheduleRecord.findByPk(scheduleId)
+		.then((schedule) => {
+			if (!schedule) throw new Error('Nie znaleziono danych terminu.');
+			console.log('\n✅✅✅ Fetched admin postEditSchedule schedule');
+			return schedule;
+		})
+		.then((foundSchedule) => {
+			if (new Date(`${foundSchedule.Date}T${foundSchedule.StartTime}:00`) < new Date()) {
+				console.log('\n❓❓❓ Admin schedule is past - not to edit');
+				throw new Error('Nie można edytować minionego terminu.');
+			} else if (
+				foundSchedule.Capacity == newCapacity &&
+				foundSchedule.Date === newStartDate &&
+				foundSchedule.Location === newLocation &&
+				foundSchedule.StartTime === newStartTime
+			) {
+				// Nothing changed
+				console.log('\n❓❓❓ Admin schedule no change');
+				return {confirmation: 0, message: 'Brak zmian'};
+			}
+			return foundSchedule;
+		})
+		.then((fetchedSchedule) => {
+			if (!fetchedSchedule) throw new Error('Nie przekazano terminu do update.');
+
+			models.ScheduleRecord.update(
+				{
+					Capacity: newCapacity,
+					StartDate: newStartDate,
+					StartTime: newStartTime,
+					Location: newLocation,
+				},
+				{where: {ScheduleID: scheduleId}},
+			)
+				.then((scheduleResult) => {
+					return {scheduleResult};
+				})
+				.then((results) => {
+					console.log('\n✅✅✅ admin postEditSchedule UPDATE successful');
+					const affectedScheduleRows = results.scheduleResult[0];
+					const status = affectedScheduleRows >= 1;
+					return res.status(200).json({
+						confirmation: status,
+						affectedScheduleRows,
+					});
+				})
+				.catch((err) => {
+					console.log('\n❌❌❌ Error admin  postEditSchedule UPDATE:', err);
+					return res.status(500).json({message: err.message});
+				});
+		})
+		.catch((err) => {
+			console.log('\n❌❌❌ Error admin postEditSchedule', err);
+			return res.status(404).json({message: err.message});
 		});
 };
 //@ FEEDBACK

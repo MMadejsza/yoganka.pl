@@ -41,6 +41,7 @@ router.post('/create-product', adminC.createProduct);
 //# EDIT
 router.post('/edit-customer-data/:id', adminC.postEditCustomer);
 router.post('/edit-product-data/:id', adminC.postEditProduct);
+router.post('/edit-schedule-data/:id', adminC.postEditSchedule);
 
 // # DELETE
 router.post('/delete-user/:id', adminC.postDeleteUser);
