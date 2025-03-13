@@ -917,20 +917,83 @@ export const createProduct = async (req, res, next) => {
 		})
 		.catch((err) => console.log(err));
 };
-export const editProduct = async (req, res, next) => {
-	models.Product.findByPk()
-		.then({
-			Name: req.body.name,
-			Type: req.body.type,
-			Location: req.body.location,
-			Duration: req.body.duration,
-			Price: req.body.price,
-			StartDate: req.body.startDate,
+export const postEditProduct = async (req, res, next) => {
+	console.log(`\n➡️➡️➡️ called admin postEditProduct`);
+	const productId = req.params.id;
+	const newType = req.body.type;
+	const newStartDate = req.body.date;
+	const newLocation = req.body.location;
+	const newDuration = req.body.duration;
+	const newPrice = req.body.price;
+
+	if (
+		!newType ||
+		!newType.trim() ||
+		!newStartDate ||
+		!newStartDate.trim() ||
+		!newLocation ||
+		!newLocation.trim() ||
+		!newDuration ||
+		!newPrice
+	) {
+		console.log('\n❌❌❌ Error postEditCustomer:', 'No enough data');
+		return res.status(400).json({message: 'Nie podano wszystkich danych.'});
+	}
+
+	models.Product.findByPk(productId)
+		.then((product) => {
+			if (!product) throw new Error('Nie znaleziono danych uczestnika.');
+			console.log('\n✅✅✅ Fetched admin postEditProduct product');
+			return product;
 		})
-		.then(() => {
-			console.log('✅ created');
+		.then((foundProduct) => {
+			if (
+				foundProduct.Type === newType &&
+				foundProduct.StartDate === newStartDate &&
+				foundProduct.Location === newLocation &&
+				foundProduct.Duration === newDuration &&
+				foundProduct.Price === newPrice
+			) {
+				// Nothing changed
+				console.log('\n❓❓❓ Admin Product no change');
+				return {confirmation: 0, message: 'Brak zmian'};
+			}
+			return foundProduct;
 		})
-		.catch((err) => console.log(err));
+		.then((fetchedProduct) => {
+			if (!fetchedProduct) throw new Error('Nie przekazano produktu do update.');
+
+			models.Product.update(
+				{
+					Type: newType,
+					StartDate: newStartDate,
+					Location: newLocation,
+					Duration: newDuration,
+					Price: newPrice,
+				},
+				{where: {ProductID: productId}},
+			)
+				.then((productResult) => {
+					return {productResult};
+				})
+				.then((results) => {
+					console.log('\n✅✅✅ admin postEditProduct UPDATE successful');
+					const affectedProductRows = results.productResult[0];
+					const status = affectedProductRows >= 1;
+					return res.status(200).json({
+						confirmation: status,
+						affectedProductRows,
+					});
+				})
+				.catch((err) => {
+					console.log('\n❌❌❌ Error admin  postEditProduct UPDATE:', err);
+					return res.status(500).json({error: err});
+				});
+		})
+		.catch((err) => {
+			console.log('\n❌❌❌ Error admin postEditProduct', err);
+			return res.status(404).json({message: err});
+		});
 };
 export const postDeleteProduct = (req, res, next) => {
 	console.log(`\n➡️➡️➡️ called postDeleteProduct`);

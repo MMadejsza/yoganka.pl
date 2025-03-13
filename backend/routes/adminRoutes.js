@@ -40,7 +40,7 @@ router.post('/create-product', adminC.createProduct);
 // router.post('/create-invoice', adminC.createInvoice);
 //# EDIT
 router.post('/edit-customer-data/:id', adminC.postEditCustomer);
-router.post('/edit-product', adminC.editProduct);
+router.post('/edit-product-data/:id', adminC.postEditProduct);
 
 // # DELETE
 router.post('/delete-user/:id', adminC.postDeleteUser);
