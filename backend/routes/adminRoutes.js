@@ -29,7 +29,7 @@ router.get('/show-all-invoices', adminC.showAllInvoices);
 
 //@ POST
 //# CREATE
-router.post('/add-user', adminC.createUser);
+router.post('/create-user', adminC.postCreateUser);
 router.post('/edit-user-settings/:id', adminC.postEditSettings);
 //? router.post('/create-customer', adminC.createCustomer);
 //? router.post('/create-customer-phone', adminC.createCustomerPhone);

@@ -37,13 +37,13 @@ const sideNavActions = [
 const allowedPaths = sideNavTabs.map((tab) => tab.link);
 
 function AdminPage() {
-	const modalMatch = useMatch('/admin-console/show-all-users/:id');
 	const navigate = useNavigate();
 	const location = useLocation(); // fetch current path
 	const isAdminPage = location.pathname.includes('admin-console') ?? false;
 	const isInactiveTable = ['invoices', 'newsletters', 'feedback'].some((path) =>
 		location.pathname.includes(path),
 	);
+	const modalMatch = useMatch('/admin-console/show-all-users/:id');
 	const [isModalOpen, setIsModalOpen] = useState(modalMatch);
 
 	const handleOpenModal = (row) => {
@@ -146,6 +146,8 @@ function AdminPage() {
 					<SideNav
 						menuSet={sideNavActions}
 						side='right'
+						type='action'
+						onclose={handleCloseModal}
 					/>
 				</>
 			)}

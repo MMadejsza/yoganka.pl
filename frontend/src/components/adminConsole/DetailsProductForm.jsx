@@ -6,7 +6,7 @@ import {formatIsoDateTime} from '../../utils/productViewsUtils.js';
 import {useInput} from '../../hooks/useInput.js';
 // import {typeValidations} from '../../utils/validation.js';
 import InputLogin from '../login/InputLogin.jsx';
-import UserFeedbackBox from './UserFeedbackBox.jsx';
+import UserFeedbackBox from './FeedbackBox.jsx';
 
 function DetailsProductForm({productData}) {
 	// const location = useLocation();

@@ -4,7 +4,7 @@ import {queryClient, fetchStatus} from '../../utils/http.js';
 import {formatIsoDateTime} from '../../utils/productViewsUtils.js';
 import {useInput} from '../../hooks/useInput.js';
 import InputLogin from '../login/InputLogin.jsx';
-import UserFeedbackBox from './UserFeedbackBox.jsx';
+import UserFeedbackBox from './FeedbackBox.jsx';
 
 function DetailsScheduleForm({scheduleData}) {
 	// !dodaj 'zamknij zapisy

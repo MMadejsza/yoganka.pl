@@ -2,18 +2,43 @@ import React, {useState} from 'react';
 import {useNavigate, useLocation} from 'react-router-dom';
 
 import {NavLink} from 'react-router-dom';
-import NewUser from './NewUser.jsx';
+import NewUserForm from './NewUserForm.jsx';
+import ModalFrame from './ModalFrame.jsx';
 
-function SideNav({menuSet, side}) {
+function SideNav({menuSet, side, type, onclose}) {
 	const navigate = useNavigate();
 	const location = useLocation();
 
-	const isModalPath = location.pathname.includes('add-user');
-	const [isModalOpen, setIsModalOpen] = useState(isModalPath);
+	// const isModalPath = location.pathname.includes('add-user');
+	const [isModalOpen, setIsModalOpen] = useState(false);
+
+	const pickDestination = (location) => {
+		let destination, destComponent;
+		const path = location.pathname;
+		switch (true) {
+			case path.includes('show-all-users'):
+				destination = 'show-all-users/add-user';
+				destComponent = <NewUserForm />;
+			case path.includes('show-all-customers'):
+				destination = 'show-all-customers/add-customer';
+				destComponent = <NewUserForm />;
+			case path.includes('show-all-products'):
+				destination = 'show-all-products/add-product';
+				destComponent = <NewUserForm />;
+			case path.includes('show-all-schedules'):
+				destination = 'show-all-schedules/add-schedule';
+				destComponent = <NewUserForm />;
+			case path.includes('show-all-bookings'):
+				destination = 'show-all-bookings/add-booking';
+				destComponent = <NewUserForm />;
+			default:
+		}
+		return {dest: destination, comp: destComponent};
+	};
 
 	const handleOpenModal = (link) => {
 		setIsModalOpen(true);
-		navigate(`/admin-console/show-all-users/${link}`, {state: {background: location}});
+		navigate(`/admin-console/${link}`, {state: {background: location}});
 	};
 
 	const handleCloseModal = () => {
@@ -31,9 +56,9 @@ function SideNav({menuSet, side}) {
 							<NavLink
 								to={li.link}
 								onClick={(e) => {
-									if (li.link === 'add-user') {
+									if (type == 'action') {
 										e.preventDefault();
-										handleOpenModal(li.link);
+										handleOpenModal(pickDestination(location).dest);
 									}
 								}}
 								className={({isActive}) =>
@@ -56,10 +81,11 @@ function SideNav({menuSet, side}) {
 				</ul>
 			</nav>
 			{isModalOpen && (
-				<NewUser
+				<ModalFrame
 					visited={isModalOpen}
-					onClose={handleCloseModal}
-				/>
+					onClose={handleCloseModal}>
+					{pickDestination(location).comp}
+				</ModalFrame>
 			)}
 		</aside>
 	);

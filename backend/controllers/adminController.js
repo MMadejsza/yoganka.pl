@@ -88,25 +88,47 @@ export const showUserByID = (req, res, next) => {
 			return res.status(404).json({message: err});
 		});
 };
-export const createUser = (req, res, next) => {
-	// console.log('📩 Otrzymane dane:', req.body);
-	models.User.create({
-		RegistrationDate: req.body.registrationDate,
-		Login: req.body.login,
-		PasswordHash: req.body.password,
-		LastLoginDate: 'logindate',
-		Email: req.body.email + Math.floor(Math.random() * 1000) + '@google.com',
-		Role: req.body.role,
-		ProfilePictureSrcSetJSON: req.body.profilePicture,
-	})
-		.then(() => {
-			console.log('✅ user created');
-			res.status(201).json({
-				isLoggedIn: req.session.isLoggedIn,
-				message: '✅ User created',
-			});
+export const postCreateUser = (req, res, next) => {
+	console.log(`\n➡️➡️➡️ called postCreateUser`);
+	const {email, password, confirmedPassword, date} = req.body;
+
+	models.User.findOne({where: {email}})
+		.then((user) => {
+			if (user) {
+				throw new Error('Użytkownik już istnieje.');
+			}
+
+			// it returns the promise
+			return bcrypt
+				.hash(password, 12)
+				.then((passwordHashed) => {
+					return models.User.create({
+						RegistrationDate: date,
+						PasswordHash: passwordHashed,
+						LastLoginDate: date,
+						Email: email,
+						Role: 'user',
+						ProfilePictureSrcSetJSON: null,
+					});
+				})
+				.then((newUser) => {
+					return res.status(200).json({
+						type: 'signup',
+						code: 200,
+						confirmation: 1,
+						message: '✅ Zarejestrowano pomyślnie',
+					});
+				});
 		})
-		.catch((err) => console.log(err));
+		.catch((err) => {
+			console.log('❌❌❌ Użytkownik już istnieje.');
+			return res.status(409).json({
+				confirmation: 0,
+				type: 'signup',
+				code: 409,
+				message: err.message,
+			});
+		});
 };
 
 export const postDeleteUser = (req, res, next) => {

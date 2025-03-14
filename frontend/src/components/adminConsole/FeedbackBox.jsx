@@ -3,6 +3,7 @@ import {useNavigate} from 'react-router-dom';
 function UserFeedbackBox({
 	warnings,
 	status,
+	successMsg,
 	isPending,
 	isError,
 	error,
@@ -31,7 +32,7 @@ function UserFeedbackBox({
 
 	let statusMsg;
 	if (status == 1) {
-		statusMsg = 'Zmiany zatwierdzone';
+		statusMsg = successMsg || 'Zmiany zatwierdzone';
 		if (redirectTarget) {
 			setTimeout(() => {
 				navigate(redirectTarget);
@@ -39,7 +40,7 @@ function UserFeedbackBox({
 			}, 1000);
 		}
 	} else if (status == 0) {
-		statusMsg = 'Brak zmian';
+		statusMsg = error.message || 'Brak zmian';
 	} else if (isPending) {
 		statusMsg = 'Wysyłanie...';
 	} else if (isError) {

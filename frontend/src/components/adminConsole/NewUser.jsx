@@ -1,13 +1,13 @@
 import ModalFrame from './ModalFrame.jsx';
 
-import UserForm from './UserForm.jsx';
+import NewUserForm from './NewUserForm.jsx';
 
 function NewUser({visited, onClose}) {
 	return (
 		<ModalFrame
 			visited={visited}
 			onClose={onClose}>
-			<UserForm closeModal={true} />
+			<NewUserForm onClose={onClose} />
 		</ModalFrame>
 	);
 }

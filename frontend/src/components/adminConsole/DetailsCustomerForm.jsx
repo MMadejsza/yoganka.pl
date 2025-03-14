@@ -5,7 +5,7 @@ import {queryClient, fetchItem, fetchStatus} from '../../utils/http.js';
 import {useInput} from '../../hooks/useInput.js';
 import {phoneValidations} from '../../utils/validation.js';
 import InputLogin from '../login/InputLogin.jsx';
-import UserFeedbackBox from './UserFeedbackBox.jsx';
+import UserFeedbackBox from './FeedbackBox.jsx';
 
 function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
 	console.log('customerAccessed adminAccessed', customerAccessed, adminAccessed);

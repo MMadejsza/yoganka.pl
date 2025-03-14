@@ -9,7 +9,7 @@ import ViewProduct from './ViewProduct.jsx';
 import ViewSchedule from './ViewSchedule.jsx';
 import ViewBooking from './ViewBooking.jsx';
 import ViewReview from './ViewReview.jsx';
-import UserFeedbackBox from './UserFeedbackBox.jsx';
+import UserFeedbackBox from './FeedbackBox.jsx';
 
 function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, customer, role}) {
 	const navigate = useNavigate();

@@ -20,11 +20,7 @@ export const postSignup = (req, res, next) => {
 	models.User.findOne({where: {email}})
 		.then((user) => {
 			if (user) {
-				return res.status(404).json({
-					type: 'signup',
-					code: 404,
-					message: 'Użytkownik już istnieje',
-				});
+				throw new Error('Użytkownik już istnieje.');
 			}
 
 			// it returns the promise
@@ -44,13 +40,19 @@ export const postSignup = (req, res, next) => {
 					return res.status(200).json({
 						type: 'signup',
 						code: 200,
-						message: 'Zarejestrowano pomyślnie',
+						confirmation: 1,
+						message: '✅ Zarejestrowano pomyślnie',
 					});
 				});
 		})
 		.catch((err) => {
-			console.log(err);
-			return res.status(500).json({error: err.message});
+			console.log('❌❌❌ Użytkownik już istnieje.');
+			return res.status(409).json({
+				confirmation: 0,
+				type: 'signup',
+				code: 409,
+				message: err.message,
+			});
 		});
 };
 export const postLogin = (req, res, next) => {
@@ -63,6 +65,7 @@ export const postLogin = (req, res, next) => {
 				res.status(404).json({
 					type: 'login',
 					code: 404,
+					confirmation: 0,
 					message: 'Użytkownik nie istnieje',
 				});
 				return null;
@@ -84,6 +87,7 @@ export const postLogin = (req, res, next) => {
 					return res.status(200).json({
 						type: 'login',
 						code: 200,
+						confirmation: 1,
 						message: 'Zalogowano pomyślnie',
 					});
 				} else {
@@ -91,6 +95,7 @@ export const postLogin = (req, res, next) => {
 					return res.status(404).json({
 						type: 'login',
 						code: 404,
+						confirmation: 0,
 						message: 'Hasło nieprawidłowe',
 					});
 				}
@@ -98,11 +103,11 @@ export const postLogin = (req, res, next) => {
 		})
 		.catch((err) => {
 			console.log(err);
-			return res.status(500).json({error: err.message});
+			return res.status(500).json({message: err.message});
 		});
 };
 export const postLogout = (req, res, next) => {
-	console.log('postLogout 1');
+	console.log(`\n➡️➡️➡️ called postLogout`);
 
 	req.session.destroy((err) => {
 		console.log('postLogout');

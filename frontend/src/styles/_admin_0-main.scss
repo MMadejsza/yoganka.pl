@@ -285,8 +285,9 @@
 			}
 		}
 		&__details-list {
-			@include mixin.flex(column, center);
+			@include mixin.flex(column, center, center);
 			width: 100%;
+			max-width: 600px;
 			margin-bottom: 1rem;
 			& button:not(.password) {
 				margin-top: 1rem;

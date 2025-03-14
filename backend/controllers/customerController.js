@@ -6,7 +6,7 @@ export const postBookSchedule = (req, res, next) => {
 	// @ Fetching USER
 	// check if there is logged in User
 	if (!req.user) {
-		throw new Error({message: 'Użytkownik nie jest zalogowany'});
+		throw new Error('Użytkownik nie jest zalogowany');
 	}
 	let currentCustomer;
 	// If it's not a Customer yet
@@ -242,7 +242,9 @@ export const postEditCustomer = (req, res, next) => {
 	const newContactMethod = req.body.cMethod;
 	if (!newPhone || !newPhone.trim()) {
 		console.log('\n❌❌❌ Error postEditCustomer:', 'No phone');
-		return res.status(400).json({message: 'Numer telefonu nie może być pusty'});
+		return res
+			.status(400)
+			.json({confirmation: 0, message: 'Numer telefonu nie może być pusty'});
 	}
 
 	models.Customer.update(
@@ -263,7 +265,7 @@ export const postEditCustomer = (req, res, next) => {
 		})
 		.catch((err) => {
 			console.log('\n❌❌❌ Error postEditCustomer:', err);
-			return res.status(500).json({error: err.message});
+			return res.status(500).json({message: err.message});
 		});
 };
 
