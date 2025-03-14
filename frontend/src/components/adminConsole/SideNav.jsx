@@ -5,6 +5,7 @@ import {NavLink} from 'react-router-dom';
 import ModalFrame from './ModalFrame.jsx';
 import NewUserForm from './NewUserForm.jsx';
 import NewCustomerForm from './NewCustomerForm.jsx';
+import NewProductForm from './NewProductForm.jsx';
 
 function SideNav({menuSet, side, type, onclose}) {
 	const navigate = useNavigate();
@@ -28,7 +29,7 @@ function SideNav({menuSet, side, type, onclose}) {
 
 			case path.includes('show-all-products'):
 				destination = 'show-all-products/add-product';
-				destComponent = <NewUserForm />;
+				destComponent = <NewProductForm />;
 				break;
 
 			case path.includes('show-all-schedules'):

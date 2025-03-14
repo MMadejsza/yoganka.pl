@@ -1067,47 +1067,39 @@ export const showProductByID = (req, res, next) => {
 };
 export const postCreateProduct = async (req, res, next) => {
 	console.log(`\n➡️➡️➡️ called postCreateProduct`);
-	const {userID, customerType, firstName, lastName, DoB, phone, cMethod, loyalty, notes} =
-		req.body;
-	// let customerPromise;
-	// models.Customer.findOne({where: {UserID: userID}})
-	// 	.then((customer) => {
-	// 		if (customer) {
-	// 			throw new Error('Profil uczestnika już istnieje.');
-	// 		}
-	// 		return (customerPromise = models.Customer.create({
-	// 			CustomerType: customerType || 'Indywidualny',
-	// 			UserID: userID,
-	// 			FirstName: firstName,
-	// 			LastName: lastName,
-	// 			DoB: DoB,
-	// 			Phone: phone,
-	// 			PreferredContactMethod: cMethod || '=',
-	// 			ReferralSource: 'Admin insert',
-	// 			Loyalty: loyalty || 5,
-	// 			Notes: notes,
-	// 		}).then((newCustomer) => {
-	// 			return models.User.update({Role: 'customer'}, {where: {UserID: userID}}).then(
-	// 				() => newCustomer,
-	// 			);
-	// 		}));
-	// 	})
-	// 	.then((newCustomer) => {
-	// 		console.log('\n✅✅✅ postCreateProduct Zarejestrowano pomyślnie.');
-	// 		return res.status(200).json({
-	// 			code: 200,
-	// 			confirmation: 1,
-	// 			message: 'Zarejestrowano pomyślnie.',
-	// 		});
-	// 	})
-	// 	.catch((err) => {
-	// 		console.log('\n❌❌❌ postCreateProduct Profil uczestnika już istnieje.');
-	// 		return res.status(409).json({
-	// 			confirmation: 0,
-	// 			code: 409,
-	// 			message: err.message,
-	// 		});
-	// 	});
+	const {name, productType, StartDate, duration, location, price, status} = req.body;
+	let productPromise;
+	models.Product.findOne({where: {Name: name}})
+		.then((product) => {
+			if (product) {
+				throw new Error('Produkt już istnieje.');
+			}
+			return (productPromise = models.Product.create({
+				Name: name,
+				Type: productType,
+				Location: location,
+				Duration: duration,
+				Price: price,
+				StartDate: StartDate,
+				Status: status || 'Aktywny', //!Dodaj to pole do EditProduct
+			}));
+		})
+		.then((newProduct) => {
+			console.log('\n✅✅✅ postCreateProduct Stworzono pomyślnie.');
+			return res.status(200).json({
+				code: 200,
+				confirmation: 1,
+				message: 'Stworzono pomyślnie.',
+			});
+		})
+		.catch((err) => {
+			console.log('\n❌❌❌ postCreateProduct Produkt już istnieje.');
+			return res.status(409).json({
+				confirmation: 0,
+				code: 409,
+				message: err.message,
+			});
+		});
 };
 export const postEditProduct = async (req, res, next) => {
 	console.log(`\n➡️➡️➡️ called admin postEditProduct`);

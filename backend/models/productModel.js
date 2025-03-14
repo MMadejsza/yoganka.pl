@@ -12,11 +12,12 @@ const Product = sequelizeDb.define(
 		},
 		Name: {
 			type: DataTypes.STRING(255),
-			allowNull: true,
+			allowNull: false,
+			unique: true,
 		},
 		Type: {
 			type: DataTypes.STRING(50),
-			allowNull: true,
+			allowNull: false,
 		},
 		Location: {
 			type: DataTypes.STRING(255),
@@ -24,16 +25,15 @@ const Product = sequelizeDb.define(
 		},
 		Duration: {
 			type: DataTypes.TIME, //  HH:MM:SS
-			allowNull: true,
+			allowNull: false,
 		},
 		Price: {
 			type: DataTypes.DECIMAL(10, 2),
-			allowNull: true,
+			allowNull: false,
 		},
-
 		StartDate: {
 			type: DataTypes.DATEONLY, //  YYYY-MM-DD
-			allowNull: true,
+			allowNull: false,
 		},
 		Status: {
 			type: DataTypes.STRING(50),
