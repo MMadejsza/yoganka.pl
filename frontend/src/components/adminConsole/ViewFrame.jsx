@@ -140,7 +140,12 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 				];
 				return controller;
 			case 'product':
-				controller.recordDisplay = <ViewProduct data={data} />;
+				controller.recordDisplay = (
+					<ViewProduct
+						data={data}
+						isAdminPanel={isAdminPanel}
+					/>
+				);
 				controller.recordEditor = '';
 				controller.deleteBtnTitle = 'Produkt';
 				controller.deleteQuery = `delete-product/${data.product.ProductID}`;

@@ -29,13 +29,13 @@ export const formatIsoDateTime = (isoString) => {
 	} else formattedTime = '';
 
 	// Concat
-	return `${formattedDate} | ${formattedTime}`;
+	return `${formattedTime} | ${formattedDate}`;
 };
 
 //@ stats calculation
 export const calculateProductStats = (product, schedules) => {
 	console.log(`schedules: `, schedules);
-
+	const attendedBookings = [];
 	const scheduleRecords = [];
 	const bookings = [];
 	const attendances = [];
@@ -87,21 +87,30 @@ export const calculateProductStats = (product, schedules) => {
 			for (let booking of allBookings) {
 				totalRevenue += parseFloat(booking.AmountPaid);
 				participantAges.push(calculateAge(booking.Customer.DoB));
-				const precessedBooking = {
-					id: booking.BookingID,
-					date: booking.Date,
-					customer: `${booking.Customer.FirstName} ${booking.Customer.LastName}`,
-					value: booking.AmountPaid,
-					method: booking.PaymentMethod,
-					attended: 0,
-				};
 
+				booking.Attendance = 0;
+				const formattedCustomer = `${booking.Customer.FirstName} ${booking.Customer.LastName} (${booking.Customer.CustomerID})`;
 				if (booking.BookedSchedule?.Attendance == true) {
 					scheduleParticipantsAmount += 1;
 					totalParticipantsAmount += 1;
-					precessedBooking.attended = 1;
+					booking.Attendance = true;
+
+					const isoTimeStamp = new Date(booking.BookedSchedule.TimeStamp).toISOString();
+					attendedBookings.push({
+						id: booking.BookingID,
+						date: booking.Date,
+						customerID: booking.Customer.CustomerID,
+						customer: formattedCustomer,
+						value: booking.AmountPaid,
+						timestamp: `${getWeekDay(isoTimeStamp.split('T')[0])} | ${formatIsoDateTime(
+							isoTimeStamp,
+						)}`,
+						method: booking.PaymentMethod,
+						Attendance: 1,
+					});
 				}
-				bookings.push(precessedBooking);
+				booking.Customer = formattedCustomer;
+				bookings.push(booking);
 			}
 			scheduleAttendance = Math.round((scheduleParticipantsAmount / schedule.Capacity) * 100);
 		}
@@ -180,7 +189,8 @@ export const calculateProductStats = (product, schedules) => {
 
 	const stats = {
 		scheduleRecords: scheduleRecords, // Podsumowanie sesji
-		bookings: bookings, // Lista rezerwacji
+		attendedBookings: attendedBookings,
+		totalBookings: bookings, // Lista rezerwacji
 		reviews: reviews,
 		totalSchedulesAmount: totalSchedules,
 		totalTime: formattedDuration,
@@ -224,6 +234,9 @@ export const calculateScheduleStats = (product, schedule) => {
 		// Tworzymy obiekt Date z daty i godziny terminu
 		const scheduleDateTime = new Date(`${bs.Date}T${bs.StartTime}:00`);
 		// Uważamy termin za "odbyte", jeśli jego data już minęła
+		bs.Booking.Customer = `${bs.Customer.FirstName} ${bs.Customer.LastName} (${bs.Customer.CustomerID})`;
+		bs.Booking.Attendance = bs.Attendance;
+		totalBookings.push(bs.Booking);
 		if (scheduleDateTime > now) return;
 		totalBookingsAmount++;
 		// Sumujemy czas trwania zajęć tylko wtedy, gdy są potwierdzeni uczestnicy
@@ -231,7 +244,6 @@ export const calculateScheduleStats = (product, schedule) => {
 			totalTimeInSeconds += durationToSeconds(product.Duration);
 		}
 		// Liczymy przychód na podstawie wszystkich rezerwacji, niezależnie od tego, czy użytkownik przyszedł
-		totalBookings.push(bs.Booking);
 		totalRevenue += parseFloat(bs.Booking.AmountPaid);
 	});
 
@@ -239,11 +251,16 @@ export const calculateScheduleStats = (product, schedule) => {
 	attendedRecords.forEach((record) => {
 		attendedBookingsAmount++;
 		participantAges.push(calculateAge(record.Customer.DoB));
-
+		const isoTimeStamp = new Date(record.TimeStamp).toISOString();
 		attendedBookings.push({
 			id: record.BookingID, // Zakładamy, że rekord BookedSchedule zawiera odniesienie do BookingID
 			date: record.Booking.Date || bs.Date, //! Jeśli dostępna, inaczej używamy daty terminu
 			customer: `${record.Customer.FirstName} ${record.Customer.LastName}`,
+			timestamp: `${getWeekDay(isoTimeStamp.split('T')[0])} | ${formatIsoDateTime(
+				isoTimeStamp,
+			)}`,
+
+			customerID: record.Customer.CustomerID,
 			value: record.Booking.AmountPaid, // Informacja z BookedSchedule – dla odniesienia (nie wpływa na revenue)
 			method: record.Booking.PaymentMethod,
 		});

@@ -2,6 +2,7 @@ import DetailsSchedule from './DetailsSchedule.jsx';
 import DetailsProduct from './DetailsProduct.jsx';
 import DetailsScheduleStats from './DetailsScheduleStats.jsx';
 import DetailsProductBookings from './DetailsProductBookings.jsx';
+import DetailsTableAttendance from './DetailsTableAttendance.jsx';
 import DetailsProductReviews from './DetailsProductReviews.jsx';
 import ViewScheduleNewCustomerForm from './ViewScheduleNewCustomerForm.jsx';
 import {calculateScheduleStats} from '../../utils/productViewsUtils.js';
@@ -213,9 +214,10 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen, isAdminPanel}) {
 					{/*//@ all bookings if not event/camp? */}
 
 					<div className='user-container__main-details  schedules modal-checklist'>
-						<DetailsProductBookings
+						<DetailsTableAttendance
 							stats={scheduleStats}
 							type={type}
+							isAdminPage={isAdminPanel}
 						/>
 					</div>
 					<div className='user-container__main-details  schedules modal-checklist'>

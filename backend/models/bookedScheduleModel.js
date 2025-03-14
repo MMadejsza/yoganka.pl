@@ -32,10 +32,17 @@ const BookedSchedule = sequelizeDb.define(
 			allowNull: false,
 			defaultValue: true,
 		},
+		TimeStamp: {
+			type: DataTypes.DATE,
+			allowNull: false,
+			defaultValue: DataTypes.NOW,
+		},
 	},
 	{
 		tableName: 'booked_schedules', // exact mysql table name
-		timestamps: false, // turn off `createdAt` and `updatedAt`
+		timestamps: true,
+		updatedAt: 'TimeStamp', //mapping to TimeStamp
+		createdAt: false,
 		indexes: [
 			{
 				unique: true,
@@ -44,4 +51,9 @@ const BookedSchedule = sequelizeDb.define(
 		],
 	},
 );
+BookedSchedule.beforeCreate((instance) => {
+	if (!instance.TimeStamp) {
+		instance.TimeStamp = new Date();
+	}
+});
 export default BookedSchedule;

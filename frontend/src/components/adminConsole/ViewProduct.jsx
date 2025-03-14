@@ -4,16 +4,18 @@ import DetailsProductSchedules from './DetailsProductSchedules.jsx';
 import {calculateProductStats} from '../../utils/productViewsUtils.js';
 import DetailsProductBookings from './DetailsProductBookings.jsx';
 import DetailsProductReviews from './DetailsProductReviews.jsx';
+import DetailsTableAttendance from './DetailsTableAttendance.jsx';
 
 // import {calculateStats} from '../../utils/productViewsUtils.js';
 
-function ViewProduct({data}) {
+function ViewProduct({data, isAdminPanel}) {
 	console.clear();
 	console.log(
 		`📝
 	    Product object from backend:`,
 		data,
 	);
+	console.log(`	    Product isAdminPanel:`, isAdminPanel);
 	const {product} = data;
 	const type = product.Type;
 	const prodStats = calculateProductStats(product, product.ScheduleRecords);
@@ -43,11 +45,22 @@ function ViewProduct({data}) {
 					<DetailsProductSchedules scheduleRecords={prodStats.scheduleRecords} />
 				</div>
 			)}
+
+			{(type == 'Camp' || type == 'Event') && (
+				<div className='user-container__main-details  schedules modal-checklist'>
+					<DetailsTableAttendance
+						stats={prodStats}
+						type={type}
+						isAdminPage={isAdminPanel}
+					/>
+				</div>
+			)}
 			{/*//@ All bookings */}
 			<div className='user-container__main-details  schedules modal-checklist'>
 				<DetailsProductBookings
 					stats={prodStats}
 					type={type}
+					isAdminPage={isAdminPanel}
 				/>
 			</div>
 			{/*//@ Feedback */}

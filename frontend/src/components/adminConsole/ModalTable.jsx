@@ -8,13 +8,19 @@ function ModalTable({
 	onQuickBook,
 	status,
 	isAdminPage,
+	adminActions,
 }) {
 	const today = new Date();
 	console.log('ModalTable content', content);
 	console.log('ModalTable status', status);
 
 	const symbol = (row, isArchived) => {
-		if (status?.isLoggedIn && (status?.role === 'CUSTOMER' || status?.role === 'ADMIN')) {
+		if (isAdminPage && adminActions) {
+			return 'delete_forever';
+		} else if (
+			status?.isLoggedIn &&
+			(status?.role === 'CUSTOMER' || status?.role === 'ADMIN')
+		) {
 			if (row.isUserGoing) return 'check';
 			else if (row.full || isArchived) return 'block';
 			else if (row.wasUserReserved) return 'cycle';
@@ -23,21 +29,26 @@ function ModalTable({
 		return 'lock_person';
 	};
 
-	const onClickAction = (row, isArchived) => {
+	const onClickAction = (row, isArchived, e) => {
+		console.log('onClickAction:', {
+			isUserGoing: row.isUserGoing,
+			isLoggedIn: status?.isLoggedIn,
+			isArchived,
+			role: status?.role,
+		});
 		if (
 			!row.isUserGoing &&
 			status?.isLoggedIn &&
 			!isArchived &&
-			(status?.Role === 'CUSTOMER' || status?.Role === 'ADMIN')
+			(status?.role === 'CUSTOMER' || status?.role === 'ADMIN')
 		) {
-			return (e) => {
-				e.stopPropagation();
-				onQuickBook({
-					scheduleID: row['ID'],
-					productName: row['Nazwa'],
-					productPrice: row['Zadatek'],
-				});
-			};
+			e.stopPropagation();
+			onQuickBook({
+				scheduleID: row['ID'],
+				productName: row['Nazwa'],
+				productPrice: row['Zadatek'],
+				customerDetails: '',
+			});
 		}
 		return null;
 	};
@@ -76,7 +87,7 @@ function ModalTable({
 									value = (
 										<span
 											className='material-symbols-rounded nav__icon nav__icon--side account'
-											onClick={() => onClickAction(row, isArchived)}>
+											onClick={(e) => onClickAction(row, isArchived, e)}>
 											{symbol(row, isArchived)}
 										</span>
 									);

@@ -43,7 +43,7 @@ function SchedulePage() {
 			await fetch(`/api/customer/grafik/book/${scheduleID}`, {
 				method: 'POST',
 				body: JSON.stringify({
-					customerDetails: customerDetails,
+					customerDetails: customerDetails || null,
 					schedule: scheduleID,
 					date: new Date().toISOString().split('T')[0],
 					product: productName,

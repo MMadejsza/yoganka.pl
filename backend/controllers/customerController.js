@@ -66,13 +66,13 @@ export const postBookSchedule = (req, res, next) => {
 			.then((scheduleRecord) => {
 				if (!scheduleRecord) {
 					console.log('❗❗❗if (!scheduleRecord) {');
-					throw new Error({message: 'Nie znaleziono terminu'});
+					throw new Error('Nie znaleziono terminu');
 				}
 				const scheduleDateTime = new Date(
 					`${scheduleRecord.Date}T${scheduleRecord.StartTime}:00`,
 				);
 				if (scheduleDateTime < new Date()) {
-					throw new Error({message: 'Nie można rezerwować terminu, który już minął.'});
+					throw new Error('Nie można rezerwować terminu, który już minął.');
 				}
 				// console.log('scheduleRecord', scheduleRecord);
 				// Count the current amount of reservations
@@ -86,7 +86,7 @@ export const postBookSchedule = (req, res, next) => {
 					if (currentAttendance >= scheduleRecord.Capacity) {
 						// If limit is reached
 						console.log('❗❗❗if (currentAttendance >= scheduleRecord.capacity)');
-						throw new Error({message: 'Brak wolnych miejsc na ten termin.'});
+						throw new Error('Brak wolnych miejsc na ten termin.');
 					}
 
 					// IF still enough spaces - check if booked in the past
@@ -144,6 +144,7 @@ export const postBookSchedule = (req, res, next) => {
 							.addScheduleRecord(req.body.schedule, {
 								through: {CustomerID: currentCustomer.CustomerID},
 								transaction: t,
+								individualHooks: true,
 							})
 							.then(() => booking);
 					});
@@ -157,16 +158,16 @@ export const postBookSchedule = (req, res, next) => {
 		.catch((err) => {
 			console.error(err);
 			// If no enough spaces
-			console.log('\n❌❌❌ Error postBookSchedule:', err.message);
-			if (err.message === 'Brak wolnych miejsc na ten termin.') {
-				return res.status(409).json({message: err.message});
+			console.log('\n❌❌❌ Error postBookSchedule:', err);
+			if (err === 'Brak wolnych miejsc na ten termin.') {
+				return res.status(409).json({message: err});
 			}
 
 			if (
-				err.message === 'Użytkownik nie jest zalogowany.' ||
-				err.message === 'Nie można rezerwować terminu, który już minął.'
+				err === 'Użytkownik nie jest zalogowany.' ||
+				err === 'Nie można rezerwować terminu, który już minął.'
 			) {
-				return res.status(401).json({message: err.message});
+				return res.status(401).json({message: err});
 			}
 			// if the same customer tries to book the schedule
 			if (
@@ -177,7 +178,7 @@ export const postBookSchedule = (req, res, next) => {
 					message: 'Ten termin został już opłacony przez tego klienta.',
 				});
 			}
-			return res.status(500).json({message: err.message});
+			return res.status(500).json({message: err});
 		});
 };
 export const postCancelSchedule = (req, res, next) => {
