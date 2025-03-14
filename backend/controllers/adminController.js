@@ -1081,7 +1081,7 @@ export const postCreateProduct = async (req, res, next) => {
 				Duration: duration,
 				Price: price,
 				StartDate: StartDate,
-				Status: status || 'Aktywny', //!Dodaj to pole do EditProduct
+				Status: status || 'Aktywny',
 			}));
 		})
 		.then((newProduct) => {
@@ -1104,11 +1104,7 @@ export const postCreateProduct = async (req, res, next) => {
 export const postEditProduct = async (req, res, next) => {
 	console.log(`\n➡️➡️➡️ called admin postEditProduct`);
 	const productId = req.params.id;
-	const newType = req.body.type;
-	const newStartDate = req.body.date;
-	const newLocation = req.body.location;
-	const newDuration = req.body.duration;
-	const newPrice = req.body.price;
+	const {newType, newStartDate, newLocation, newDuration, newPrice, newStatus} = req.body;
 
 	if (
 		!newType ||
@@ -1118,10 +1114,12 @@ export const postEditProduct = async (req, res, next) => {
 		!newLocation ||
 		!newLocation.trim() ||
 		!newDuration ||
-		!newPrice
+		!newPrice ||
+		!newStatus ||
+		!newStatus.trim()
 	) {
 		console.log('\n❌❌❌ Error postEditCustomer:', 'No enough data');
-		return res.status(400).json({message: 'Nie podano wszystkich danych.'});
+		return res.status(400).json({confirmation: 0, message: 'Nie podano wszystkich danych.'});
 	}
 
 	models.Product.findByPk(productId)
@@ -1131,12 +1129,14 @@ export const postEditProduct = async (req, res, next) => {
 			return product;
 		})
 		.then((foundProduct) => {
+			const {Type, StartDate, Location, Duration, Price, Status} = foundProduct;
 			if (
-				foundProduct.Type === newType &&
-				foundProduct.StartDate === newStartDate &&
-				foundProduct.Location === newLocation &&
-				foundProduct.Duration === newDuration &&
-				foundProduct.Price === newPrice
+				Type === newType &&
+				StartDate === newStartDate &&
+				Location === newLocation &&
+				Duration === newDuration &&
+				Price === newPrice &&
+				Status === newStatus
 			) {
 				// Nothing changed
 				console.log('\n❓❓❓ Admin Product no change');
@@ -1154,6 +1154,7 @@ export const postEditProduct = async (req, res, next) => {
 					Location: newLocation,
 					Duration: newDuration,
 					Price: newPrice,
+					Status: newStatus,
 				},
 				{where: {ProductID: productId}},
 			)
@@ -1166,17 +1167,18 @@ export const postEditProduct = async (req, res, next) => {
 					const status = affectedProductRows >= 1;
 					return res.status(200).json({
 						confirmation: status,
+						message: 'Zmiany zaakceptowane.',
 						affectedProductRows,
 					});
 				})
 				.catch((err) => {
-					console.log('\n❌❌❌ Error admin  postEditProduct UPDATE:', err);
-					return res.status(500).json({error: err});
+					console.log('\n❌❌❌ Error admin  postEditProduct UPDATE:', err.message);
+					return res.status(500).json({confirmation: 0, message: err.message});
 				});
 		})
 		.catch((err) => {
 			console.log('\n❌❌❌ Error admin postEditProduct', err);
-			return res.status(404).json({message: err});
+			return res.status(404).json({confirmation: 0, message: err});
 		});
 };
 export const postDeleteProduct = (req, res, next) => {

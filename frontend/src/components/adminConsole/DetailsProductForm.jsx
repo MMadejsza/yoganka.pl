@@ -1,15 +1,12 @@
 import React, {useState} from 'react';
-// import {useLocation} from 'react-router-dom';
 import {useQuery, useMutation} from '@tanstack/react-query';
 import {queryClient, fetchStatus} from '../../utils/http.js';
 import {formatIsoDateTime} from '../../utils/productViewsUtils.js';
 import {useInput} from '../../hooks/useInput.js';
-// import {typeValidations} from '../../utils/validation.js';
 import InputLogin from '../login/InputLogin.jsx';
 import UserFeedbackBox from './FeedbackBox.jsx';
 
 function DetailsProductForm({productData}) {
-	// const location = useLocation();
 	let initialFeedbackConfirmation;
 	const [feedbackConfirmation, setFeedbackConfirmation] = useState(initialFeedbackConfirmation);
 
@@ -18,6 +15,7 @@ function DetailsProductForm({productData}) {
 		queryFn: fetchStatus,
 	});
 
+	let successMsg;
 	const {mutate, isPending, isError, error} = useMutation({
 		mutationFn: (formData) => {
 			return fetch(`/api/admin-console/edit-product-data/${productData.ProductID}`, {
@@ -29,10 +27,13 @@ function DetailsProductForm({productData}) {
 				body: JSON.stringify(formData),
 				credentials: 'include', // include cookies
 			}).then((response) => {
-				if (!response.ok) {
-					throw new Error('Błąd');
-				}
-				return response.json();
+				return response.json().then((data) => {
+					if (!response.ok) {
+						// reject with backend data
+						return Promise.reject(data);
+					}
+					return data;
+				});
 			});
 		},
 		onSuccess: (res) => {
@@ -42,11 +43,15 @@ function DetailsProductForm({productData}) {
 			]);
 			queryClient.invalidateQueries(['query', `/admin-console/show-all-products`]);
 
-			if (res.confirmation) {
+			if (res.confirmation || res.code == 200) {
+				successMsg = res.message;
 				setFeedbackConfirmation(1);
 			} else {
 				setFeedbackConfirmation(0);
 			}
+		},
+		onError: (err) => {
+			setFeedbackConfirmation(0);
 		},
 	});
 	// Fallback to feed custom hooks when data isn't available
@@ -58,6 +63,7 @@ function DetailsProductForm({productData}) {
 	const totalHours = hours + minutes / 60 + seconds / 3600;
 	const durationDefault = totalHours || 1;
 	const priceDefault = productData?.Price || 500.0;
+	const statusDefault = productData?.Status || 'Aktywny';
 
 	// using custom hook with extracting and reassigning its 'return' for particular inputs and assign validation methods from imported utils. Every inout has its won state now
 	const {
@@ -120,9 +126,17 @@ function DetailsProductForm({productData}) {
 		hasError: priceHasError,
 	} = useInput(priceDefault);
 
-	// if (isProductLoading) return <div>Ładowanie...</div>;
-	// if (isProductError) return <div>Błąd ładowania ustawień.</div>;
-	// console.log(data);
+	const {
+		value: statusValue,
+		handleChange: handleStatusChange,
+		handleFocus: handleStatusFocus,
+		handleBlur: handleStatusBlur,
+		handleReset: handleStatusReset,
+		didEdit: statusDidEdit,
+		isFocused: statusIsFocused,
+		validationResults: statusValidationResults,
+		hasError: statusHasError,
+	} = useInput(statusDefault);
 
 	// Reset all te inputs
 	const handleReset = () => {
@@ -132,6 +146,7 @@ function DetailsProductForm({productData}) {
 		handleLocationReset();
 		handleDurationReset();
 		handlePriceReset();
+		handleStatusReset();
 	};
 
 	// Submit handling
@@ -139,7 +154,14 @@ function DetailsProductForm({productData}) {
 		e.preventDefault(); // No reloading
 		console.log('Submit triggered');
 
-		if (typeHasError || dateHasError || locationHasError || durationHasError || priceHasError) {
+		if (
+			typeHasError ||
+			dateHasError ||
+			locationHasError ||
+			durationHasError ||
+			priceHasError ||
+			statusHasError
+		) {
 			return;
 		}
 		console.log('Submit passed errors');
@@ -171,6 +193,7 @@ function DetailsProductForm({productData}) {
 	let feedback = feedbackConfirmation !== undefined && (
 		<UserFeedbackBox
 			status={feedbackConfirmation}
+			successMsg={successMsg}
 			isPending={isPending}
 			isError={isError}
 			error={error}
@@ -266,7 +289,27 @@ function DetailsProductForm({productData}) {
 				didEdit={priceDidEdit}
 				isFocused={priceIsFocused}
 			/>
-
+			<InputLogin
+				embedded={true}
+				formType={formType}
+				type='select'
+				options={[
+					{label: 'Aktywny', value: 'Aktywny'},
+					{label: 'Zakończony', value: 'Zakończony'},
+					{label: 'Zawieszony', value: 'Zawieszony'},
+				]}
+				id='status'
+				name='status'
+				label='Status:'
+				value={statusValue}
+				required
+				onFocus={handleStatusFocus}
+				onBlur={handleStatusBlur}
+				onChange={handleStatusChange}
+				validationResults={statusValidationResults}
+				didEdit={statusDidEdit}
+				isFocused={statusIsFocused}
+			/>
 			<button
 				type='reset'
 				onClick={handleReset}

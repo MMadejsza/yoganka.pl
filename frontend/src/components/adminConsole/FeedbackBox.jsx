@@ -40,7 +40,7 @@ function UserFeedbackBox({
 			}, 1000);
 		}
 	} else if (status == 0) {
-		statusMsg = error.message || 'Brak zmian';
+		statusMsg = error?.message || 'Brak zmian';
 	} else if (isPending) {
 		statusMsg = 'Wysyłanie...';
 	} else if (isError) {

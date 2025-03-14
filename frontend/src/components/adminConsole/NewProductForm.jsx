@@ -281,6 +281,7 @@ function NewProductForm({onClose}) {
 				name='location'
 				label='Miejsce:'
 				value={locationValue}
+				autoComplete='off'
 				onFocus={handleLocationFocus}
 				onBlur={handleLocationBlur}
 				onChange={handleLocationChange}
@@ -310,8 +311,9 @@ function NewProductForm({onClose}) {
 				formType={formType}
 				type='select'
 				options={[
-					{label: 'Aktywny', value: 1},
-					{label: 'Zakończony', value: 0},
+					{label: 'Aktywny', value: 'Aktywny'},
+					{label: 'Zakończony', value: 'Zakończony'},
+					{label: 'Zawieszony', value: 'Zawieszony'},
 				]}
 				id='status'
 				name='status'
