@@ -2,8 +2,9 @@ import React, {useState} from 'react';
 import {useNavigate, useLocation} from 'react-router-dom';
 
 import {NavLink} from 'react-router-dom';
-import NewUserForm from './NewUserForm.jsx';
 import ModalFrame from './ModalFrame.jsx';
+import NewUserForm from './NewUserForm.jsx';
+import NewCustomerForm from './NewCustomerForm.jsx';
 
 function SideNav({menuSet, side, type, onclose}) {
 	const navigate = useNavigate();
@@ -19,19 +20,26 @@ function SideNav({menuSet, side, type, onclose}) {
 			case path.includes('show-all-users'):
 				destination = 'show-all-users/add-user';
 				destComponent = <NewUserForm />;
+				break;
 			case path.includes('show-all-customers'):
 				destination = 'show-all-customers/add-customer';
-				destComponent = <NewUserForm />;
+				destComponent = <NewCustomerForm />;
+				break;
+
 			case path.includes('show-all-products'):
 				destination = 'show-all-products/add-product';
 				destComponent = <NewUserForm />;
+				break;
+
 			case path.includes('show-all-schedules'):
 				destination = 'show-all-schedules/add-schedule';
 				destComponent = <NewUserForm />;
+				break;
+
 			case path.includes('show-all-bookings'):
 				destination = 'show-all-bookings/add-booking';
 				destComponent = <NewUserForm />;
-			default:
+				break;
 		}
 		return {dest: destination, comp: destComponent};
 	};

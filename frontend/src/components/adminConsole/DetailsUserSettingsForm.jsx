@@ -10,7 +10,7 @@ function DetailsUserSettingsForm({settingsData, customerAccessed, adminAccessed}
 	const params = useParams();
 	let initialFeedbackConfirmation;
 	const [feedbackConfirmation, setFeedbackConfirmation] = useState(initialFeedbackConfirmation);
-
+	console.log('settingsData', settingsData);
 	const {data: status} = useQuery({
 		queryKey: ['authStatus'],
 		queryFn: fetchStatus,
@@ -19,12 +19,12 @@ function DetailsUserSettingsForm({settingsData, customerAccessed, adminAccessed}
 	const queryKey = customerAccessed
 		? ['formFilling', 'userSettings']
 		: adminAccessed
-		? ['formFilling', 'userSettings', settingsData.UserPrefID]
+		? ['formFilling', 'userSettings', settingsData?.UserPrefID || '']
 		: null;
 	const dynamicFetchAddress = customerAccessed
 		? '/konto/ustawienia/preferencje'
 		: adminAccessed
-		? `/admin-console/show-user-settings/${settingsData.UserPrefID}`
+		? `/admin-console/show-user-settings/${settingsData?.UserPrefID}`
 		: null;
 	const {
 		data,
@@ -42,7 +42,7 @@ function DetailsUserSettingsForm({settingsData, customerAccessed, adminAccessed}
 	const dynamicMutationAddress = customerAccessed
 		? '/api/konto/ustawienia/update/preferencje'
 		: adminAccessed
-		? `/api/admin-console/edit-user-settings/${settingsData.UserPrefID}`
+		? `/api/admin-console/edit-user-settings/${settingsData?.UserPrefID}`
 		: null;
 	console.log('dynamicMutationAddress', dynamicMutationAddress);
 	const {mutate, isPending, isError, error} = useMutation({
@@ -144,7 +144,6 @@ function DetailsUserSettingsForm({settingsData, customerAccessed, adminAccessed}
 	} = useInput(!!preferences.Theme);
 
 	if (isFormLoading) return <div>Ładowanie...</div>;
-	if (isFormError) return <div>Błąd ładowania ustawień.</div>;
 
 	// Reset all te inputs
 	const handleReset = () => {

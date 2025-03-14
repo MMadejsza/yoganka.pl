@@ -41,12 +41,13 @@ function LoginFrom() {
 			});
 		},
 		onSuccess: (res) => {
-			queryClient.invalidateQueries(['authStatus']);
 			if (res.type == 'signup' && (res.code == 303 || res.code == 200)) {
 				navigate('/login');
 				setFirstTime(!firstTime);
 				console.log(res);
 			}
+			queryClient.invalidateQueries(['authStatus']);
+
 			navigate(-1);
 		},
 		onError: () => {

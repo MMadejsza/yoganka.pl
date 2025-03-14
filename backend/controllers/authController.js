@@ -62,13 +62,8 @@ export const postLogin = (req, res, next) => {
 	models.User.findOne({where: {email}})
 		.then((user) => {
 			if (!user) {
-				res.status(404).json({
-					type: 'login',
-					code: 404,
-					confirmation: 0,
-					message: 'Użytkownik nie istnieje',
-				});
-				return null;
+				console.log("\n❌❌❌ User doesn't exist");
+				throw new Error('Użytkownik nie istnieje.');
 			}
 			user.update({LastLoginDate: date});
 			return user;
@@ -91,19 +86,19 @@ export const postLogin = (req, res, next) => {
 						message: 'Zalogowano pomyślnie',
 					});
 				} else {
-					console.log('no match');
-					return res.status(404).json({
-						type: 'login',
-						code: 404,
-						confirmation: 0,
-						message: 'Hasło nieprawidłowe',
-					});
+					console.log('\n❌❌❌ Password incorrect');
+					throw new Error('Hasło nieprawidłowe.');
 				}
 			});
 		})
 		.catch((err) => {
 			console.log(err);
-			return res.status(500).json({message: err.message});
+			return res.status(404).json({
+				type: 'login',
+				code: 404,
+				confirmation: 0,
+				message: err.message,
+			});
 		});
 };
 export const postLogout = (req, res, next) => {

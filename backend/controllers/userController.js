@@ -333,7 +333,7 @@ export const getEditSettings = (req, res, next) => {
 	models.UserPrefSettings.findByPk(PK)
 		.then((preferences) => {
 			if (!preferences) {
-				throw new Error({message: 'Nie pobrano ustawień.'});
+				throw new Error('Nie pobrano ustawień.');
 			}
 			console.log('\n✅✅✅ getEditSettings fetched');
 			return res.status(200).json({preferences});

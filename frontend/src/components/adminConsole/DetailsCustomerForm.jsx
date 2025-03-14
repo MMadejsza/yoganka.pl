@@ -65,8 +65,13 @@ function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
 			});
 		},
 		onSuccess: (res) => {
-			queryClient.invalidateQueries(['query', '/konto/ustawienia']);
-			queryClient.invalidateQueries(['query', `/admin-console/show-all-users/${params.id}`]);
+			if (customerAccessed) queryClient.invalidateQueries(['query', '/konto/ustawienia']);
+			else
+				queryClient.invalidateQueries([
+					'query',
+					`/admin-console/show-all-users/${params.id}`,
+				]);
+
 			if (res.confirmation) {
 				setFeedbackConfirmation(1);
 			} else {
@@ -159,8 +164,6 @@ function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
 		console.log('sent data:', formDataObj);
 		mutate(formDataObj);
 		handleReset();
-
-		//! assign registration date
 	};
 
 	// Dynamically set descriptive names when switching from login in to registration
@@ -185,7 +188,6 @@ function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
 
 	form = (
 		<form
-			action='/api/konto/ustawienia/update/uczestnik'
 			method='POST'
 			onSubmit={handleSubmit}
 			className={`user-container__details-list modal-checklist__list form`}>

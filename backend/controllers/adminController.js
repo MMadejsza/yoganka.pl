@@ -34,7 +34,7 @@ export const showAllUsers = (req, res, next) => {
 							newRecord[newKey] = `Tak (ID: ${record[key]['UserPrefID']})`;
 						} else newRecord[newKey] = 'Nie';
 					} else if (key == 'LastLoginDate' || key == 'RegistrationDate') {
-						newRecord[newKey] = formatIsoDateTime(record[key]);
+						newRecord[newKey] = record[key];
 					} else {
 						newRecord[newKey] = record[key]; // Assignment
 					}
@@ -121,7 +121,7 @@ export const postCreateUser = (req, res, next) => {
 				});
 		})
 		.catch((err) => {
-			console.log('❌❌❌ Użytkownik już istnieje.');
+			console.log('\n❌❌❌ Użytkownik już istnieje.');
 			return res.status(409).json({
 				confirmation: 0,
 				type: 'signup',
@@ -163,8 +163,8 @@ export const getEditSettings = (req, res, next) => {
 			return res.status(200).json({preferences});
 		})
 		.catch((err) => {
-			console.log('\n❌❌❌ Error admin fetching the settings:', err);
-			return res.status(404).json({message: err});
+			console.log('\n❌❌❌ Error admin fetching the settings:', err.message);
+			return res.status(404).json({message: err.message});
 		});
 };
 
@@ -368,6 +368,50 @@ export const showCustomerByID = (req, res, next) => {
 			return res.status(200).json({isLoggedIn: req.session.isLoggedIn, customer});
 		})
 		.catch((err) => console.log(err));
+};
+export const postCreateCustomer = (req, res, next) => {
+	console.log(`\n➡️➡️➡️ called postCreateCustomer`);
+	const {userID, customerType, firstName, lastName, DoB, phone, cMethod, loyalty, notes} =
+		req.body;
+	let customerPromise;
+	models.Customer.findOne({where: {UserID: userID}})
+		.then((customer) => {
+			if (customer) {
+				throw new Error('Profil uczestnika już istnieje.');
+			}
+			return (customerPromise = models.Customer.create({
+				CustomerType: customerType || 'Indywidualny',
+				UserID: userID,
+				FirstName: firstName,
+				LastName: lastName,
+				DoB: DoB,
+				Phone: phone,
+				PreferredContactMethod: cMethod || '=',
+				ReferralSource: 'Admin insert',
+				Loyalty: loyalty || 5,
+				Notes: notes,
+			}).then((newCustomer) => {
+				return models.User.update({Role: 'customer'}, {where: {UserID: userID}}).then(
+					() => newCustomer,
+				);
+			}));
+		})
+		.then((newCustomer) => {
+			console.log('\n✅✅✅ postCreateCustomer Zarejestrowano pomyślnie.');
+			return res.status(200).json({
+				code: 200,
+				confirmation: 1,
+				message: 'Zarejestrowano pomyślnie.',
+			});
+		})
+		.catch((err) => {
+			console.log('\n❌❌❌ postCreateCustomer Profil uczestnika już istnieje.');
+			return res.status(409).json({
+				confirmation: 0,
+				code: 409,
+				message: err.message,
+			});
+		});
 };
 export const postDeleteCustomer = (req, res, next) => {
 	console.log(`\n➡️➡️➡️ called postDeleteCustomer`);
@@ -1021,19 +1065,49 @@ export const showProductByID = (req, res, next) => {
 		})
 		.catch((err) => console.log(err));
 };
-export const createProduct = async (req, res, next) => {
-	models.Product.create({
-		Name: req.body.name,
-		Type: req.body.type,
-		Location: req.body.location,
-		Duration: req.body.duration,
-		Price: req.body.price,
-		StartDate: req.body.startDate,
-	})
-		.then(() => {
-			console.log('✅ created');
-		})
-		.catch((err) => console.log(err));
+export const postCreateProduct = async (req, res, next) => {
+	console.log(`\n➡️➡️➡️ called postCreateProduct`);
+	const {userID, customerType, firstName, lastName, DoB, phone, cMethod, loyalty, notes} =
+		req.body;
+	// let customerPromise;
+	// models.Customer.findOne({where: {UserID: userID}})
+	// 	.then((customer) => {
+	// 		if (customer) {
+	// 			throw new Error('Profil uczestnika już istnieje.');
+	// 		}
+	// 		return (customerPromise = models.Customer.create({
+	// 			CustomerType: customerType || 'Indywidualny',
+	// 			UserID: userID,
+	// 			FirstName: firstName,
+	// 			LastName: lastName,
+	// 			DoB: DoB,
+	// 			Phone: phone,
+	// 			PreferredContactMethod: cMethod || '=',
+	// 			ReferralSource: 'Admin insert',
+	// 			Loyalty: loyalty || 5,
+	// 			Notes: notes,
+	// 		}).then((newCustomer) => {
+	// 			return models.User.update({Role: 'customer'}, {where: {UserID: userID}}).then(
+	// 				() => newCustomer,
+	// 			);
+	// 		}));
+	// 	})
+	// 	.then((newCustomer) => {
+	// 		console.log('\n✅✅✅ postCreateProduct Zarejestrowano pomyślnie.');
+	// 		return res.status(200).json({
+	// 			code: 200,
+	// 			confirmation: 1,
+	// 			message: 'Zarejestrowano pomyślnie.',
+	// 		});
+	// 	})
+	// 	.catch((err) => {
+	// 		console.log('\n❌❌❌ postCreateProduct Profil uczestnika już istnieje.');
+	// 		return res.status(409).json({
+	// 			confirmation: 0,
+	// 			code: 409,
+	// 			message: err.message,
+	// 		});
+	// 	});
 };
 export const postEditProduct = async (req, res, next) => {
 	console.log(`\n➡️➡️➡️ called admin postEditProduct`);

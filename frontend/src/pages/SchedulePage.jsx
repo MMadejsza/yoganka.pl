@@ -66,7 +66,10 @@ function SchedulePage() {
 				}
 				return response.json();
 			}),
-		onSuccess: () => {
+		onSuccess: (res) => {
+			if (res.isNewCustomer) {
+				queryClient.invalidateQueries(['authStatus']);
+			}
 			queryClient.invalidateQueries(['data', location.pathname]);
 			setIsBookedSuccessfully(true);
 		},

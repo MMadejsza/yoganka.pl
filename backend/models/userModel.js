@@ -12,6 +12,10 @@ const User = sequelizeDb.define(
 		RegistrationDate: {
 			type: DataTypes.DATE,
 			allowNull: false,
+			get() {
+				const rawValue = this.getDataValue('RegistrationDate');
+				return rawValue ? rawValue.toISOString() : null;
+			},
 		},
 		PasswordHash: {
 			type: DataTypes.STRING(255),

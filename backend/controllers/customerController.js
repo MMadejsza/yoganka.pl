@@ -9,6 +9,7 @@ export const postBookSchedule = (req, res, next) => {
 		throw new Error('Użytkownik nie jest zalogowany');
 	}
 	let currentCustomer;
+	let isNewCustomer = false;
 	// If it's not a Customer yet
 	let customerPromise;
 	if (!req.user.Customer) {
@@ -46,7 +47,13 @@ export const postBookSchedule = (req, res, next) => {
 			PreferredContactMethod: cDetails.cMethod || '-',
 			ReferralSource: cDetails.rSource || '-',
 			Notes: cDetails.notes,
+		}).then((newCustomer) => {
+			return models.User.update({Role: 'customer'}, {where: {UserID: req.user.UserID}}).then(
+				() => newCustomer,
+			);
 		});
+
+		isNewCustomer = true;
 	} else {
 		customerPromise = Promise.resolve(req.user.Customer);
 	}
@@ -153,7 +160,11 @@ export const postBookSchedule = (req, res, next) => {
 	})
 		.then((booking) => {
 			console.log('\n✅✅✅ Rezerwacja utworzona pomyślnie');
-			res.status(201).json({message: 'Rezerwacja utworzona pomyślnie', booking});
+			res.status(201).json({
+				isNewCustomer,
+				message: 'Rezerwacja utworzona pomyślnie',
+				booking,
+			});
 		})
 		.catch((err) => {
 			console.error(err);
@@ -242,9 +253,7 @@ export const postEditCustomer = (req, res, next) => {
 	const newContactMethod = req.body.cMethod;
 	if (!newPhone || !newPhone.trim()) {
 		console.log('\n❌❌❌ Error postEditCustomer:', 'No phone');
-		return res
-			.status(400)
-			.json({confirmation: 0, message: 'Numer telefonu nie może być pusty'});
+		throw new Error('Numer telefonu nie może być pusty');
 	}
 
 	models.Customer.update(
@@ -264,8 +273,8 @@ export const postEditCustomer = (req, res, next) => {
 			});
 		})
 		.catch((err) => {
-			console.log('\n❌❌❌ Error postEditCustomer:', err);
-			return res.status(500).json({message: err.message});
+			console.log('\n❌❌❌ Error postEditCustomer:', err.message);
+			return res.status(400).json({confirmation: 0, message: err.message});
 		});
 };
 

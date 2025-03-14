@@ -31,11 +31,11 @@ router.get('/show-all-invoices', adminC.showAllInvoices);
 //# CREATE
 router.post('/create-user', adminC.postCreateUser);
 router.post('/edit-user-settings/:id', adminC.postEditSettings);
-//? router.post('/create-customer', adminC.createCustomer);
+router.post('/create-customer', adminC.postCreateCustomer);
 //? router.post('/create-customer-phone', adminC.createCustomerPhone);
 router.post('/create-schedule-record', adminC.createScheduleRecord);
 // router.post('/create-newsletter', adminC.createNewsletter);
-router.post('/create-product', adminC.createProduct);
+router.post('/create-product', adminC.postCreateProduct);
 // router.post('/create-booking', adminC.createBooking);
 // router.post('/create-invoice', adminC.createInvoice);
 //# EDIT
