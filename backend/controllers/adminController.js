@@ -705,6 +705,39 @@ export const showScheduleByID = (req, res, next) => {
 		})
 		.catch((err) => catchErr(err, controllerName));
 };
+export const showProductSchedules = (req, res, next) => {
+	const controllerName = 'showProductSchedulesByID';
+	console.log(`\n➡️➡️➡️ admin called`, controllerName);
+
+	const productID = req.params.pId;
+	const customerID = req.params.cId;
+
+	// find all schedule for chosen Product
+	models.ScheduleRecord.findAll({where: {ProductID: productID}})
+		.then((foundSchedules) => {
+			//find all bookings for given customer
+			return models.BookedSchedule.findAll({where: {CustomerID: customerID}}).then(
+				(bookedByCustomerSchedules) => {
+					// filter bookings which have not been booked yet by him
+					const filteredSchedules = foundSchedules.filter((foundSchedule) => {
+						return !bookedByCustomerSchedules.some(
+							(bs) => bs.ScheduleID == foundSchedule.ScheduleID,
+						);
+					});
+					return filteredSchedules;
+				},
+			);
+		})
+		.then((filteredFoundSchedules) => {
+			console.log(`✅✅✅ admin ${controllerName} schedule fetched`);
+			res.status(200).json({
+				confirmation: 1,
+				message: 'Terminy pobrane pomyślnie.',
+				content: filteredFoundSchedules,
+			});
+		})
+		.catch((err) => catchErr(err, controllerName));
+};
 export const showBookedSchedules = (req, res, next) => {};
 export const createScheduleRecord = (req, res, next) => {
 	models.ScheduleRecord.create({

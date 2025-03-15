@@ -1,6 +1,7 @@
 import {useState} from 'react';
 import {useMutation, useQuery} from '@tanstack/react-query';
 import {queryClient, fetchData, fetchStatus} from '../../utils/http.js';
+import {getWeekDay} from '../../utils/customerViewsUtils.js';
 import {useInput} from '../../hooks/useInput.js';
 import InputLogin from '../login/InputLogin.jsx';
 import UserFeedbackBox from './FeedbackBox.jsx';
@@ -16,26 +17,90 @@ function NewBookingForm({onClose}) {
 	});
 
 	const {
-		data: usersList,
-		isError: isUsersError,
-		error: usersError,
+		data: customersList,
+		isError: isCustomersError,
+		error: customersError,
 	} = useQuery({
 		// as id for later caching received data to not send the same request again where location.pathname is key
-		queryKey: ['data', '/admin-console/show-all-users'],
+		queryKey: ['data', '/admin-console/show-all-customers'],
 		// definition of the code sending the actual request- must be returning the promise
-		queryFn: () => fetchData('/admin-console/show-all-users'),
+		queryFn: () => fetchData('/admin-console/show-all-customers'),
 		// only when location.pathname is set extra beyond admin panel:
 	});
 
-	const usersOptionsList = usersList?.content?.sort(
-		(a, b) => new Date(b.Zarejestrowany) - new Date(a.Zarejestrowany),
+	const {
+		data: productsList,
+		isError: isProductsError,
+		error: productsError,
+	} = useQuery({
+		// as id for later caching received data to not send the same request again where location.pathname is key
+		queryKey: ['data', '/admin-console/show-all-products'],
+		// definition of the code sending the actual request- must be returning the promise
+		queryFn: () => fetchData('/admin-console/show-all-products'),
+		// only when location.pathname is set extra beyond admin panel:
+	});
+
+	const {
+		value: customerValue,
+		handleChange: handleCustomerChange,
+		handleFocus: handleCustomerFocus,
+		handleBlur: handleCustomerBlur,
+		handleReset: handleCustomerReset,
+		didEdit: customerDidEdit,
+		isFocused: customerIsFocused,
+		validationResults: customerValidationResults,
+		hasError: customerHasError,
+	} = useInput(1);
+	const {
+		value: productValue,
+		handleChange: handleProductChange,
+		handleFocus: handleProductFocus,
+		handleBlur: handleProductBlur,
+		handleReset: handleProductReset,
+		didEdit: productDidEdit,
+		isFocused: productIsFocused,
+		validationResults: productValidationResults,
+		hasError: productHasError,
+	} = useInput('');
+
+	const pickedProductID = productValue || null;
+	const pickedCustomerID = customerValue || null;
+	const {
+		data: schedulesList,
+		isError: isSchedulesError,
+		error: schedulesError,
+	} = useQuery({
+		// as id for later caching received data to not send the same request again where location.pathname is key
+		queryKey: [
+			'data',
+			`/admin-console/show-product-schedules/${pickedProductID}/${pickedCustomerID}`,
+		],
+		// definition of the code sending the actual request- must be returning the promise
+		queryFn: () =>
+			fetchData(
+				`/admin-console/show-product-schedules/${pickedProductID}/${pickedCustomerID}`,
+			),
+		// only when location.pathname is set extra beyond admin panel:
+		enabled: !!pickedProductID && !!pickedCustomerID,
+	});
+
+	const customersOptionsList = customersList?.content?.sort((a, b) =>
+		a['Imię Nazwisko'].localeCompare(b['Imię Nazwisko']),
 	);
-	console.log('usersOptionsList: ', usersOptionsList);
+	console.log('customersOptionsList: ', customersOptionsList);
+	const productsOptionsList = productsList?.content?.sort((a, b) =>
+		b.Rodzaj.localeCompare(a.Rodzaj),
+	);
+	console.log('productOptionsList: ', productsOptionsList);
+	const schedulesOptionsList = schedulesList?.content?.sort(
+		(a, b) => new Date(b.Data) - new Date(a.Data),
+	);
+	console.log('schedulesOptionsList: ', schedulesOptionsList);
 
 	let successMsg;
 	const {mutate, isPending, isError, error} = useMutation({
 		mutationFn: (formData) => {
-			return fetch(`/api/admin-console/create-customer`, {
+			return fetch(`/api/admin-console/create-booking`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -54,7 +119,7 @@ function NewBookingForm({onClose}) {
 			});
 		},
 		onSuccess: (res) => {
-			queryClient.invalidateQueries(['/admin-console/show-all-customers']);
+			queryClient.invalidateQueries(['/admin-console/show-all-bookings']);
 			if (res.confirmation || res.code == 200) {
 				successMsg = res.message;
 				setFeedbackConfirmation(1);
@@ -68,118 +133,49 @@ function NewBookingForm({onClose}) {
 	});
 
 	// using custom hook with extracting and reassigning its 'return' for particular inputs and assign validation methods from imported utils. Every inout has its won state now
+
 	const {
-		value: userValue,
-		handleChange: handleUserChange,
-		handleFocus: handleUserFocus,
-		handleBlur: handleUserBlur,
-		handleReset: handleUserReset,
-		didEdit: userDidEdit,
-		isFocused: userIsFocused,
-		validationResults: userValidationResults,
-		hasError: userHasError,
-	} = useInput('');
+		value: scheduleValue,
+		handleChange: handleScheduleChange,
+		handleFocus: handleScheduleFocus,
+		handleBlur: handleScheduleBlur,
+		handleReset: handleScheduleReset,
+		didEdit: scheduleDidEdit,
+		isFocused: scheduleIsFocused,
+		validationResults: scheduleValidationResults,
+		hasError: scheduleHasError,
+	} = useInput('-');
 	const {
-		value: customerTypeValue,
-		handleChange: handleCustomerTypeChange,
-		handleFocus: handleCustomerTypeFocus,
-		handleBlur: handleCustomerTypeBlur,
-		handleReset: handleCustomerTypeReset,
-		didEdit: customerTypeDidEdit,
-		isFocused: customerTypeIsFocused,
-		validationResults: customerTypeValidationResults,
-		hasError: customerTypeHasError,
-	} = useInput('Indywidualny');
+		value: amountPaidValue,
+		handleChange: handleAmountPaidChange,
+		handleFocus: handleAmountPaidFocus,
+		handleBlur: handleAmountPaidBlur,
+		handleReset: handleAmountPaidReset,
+		didEdit: amountPaidDidEdit,
+		isFocused: amountPaidIsFocused,
+		validationResults: amountPaidValidationResults,
+		hasError: amountPaidHasError,
+	} = useInput('', val.amountPaidValidations);
 	const {
-		value: firstNameValue,
-		handleChange: handleFirstNameChange,
-		handleFocus: handleFirstNameFocus,
-		handleBlur: handleFirstNameBlur,
-		handleReset: handleFirstNameReset,
-		didEdit: firstNameDidEdit,
-		isFocused: firstNameIsFocused,
-		validationResults: firstNameValidationResults,
-		hasError: firstNameHasError,
-	} = useInput('', val.firstNameValidations);
-	const {
-		value: lastNameValue,
-		handleChange: handleLastNameChange,
-		handleFocus: handleLastNameFocus,
-		handleBlur: handleLastNameBlur,
-		handleReset: handleLastNameReset,
-		didEdit: lastNameDidEdit,
-		isFocused: lastNameIsFocused,
-		validationResults: lastNameValidationResults,
-		hasError: lastNameHasError,
-	} = useInput('', val.lastNameValidations);
-	const {
-		value: DoBValue,
-		handleChange: handleDoBChange,
-		handleFocus: handleDoBFocus,
-		handleBlur: handleDoBBlur,
-		handleReset: handleDoBReset,
-		didEdit: DoBDidEdit,
-		isFocused: DoBIsFocused,
-		validationResults: DoBValidationResults,
-		hasError: DoBHasError,
-	} = useInput('', val.dobValidations);
-	const {
-		value: phoneValue,
-		handleChange: handlePhoneChange,
-		handleFocus: handlePhoneFocus,
-		handleBlur: handlePhoneBlur,
-		handleReset: handlePhoneReset,
-		didEdit: phoneDidEdit,
-		isFocused: phoneIsFocused,
-		validationResults: phoneValidationResults,
-		hasError: phoneHasError,
-	} = useInput(' ', val.phoneValidations);
-	const {
-		value: cMethodValue,
-		handleChange: handleCMethodChange,
-		handleFocus: handleCMethodFocus,
-		handleBlur: handleCMethodBlur,
-		handleReset: handleCMethodReset,
-		didEdit: cMethodDidEdit,
-		isFocused: cMethodIsFocused,
-		validationResults: cMethodValidationResults,
-		hasError: cMethodHasError,
-	} = useInput('');
-	const {
-		value: loyaltyValue,
-		handleChange: handleLoyaltyChange,
-		handleFocus: handleLoyaltyFocus,
-		handleBlur: handleLoyaltyBlur,
-		handleReset: handleLoyaltyReset,
-		didEdit: loyaltyDidEdit,
-		isFocused: loyaltyIsFocused,
-		validationResults: loyaltyValidationResults,
-		hasError: loyaltyHasError,
-	} = useInput(5);
-	const {
-		value: notesValue,
-		handleChange: handleNotesChange,
-		handleFocus: handleNotesFocus,
-		handleBlur: handleNotesBlur,
-		handleReset: handleNotesReset,
-		didEdit: notesDidEdit,
-		isFocused: notesIsFocused,
-		validationResults: notesValidationResults,
-		hasError: notesHasError,
-	} = useInput('', val.notesValidations);
+		value: paymentMethodValue,
+		handleChange: handlePaymentMethodChange,
+		handleFocus: handlePaymentMethodFocus,
+		handleBlur: handlePaymentMethodBlur,
+		handleReset: handlePaymentMethodReset,
+		didEdit: paymentMethodDidEdit,
+		isFocused: paymentMethodIsFocused,
+		validationResults: paymentMethodValidationResults,
+		hasError: paymentMethodHasError,
+	} = useInput(1, val.paymentMethodValidations);
 
 	// Reset all te inputs
 	const handleReset = () => {
 		setFeedbackConfirmation(undefined);
-		handleUserReset();
-		handleLoyaltyReset();
-		handleCustomerTypeReset();
-		handleFirstNameReset();
-		handleLastNameReset();
-		handleDoBReset();
-		handlePhoneReset();
-		handleCMethodReset();
-		handleNotesReset();
+		handleCustomerReset();
+		handleProductReset();
+		handleScheduleReset();
+		handleAmountPaidReset();
+		handlePaymentMethodReset();
 	};
 
 	// Submit handling
@@ -188,15 +184,11 @@ function NewBookingForm({onClose}) {
 		console.log('Submit triggered');
 
 		if (
-			phoneHasError ||
-			cMethodHasError ||
-			firstNameHasError ||
-			lastNameHasError ||
-			DoBHasError ||
-			userHasError ||
-			notesHasError ||
-			customerTypeHasError ||
-			loyaltyHasError
+			amountPaidHasError ||
+			paymentMethodHasError ||
+			customerHasError ||
+			productHasError ||
+			scheduleHasError
 		) {
 			return;
 		}
@@ -212,7 +204,7 @@ function NewBookingForm({onClose}) {
 	// Dynamically set descriptive names when switching from login in to registration
 	const formLabels = {
 		formType: 'login',
-		title: 'Przypisanie nowego profilu uczestnika',
+		title: 'Tworzenie nowej transakcji',
 		actionTitle: 'Zatwierdź',
 	};
 
@@ -231,7 +223,7 @@ function NewBookingForm({onClose}) {
 		/>
 	);
 
-	form = usersList && (
+	form = productsList && customersList && (
 		<form
 			// action='/api/login-pass/login'
 			method='POST'
@@ -243,164 +235,109 @@ function NewBookingForm({onClose}) {
 				embedded={true}
 				formType={formType}
 				type='select'
-				options={usersOptionsList.map((userObj) => ({
-					label: `(ID: ${userObj.ID}) ${userObj['E-mail']}`,
-					value: userObj.ID,
+				options={customersOptionsList.map((customerObj) => ({
+					key: customerObj.ID,
+					label: `(ID: ${customerObj.ID}) ${customerObj['Imię Nazwisko']}`,
+					value: customerObj.ID,
 				}))}
-				id='user'
-				name='userID'
-				label='Przypisz do konta:'
-				value={userValue}
-				onFocus={handleUserFocus}
-				onBlur={handleUserBlur}
-				onChange={handleUserChange}
-				validationResults={userValidationResults}
-				didEdit={userDidEdit}
+				id='customer'
+				name='customerID'
+				label='Uczestnik:*'
+				value={customerValue}
+				onFocus={handleCustomerFocus}
+				onBlur={handleCustomerBlur}
+				onChange={handleCustomerChange}
+				validationResults={customerValidationResults}
+				didEdit={customerDidEdit}
 				required
-				isFocused={userIsFocused}
+				isFocused={customerIsFocused}
+			/>
+			<InputLogin
+				embedded={true}
+				formType={formType}
+				type='select'
+				options={productsOptionsList.map((productObj) => ({
+					key: productObj.ID,
+					label: `(ID: ${productObj.ID}) ${productObj.Nazwa}`,
+					value: productObj.ID,
+				}))}
+				id='product'
+				name='product'
+				label='Zajęcia:*'
+				value={productValue}
+				onFocus={handleProductFocus}
+				onBlur={handleProductBlur}
+				onChange={handleProductChange}
+				required
+				validationResults={productValidationResults}
+				didEdit={productDidEdit}
+				isFocused={productIsFocused}
+			/>
+			<InputLogin
+				embedded={true}
+				formType={formType}
+				type='select'
+				options={
+					schedulesOptionsList?.length > 0
+						? schedulesOptionsList.map((scheduleObj) => ({
+								key: scheduleObj.ScheduleID,
+								label: `(ID: ${scheduleObj.ScheduleID}) ${getWeekDay(
+									scheduleObj.Date,
+								)} ${scheduleObj.Date} ${scheduleObj.StartTime}`,
+								value: scheduleObj.ScheduleID,
+						  }))
+						: [{label: 'Uczestnik już rezerwował wszystkie terminy', value: 0}]
+				}
+				id='schedule'
+				name='schedule'
+				label='Termin:*'
+				value={scheduleValue}
+				onFocus={handleScheduleFocus}
+				onBlur={handleScheduleBlur}
+				onChange={handleScheduleChange}
+				required
+				validationResults={scheduleValidationResults}
+				didEdit={scheduleDidEdit}
+				isFocused={scheduleIsFocused}
+			/>
+			<InputLogin
+				embedded={true}
+				formType={formType}
+				type='decimal'
+				id='amountPaid'
+				name='amountPaid'
+				label='Zapłacono:*'
+				placeholder='zł'
+				value={amountPaidValue}
+				onFocus={handleAmountPaidFocus}
+				onBlur={handleAmountPaidBlur}
+				onChange={handleAmountPaidChange}
+				required
+				validationResults={amountPaidValidationResults}
+				didEdit={amountPaidDidEdit}
+				isFocused={amountPaidIsFocused}
 			/>
 			<InputLogin
 				embedded={true}
 				formType={formType}
 				type='select'
 				options={[
-					{label: 'Indywidualny', value: 'Indywidualny'},
-					{label: 'B2B', value: 'Biznesowy'},
+					{label: 'Gotówka', value: 1},
+					{label: 'BLIK', value: 2},
+					{label: 'Przelew', value: 3},
 				]}
-				id='customerType'
-				name='customerType'
-				label='Typ uczestnika:'
-				value={customerTypeValue}
-				onFocus={handleCustomerTypeFocus}
-				onBlur={handleCustomerTypeBlur}
-				onChange={handleCustomerTypeChange}
+				id='paymentMethod'
+				name='paymentMethod'
+				label='Metoda płatności:*'
+				value={paymentMethodValue}
+				onFocus={handlePaymentMethodFocus}
+				onBlur={handlePaymentMethodBlur}
+				onChange={handlePaymentMethodChange}
 				required
-				validationResults={customerTypeValidationResults}
-				didEdit={customerTypeDidEdit}
-				isFocused={customerTypeIsFocused}
+				validationResults={paymentMethodValidationResults}
+				didEdit={paymentMethodDidEdit}
+				isFocused={paymentMethodIsFocused}
 			/>
-			<InputLogin
-				embedded={true}
-				formType={formType}
-				type='text'
-				id='firstName'
-				name='firstName'
-				label='Imię:*'
-				value={firstNameValue}
-				onFocus={handleFirstNameFocus}
-				onBlur={handleFirstNameBlur}
-				onChange={handleFirstNameChange}
-				autoComplete='given-name'
-				required
-				validationResults={firstNameValidationResults}
-				didEdit={firstNameDidEdit}
-				isFocused={firstNameIsFocused}
-			/>
-			<InputLogin
-				embedded={true}
-				formType={formType}
-				type='text'
-				id='lastName'
-				name='lastName'
-				label='Nazwisko:*'
-				value={lastNameValue}
-				onFocus={handleLastNameFocus}
-				onBlur={handleLastNameBlur}
-				onChange={handleLastNameChange}
-				autoComplete='family-name'
-				required
-				validationResults={lastNameValidationResults}
-				didEdit={lastNameDidEdit}
-				isFocused={lastNameIsFocused}
-			/>
-			<InputLogin
-				embedded={true}
-				formType={formType}
-				type='date'
-				id='DoB'
-				name='DoB'
-				label='Urodziny:*'
-				value={DoBValue}
-				onFocus={handleDoBFocus}
-				onBlur={handleDoBBlur}
-				onChange={handleDoBChange}
-				autoComplete='bday'
-				required
-				validationResults={DoBValidationResults}
-				didEdit={DoBDidEdit}
-				isFocused={DoBIsFocused}
-			/>
-			<InputLogin
-				embedded={true}
-				formType={formType}
-				type='tel'
-				id='phone'
-				name='phone'
-				label='Numer telefonu:*'
-				value={phoneValue}
-				onFocus={handlePhoneFocus}
-				onBlur={handlePhoneBlur}
-				onChange={handlePhoneChange}
-				autoComplete='phone'
-				required
-				validationResults={phoneValidationResults}
-				didEdit={phoneDidEdit}
-				isFocused={phoneIsFocused}
-			/>
-			<InputLogin
-				embedded={true}
-				formType={formType}
-				type='select'
-				options={[
-					{label: 'Telefon', value: 'Telefon'},
-					{label: 'Email', value: 'Email'},
-				]}
-				id='cMethod'
-				name='cMethod'
-				label='Preferuję kontakt przez:'
-				value={cMethodValue}
-				onFocus={handleCMethodFocus}
-				onBlur={handleCMethodBlur}
-				onChange={handleCMethodChange}
-				validationResults={cMethodValidationResults}
-				didEdit={cMethodDidEdit}
-				isFocused={cMethodIsFocused}
-			/>
-			<InputLogin
-				embedded={true}
-				formType={formType}
-				type='number'
-				id='loyalty'
-				name='loyalty'
-				label='Lojalność:'
-				min='0'
-				max='10'
-				value={loyaltyValue}
-				onFocus={handleLoyaltyFocus}
-				onBlur={handleLoyaltyBlur}
-				onChange={handleLoyaltyChange}
-				validationResults={loyaltyValidationResults}
-				didEdit={loyaltyDidEdit}
-				isFocused={loyaltyIsFocused}
-			/>
-			<InputLogin
-				embedded={true}
-				formType={formType}
-				type='textarea'
-				id='notes'
-				name='notes'
-				label='Notatka:'
-				cols='40'
-				rows='10'
-				value={notesValue}
-				onFocus={handleNotesFocus}
-				onBlur={handleNotesBlur}
-				onChange={handleNotesChange}
-				validationResults={notesValidationResults}
-				didEdit={notesDidEdit}
-				isFocused={notesIsFocused}
-			/>
-
 			<button
 				type='reset'
 				onClick={handleReset}
@@ -418,11 +355,9 @@ function NewBookingForm({onClose}) {
 
 	return (
 		<>
-			{/* <section className={formType}> */}
 			<div className='user-container modal__summary'>
 				{form} {feedback}
 			</div>
-			{/* </section> */}
 		</>
 	);
 }

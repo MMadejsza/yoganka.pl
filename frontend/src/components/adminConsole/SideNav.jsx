@@ -6,6 +6,7 @@ import ModalFrame from './ModalFrame.jsx';
 import NewUserForm from './NewUserForm.jsx';
 import NewCustomerForm from './NewCustomerForm.jsx';
 import NewProductForm from './NewProductForm.jsx';
+import NewBookingForm from './NewBookingForm.jsx';
 
 function SideNav({menuSet, side, type, onclose}) {
 	const navigate = useNavigate();
@@ -39,7 +40,7 @@ function SideNav({menuSet, side, type, onclose}) {
 
 			case path.includes('show-all-bookings'):
 				destination = 'show-all-bookings/add-booking';
-				destComponent = <NewUserForm />;
+				destComponent = <NewBookingForm />;
 				break;
 		}
 		return {dest: destination, comp: destComponent};
