@@ -740,7 +740,18 @@ export const postDeleteSchedule = (req, res, next) => {
 					'Nie można usunąć terminu który już minął. Posiada też wartość historyczną dla statystyk.',
 				);
 			}
-			return foundSchedule.destroy();
+
+			return models.BookedSchedule.findOne({
+				where: {ScheduleID: id},
+			}).then((foundRecord) => {
+				if (foundRecord) {
+					errCode = 409;
+					throw new Error(
+						'Nie można usunąć terminu, na który są zapisane osoby. Najpierw usuń obecności.',
+					);
+				}
+				return foundSchedule.destroy();
+			});
 		})
 		.then((deletedCount) => {
 			if (!deletedCount) {

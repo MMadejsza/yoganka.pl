@@ -130,6 +130,7 @@ export const postBookSchedule = (req, res, next) => {
 			})
 			.then((existingBooking) => {
 				if (existingBooking) {
+					//! assuming single schedule/booking
 					return existingBooking.ScheduleRecords[0].BookedSchedule.update(
 						{Attendance: true},
 						{transaction: t},
