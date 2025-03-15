@@ -77,7 +77,10 @@ export const getShowAllSchedules = (req, res, next) => {
 			),
 		})
 		.then((records) => {
-			if (!records) throw new Error({message: 'Nie znaleziono terminów.'});
+			if (!records) {
+				errCode = 404;
+				throw new Error('Nie znaleziono terminów.');
+			}
 			// Convert for records for different names
 			const formattedRecords = records.map((record) => {
 				const newRecord = {}; // Container for formatted data
@@ -146,16 +149,15 @@ export const getShowAllSchedules = (req, res, next) => {
 			];
 
 			// ✅ Return response to frontend
-			console.log('✅✅✅ user getShowAllSchedules schedules fetched');
+			console.log('\n✅✅✅ user getShowAllSchedules schedules fetched');
 			res.json({
+				confirmation: 1,
+				message: 'Terminy pobrane pomyślnie.',
 				totalHeaders, // To render
 				content: formattedRecords, // With new names
 			});
 		})
-		.catch((err) => {
-			console.log('\n❌❌❌ Error user getShowAllSchedules', err);
-			return res.status(404).json({message: err.message}).redirect('/');
-		});
+		.catch((err) => catchErr(err, controllerName));
 };
 export const getShowScheduleByID = (req, res, next) => {
 	const controllerName = 'getShowScheduleByID';
@@ -175,18 +177,11 @@ export const getShowScheduleByID = (req, res, next) => {
 				model: models.BookedSchedule,
 				required: false,
 			},
-			// {
-			// 	model: models.Booking, // Booking which has relation through BookedSchedule
-			// 	through: {}, // attributes: [] omit data from mid table
-			// 	required: false,
-			// 	attributes: {
-			// 		exclude: ['Product'],
-			// 	},
-			// },
 		],
 	})
 		.then((scheduleData) => {
 			if (!scheduleData) {
+				errCode = 404;
 				throw new Error({message: 'Nie znaleziono rezerwacji.'});
 			}
 
@@ -221,37 +216,31 @@ export const getShowScheduleByID = (req, res, next) => {
 			return res.status(200).json({schedule, user: req.user});
 			// return res.status(200).json({schedule});
 		})
-		.catch((err) => {
-			console.log('\n❌❌❌ Error fetching the schedule:', err.message);
-			return res.status(404).json({message: err.message}).redirect('/grafik');
-		});
+		.catch((err) => catchErr(err, controllerName));
 };
 
 export const getShowAccount = (req, res, next) => {
 	const controllerName = 'getShowAccount';
 	log(controllerName);
 
-	// return res.status(401).json({});
-
 	// @ Fetching USER
 	// check if there is logged in User
 	if (!req.user) {
-		return res.status(401).json({error: 'Użytkownik nie jest zalogowany'});
+		errCode = 401;
+		throw new Error('Użytkownik nie jest zalogowany');
 	}
 
 	// if only user
 	if (!req.user.Customer) {
 		const user = req.user;
 		console.log('\n✅✅✅ getShowAccount user fetched');
-		return res.status(200).json({user});
+		return res
+			.status(200)
+			.json({confirmation: 1, message: 'Profil uczestnika pobrany pomyślnie.', user});
 	} else {
 		let PK = req.user.Customer.CustomerID;
 		return models.Customer.findByPk(PK, {
 			include: [
-				// {
-				// 	model: models.CustomerPhones, // Customer phone numbers
-				// 	required: false,
-				// },
 				{
 					model: models.User, // Add Customer
 					required: false, // May not exist
@@ -320,15 +309,17 @@ export const getShowAccount = (req, res, next) => {
 		})
 			.then((customer) => {
 				if (!customer) {
-					throw new Error({message: 'Nie pobrano danych uczestnika.'});
+					errCode = 404;
+					throw new Error('Nie pobrano danych uczestnika.');
 				}
 				console.log('\n✅✅✅ showAccount customer fetched');
-				return res.status(200).json({customer});
+				return res.status(200).json({
+					customer,
+					confirmation: 1,
+					message: 'Profil uczestnika pobrany pomyślnie.',
+				});
 			})
-			.catch((err) => {
-				console.log('\n❌❌❌ Error fetching the account:', err.message);
-				return res.status(404).json({message: err.message});
-			});
+			.catch((err) => catchErr(err, controllerName));
 	}
 };
 
@@ -340,15 +331,15 @@ export const getEditSettings = (req, res, next) => {
 	models.UserPrefSettings.findByPk(PK)
 		.then((preferences) => {
 			if (!preferences) {
+				errCode = 404;
 				throw new Error('Nie pobrano ustawień.');
 			}
 			console.log('\n✅✅✅ getEditSettings fetched');
-			return res.status(200).json({preferences});
+			return res
+				.status(200)
+				.json({confirmation: 1, message: 'Ustawienia pobrana pomyślnie.', preferences});
 		})
-		.catch((err) => {
-			console.log('\n❌❌❌ Error fetching the settings:', err.message);
-			return res.status(404).json({message: err.message});
-		});
+		.catch((err) => catchErr(err, controllerName));
 };
 
 export const postEditSettings = (req, res, next) => {
@@ -356,52 +347,50 @@ export const postEditSettings = (req, res, next) => {
 	log(controllerName);
 
 	const userID = req.user.UserID;
-	const handedness = !!req.body.handedness || false;
-	const font = req.body.font || 14;
-	const notifications = !!req.body.notifications || false;
-	const animation = !!req.body.animation || false;
-	const theme = !!req.body.theme || false;
+
+	const {handedness, font, notifications, animation, theme} = req.body;
 
 	// if preferences don't exist - create new ones:
 	models.UserPrefSettings.findOrCreate({
 		where: {UserID: userID},
 		defaults: {
 			UserID: userID,
-			Handedness: handedness,
-			FontSize: font,
-			Notifications: notifications,
-			Animation: animation,
-			Theme: theme,
+			Handedness: handedness || false,
+			FontSize: font || 14,
+			Notifications: notifications || false,
+			Animation: animation || false,
+			Theme: theme || false,
 		},
 	})
 		.then(([preferences, created]) => {
+			const {Handedness, FontSize, Notifications, Animation, Theme} = preferences;
 			if (!created) {
 				// Nothing changed
 				if (
-					preferences.Handedness === handedness &&
-					preferences.FontSize === font &&
-					preferences.Notifications === notifications &&
-					preferences.Animation === animation &&
-					preferences.Theme === theme
+					Handedness === handedness &&
+					FontSize === font &&
+					Notifications === notifications &&
+					Animation === animation &&
+					Theme === theme
 				) {
 					// Nothing changed
 					console.log('\n❓❓❓ Preferences no change');
 					return {confirmation: 0, message: 'Brak zmian'};
 				} else {
 					// Update
-					preferences.Handedness = handedness;
-					preferences.FontSize = font;
-					preferences.Notifications = notifications;
-					preferences.Animation = animation;
-					preferences.Theme = theme;
+					Handedness = handedness;
+					FontSize = font;
+					Notifications = notifications;
+					Animation = animation;
+					Theme = theme;
 					return preferences.save().then(() => {
-						console.log('\n✅✅✅ Preferences Updated');
+						console.log('\n✅✅✅ postEditSettings Preferences Updated');
 						return {confirmation: 1, message: 'Ustawienia zostały zaktualizowane'};
 					});
 				}
 			} else {
 				// New preferences created
-				console.log('\n✅✅✅ Preferences Created');
+				console.log('\n✅✅✅ postEditSettings Preferences Created');
 				return {confirmation: 1, message: 'Ustawienia zostały utworzone'};
 			}
 		})
@@ -412,8 +401,5 @@ export const postEditSettings = (req, res, next) => {
 				message: result.message,
 			});
 		})
-		.catch((err) => {
-			console.log('\n❌❌❌ Error in postEditSettings:', err);
-			return res.status(500).json({message: err.message});
-		});
+		.catch((err) => catchErr(err, controllerName, {code: 409}));
 };
