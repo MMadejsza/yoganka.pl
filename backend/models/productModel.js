@@ -13,7 +13,7 @@ const Product = sequelizeDb.define(
 		Name: {
 			type: DataTypes.STRING(255),
 			allowNull: false,
-			unique: true,
+			unique: 'unique_name_index',
 		},
 		Type: {
 			type: DataTypes.STRING(50),

@@ -3,20 +3,7 @@ import {Sequelize, Op, fn, col} from 'sequelize';
 import {simpleListAllToTable, listAllToTable} from '../utils/listAllToTable.js';
 import columnMaps from '../utils/columnsMapping.js';
 import {formatIsoDateTime, getWeekDay} from '../utils/formatDateTime.js';
-
-// !HELPERS
-const errCode = 500;
-const log = (controllerName) => {
-	console.log(`\n➡️➡️➡️ Admin called`, controllerName);
-};
-const catchErr = (err, controllerName, extraProps = {}) => {
-	console.log(`\n❌❌❌ Error Admin ${controllerName}`, err.message);
-	return res.status(errCode).json({
-		confirmation: 0,
-		message: err.message,
-		...extraProps, // type: 'signup', code: 409,
-	});
-};
+import {errCode, log, catchErr} from './_controllers.js';
 
 //@ USERS
 export const showAllUsers = (req, res, next) => {
