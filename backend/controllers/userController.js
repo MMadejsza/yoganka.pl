@@ -2,9 +2,12 @@ import * as models from '../models/_index.js';
 import columnMaps from '../utils/columnsMapping.js';
 import {formatIsoDateTime, getWeekDay} from '../utils/formatDateTime.js';
 import {Sequelize, Op, fn, col} from 'sequelize';
+import {errCode, log, catchErr} from './_controllers.js';
 
 export const getShowUserByID = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called showUserByID`);
+	const controllerName = 'getShowUserByID';
+	log(controllerName);
+
 	const PK = req.user.UserID;
 	models.User.findByPk(PK, {
 		include: [
@@ -20,19 +23,20 @@ export const getShowUserByID = (req, res, next) => {
 	})
 		.then((user) => {
 			if (!user) {
-				throw new Error({message: 'Nie znaleziono użytkownika.'});
+				errCode = 404;
+				throw new Error('Nie znaleziono użytkownika.');
 			}
 
 			console.log('\n✅✅✅ getShowUserByID user fetched');
-			return res.status(200).json({user});
+			return res
+				.status(200)
+				.json({user, confirmation: 1, message: '✅ Konto pobrane pomyślnie'});
 		})
-		.catch((err) => {
-			console.log('\n❌❌❌ Error fetching the user:', err.message);
-			return res.status(404).json({message: err.message}).redirect('/konto');
-		});
+		.catch((err) => catchErr(err, controllerName));
 };
 export const getShowAllSchedules = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called user getShowAllSchedules`);
+	const controllerName = 'getShowAllSchedules';
+	log(controllerName);
 
 	const model = models.ScheduleRecord;
 
@@ -154,7 +158,8 @@ export const getShowAllSchedules = (req, res, next) => {
 		});
 };
 export const getShowScheduleByID = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called user showScheduleByID`);
+	const controllerName = 'getShowScheduleByID';
+	log(controllerName);
 
 	const isUser = !!req.user;
 	const isCustomer = !!req.user?.Customer;
@@ -223,7 +228,9 @@ export const getShowScheduleByID = (req, res, next) => {
 };
 
 export const getShowAccount = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called showAccount`, new Date().toISOString());
+	const controllerName = 'getShowAccount';
+	log(controllerName);
+
 	// return res.status(401).json({});
 
 	// @ Fetching USER
@@ -326,8 +333,8 @@ export const getShowAccount = (req, res, next) => {
 };
 
 export const getEditSettings = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called getEditSettings`);
-
+	const controllerName = 'getEditSettings';
+	log(controllerName);
 	const PK = req.user.UserPrefSetting?.UserPrefID;
 
 	models.UserPrefSettings.findByPk(PK)
@@ -345,7 +352,9 @@ export const getEditSettings = (req, res, next) => {
 };
 
 export const postEditSettings = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called postEditSettings`);
+	const controllerName = 'getEditSettings';
+	log(controllerName);
+
 	const userID = req.user.UserID;
 	const handedness = !!req.body.handedness || false;
 	const font = req.body.font || 14;

@@ -187,25 +187,26 @@ export const postEditSettings = (req, res, next) => {
 		},
 	})
 		.then(([preferences, created]) => {
+			const {Handedness, FontSize, Notifications, Animation, Theme} = preferences;
 			if (!created) {
 				// Nothing changed
 				if (
-					preferences.Handedness === handedness &&
-					preferences.FontSize === font &&
-					preferences.Notifications === notifications &&
-					preferences.Animation === animation &&
-					preferences.Theme === theme
+					Handedness === handedness &&
+					FontSize === font &&
+					Notifications === notifications &&
+					Animation === animation &&
+					Theme === theme
 				) {
 					// Nothing changed
 					console.log('\n❓❓❓ postEditSettings Admin Preferences no change');
 					return {confirmation: 0, message: 'Brak zmian.'};
 				} else {
 					// Update
-					preferences.Handedness = handedness;
-					preferences.FontSize = font;
-					preferences.Notifications = notifications;
-					preferences.Animation = animation;
-					preferences.Theme = theme;
+					Handedness = handedness;
+					FontSize = font;
+					Notifications = notifications;
+					Animation = animation;
+					Theme = theme;
 
 					return preferences.save().then(() => {
 						console.log('\n✅✅✅ postEditSettings Admin Preferences Updated');
@@ -470,11 +471,12 @@ export const postEditCustomer = (req, res, next) => {
 			return customer;
 		})
 		.then((foundCustomer) => {
+			const {Phone, PreferredContactMethod, Loyalty, Notes} = foundCustomer;
 			if (
-				foundCustomer.Phone == newPhone &&
-				foundCustomer.PreferredContactMethod == newContactMethod &&
-				foundCustomer.Loyalty == newLoyalty &&
-				foundCustomer.Notes == newNotes
+				Phone == newPhone &&
+				PreferredContactMethod == newContactMethod &&
+				Loyalty == newLoyalty &&
+				Notes == newNotes
 			) {
 				// Nothing changed
 				console.log('\n❓❓❓ Admin Customer no change');
