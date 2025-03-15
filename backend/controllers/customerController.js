@@ -1,8 +1,10 @@
 import db from '../utils/db.js';
 import * as models from '../models/_index.js';
+import {errCode, log, catchErr} from './_controllers.js';
 
 export const postBookSchedule = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called postBookSchedule`);
+	const controllerName = 'postBookSchedule';
+	log(controllerName);
 	// @ Fetching USER
 	// check if there is logged in User
 	if (!req.user) {
@@ -15,26 +17,26 @@ export const postBookSchedule = (req, res, next) => {
 	if (!req.user.Customer) {
 		const cDetails = req.body.customerDetails;
 		console.log('❗❗❗Użytkownik nie jest klientem, tworzymy rekord Customer...');
-
+		errCode = 400;
 		if (!cDetails) {
 			console.log('\n❌❌❌ Brak danych klienta');
-			return res.status(400).json({message: 'Brak danych klienta'});
+			throw new Error('Brak danych klienta');
 		}
 		if (!cDetails.fname || !cDetails.fname.trim()) {
 			console.log('\n❌❌❌ Imię nie może być puste');
-			return res.status(400).json({message: 'Imię nie może być puste'});
+			throw new Error('Imię nie może być puste');
 		}
 		if (!cDetails.lname || !cDetails.lname.trim()) {
 			console.log('\n❌❌❌ Nazwisko nie może być puste');
-			return res.status(400).json({message: 'Nazwisko nie może być puste'});
+			throw new Error('Nazwisko nie może być puste');
 		}
 		if (!cDetails.dob || !cDetails.dob.trim()) {
 			console.log('\n❌❌❌ Data urodzenia nie może być puste');
-			return res.status(400).json({message: 'Data urodzenia nie może być pusta'});
+			throw new Error('Data urodzenia nie może być pusta');
 		}
 		if (!cDetails.phone || !cDetails.phone.trim()) {
 			console.log('\n❌❌❌ Telefon nie może być puste');
-			return res.status(400).json({message: 'Numer telefonu nie może być pusty'});
+			throw new Error('Numer telefonu nie może być pusty');
 		}
 
 		customerPromise = models.Customer.create({
@@ -73,12 +75,14 @@ export const postBookSchedule = (req, res, next) => {
 			.then((scheduleRecord) => {
 				if (!scheduleRecord) {
 					console.log('❗❗❗if (!scheduleRecord) {');
+					errCode = 404;
 					throw new Error('Nie znaleziono terminu');
 				}
 				const scheduleDateTime = new Date(
 					`${scheduleRecord.Date}T${scheduleRecord.StartTime}:00`,
 				);
 				if (scheduleDateTime < new Date()) {
+					errCode = 401;
 					throw new Error('Nie można rezerwować terminu, który już minął.');
 				}
 				// console.log('scheduleRecord', scheduleRecord);
@@ -93,6 +97,7 @@ export const postBookSchedule = (req, res, next) => {
 					if (currentAttendance >= scheduleRecord.Capacity) {
 						// If limit is reached
 						console.log('❗❗❗if (currentAttendance >= scheduleRecord.capacity)');
+						errCode = 409;
 						throw new Error('Brak wolnych miejsc na ten termin.');
 					}
 
@@ -124,8 +129,6 @@ export const postBookSchedule = (req, res, next) => {
 			})
 			.then((existingBooking) => {
 				if (existingBooking) {
-					// If booking exists - update attendance only
-					// console.log('❗❗❗', existingBooking);
 					return existingBooking.ScheduleRecords[0].BookedSchedule.update(
 						{Attendance: true},
 						{transaction: t},
@@ -159,46 +162,25 @@ export const postBookSchedule = (req, res, next) => {
 			});
 	})
 		.then((booking) => {
-			console.log('\n✅✅✅ Rezerwacja utworzona pomyślnie');
+			console.log('\n✅✅✅ postBookSchedule Rezerwacja utworzona pomyślnie');
 			res.status(201).json({
 				isNewCustomer,
+				confirmation: 1,
 				message: 'Rezerwacja utworzona pomyślnie',
 				booking,
 			});
 		})
-		.catch((err) => {
-			console.error(err);
-			// If no enough spaces
-			console.log('\n❌❌❌ Error postBookSchedule:', err);
-			if (err === 'Brak wolnych miejsc na ten termin.') {
-				return res.status(409).json({message: err});
-			}
-
-			if (
-				err === 'Użytkownik nie jest zalogowany.' ||
-				err === 'Nie można rezerwować terminu, który już minął.'
-			) {
-				return res.status(401).json({message: err});
-			}
-			// if the same customer tries to book the schedule
-			if (
-				err.name === 'SequelizeUniqueConstraintError' ||
-				err.parent?.code === 'ER_DUP_ENTRY'
-			) {
-				return res.status(409).json({
-					message: 'Ten termin został już opłacony przez tego klienta.',
-				});
-			}
-			return res.status(500).json({message: err});
-		});
+		.catch((err) => catchErr(err, controllerName));
 };
 export const postCancelSchedule = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called postCancelSchedule`);
+	const controllerName = 'postBookSchedule';
+	log(controllerName);
 	const scheduleID = req.params.id;
 
 	models.ScheduleRecord.findOne({where: {ScheduleID: scheduleID}})
 		.then((scheduleRecord) => {
 			if (!scheduleRecord) {
+				errCode = 404;
 				throw new Error({message: 'Nie znaleziono terminu.'});
 			}
 			const scheduleDateTime = new Date(
@@ -206,6 +188,7 @@ export const postCancelSchedule = (req, res, next) => {
 			);
 
 			if (scheduleDateTime < new Date()) {
+				errCode = 401;
 				throw new Error({message: 'Nie można zwolnić miejsca dla minionego terminu.'});
 			}
 			return models.BookedSchedule.update(
@@ -221,38 +204,37 @@ export const postCancelSchedule = (req, res, next) => {
 					console.log('\n✅✅✅ postCancelSchedule Update successful');
 					return res
 						.status(200)
-						.json({message: 'Miejsce zwolnione - dziękujemy za informację :)'});
+						.json({
+							confirmation: 1,
+							message: 'Miejsce zwolnione - dziękujemy za informację :)',
+						});
 				} else {
+					errCode = 404;
+
 					throw new Error({message: 'Nie znaleziono terminu.'});
 				}
 			});
 		})
-		.catch((err) => {
-			console.log('\n❌❌❌ Error postCancelSchedule:', err.message);
-			if (err.message === 'Nie znaleziono terminu.') {
-				return res.status(404).json({message: err.message});
-			}
-			if (err.message == 'Nie można zwolnić miejsca dla minionego terminu.') {
-				return res.status(409).json({message: err.message});
-			}
-			next(err);
-		});
+		.catch((err) => catchErr(err, controllerName));
 };
 
 export const getEditCustomer = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called getEditCustomer`);
+	const controllerName = 'getEditCustomer';
+	log(controllerName);
 	const customer = req.user.Customer;
 	// console.log(customer);
-	return res.status(200).json({customer});
+	return res.status(200).json({confirmation: 1, customer});
 };
 export const postEditCustomer = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called postEditCustomer`);
+	const controllerName = 'postEditCustomer';
+	log(controllerName);
 
 	const customerId = req.user.Customer.CustomerID;
 	const newPhone = req.body.phone;
 	const newContactMethod = req.body.cMethod;
 	if (!newPhone || !newPhone.trim()) {
 		console.log('\n❌❌❌ Error postEditCustomer:', 'No phone');
+		errCode = 400;
 		throw new Error('Numer telefonu nie może być pusty');
 	}
 
@@ -270,16 +252,15 @@ export const postEditCustomer = (req, res, next) => {
 			return res.status(200).json({
 				confirmation: status,
 				affectedCustomerRows,
+				message: 'Profil zaktualizowany pomyslnie.',
 			});
 		})
-		.catch((err) => {
-			console.log('\n❌❌❌ Error postEditCustomer:', err.message);
-			return res.status(400).json({confirmation: 0, message: err.message});
-		});
+		.catch((err) => catchErr(err, controllerName));
 };
 
 export const getShowBookingByID = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ customer called showBookingByID`);
+	const controllerName = 'getShowBookingByID';
+	log(controllerName);
 
 	const PK = req.params.id;
 
@@ -309,13 +290,18 @@ export const getShowBookingByID = (req, res, next) => {
 	})
 		.then((booking) => {
 			if (!booking) {
+				errCode = 404;
 				throw new Error({message: 'Nie znaleziono rezerwacji.'});
 			}
 			console.log('\n✅✅✅ getShowBookingByID booking fetched');
-			return res.status(200).json({isLoggedIn: req.session.isLoggedIn, booking});
+			return res
+				.status(200)
+				.json({
+					confirmation: 1,
+					message: 'Rezerwacja pobrana pomyślnie.',
+					isLoggedIn: req.session.isLoggedIn,
+					booking,
+				});
 		})
-		.catch((err) => {
-			console.log('\n❌❌❌ Error fetching the booking:', err.message);
-			return res.status(404).json({message: err.message});
-		});
+		.catch((err) => catchErr(err, controllerName));
 };

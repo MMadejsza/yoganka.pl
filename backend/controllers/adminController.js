@@ -56,6 +56,7 @@ export const showAllUsers = (req, res, next) => {
 			console.log('\n✅✅✅ showAllUsers fetched');
 			res.json({
 				confirmation: 1,
+				message: 'Konta pobrane pomyślnie.',
 				isLoggedIn: req.session.isLoggedIn,
 				totalHeaders, // To render
 				content: formattedRecords, // With new names
