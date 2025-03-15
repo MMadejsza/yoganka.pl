@@ -4,9 +4,25 @@ import {simpleListAllToTable, listAllToTable} from '../utils/listAllToTable.js';
 import columnMaps from '../utils/columnsMapping.js';
 import {formatIsoDateTime, getWeekDay} from '../utils/formatDateTime.js';
 
+// !HELPERS
+const errCode = 500;
+const log = (controllerName) => {
+	console.log(`\n➡️➡️➡️ Admin called`, controllerName);
+};
+const catchErr = (err, controllerName, extraProps = {}) => {
+	console.log(`\n❌❌❌ Error Admin ${controllerName}`, err.message);
+	return res.status(errCode).json({
+		confirmation: 0,
+		message: err.message,
+		...extraProps, // type: 'signup', code: 409,
+	});
+};
+
 //@ USERS
 export const showAllUsers = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called showAllUsers`);
+	const controllerName = 'showAllUsers';
+	log(controllerName);
+
 	const model = models.User;
 	model
 		.findAll({
@@ -18,7 +34,10 @@ export const showAllUsers = (req, res, next) => {
 			],
 		})
 		.then((records) => {
-			if (!records) throw new Error('Nie znaleziono użytkowników.');
+			if (!records) {
+				errCode = 404;
+				throw new Error('Nie znaleziono użytkowników.');
+			}
 			// fetching map for User table or empty object
 			const columnMap = columnMaps[model.name] || {};
 			const keysForHeaders = Object.values(columnMap);
@@ -47,20 +66,20 @@ export const showAllUsers = (req, res, next) => {
 			const totalHeaders = keysForHeaders;
 
 			// ✅ Return response to frontend
-			console.log('\n✅✅✅ Fetched showAllUsers');
+			console.log('\n✅✅✅ showAllUsers fetched');
 			res.json({
+				confirmation: 1,
 				isLoggedIn: req.session.isLoggedIn,
 				totalHeaders, // To render
 				content: formattedRecords, // With new names
 			});
 		})
-		.catch((err) => {
-			console.log('\n❌❌❌ Error showAllUsers', err);
-			return res.status(404).json({message: err});
-		});
+		.catch((err) => catchErr(err, controllerName));
 };
 export const showUserByID = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called showUserByID`);
+	const controllerName = 'showUserByID';
+	log(controllerName);
+
 	const PK = req.params.id || req.user.UserID;
 	models.User.findByPk(PK, {
 		include: [
@@ -76,26 +95,27 @@ export const showUserByID = (req, res, next) => {
 	})
 		.then((user) => {
 			if (!user) {
+				errCode = 404;
 				throw new Error('Nie znaleziono użytkownika.');
 			}
 
-			console.log('✅✅✅ showUserByID user fetched');
-
-			return res.status(200).json({isLoggedIn: req.session.isLoggedIn, user});
+			console.log('\n✅✅✅ showUserByID user fetched');
+			return res
+				.status(200)
+				.json({confirmation: 1, isLoggedIn: req.session.isLoggedIn, user});
 		})
-		.catch((err) => {
-			console.log('\n❌❌❌ Error showUserByID', err);
-			return res.status(404).json({message: err});
-		});
+		.catch((err) => catchErr(err, controllerName));
 };
 export const postCreateUser = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called postCreateUser`);
+	const controllerName = 'postCreateUser';
+	log(controllerName);
 	const {email, password, confirmedPassword, date} = req.body;
 
 	models.User.findOne({where: {email}})
 		.then((user) => {
 			if (user) {
-				throw new Error('Użytkownik już istnieje.');
+				errCode = 409;
+				throw new Error('Konto już istnieje.');
 			}
 
 			// it returns the promise
@@ -112,27 +132,22 @@ export const postCreateUser = (req, res, next) => {
 					});
 				})
 				.then((newUser) => {
+					console.log('\n✅✅✅ postCreateUser User created.');
 					return res.status(200).json({
 						type: 'signup',
 						code: 200,
 						confirmation: 1,
-						message: '✅ Zarejestrowano pomyślnie',
+						message: 'Konto utworzone pomyślnie',
 					});
 				});
 		})
-		.catch((err) => {
-			console.log('\n❌❌❌ Użytkownik już istnieje.');
-			return res.status(409).json({
-				confirmation: 0,
-				type: 'signup',
-				code: 409,
-				message: err.message,
-			});
-		});
-};
 
+		.catch((err) => catchErr(err, controllerName, {type: 'signup', code: 409}));
+};
 export const postDeleteUser = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called postDeleteUser`);
+	const controllerName = 'postDeleteUser';
+	log(controllerName);
+
 	const id = req.params.id;
 	models.User.destroy({
 		where: {
@@ -141,52 +156,47 @@ export const postDeleteUser = (req, res, next) => {
 	})
 		.then((deletedCount) => {
 			if (!deletedCount) {
-				throw new Error('\n❌ Nie usunięto użytkownika.');
+				errCode = 404;
+				throw new Error('Nie usunięto użytkownika.');
 			}
 			console.log('\n✅✅✅ admin postDeleteUser deleted the user');
-			return res.status(200).json({confirmation: true});
+			return res.status(200).json({confirmation: 1, message: 'Konto usunięte pomyślnie.'});
 		})
-		.catch((err) => {
-			console.log('\n❌❌❌ Error admin postDeleteUser:', err);
-			return res.status(404).json({message: err});
-		});
+		.catch((err) => catchErr(err, controllerName));
 };
 export const getEditSettings = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ admin called getEditSettings`);
+	const controllerName = 'getEditSettings';
+	log(controllerName);
 
 	models.UserPrefSettings.findByPk(req.params.id)
 		.then((preferences) => {
 			if (!preferences) {
+				errCode = 404;
 				throw new Error('Nie pobrano ustawień.');
 			}
 			console.log('\n✅✅✅ admin getEditSettings fetched');
-			return res.status(200).json({preferences});
+			return res.status(200).json({confirmation: 1, preferences});
 		})
-		.catch((err) => {
-			console.log('\n❌❌❌ Error admin fetching the settings:', err.message);
-			return res.status(404).json({message: err.message});
-		});
+		.catch((err) => catchErr(err, controllerName));
 };
 
 export const postEditSettings = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called Admin postEditSettings`);
+	const controllerName = 'postEditSettings';
+	log(controllerName);
+
 	const userID = req.params.id;
-	const handedness = !!req.body.handedness || false;
-	const font = parseInt(req.body.font) || 14;
-	const notifications = !!req.body.notifications || false;
-	const animation = !!req.body.animation || false;
-	const theme = !!req.body.theme || false;
+	const {handedness, font, notifications, animation, theme} = req.body;
 
 	// if preferences don't exist - create new ones:
 	models.UserPrefSettings.findOrCreate({
 		where: {UserID: userID},
 		defaults: {
 			UserID: userID,
-			Handedness: handedness,
-			FontSize: font,
-			Notifications: notifications,
-			Animation: animation,
-			Theme: theme,
+			Handedness: !!handedness || false,
+			FontSize: parseInt(font) || 14,
+			Notifications: !!notifications || false,
+			Animation: !!animation || false,
+			Theme: !!theme || false,
 		},
 	})
 		.then(([preferences, created]) => {
@@ -200,8 +210,8 @@ export const postEditSettings = (req, res, next) => {
 					preferences.Theme === theme
 				) {
 					// Nothing changed
-					console.log('\n❓❓❓ Admin Preferences no change');
-					return {confirmation: 0, message: 'Brak zmian'};
+					console.log('\n❓❓❓ postEditSettings Admin Preferences no change');
+					return {confirmation: 0, message: 'Brak zmian.'};
 				} else {
 					// Update
 					preferences.Handedness = handedness;
@@ -211,13 +221,13 @@ export const postEditSettings = (req, res, next) => {
 					preferences.Theme = theme;
 
 					return preferences.save().then(() => {
-						console.log('\n✅✅✅ Admin Preferences Updated');
-						return {confirmation: 1, message: 'Ustawienia zostały zaktualizowane'};
+						console.log('\n✅✅✅ postEditSettings Admin Preferences Updated');
+						return {confirmation: 1, message: 'Ustawienia zostały zaktualizowane.'};
 					});
 				}
 			} else {
 				// New preferences created
-				console.log('\n✅✅✅ Admin Preferences Created');
+				console.log('\n✅✅✅ postEditSettings Admin Preferences Created');
 				return {confirmation: 1, message: 'Ustawienia zostały utworzone'};
 			}
 		})
@@ -228,17 +238,18 @@ export const postEditSettings = (req, res, next) => {
 				message: result.message,
 			});
 		})
-		.catch((err) => {
-			console.log('\n❌❌❌ Admin Error in postEditSettings:', err);
-			return res.status(500).json({message: err});
-		});
+		.catch((err) => catchErr(err, controllerName));
 };
 export const showAllUserSettings = (req, res, next) => {
+	const controllerName = 'showAllUserSettings';
+	log(controllerName);
+
 	listAllToTable(res, models.UserPrefSettings, null);
 };
 //@ CUSTOMERS
 export const showAllCustomers = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called showAllCustomers`);
+	const controllerName = 'showAllCustomers';
+	log(controllerName);
 	const model = models.Customer;
 
 	// We create dynamic joint columns based on the map
@@ -258,7 +269,10 @@ export const showAllCustomers = (req, res, next) => {
 			},
 		})
 		.then((records) => {
-			if (!records) throw new Error('Nie znaleziono użytkowników.');
+			if (!records) {
+				errCode = 404;
+				throw new Error('Nie znaleziono użytkowników.');
+			}
 			// Convert for records for different names
 			const formattedRecords = records.map((record) => {
 				const newRecord = {}; // Container for formatted data
@@ -277,20 +291,18 @@ export const showAllCustomers = (req, res, next) => {
 			// New headers (keys from columnMap)
 			const totalHeaders = keysForHeaders;
 			// ✅ Return response to frontend
-			console.log('✅✅✅ showAllCustomers customers fetched');
+			console.log('\n✅✅✅ showAllCustomers customers fetched');
 			res.json({
+				confirmation: 1,
 				isLoggedIn: req.session.isLoggedIn,
 				totalHeaders, // To render
 				content: formattedRecords, // With new names
 			});
 		})
-		.catch((err) => {
-			console.log('\n❌❌❌ Error showAllCustomers', err);
-			return res.status(404).json({message: err});
-		});
+		.catch((err) => catchErr(err, controllerName));
 };
 export const showCustomerByID = (req, res, next) => {
-	console.log(`\n➡️ called showCustomerByID`, new Date().toISOString());
+	console.log(`\n➡️ admin called showCustomerByID`, new Date().toISOString());
 	// console.log(req.user);
 	const PK = req.params.id;
 	models.Customer.findByPk(PK, {
@@ -362,21 +374,26 @@ export const showCustomerByID = (req, res, next) => {
 	})
 		.then((customer) => {
 			if (!customer) {
-				return res.redirect('/admin-console/show-all-users');
+				errCode = 404;
+				throw new Error('Nie znaleziono profilu uczestnika.');
 			}
-			console.log('✅ customer fetched');
-			return res.status(200).json({isLoggedIn: req.session.isLoggedIn, customer});
+			console.log('\n✅✅✅ showCustomerByID customer fetched');
+			return res
+				.status(200)
+				.json({confirmation: 1, isLoggedIn: req.session.isLoggedIn, customer});
 		})
-		.catch((err) => console.log(err));
+		.catch((err) => catchErr(err, controllerName));
 };
 export const postCreateCustomer = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called postCreateCustomer`);
+	const controllerName = 'postCreateCustomer';
+	log(controllerName);
 	const {userID, customerType, firstName, lastName, DoB, phone, cMethod, loyalty, notes} =
 		req.body;
 	let customerPromise;
 	models.Customer.findOne({where: {UserID: userID}})
 		.then((customer) => {
 			if (customer) {
+				errCode = 409;
 				throw new Error('Profil uczestnika już istnieje.');
 			}
 			return (customerPromise = models.Customer.create({
@@ -397,24 +414,19 @@ export const postCreateCustomer = (req, res, next) => {
 			}));
 		})
 		.then((newCustomer) => {
-			console.log('\n✅✅✅ postCreateCustomer Zarejestrowano pomyślnie.');
+			console.log('\n✅✅✅ postCreateCustomer customer created.');
 			return res.status(200).json({
 				code: 200,
 				confirmation: 1,
 				message: 'Zarejestrowano pomyślnie.',
 			});
 		})
-		.catch((err) => {
-			console.log('\n❌❌❌ postCreateCustomer Profil uczestnika już istnieje.');
-			return res.status(409).json({
-				confirmation: 0,
-				code: 409,
-				message: err.message,
-			});
-		});
+		.catch((err) => catchErr(err, controllerName, {code: 409}));
 };
 export const postDeleteCustomer = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called postDeleteCustomer`);
+	const controllerName = 'postDeleteCustomer';
+	log(controllerName);
+
 	const id = req.params.id;
 	models.Customer.destroy({
 		where: {
@@ -423,45 +435,50 @@ export const postDeleteCustomer = (req, res, next) => {
 	})
 		.then((deletedCount) => {
 			if (!deletedCount) {
-				throw new Error('\n❌ Nie usunięto profilu uczestnika.');
+				errCode = 404;
+				throw new Error('Nie usunięto profilu uczestnika.');
 			}
 			console.log('\n✅✅✅ admin postDeleteUser deleted the customer');
-			return res.status(200).json({confirmation: true});
+			return res.status(200).json({confirmation: 1, message: 'Profil usunięty pomyślnie.'});
 		})
-		.catch((err) => {
-			console.log('\n❌❌❌ Error admin postDeleteCustomer:', err);
-			return res.status(404).json({message: err});
-		});
+		.catch((err) => catchErr(err, controllerName));
 };
 export const getEditCustomer = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ admin called getEditCustomer`);
+	const controllerName = 'getEditCustomer';
+	log(controllerName);
+
 	models.Customer.findByPk(req.params.id)
 		.then((customer) => {
-			if (!customer) throw new Error('Nie znaleziono danych uczestnika.');
+			if (!customer) {
+				errCode = 404;
+				throw new Error('Nie znaleziono danych uczestnika.');
+			}
 			console.log('\n✅✅✅ Fetched admin getEditCustomer customer');
-			return res.status(200).json({customer});
+			return res
+				.status(200)
+				.json({confirmation: 1, customer, message: 'Dane uczestnika pobrane pomyślnie.'});
 		})
-		.catch((err) => {
-			console.log('\n❌❌❌ Error admin getEditCustomer', err);
-			return res.status(404).json({message: err});
-		});
+		.catch((err) => catchErr(err, controllerName));
 };
 export const postEditCustomer = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ admin called postEditCustomer`);
+	const controllerName = 'postEditCustomer';
+	log(controllerName);
+
 	const customerId = req.params.id;
-	const newPhone = req.body.phone;
-	const newContactMethod = req.body.cMethod;
-	const newLoyalty = req.body.loyalty;
-	const newNotes = req.body.notes;
+
+	const {newPhone, newContactMethod, newLoyalty, newNotes} = req.body;
 
 	if (!newPhone || !newPhone.trim()) {
-		console.log('\n❌❌❌ Error postEditCustomer:', 'No phone');
-		return res.status(400).json({message: 'Numer telefonu nie może być pusty'});
+		errCode = 400;
+		console.log('\n❌❌❌ Error postEditCustomer No phone');
+		throw new Error('Numer telefonu nie może być pusty.');
 	}
 
 	models.Customer.findByPk(customerId)
 		.then((customer) => {
+			errCode = 404;
 			if (!customer) throw new Error('Nie znaleziono danych uczestnika.');
+
 			console.log('\n✅✅✅ Fetched admin postEditCustomer customer');
 			return customer;
 		})
@@ -479,8 +496,6 @@ export const postEditCustomer = (req, res, next) => {
 			return foundCustomer;
 		})
 		.then((fetchedCustomer) => {
-			if (!fetchedCustomer) throw new Error('Nie przekazano uczestnika do update.');
-
 			models.Customer.update(
 				{
 					Phone: newPhone,
@@ -498,30 +513,20 @@ export const postEditCustomer = (req, res, next) => {
 					const affectedCustomerRows = results.customerResult[0];
 					const status = affectedCustomerRows >= 1;
 					return res.status(200).json({
+						message: 'Profil zaktualizowany pomyślnie.',
 						confirmation: status,
 						affectedCustomerRows,
 					});
 				})
-				.catch((err) => {
-					console.log('\n❌❌❌ Error admin  postEditCustomer UPDATE:', err);
-					return res.status(500).json({error: err});
-				});
+				.catch((err) => catchErr(err, controllerName));
 		})
-		.catch((err) => {
-			console.log('\n❌❌❌ Error admin postEditCustomer', err);
-			return res.status(404).json({message: err});
-		});
+		.catch((err) => catchErr(err, controllerName));
 };
-export const showAllCustomersPhones = (req, res, next) => {
-	models.CustomerPhones.findAll()
-		.then((phones) => {
-			return res.json(phones);
-		})
-		.catch((err) => console.log(err));
-};
+
 //@ SCHEDULES
 export const showAllSchedules = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called admin getShowAllSchedules`);
+	const controllerName = 'showAllSchedules';
+	log(controllerName);
 	const model = models.ScheduleRecord;
 
 	// We create dynamic joint columns based on the map
@@ -553,7 +558,10 @@ export const showAllSchedules = (req, res, next) => {
 			},
 		})
 		.then((records) => {
-			if (!records) throw new Error('Nie znaleziono terminów.');
+			if (!records) {
+				errCode = 404;
+				throw new Error('Nie znaleziono terminów.');
+			}
 			// Convert for records for different names
 			const formattedRecords = records.map((record) => {
 				const newRecord = {}; // Container for formatted data
@@ -614,17 +622,18 @@ export const showAllSchedules = (req, res, next) => {
 			// ✅ Return response to frontend
 			console.log('✅✅✅ admin getShowAllSchedules schedules fetched');
 			res.json({
+				confirmation: 1,
+				message: 'Terminy pobrane pomyślnie.',
 				totalHeaders, // To render
 				content: formattedRecords, // With new names
 			});
 		})
-		.catch((err) => {
-			console.log('\n❌❌❌ Error admin getShowAllSchedules', err);
-			return res.status(404).json({message: err});
-		});
+		.catch((err) => catchErr(err, controllerName));
 };
 export const showScheduleByID = (req, res, next) => {
-	console.log(`\n➡️ called showScheduleByID`);
+	const controllerName = 'showScheduleByID';
+	console.log(`\n➡️➡️➡️ admin called`, controllerName);
+
 	const PK = req.params.id;
 	models.ScheduleRecord.findByPk(PK, {
 		include: [
@@ -661,7 +670,8 @@ export const showScheduleByID = (req, res, next) => {
 	})
 		.then((scheduleData) => {
 			if (!scheduleData) {
-				return res.redirect('/admin-console/show-all-schedules');
+				errCode = 404;
+				throw new Error('Nie znaleziono terminu.');
 			}
 			// Konwersja rekordu na zwykły obiekt
 			let schedule = scheduleData.toJSON();
@@ -695,12 +705,15 @@ export const showScheduleByID = (req, res, next) => {
 			schedule.isCompleted = scheduleDateTime <= now;
 
 			// Zwracamy pełen obiekt użytkownika (zgodnie z działającym kodem)
-			return res.status(200).json({schedule, user: req.user});
+			console.log('✅✅✅ admin showScheduleByID schedule fetched');
+			return res.status(200).json({
+				confirmation: 1,
+				message: 'Termin pobrany pomyślnie',
+				schedule,
+				user: req.user,
+			});
 		})
-		.catch((err) => {
-			console.log('\n❌❌❌ Error fetching the schedule:', err);
-			return res.status(404).json({message: err});
-		});
+		.catch((err) => catchErr(err, controllerName));
 };
 export const showBookedSchedules = (req, res, next) => {};
 export const createScheduleRecord = (req, res, next) => {
@@ -716,7 +729,8 @@ export const createScheduleRecord = (req, res, next) => {
 		.catch((err) => console.log(err));
 };
 export const postDeleteSchedule = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called postDeleteSchedule`);
+	const controllerName = 'postDeleteSchedule';
+	log(controllerName);
 	const id = req.params.id;
 
 	models.ScheduleRecord.findOne({
@@ -726,40 +740,35 @@ export const postDeleteSchedule = (req, res, next) => {
 	})
 		.then((foundSchedule) => {
 			if (!foundSchedule) {
-				throw new Error('\n❌ Nie znaleziono terminu do usunięcia.');
+				errCode = 404;
+				throw new Error('Nie znaleziono terminu do usunięcia.');
 			} else if (
 				new Date(`${foundSchedule.Date}T${foundSchedule.StartTime}:00`) < new Date()
 			) {
+				errCode = 400;
 				throw new Error(
-					'\n❌ Nie można usunąć terminu który już minął. Posiada też wartość historyczną dla statystyk.',
+					'Nie można usunąć terminu który już minął. Posiada też wartość historyczną dla statystyk.',
 				);
 			}
 			return foundSchedule.destroy();
 		})
 		.then((deletedCount) => {
 			if (!deletedCount) {
-				throw new Error('\n❌ Nie usunięto terminu.');
+				errCode = 404;
+				throw new Error('Nie usunięto terminu.');
 			}
 			console.log('\n✅✅✅ admin postDeleteSchedule deleted the schedule record');
-			return res.status(200).json({confirmation: true});
+			return res.status(200).json({confirmation: 1, message: 'Termin usunięty pomyślnie.'});
 		})
-		.catch((err) => {
-			console.log('\n❌❌❌ Error admin postDeleteSchedule:', err);
-			return res.status(404).json({message: err});
-		});
+		.catch((err) => catchErr(err, controllerName));
 };
 export const postEditSchedule = async (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called admin postEditSchedule`);
+	const controllerName = 'postEditSchedule';
+	log(controllerName);
+
 	const scheduleId = req.params.id;
-	const newCapacity = req.body.capacity;
-	const newStartDate = req.body.date;
-	const newStartTime = req.body.startTime;
-	const newLocation = req.body.location;
-	console.log(scheduleId);
-	console.log(newCapacity);
-	console.log(newStartDate);
-	console.log(newStartTime);
-	console.log(newLocation);
+
+	const {newCapacity, newStartDate, newStartTime, newLocation} = req.body;
 
 	if (
 		!newCapacity ||
@@ -770,25 +779,31 @@ export const postEditSchedule = async (req, res, next) => {
 		!newStartTime ||
 		!newStartTime.trim()
 	) {
+		errCode = 400;
 		console.log('\n❌❌❌ Error postEditSchedule:', 'No enough data');
-		return res.status(400).json({message: 'Nie podano wszystkich danych.'});
+		throw new Error('Nie podano wszystkich danych.');
 	}
 
 	models.ScheduleRecord.findByPk(scheduleId)
 		.then((schedule) => {
-			if (!schedule) throw new Error('Nie znaleziono danych terminu.');
+			if (!schedule) {
+				errCode = 404;
+				throw new Error('Nie znaleziono danych terminu.');
+			}
 			console.log('\n✅✅✅ Fetched admin postEditSchedule schedule');
 			return schedule;
 		})
 		.then((foundSchedule) => {
+			const {Capacity, Date, Location, StartTime} = foundSchedule;
 			if (new Date(`${foundSchedule.Date}T${foundSchedule.StartTime}:00`) < new Date()) {
+				errCode = 400;
 				console.log('\n❓❓❓ Admin schedule is past - not to edit');
 				throw new Error('Nie można edytować minionego terminu.');
 			} else if (
-				foundSchedule.Capacity == newCapacity &&
-				foundSchedule.Date === newStartDate &&
-				foundSchedule.Location === newLocation &&
-				foundSchedule.StartTime === newStartTime
+				Capacity == newCapacity &&
+				Date === newStartDate &&
+				Location === newLocation &&
+				StartTime === newStartTime
 			) {
 				// Nothing changed
 				console.log('\n❓❓❓ Admin schedule no change');
@@ -797,8 +812,6 @@ export const postEditSchedule = async (req, res, next) => {
 			return foundSchedule;
 		})
 		.then((fetchedSchedule) => {
-			if (!fetchedSchedule) throw new Error('Nie przekazano terminu do update.');
-
 			models.ScheduleRecord.update(
 				{
 					Capacity: newCapacity,
@@ -816,23 +829,19 @@ export const postEditSchedule = async (req, res, next) => {
 					const affectedScheduleRows = results.scheduleResult[0];
 					const status = affectedScheduleRows >= 1;
 					return res.status(200).json({
+						message: 'Termin zaktualizowany pomyślnie.',
 						confirmation: status,
 						affectedScheduleRows,
 					});
 				})
-				.catch((err) => {
-					console.log('\n❌❌❌ Error admin  postEditSchedule UPDATE:', err);
-					return res.status(500).json({message: err.message});
-				});
+				.catch((err) => catchErr(err, controllerName));
 		})
-		.catch((err) => {
-			console.log('\n❌❌❌ Error admin postEditSchedule', err);
-			return res.status(404).json({message: err.message});
-		});
+		.catch((err) => catchErr(err, controllerName));
 };
 //@ FEEDBACK
 export const showAllParticipantsFeedback = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called showAllParticipantsFeedback`);
+	const controllerName = 'showAllParticipantsFeedback';
+	log(controllerName);
 
 	const model = models.Feedback;
 
@@ -867,7 +876,10 @@ export const showAllParticipantsFeedback = (req, res, next) => {
 			},
 		})
 		.then((records) => {
-			if (!records) throw new Error('Nie znaleziono opinii.');
+			if (!records) {
+				errCode = 404;
+				throw new Error('Nie znaleziono opinii.');
+			}
 			// Convert for records for different names
 			const formattedRecords = records.map((record) => {
 				const newRecord = {}; // Container for formatted data
@@ -909,21 +921,20 @@ export const showAllParticipantsFeedback = (req, res, next) => {
 			const totalHeaders = keysForHeaders;
 
 			// ✅ Return response to frontend
-			console.log('✅✅✅ showAllParticipantsFeedback reviews fetched');
+			console.log('\n✅✅✅ showAllParticipantsFeedback reviews fetched');
 			res.json({
+				confirmation: 1,
+				message: 'Opinie pobrane pomyślnie',
 				isLoggedIn: req.session.isLoggedIn,
 				records: records,
 				totalHeaders, // To render
 				content: formattedRecords, // With new names
 			});
 		})
-		.catch((err) => {
-			console.log('\n❌❌❌ Error showAllCustomers', err);
-			return res.status(404).json({message: err});
-		});
+		.catch((err) => catchErr(err, controllerName));
 };
 export const showAllParticipantsFeedbackByID = (req, res, next) => {
-	console.log(`\n➡️ called showAllParticipantsFeedbackByID`);
+	console.log(`\n➡️ admin called showAllParticipantsFeedbackByID`);
 
 	const PK = req.params.id;
 	models.Feedback.findByPk(PK, {
@@ -947,7 +958,8 @@ export const showAllParticipantsFeedbackByID = (req, res, next) => {
 	})
 		.then((review) => {
 			if (!review) {
-				return res.redirect('/admin-console/show-all-participants-feedback');
+				errCode = 404;
+				throw new Error('Nie znaleziono opinii.');
 			}
 			const customerId = review.Customer.CustomerID;
 
@@ -971,16 +983,22 @@ export const showAllParticipantsFeedbackByID = (req, res, next) => {
 				],
 				attributes: {exclude: ['CustomerID', 'ScheduleID']},
 			}).then((otherReviews) => {
-				console.log('✅ Feedback fetched');
-				return res
-					.status(200)
-					.json({isLoggedIn: req.session.isLoggedIn, review, otherReviews});
+				console.log('\n✅✅✅ showAllParticipantsFeedbackByID Feedback fetched');
+				return res.status(200).json({
+					confirmation: 1,
+					message: 'Opinia pobrana pomyślnie',
+					isLoggedIn: req.session.isLoggedIn,
+					review,
+					otherReviews,
+				});
 			});
 		})
-		.catch((err) => console.log(err));
+		.catch((err) => catchErr(err, controllerName));
 };
 export const postDeleteFeedback = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called postDeleteFeedback`);
+	const controllerName = 'postDeleteFeedback';
+	log(controllerName);
+
 	const id = req.params.id;
 	models.Feedback.destroy({
 		where: {
@@ -989,19 +1007,18 @@ export const postDeleteFeedback = (req, res, next) => {
 	})
 		.then((deletedCount) => {
 			if (!deletedCount) {
-				throw new Error('\n❌ Nie usunięto opinii.');
+				errCode = 404;
+				throw new Error('Nie usunięto opinii.');
 			}
 			console.log('\n✅✅✅ admin postDeleteFeedback deleted the feedback');
-			return res.status(200).json({confirmation: true});
+			return res.status(200).json({confirmation: 1, message: 'Opinia usunięta pomyślnie.'});
 		})
-		.catch((err) => {
-			console.log('\n❌❌❌ Error admin postDeleteFeedback:', err);
-			return res.status(404).json({message: err});
-		});
+		.catch((err) => catchErr(err, controllerName));
 };
 //@ NEWSLETTERS
 export const showAllNewsletters = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called showAllNewsletters`);
+	const controllerName = 'showAllNewsletters';
+	log(controllerName);
 
 	simpleListAllToTable(res, models.Newsletter);
 };
@@ -1011,11 +1028,13 @@ export const showAllSubscribedNewsletters = (req, res, next) => {
 };
 //@ PRODUCTS
 export const showAllProducts = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called showAllProducts`);
+	const controllerName = 'showAllProducts';
+	log(controllerName);
 	simpleListAllToTable(res, models.Product);
 };
 export const showProductByID = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called showProductByID`);
+	const controllerName = 'showProductByID';
+	log(controllerName);
 
 	const PK = req.params.id;
 	models.Product.findByPk(PK, {
@@ -1058,20 +1077,30 @@ export const showProductByID = (req, res, next) => {
 	})
 		.then((product) => {
 			if (!product) {
-				return res.redirect('/admin-console/show-all-products');
+				errCode = 404;
+				throw new Error('Nie znaleziono produktu.');
 			}
-			console.log('✅ product fetched');
-			return res.status(200).json({isLoggedIn: req.session.isLoggedIn, product});
+			console.log('\n✅✅✅ showProductByID product fetched');
+			return res.status(200).json({
+				confirmation: 1,
+				message: 'Produkt pobrany pomyślnie pomyślnie.',
+				isLoggedIn: req.session.isLoggedIn,
+				product,
+			});
 		})
-		.catch((err) => console.log(err));
+		.catch((err) => catchErr(err, controllerName));
 };
 export const postCreateProduct = async (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called postCreateProduct`);
+	const controllerName = 'postCreateProduct';
+	log(controllerName);
+
 	const {name, productType, StartDate, duration, location, price, status} = req.body;
+
 	let productPromise;
 	models.Product.findOne({where: {Name: name}})
 		.then((product) => {
 			if (product) {
+				errCode = 409;
 				throw new Error('Produkt już istnieje.');
 			}
 			return (productPromise = models.Product.create({
@@ -1092,18 +1121,13 @@ export const postCreateProduct = async (req, res, next) => {
 				message: 'Stworzono pomyślnie.',
 			});
 		})
-		.catch((err) => {
-			console.log('\n❌❌❌ postCreateProduct Produkt już istnieje.');
-			return res.status(409).json({
-				confirmation: 0,
-				code: 409,
-				message: err.message,
-			});
-		});
+		.catch((err) => catchErr(err, controllerName, {code: 409}));
 };
 export const postEditProduct = async (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called admin postEditProduct`);
+	const controllerName = 'postEditProduct';
+	log(controllerName);
 	const productId = req.params.id;
+
 	const {newType, newStartDate, newLocation, newDuration, newPrice, newStatus} = req.body;
 
 	if (
@@ -1119,12 +1143,16 @@ export const postEditProduct = async (req, res, next) => {
 		!newStatus.trim()
 	) {
 		console.log('\n❌❌❌ Error postEditCustomer:', 'No enough data');
-		return res.status(400).json({confirmation: 0, message: 'Nie podano wszystkich danych.'});
+		errCode = 400;
+		throw new Error('Nie podano wszystkich danych.');
 	}
 
 	models.Product.findByPk(productId)
 		.then((product) => {
-			if (!product) throw new Error('Nie znaleziono danych uczestnika.');
+			if (!product) {
+				errCode = 404;
+				throw new Error('Nie znaleziono danych uczestnika.');
+			}
 			console.log('\n✅✅✅ Fetched admin postEditProduct product');
 			return product;
 		})
@@ -1145,8 +1173,6 @@ export const postEditProduct = async (req, res, next) => {
 			return foundProduct;
 		})
 		.then((fetchedProduct) => {
-			if (!fetchedProduct) throw new Error('Nie przekazano produktu do update.');
-
 			models.Product.update(
 				{
 					Type: newType,
@@ -1171,18 +1197,14 @@ export const postEditProduct = async (req, res, next) => {
 						affectedProductRows,
 					});
 				})
-				.catch((err) => {
-					console.log('\n❌❌❌ Error admin  postEditProduct UPDATE:', err.message);
-					return res.status(500).json({confirmation: 0, message: err.message});
-				});
+				.catch((err) => catchErr(err, controllerName));
 		})
-		.catch((err) => {
-			console.log('\n❌❌❌ Error admin postEditProduct', err);
-			return res.status(404).json({confirmation: 0, message: err});
-		});
+		.catch((err) => catchErr(err, controllerName));
 };
 export const postDeleteProduct = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called postDeleteProduct`);
+	const controllerName = 'postDeleteProduct';
+	log(controllerName);
+
 	const id = req.params.id;
 	models.Product.destroy({
 		where: {
@@ -1191,19 +1213,18 @@ export const postDeleteProduct = (req, res, next) => {
 	})
 		.then((deletedCount) => {
 			if (!deletedCount) {
-				throw new Error('\n❌ Nie usunięto zajęć.');
+				errCode = 404;
+				throw new Error('Nie usunięto zajęć.');
 			}
 			console.log('\n✅✅✅ admin postDeleteProduct deleted the product');
-			return res.status(200).json({confirmation: true});
+			return res.status(200).json({confirmation: 1, message: 'Produkt usunięty pomyślnie.'});
 		})
-		.catch((err) => {
-			console.log('\n❌❌❌ Error admin postDeleteProduct:', err);
-			return res.status(404).json({message: err});
-		});
+		.catch((err) => catchErr(err, controllerName));
 };
 //@ BOOKINGS
 export const showAllBookings = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called showAllBookings`);
+	const controllerName = 'showAllBookings';
+	log(controllerName);
 	const model = models.Booking;
 
 	// We create dynamic joint columns based on the map
@@ -1236,7 +1257,10 @@ export const showAllBookings = (req, res, next) => {
 			},
 		})
 		.then((records) => {
-			if (!records) throw new Error('Nie znaleziono rezerwacji.');
+			if (!records) {
+				errCode = 404;
+				throw new Error('Nie znaleziono rezerwacji.');
+			}
 			const formattedRecords = records.map((record) => {
 				const attributes = model.getAttributes();
 				const newRecord = {};
@@ -1271,21 +1295,21 @@ export const showAllBookings = (req, res, next) => {
 			const totalHeaders = keysForHeaders;
 			req.session.isLoggedIn = true;
 			// ✅ Zwrócenie odpowiedzi do frontend
-			console.log('✅✅✅ getShowAllBookings bookings fetched');
+			console.log('\n✅✅✅ getShowAllBookings bookings fetched');
 			res.json({
+				confirmation: 1,
+				message: 'Rezerwacje pobrane pomyślnie.',
 				isLoggedIn: req.session.isLoggedIn,
 				totalHeaders,
 				records: records,
 				content: formattedRecords,
 			});
 		})
-		.catch((err) => {
-			console.log('\n❌❌❌ Error admin getShowAllSchedules', err);
-			return res.status(404).json({message: err});
-		});
+		.catch((err) => catchErr(err, controllerName));
 };
 export const showBookingByID = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called showBookingByID`);
+	const controllerName = 'showBookingByID';
+	log(controllerName);
 
 	const PK = req.params.id;
 	models.Booking.findByPk(PK, {
@@ -1314,15 +1338,23 @@ export const showBookingByID = (req, res, next) => {
 	})
 		.then((booking) => {
 			if (!booking) {
-				return res.redirect('/admin-console/show-all-bookings');
+				errCode = 404;
+				throw new Error('Nie znaleziono rezerwacji.');
 			}
-			console.log('✅ Schedule fetched');
-			return res.status(200).json({isLoggedIn: req.session.isLoggedIn, booking});
+			console.log('\n✅✅✅ admin showBookingByID Schedule fetched');
+			return res.status(200).json({
+				confirmation: 1,
+				message: 'Rezerwacja pobrana pomyślnie.',
+				isLoggedIn: req.session.isLoggedIn,
+				booking,
+			});
 		})
-		.catch((err) => console.log(err));
+		.catch((err) => catchErr(err, controllerName));
 };
 export const postDeleteBooking = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called postDeleteBooking`);
+	const controllerName = 'postDeleteBooking';
+	log(controllerName);
+
 	const id = req.params.id;
 	models.Booking.destroy({
 		where: {
@@ -1331,19 +1363,21 @@ export const postDeleteBooking = (req, res, next) => {
 	})
 		.then((deletedCount) => {
 			if (!deletedCount) {
+				errCode = 404;
 				throw new Error('\n❌ Nie usunięto rezerwacji.');
 			}
 			console.log('\n✅✅✅ admin postDeleteBooking deleted the feedback');
-			return res.status(200).json({confirmation: true});
+			return res.status(200).json({
+				confirmation: 1,
+				message: 'Rezerwacja usunięta pomyślnie.',
+			});
 		})
-		.catch((err) => {
-			console.log('\n❌❌❌ Error admin postDeleteBooking:', err);
-			return res.status(404).json({message: err});
-		});
+		.catch((err) => catchErr(err, controllerName));
 };
 //@ INVOICES
 export const showAllInvoices = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called showAllInvoices`);
+	const controllerName = 'showAllInvoices';
+	log(controllerName);
 
 	const model = models.Invoice;
 
@@ -1377,7 +1411,10 @@ export const showAllInvoices = (req, res, next) => {
 			},
 		})
 		.then((records) => {
-			if (!records) throw new Error('Nie znaleziono faktur.');
+			if (!records) {
+				errCode = 404;
+				throw new Error('Nie znaleziono faktur.');
+			}
 			// Convert for records for different names
 			const formattedRecords = records.map((record) => {
 				const newRecord = {}; // Container for formatted data
@@ -1408,15 +1445,14 @@ export const showAllInvoices = (req, res, next) => {
 			const totalHeaders = keysForHeaders;
 			req.session.isLoggedIn = true;
 			// ✅ Return response to frontend
-			console.log('✅✅✅ showAllInvoices invoices fetched');
+			console.log('\n✅✅✅ showAllInvoices invoices fetched');
 			res.json({
+				confirmation: 1,
+				message: 'Faktury pobrane pomyślnie.',
 				isLoggedIn: req.session.isLoggedIn,
 				totalHeaders, // To render
 				content: formattedRecords, // With new names
 			});
 		})
-		.catch((err) => {
-			console.log('\n❌❌❌ Error admin showAllInvoices', err);
-			return res.status(404).json({message: err});
-		});
+		.catch((err) => catchErr(err, controllerName));
 };
