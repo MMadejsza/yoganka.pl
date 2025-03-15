@@ -8,6 +8,7 @@ export const postBookSchedule = (req, res, next) => {
 	// @ Fetching USER
 	// check if there is logged in User
 	if (!req.user) {
+		errCode = 403;
 		throw new Error('Użytkownik nie jest zalogowany');
 	}
 	let currentCustomer;
@@ -181,7 +182,7 @@ export const postCancelSchedule = (req, res, next) => {
 		.then((scheduleRecord) => {
 			if (!scheduleRecord) {
 				errCode = 404;
-				throw new Error({message: 'Nie znaleziono terminu.'});
+				throw new Error('Nie znaleziono terminu.');
 			}
 			const scheduleDateTime = new Date(
 				`${scheduleRecord.Date}T${scheduleRecord.StartTime}:00`,
@@ -189,7 +190,7 @@ export const postCancelSchedule = (req, res, next) => {
 
 			if (scheduleDateTime < new Date()) {
 				errCode = 401;
-				throw new Error({message: 'Nie można zwolnić miejsca dla minionego terminu.'});
+				throw new Error('Nie można zwolnić miejsca dla minionego terminu.');
 			}
 			return models.BookedSchedule.update(
 				{Attendance: false},
@@ -202,16 +203,14 @@ export const postCancelSchedule = (req, res, next) => {
 			).then(([updatedCount]) => {
 				if (updatedCount > 0) {
 					console.log('\n✅✅✅ postCancelSchedule Update successful');
-					return res
-						.status(200)
-						.json({
-							confirmation: 1,
-							message: 'Miejsce zwolnione - dziękujemy za informację :)',
-						});
+					return res.status(200).json({
+						confirmation: 1,
+						message: 'Miejsce zwolnione - dziękujemy za informację :)',
+					});
 				} else {
 					errCode = 404;
 
-					throw new Error({message: 'Nie znaleziono terminu.'});
+					throw new Error('Nie znaleziono terminu.');
 				}
 			});
 		})
@@ -291,17 +290,15 @@ export const getShowBookingByID = (req, res, next) => {
 		.then((booking) => {
 			if (!booking) {
 				errCode = 404;
-				throw new Error({message: 'Nie znaleziono rezerwacji.'});
+				throw new Error('Nie znaleziono rezerwacji.');
 			}
 			console.log('\n✅✅✅ getShowBookingByID booking fetched');
-			return res
-				.status(200)
-				.json({
-					confirmation: 1,
-					message: 'Rezerwacja pobrana pomyślnie.',
-					isLoggedIn: req.session.isLoggedIn,
-					booking,
-				});
+			return res.status(200).json({
+				confirmation: 1,
+				message: 'Rezerwacja pobrana pomyślnie.',
+				isLoggedIn: req.session.isLoggedIn,
+				booking,
+			});
 		})
 		.catch((err) => catchErr(err, controllerName));
 };

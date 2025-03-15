@@ -1,14 +1,17 @@
 import columnMaps from './columnsMapping.js';
 import {formatIsoDateTime} from './formatDateTime.js';
+import {errCode, log, catchErr} from '../controllers/_controllers.js';
 
 export const simpleListAllToTable = (res, model) => {
-	console.log(`\n➡️➡️➡️ called simpleListAllToTable`);
+	const controllerName = 'simpleListAllToTable';
+	log(controllerName);
 
 	model
 		.findAll()
 		.then((records) => {
 			if (!records) {
-				throw new Error({message: 'Nie znaleziono rekordów.'});
+				errCode = 404;
+				throw new Error('Nie znaleziono rekordów.');
 			}
 			// fetching map for User table or empty object
 			const columnMap = columnMaps[model.name] || {};
@@ -40,24 +43,26 @@ export const simpleListAllToTable = (res, model) => {
 			// New headers (keys from columnMap)
 			const totalHeaders = Object.keys(formattedRecords[0] || {});
 
-			console.log('✅✅✅ simpleListAllToTable fetched');
+			console.log('\n✅✅✅ simpleListAllToTable fetched');
 			return res.json({
 				totalHeaders,
+				confirmation: 1,
+				message: 'Pobrano pomyślnie',
 				content: formattedRecords,
 			});
 		})
-		.catch((err) => {
-			console.log('\n❌❌❌ Error simpleListAllToTable', err);
-			return res.status(404).json({message: err.message});
-		});
+		.catch((err) => catchErr(err, controllerName));
 };
 
 export const listAllToTable = (res, model, references) => {
+	const controllerName = 'listAllToTable';
+	log(controllerName);
 	model
 		.findAll(references)
 		.then((records) => {
 			if (!records) {
-				throw new Error({message: 'Nie znaleziono rekordów.'});
+				errCode = 404;
+				throw new Error('Nie znaleziono rekordów.');
 			}
 			// fetching map for User table or empty object
 			const columnMap = columnMaps[model.name] || {};
@@ -86,14 +91,13 @@ export const listAllToTable = (res, model, references) => {
 			const totalHeaders = Object.keys(formattedRecords[0] || {});
 
 			// ✅ Return response to frontend
-			console.log('✅✅✅ listAllToTable fetched');
+			console.log('\n✅✅✅ listAllToTable fetched');
 			res.json({
+				confirmation: 1,
+				message: 'Pobrano pomyślnie',
 				totalHeaders, // To render
 				content: formattedRecords, // With new names
 			});
 		})
-		.catch((err) => {
-			console.log('\n❌❌❌ Error listAllToTable', err);
-			return res.status(404).json({message: err.message});
-		});
+		.catch((err) => catchErr(err, controllerName));
 };

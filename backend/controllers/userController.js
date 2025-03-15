@@ -182,7 +182,7 @@ export const getShowScheduleByID = (req, res, next) => {
 		.then((scheduleData) => {
 			if (!scheduleData) {
 				errCode = 404;
-				throw new Error({message: 'Nie znaleziono rezerwacji.'});
+				throw new Error('Nie znaleziono rezerwacji.');
 			}
 
 			// Convert to JSON
