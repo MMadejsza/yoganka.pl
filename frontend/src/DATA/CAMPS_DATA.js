@@ -25,12 +25,14 @@ export const CAMPS_DATA = [
 		},
 		modal: {
 			fullDescTitle: ``,
-			fullDesc: `Wakacje z\u00A0jogą, czyli aż\u00A06 dni wytchnienia w\u00A0górskim raju. Poziomkowa Górka to miejsce, gdzie natura spotyka\u00A0się z\u00A0harmonią ciała i\u00A0ducha. Poranki z\u00A0widokiem na\u00A0szczyty,  kojące górskie powietrze, joga, medytacja, piesze wędrówki sprawią, że\u00A0to będzie wyjątkowy czas. To moment tylko dla\u00A0Ciebie – na\u00A0oddech, zwolnienie tempa i\u00A0odnalezienie równowagi w magicznej atmosferze górskiego spokoju. Harmonogram jest poglądowy, stałą częścią dnia będą posiłki i\u00A0sesje jogi. W czasie wolnym piesze wędrówki, lokalne wycieczki wg. uznania. Wieczory to czas na\u00A0regenerację i\u00A0odpoczynek np. w\u00A0saunie. Warsztat ceramiczny w\u00A0przygotowaniu, odbędzie\u00A0się w\u00A0wybrany\u00A0dzień.`,
+			fullDesc: `Poranki z\u00A0widokiem na\u00A0szczyty,  kojące górskie powietrze, joga, medytacja, piesze wędrówki sprawią, że\u00A0to\u00A0będzie wyjątkowy czas. To moment tylko dla\u00A0Ciebie – na\u00A0oddech, zwolnienie tempa i\u00A0odnalezienie równowagi w\u00A0magicznej atmosferze górskiego spokoju. Harmonogram jest poglądowy, stałą częścią dnia będą posiłki i\u00A0sesje jogi. W\u00A0czasie wolnym piesze wędrówki, lokalne wycieczki wg.\u00A0uznania. Wieczory to\u00A0czas na\u00A0regenerację i\u00A0odpoczynek np.\u00A0w\u00A0saunie. Warsztat motania lalek oraz warsztat ceramiczny, odbędą\u00A0się w\u00A0wybrany dzień. 
+			Opcja na\u00A03 lub\u00A04 dni do\u00A0indywidualnego ustalenia.`,
 			glance: {
 				title: ``,
 				area: `Karpaty`,
 				accommodation: `Poziomkowa Górka`,
-				price: `3011zł*`,
+				price: `2550zł do 30.05
+				2800zł od 1.06 `,
 			},
 
 			plan: {
@@ -69,32 +71,33 @@ export const CAMPS_DATA = [
 					title: `Cena zawiera:`,
 					list: [
 						`11h jogi`,
-						`3h medytacji`,
-						`2h mindfulness`,
+						`1h medytacji`,
+						`1h mindfulness`,
 						`Warsztat kreatywny`,
+						`Warsztat motania lalek`,
 						`3 pyszne posiłki dziennie`,
 						`5 noclegów`,
 					],
 				},
-				optional: {
-					title: `Poszerz slow menu:`,
-					list: [`Masaże`, `Sauna`, `Jacuzzi`],
-				},
-				freeTime: {
-					title: `W czasie wolnym:`,
-					//(note: statuses are free/optional/available for different icons)
-					list: [
-						{status: `free`, activity: `Górskie wędrówki`},
-						{status: `free`, activity: `Zwiedzanie okolic`},
-						{
-							status: `free`,
-							activity: `Wycieczki (np. skansen w\u00A0Laskowej, nad\u00A0jezioro)`,
-						},
-						{status: `free`, activity: `Relaks`},
-						{status: `optional`, activity: `Sauna`},
-						{status: `optional`, activity: `Jacuzzi`},
-					],
-				},
+				// optional: {
+				// 	title: `Poszerz slow menu:`,
+				// 	list: [`Masaże`, `Sauna`, `Jacuzzi`],
+				// },
+				// freeTime: {
+				// 	title: `W czasie wolnym:`,
+				// 	//(note: statuses are free/optional/available for different icons)
+				// 	list: [
+				// 		{status: `free`, activity: `Górskie wędrówki`},
+				// 		{status: `free`, activity: `Zwiedzanie okolic`},
+				// 		{
+				// 			status: `free`,
+				// 			activity: `Wycieczki (np. skansen w\u00A0Laskowej, nad\u00A0jezioro)`,
+				// 		},
+				// 		{status: `free`, activity: `Relaks`},
+				// 		{status: `optional`, activity: `Sauna`},
+				// 		{status: `optional`, activity: `Jacuzzi`},
+				// 	],
+				// },
 			},
 			note: `Gotowa na wakacje z jogą?`,
 			btnsContent: [
@@ -132,12 +135,12 @@ export const CAMPS_DATA = [
 		eventType: ``,
 		extraClass: ``,
 		front: {
-			title: `Energia liczb i\u00A0moc\u00A0jogi  
-					Joga |\u00A0Numerologia
-					|\u00A0Aromaterapia`,
+			title: `Joga | Numerologia 
+			| Aromaterapia |
+			Jesień na\u00A0Mazurach`,
 			dates: [`24-26.10.2025`],
 			location: `Mazury`,
-			desc: ``,
+			desc: `Maty od partnera Miś Yoga!`,
 			btnsContent: [],
 		},
 		modal: {
@@ -147,7 +150,7 @@ export const CAMPS_DATA = [
 				title: ``,
 				area: `Grom`,
 				accommodation: `Przestrzeń GROM`,
-				price: `1444zł`,
+				price: `1499zł`,
 			},
 
 			plan: {
@@ -189,19 +192,27 @@ export const CAMPS_DATA = [
 						`2h warsztatów aromaterapii`,
 						`3 pyszne posiłki dziennie`,
 						`2 noclegi`,
-						`Sauna`,
+						// `Sauna`,
 						`Upominek`,
 					],
 				},
-				freeTime: {
-					title: `W czasie wolnym:`,
-					//(note: statuses are free/optional/available for different icons)
+				optional: {
+					title: `Dodatkowo płatne:`,
 					list: [
-						{status: `free`, activity: `Leśne spacery`},
-						{status: `free`, activity: `Pogaduchy`},
-						{status: `free`, activity: `Relaks`},
+						// `Masaże`,
+						`Sauna`,
+						// `Jacuzzi`
 					],
 				},
+				// freeTime: {
+				// 	title: `W czasie wolnym:`,
+				// 	//(note: statuses are free/optional/available for different icons)
+				// 	list: [
+				// 		{status: `free`, activity: `Leśne spacery`},
+				// 		{status: `free`, activity: `Pogaduchy`},
+				// 		{status: `free`, activity: `Relaks`},
+				// 	],
+				// },
 			},
 			note: `Gotowa na jesienne otulenie?`,
 			btnsContent: [
@@ -351,8 +362,12 @@ export const CAMPS_DATA = [
 		eventType: ``,
 		extraClass: `long`,
 		front: {
-			title: `Summer ZenNature\u00A0Camp
-			Joga |\u00A0Biżuteria z\u00A0kamieni |\u00A0Relaks`,
+			// title: `Summer ZenNature\u00A0Camp
+			// Joga |\u00A0Biżuteria z\u00A0kamieni
+			// SUP joga |\u00A0Relaks`,
+			title: `Summer ZenNature
+			Joga | SUP joga 
+			Biżuteria z\u00A0kamieni`,
 			dates: [`27-30.06.2025`],
 			location: `Warmia`,
 			desc: ``,
@@ -360,14 +375,15 @@ export const CAMPS_DATA = [
 		},
 		modal: {
 			fullDescTitle: ``,
-			fullDesc: `Zanurzysz\u00A0się w\u00A0letnim błogostanie, gdzie czas zwalnia, oddech\u00A0się wydłuża, a\u00A0ciało i\u00A0dusza odnajdują pełną harmonię. W samym sercu mazurskiej natury, w\u00A0miejscu pulsującym spokojem, czeka\u00A0na Ciebie wyjątkowa przestrzeń relaksu i\u00A0odnowy. Tak można opisać błogie Wipsowo 44. Te cztery dni to czas obfity w\u00A0jogę w\u00A0rytmie natury na drewnianym tarasie z\u00A0lasem w\u00A0tle, kojące rytuały ziołowe w\u00A0pa w\u00A0kurniku, kąpiele w\u00A0jeziorze, spacery na\u00A0boso i\u00A0drzemki w\u00A0hamakach. Dopełnieniem będzie warsztat tworzenia biżuterii z\u00A0kamieni naturalnych ze\u00A0Studiem Cudo. Bez wahania musisz tego doświadczyć! 
-			Plan godzinowy może ulec zmianie, codziennie rano i\u00A0wieczorem sesja jogi, pranayama, dużo czasu wolnego na regenerację. Wrócisz wypoczęta i\u00A0personalizowanym naszyjnikiem!`,
+			fullDesc: `W\u00A0samym sercu mazurskiej natury, w\u00A0miejscu pulsującym spokojem, czeka na\u00A0Ciebie wyjątkowa przestrzeń relaksu i\u00A0odnowy. Tak\u00A0można opisać błogie Wipsowo\u00A044. To czas obfity w\u00A0jogę w\u00A0rytmie natury na\u00A0drewnianym tarasie z\u00A0lasem w\u00A0tle, kąpiele w\u00A0jeziorze, spacery na\u00A0boso i\u00A0drzemki w\u00A0hamakach. Dopełnieniem będzie warsztat tworzenia biżuterii z\u00A0kamieni naturalnych ze\u00A0Studiem\u00A0Cudo oraz SUP\u00A0JOGA. Bez wahania musisz tego doświadczyć! Maty od\u00A0partnera Miś\u00A0Yoga.
+			Plan godzinowy jest poglądowy. Joga na\u00A0supach odbędzie się pod\u00A0prognozę pogody w\u00A0wybrany dzień. W momencie wpisu obowiązuje przedpłata 570zł.`,
 			glance: {
 				title: ``,
 				area: `Wipsowo`,
 				accommodation: `Wipsowo 44`,
 				capacity: ``,
-				price: `2222zł`,
+				price: `1670zł do 24.04  
+				1800zł od 25.04`,
 				travel: ``,
 			},
 
@@ -385,7 +401,7 @@ export const CAMPS_DATA = [
 						'day': 'Sobota:',
 						'08:30': 'Sunrise yoga',
 						'09:45': 'Niespieszne śniadanie',
-						'11:00': `Zen nature: bose spacery, malowanie, drzemki w\u00A0hamakach, kąpiele`,
+						'11:00': `Zen nature: bose spacery, drzemki w\u00A0hamakach, kąpiele`,
 						'14:00': `Spotkanie przy stole - obiad`,
 						'17:00': `Mindfulness`,
 						'18:00': `Spotkanie przy stole:\u00A0kolacja`,
@@ -398,7 +414,7 @@ export const CAMPS_DATA = [
 						'09:30': 'Niespieszne śniadanie',
 						'11:30': `Naszyjniki z kamieni`,
 						'14:00': `Spotkanie przy stole - obiad`,
-						'15:30': `Czas wolny: spa w kurniku, malowanie, spacery, kąpiele`,
+						'15:30': `Czas wolny: spa w kurniku, spacery, kąpiele`,
 						'18:00': `Spotkanie przy stole:\u00A0kolacja`,
 						'20:00': `Sunset yoga nidra +\u00A0yin`,
 						'21:30': `Ruska bania dla\u00A0chętnych (dodatkowo\u00A0płatna)`,
@@ -419,7 +435,8 @@ export const CAMPS_DATA = [
 						`2h Warsztatu biżuterii`,
 						`3 noce`,
 						`3x dziennie pełne wyżywienie`,
-						`Malowanie w plenerze`,
+						// `Malowanie w plenerze`,
+						`SUP joga`,
 						`Medytacja oraz sesja mindfulness`,
 					],
 				},
@@ -436,8 +453,8 @@ export const CAMPS_DATA = [
 					list: [
 						{status: `free`, activity: `Spacer, kąpiele w\u00A0jeziorze/leśne`},
 						{status: `free`, activity: `Chodzenie bosko, spanie w\u00A0hamakach`},
-						{status: `free`, activity: `Malowanie w\u00A0plenerze`},
-						{status: `free`, activity: `SUP`},
+						// {status: `free`, activity: `Malowanie w\u00A0plenerze`},
+						{status: `free`, activity: `SUP joga`},
 						{status: `free`, activity: `Ruska bania/spa rytuał samoobsługowy`},
 					],
 				},
