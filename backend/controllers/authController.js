@@ -1,7 +1,10 @@
 import * as models from '../models/_index.js';
 import bcrypt from 'bcryptjs';
+import {errCode as errC, log, catchErr} from './_controllers.js';
 
 export const getStatus = (req, res, next) => {
+	const controllerName = 'getStatus';
+	log(controllerName);
 	console.log(`\n✅✅✅ getStatus`, {
 		isLoggedIn: res.locals.isLoggedIn || false,
 		role: res.locals.role,
@@ -14,12 +17,15 @@ export const getStatus = (req, res, next) => {
 	});
 };
 export const postSignup = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called postSignup`);
+	const controllerName = 'postSignup';
+	log(controllerName);
+
 	const {email, password, confirmedPassword, date} = req.body;
 
 	models.User.findOne({where: {email}})
 		.then((user) => {
 			if (user) {
+				errCode = 409;
 				throw new Error('Użytkownik już istnieje.');
 			}
 
@@ -45,23 +51,18 @@ export const postSignup = (req, res, next) => {
 					});
 				});
 		})
-		.catch((err) => {
-			console.log('❌❌❌ Użytkownik już istnieje.');
-			return res.status(409).json({
-				confirmation: 0,
-				type: 'signup',
-				code: 409,
-				message: err.message,
-			});
-		});
+		.catch((err) => catchErr(err, controllerName, {type: 'signup', code: 409}));
 };
 export const postLogin = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called postLogin`);
+	const controllerName = 'postLogin';
+	log(controllerName);
+
 	const {email, password, date} = req.body;
 
 	models.User.findOne({where: {email}})
 		.then((user) => {
 			if (!user) {
+				errCode = 404;
 				console.log("\n❌❌❌ User doesn't exist");
 				throw new Error('Użytkownik nie istnieje.');
 			}
@@ -86,23 +87,17 @@ export const postLogin = (req, res, next) => {
 						message: 'Zalogowano pomyślnie',
 					});
 				} else {
+					errCode = 400;
 					console.log('\n❌❌❌ Password incorrect');
 					throw new Error('Hasło nieprawidłowe.');
 				}
 			});
 		})
-		.catch((err) => {
-			console.log(err);
-			return res.status(404).json({
-				type: 'login',
-				code: 404,
-				confirmation: 0,
-				message: err.message,
-			});
-		});
+		.catch((err) => catchErr(err, controllerName, {type: 'signup', code: 404}));
 };
 export const postLogout = (req, res, next) => {
-	console.log(`\n➡️➡️➡️ called postLogout`);
+	const controllerName = 'postLogout';
+	log(controllerName);
 
 	req.session.destroy((err) => {
 		console.log('postLogout');
