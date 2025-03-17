@@ -741,7 +741,7 @@ export const showProductSchedules = (req, res, next) => {
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 export const showBookedSchedules = (req, res, next) => {};
-export const createScheduleRecord = (req, res, next) => {
+export const postCreateScheduleRecord = (req, res, next) => {
 	models.ScheduleRecord.create({
 		ProductID: req.body.productID,
 		Date: req.body.date,

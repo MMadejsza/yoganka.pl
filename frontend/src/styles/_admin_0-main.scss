@@ -298,7 +298,7 @@
 			flex-basis: 100%;
 			font-size: 2.2rem;
 			margin-bottom: 2.2rem;
-			color: map.get(var.$colors, accent-bcg);
+			color: map.get(var.$colors, tile-title);
 			&.admin-action {
 				@include mixin.flex(row, center, center);
 				gap: 1rem;
@@ -392,23 +392,22 @@
 				@include mixin.flex(row, center, center);
 				gap: 1rem;
 			}
+		}
+	}
+	.table-form-btn {
+		@include mixin.flex(row, center, center);
+		cursor: pointer;
+		height: 100%;
+		width: min-content;
+		border: none;
+		transition: map.get(var.$behavior, base-transition);
 
-			.table-form-btn {
-				@include mixin.flex(row, center, center);
-				cursor: pointer;
-				height: 100%;
-				width: min-content;
-				border: none;
-				transition: map.get(var.$behavior, base-transition);
+		&:hover {
+			text-shadow: map.get(var.$shadows, active-text-icons-shadow);
+		}
 
-				&:hover {
-					text-shadow: map.get(var.$shadows, active-text-icons-shadow);
-				}
-
-				&--submit {
-					color: map.get(var.$colors, accent-bcg);
-				}
-			}
+		&--submit {
+			color: map.get(var.$colors, accent-bcg);
 		}
 	}
 }

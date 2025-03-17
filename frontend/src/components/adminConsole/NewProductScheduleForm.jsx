@@ -109,16 +109,16 @@ function NewProductScheduleForm() {
 		hasError: locationHasError,
 	} = useInput('', val.locationValidations);
 	const {
-		value: attendanceValue,
-		handleChange: handleAttendanceChange,
-		handleFocus: handleAttendanceFocus,
-		handleBlur: handleAttendanceBlur,
-		handleReset: handleAttendanceReset,
-		didEdit: attendanceDidEdit,
-		isFocused: attendanceIsFocused,
-		validationResults: attendanceValidationResults,
-		hasError: attendanceHasError,
-	} = useInput('', val.attendanceValidations);
+		value: capacityValue,
+		handleChange: handleCapacityChange,
+		handleFocus: handleCapacityFocus,
+		handleBlur: handleCapacityBlur,
+		handleReset: handleCapacityReset,
+		didEdit: capacityDidEdit,
+		isFocused: capacityIsFocused,
+		validationResults: capacityValidationResults,
+		hasError: capacityHasError,
+	} = useInput('', val.capacityValidations);
 
 	// Reset all te inputs
 	const handleReset = () => {
@@ -126,7 +126,9 @@ function NewProductScheduleForm() {
 		handleDateReset();
 		handleTimeReset();
 		handleLocationReset();
-		handleAttendanceReset();
+		handleCapacityReset();
+		handleRepeatReset();
+		handleShouldRepeatReset();
 	};
 
 	// Submit handling
@@ -134,7 +136,14 @@ function NewProductScheduleForm() {
 		e.preventDefault(); // No reloading
 		console.log('Submit triggered');
 
-		if (locationHasError || attendanceHasError || dateHasError || timeHasError) {
+		if (
+			locationHasError ||
+			capacityHasError ||
+			dateHasError ||
+			timeHasError ||
+			shouldRepeatHasError ||
+			repeatHasError
+		) {
 			return;
 		}
 		console.log('Submit passed errors');
@@ -201,14 +210,14 @@ function NewProductScheduleForm() {
 					embedded={true}
 					formType={formType}
 					type='number'
-					id='repeat'
-					name='repeat'
+					id='repeatCount'
+					name='repeatCount'
 					step='1'
 					min='0'
 					max={shouldRepeatValue == 7 ? '52' : shouldRepeatValue == 30 ? '12' : null}
 					label=''
 					disabled={shouldRepeatValue == 1}
-					placeholder='Ilość'
+					placeholder='x razy'
 					value={repeatValue}
 					onFocus={handleRepeatFocus}
 					onBlur={handleRepeatBlur}
@@ -272,20 +281,20 @@ function NewProductScheduleForm() {
 					embedded={true}
 					formType={formType}
 					type='number'
-					id='attendance'
-					name='attendance'
+					id='capacity'
+					name='capacity'
 					step='1'
 					min='0'
 					label=''
 					placeholder='Ilość miejsc'
 					required
-					value={attendanceValue}
-					onFocus={handleAttendanceFocus}
-					onBlur={handleAttendanceBlur}
-					onChange={handleAttendanceChange}
-					validationResults={attendanceValidationResults}
-					didEdit={attendanceDidEdit}
-					isFocused={attendanceIsFocused}
+					value={capacityValue}
+					onFocus={handleCapacityFocus}
+					onBlur={handleCapacityBlur}
+					onChange={handleCapacityChange}
+					validationResults={capacityValidationResults}
+					didEdit={capacityDidEdit}
+					isFocused={capacityIsFocused}
 				/>
 				<div className='action-btns'>
 					<button
