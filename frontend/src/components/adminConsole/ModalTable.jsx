@@ -74,8 +74,14 @@ function ModalTable({
 						<tr
 							className={`data-table__cells ${active ? 'active' : ''}  ${
 								classModifier ? `data-table__cells--${classModifier}` : ''
-							} ${row.isUserGoing && status?.isLoggedIn ? 'booked' : ''} ${
-								isArchived && !isAdminPage ? 'archived' : ''
+							} ${
+								!isAdminPage
+									? row.isUserGoing && status?.isLoggedIn
+										? 'booked'
+										: ''
+									: ''
+							} ${
+								!isAdminPage ? (isArchived && !isAdminPage ? 'archived' : '') : ''
 							} ${row.full && !isAdminPage && 'full'}`}
 							key={rowIndex}>
 							{keys.map((key, keyIndex) => {

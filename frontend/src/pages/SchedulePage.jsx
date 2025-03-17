@@ -45,7 +45,6 @@ function SchedulePage() {
 				body: JSON.stringify({
 					customerDetails: customerDetails || null,
 					schedule: scheduleID,
-					date: new Date().toISOString().split('T')[0],
 					product: productName,
 					status: 'Paid',
 					amountPaid: productPrice,

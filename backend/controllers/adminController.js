@@ -61,7 +61,7 @@ export const showAllUsers = (req, res, next) => {
 				message: 'Konta pobrane pomyślnie.',
 				isLoggedIn: req.session.isLoggedIn,
 				totalHeaders, // To render
-				content: formattedRecords, // With new names
+				content: formattedRecords.sort((a, b) => a.Email.localeCompare(b.Email)), // With new names
 			});
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
@@ -231,12 +231,12 @@ export const postEditSettings = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
-export const showAllUserSettings = (req, res, next) => {
-	const controllerName = 'showAllUserSettings';
-	log(controllerName);
+// export const showAllUserSettings = (req, res, next) => {
+// 	const controllerName = 'showAllUserSettings';
+// 	log(controllerName);
 
-	listAllToTable(res, models.UserPrefSettings, null);
-};
+// 	listAllToTable(res, models.UserPrefSettings, null);
+// };
 //@ CUSTOMERS
 export const showAllCustomers = (req, res, next) => {
 	const controllerName = 'showAllCustomers';
@@ -256,7 +256,7 @@ export const showAllCustomers = (req, res, next) => {
 		.findAll({
 			attributes: {
 				include: includeAttributes, // Adding joint columns
-				exclude: ['UserID', 'FirstName', 'LastName'], // Deleting substituted ones
+				exclude: ['UserID'], // Deleting substituted ones
 			},
 		})
 		.then((records) => {
@@ -287,7 +287,7 @@ export const showAllCustomers = (req, res, next) => {
 				confirmation: 1,
 				isLoggedIn: req.session.isLoggedIn,
 				totalHeaders, // To render
-				content: formattedRecords, // With new names
+				content: formattedRecords.sort((a, b) => a.LastName.localeCompare(b.LastName)), // With new names
 			});
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
@@ -571,7 +571,7 @@ export const showAllSchedules = (req, res, next) => {
 						attributeType === 'DATEONLY' ||
 						attributeType === 'DATETIME'
 					) {
-						newRecord[newKey] = formatIsoDateTime(jsonRecord[key]);
+						newRecord[newKey] = jsonRecord[key]; //formatIsoDateTime(jsonRecord[key]);
 					} else if (key === 'Product' && jsonRecord[key]) {
 						newRecord['Typ'] = jsonRecord[key].Type; //  flatten object
 						newRecord['Nazwa'] = jsonRecord[key].Name;
@@ -617,7 +617,7 @@ export const showAllSchedules = (req, res, next) => {
 				confirmation: 1,
 				message: 'Terminy pobrane pomyślnie.',
 				totalHeaders, // To render
-				content: formattedRecords, // With new names
+				content: formattedRecords.sort((a, b) => new Date(b.Data) - new Date(a.Data)), // With new names
 			});
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
@@ -1307,7 +1307,7 @@ export const showAllBookings = (req, res, next) => {
 					const attributeType = attributes[key]?.type.constructor.key?.toUpperCase();
 					const newKey = columnMap[key] || key;
 					if (['DATE', 'DATEONLY', 'DATETIME'].includes(attributeType)) {
-						newRecord[newKey] = formatIsoDateTime(jsonRecord[key]);
+						newRecord[newKey] = jsonRecord[key]; //formatIsoDateTime(jsonRecord[key]);
 					} else if (key === 'Customer') {
 						const customer = jsonRecord[key]['Imię Nazwisko'];
 						const customerID = jsonRecord.CustomerID;
@@ -1338,7 +1338,9 @@ export const showAllBookings = (req, res, next) => {
 				isLoggedIn: req.session.isLoggedIn,
 				totalHeaders,
 				records: records,
-				content: formattedRecords,
+				content: formattedRecords.sort(
+					(a, b) => new Date(b['Data Rezerwacji']) - new Date(a['Data Rezerwacji']),
+				),
 			});
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));

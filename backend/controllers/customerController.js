@@ -135,7 +135,7 @@ export const postBookSchedule = (req, res, next) => {
 					return models.Booking.create(
 						{
 							CustomerID: currentCustomer.CustomerID,
-							Date: req.body.date,
+							Date: new Date(),
 							Product: req.body.product,
 							Status: req.body.status,
 							AmountPaid: req.body.amountPaid,

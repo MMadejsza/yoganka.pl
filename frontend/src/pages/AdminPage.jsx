@@ -10,7 +10,7 @@ import ModalTable from '../components/adminConsole/ModalTable.jsx';
 const sideNavTabs = [
 	{name: 'Użytkownicy', icon: 'group', link: '/admin-console/show-all-users'},
 	{name: 'Klienci', icon: 'sentiment_satisfied', link: '/admin-console/show-all-customers'},
-	{name: 'Produkty', icon: 'inventory', link: '/admin-console/show-all-products'},
+	{name: 'Zajęcia', icon: 'inventory', link: '/admin-console/show-all-products'},
 	{name: 'Grafik', icon: 'calendar_month', link: '/admin-console/show-all-schedules'},
 	{name: `Booking'i`, icon: 'event_available', link: '/admin-console/show-all-bookings'},
 	{name: `Faktury`, icon: 'receipt_long', link: '/admin-console/show-all-invoices'},

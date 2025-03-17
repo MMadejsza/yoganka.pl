@@ -6,7 +6,7 @@ const columnMaps = {
 		// ProfilePictureSrcSetJSON: 'Zdjęcie',
 		// Login: 'Login',
 		UserID: 'ID',
-		Email: 'E-mail',
+		Email: 'Email',
 		LastLoginDate: 'Ostatni login',
 		RegistrationDate: 'Zarejestrowany',
 		Role: 'Uprawnienia',
@@ -43,7 +43,7 @@ const columnMaps = {
 	ScheduleRecord: {
 		// ProductID: 'ID produktu',
 		ScheduleID: 'ID',
-		['']: '',
+		// ['']: '',
 		['Miejsca']: 'Miejsca',
 		Date: 'Data',
 		['Dzień']: 'Dzień',

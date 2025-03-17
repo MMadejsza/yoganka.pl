@@ -33,7 +33,7 @@ export const simpleListAllToTable = (res, model) => {
 							attributeType === 'DATETIME') &&
 						jsonRecord[key]
 					) {
-						newRecord[newKey] = formatIsoDateTime(jsonRecord[key]);
+						newRecord[newKey] = jsonRecord[key]; //formatIsoDateTime(jsonRecord[key]);
 					} else {
 						newRecord[newKey] = jsonRecord[key]; // Assignment
 					}
@@ -49,7 +49,7 @@ export const simpleListAllToTable = (res, model) => {
 				totalHeaders,
 				confirmation: 1,
 				message: 'Pobrano pomyślnie',
-				content: formattedRecords,
+				content: formattedRecords, //.sort((a, b) => new Date(b.Data) - new Date(a.Data)),
 			});
 		})
 		.catch((err) => catchErr(err, controllerName));
