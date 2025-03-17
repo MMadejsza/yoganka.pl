@@ -123,6 +123,10 @@ html {
 				place-self: center;
 			}
 		}
+		&:hover {
+			text-shadow: map.get(var.$shadows, active-text-icons-shadow);
+			cursor: pointer;
+		}
 	}
 
 	&__link {

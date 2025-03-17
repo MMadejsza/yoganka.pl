@@ -782,7 +782,7 @@ export const postDeleteSchedule = (req, res, next) => {
 				if (foundRecord) {
 					errCode = 409;
 					throw new Error(
-						'Nie można usunąć terminu, na który są zapisane osoby. Najpierw usuń obecności.',
+						'Nie można usunąć terminu, na który są zapisane osoby. Najpierw USUŃ obecności.',
 					);
 				}
 				return foundSchedule.destroy();

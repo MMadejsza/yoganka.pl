@@ -1,3 +1,5 @@
+import {useQuery} from '@tanstack/react-query';
+import {fetchStatus} from '../../utils/http.js';
 import DetailsProduct from './DetailsProduct.jsx';
 import DetailsProductStats from './DetailsProductStats.jsx';
 import DetailsProductSchedules from './DetailsProductSchedules.jsx';
@@ -16,6 +18,11 @@ function ViewProduct({data, isAdminPanel}) {
 		data,
 	);
 	console.log(`	    Product isAdminPanel:`, isAdminPanel);
+	const {data: status, isLoading: isStatusLoading} = useQuery({
+		queryKey: ['authStatus'],
+		queryFn: fetchStatus,
+		cache: 'no-store',
+	});
 	const {product} = data;
 	const type = product.Type;
 	const prodStats = calculateProductStats(product, product.ScheduleRecords);
@@ -42,7 +49,10 @@ function ViewProduct({data, isAdminPanel}) {
 			{/*//@ Schedules if not event/camp*/}
 			{prodStats.totalSchedulesAmount > 1 && (
 				<div className='user-container__main-details  schedules modal-checklist'>
-					<DetailsProductSchedules scheduleRecords={prodStats.scheduleRecords} />
+					<DetailsProductSchedules
+						scheduleRecords={prodStats.scheduleRecords}
+						status={status}
+					/>
 				</div>
 			)}
 

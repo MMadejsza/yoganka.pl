@@ -299,6 +299,12 @@
 			font-size: 2.2rem;
 			margin-bottom: 2.2rem;
 			color: map.get(var.$colors, accent-bcg);
+			&.admin-action {
+				@include mixin.flex(row, center, center);
+				gap: 1rem;
+
+				text-decoration: none;
+			}
 		}
 		&__section-record {
 			&-label {
@@ -348,6 +354,60 @@
 			select {
 				width: 100%;
 				padding-left: 5rem;
+			}
+		}
+	}
+	.table-form {
+		width: 100%;
+		&__content {
+			flex-basis: 100%;
+			width: 100%;
+			padding: 0 1rem;
+			@include mixin.flex(row, space-between, center);
+			gap: 1.5rem;
+			transition: map.get(var.$behavior, base-transition);
+
+			.frequency-inputs {
+				@include mixin.flex(row, center, center);
+			}
+			input,
+			select {
+				width: min-content;
+				max-width: 125px;
+				padding: 0 1rem;
+				text-align: center;
+			}
+			.modal-checklist__li {
+				width: min-content;
+				gap: 0;
+				&:nth-child(2) {
+					input {
+						width: 75px;
+					}
+				}
+			}
+			.action-btns {
+				flex-basis: 10%;
+				height: 100%;
+				@include mixin.flex(row, center, center);
+				gap: 1rem;
+			}
+
+			.table-form-btn {
+				@include mixin.flex(row, center, center);
+				cursor: pointer;
+				height: 100%;
+				width: min-content;
+				border: none;
+				transition: map.get(var.$behavior, base-transition);
+
+				&:hover {
+					text-shadow: map.get(var.$shadows, active-text-icons-shadow);
+				}
+
+				&--submit {
+					color: map.get(var.$colors, accent-bcg);
+				}
 			}
 		}
 	}

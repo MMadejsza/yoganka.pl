@@ -1,7 +1,12 @@
+import React, {useState} from 'react';
+
 import {getWeekDay} from '../../utils/productViewsUtils.js';
 import ModalTable from './ModalTable';
+import NewProductScheduleForm from './NewProductScheduleForm';
 
-function DetailsProductSchedules({scheduleRecords, placement}) {
+function DetailsProductSchedules({scheduleRecords, placement, status}) {
+	const [isFormVisible, setIsFormVisible] = useState();
+
 	const notPublished = (
 		<>
 			<div style={{fontWeight: 'bold', fontSize: '2rem'}}>Nie opublikowano</div>
@@ -9,9 +14,9 @@ function DetailsProductSchedules({scheduleRecords, placement}) {
 	);
 
 	let processedScheduleRecordsArr = scheduleRecords;
-	let headers = ['ID', 'Data', 'Dzień', 'Godzina', 'Lokacja', 'Frekwencja'];
-	let keys = ['id', 'date', 'day', 'time', 'location', 'attendance'];
-
+	let headers = ['ID', 'Dzień', 'Data', 'Godzina', 'Lokacja', 'Frekwencja', 'Akcje'];
+	let keys = ['id', 'day', 'date', 'time', 'location', 'attendance', ''];
+	let form;
 	if (placement == 'booking') {
 		headers = ['ID', 'Produkt', 'Data', 'Dzień', 'Godzina', 'Lokacja', 'Zadatek'];
 		keys = ['id', 'product', 'date', 'day', 'time', 'location', 'price'];
@@ -35,19 +40,33 @@ function DetailsProductSchedules({scheduleRecords, placement}) {
 				time: schedule.StartTime,
 				location: schedule.Location,
 				attendance: `${schedule.participants}/${schedule.capacity} (${schedule.attendance}%)`,
+				attendanceCount: schedule.attendance,
 			};
 		});
+
+		form = <NewProductScheduleForm />;
 	}
 
 	return (
 		<>
-			<h2 className='user-container__section-title modal__title--day'>Terminy:</h2>
+			<h2 className='user-container__section-title modal__title--day admin-action '>
+				Terminy
+				<span
+					className='material-symbols-rounded nav__icon nav__icon--side account nav__item'
+					onClick={() => setIsFormVisible(!isFormVisible)}>
+					{!isFormVisible ? 'add_circle' : 'undo'}
+				</span>
+			</h2>
+			{isFormVisible && form}
 			{scheduleRecords.length > 0 ? (
 				<ModalTable
 					headers={headers}
 					keys={keys}
 					content={processedScheduleRecordsArr}
 					active={false}
+					status={status}
+					isAdminPage={true}
+					adminActions={true}
 				/>
 			) : (
 				notPublished

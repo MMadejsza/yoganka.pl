@@ -89,11 +89,14 @@ input {
 	outline: none;
 	transition: map.get(var.$behavior, base-transition);
 
-	&:hover,
+	&:hover:not([disabled]),
 	&:focus:not([type='checkbox']) {
 		box-shadow: map.get(var.$shadows, active-box-shadow);
 	}
 
+	&[disabled] {
+		opacity: 0;
+	}
 	&[type='checkbox'] {
 		cursor: pointer;
 		width: 2rem;
