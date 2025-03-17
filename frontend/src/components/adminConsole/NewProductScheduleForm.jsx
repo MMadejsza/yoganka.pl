@@ -205,6 +205,7 @@ function NewProductScheduleForm() {
 					name='repeat'
 					step='1'
 					min='0'
+					max={shouldRepeatValue == 7 ? '52' : shouldRepeatValue == 30 ? '12' : null}
 					label=''
 					disabled={shouldRepeatValue == 1}
 					placeholder='Ilość'
