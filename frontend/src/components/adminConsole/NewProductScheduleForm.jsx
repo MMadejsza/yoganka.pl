@@ -150,6 +150,7 @@ function NewProductScheduleForm() {
 
 		const fd = new FormData(e.target);
 		const formDataObj = Object.fromEntries(fd.entries());
+		formDataObj.productID = params.id;
 		console.log('sent data:', formDataObj);
 		mutate(formDataObj);
 		handleReset();
@@ -247,8 +248,8 @@ function NewProductScheduleForm() {
 					embedded={true}
 					formType={formType}
 					type='time'
-					id='time'
-					name='time'
+					id='startTime'
+					name='startTime'
 					label=''
 					value={timeValue}
 					required

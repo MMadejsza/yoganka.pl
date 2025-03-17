@@ -36,6 +36,12 @@ const ScheduleRecord = sequelizeDb.define(
 	{
 		tableName: 'schedule_records',
 		timestamps: false,
+		indexes: [
+			{
+				unique: true,
+				fields: ['ProductID', 'Date', 'StartTime', 'Location'],
+			},
+		],
 	},
 );
 

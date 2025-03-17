@@ -1,5 +1,6 @@
 import * as models from '../models/_index.js';
 import {Sequelize, Op, fn, col} from 'sequelize';
+import {addDays, addMonths, addYears, format} from 'date-fns';
 import db from '../utils/db.js';
 import {simpleListAllToTable, listAllToTable} from '../utils/listAllToTable.js';
 import columnMaps from '../utils/columnsMapping.js';
@@ -742,16 +743,115 @@ export const showProductSchedules = (req, res, next) => {
 };
 export const showBookedSchedules = (req, res, next) => {};
 export const postCreateScheduleRecord = (req, res, next) => {
-	models.ScheduleRecord.create({
-		ProductID: req.body.productID,
-		Date: req.body.date,
-		StartTime: req.body.startTime,
-		Location: req.body.location,
+	const controllerName = 'postCreateScheduleRecord';
+	log(controllerName);
+	const {productID, date, capacity, location, startTime, repeatCount, shouldRepeat} = req.body;
+	const inputsContent = [date, capacity, location, startTime, repeatCount || 1, shouldRepeat];
+
+	let currentDate = new Date(`${date}T${startTime}`);
+
+	inputsContent.forEach((inputValue) => {
+		if (!inputValue || !inputValue.toString().trim()) {
+			errCode = 400;
+			console.log('\n❌❌❌ Error postCreateScheduleRecord:', 'No enough data');
+			throw new Error('Nie podano wszystkich danych.');
+		}
+	});
+
+	// chose amount of iterations
+	const iterations = shouldRepeat == 1 ? 1 : repeatCount;
+	// Recursive function to let each call finish and update the date in between
+	function createRecord(i, currentDate, records = [], transaction) {
+		// base condition to stop and resolve the promise
+		if (i >= iterations) {
+			return Promise.resolve(records);
+		}
+		// create schedule within passed transaction
+		return models.ScheduleRecord.create(
+			{
+				ProductID: productID,
+				Date: currentDate,
+				StartTime: startTime,
+				Location: location,
+				Capacity: capacity,
+			},
+			{transaction},
+		).then((record) => {
+			console.log('\n✅✅✅ Utworzono rekord dla daty:', currentDate);
+			// Update the date based on shouldRepeat:
+			if (shouldRepeat == 7) {
+				currentDate = addDays(currentDate, 7);
+			} else if (shouldRepeat == 30) {
+				currentDate = addMonths(currentDate, 1);
+			} else if (shouldRepeat == 365) {
+				currentDate = addYears(currentDate, 1);
+			}
+			records.push(record);
+			return createRecord(i + 1, currentDate, records, transaction);
+		});
+	}
+
+	// # Transaction start to eventually rollback all the changes if anything wrong
+
+	db.transaction((t) => {
+		return createRecord(0, currentDate, [], t);
 	})
-		.then(() => {
-			console.log('✅ created');
+		.then((createdRecords) => {
+			console.log('\n✅✅✅ Wszystkie rekordy utworzone pomyślnie');
+			res.status(201).json({
+				confirmation: 1,
+				message: 'Terminy utworzone pomyślnie.',
+				records: createdRecords,
+			});
 		})
-		.catch((err) => console.log(err));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
+	// db.transaction((t) => {
+	// 	// container for each promise in the loop
+	// 	let promises = [];
+
+	// 	// chose amount of iterations
+	// 	const iterations = shouldRepeat == 1 ? 1 : repeatCount;
+
+	// 	for (let i = 0; i < iterations; i++) {
+	// 		promises.push(
+	// 			models.ScheduleRecord.create(
+	// 				{
+	// 					ProductID: productID,
+	// 					Date: currentDate,
+	// 					StartTime: startTime,
+	// 					Location: location,
+	// 					Capacity: capacity,
+	// 				},
+	// 				{transaction: t},
+	// 			).then((record) => {
+	// 				console.log(
+	// 					'\n✅✅✅ Admin postCreateScheduleRecord created for date:',
+	// 					currentDate,
+	// 				);
+	// 				// Update the date based on shouldRepeat:
+	// 				if (shouldRepeat == 7) {
+	// 					currentDate = addDays(currentDate, 7);
+	// 				} else if (shouldRepeat == 30) {
+	// 					currentDate = addMonths(currentDate, 1);
+	// 				} else if (shouldRepeat == 365) {
+	// 					currentDate = addYears(currentDate, 1);
+	// 				}
+	// 				return record;
+	// 			}),
+	// 		);
+	// 	}
+	// 	// return Promise.all, waiting for all creations in the transaction to be done
+	// 	return Promise.all(promises);
+	// })
+	// 	.then((createdRecords) => {
+	// 		console.log('\n✅✅✅ Admin postCreateScheduleRecord ALL created ');
+	// 		res.status(201).json({
+	// 			confirmation: 1,
+	// 			message: 'Terminy utworzone pomyślnie.',
+	// 			records: createdRecords,
+	// 		});
+	// 	})
+	// 	.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 export const postDeleteSchedule = (req, res, next) => {
 	const controllerName = 'postDeleteSchedule';
@@ -1491,7 +1591,7 @@ export const postCreateBooking = (req, res, next) => {
 				if (existingBooking) {
 					//! assuming single schedule/booking
 					throw new Error(
-						'Uczestnik już rezerwował ten termin. MOżna mu ewentualnie poprawić obecność w zakładce wspomnianego terminu w "Grafik" w panelu admina.',
+						'Uczestnik już rezerwował ten termin. Można mu ewentualnie poprawić obecność w zakładce wspomnianego terminu w "Grafik" w panelu admina.',
 					);
 				} else {
 					// booking doesn't exist - create new one

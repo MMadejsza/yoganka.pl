@@ -33,7 +33,7 @@ router.get('/show-all-invoices', adminC.showAllInvoices);
 router.post('/create-user', adminC.postCreateUser);
 router.post('/edit-user-settings/:id', adminC.postEditSettings);
 router.post('/create-customer', adminC.postCreateCustomer);
-router.post('/create-schedule-record', adminC.postCreateScheduleRecord);
+router.post('/create-schedule', adminC.postCreateScheduleRecord);
 // router.post('/create-newsletter', adminC.createNewsletter);
 router.post('/create-product', adminC.postCreateProduct);
 router.post('/create-booking', adminC.postCreateBooking);
