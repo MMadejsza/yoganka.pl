@@ -37,7 +37,7 @@ router.post('/create-customer', adminC.postCreateCustomer);
 router.post('/create-schedule-record', adminC.createScheduleRecord);
 // router.post('/create-newsletter', adminC.createNewsletter);
 router.post('/create-product', adminC.postCreateProduct);
-// router.post('/create-booking', adminC.createBooking);
+router.post('/create-booking', adminC.postCreateBooking);
 // router.post('/create-invoice', adminC.createInvoice);
 //# EDIT
 router.post('/edit-customer-data/:id', adminC.postEditCustomer);

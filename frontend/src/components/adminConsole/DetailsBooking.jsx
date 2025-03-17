@@ -20,7 +20,10 @@ function DetailsBooking({bookingData}) {
 				</li>
 				<li className='user-container__section-record modal-checklist__li'>
 					<p className='user-container__section-record-label'>Kwota:</p>
-					<p className='user-container__section-record-content'>{booking.AmountPaid}</p>
+					<p className='user-container__section-record-content'>
+						{' '}
+						{`${booking.AmountPaid}zł`}
+					</p>
 				</li>
 				<li className='user-container__section-record modal-checklist__li'>
 					<p className='user-container__section-record-label'>Metoda Płatności:</p>
@@ -29,9 +32,19 @@ function DetailsBooking({bookingData}) {
 					</p>
 				</li>
 				<li className='user-container__section-record modal-checklist__li'>
-					<p className='user-container__section-record-label'>Status:</p>
+					<p className='user-container__section-record-label'>Opłacono:</p>
 					<p className='user-container__section-record-content'>{booking.Status}</p>
 				</li>
+				{booking.AmountDue && booking.AmountDue != '0.00' && (
+					<li className='user-container__section-record modal-checklist__li'>
+						<p className='user-container__section-record-label'>
+							Pozostało do zapłaty:
+						</p>
+						<p className='user-container__section-record-content'>
+							{`${booking.AmountDue}zł`}
+						</p>
+					</li>
+				)}
 			</ul>
 		</>
 	);

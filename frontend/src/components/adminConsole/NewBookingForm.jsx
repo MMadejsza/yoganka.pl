@@ -10,6 +10,7 @@ import * as val from '../../utils/validation.js';
 function NewBookingForm({onClose}) {
 	let initialFeedbackConfirmation;
 	const [feedbackConfirmation, setFeedbackConfirmation] = useState(initialFeedbackConfirmation);
+	const [successMsg, setSuccessMsg] = useState(null);
 
 	const {data: status} = useQuery({
 		queryKey: ['authStatus'],
@@ -97,7 +98,6 @@ function NewBookingForm({onClose}) {
 	);
 	console.log('schedulesOptionsList: ', schedulesOptionsList);
 
-	let successMsg;
 	const {mutate, isPending, isError, error} = useMutation({
 		mutationFn: (formData) => {
 			return fetch(`/api/admin-console/create-booking`, {
@@ -121,7 +121,7 @@ function NewBookingForm({onClose}) {
 		onSuccess: (res) => {
 			queryClient.invalidateQueries(['/admin-console/show-all-bookings']);
 			if (res.confirmation || res.code == 200) {
-				successMsg = res.message;
+				setSuccessMsg(res.message);
 				setFeedbackConfirmation(1);
 			} else {
 				setFeedbackConfirmation(0);
@@ -144,7 +144,7 @@ function NewBookingForm({onClose}) {
 		isFocused: scheduleIsFocused,
 		validationResults: scheduleValidationResults,
 		hasError: scheduleHasError,
-	} = useInput('-');
+	} = useInput('');
 	const {
 		value: amountPaidValue,
 		handleChange: handleAmountPaidChange,
@@ -179,23 +179,35 @@ function NewBookingForm({onClose}) {
 	};
 
 	// Submit handling
+	const areErrors =
+		amountPaidHasError ||
+		paymentMethodHasError ||
+		customerHasError ||
+		productHasError ||
+		scheduleHasError;
 	const handleSubmit = async (e) => {
 		e.preventDefault(); // No reloading
 		console.log('Submit triggered');
 
-		if (
-			amountPaidHasError ||
-			paymentMethodHasError ||
-			customerHasError ||
-			productHasError ||
-			scheduleHasError
-		) {
+		if (areErrors) {
 			return;
+		} else if (schedulesList?.length <= 0) {
+			setFeedbackConfirmation(0);
+			error.message = 'Pole termin nie może być puste.';
 		}
 		console.log('Submit passed errors');
 
 		const fd = new FormData(e.target);
 		const formDataObj = Object.fromEntries(fd.entries());
+
+		const selectedProduct = productsOptionsList.find(
+			(product) => product.ID.toString() === formDataObj.productID,
+		);
+		if (selectedProduct) {
+			formDataObj.productName = `(ID: ${selectedProduct.ID}) ${selectedProduct.Nazwa}`;
+			formDataObj.productPrice = selectedProduct.Zadatek;
+		}
+
 		console.log('sent data:', formDataObj);
 		mutate(formDataObj);
 		handleReset();
@@ -222,7 +234,8 @@ function NewBookingForm({onClose}) {
 			size='small'
 		/>
 	);
-
+	const isSubmitDisabled =
+		!scheduleValue || scheduleValue === '' || scheduleValue === false || areErrors;
 	form = productsList && customersList && (
 		<form
 			// action='/api/login-pass/login'
@@ -261,8 +274,8 @@ function NewBookingForm({onClose}) {
 					label: `(ID: ${productObj.ID}) ${productObj.Nazwa}`,
 					value: productObj.ID,
 				}))}
-				id='product'
-				name='product'
+				id='productID'
+				name='productID'
 				label='Zajęcia:*'
 				value={productValue}
 				onFocus={handleProductFocus}
@@ -286,10 +299,10 @@ function NewBookingForm({onClose}) {
 								)} ${scheduleObj.Date} ${scheduleObj.StartTime}`,
 								value: scheduleObj.ScheduleID,
 						  }))
-						: [{label: 'Uczestnik już rezerwował wszystkie terminy', value: 0}]
+						: [{label: 'Uczestnik już rezerwował wszystkie terminy', value: ''}]
 				}
-				id='schedule'
-				name='schedule'
+				id='scheduleID'
+				name='scheduleID'
 				label='Termin:*'
 				value={scheduleValue}
 				onFocus={handleScheduleFocus}
@@ -347,7 +360,9 @@ function NewBookingForm({onClose}) {
 			</button>
 			<button
 				type='submit'
-				className={`form-action-btn modal__btn modal__btn--small`}>
+				className={`form-action-btn modal__btn modal__btn--small ${
+					isSubmitDisabled ? 'dimmed' : ''
+				}`}>
 				<span className='material-symbols-rounded nav__icon'>check</span> {actionTitle}
 			</button>
 		</form>

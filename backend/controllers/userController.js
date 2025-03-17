@@ -2,7 +2,8 @@ import * as models from '../models/_index.js';
 import columnMaps from '../utils/columnsMapping.js';
 import {formatIsoDateTime, getWeekDay} from '../utils/formatDateTime.js';
 import {Sequelize, Op, fn, col} from 'sequelize';
-import {errCode, log, catchErr} from './_controllers.js';
+import {errorCode, log, catchErr} from './_controllers.js';
+let errCode = errorCode;
 
 export const getShowUserByID = (req, res, next) => {
 	const controllerName = 'getShowUserByID';
@@ -32,7 +33,7 @@ export const getShowUserByID = (req, res, next) => {
 				.status(200)
 				.json({user, confirmation: 1, message: '✅ Konto pobrane pomyślnie'});
 		})
-		.catch((err) => catchErr(err, controllerName));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 export const getShowAllSchedules = (req, res, next) => {
 	const controllerName = 'getShowAllSchedules';
@@ -157,7 +158,7 @@ export const getShowAllSchedules = (req, res, next) => {
 				content: formattedRecords, // With new names
 			});
 		})
-		.catch((err) => catchErr(err, controllerName));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 export const getShowScheduleByID = (req, res, next) => {
 	const controllerName = 'getShowScheduleByID';
@@ -216,7 +217,7 @@ export const getShowScheduleByID = (req, res, next) => {
 			return res.status(200).json({schedule, user: req.user});
 			// return res.status(200).json({schedule});
 		})
-		.catch((err) => catchErr(err, controllerName));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 
 export const getShowAccount = (req, res, next) => {
@@ -319,7 +320,7 @@ export const getShowAccount = (req, res, next) => {
 					message: 'Profil uczestnika pobrany pomyślnie.',
 				});
 			})
-			.catch((err) => catchErr(err, controllerName));
+			.catch((err) => catchErr(res, errCode, err, controllerName));
 	}
 };
 
@@ -339,7 +340,7 @@ export const getEditSettings = (req, res, next) => {
 				.status(200)
 				.json({confirmation: 1, message: 'Ustawienia pobrana pomyślnie.', preferences});
 		})
-		.catch((err) => catchErr(err, controllerName));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 
 export const postEditSettings = (req, res, next) => {
@@ -401,5 +402,5 @@ export const postEditSettings = (req, res, next) => {
 				message: result.message,
 			});
 		})
-		.catch((err) => catchErr(err, controllerName, {code: 409}));
+		.catch((err) => catchErr(res, errCode, err, controllerName, {code: 409}));
 };

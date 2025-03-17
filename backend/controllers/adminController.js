@@ -1,9 +1,11 @@
 import * as models from '../models/_index.js';
 import {Sequelize, Op, fn, col} from 'sequelize';
+import db from '../utils/db.js';
 import {simpleListAllToTable, listAllToTable} from '../utils/listAllToTable.js';
 import columnMaps from '../utils/columnsMapping.js';
 import {formatIsoDateTime, getWeekDay} from '../utils/formatDateTime.js';
-import {errCode, log, catchErr} from './_controllers.js';
+import {errorCode, log, catchErr} from './_controllers.js';
+let errCode = errorCode;
 
 //@ USERS
 export const showAllUsers = (req, res, next) => {
@@ -62,7 +64,7 @@ export const showAllUsers = (req, res, next) => {
 				content: formattedRecords, // With new names
 			});
 		})
-		.catch((err) => catchErr(err, controllerName));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 export const showUserByID = (req, res, next) => {
 	const controllerName = 'showUserByID';
@@ -92,7 +94,7 @@ export const showUserByID = (req, res, next) => {
 				.status(200)
 				.json({confirmation: 1, isLoggedIn: req.session.isLoggedIn, user});
 		})
-		.catch((err) => catchErr(err, controllerName));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 export const postCreateUser = (req, res, next) => {
 	const controllerName = 'postCreateUser';
@@ -130,7 +132,7 @@ export const postCreateUser = (req, res, next) => {
 				});
 		})
 
-		.catch((err) => catchErr(err, controllerName, {type: 'signup', code: 409}));
+		.catch((err) => catchErr(res, errCode, err, controllerName, {type: 'signup', code: 409}));
 };
 export const postDeleteUser = (req, res, next) => {
 	const controllerName = 'postDeleteUser';
@@ -150,7 +152,7 @@ export const postDeleteUser = (req, res, next) => {
 			console.log('\n✅✅✅ admin postDeleteUser deleted the user');
 			return res.status(200).json({confirmation: 1, message: 'Konto usunięte pomyślnie.'});
 		})
-		.catch((err) => catchErr(err, controllerName));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 export const getEditSettings = (req, res, next) => {
 	const controllerName = 'getEditSettings';
@@ -165,7 +167,7 @@ export const getEditSettings = (req, res, next) => {
 			console.log('\n✅✅✅ admin getEditSettings fetched');
 			return res.status(200).json({confirmation: 1, preferences});
 		})
-		.catch((err) => catchErr(err, controllerName));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 
 export const postEditSettings = (req, res, next) => {
@@ -227,7 +229,7 @@ export const postEditSettings = (req, res, next) => {
 				message: result.message,
 			});
 		})
-		.catch((err) => catchErr(err, controllerName));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 export const showAllUserSettings = (req, res, next) => {
 	const controllerName = 'showAllUserSettings';
@@ -288,7 +290,7 @@ export const showAllCustomers = (req, res, next) => {
 				content: formattedRecords, // With new names
 			});
 		})
-		.catch((err) => catchErr(err, controllerName));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 export const showCustomerByID = (req, res, next) => {
 	console.log(`\n➡️ admin called showCustomerByID`, new Date().toISOString());
@@ -371,7 +373,7 @@ export const showCustomerByID = (req, res, next) => {
 				.status(200)
 				.json({confirmation: 1, isLoggedIn: req.session.isLoggedIn, customer});
 		})
-		.catch((err) => catchErr(err, controllerName));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 export const postCreateCustomer = (req, res, next) => {
 	const controllerName = 'postCreateCustomer';
@@ -410,7 +412,7 @@ export const postCreateCustomer = (req, res, next) => {
 				message: 'Zarejestrowano pomyślnie.',
 			});
 		})
-		.catch((err) => catchErr(err, controllerName, {code: 409}));
+		.catch((err) => catchErr(res, errCode, err, controllerName, {code: 409}));
 };
 export const postDeleteCustomer = (req, res, next) => {
 	const controllerName = 'postDeleteCustomer';
@@ -430,7 +432,7 @@ export const postDeleteCustomer = (req, res, next) => {
 			console.log('\n✅✅✅ admin postDeleteUser deleted the customer');
 			return res.status(200).json({confirmation: 1, message: 'Profil usunięty pomyślnie.'});
 		})
-		.catch((err) => catchErr(err, controllerName));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 export const getEditCustomer = (req, res, next) => {
 	const controllerName = 'getEditCustomer';
@@ -447,7 +449,7 @@ export const getEditCustomer = (req, res, next) => {
 				.status(200)
 				.json({confirmation: 1, customer, message: 'Dane uczestnika pobrane pomyślnie.'});
 		})
-		.catch((err) => catchErr(err, controllerName));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 export const postEditCustomer = (req, res, next) => {
 	const controllerName = 'postEditCustomer';
@@ -508,9 +510,9 @@ export const postEditCustomer = (req, res, next) => {
 						affectedCustomerRows,
 					});
 				})
-				.catch((err) => catchErr(err, controllerName));
+				.catch((err) => catchErr(res, errCode, err, controllerName));
 		})
-		.catch((err) => catchErr(err, controllerName));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 
 //@ SCHEDULES
@@ -618,7 +620,7 @@ export const showAllSchedules = (req, res, next) => {
 				content: formattedRecords, // With new names
 			});
 		})
-		.catch((err) => catchErr(err, controllerName));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 export const showScheduleByID = (req, res, next) => {
 	const controllerName = 'showScheduleByID';
@@ -703,7 +705,7 @@ export const showScheduleByID = (req, res, next) => {
 				user: req.user,
 			});
 		})
-		.catch((err) => catchErr(err, controllerName));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 export const showProductSchedules = (req, res, next) => {
 	const controllerName = 'showProductSchedulesByID';
@@ -736,7 +738,7 @@ export const showProductSchedules = (req, res, next) => {
 				content: filteredFoundSchedules,
 			});
 		})
-		.catch((err) => catchErr(err, controllerName));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 export const showBookedSchedules = (req, res, next) => {};
 export const createScheduleRecord = (req, res, next) => {
@@ -794,7 +796,7 @@ export const postDeleteSchedule = (req, res, next) => {
 			console.log('\n✅✅✅ admin postDeleteSchedule deleted the schedule record');
 			return res.status(200).json({confirmation: 1, message: 'Termin usunięty pomyślnie.'});
 		})
-		.catch((err) => catchErr(err, controllerName));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 export const postEditSchedule = async (req, res, next) => {
 	const controllerName = 'postEditSchedule';
@@ -868,9 +870,9 @@ export const postEditSchedule = async (req, res, next) => {
 						affectedScheduleRows,
 					});
 				})
-				.catch((err) => catchErr(err, controllerName));
+				.catch((err) => catchErr(res, errCode, err, controllerName));
 		})
-		.catch((err) => catchErr(err, controllerName));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 //@ FEEDBACK
 export const showAllParticipantsFeedback = (req, res, next) => {
@@ -965,7 +967,7 @@ export const showAllParticipantsFeedback = (req, res, next) => {
 				content: formattedRecords, // With new names
 			});
 		})
-		.catch((err) => catchErr(err, controllerName));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 export const showAllParticipantsFeedbackByID = (req, res, next) => {
 	console.log(`\n➡️ admin called showAllParticipantsFeedbackByID`);
@@ -1027,7 +1029,7 @@ export const showAllParticipantsFeedbackByID = (req, res, next) => {
 				});
 			});
 		})
-		.catch((err) => catchErr(err, controllerName));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 export const postDeleteFeedback = (req, res, next) => {
 	const controllerName = 'postDeleteFeedback';
@@ -1047,7 +1049,7 @@ export const postDeleteFeedback = (req, res, next) => {
 			console.log('\n✅✅✅ admin postDeleteFeedback deleted the feedback');
 			return res.status(200).json({confirmation: 1, message: 'Opinia usunięta pomyślnie.'});
 		})
-		.catch((err) => catchErr(err, controllerName));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 //@ NEWSLETTERS
 export const showAllNewsletters = (req, res, next) => {
@@ -1122,7 +1124,7 @@ export const showProductByID = (req, res, next) => {
 				product,
 			});
 		})
-		.catch((err) => catchErr(err, controllerName));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 export const postCreateProduct = async (req, res, next) => {
 	const controllerName = 'postCreateProduct';
@@ -1155,7 +1157,7 @@ export const postCreateProduct = async (req, res, next) => {
 				message: 'Stworzono pomyślnie.',
 			});
 		})
-		.catch((err) => catchErr(err, controllerName, {code: 409}));
+		.catch((err) => catchErr(res, errCode, err, controllerName, {code: 409}));
 };
 export const postEditProduct = async (req, res, next) => {
 	const controllerName = 'postEditProduct';
@@ -1231,9 +1233,9 @@ export const postEditProduct = async (req, res, next) => {
 						affectedProductRows,
 					});
 				})
-				.catch((err) => catchErr(err, controllerName));
+				.catch((err) => catchErr(res, errCode, err, controllerName));
 		})
-		.catch((err) => catchErr(err, controllerName));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 export const postDeleteProduct = (req, res, next) => {
 	const controllerName = 'postDeleteProduct';
@@ -1253,7 +1255,7 @@ export const postDeleteProduct = (req, res, next) => {
 			console.log('\n✅✅✅ admin postDeleteProduct deleted the product');
 			return res.status(200).json({confirmation: 1, message: 'Produkt usunięty pomyślnie.'});
 		})
-		.catch((err) => catchErr(err, controllerName));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 //@ BOOKINGS
 export const showAllBookings = (req, res, next) => {
@@ -1339,7 +1341,7 @@ export const showAllBookings = (req, res, next) => {
 				content: formattedRecords,
 			});
 		})
-		.catch((err) => catchErr(err, controllerName));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 export const showBookingByID = (req, res, next) => {
 	const controllerName = 'showBookingByID';
@@ -1383,7 +1385,158 @@ export const showBookingByID = (req, res, next) => {
 				booking,
 			});
 		})
-		.catch((err) => catchErr(err, controllerName));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
+};
+export const postCreateBooking = (req, res, next) => {
+	const controllerName = 'postCreateBooking';
+	log(controllerName);
+
+	const {
+		customerID,
+		productID,
+		productName,
+		productPrice,
+		scheduleID,
+		amountPaid,
+		paymentMethod,
+	} = req.body;
+
+	errCode = 400;
+	if (!customerID) {
+		console.log('\n❌❌❌ customerID empty.');
+		throw new Error('Pole uczestnika nie może być puste.');
+	}
+	if (!productID || !productID.trim()) {
+		console.log('\n❌❌❌ productID empty');
+		throw new Error('Pole zajęć nie może być puste.');
+	}
+	if (!scheduleID || !scheduleID.trim()) {
+		console.log('\n❌❌❌ scheduleID empty');
+		throw new Error('Pole terminu nie może być puste.');
+	}
+	if (!amountPaid || !amountPaid.trim()) {
+		console.log('\n❌❌❌ amountPaid empty');
+		throw new Error('Pole kwoty nie może być puste.');
+	}
+	if (!paymentMethod || !paymentMethod.trim()) {
+		console.log('\n❌❌❌ paymentMethod empty');
+		throw new Error('Pole metody płatności nie może być puste.');
+	}
+
+	let isNewCustomer = false;
+	db.transaction((t) => {
+		// Fetch schedule and lock it for other paralele transactions
+		return models.ScheduleRecord.findOne({
+			where: {ScheduleID: scheduleID}, //from mutation
+			transaction: t,
+			lock: t.LOCK.UPDATE, //@
+		})
+
+			.then((scheduleRecord) => {
+				if (!scheduleRecord) {
+					errCode = 404;
+					throw new Error('Nie znaleziono terminu');
+				}
+				// @ admin IS able to fill the past schedule but not change it:
+				// const scheduleDateTime = new Date(
+				// 	`${scheduleRecord.Date}T${scheduleRecord.StartTime}:00`,
+				// );
+				// if (scheduleDateTime < new Date()) {
+				// 	errCode = 401;
+				// 	throw new Error('Nie można rezerwować terminu, który już minął.');
+				// }
+				// Count the current amount of reservations
+				return models.BookedSchedule.count({
+					where: {ScheduleID: scheduleID, Attendance: 1},
+					transaction: t,
+					lock: t.LOCK.UPDATE, //@
+				}).then((currentAttendance) => {
+					// console.log('currentAttendance', currentAttendance);
+
+					if (currentAttendance >= scheduleRecord.Capacity) {
+						// If limit is reached
+						errCode = 409;
+						throw new Error('Brak wolnych miejsc na ten termin.');
+					}
+
+					// IF still enough spaces - check if booked in the past
+					return models.Booking.findOne({
+						where: {
+							CustomerID: customerID,
+						},
+						include: [
+							{
+								model: models.ScheduleRecord,
+								where: {ScheduleID: scheduleID},
+								through: {
+									attributes: [
+										'Attendance',
+										'CustomerID',
+										'BookingID',
+										'ScheduleID',
+									],
+									where: {CustomerID: customerID},
+								},
+								required: true,
+							},
+						],
+						transaction: t,
+						lock: t.LOCK.UPDATE,
+					});
+				});
+			})
+			.then((existingBooking) => {
+				if (existingBooking) {
+					//! assuming single schedule/booking
+					throw new Error(
+						'Uczestnik już rezerwował ten termin. MOżna mu ewentualnie poprawić obecność w zakładce wspomnianego terminu w "Grafik" w panelu admina.',
+					);
+				} else {
+					// booking doesn't exist - create new one
+					const amountDueCalculated = parseFloat(productPrice) - parseFloat(amountPaid);
+					const statusDeduced = amountDueCalculated <= 0 ? 'w pełni' : 'Częściowo';
+					const paymentMethodDeduced =
+						paymentMethod == 1
+							? 'Gotówka (M)'
+							: paymentMethod == 2
+							? 'BLIK (M)'
+							: 'Przelew (M)';
+					return models.Booking.create(
+						{
+							CustomerID: customerID,
+							Date: new Date(),
+							Product: productName,
+							Status: statusDeduced,
+							AmountPaid: amountPaid,
+							AmountDue: amountDueCalculated,
+							PaymentMethod: paymentMethodDeduced,
+							PaymentStatus: 'Completed',
+						},
+						{transaction: t},
+					).then((booking) => {
+						// After creating the reservation, we connected addScheduleRecord which was generated by Sequelize for many-to-many relationship between reservation and ScheduleRecord. The method adds entry to intermediate table (booked_schedules) and connects created reservation with schedule feeder (ScheduleRecord).
+						// console.log('scheduleId:', req.body.schedule);
+						return booking
+							.addScheduleRecord(scheduleID, {
+								through: {CustomerID: customerID},
+								transaction: t,
+								individualHooks: true,
+							})
+							.then(() => booking);
+					});
+				}
+			});
+	})
+		.then((booking) => {
+			console.log('\n✅✅✅ admin postBookSchedule Rezerwacja utworzona pomyślnie');
+			res.status(201).json({
+				isNewCustomer,
+				confirmation: 1,
+				message: 'Rezerwacja utworzona pomyślnie.',
+				booking,
+			});
+		})
+		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 export const postDeleteBooking = (req, res, next) => {
 	const controllerName = 'postDeleteBooking';
@@ -1406,7 +1559,7 @@ export const postDeleteBooking = (req, res, next) => {
 				message: 'Rezerwacja usunięta pomyślnie.',
 			});
 		})
-		.catch((err) => catchErr(err, controllerName));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 //@ INVOICES
 export const showAllInvoices = (req, res, next) => {
@@ -1488,5 +1641,5 @@ export const showAllInvoices = (req, res, next) => {
 				content: formattedRecords, // With new names
 			});
 		})
-		.catch((err) => catchErr(err, controllerName));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
 };

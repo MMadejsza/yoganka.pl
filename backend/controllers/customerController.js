@@ -1,43 +1,40 @@
 import db from '../utils/db.js';
 import * as models from '../models/_index.js';
-import {errCode, log, catchErr} from './_controllers.js';
+import {errorCode, log, catchErr} from './_controllers.js';
+let errCode = errorCode;
 
 export const postBookSchedule = (req, res, next) => {
 	const controllerName = 'postBookSchedule';
 	log(controllerName);
+
 	// @ Fetching USER
-	// check if there is logged in User
-	if (!req.user) {
-		errCode = 403;
-		throw new Error('Użytkownik nie jest zalogowany');
-	}
 	let currentCustomer;
 	let isNewCustomer = false;
 	// If it's not a Customer yet
 	let customerPromise;
 	if (!req.user.Customer) {
 		const cDetails = req.body.customerDetails;
-		console.log('❗❗❗Użytkownik nie jest klientem, tworzymy rekord Customer...');
+		console.log('❗❗❗User isnt the customer, creation of the record Customer...');
 		errCode = 400;
 		if (!cDetails) {
-			console.log('\n❌❌❌ Brak danych klienta');
-			throw new Error('Brak danych klienta');
+			console.log('\n❌❌❌ No given customer data');
+			throw new Error('Brak danych klienta.');
 		}
 		if (!cDetails.fname || !cDetails.fname.trim()) {
-			console.log('\n❌❌❌ Imię nie może być puste');
-			throw new Error('Imię nie może być puste');
+			console.log('\n❌❌❌ fName field empty');
+			throw new Error('Imię nie może być puste.');
 		}
 		if (!cDetails.lname || !cDetails.lname.trim()) {
-			console.log('\n❌❌❌ Nazwisko nie może być puste');
-			throw new Error('Nazwisko nie może być puste');
+			console.log('\n❌❌❌ lname field empty');
+			throw new Error('Nazwisko nie może być puste.');
 		}
 		if (!cDetails.dob || !cDetails.dob.trim()) {
-			console.log('\n❌❌❌ Data urodzenia nie może być puste');
-			throw new Error('Data urodzenia nie może być pusta');
+			console.log('\n❌❌❌ dob field empty');
+			throw new Error('Data urodzenia nie może być pusta.');
 		}
 		if (!cDetails.phone || !cDetails.phone.trim()) {
-			console.log('\n❌❌❌ Telefon nie może być puste');
-			throw new Error('Numer telefonu nie może być pusty');
+			console.log('\n❌❌❌ phone field empty');
+			throw new Error('Numer telefonu nie może być pusty.');
 		}
 
 		customerPromise = models.Customer.create({
@@ -75,7 +72,6 @@ export const postBookSchedule = (req, res, next) => {
 			})
 			.then((scheduleRecord) => {
 				if (!scheduleRecord) {
-					console.log('❗❗❗if (!scheduleRecord) {');
 					errCode = 404;
 					throw new Error('Nie znaleziono terminu');
 				}
@@ -97,7 +93,6 @@ export const postBookSchedule = (req, res, next) => {
 
 					if (currentAttendance >= scheduleRecord.Capacity) {
 						// If limit is reached
-						console.log('❗❗❗if (currentAttendance >= scheduleRecord.capacity)');
 						errCode = 409;
 						throw new Error('Brak wolnych miejsc na ten termin.');
 					}
@@ -168,11 +163,11 @@ export const postBookSchedule = (req, res, next) => {
 			res.status(201).json({
 				isNewCustomer,
 				confirmation: 1,
-				message: 'Rezerwacja utworzona pomyślnie',
+				message: 'Rezerwacja utworzona pomyślnie.',
 				booking,
 			});
 		})
-		.catch((err) => catchErr(err, controllerName));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 export const postCancelSchedule = (req, res, next) => {
 	const controllerName = 'postBookSchedule';
@@ -215,7 +210,7 @@ export const postCancelSchedule = (req, res, next) => {
 				}
 			});
 		})
-		.catch((err) => catchErr(err, controllerName));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 
 export const getEditCustomer = (req, res, next) => {
@@ -255,7 +250,7 @@ export const postEditCustomer = (req, res, next) => {
 				message: 'Profil zaktualizowany pomyslnie.',
 			});
 		})
-		.catch((err) => catchErr(err, controllerName));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 
 export const getShowBookingByID = (req, res, next) => {
@@ -301,5 +296,5 @@ export const getShowBookingByID = (req, res, next) => {
 				booking,
 			});
 		})
-		.catch((err) => catchErr(err, controllerName));
+		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
