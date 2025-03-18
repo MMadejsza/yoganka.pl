@@ -777,7 +777,7 @@ export const postCreateScheduleRecord = (req, res, next) => {
 			},
 			{transaction},
 		).then((record) => {
-			console.log('\n✅✅✅ Utworzono rekord dla daty:', currentDate);
+			console.log('\n✅✅✅ postCreateScheduleRecord created for:', currentDate);
 			// Update the date based on shouldRepeat:
 			if (shouldRepeat == 7) {
 				currentDate = addDays(currentDate, 7);
@@ -797,7 +797,7 @@ export const postCreateScheduleRecord = (req, res, next) => {
 		return createRecord(0, currentDate, [], t);
 	})
 		.then((createdRecords) => {
-			console.log('\n✅✅✅ Wszystkie rekordy utworzone pomyślnie');
+			console.log('\n✅✅✅ postCreateScheduleRecord created all records successfully.');
 			res.status(201).json({
 				confirmation: 1,
 				message: 'Terminy utworzone pomyślnie.',
@@ -805,53 +805,6 @@ export const postCreateScheduleRecord = (req, res, next) => {
 			});
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
-	// db.transaction((t) => {
-	// 	// container for each promise in the loop
-	// 	let promises = [];
-
-	// 	// chose amount of iterations
-	// 	const iterations = shouldRepeat == 1 ? 1 : repeatCount;
-
-	// 	for (let i = 0; i < iterations; i++) {
-	// 		promises.push(
-	// 			models.ScheduleRecord.create(
-	// 				{
-	// 					ProductID: productID,
-	// 					Date: currentDate,
-	// 					StartTime: startTime,
-	// 					Location: location,
-	// 					Capacity: capacity,
-	// 				},
-	// 				{transaction: t},
-	// 			).then((record) => {
-	// 				console.log(
-	// 					'\n✅✅✅ Admin postCreateScheduleRecord created for date:',
-	// 					currentDate,
-	// 				);
-	// 				// Update the date based on shouldRepeat:
-	// 				if (shouldRepeat == 7) {
-	// 					currentDate = addDays(currentDate, 7);
-	// 				} else if (shouldRepeat == 30) {
-	// 					currentDate = addMonths(currentDate, 1);
-	// 				} else if (shouldRepeat == 365) {
-	// 					currentDate = addYears(currentDate, 1);
-	// 				}
-	// 				return record;
-	// 			}),
-	// 		);
-	// 	}
-	// 	// return Promise.all, waiting for all creations in the transaction to be done
-	// 	return Promise.all(promises);
-	// })
-	// 	.then((createdRecords) => {
-	// 		console.log('\n✅✅✅ Admin postCreateScheduleRecord ALL created ');
-	// 		res.status(201).json({
-	// 			confirmation: 1,
-	// 			message: 'Terminy utworzone pomyślnie.',
-	// 			records: createdRecords,
-	// 		});
-	// 	})
-	// 	.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 export const postDeleteSchedule = (req, res, next) => {
 	const controllerName = 'postDeleteSchedule';

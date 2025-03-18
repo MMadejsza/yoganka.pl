@@ -217,7 +217,7 @@ function NewProductScheduleForm() {
 					id='repeatCount'
 					name='repeatCount'
 					step='1'
-					min='0'
+					min='2'
 					max={shouldRepeatValue == 7 ? '52' : shouldRepeatValue == 30 ? '12' : null}
 					label=''
 					disabled={shouldRepeatValue == 1}
