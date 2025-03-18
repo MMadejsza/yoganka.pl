@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {useParams} from 'react-router-dom';
+import {useLocation, useParams} from 'react-router-dom';
 import {useMutation, useQuery} from '@tanstack/react-query';
 import {queryClient, fetchStatus} from '../../utils/http.js';
 import {useInput} from '../../hooks/useInput.js';
@@ -9,6 +9,7 @@ import * as val from '../../utils/validation.js';
 
 function NewProductScheduleForm() {
 	const params = useParams();
+	const location = useLocation();
 	let initialFeedbackConfirmation;
 	const [feedbackConfirmation, setFeedbackConfirmation] = useState(initialFeedbackConfirmation);
 
@@ -150,7 +151,9 @@ function NewProductScheduleForm() {
 
 		const fd = new FormData(e.target);
 		const formDataObj = Object.fromEntries(fd.entries());
-		formDataObj.productID = params.id;
+		if (location.pathname.includes('show-all-products')) {
+			formDataObj.productID = params.id;
+		}
 		console.log('sent data:', formDataObj);
 		mutate(formDataObj);
 		handleReset();

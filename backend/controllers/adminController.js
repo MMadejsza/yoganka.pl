@@ -1620,7 +1620,7 @@ export const postCreateBooking = (req, res, next) => {
 						// console.log('scheduleId:', req.body.schedule);
 						return booking
 							.addScheduleRecord(scheduleID, {
-								through: {CustomerID: customerID},
+								through: {CustomerID: customerID, DidAction: 'Admin'},
 								transaction: t,
 								individualHooks: true,
 							})

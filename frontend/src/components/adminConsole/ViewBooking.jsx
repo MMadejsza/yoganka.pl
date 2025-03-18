@@ -17,7 +17,9 @@ function ViewBooking({data, isUserAccountPage}) {
 
 	return (
 		<>
-			<h1 className='user-container__user-title modal__title'>{`Rezerwacja (ID: ${booking.BookingID})`}</h1>
+			<h1 className='user-container__user-title modal__title'>{`Rezerwacja (ID: ${
+				booking.BookingID
+			}${booking.DidAction == 'Admin' ? '- Manual by Admin' : ''})`}</h1>
 			{!isUserAccountPage && (
 				<h2 className='user-container__user-title modal__title'>{` ${customer.FirstName} ${customer.LastName}`}</h2>
 			)}

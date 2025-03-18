@@ -51,16 +51,18 @@ function DetailsProductSchedules({scheduleRecords, placement, status}) {
 		<>
 			<h2 className='user-container__section-title modal__title--day admin-action '>
 				Terminy
-				<button
-					onClick={(e) => {
-						e.preventDefault;
-						setIsFormVisible(!isFormVisible);
-					}}
-					className={`form-action-btn table-form-btn table-form-btn--submit`}>
-					<span className='material-symbols-rounded nav__icon nav__icon--side account'>
-						{!isFormVisible ? 'add_circle' : 'undo'}
-					</span>
-				</button>
+				{placement != 'booking' && (
+					<button
+						onClick={(e) => {
+							e.preventDefault;
+							setIsFormVisible(!isFormVisible);
+						}}
+						className={`form-action-btn table-form-btn table-form-btn--submit`}>
+						<span className='material-symbols-rounded nav__icon nav__icon--side account'>
+							{!isFormVisible ? 'add_circle' : 'undo'}
+						</span>
+					</button>
+				)}
 			</h2>
 			{isFormVisible && form}
 			{scheduleRecords.length > 0 ? (

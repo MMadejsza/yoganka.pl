@@ -37,6 +37,11 @@ const BookedSchedule = sequelizeDb.define(
 			allowNull: false,
 			defaultValue: DataTypes.NOW,
 		},
+		DidAction: {
+			type: DataTypes.STRING(10),
+			allowNull: false,
+			defaultValue: 'Customer',
+		},
 	},
 	{
 		tableName: 'booked_schedules', // exact mysql table name

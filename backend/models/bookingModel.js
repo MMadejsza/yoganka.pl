@@ -46,6 +46,11 @@ const Booking = sequelizeDb.define(
 			type: DataTypes.STRING(50),
 			allowNull: false,
 		},
+		DidAction: {
+			type: DataTypes.STRING(10),
+			allowNull: false,
+			defaultValue: 'Customer',
+		},
 	},
 	{
 		tableName: 'bookings',

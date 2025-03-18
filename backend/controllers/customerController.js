@@ -170,7 +170,7 @@ export const postBookSchedule = (req, res, next) => {
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 export const postCancelSchedule = (req, res, next) => {
-	const controllerName = 'postBookSchedule';
+	const controllerName = 'postCancelSchedule';
 	log(controllerName);
 	const scheduleID = req.params.id;
 
