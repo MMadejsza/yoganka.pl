@@ -959,7 +959,6 @@ export const postDeleteAttendanceRecord = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
-
 export const postMarkAbsent = (req, res, next) => {
 	const controllerName = 'postMarkAbsent';
 	log(controllerName);
@@ -990,7 +989,36 @@ export const postMarkAbsent = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
+export const postMarkPresent = (req, res, next) => {
+	const controllerName = 'postMarkPresent';
+	log(controllerName);
+	console.log(req.body);
+	const {cancelledAttendanceCustomerID, cancelledAttendanceBookingID} = req.body;
 
+	models.BookedSchedule.findOne({
+		where: {CustomerID: cancelledAttendanceCustomerID, BookingID: cancelledAttendanceBookingID},
+	})
+		.then((foundRecord) => {
+			if (!foundRecord) {
+				errCode = 404;
+				throw new Error('Nie znaleziono rekordu obecności w dzienniku.');
+			}
+			return foundRecord.update({
+				Attendance: 1,
+				DidAction: 'Admin',
+			});
+		})
+		.then((updatedRecord) => {
+			console.log('\n✅✅✅ admin postMarkPresent UPDATE successful');
+			const status = updatedRecord ? true : false;
+			return res.status(200).json({
+				confirmation: status,
+				message: 'Uczestnik oznaczony jako obecny.',
+				affectedRows: status ? 1 : 0,
+			});
+		})
+		.catch((err) => catchErr(res, errCode, err, controllerName));
+};
 //@ FEEDBACK
 export const showAllParticipantsFeedback = (req, res, next) => {
 	const controllerName = 'showAllParticipantsFeedback';

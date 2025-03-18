@@ -224,6 +224,7 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen, isAdminPanel}) {
 						<DetailsProductBookings
 							stats={scheduleStats}
 							type={type}
+							isAdminPage={isAdminPanel}
 						/>
 					</div>
 

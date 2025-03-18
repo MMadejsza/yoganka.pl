@@ -55,6 +55,8 @@ function ModalTable({
 				customerDetails: '',
 				attendanceCustomerID: row.customerID,
 				attendanceBookingID: row.id,
+				cancelledAttendanceCustomerID: row.CustomerID,
+				cancelledAttendanceBookingID: row.BookingID,
 			});
 		}
 		return null;

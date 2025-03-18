@@ -32,6 +32,7 @@ router.get('/show-all-invoices', adminC.showAllInvoices);
 //# CREATE
 router.post('/create-user', adminC.postCreateUser);
 router.post('/mark-absent', adminC.postMarkAbsent);
+router.post('/mark-present', adminC.postMarkPresent);
 router.post('/delete-attendance-record', adminC.postDeleteAttendanceRecord);
 router.post('/edit-user-settings/:id', adminC.postEditSettings);
 router.post('/create-customer', adminC.postCreateCustomer);

@@ -7,7 +7,7 @@ import NewAttendanceForm from './NewAttendanceForm';
 import {queryClient, fetchStatus} from '../../utils/http.js';
 
 function DetailsTableAttendance({type, stats, isAdminPage}) {
-	console.log('\n✅✅✅DetailsTableAttendance:');
+	// console.log('\n✅✅✅DetailsTableAttendance:');
 	let bookingsArray = stats.attendedBookings;
 	let params = useParams();
 	const [isFormVisible, setIsFormVisible] = useState();
@@ -109,7 +109,8 @@ function DetailsTableAttendance({type, stats, isAdminPage}) {
 	const handleDelete = (params) => {
 		if (!deleteWarningTriggered) {
 			setDeleteWarnings([
-				'Rekordu wliczanego do statystyk w systemie. Nie powinno być potrzeby tego robić. Skontaktuj się z IT lub kliknij jeszcze raz w ciągu 5s w celu potwierdzenia.',
+				'Rekordu wliczanego do statystyk w systemie. Nie powinno być potrzeby tego robić. ',
+				'Skontaktuj się z IT lub kliknij jeszcze raz w ciągu 5s w celu potwierdzenia.',
 			]);
 			setDeleteWarningTriggered(true);
 		} else {
