@@ -39,6 +39,7 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 		refetchOnMount: true,
 		enabled: !!params.id || location.pathname.includes('ustawienia'),
 	});
+
 	if (data) {
 		console.log('ViewFrame data: ', data);
 	}
