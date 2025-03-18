@@ -70,10 +70,13 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 				},
 				credentials: 'include', // include cookies
 			}).then((response) => {
-				if (!response.ok) {
-					throw new Error('Błąd');
-				}
-				return response.json();
+				return response.json().then((data) => {
+					if (!response.ok) {
+						// reject with backend data
+						return Promise.reject(data);
+					}
+					return data;
+				});
 			});
 		},
 		onSuccess: (res) => {

@@ -5,7 +5,7 @@ function ModalTable({
 	active,
 	classModifier,
 	onOpen,
-	onQuickBook,
+	onQuickAction,
 	status,
 	isAdminPage,
 	adminActions,
@@ -14,9 +14,9 @@ function ModalTable({
 	console.log('ModalTable content', content);
 	console.log('ModalTable status', status);
 
-	const symbol = (row, isArchived) => {
+	const symbol = (row, isArchived, symbol) => {
 		if (isAdminPage && adminActions) {
-			return 'delete_forever';
+			return symbol;
 		} else if (
 			status?.isLoggedIn &&
 			(status?.role === 'CUSTOMER' || status?.role === 'ADMIN')
@@ -29,25 +29,32 @@ function ModalTable({
 		return 'lock_person';
 	};
 
-	const onClickAction = (row, isArchived, e) => {
-		console.log('onClickAction:', {
-			isUserGoing: row.isUserGoing,
-			isLoggedIn: status?.isLoggedIn,
+	const onRowBtnClick = (row, archived, method, e) => {
+		const isUserGoing = row.isUserGoing != undefined ? row.isUserGoing : false;
+		const isLoggedIn = status?.isLoggedIn != undefined ? status.isLoggedIn : 'N/A';
+		const isArchived = archived != undefined ? archived : 'N/A';
+		const isAuthorized =
+			status?.role != undefined
+				? status?.role === 'CUSTOMER' || status?.role === 'ADMIN'
+				: 'N/A';
+
+		console.log('onRowBtnClick:', {
+			isUserGoing: isUserGoing,
+			isLoggedIn: isLoggedIn,
 			isArchived,
 			role: status?.role,
+			isAuthorized,
+			method: method,
 		});
-		if (
-			!row.isUserGoing &&
-			status?.isLoggedIn &&
-			!isArchived &&
-			(status?.role === 'CUSTOMER' || status?.role === 'ADMIN')
-		) {
+		if (!isUserGoing && isLoggedIn && !isArchived && isAuthorized) {
 			e.stopPropagation();
-			onQuickBook({
+			method({
 				scheduleID: row['ID'],
 				productName: row['Nazwa'],
 				productPrice: row['Zadatek'],
 				customerDetails: '',
+				attendanceCustomerID: row.customerID,
+				attendanceBookingID: row.id,
 			});
 		}
 		return null;
@@ -91,11 +98,26 @@ function ModalTable({
 								}
 								if (key == '') {
 									value = (
-										<span
-											className='material-symbols-rounded nav__icon nav__icon--side account'
-											onClick={(e) => onClickAction(row, isArchived, e)}>
-											{symbol(row, isArchived)}
-										</span>
+										<div className='action-btns'>
+											{onQuickAction.map((action, index) => (
+												<button
+													key={index}
+													className={`form-action-btn table-form-btn table-form-btn--submit`}>
+													<span
+														className='material-symbols-rounded nav__icon '
+														onClick={(e) =>
+															onRowBtnClick(
+																row,
+																isArchived,
+																action.method,
+																e,
+															)
+														}>
+														{symbol(row, isArchived, action.symbol)}
+													</span>
+												</button>
+											))}
+										</div>
 									);
 								}
 								return (

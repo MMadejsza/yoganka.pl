@@ -18,23 +18,49 @@ function UserFeedbackBox({
 	// console.log('userFeedbackBox size', size);
 	const navigate = useNavigate();
 
-	const statusClass = isPending
-		? 'neutral'
-		: isError
-		? 'error'
-		: status == 1
-		? 'success'
-		: warnings && warnings.length > 0
-		? 'error'
-		: 'neutral';
+	// const statusClass = isPending
+	// 	? 'neutral'
+	// 	: isError
+	// 	? 'error'
+	// 	: status == 1
+	// 	? 'success'
+	// 	: warnings && warnings.length > 0
+	// 	? 'error'
+	// 	: 'neutral';
+	const statusClass =
+		warnings && warnings.length > 0
+			? 'error'
+			: isPending
+			? 'neutral'
+			: isError
+			? 'error'
+			: status == 1
+			? 'success'
+			: 'neutral';
 	const sizeClass = size === 'small' ? 'feedback-box--small' : '';
 	const readyClasses = `feedback-box feedback-box--${statusClass} ${sizeClass}`;
 
 	let statusMsg;
-	if (status == 1) {
+	if (warnings) {
+		statusMsg = (
+			<>
+				<h1 className='feedback-box__title'>
+					{!!warnings ? 'To spowoduje także usunięcie:' : 'Czy na pewno?'}
+				</h1>
+				{warnings.map((msg) => (
+					<p
+						className='feedback-box__warning'
+						key={msg}>
+						❌ {msg}
+					</p>
+				))}{' '}
+			</>
+		);
+	} else if (status == 1) {
 		statusMsg = successMsg || 'Zmiany zatwierdzone';
 		if (redirectTarget) {
 			setTimeout(() => {
+				statusMsg = null;
 				navigate(redirectTarget);
 				onClose();
 			}, 1000);
@@ -58,21 +84,6 @@ function UserFeedbackBox({
 		} else {
 			statusMsg = error.message;
 		}
-	} else if (warnings) {
-		statusMsg = (
-			<>
-				<h1 className='feedback-box__title'>
-					{!!warnings ? 'To spowoduje także usunięcie:' : 'Czy na pewno?'}
-				</h1>
-				{warnings.map((msg) => (
-					<p
-						className='feedback-box__warning'
-						key={msg}>
-						❌ {msg}
-					</p>
-				))}{' '}
-			</>
-		);
 	}
 
 	return <div className={readyClasses}>{statusMsg}</div>;

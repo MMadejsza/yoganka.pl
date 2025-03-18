@@ -12,13 +12,13 @@ function NewProductScheduleForm() {
 	const location = useLocation();
 	let initialFeedbackConfirmation;
 	const [feedbackConfirmation, setFeedbackConfirmation] = useState(initialFeedbackConfirmation);
+	const [successMsg, setSuccessMsg] = useState(null);
 
 	const {data: status} = useQuery({
 		queryKey: ['authStatus'],
 		queryFn: fetchStatus,
 	});
 
-	let successMsg;
 	const {mutate, isPending, isError, error} = useMutation({
 		mutationFn: (formData) => {
 			return fetch(`/api/admin-console/create-schedule`, {
@@ -42,7 +42,7 @@ function NewProductScheduleForm() {
 		onSuccess: (res) => {
 			queryClient.invalidateQueries([`/admin-console/show-all-products/${params.id}`]);
 			if (res.confirmation || res.code == 200) {
-				successMsg = res.message;
+				setSuccessMsg(res.message);
 				setFeedbackConfirmation(1);
 			} else {
 				setFeedbackConfirmation(0);

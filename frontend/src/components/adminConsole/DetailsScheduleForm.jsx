@@ -10,6 +10,7 @@ function DetailsScheduleForm({scheduleData}) {
 	// !dodaj 'zamknij zapisy
 	let initialFeedbackConfirmation;
 	const [feedbackConfirmation, setFeedbackConfirmation] = useState(initialFeedbackConfirmation);
+	const [successMsg, setSuccessMsg] = useState(null);
 
 	const {data: status} = useQuery({
 		queryKey: ['authStatus'],
@@ -27,12 +28,13 @@ function DetailsScheduleForm({scheduleData}) {
 				body: JSON.stringify(formData),
 				credentials: 'include', // include cookies
 			}).then((response) => {
-				if (!response.ok) {
-					return response.json().then((err) => {
-						throw new Error(err.message || 'Błąd');
-					});
-				}
-				return response.json();
+				return response.json().then((data) => {
+					if (!response.ok) {
+						// reject with backend data
+						return Promise.reject(data);
+					}
+					return data;
+				});
 			});
 		},
 		onSuccess: (res) => {
@@ -43,6 +45,7 @@ function DetailsScheduleForm({scheduleData}) {
 			queryClient.invalidateQueries(['query', `/admin-console/show-all-schedules`]);
 
 			if (res.confirmation) {
+				setSuccessMsg(res.message);
 				setFeedbackConfirmation(1);
 			} else {
 				setFeedbackConfirmation(0);
@@ -149,6 +152,7 @@ function DetailsScheduleForm({scheduleData}) {
 	let feedback = (feedbackConfirmation !== undefined || isError) && (
 		<UserFeedbackBox
 			status={feedbackConfirmation}
+			successMsg={successMsg}
 			isPending={isPending}
 			isError={isError}
 			error={error}

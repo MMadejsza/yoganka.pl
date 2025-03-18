@@ -166,11 +166,11 @@
 				padding-top: 2rem;
 			}
 
-			&:not(.booked) span {
-				cursor: pointer;
-				color: map.get(var.$colors, accent-bcg);
-				text-shadow: map.get(var.$shadows, active-text-icons-shadow);
-			}
+			// &:not(.booked) span {
+			// 	cursor: pointer;
+			// 	color: map.get(var.$colors, accent-bcg);
+			// 	text-shadow: map.get(var.$shadows, active-text-icons-shadow);
+			// }
 
 			&.booked {
 				background-color: color.adjust(green, $lightness: 80%);
@@ -386,13 +386,13 @@
 					}
 				}
 			}
-			.action-btns {
-				flex-basis: 10%;
-				height: 100%;
-				@include mixin.flex(row, center, center);
-				gap: 1rem;
-			}
 		}
+	}
+	.action-btns {
+		flex-basis: 10%;
+		height: 100%;
+		@include mixin.flex(row, center, center);
+		gap: 1rem;
 	}
 	.table-form-btn {
 		@include mixin.flex(row, center, center);

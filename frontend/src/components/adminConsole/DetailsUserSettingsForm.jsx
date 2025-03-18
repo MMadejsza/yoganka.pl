@@ -10,6 +10,8 @@ function DetailsUserSettingsForm({settingsData, customerAccessed, adminAccessed}
 	const params = useParams();
 	let initialFeedbackConfirmation;
 	const [feedbackConfirmation, setFeedbackConfirmation] = useState(initialFeedbackConfirmation);
+	const [successMsg, setSuccessMsg] = useState(null);
+
 	console.log('settingsData', settingsData);
 	const {data: status} = useQuery({
 		queryKey: ['authStatus'],
@@ -45,6 +47,7 @@ function DetailsUserSettingsForm({settingsData, customerAccessed, adminAccessed}
 		? `/api/admin-console/edit-user-settings/${settingsData?.UserPrefID}`
 		: null;
 	console.log('dynamicMutationAddress', dynamicMutationAddress);
+
 	const {mutate, isPending, isError, error} = useMutation({
 		mutationFn: (formData) => {
 			return fetch(dynamicMutationAddress, {
@@ -56,16 +59,20 @@ function DetailsUserSettingsForm({settingsData, customerAccessed, adminAccessed}
 				body: JSON.stringify(formData),
 				credentials: 'include', // include cookies
 			}).then((response) => {
-				if (!response.ok) {
-					throw new Error('Błąd');
-				}
-				return response.json();
+				return response.json().then((data) => {
+					if (!response.ok) {
+						// reject with backend data
+						return Promise.reject(data);
+					}
+					return data;
+				});
 			});
 		},
 		onSuccess: (res) => {
 			queryClient.invalidateQueries(['query', '/konto/ustawienia']);
 			queryClient.invalidateQueries(['query', `/admin-console/show-all-users/${params.id}`]);
 			if (res.confirmation) {
+				setSuccessMsg(res.message);
 				setFeedbackConfirmation(1);
 			} else {
 				setFeedbackConfirmation(0);
@@ -196,6 +203,7 @@ function DetailsUserSettingsForm({settingsData, customerAccessed, adminAccessed}
 			isPending={isPending}
 			isError={isError}
 			error={error}
+			successMsg={successMsg}
 			size='small'
 		/>
 	);

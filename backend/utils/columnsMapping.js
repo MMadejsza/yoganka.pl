@@ -15,8 +15,8 @@ const columnMaps = {
 
 	Customer: {
 		// UserID: 'ID użytkownika',
-		FirstName: 'Imię',
-		LastName: 'Nazwisko',
+		// FirstName: 'Imię',
+		// LastName: 'Nazwisko',
 		CustomerID: 'ID',
 		['ID klienta-użytkownika']: 'Uczestnik-Konto',
 		['Imię Nazwisko']: 'Imię Nazwisko',

@@ -927,6 +927,70 @@ export const postEditSchedule = async (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
+//@ ATTENDANCE
+export const postDeleteAttendanceRecord = (req, res, next) => {
+	const controllerName = 'postDeleteAttendanceRecord';
+	log(controllerName);
+	console.log(req.body);
+
+	const {attendanceCustomerID, attendanceBookingID} = req.body;
+
+	models.BookedSchedule.findOne({
+		where: {CustomerID: attendanceCustomerID, BookingID: attendanceBookingID},
+	})
+		.then((foundRecord) => {
+			if (!foundRecord) {
+				errCode = 404;
+				throw new Error('Nie znaleziono rekordu obecności w dzienniku.');
+			}
+			return foundRecord.destroy();
+		})
+		.then((deletedCount) => {
+			if (!deletedCount) {
+				errCode = 404;
+				throw new Error('Nie usunięto rekordu.');
+			}
+
+			console.log('\n✅✅✅ admin postDeleteAttendanceRecord UPDATE successful');
+			return res.status(200).json({
+				confirmation: 1,
+				message: 'Rekord obecności usunięty.',
+			});
+		})
+		.catch((err) => catchErr(res, errCode, err, controllerName));
+};
+
+export const postMarkAbsent = (req, res, next) => {
+	const controllerName = 'postMarkAbsent';
+	log(controllerName);
+
+	const {attendanceCustomerID, attendanceBookingID} = req.body;
+
+	models.BookedSchedule.findOne({
+		where: {CustomerID: attendanceCustomerID, BookingID: attendanceBookingID},
+	})
+		.then((foundRecord) => {
+			if (!foundRecord) {
+				errCode = 404;
+				throw new Error('Nie znaleziono rekordu obecności w dzienniku.');
+			}
+			return foundRecord.update({
+				Attendance: 0,
+				DidAction: 'Admin',
+			});
+		})
+		.then((updatedRecord) => {
+			console.log('\n✅✅✅ admin postMarkAbsent UPDATE successful');
+			const status = updatedRecord ? true : false;
+			return res.status(200).json({
+				confirmation: status,
+				message: 'Uczestnik oznaczony jako nieobecny.',
+				affectedRows: status ? 1 : 0,
+			});
+		})
+		.catch((err) => catchErr(res, errCode, err, controllerName));
+};
+
 //@ FEEDBACK
 export const showAllParticipantsFeedback = (req, res, next) => {
 	const controllerName = 'showAllParticipantsFeedback';
@@ -1134,10 +1198,10 @@ export const showProductByID = (req, res, next) => {
 				include: [
 					{
 						model: models.Booking, // Booking which has relation through BookedSchedule
-						through: {}, // omit data from mid table
+						// through: {}, // omit data from mid table
 						required: false,
 						attributes: {
-							exclude: ['Product', 'CustomerID'],
+							exclude: ['Product'],
 						},
 						include: [
 							{

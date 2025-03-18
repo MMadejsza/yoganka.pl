@@ -136,7 +136,7 @@ function SchedulePage() {
 				active={true}
 				status={status}
 				onOpen={handleOpenModal}
-				onQuickBook={book}
+				onQuickAction={[{symbol: 'shopping_bag_speed', method: book}]}
 				// classModifier={classModifier}
 			/>
 		);
