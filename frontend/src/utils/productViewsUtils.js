@@ -190,21 +190,21 @@ export const calculateProductStats = (product, schedules) => {
 	const medianReviewersPercentage = `${medianReviewersPercentageValue}%`;
 
 	const stats = {
-		scheduleRecords: scheduleRecords, // Podsumowanie sesji
+		scheduleRecords: scheduleRecords,
 		attendedBookings: attendedBookings,
-		totalBookings: bookings, // Lista rezerwacji
+		totalBookings: bookings,
 		reviews: reviews,
 		totalSchedulesAmount: totalSchedules,
 		totalTime: formattedDuration,
 		revenue: `${Math.round(totalRevenue * 100) / 100}zł`,
 		medianParticipantsAge: medianAge,
 		totalParticipantsAmount: totalParticipantsAmount,
-		avgParticipantsAmountPerSesh: avgParticipantsAmountPerSesh, // Średnia liczba uczestników/termin
-		medianParticipantsAmountPerSesh: medianParticipantsAmountPerSesh, // Mediana liczby uczestników/termin
-		avgAttendancePercentagePerSesh: avgAttendancePercentagePerSesh, // Średnia frekwencja/termin
-		medianAttendancePerSesh: medianAttendancePerSesh, // Mediana frekwencji/termin
-		avgReviewersPercentage: avgReviewersPercentage, // Średni % opinii/termin
-		medianReviewersPercentage: medianReviewersPercentage, // Mediana % opinii/termin
+		avgParticipantsAmountPerSesh: avgParticipantsAmountPerSesh,
+		medianParticipantsAmountPerSesh: medianParticipantsAmountPerSesh,
+		avgAttendancePercentagePerSesh: avgAttendancePercentagePerSesh,
+		medianAttendancePerSesh: medianAttendancePerSesh,
+		avgReviewersPercentage: avgReviewersPercentage,
+		medianReviewersPercentage: medianReviewersPercentage,
 		avgFeedbackScore: Math.round(avgFeedbackScore * 100) / 100,
 	};
 	console.log(`❗❗❗ calculateProductStats stats`, stats);
@@ -231,7 +231,6 @@ export const calculateScheduleStats = (product, schedule) => {
 
 	const now = new Date();
 
-	// Kluczowa zmiana:
 	// Używamy BookedSchedules (z atrybutem Attendance) do określenia faktycznego uczestnictwa
 	const attendedRecords = schedule
 		? schedule.BookedSchedules?.filter((abs) => abs.Attendance === true || abs.Attendance === 1)
@@ -313,9 +312,9 @@ export const calculateScheduleStats = (product, schedule) => {
 		attendedBookingsAmount > 0 ? Math.round((totalReviews / attendedBookingsAmount) * 100) : 0;
 
 	const stats = {
-		totalBookings: totalBookings, // Zawiera wszystkie minione terminy, nawet puste
+		totalBookings: totalBookings,
 		totalBookingsAmount: totalBookingsAmount,
-		attendedBookings: attendedBookings, // Dane tylko z potwierdzonych uczestnictw (BookedSchedules)
+		attendedBookings: attendedBookings,
 		totalParticipantsAmount: attendedBookingsAmount,
 		medianParticipantsAge: medianAge,
 		avgAttendancePercentage: `${avgAttendancePercentage}%`,
@@ -323,7 +322,7 @@ export const calculateScheduleStats = (product, schedule) => {
 		avgReviewersPercentage: `${avgReviewersPercentage}%`,
 		avgFeedbackScore: avgFeedbackScore,
 		totalTime: formattedDuration,
-		revenue: `${Math.round(totalRevenue * 100) / 100}zł`, // Przychód liczony na podstawie rezerwacji (Bookings)
+		revenue: `${Math.round(totalRevenue * 100) / 100}zł`,
 	};
 
 	console.log(`❗❗❗ calculateScheduleStats stats`, stats);
