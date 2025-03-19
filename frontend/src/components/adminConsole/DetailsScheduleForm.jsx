@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {useQuery, useMutation} from '@tanstack/react-query';
 import {queryClient, fetchStatus} from '../../utils/http.js';
-import {formatIsoDateTime} from '../../utils/productViewsUtils.js';
+import {formatIsoDateTime} from '../../utils/dateTime.js';
 import {useInput} from '../../hooks/useInput.js';
 import InputLogin from '../login/InputLogin.jsx';
 import UserFeedbackBox from './FeedbackBox.jsx';

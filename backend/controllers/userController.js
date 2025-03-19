@@ -99,7 +99,7 @@ export const getShowAllSchedules = (req, res, next) => {
 						attributeType === 'DATEONLY' ||
 						attributeType === 'DATETIME'
 					) {
-						newRecord[newKey] = formatIsoDateTime(jsonRecord[key]);
+						newRecord[newKey] = formatIsoDateTime(jsonRecord[key], true);
 					} else if (key === 'Product' && jsonRecord[key]) {
 						newRecord['Typ'] = jsonRecord[key].Type; //  flatten object
 						newRecord['Nazwa'] = jsonRecord[key].Name;

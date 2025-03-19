@@ -4,33 +4,9 @@ import {
 	calculateAge,
 	calculateMode,
 	calculateMedian,
-	getWeekDay as getWeekDayFromProduct,
 } from './customerViewsUtils.js';
 
-//@ stats helpers
-export const getWeekDay = getWeekDayFromProduct;
-export const formatIsoDateTime = (isoString) => {
-	// Create object Date
-	const date = new Date(isoString);
-
-	// format [date] [time (hh:mm)]
-	const formattedDate = date.toLocaleString('pl-PL', {
-		year: 'numeric',
-		month: '2-digit',
-		day: '2-digit',
-	});
-	let formattedTime;
-	if (isoString?.length != 10) {
-		formattedTime = date.toLocaleString('pl-PL', {
-			hour: '2-digit',
-			minute: '2-digit',
-			hour12: false,
-		});
-	} else formattedTime = '';
-
-	// Concat
-	return `${formattedTime} | ${formattedDate}`;
-};
+import {formatIsoDateTime} from './dateTime.js';
 
 //@ stats calculation
 export const calculateProductStats = (product, schedules) => {
@@ -70,7 +46,7 @@ export const calculateProductStats = (product, schedules) => {
 
 				reviews.push({
 					id: feedback.FeedbackID,
-					date: feedback.SubmissionDate,
+					date: formatIsoDateTime(feedback.SubmissionDate),
 					customer: `${feedback.Customer.FirstName} ${feedback.Customer.LastName}`,
 					rating: feedback.Rating,
 					review: feedback.Text,
@@ -100,13 +76,11 @@ export const calculateProductStats = (product, schedules) => {
 					const isoTimeStamp = new Date(booking.BookedSchedule.TimeStamp).toISOString();
 					attendedBookings.push({
 						id: booking.BookingID,
-						date: booking.Date,
+						date: formatIsoDateTime(booking.Date),
 						customerID: booking.Customer.CustomerID,
 						customer: formattedCustomer,
 						value: booking.AmountPaid,
-						timestamp: `${getWeekDay(isoTimeStamp.split('T')[0])} | ${formatIsoDateTime(
-							isoTimeStamp,
-						)}`,
+						timestamp: formatIsoDateTime(isoTimeStamp),
 						method: booking.PaymentMethod,
 						Attendance: 1,
 					});
@@ -126,7 +100,7 @@ export const calculateProductStats = (product, schedules) => {
 
 		scheduleRecords.push({
 			ScheduleID: schedule.ScheduleID,
-			Date: schedule.Date,
+			Date: formatIsoDateTime(schedule.Date),
 			StartTime: schedule.StartTime,
 			Location: schedule.Location,
 			bookingsNumber: schedule.Bookings.length,
@@ -260,11 +234,9 @@ export const calculateScheduleStats = (product, schedule) => {
 		const isoTimeStamp = new Date(record.TimeStamp).toISOString();
 		attendedBookings.push({
 			id: record.BookingID, // Zakładamy, że rekord BookedSchedule zawiera odniesienie do BookingID
-			date: record.Booking.Date || bs.Date, //! Jeśli dostępna, inaczej używamy daty terminu
+			date: formatIsoDateTime(record.Booking.Date) || formatIsoDateTime(bs.Date), //! Jeśli dostępna, inaczej używamy daty terminu
 			customer: `${record.Customer.FirstName} ${record.Customer.LastName}`,
-			timestamp: `${getWeekDay(isoTimeStamp.split('T')[0])} | ${formatIsoDateTime(
-				isoTimeStamp,
-			)}`,
+			timestamp: `${formatIsoDateTime(isoTimeStamp)}`,
 
 			customerID: record.Customer.CustomerID,
 			value: record.Booking.AmountPaid, // Informacja z BookedSchedule – dla odniesienia (nie wpływa na revenue)
@@ -280,7 +252,7 @@ export const calculateScheduleStats = (product, schedule) => {
 			feedbackCount++;
 			reviews.push({
 				id: feedback.FeedbackID,
-				date: feedback.SubmissionDate,
+				date: formatIsoDateTime(feedback.SubmissionDate),
 				customer: `${feedback.Customer.FirstName} ${feedback.Customer.LastName}`,
 				rating: feedback.Rating,
 				review: feedback.Text,

@@ -1,4 +1,5 @@
-import {formatIsoDateTime} from '../../utils/productViewsUtils.js';
+import {formatIsoDateTime} from '../../utils/dateTime.js';
+
 function DetailsUser({userData, customerView, isUserAccountPage}) {
 	console.log(isUserAccountPage);
 	const title = isUserAccountPage ? `Dane konta:` : `Konto (ID ${userData.UserID}):`;

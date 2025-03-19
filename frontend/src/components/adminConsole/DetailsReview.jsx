@@ -1,4 +1,4 @@
-import {formatIsoDateTime} from '../../utils/productViewsUtils.js';
+import {formatIsoDateTime} from '../../utils/dateTime.js';
 
 function DetailsReview({reviewData}) {
 	return (

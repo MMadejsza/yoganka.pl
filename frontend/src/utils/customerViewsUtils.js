@@ -1,3 +1,5 @@
+import {formatIsoDateTime, getWeekDay} from './dateTime.js';
+
 export function calculateAge(dateString) {
 	const birthDate = new Date(dateString);
 	const today = new Date();
@@ -69,11 +71,6 @@ export function secondsToDuration(totalSeconds, limiter) {
 
 	return {days: dd, hours: hh, minutes: mm, seconds: ss};
 }
-export const getWeekDay = (dateStr) => {
-	const date = new Date(dateStr);
-	const days = ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'];
-	return days[date.getDay()];
-};
 
 //@ stats calculation
 export const calculateStats = (customer) => {
@@ -100,7 +97,7 @@ export const calculateStats = (customer) => {
 
 		totalBookings.push({
 			id: booking.BookingID,
-			date: booking.Date,
+			date: formatIsoDateTime(booking.Date),
 			classes: booking.Product,
 			totalValue: booking.AmountPaid,
 			method: booking.PaymentMethod,
@@ -119,7 +116,7 @@ export const calculateStats = (customer) => {
 			invoices.push({
 				id: invoiceID,
 				bId: invoiceBID,
-				date: invoiceDate,
+				date: formatIsoDateTime(invoiceDate),
 				due: invoiceDue,
 				totalValue: invoiceTotalValue,
 				status: invoiceStatus,
@@ -189,7 +186,7 @@ export const calculateStats = (customer) => {
 				${getWeekDay(scheduleDate)}
 				${scheduleStartTime}
 				`,
-				date: feedback.SubmissionDate,
+				date: formatIsoDateTime(feedback.SubmissionDate),
 				rating: feedback.Rating,
 				review: feedback.Text,
 				delay: feedback.Delay,

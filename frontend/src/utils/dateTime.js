@@ -1,3 +1,9 @@
+export const getWeekDay = (dateStr) => {
+	const date = new Date(dateStr);
+	const days = ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'];
+	return days[date.getDay()];
+};
+
 export const formatIsoDateTime = (isoString, isSchedule) => {
 	// Create object Date
 	const date = new Date(isoString);
@@ -26,9 +32,4 @@ export const formatIsoDateTime = (isoString, isSchedule) => {
 		return `${formattedDate}`;
 	}
 	return `${formattedDate} (${getWeekDay(date)}${formattedTime ? ` - ` + formattedTime : ``})`;
-};
-export const getWeekDay = (dateStr) => {
-	const date = new Date(dateStr);
-	const days = ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'];
-	return days[date.getDay()];
 };

@@ -566,14 +566,15 @@ export const showAllSchedules = (req, res, next) => {
 				// 🔄 Iterate after each column in user record
 				for (const key in jsonRecord) {
 					const newKey = columnMap[key] || key; // New or original name if not specified
-					const attributeType = attributes[key]?.type.constructor.key?.toUpperCase();
-					if (
-						attributeType === 'DATE' ||
-						attributeType === 'DATEONLY' ||
-						attributeType === 'DATETIME'
-					) {
-						newRecord[newKey] = jsonRecord[key]; //formatIsoDateTime(jsonRecord[key]);
-					} else if (key === 'Product' && jsonRecord[key]) {
+					// const attributeType = attributes[key]?.type.constructor.key?.toUpperCase();
+					// if (
+					// 	attributeType === 'DATE' ||
+					// 	attributeType === 'DATEONLY' ||
+					// 	attributeType === 'DATETIME'
+					// ) {
+					// 	newRecord[newKey] = jsonRecord[key];
+					// } else
+					if (key === 'Product' && jsonRecord[key]) {
 						newRecord['Typ'] = jsonRecord[key].Type; //  flatten object
 						newRecord['Nazwa'] = jsonRecord[key].Name;
 					} else if (key === 'Bookings') {
@@ -1453,7 +1454,7 @@ export const showAllBookings = (req, res, next) => {
 					const attributeType = attributes[key]?.type.constructor.key?.toUpperCase();
 					const newKey = columnMap[key] || key;
 					if (['DATE', 'DATEONLY', 'DATETIME'].includes(attributeType)) {
-						newRecord[newKey] = jsonRecord[key]; //formatIsoDateTime(jsonRecord[key]);
+						newRecord[newKey] = jsonRecord[key];
 					} else if (key === 'Customer') {
 						const customer = jsonRecord[key]['Imię Nazwisko'];
 						const customerID = jsonRecord.CustomerID;

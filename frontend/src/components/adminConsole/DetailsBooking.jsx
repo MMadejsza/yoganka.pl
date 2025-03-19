@@ -1,4 +1,4 @@
-import {formatIsoDateTime, getWeekDay} from '../../utils/productViewsUtils.js';
+import {formatIsoDateTime} from '../../utils/dateTime.js';
 
 function DetailsBooking({bookingData}) {
 	const booking = bookingData;
@@ -15,7 +15,7 @@ function DetailsBooking({bookingData}) {
 				<li className='user-container__section-record modal-checklist__li'>
 					<p className='user-container__section-record-label'>Data rezerwacji:</p>
 					<p className='user-container__section-record-content'>
-						{`${formatIsoDateTime(booking.Date)} ${getWeekDay(booking.Date)}`}
+						{`${formatIsoDateTime(booking.Date)}`}
 					</p>
 				</li>
 				<li className='user-container__section-record modal-checklist__li'>

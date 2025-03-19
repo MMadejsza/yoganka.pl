@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 
-import {getWeekDay} from '../../utils/productViewsUtils.js';
+import {getWeekDay} from '../../utils/dateTime.js';
 import ModalTable from './ModalTable';
 import NewProductScheduleForm from './NewProductScheduleForm';
 

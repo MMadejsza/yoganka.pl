@@ -1,10 +1,10 @@
 import {useState} from 'react';
 import {useMutation, useQuery} from '@tanstack/react-query';
-import {queryClient, fetchData, fetchStatus} from '../../utils/http.js';
-import {getWeekDay} from '../../utils/customerViewsUtils.js';
 import {useInput} from '../../hooks/useInput.js';
 import InputLogin from '../login/InputLogin.jsx';
 import UserFeedbackBox from './FeedbackBox.jsx';
+import {queryClient, fetchData, fetchStatus} from '../../utils/http.js';
+import {getWeekDay} from '../../utils/dateTime.js';
 import * as val from '../../utils/validation.js';
 
 function NewBookingForm({onClose}) {

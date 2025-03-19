@@ -1,4 +1,5 @@
-import {getWeekDay} from '../../utils/customerViewsUtils.js';
+import {getWeekDay} from '../../utils/dateTime.js';
+
 import ModalTable from './ModalTable';
 
 function DetailsCustomerReviews({reviews, placement}) {
