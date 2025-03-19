@@ -77,6 +77,7 @@ export const getWeekDay = (dateStr) => {
 
 //@ stats calculation
 export const calculateStats = (customer) => {
+	console.log(`❗❗❗ calculateStats customer`, customer);
 	// console.log(`calculateStats passed customer`, customer);
 	const today = new Date().toISOString().split('T')[0];
 	const scheduleRecords = [];
@@ -215,5 +216,8 @@ export const calculateStats = (customer) => {
 		},
 		totalHours: `${splitDuration.hours}:${splitDuration.minutes}`,
 	};
+
+	console.log(`❗❗❗ calculateStats stats`, stats);
+
 	return stats;
 };

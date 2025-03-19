@@ -835,7 +835,7 @@ export const postDeleteSchedule = (req, res, next) => {
 				if (foundRecord) {
 					errCode = 409;
 					throw new Error(
-						'Nie można usunąć terminu, na który są zapisane osoby. Najpierw USUŃ obecności.',
+						'Nie można usunąć terminu, który posiada rekordy obecności (obecny/anulowany). Najpierw USUŃ rekordy obecności w konkretnym terminie.',
 					);
 				}
 				return foundSchedule.destroy();
@@ -1226,7 +1226,8 @@ export const showProductByID = (req, res, next) => {
 				include: [
 					{
 						model: models.Booking, // Booking which has relation through BookedSchedule
-						// through: {}, // omit data from mid table
+						as: 'Bookings',
+						through: {}, // omit data from mid table
 						required: false,
 						attributes: {
 							exclude: ['Product'],

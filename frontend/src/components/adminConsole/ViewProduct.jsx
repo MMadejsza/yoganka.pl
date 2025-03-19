@@ -52,6 +52,7 @@ function ViewProduct({data, isAdminPanel}) {
 					<DetailsProductSchedules
 						scheduleRecords={prodStats.scheduleRecords}
 						status={status}
+						isAdminPage={isAdminPanel}
 					/>
 				</div>
 			)}

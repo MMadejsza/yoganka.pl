@@ -77,7 +77,7 @@ function DetailsProductBookings({type, stats, isAdminPage}) {
 	const table = (
 		<ModalTable
 			headers={['ID', 'Data rezerwacji', 'Uczestnik', 'Zadatek', 'Metoda płatności']}
-			keys={['BookingID', 'Date', 'Customer', 'AmountPaid', 'PaymentMethod']}
+			keys={['BookingID', 'Date', 'customer', 'AmountPaid', 'PaymentMethod']}
 			content={bookingsArray}
 			active={false}
 		/>
@@ -90,7 +90,7 @@ function DetailsProductBookings({type, stats, isAdminPage}) {
 			{feedback}
 			<ModalTable
 				headers={['ID', 'Data rezerwacji', 'Uczestnik', 'Zadatek', 'Metoda płatności', '']}
-				keys={['BookingID', 'Date', 'Customer', 'AmountPaid', 'PaymentMethod', '']}
+				keys={['BookingID', 'Date', 'customer', 'AmountPaid', 'PaymentMethod', '']}
 				content={cancelledBookingsArr}
 				active={false}
 				isAdminPage={isAdminPage}

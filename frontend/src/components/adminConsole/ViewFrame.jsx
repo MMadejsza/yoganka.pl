@@ -31,6 +31,7 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 	const [deleteWarningTriggered, setDeleteWarningTriggered] = useState(false);
 	let initialFeedbackConfirmation;
 	const [deleteConfirmation, setDeleteConfirmation] = useState(initialFeedbackConfirmation);
+	const [deleteErrorMessage, setDeleteErrorMessage] = useState(null);
 
 	const {data, isPending, isError, error} = useQuery({
 		queryKey: ['query', location.pathname],
@@ -60,6 +61,7 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 		isPending: isDeletePending,
 		isError: isDeleteError,
 		error: deleteError,
+		reset,
 	} = useMutation({
 		mutationFn: () => {
 			return fetch(`/api/admin-console/${dataDeleteQuery}`, {
@@ -80,8 +82,13 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 			});
 		},
 		onSuccess: (res) => {
-			setDeleteConfirmation(res.confirmation ? 1 : 0);
+			setDeleteConfirmation(res.confirmation);
 			queryClient.invalidateQueries(['query', `/admin-console/show-all-users/${params.id}`]);
+		},
+		onError: (err) => {
+			setDeleteConfirmation(0);
+			setDeleteErrorMessage(err.message);
+			console.error('Błąd usuwania:', err);
 		},
 	});
 
@@ -94,13 +101,14 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 	// };
 
 	const handleDelete = () => {
-		if (deleteWarningTriggered) {
-			console.log('❌ DELETED triggered ');
-			console.log('❌ dataDeleteQuery ', dataDeleteQuery);
-
+		if (!deleteWarningTriggered) {
+			// 1st click
+			setDeleteWarningTriggered(true);
+		} else {
+			// 2nd click
+			reset();
 			deleteRecord();
 		}
-		setDeleteWarningTriggered(true);
 	};
 	const handleCancelDelete = () => {
 		setDeleteWarningTriggered(false);
@@ -270,11 +278,11 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 					dataDisplay
 				) : (
 					<UserFeedbackBox
-						warnings={deleteWarnings}
+						warnings={!deleteErrorMessage ? deleteWarnings : []}
 						status={deleteConfirmation}
 						isPending={isDeletePending}
 						isError={isDeleteError}
-						error={deleteError}
+						error={deleteErrorMessage ? {message: deleteErrorMessage} : null}
 						redirectTarget={redirectToPage}
 						onClose={onClose}
 					/>

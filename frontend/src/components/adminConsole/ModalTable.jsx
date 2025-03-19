@@ -101,7 +101,7 @@ function ModalTable({
 								if (key == '') {
 									value = (
 										<div className='action-btns'>
-											{onQuickAction.map((action, index) => (
+											{onQuickAction?.map((action, index) => (
 												<button
 													key={index}
 													className={`form-action-btn table-form-btn table-form-btn--submit`}>

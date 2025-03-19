@@ -34,7 +34,9 @@ export const formatIsoDateTime = (isoString) => {
 
 //@ stats calculation
 export const calculateProductStats = (product, schedules) => {
-	console.log(`schedules: `, schedules);
+	console.log(`❗❗❗ calculateProductStats product`, product);
+	console.log(`❗❗❗ calculateProductStats schedules`, schedules);
+	// console.log(`schedules: `, schedules);
 	const attendedBookings = [];
 	const scheduleRecords = [];
 	const bookings = [];
@@ -109,7 +111,7 @@ export const calculateProductStats = (product, schedules) => {
 						Attendance: 1,
 					});
 				}
-				booking.Customer = formattedCustomer;
+				booking.customer = formattedCustomer;
 				bookings.push(booking);
 			}
 			scheduleAttendance = Math.round((scheduleParticipantsAmount / schedule.Capacity) * 100);
@@ -205,10 +207,15 @@ export const calculateProductStats = (product, schedules) => {
 		medianReviewersPercentage: medianReviewersPercentage, // Mediana % opinii/termin
 		avgFeedbackScore: Math.round(avgFeedbackScore * 100) / 100,
 	};
+	console.log(`❗❗❗ calculateProductStats stats`, stats);
+
 	return stats;
 };
 
 export const calculateScheduleStats = (product, schedule) => {
+	console.log(`❗❗❗ calculateScheduleStats product`, product);
+	console.log(`❗❗❗ calculateScheduleStats schedule`, schedule);
+
 	// Inicjalizacja zmiennych statystycznych
 	const attendedBookings = [];
 	const totalBookings = [];
@@ -234,7 +241,7 @@ export const calculateScheduleStats = (product, schedule) => {
 		// Tworzymy obiekt Date z daty i godziny terminu
 		const scheduleDateTime = new Date(`${bs.Date}T${bs.StartTime}:00`);
 		// Uważamy termin za "odbyte", jeśli jego data już minęła
-		bs.Booking.Customer = `${bs.Customer.FirstName} ${bs.Customer.LastName} (${bs.Customer.CustomerID})`;
+		bs.Booking.customer = `${bs.Customer.FirstName} ${bs.Customer.LastName} (${bs.Customer.CustomerID})`;
 		bs.Booking.Attendance = bs.Attendance;
 		totalBookings.push(bs.Booking);
 		if (scheduleDateTime > now) return;
@@ -319,5 +326,6 @@ export const calculateScheduleStats = (product, schedule) => {
 		revenue: `${Math.round(totalRevenue * 100) / 100}zł`, // Przychód liczony na podstawie rezerwacji (Bookings)
 	};
 
+	console.log(`❗❗❗ calculateScheduleStats stats`, stats);
 	return stats;
 };

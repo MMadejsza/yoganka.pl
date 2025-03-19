@@ -33,7 +33,6 @@ router.get('/show-all-invoices', adminC.showAllInvoices);
 router.post('/create-user', adminC.postCreateUser);
 router.post('/mark-absent', adminC.postMarkAbsent);
 router.post('/mark-present', adminC.postMarkPresent);
-router.post('/delete-attendance-record', adminC.postDeleteAttendanceRecord);
 router.post('/edit-user-settings/:id', adminC.postEditSettings);
 router.post('/create-customer', adminC.postCreateCustomer);
 router.post('/create-schedule', adminC.postCreateScheduleRecord);
@@ -49,6 +48,7 @@ router.post('/edit-schedule-data/:id', adminC.postEditSchedule);
 // # DELETE
 router.post('/delete-user/:id', adminC.postDeleteUser);
 router.post('/delete-customer/:id', adminC.postDeleteCustomer);
+router.post('/delete-attendance-record', adminC.postDeleteAttendanceRecord);
 router.post('/delete-product/:id', adminC.postDeleteProduct);
 router.post('/delete-schedule/:id', adminC.postDeleteSchedule);
 router.post('/delete-booking/:id', adminC.postDeleteBooking);

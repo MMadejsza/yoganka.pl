@@ -41,7 +41,7 @@ function UserFeedbackBox({
 	const readyClasses = `feedback-box feedback-box--${statusClass} ${sizeClass}`;
 
 	let statusMsg;
-	if (warnings) {
+	if (warnings && !error && !status) {
 		statusMsg = (
 			<>
 				<h1 className='feedback-box__title'>
