@@ -1,17 +1,21 @@
-import {calculateAge} from '../../utils/customerViewsUtils.js';
+import React, {useState} from 'react';
 import DetailsCustomerForm from './DetailsCustomerForm.jsx';
+import {calculateAge} from '../../utils/customerViewsUtils.js';
 
-function DetailsCustomer({
-	customerData,
-	isUserAccountPage,
-	isEditing,
-	customerAccessed,
-	adminAccessed,
-}) {
+function DetailsCustomer({customerData, isUserAccountPage, customerAccessed, adminAccessed}) {
 	console.log('customerData', customerData);
 	const title = isUserAccountPage
 		? `Dane kontaktowe:`
 		: `Uczestnik (ID ${customerData.CustomerID}):`;
+
+	const [isEditing, setIsEditing] = useState(false);
+	const handleStartEditing = () => {
+		setIsEditing(true);
+		// navigate('/konto/ustawienia');
+	};
+	const handleCloseEditing = () => {
+		setIsEditing(false);
+	};
 
 	let content = isEditing ? (
 		<DetailsCustomerForm
@@ -75,6 +79,24 @@ function DetailsCustomer({
 			<div className='user-container__main-details modal-checklist'>
 				<h2 className='user-container__section-title modal__title--day'>{title}</h2>
 				{content}
+
+				<div className='user-container__action'>
+					<button
+						className='modal__btn'
+						onClick={isEditing == false ? handleStartEditing : handleCloseEditing}>
+						{isEditing == false ? (
+							<>
+								<span className='material-symbols-rounded nav__icon'>edit</span>{' '}
+								Edytuj
+							</>
+						) : (
+							<>
+								<span className='material-symbols-rounded nav__icon'>undo</span>{' '}
+								Wróć
+							</>
+						)}
+					</button>
+				</div>
 			</div>
 		</>
 	);

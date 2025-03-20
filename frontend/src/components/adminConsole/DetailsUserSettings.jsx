@@ -1,12 +1,7 @@
+import React, {useState} from 'react';
 import DetailsUserSettingsForm from './DetailsUserSettingsForm.jsx';
 
-function DetailsUserSettings({
-	settingsData,
-	isUserAccountPage,
-	isEditing,
-	customerAccessed,
-	adminAccessed,
-}) {
+function DetailsUserSettings({settingsData, isUserAccountPage, customerAccessed, adminAccessed}) {
 	let handedness, fontSize, notifications, animation, theme;
 	const hasPrefs = !!settingsData;
 
@@ -21,6 +16,15 @@ function DetailsUserSettings({
 		: `Ustawienia strony  ${
 				settingsData?.UserID ? '(ID ' + settingsData?.UserPrefID + '):' : '(Domyślne)'
 		  }`;
+
+	const [isEditing, setIsEditing] = useState(false);
+	const handleStartEditing = () => {
+		setIsEditing(true);
+		// navigate('/konto/ustawienia');
+	};
+	const handleCloseEditing = () => {
+		setIsEditing(false);
+	};
 
 	const displayContent = (
 		<ul className='user-container__details-list modal-checklist__list'>
@@ -59,6 +63,22 @@ function DetailsUserSettings({
 		<>
 			<h2 className='user-container__section-title modal__title--day'>{title}</h2>
 			{isEditing ? onEditContent : displayContent}
+
+			<div className='user-container__action'>
+				<button
+					className='modal__btn'
+					onClick={isEditing == false ? handleStartEditing : handleCloseEditing}>
+					{isEditing == false ? (
+						<>
+							<span className='material-symbols-rounded nav__icon'>edit</span> Edytuj
+						</>
+					) : (
+						<>
+							<span className='material-symbols-rounded nav__icon'>undo</span> Wróć
+						</>
+					)}
+				</button>
+			</div>
 		</>
 	);
 }

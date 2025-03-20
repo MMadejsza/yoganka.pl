@@ -1,3 +1,4 @@
+import {useLocation} from 'react-router-dom';
 import DetailsUser from './DetailsUser.jsx';
 import DetailsUserSettings from './DetailsUserSettings.jsx';
 import DetailsCustomer from './DetailsCustomer.jsx';
@@ -10,6 +11,11 @@ import DetailsCustomerReviews from './DetailsCustomerReviews.jsx';
 import {calculateStats} from '../../utils/customerViewsUtils.js';
 
 function ViewCustomer({data}) {
+	const location = useLocation();
+	const customerAccessed = location.pathname.includes('ustawienia');
+	console.log('customerAccessed', customerAccessed);
+	const adminAccessed = location.pathname.includes('admin-console');
+	console.log('adminAccessed', adminAccessed);
 	console.clear();
 	console.log(
 		`📝 
@@ -30,7 +36,11 @@ function ViewCustomer({data}) {
 
 			{/*//@ Personal-customer details */}
 			<div className='user-container__main-details modal-checklist'>
-				<DetailsCustomer customerData={customer} />
+				<DetailsCustomer
+					customerData={customer}
+					customerAccessed={customerAccessed}
+					adminAccessed={adminAccessed}
+				/>
 			</div>
 
 			{/*//@ Personal-user details */}
@@ -41,7 +51,11 @@ function ViewCustomer({data}) {
 				/>
 
 				{user.UserPrefSetting && (
-					<DetailsUserSettings settingsData={user.UserPrefSetting} />
+					<DetailsUserSettings
+						settingsData={user.UserPrefSetting}
+						customerAccessed={customerAccessed}
+						adminAccessed={adminAccessed}
+					/>
 				)}
 			</div>
 

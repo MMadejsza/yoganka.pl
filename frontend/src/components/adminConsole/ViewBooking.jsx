@@ -1,3 +1,4 @@
+import {useLocation} from 'react-router-dom';
 import DetailsCustomer from './DetailsCustomer.jsx';
 import DetailsBooking from './DetailsBooking.jsx';
 import DetailsProductSchedules from './DetailsProductSchedules.jsx';
@@ -5,6 +6,11 @@ import DetailsProductSchedules from './DetailsProductSchedules.jsx';
 // import {calculateStats} from '../../utils/productViewsUtils.js';
 
 function ViewBooking({data, isUserAccountPage}) {
+	const location = useLocation();
+	const customerAccessed = location.pathname.includes('ustawienia');
+	console.log('customerAccessed', customerAccessed);
+	const adminAccessed = location.pathname.includes('admin-console');
+	console.log('adminAccessed', adminAccessed);
 	// console.clear();
 	console.log(
 		`📝
@@ -30,6 +36,8 @@ function ViewBooking({data, isUserAccountPage}) {
 					<DetailsCustomer
 						customerData={customer}
 						isUserAccountPage={isUserAccountPage}
+						customerAccessed={customerAccessed}
+						adminAccessed={adminAccessed}
 					/>
 				</div>
 			)}

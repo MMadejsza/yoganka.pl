@@ -185,6 +185,7 @@ export const postEditSettings = (req, res, next) => {
 
 	const userID = req.params.id;
 	const {handedness, font, notifications, animation, theme} = req.body;
+	console.log(`❗❗❗`, req.body);
 
 	// if preferences don't exist - create new ones:
 	models.UserPrefSettings.findOrCreate({
@@ -199,26 +200,25 @@ export const postEditSettings = (req, res, next) => {
 		},
 	})
 		.then(([preferences, created]) => {
-			const {Handedness, FontSize, Notifications, Animation, Theme} = preferences;
 			if (!created) {
 				// Nothing changed
 				if (
-					Handedness === handedness &&
-					FontSize === font &&
-					Notifications === notifications &&
-					Animation === animation &&
-					Theme === theme
+					preferences.Handedness == !!handedness &&
+					preferences.FontSize == parseInt(font) &&
+					preferences.Notifications == !!notifications &&
+					preferences.Animation == !!animation &&
+					preferences.Theme == !!theme
 				) {
 					// Nothing changed
 					console.log('\n❓❓❓ postEditSettings Admin Preferences no change');
 					return {confirmation: 0, message: 'Brak zmian.'};
 				} else {
 					// Update
-					Handedness = handedness;
-					FontSize = font;
-					Notifications = notifications;
-					Animation = animation;
-					Theme = theme;
+					preferences.Handedness = !!handedness;
+					preferences.FontSize = parseInt(font);
+					preferences.Notifications = !!notifications;
+					preferences.Animation = !!animation;
+					preferences.Theme = !!theme;
 
 					return preferences.save().then(() => {
 						console.log('\n✅✅✅ postEditSettings Admin Preferences Updated');
@@ -240,12 +240,7 @@ export const postEditSettings = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
-// export const showAllUserSettings = (req, res, next) => {
-// 	const controllerName = 'showAllUserSettings';
-// 	log(controllerName);
 
-// 	listAllToTable(res, models.UserPrefSettings, null);
-// };
 //@ CUSTOMERS
 export const showAllCustomers = (req, res, next) => {
 	const controllerName = 'showAllCustomers';
@@ -466,7 +461,12 @@ export const postEditCustomer = (req, res, next) => {
 
 	const customerId = req.params.id;
 
-	const {newPhone, newContactMethod, newLoyalty, newNotes} = req.body;
+	const {
+		phone: newPhone,
+		cMethod: newContactMethod,
+		loyalty: newLoyalty,
+		notes: newNotes,
+	} = req.body;
 
 	if (!newPhone || !newPhone.trim()) {
 		errCode = 400;

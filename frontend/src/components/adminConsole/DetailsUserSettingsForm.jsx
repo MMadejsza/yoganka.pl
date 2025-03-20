@@ -224,6 +224,7 @@ function DetailsUserSettingsForm({settingsData, customerAccessed, adminAccessed}
 				name='handedness'
 				label='Pozycja menu:'
 				value={handednessValue}
+				checked={handednessValue}
 				onFocus={handleHandednessFocus}
 				onBlur={handleHandednessBlur}
 				onChange={handleHandednessChange}
@@ -257,6 +258,7 @@ function DetailsUserSettingsForm({settingsData, customerAccessed, adminAccessed}
 				name='notifications'
 				label='Powiadomienia:'
 				value={notificationsValue}
+				checked={notificationsValue}
 				onFocus={handleNotificationsFocus}
 				onBlur={handleNotificationsBlur}
 				onChange={handleNotificationsChange}
@@ -272,6 +274,7 @@ function DetailsUserSettingsForm({settingsData, customerAccessed, adminAccessed}
 				name='animation'
 				label='Animacje'
 				value={animationsValue}
+				checked={animationsValue}
 				onFocus={handleAnimationFocus}
 				onBlur={handleAnimationBlur}
 				onChange={handleAnimationChange}
@@ -287,6 +290,7 @@ function DetailsUserSettingsForm({settingsData, customerAccessed, adminAccessed}
 				name='theme'
 				label='Motyw:'
 				value={themeValue}
+				checked={themeValue}
 				onFocus={handleThemeFocus}
 				onBlur={handleThemeBlur}
 				onChange={handleThemeChange}

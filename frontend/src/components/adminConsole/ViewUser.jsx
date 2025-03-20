@@ -4,17 +4,15 @@ import DetailsUser from './DetailsUser.jsx';
 import DetailsUserSettings from './DetailsUserSettings.jsx';
 import DetailsCustomer from './DetailsCustomer.jsx';
 
-function ViewUser({data, isUserAccountPage, isEditing}) {
+function ViewUser({data, isUserAccountPage}) {
 	const location = useLocation();
+	const customerAccessed = location.pathname.includes('ustawienia');
+	console.log('customerAccessed', customerAccessed);
+	const adminAccessed = location.pathname.includes('admin-console');
+	console.log('adminAccessed', adminAccessed);
+
 	// const isUserSettings = location.pathname.includes('konto/ustawienia');
-	const [editingState, setEditingState] = useState(false);
-	const handleStartEditing = () => {
-		setEditingState(true);
-		// navigate('/konto/ustawienia');
-	};
-	const handleCloseEditing = () => {
-		setEditingState(false);
-	};
+
 	// console.clear();
 	console.log(
 		`📝 user object from backend:
@@ -26,19 +24,11 @@ function ViewUser({data, isUserAccountPage, isEditing}) {
 		`,
 		isUserAccountPage,
 	);
-	console.log(
-		`📝 isEditing:
-		`,
-		isEditing,
-	);
+
 	const user = data.user || data.customer.User;
 	const customer = data.customer || data.user.Customer;
 	const isAdmin = data.user?.Role == 'Admin' || data.customer?.User.Role == 'Admin'; //|| data.user.User?.Role == 'Admin';
 	const name = customer ? `${customer.FirstName} ${customer.LastName}` : user.Email;
-	const customerAccessed = location.pathname.includes('ustawienia');
-	console.log('customerAccessed', customerAccessed);
-	const adminAccessed = location.pathname.includes('admin-console/show-all-users/');
-	console.log('adminAccessed', adminAccessed);
 
 	return (
 		<>
@@ -63,7 +53,6 @@ function ViewUser({data, isUserAccountPage, isEditing}) {
 				<DetailsUserSettings
 					settingsData={user.UserPrefSetting}
 					isUserAccountPage={isUserAccountPage}
-					isEditing={editingState}
 					customerAccessed={customerAccessed}
 					adminAccessed={adminAccessed}
 				/>
@@ -72,26 +61,10 @@ function ViewUser({data, isUserAccountPage, isEditing}) {
 				<DetailsCustomer
 					customerData={customer}
 					isUserAccountPage={isUserAccountPage}
-					isEditing={editingState}
 					customerAccessed={customerAccessed}
 					adminAccessed={adminAccessed}
 				/>
 			)}
-			<div className='user-container__action'>
-				<button
-					className='modal__btn'
-					onClick={editingState == false ? handleStartEditing : handleCloseEditing}>
-					{editingState == false ? (
-						<>
-							<span className='material-symbols-rounded nav__icon'>edit</span> Edytuj
-						</>
-					) : (
-						<>
-							<span className='material-symbols-rounded nav__icon'>undo</span> Wróć
-						</>
-					)}
-				</button>
-			</div>
 		</>
 	);
 }
