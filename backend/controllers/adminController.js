@@ -438,7 +438,7 @@ export const deleteCustomer = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
-export const getputEditCustomer = (req, res, next) => {
+export const getEditCustomer = (req, res, next) => {
 	const controllerName = 'getputEditCustomer';
 	log(controllerName);
 

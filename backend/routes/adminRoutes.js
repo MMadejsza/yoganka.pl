@@ -9,7 +9,7 @@ router.get('/show-all-users/:id', adminC.getUserByID);
 router.get('/show-user-settings/:id', adminC.getEditSettings);
 router.get('/show-all-customers', adminC.getAllCustomers);
 router.get('/show-all-customers/:id', adminC.getCustomerByID);
-router.get('/show-customer-data/:id', adminC.getputEditCustomer);
+router.get('/show-customer-data/:id', adminC.getEditCustomer);
 router.get('/show-all-schedules', adminC.getAllSchedules);
 router.get('/show-all-schedules/:id', adminC.getScheduleByID);
 router.get('/show-product-schedules/:pId/:cId', adminC.getProductSchedules);

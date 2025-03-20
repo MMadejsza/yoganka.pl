@@ -324,8 +324,8 @@ export const getShowAccount = (req, res, next) => {
 	}
 };
 
-export const getEditSettings = (req, res, next) => {
-	const controllerName = 'getEditSettings';
+export const getSettings = (req, res, next) => {
+	const controllerName = 'getSettings';
 	log(controllerName);
 	const PK = req.user.UserPrefSetting?.UserPrefID;
 
@@ -335,7 +335,7 @@ export const getEditSettings = (req, res, next) => {
 				errCode = 404;
 				throw new Error('Nie pobrano ustawień.');
 			}
-			console.log('\n✅✅✅ getEditSettings fetched');
+			console.log('\n✅✅✅ getSettings fetched');
 			return res
 				.status(200)
 				.json({confirmation: 1, message: 'Ustawienia pobrana pomyślnie.', preferences});
@@ -344,46 +344,46 @@ export const getEditSettings = (req, res, next) => {
 };
 
 export const putEditSettings = (req, res, next) => {
-	const controllerName = 'getEditSettings';
+	const controllerName = 'putEditSettings';
 	log(controllerName);
 
 	const userID = req.user.UserID;
 
 	const {handedness, font, notifications, animation, theme} = req.body;
+	console.log(`❗❗❗`, req.body);
 
 	// if preferences don't exist - create new ones:
 	models.UserPrefSettings.findOrCreate({
 		where: {UserID: userID},
 		defaults: {
 			UserID: userID,
-			Handedness: handedness || false,
-			FontSize: font || 14,
-			Notifications: notifications || false,
-			Animation: animation || false,
-			Theme: theme || false,
+			Handedness: !!handedness || false,
+			FontSize: parseInt(font) || 14,
+			Notifications: !!notifications || false,
+			Animation: !!animation || false,
+			Theme: !!theme || false,
 		},
 	})
 		.then(([preferences, created]) => {
-			const {Handedness, FontSize, Notifications, Animation, Theme} = preferences;
 			if (!created) {
 				// Nothing changed
 				if (
-					Handedness === handedness &&
-					FontSize === font &&
-					Notifications === notifications &&
-					Animation === animation &&
-					Theme === theme
+					preferences.Handedness == !!handedness &&
+					preferences.FontSize == parseInt(font) &&
+					preferences.Notifications == !!notifications &&
+					preferences.Animation == !!animation &&
+					preferences.Theme == !!theme
 				) {
 					// Nothing changed
-					console.log('\n❓❓❓ Preferences no change');
+					console.log('\n❓❓❓ putEditSettings no change');
 					return {confirmation: 0, message: 'Brak zmian'};
 				} else {
 					// Update
-					Handedness = handedness;
-					FontSize = font;
-					Notifications = notifications;
-					Animation = animation;
-					Theme = theme;
+					preferences.Handedness = !!handedness;
+					preferences.FontSize = parseInt(font);
+					preferences.Notifications = !!notifications;
+					preferences.Animation = !!animation;
+					preferences.Theme = !!theme;
 					return preferences.save().then(() => {
 						console.log('\n✅✅✅ putEditSettings Preferences Updated');
 						return {confirmation: 1, message: 'Ustawienia zostały zaktualizowane'};

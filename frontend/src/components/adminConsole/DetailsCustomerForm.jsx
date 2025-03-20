@@ -24,9 +24,9 @@ function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
 		? ['formFilling', 'putEditCustomer', customerData.CustomerID]
 		: null;
 	const dynamicFetch = (signal) => {
-		if (customerAccessed) return fetchItem('customer/konto/ustawienia/uczestnik', {signal});
+		if (customerAccessed) return fetchItem('/customer/konto/ustawienia/uczestnik', {signal});
 		else
-			return fetchItem(`admin-console/show-customer-data/${customerData.CustomerID}`, {
+			return fetchItem(`/admin-console/show-customer-data/${customerData.CustomerID}`, {
 				signal,
 			});
 	};
@@ -43,9 +43,9 @@ function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
 	});
 
 	const dynamicMutationAddress = customerAccessed
-		? '/api/konto/ustawienia/update/uczestnik'
+		? '/api/customer' + '/konto/ustawienia/update/uczestnik'
 		: adminAccessed
-		? `/api/admin-console/edit-customer-data/${customerData.CustomerID}`
+		? `/api/admin-console` + `/edit-customer-data/${customerData.CustomerID}`
 		: null;
 	const {mutate, isPending, isError, error} = useMutation({
 		mutationFn: (formData) => {

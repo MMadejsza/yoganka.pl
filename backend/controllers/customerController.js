@@ -213,8 +213,8 @@ export const postCancelSchedule = (req, res, next) => {
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 
-export const getputEditCustomer = (req, res, next) => {
-	const controllerName = 'getputEditCustomer';
+export const getEditCustomer = (req, res, next) => {
+	const controllerName = 'getEditCustomer';
 	log(controllerName);
 	const customer = req.user.Customer;
 	// console.log(customer);
@@ -224,9 +224,11 @@ export const putEditCustomer = (req, res, next) => {
 	const controllerName = 'putEditCustomer';
 	log(controllerName);
 
+	console.log(req.body);
+
 	const customerId = req.user.Customer.CustomerID;
-	const newPhone = req.body.phone;
-	const newContactMethod = req.body.cMethod;
+	const {phone: newPhone, cMethod: newContactMethod} = req.body;
+
 	if (!newPhone || !newPhone.trim()) {
 		console.log('\n❌❌❌ Error putEditCustomer:', 'No phone');
 		errCode = 400;
