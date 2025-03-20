@@ -24,6 +24,10 @@ const User = sequelizeDb.define(
 		LastLoginDate: {
 			type: DataTypes.DATE,
 			allowNull: true,
+			get() {
+				const rawValue = this.getDataValue('RegistrationDate');
+				return rawValue ? rawValue.toISOString() : null;
+			},
 		},
 		Email: {
 			type: DataTypes.STRING(255),

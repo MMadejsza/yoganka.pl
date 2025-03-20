@@ -1,9 +1,8 @@
 export const formatIsoDateTime = (isoString, isSchedule) => {
 	// Create object Date
 	const date = new Date(isoString);
-
 	// format [date] [time (hh:mm)]
-	let formattedDate = isoString.slice(0, 10);
+	let formattedDate = isoString.toString().slice(0, 10);
 	if (isSchedule) {
 		formattedDate = date.toLocaleString('pl-PL', {
 			year: 'numeric',

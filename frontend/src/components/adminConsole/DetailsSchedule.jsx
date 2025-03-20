@@ -55,7 +55,7 @@ function DetailsSchedule({data, placement, isAdminPanel}) {
 			<li className='user-container__section-record modal-checklist__li'>
 				<p className='user-container__section-record-label'>Data:</p>
 				<p className='user-container__section-record-content'>
-					{`${getWeekDay(schedule.Date)} (${schedule.Date})`}
+					{`${schedule.Date} (${getWeekDay(schedule.Date)})`}
 				</p>
 			</li>
 			<li className='user-container__section-record modal-checklist__li'>

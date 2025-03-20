@@ -34,11 +34,19 @@ export const showAllUsers = (req, res, next) => {
 			// Convert for records for different names
 			const formattedRecords = records.map((record) => {
 				const newRecord = {}; // Container for formatted data
+				const attributes = model.getAttributes();
 
 				// 🔄 Iterate after each column in user record
 				for (const key in record.toJSON()) {
 					const newKey = columnMap[key] || key; // New or original name if not specified
-					if (key == 'UserPrefSetting') {
+					const attributeType = attributes[key]?.type.constructor.key?.toUpperCase();
+					if (
+						attributeType === 'DATE' ||
+						attributeType === 'DATEONLY' ||
+						attributeType === 'DATETIME'
+					) {
+						newRecord[newKey] = formatIsoDateTime(record[key]);
+					} else if (key == 'UserPrefSetting') {
 						if (record[key]) {
 							newRecord[newKey] = `Tak (ID: ${record[key]['UserPrefID']})`;
 						} else newRecord[newKey] = 'Nie';
@@ -559,7 +567,7 @@ export const showAllSchedules = (req, res, next) => {
 			const formattedRecords = records.map((record) => {
 				const newRecord = {}; // Container for formatted data
 
-				const attributes = model.getAttributes();
+				// const attributes = model.getAttributes();
 				const jsonRecord = record.toJSON();
 				// console.log('jsonRecord', jsonRecord);
 

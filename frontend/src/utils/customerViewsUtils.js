@@ -107,7 +107,7 @@ export const calculateStats = (customer) => {
 		const invoice = booking.Invoice;
 		if (invoice) {
 			const invoiceID = invoice.InvoiceID;
-			const invoiceBID = invoice.BookingID;
+			const invoiceBID = booking.BookingID;
 			const invoiceDate = invoice.InvoiceDate;
 			const invoiceDue = invoice.DueDate;
 			const invoiceTotalValue = invoice.TotalAmount;

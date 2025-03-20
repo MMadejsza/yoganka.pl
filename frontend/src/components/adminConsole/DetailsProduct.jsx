@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
-import {durationToSeconds, secondsToDuration} from '../../utils/customerViewsUtils.js';
 import DetailsProductForm from './DetailsProductForm.jsx';
+
+import {durationToSeconds, secondsToDuration} from '../../utils/customerViewsUtils.js';
+import {getWeekDay} from '../../utils/dateTime.js';
 
 function DetailsProduct({data, placement, userAccessed}) {
 	// console.log(
@@ -48,7 +50,7 @@ function DetailsProduct({data, placement, userAccessed}) {
 								: 'Wdrożono:'}
 						</p>
 						<p className='user-container__section-record-content'>
-							{product.StartDate}
+							{`${product.StartDate} (${getWeekDay(product.StartDate)})`}
 						</p>
 					</li>
 					<li className='user-container__section-record modal-checklist__li'>
