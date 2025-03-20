@@ -23,7 +23,7 @@ function AccountPage() {
 
 	const {data, isError, error} = useQuery({
 		queryKey: ['account'],
-		queryFn: ({signal}) => fetchItem('/account', {signal}),
+		queryFn: ({signal}) => fetchItem('/show-account', {signal}),
 		staleTime: 0,
 		refetchOnMount: true,
 	});

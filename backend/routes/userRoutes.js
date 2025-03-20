@@ -9,7 +9,7 @@ router.get('/grafik', userC.getShowAllSchedules);
 router.get('/konto/grafik/:id', isAuth, userC.getShowScheduleByID);
 router.get('/konto/ustawienia/preferencje', isAuth, userC.getSettings);
 router.get('/konto/ustawienia', isAuth, userC.getShowUserByID);
-router.get('/account', isAuth, userC.getShowAccount);
+router.get('/show-account', isAuth, userC.getAccount);
 
 router.put('/konto/ustawienia/update/preferencje', isAuth, userC.putEditSettings);
 export default router;

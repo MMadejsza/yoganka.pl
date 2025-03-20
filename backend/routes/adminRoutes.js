@@ -3,7 +3,7 @@ import * as adminC from '../controllers/adminController.js';
 const router = express.Router();
 
 //@ GET
-router.get('/grafik/:id', adminC.getScheduleByID);
+// router.get('/grafik/:id', adminC.getScheduleByID);
 router.get('/show-all-users', adminC.getAllUsers);
 router.get('/show-all-users/:id', adminC.getUserByID);
 router.get('/show-user-settings/:id', adminC.getEditSettings);

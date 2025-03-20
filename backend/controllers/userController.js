@@ -220,8 +220,8 @@ export const getShowScheduleByID = (req, res, next) => {
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 
-export const getShowAccount = (req, res, next) => {
-	const controllerName = 'getShowAccount';
+export const getAccount = (req, res, next) => {
+	const controllerName = 'getAccount';
 	log(controllerName);
 
 	// @ Fetching USER
@@ -234,7 +234,7 @@ export const getShowAccount = (req, res, next) => {
 	// if only user
 	if (!req.user.Customer) {
 		const user = req.user;
-		console.log('\n✅✅✅ getShowAccount user fetched');
+		console.log('\n✅✅✅ getAccount user fetched');
 		return res
 			.status(200)
 			.json({confirmation: 1, message: 'Profil uczestnika pobrany pomyślnie.', user});

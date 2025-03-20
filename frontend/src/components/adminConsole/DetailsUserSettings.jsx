@@ -20,7 +20,6 @@ function DetailsUserSettings({settingsData, isUserAccountPage, customerAccessed,
 	const [isEditing, setIsEditing] = useState(false);
 	const handleStartEditing = () => {
 		setIsEditing(true);
-		// navigate('/konto/ustawienia');
 	};
 	const handleCloseEditing = () => {
 		setIsEditing(false);
