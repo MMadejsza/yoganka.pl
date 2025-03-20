@@ -32,8 +32,8 @@ function DetailsTableAttendance({type, stats, isAdminPage}) {
 			setFeedbackConfirmation(0);
 			setDeleteWarningTriggered(false);
 			setDeleteWarnings(null);
-			return fetch(`/api/admin-console/mark-absent`, {
-				method: 'POST',
+			return fetch(`/api/admin-console/edit-mark-absent`, {
+				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json',
 					'CSRF-Token': status.token,
@@ -77,7 +77,7 @@ function DetailsTableAttendance({type, stats, isAdminPage}) {
 			setDeleteWarningTriggered(false);
 
 			return fetch(`/api/admin-console/delete-attendance-record`, {
-				method: 'POST',
+				method: 'DELETE',
 				headers: {
 					'Content-Type': 'application/json',
 					'CSRF-Token': status.token,

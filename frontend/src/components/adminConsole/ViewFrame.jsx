@@ -65,7 +65,7 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 	} = useMutation({
 		mutationFn: () => {
 			return fetch(`/api/admin-console/${dataDeleteQuery}`, {
-				method: 'POST',
+				method: 'DELETE',
 				headers: {
 					'Content-Type': 'application/json',
 					'CSRF-Token': status.token,

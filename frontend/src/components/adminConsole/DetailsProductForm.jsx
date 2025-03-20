@@ -19,7 +19,7 @@ function DetailsProductForm({productData}) {
 	const {mutate, isPending, isError, error} = useMutation({
 		mutationFn: (formData) => {
 			return fetch(`/api/admin-console/edit-product-data/${productData.ProductID}`, {
-				method: 'POST',
+				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json',
 					'CSRF-Token': status.token,
@@ -203,7 +203,6 @@ function DetailsProductForm({productData}) {
 
 	form = (
 		<form
-			method='POST'
 			onSubmit={handleSubmit}
 			className={`user-container__details-list modal-checklist__list form`}>
 			<h1 className='form__title'>{title}</h1>

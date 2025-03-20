@@ -29,8 +29,8 @@ function DetailsProductBookings({type, stats, isAdminPage}) {
 		error: restoreError,
 	} = useMutation({
 		mutationFn: (formData) => {
-			return fetch(`/api/admin-console/mark-present`, {
-				method: 'POST',
+			return fetch(`/api/admin-console/edit-mark-present`, {
+				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json',
 					'CSRF-Token': status.token,

@@ -51,7 +51,7 @@ function DetailsUserSettingsForm({settingsData, customerAccessed, adminAccessed}
 	const {mutate, isPending, isError, error} = useMutation({
 		mutationFn: (formData) => {
 			return fetch(dynamicMutationAddress, {
-				method: 'POST',
+				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json',
 					'CSRF-Token': status.token,

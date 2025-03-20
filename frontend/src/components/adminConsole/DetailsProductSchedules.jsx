@@ -36,7 +36,7 @@ function DetailsProductSchedules({scheduleRecords, placement, status}) {
 		mutationFn: (formData) => {
 			setDeleteWarningTriggered(false);
 			return fetch(`/api/admin-console/delete-schedule/${formData.deleteScheduleID}`, {
-				method: 'POST',
+				method: 'DELETE',
 				headers: {
 					'Content-Type': 'application/json',
 					'CSRF-Token': status.token,

@@ -20,7 +20,7 @@ function DetailsScheduleForm({scheduleData}) {
 	const {mutate, isPending, isError, error, reset} = useMutation({
 		mutationFn: (formData) => {
 			return fetch(`/api/admin-console/edit-schedule-data/${scheduleData.ScheduleID}`, {
-				method: 'POST',
+				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json',
 					'CSRF-Token': status.token,

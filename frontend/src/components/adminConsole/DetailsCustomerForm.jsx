@@ -19,9 +19,9 @@ function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
 	});
 
 	const queryKey = customerAccessed
-		? ['formFilling', 'editCustomer']
+		? ['formFilling', 'putEditCustomer']
 		: adminAccessed
-		? ['formFilling', 'editCustomer', customerData.CustomerID]
+		? ['formFilling', 'putEditCustomer', customerData.CustomerID]
 		: null;
 	const dynamicFetch = (signal) => {
 		if (customerAccessed) return fetchItem('customer/konto/ustawienia/uczestnik', {signal});
@@ -50,7 +50,7 @@ function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
 	const {mutate, isPending, isError, error} = useMutation({
 		mutationFn: (formData) => {
 			return fetch(dynamicMutationAddress, {
-				method: 'POST',
+				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json',
 					'CSRF-Token': status.token,

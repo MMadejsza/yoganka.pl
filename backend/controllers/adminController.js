@@ -9,8 +9,8 @@ import {errorCode, log, catchErr} from './_controllers.js';
 let errCode = errorCode;
 
 //@ USERS
-export const showAllUsers = (req, res, next) => {
-	const controllerName = 'showAllUsers';
+export const getAllUsers = (req, res, next) => {
+	const controllerName = 'getAllUsers';
 	log(controllerName);
 
 	const model = models.User;
@@ -64,7 +64,7 @@ export const showAllUsers = (req, res, next) => {
 			const totalHeaders = keysForHeaders;
 
 			// ✅ Return response to frontend
-			console.log('\n✅✅✅ showAllUsers fetched');
+			console.log('\n✅✅✅ getAllUsers fetched');
 			res.json({
 				confirmation: 1,
 				message: 'Konta pobrane pomyślnie.',
@@ -75,8 +75,8 @@ export const showAllUsers = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
-export const showUserByID = (req, res, next) => {
-	const controllerName = 'showUserByID';
+export const getUserByID = (req, res, next) => {
+	const controllerName = 'getUserByID';
 	log(controllerName);
 
 	const PK = req.params.id || req.user.UserID;
@@ -98,7 +98,7 @@ export const showUserByID = (req, res, next) => {
 				throw new Error('Nie znaleziono użytkownika.');
 			}
 
-			console.log('\n✅✅✅ showUserByID user fetched');
+			console.log('\n✅✅✅ getUserByID user fetched');
 			return res
 				.status(200)
 				.json({confirmation: 1, isLoggedIn: req.session.isLoggedIn, user});
@@ -143,8 +143,8 @@ export const postCreateUser = (req, res, next) => {
 
 		.catch((err) => catchErr(res, errCode, err, controllerName, {type: 'signup', code: 409}));
 };
-export const postDeleteUser = (req, res, next) => {
-	const controllerName = 'postDeleteUser';
+export const deleteUser = (req, res, next) => {
+	const controllerName = 'deleteUser';
 	log(controllerName);
 
 	const id = req.params.id;
@@ -158,7 +158,7 @@ export const postDeleteUser = (req, res, next) => {
 				errCode = 404;
 				throw new Error('Nie usunięto użytkownika.');
 			}
-			console.log('\n✅✅✅ admin postDeleteUser deleted the user');
+			console.log('\n✅✅✅ admin deleteUser deleted the user');
 			return res.status(200).json({confirmation: 1, message: 'Konto usunięte pomyślnie.'});
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
@@ -179,8 +179,8 @@ export const getEditSettings = (req, res, next) => {
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 
-export const postEditSettings = (req, res, next) => {
-	const controllerName = 'postEditSettings';
+export const putEditSettings = (req, res, next) => {
+	const controllerName = 'putEditSettings';
 	log(controllerName);
 
 	const userID = req.params.id;
@@ -210,7 +210,7 @@ export const postEditSettings = (req, res, next) => {
 					preferences.Theme == !!theme
 				) {
 					// Nothing changed
-					console.log('\n❓❓❓ postEditSettings Admin Preferences no change');
+					console.log('\n❓❓❓ putEditSettings Admin Preferences no change');
 					return {confirmation: 0, message: 'Brak zmian.'};
 				} else {
 					// Update
@@ -221,13 +221,13 @@ export const postEditSettings = (req, res, next) => {
 					preferences.Theme = !!theme;
 
 					return preferences.save().then(() => {
-						console.log('\n✅✅✅ postEditSettings Admin Preferences Updated');
+						console.log('\n✅✅✅ putEditSettings Admin Preferences Updated');
 						return {confirmation: 1, message: 'Ustawienia zostały zaktualizowane.'};
 					});
 				}
 			} else {
 				// New preferences created
-				console.log('\n✅✅✅ postEditSettings Admin Preferences Created');
+				console.log('\n✅✅✅ putEditSettings Admin Preferences Created');
 				return {confirmation: 1, message: 'Ustawienia zostały utworzone'};
 			}
 		})
@@ -242,8 +242,8 @@ export const postEditSettings = (req, res, next) => {
 };
 
 //@ CUSTOMERS
-export const showAllCustomers = (req, res, next) => {
-	const controllerName = 'showAllCustomers';
+export const getAllCustomers = (req, res, next) => {
+	const controllerName = 'getAllCustomers';
 	log(controllerName);
 	const model = models.Customer;
 
@@ -286,7 +286,7 @@ export const showAllCustomers = (req, res, next) => {
 			// New headers (keys from columnMap)
 			const totalHeaders = keysForHeaders;
 			// ✅ Return response to frontend
-			console.log('\n✅✅✅ showAllCustomers customers fetched');
+			console.log('\n✅✅✅ getAllCustomers customers fetched');
 			res.json({
 				confirmation: 1,
 				isLoggedIn: req.session.isLoggedIn,
@@ -296,8 +296,8 @@ export const showAllCustomers = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
-export const showCustomerByID = (req, res, next) => {
-	console.log(`\n➡️ admin called showCustomerByID`, new Date().toISOString());
+export const getCustomerByID = (req, res, next) => {
+	console.log(`\n➡️ admin called getCustomerByID`, new Date().toISOString());
 	// console.log(req.user);
 	const PK = req.params.id;
 	models.Customer.findByPk(PK, {
@@ -372,7 +372,7 @@ export const showCustomerByID = (req, res, next) => {
 				errCode = 404;
 				throw new Error('Nie znaleziono profilu uczestnika.');
 			}
-			console.log('\n✅✅✅ showCustomerByID customer fetched');
+			console.log('\n✅✅✅ getCustomerByID customer fetched');
 			return res
 				.status(200)
 				.json({confirmation: 1, isLoggedIn: req.session.isLoggedIn, customer});
@@ -418,8 +418,8 @@ export const postCreateCustomer = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName, {code: 409}));
 };
-export const postDeleteCustomer = (req, res, next) => {
-	const controllerName = 'postDeleteCustomer';
+export const deleteCustomer = (req, res, next) => {
+	const controllerName = 'deleteCustomer';
 	log(controllerName);
 
 	const id = req.params.id;
@@ -433,13 +433,13 @@ export const postDeleteCustomer = (req, res, next) => {
 				errCode = 404;
 				throw new Error('Nie usunięto profilu uczestnika.');
 			}
-			console.log('\n✅✅✅ admin postDeleteUser deleted the customer');
+			console.log('\n✅✅✅ admin deleteUser deleted the customer');
 			return res.status(200).json({confirmation: 1, message: 'Profil usunięty pomyślnie.'});
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
-export const getEditCustomer = (req, res, next) => {
-	const controllerName = 'getEditCustomer';
+export const getputEditCustomer = (req, res, next) => {
+	const controllerName = 'getputEditCustomer';
 	log(controllerName);
 
 	models.Customer.findByPk(req.params.id)
@@ -448,15 +448,15 @@ export const getEditCustomer = (req, res, next) => {
 				errCode = 404;
 				throw new Error('Nie znaleziono danych uczestnika.');
 			}
-			console.log('\n✅✅✅ Fetched admin getEditCustomer customer');
+			console.log('\n✅✅✅ Fetched admin getputEditCustomer customer');
 			return res
 				.status(200)
 				.json({confirmation: 1, customer, message: 'Dane uczestnika pobrane pomyślnie.'});
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
-export const postEditCustomer = (req, res, next) => {
-	const controllerName = 'postEditCustomer';
+export const putEditCustomer = (req, res, next) => {
+	const controllerName = 'putEditCustomer';
 	log(controllerName);
 
 	const customerId = req.params.id;
@@ -470,7 +470,7 @@ export const postEditCustomer = (req, res, next) => {
 
 	if (!newPhone || !newPhone.trim()) {
 		errCode = 400;
-		console.log('\n❌❌❌ Error postEditCustomer No phone');
+		console.log('\n❌❌❌ Error putEditCustomer No phone');
 		throw new Error('Numer telefonu nie może być pusty.');
 	}
 
@@ -479,7 +479,7 @@ export const postEditCustomer = (req, res, next) => {
 			errCode = 404;
 			if (!customer) throw new Error('Nie znaleziono danych uczestnika.');
 
-			console.log('\n✅✅✅ Fetched admin postEditCustomer customer');
+			console.log('\n✅✅✅ Fetched admin putEditCustomer customer');
 			return customer;
 		})
 		.then((foundCustomer) => {
@@ -510,7 +510,7 @@ export const postEditCustomer = (req, res, next) => {
 					return {customerResult};
 				})
 				.then((results) => {
-					console.log('\n✅✅✅ admin postEditCustomer UPDATE successful');
+					console.log('\n✅✅✅ admin putEditCustomer UPDATE successful');
 					const affectedCustomerRows = results.customerResult[0];
 					const status = affectedCustomerRows >= 1;
 					return res.status(200).json({
@@ -525,8 +525,8 @@ export const postEditCustomer = (req, res, next) => {
 };
 
 //@ SCHEDULES
-export const showAllSchedules = (req, res, next) => {
-	const controllerName = 'showAllSchedules';
+export const getAllSchedules = (req, res, next) => {
+	const controllerName = 'getAllSchedules';
 	log(controllerName);
 	const model = models.ScheduleRecord;
 
@@ -622,7 +622,7 @@ export const showAllSchedules = (req, res, next) => {
 			// New headers (keys from columnMap)
 			const totalHeaders = keysForHeaders;
 			// ✅ Return response to frontend
-			console.log('✅✅✅ admin getShowAllSchedules schedules fetched');
+			console.log('✅✅✅ admin getAllSchedules schedules fetched');
 			res.json({
 				confirmation: 1,
 				message: 'Terminy pobrane pomyślnie.',
@@ -632,8 +632,8 @@ export const showAllSchedules = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
-export const showScheduleByID = (req, res, next) => {
-	const controllerName = 'showScheduleByID';
+export const getScheduleByID = (req, res, next) => {
+	const controllerName = 'getScheduleByID';
 	console.log(`\n➡️➡️➡️ admin called`, controllerName);
 
 	const PK = req.params.id;
@@ -707,7 +707,7 @@ export const showScheduleByID = (req, res, next) => {
 			schedule.isCompleted = scheduleDateTime <= now;
 
 			// Zwracamy pełen obiekt użytkownika (zgodnie z działającym kodem)
-			console.log('✅✅✅ admin showScheduleByID schedule fetched');
+			console.log('✅✅✅ admin getScheduleByID schedule fetched');
 			return res.status(200).json({
 				confirmation: 1,
 				message: 'Termin pobrany pomyślnie',
@@ -717,8 +717,8 @@ export const showScheduleByID = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
-export const showProductSchedules = (req, res, next) => {
-	const controllerName = 'showProductSchedulesByID';
+export const getProductSchedules = (req, res, next) => {
+	const controllerName = 'getProductSchedulesByID';
 	console.log(`\n➡️➡️➡️ admin called`, controllerName);
 
 	const productID = req.params.pId;
@@ -750,7 +750,7 @@ export const showProductSchedules = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
-export const showBookedSchedules = (req, res, next) => {};
+export const getBookedSchedules = (req, res, next) => {};
 export const postCreateScheduleRecord = (req, res, next) => {
 	const controllerName = 'postCreateScheduleRecord';
 	log(controllerName);
@@ -815,8 +815,8 @@ export const postCreateScheduleRecord = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
-export const postDeleteSchedule = (req, res, next) => {
-	const controllerName = 'postDeleteSchedule';
+export const deleteSchedule = (req, res, next) => {
+	const controllerName = 'deleteSchedule';
 	log(controllerName);
 	const id = req.params.id;
 	console.log(`${controllerName} deleting id: `, id);
@@ -864,13 +864,13 @@ export const postDeleteSchedule = (req, res, next) => {
 				console.log(`\n❌❌❌ Error Admin ${controllerName} Schedule not deleted.`);
 				throw new Error('Nie usunięto terminu.');
 			}
-			console.log('\n✅✅✅ admin postDeleteSchedule deleted the schedule record');
+			console.log('\n✅✅✅ admin deleteSchedule deleted the schedule record');
 			return res.status(200).json({confirmation: 1, message: 'Termin usunięty pomyślnie.'});
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
-export const postEditSchedule = async (req, res, next) => {
-	const controllerName = 'postEditSchedule';
+export const putEditSchedule = async (req, res, next) => {
+	const controllerName = 'putEditSchedule';
 	log(controllerName);
 
 	const scheduleId = req.params.id;
@@ -893,7 +893,7 @@ export const postEditSchedule = async (req, res, next) => {
 		!newStartTime.trim()
 	) {
 		errCode = 400;
-		console.log('\n❌❌❌ Error postEditSchedule:', 'No enough data');
+		console.log('\n❌❌❌ Error putEditSchedule:', 'No enough data');
 		throw new Error('Nie podano wszystkich danych.');
 	}
 
@@ -903,7 +903,7 @@ export const postEditSchedule = async (req, res, next) => {
 				errCode = 404;
 				throw new Error('Nie znaleziono danych terminu.');
 			}
-			console.log('\n✅✅✅ Fetched admin postEditSchedule schedule');
+			console.log('\n✅✅✅ Fetched admin putEditSchedule schedule');
 			return schedule;
 		})
 		.then((foundSchedule) => {
@@ -938,7 +938,7 @@ export const postEditSchedule = async (req, res, next) => {
 					return {scheduleResult};
 				})
 				.then((results) => {
-					console.log('\n✅✅✅ admin postEditSchedule UPDATE successful');
+					console.log('\n✅✅✅ admin putEditSchedule UPDATE successful');
 					const affectedScheduleRows = results.scheduleResult[0];
 					const status = affectedScheduleRows >= 1;
 					return res.status(200).json({
@@ -952,8 +952,8 @@ export const postEditSchedule = async (req, res, next) => {
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 //@ ATTENDANCE
-export const postDeleteAttendanceRecord = (req, res, next) => {
-	const controllerName = 'postDeleteAttendanceRecord';
+export const deleteAttendanceRecord = (req, res, next) => {
+	const controllerName = 'deleteAttendanceRecord';
 	log(controllerName);
 	console.log(req.body);
 
@@ -975,7 +975,7 @@ export const postDeleteAttendanceRecord = (req, res, next) => {
 				throw new Error('Nie usunięto rekordu.');
 			}
 
-			console.log('\n✅✅✅ admin postDeleteAttendanceRecord UPDATE successful');
+			console.log('\n✅✅✅ admin deleteAttendanceRecord UPDATE successful');
 			return res.status(200).json({
 				confirmation: 1,
 				message: 'Rekord obecności usunięty.',
@@ -983,8 +983,8 @@ export const postDeleteAttendanceRecord = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
-export const postMarkAbsent = (req, res, next) => {
-	const controllerName = 'postMarkAbsent';
+export const putEditMarkAbsent = (req, res, next) => {
+	const controllerName = 'putEditMarkAbsent';
 	log(controllerName);
 
 	const {attendanceCustomerID, attendanceBookingID} = req.body;
@@ -1003,7 +1003,7 @@ export const postMarkAbsent = (req, res, next) => {
 			});
 		})
 		.then((updatedRecord) => {
-			console.log('\n✅✅✅ admin postMarkAbsent UPDATE successful');
+			console.log('\n✅✅✅ admin putEditMarkAbsent UPDATE successful');
 			const status = updatedRecord ? 1 : 0;
 			return res.status(200).json({
 				confirmation: status,
@@ -1013,8 +1013,8 @@ export const postMarkAbsent = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
-export const postMarkPresent = (req, res, next) => {
-	const controllerName = 'postMarkPresent';
+export const putEditMarkPresent = (req, res, next) => {
+	const controllerName = 'putEditMarkPresent';
 	log(controllerName);
 	console.log(req.body);
 	const {cancelledAttendanceCustomerID, cancelledAttendanceBookingID} = req.body;
@@ -1033,7 +1033,7 @@ export const postMarkPresent = (req, res, next) => {
 			});
 		})
 		.then((updatedRecord) => {
-			console.log('\n✅✅✅ admin postMarkPresent UPDATE successful');
+			console.log('\n✅✅✅ admin putEditMarkPresent UPDATE successful');
 			const status = updatedRecord ? true : false;
 			return res.status(200).json({
 				confirmation: status,
@@ -1044,8 +1044,8 @@ export const postMarkPresent = (req, res, next) => {
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 //@ FEEDBACK
-export const showAllParticipantsFeedback = (req, res, next) => {
-	const controllerName = 'showAllParticipantsFeedback';
+export const getAllParticipantsFeedback = (req, res, next) => {
+	const controllerName = 'getAllParticipantsFeedback';
 	log(controllerName);
 
 	const model = models.Feedback;
@@ -1126,7 +1126,7 @@ export const showAllParticipantsFeedback = (req, res, next) => {
 			const totalHeaders = keysForHeaders;
 
 			// ✅ Return response to frontend
-			console.log('\n✅✅✅ showAllParticipantsFeedback reviews fetched');
+			console.log('\n✅✅✅ getAllParticipantsFeedback reviews fetched');
 			res.json({
 				confirmation: 1,
 				message: 'Opinie pobrane pomyślnie',
@@ -1138,8 +1138,8 @@ export const showAllParticipantsFeedback = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
-export const showAllParticipantsFeedbackByID = (req, res, next) => {
-	console.log(`\n➡️ admin called showAllParticipantsFeedbackByID`);
+export const getAllParticipantsFeedbackByID = (req, res, next) => {
+	console.log(`\n➡️ admin called getAllParticipantsFeedbackByID`);
 
 	const PK = req.params.id;
 	models.Feedback.findByPk(PK, {
@@ -1188,7 +1188,7 @@ export const showAllParticipantsFeedbackByID = (req, res, next) => {
 				],
 				attributes: {exclude: ['CustomerID', 'ScheduleID']},
 			}).then((otherReviews) => {
-				console.log('\n✅✅✅ showAllParticipantsFeedbackByID Feedback fetched');
+				console.log('\n✅✅✅ getAllParticipantsFeedbackByID Feedback fetched');
 				return res.status(200).json({
 					confirmation: 1,
 					message: 'Opinia pobrana pomyślnie',
@@ -1200,8 +1200,8 @@ export const showAllParticipantsFeedbackByID = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
-export const postDeleteFeedback = (req, res, next) => {
-	const controllerName = 'postDeleteFeedback';
+export const deleteFeedback = (req, res, next) => {
+	const controllerName = 'deleteFeedback';
 	log(controllerName);
 
 	const id = req.params.id;
@@ -1215,30 +1215,30 @@ export const postDeleteFeedback = (req, res, next) => {
 				errCode = 404;
 				throw new Error('Nie usunięto opinii.');
 			}
-			console.log('\n✅✅✅ admin postDeleteFeedback deleted the feedback');
+			console.log('\n✅✅✅ admin deleteFeedback deleted the feedback');
 			return res.status(200).json({confirmation: 1, message: 'Opinia usunięta pomyślnie.'});
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 //@ NEWSLETTERS
-export const showAllNewsletters = (req, res, next) => {
-	const controllerName = 'showAllNewsletters';
+export const getAllNewsletters = (req, res, next) => {
+	const controllerName = 'getAllNewsletters';
 	log(controllerName);
 
 	simpleListAllToTable(res, models.Newsletter);
 };
 //# SUBS
-export const showAllSubscribedNewsletters = (req, res, next) => {
+export const getAllSubscribedNewsletters = (req, res, next) => {
 	simpleListAllToTable(res, models.SubscribedNewsletter);
 };
 //@ PRODUCTS
-export const showAllProducts = (req, res, next) => {
-	const controllerName = 'showAllProducts';
+export const getAllProducts = (req, res, next) => {
+	const controllerName = 'getAllProducts';
 	log(controllerName);
 	simpleListAllToTable(res, models.Product);
 };
-export const showProductByID = (req, res, next) => {
-	const controllerName = 'showProductByID';
+export const getProductByID = (req, res, next) => {
+	const controllerName = 'getProductByID';
 	log(controllerName);
 
 	const PK = req.params.id;
@@ -1286,7 +1286,7 @@ export const showProductByID = (req, res, next) => {
 				errCode = 404;
 				throw new Error('Nie znaleziono produktu.');
 			}
-			console.log('\n✅✅✅ showProductByID product fetched');
+			console.log('\n✅✅✅ getProductByID product fetched');
 			return res.status(200).json({
 				confirmation: 1,
 				message: 'Produkt pobrany pomyślnie pomyślnie.',
@@ -1329,8 +1329,8 @@ export const postCreateProduct = async (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName, {code: 409}));
 };
-export const postEditProduct = async (req, res, next) => {
-	const controllerName = 'postEditProduct';
+export const putEditProduct = async (req, res, next) => {
+	const controllerName = 'putEditProduct';
 	log(controllerName);
 	const productId = req.params.id;
 
@@ -1355,7 +1355,7 @@ export const postEditProduct = async (req, res, next) => {
 		!newStatus ||
 		!newStatus.trim()
 	) {
-		console.log('\n❌❌❌ Error postEditProduct:', 'No enough data');
+		console.log('\n❌❌❌ Error putEditProduct:', 'No enough data');
 		errCode = 400;
 		throw new Error('Nie podano wszystkich danych.');
 	}
@@ -1366,7 +1366,7 @@ export const postEditProduct = async (req, res, next) => {
 				errCode = 404;
 				throw new Error('Nie znaleziono danych uczestnika.');
 			}
-			console.log('\n✅✅✅ Fetched admin postEditProduct product');
+			console.log('\n✅✅✅ Fetched admin putEditProduct product');
 			return product;
 		})
 		.then((foundProduct) => {
@@ -1401,7 +1401,7 @@ export const postEditProduct = async (req, res, next) => {
 					return {productResult};
 				})
 				.then((results) => {
-					console.log('\n✅✅✅ admin postEditProduct UPDATE successful');
+					console.log('\n✅✅✅ admin putEditProduct UPDATE successful');
 					const affectedProductRows = results.productResult[0];
 					const status = affectedProductRows >= 1;
 					return res.status(200).json({
@@ -1414,8 +1414,8 @@ export const postEditProduct = async (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
-export const postDeleteProduct = (req, res, next) => {
-	const controllerName = 'postDeleteProduct';
+export const deleteProduct = (req, res, next) => {
+	const controllerName = 'deleteProduct';
 	log(controllerName);
 
 	const id = req.params.id;
@@ -1429,14 +1429,14 @@ export const postDeleteProduct = (req, res, next) => {
 				errCode = 404;
 				throw new Error('Nie usunięto zajęć.');
 			}
-			console.log('\n✅✅✅ admin postDeleteProduct deleted the product');
+			console.log('\n✅✅✅ admin deleteProduct deleted the product');
 			return res.status(200).json({confirmation: 1, message: 'Produkt usunięty pomyślnie.'});
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 //@ BOOKINGS
-export const showAllBookings = (req, res, next) => {
-	const controllerName = 'showAllBookings';
+export const getAllBookings = (req, res, next) => {
+	const controllerName = 'getAllBookings';
 	log(controllerName);
 	const model = models.Booking;
 
@@ -1508,7 +1508,7 @@ export const showAllBookings = (req, res, next) => {
 			const totalHeaders = keysForHeaders;
 			req.session.isLoggedIn = true;
 			// ✅ Zwrócenie odpowiedzi do frontend
-			console.log('\n✅✅✅ getShowAllBookings bookings fetched');
+			console.log('\n✅✅✅ getAllBookings bookings fetched');
 			res.json({
 				confirmation: 1,
 				message: 'Rezerwacje pobrane pomyślnie.',
@@ -1522,8 +1522,8 @@ export const showAllBookings = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
-export const showBookingByID = (req, res, next) => {
-	const controllerName = 'showBookingByID';
+export const getBookingByID = (req, res, next) => {
+	const controllerName = 'getBookingByID';
 	log(controllerName);
 
 	const PK = req.params.id;
@@ -1556,7 +1556,7 @@ export const showBookingByID = (req, res, next) => {
 				errCode = 404;
 				throw new Error('Nie znaleziono rezerwacji.');
 			}
-			console.log('\n✅✅✅ admin showBookingByID Schedule fetched');
+			console.log('\n✅✅✅ admin getBookingByID Schedule fetched');
 			return res.status(200).json({
 				confirmation: 1,
 				message: 'Rezerwacja pobrana pomyślnie.',
@@ -1717,8 +1717,8 @@ export const postCreateBooking = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
-export const postDeleteBooking = (req, res, next) => {
-	const controllerName = 'postDeleteBooking';
+export const deleteBooking = (req, res, next) => {
+	const controllerName = 'deleteBooking';
 	log(controllerName);
 
 	const id = req.params.id;
@@ -1732,7 +1732,7 @@ export const postDeleteBooking = (req, res, next) => {
 				errCode = 404;
 				throw new Error('\n❌ Nie usunięto rezerwacji.');
 			}
-			console.log('\n✅✅✅ admin postDeleteBooking deleted the feedback');
+			console.log('\n✅✅✅ admin deleteBooking deleted the feedback');
 			return res.status(200).json({
 				confirmation: 1,
 				message: 'Rezerwacja usunięta pomyślnie.',
@@ -1741,8 +1741,8 @@ export const postDeleteBooking = (req, res, next) => {
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 //@ INVOICES
-export const showAllInvoices = (req, res, next) => {
-	const controllerName = 'showAllInvoices';
+export const getAllInvoices = (req, res, next) => {
+	const controllerName = 'getAllInvoices';
 	log(controllerName);
 
 	const model = models.Invoice;
@@ -1811,7 +1811,7 @@ export const showAllInvoices = (req, res, next) => {
 			const totalHeaders = keysForHeaders;
 			req.session.isLoggedIn = true;
 			// ✅ Return response to frontend
-			console.log('\n✅✅✅ showAllInvoices invoices fetched');
+			console.log('\n✅✅✅ getAllInvoices invoices fetched');
 			res.json({
 				confirmation: 1,
 				message: 'Faktury pobrane pomyślnie.',

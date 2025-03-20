@@ -343,7 +343,7 @@ export const getEditSettings = (req, res, next) => {
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 
-export const postEditSettings = (req, res, next) => {
+export const putEditSettings = (req, res, next) => {
 	const controllerName = 'getEditSettings';
 	log(controllerName);
 
@@ -385,13 +385,13 @@ export const postEditSettings = (req, res, next) => {
 					Animation = animation;
 					Theme = theme;
 					return preferences.save().then(() => {
-						console.log('\n✅✅✅ postEditSettings Preferences Updated');
+						console.log('\n✅✅✅ putEditSettings Preferences Updated');
 						return {confirmation: 1, message: 'Ustawienia zostały zaktualizowane'};
 					});
 				}
 			} else {
 				// New preferences created
-				console.log('\n✅✅✅ postEditSettings Preferences Created');
+				console.log('\n✅✅✅ putEditSettings Preferences Created');
 				return {confirmation: 1, message: 'Ustawienia zostały utworzone'};
 			}
 		})

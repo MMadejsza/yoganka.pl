@@ -213,22 +213,22 @@ export const postCancelSchedule = (req, res, next) => {
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 
-export const getEditCustomer = (req, res, next) => {
-	const controllerName = 'getEditCustomer';
+export const getputEditCustomer = (req, res, next) => {
+	const controllerName = 'getputEditCustomer';
 	log(controllerName);
 	const customer = req.user.Customer;
 	// console.log(customer);
 	return res.status(200).json({confirmation: 1, customer});
 };
-export const postEditCustomer = (req, res, next) => {
-	const controllerName = 'postEditCustomer';
+export const putEditCustomer = (req, res, next) => {
+	const controllerName = 'putEditCustomer';
 	log(controllerName);
 
 	const customerId = req.user.Customer.CustomerID;
 	const newPhone = req.body.phone;
 	const newContactMethod = req.body.cMethod;
 	if (!newPhone || !newPhone.trim()) {
-		console.log('\n❌❌❌ Error postEditCustomer:', 'No phone');
+		console.log('\n❌❌❌ Error putEditCustomer:', 'No phone');
 		errCode = 400;
 		throw new Error('Numer telefonu nie może być pusty');
 	}
@@ -241,7 +241,7 @@ export const postEditCustomer = (req, res, next) => {
 			return {customerResult};
 		})
 		.then((results) => {
-			console.log('\n✅✅✅ postEditCustomer Update successful');
+			console.log('\n✅✅✅ putEditCustomer Update successful');
 			const affectedCustomerRows = results.customerResult[0];
 			const status = affectedCustomerRows >= 1;
 			return res.status(200).json({
