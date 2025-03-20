@@ -92,14 +92,6 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 		},
 	});
 
-	// const handleStartEditing = () => {
-	// 	setEditingState(true);
-	// 	// navigate('/konto/ustawienia');
-	// };
-	// const handleCloseEditing = () => {
-	// 	setEditingState(false);
-	// };
-
 	const handleDelete = () => {
 		if (!deleteWarningTriggered) {
 			// 1st click

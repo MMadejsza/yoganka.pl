@@ -43,7 +43,7 @@ function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
 	});
 
 	const dynamicMutationAddress = customerAccessed
-		? '/api/customer' + '/konto/ustawienia/update/uczestnik'
+		? '/api/customer' + '/edit-customer-data'
 		: adminAccessed
 		? `/api/admin-console` + `/edit-customer-data/${customerData.CustomerID}`
 		: null;

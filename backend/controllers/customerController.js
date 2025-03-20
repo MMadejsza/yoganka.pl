@@ -255,8 +255,8 @@ export const putEditCustomer = (req, res, next) => {
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 
-export const getShowBookingByID = (req, res, next) => {
-	const controllerName = 'getShowBookingByID';
+export const getBookingByID = (req, res, next) => {
+	const controllerName = 'getBookingByID';
 	log(controllerName);
 
 	const PK = req.params.id;
@@ -290,7 +290,7 @@ export const getShowBookingByID = (req, res, next) => {
 				errCode = 404;
 				throw new Error('Nie znaleziono rezerwacji.');
 			}
-			console.log('\n✅✅✅ getShowBookingByID booking fetched');
+			console.log('\n✅✅✅ getBookingByID booking fetched');
 			return res.status(200).json({
 				confirmation: 1,
 				message: 'Rezerwacja pobrana pomyślnie.',
