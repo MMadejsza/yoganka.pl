@@ -18,15 +18,6 @@ function UserFeedbackBox({
 	// console.log('userFeedbackBox size', size);
 	const navigate = useNavigate();
 
-	// const statusClass = isPending
-	// 	? 'neutral'
-	// 	: isError
-	// 	? 'error'
-	// 	: status == 1
-	// 	? 'success'
-	// 	: warnings && warnings.length > 0
-	// 	? 'error'
-	// 	: 'neutral';
 	const statusClass =
 		warnings && warnings.length > 0
 			? 'error'

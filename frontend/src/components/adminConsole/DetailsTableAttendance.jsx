@@ -29,7 +29,9 @@ function DetailsTableAttendance({type, stats, isAdminPage}) {
 		error: markAbsentError,
 	} = useMutation({
 		mutationFn: (formData) => {
+			setFeedbackConfirmation(0);
 			setDeleteWarningTriggered(false);
+			setDeleteWarnings(null);
 			return fetch(`/api/admin-console/mark-absent`, {
 				method: 'POST',
 				headers: {
@@ -73,6 +75,7 @@ function DetailsTableAttendance({type, stats, isAdminPage}) {
 	} = useMutation({
 		mutationFn: (formData) => {
 			setDeleteWarningTriggered(false);
+
 			return fetch(`/api/admin-console/delete-attendance-record`, {
 				method: 'POST',
 				headers: {
@@ -155,16 +158,6 @@ function DetailsTableAttendance({type, stats, isAdminPage}) {
 		<>
 			<h2 className='user-container__section-title modal__title--day admin-action'>
 				{`Obecność (${bookingsArray.length})`}
-				{/* <button
-					onClick={(e) => {
-						e.preventDefault;
-						setIsFormVisible(!isFormVisible);
-					}}
-					className={`form-action-btn table-form-btn table-form-btn--submit`}>
-					<span className='material-symbols-rounded nav__icon nav__icon--side account'>
-						{!isFormVisible ? 'add_circle' : 'undo'}
-					</span>
-				</button> */}
 			</h2>
 			{feedback}
 			{isFormVisible && form}

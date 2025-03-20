@@ -1004,11 +1004,11 @@ export const postMarkAbsent = (req, res, next) => {
 		})
 		.then((updatedRecord) => {
 			console.log('\n✅✅✅ admin postMarkAbsent UPDATE successful');
-			const status = updatedRecord ? true : false;
+			const status = updatedRecord ? 1 : 0;
 			return res.status(200).json({
 				confirmation: status,
 				message: 'Uczestnik oznaczony jako nieobecny.',
-				affectedRows: status ? 1 : 0,
+				affectedRows: status ? 2 : 0,
 			});
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
