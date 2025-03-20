@@ -100,7 +100,7 @@ export const calculateProductStats = (product, schedules) => {
 
 		scheduleRecords.push({
 			ScheduleID: schedule.ScheduleID,
-			Date: formatIsoDateTime(schedule.Date),
+			Date: schedule.Date,
 			StartTime: schedule.StartTime,
 			Location: schedule.Location,
 			bookingsNumber: schedule.Bookings.length,

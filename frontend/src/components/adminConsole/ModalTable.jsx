@@ -57,6 +57,8 @@ function ModalTable({
 				attendanceBookingID: row.id,
 				cancelledAttendanceCustomerID: row.CustomerID,
 				cancelledAttendanceBookingID: row.BookingID,
+				deleteScheduleID: row.id,
+				isDisabled: row.isActionDisabled,
 			});
 		}
 		return null;
@@ -106,7 +108,11 @@ function ModalTable({
 													key={index}
 													className={`form-action-btn table-form-btn table-form-btn--submit`}>
 													<span
-														className='material-symbols-rounded nav__icon '
+														className={`material-symbols-rounded nav__icon ${
+															row.isActionDisabled === true
+																? 'dimmed'
+																: ''
+														}`}
 														onClick={(e) =>
 															onRowBtnClick(
 																row,

@@ -819,6 +819,7 @@ export const postDeleteSchedule = (req, res, next) => {
 	const controllerName = 'postDeleteSchedule';
 	log(controllerName);
 	const id = req.params.id;
+	console.log(`${controllerName} deleting id: `, id);
 
 	models.ScheduleRecord.findOne({
 		where: {
