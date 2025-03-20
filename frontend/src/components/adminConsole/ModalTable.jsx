@@ -112,6 +112,10 @@ function ModalTable({
 															row.isActionDisabled === true
 																? 'dimmed'
 																: ''
+														} ${
+															action.extraClass
+																? action.extraClass
+																: ''
 														}`}
 														onClick={(e) =>
 															onRowBtnClick(

@@ -829,11 +829,15 @@ export const postDeleteSchedule = (req, res, next) => {
 		.then((foundSchedule) => {
 			if (!foundSchedule) {
 				errCode = 404;
+				console.log(`\n❌❌❌ Error Admin ${controllerName} Schedule to delete not found.`);
 				throw new Error('Nie znaleziono terminu do usunięcia.');
 			} else if (
 				new Date(`${foundSchedule.Date}T${foundSchedule.StartTime}:00`) < new Date()
 			) {
 				errCode = 400;
+				console.log(
+					`\n❌❌❌ Error Admin ${controllerName} Schedule is passed - can't be deleted.`,
+				);
 				throw new Error(
 					'Nie można usunąć terminu który już minął. Posiada też wartość historyczną dla statystyk.',
 				);
@@ -844,6 +848,9 @@ export const postDeleteSchedule = (req, res, next) => {
 			}).then((foundRecord) => {
 				if (foundRecord) {
 					errCode = 409;
+					console.log(
+						`\n❌❌❌ Error Admin ${controllerName} Schedule is booked - can't be deleted.`,
+					);
 					throw new Error(
 						'Nie można usunąć terminu, który posiada rekordy obecności (obecny/anulowany). Najpierw USUŃ rekordy obecności w konkretnym terminie.',
 					);
@@ -854,6 +861,7 @@ export const postDeleteSchedule = (req, res, next) => {
 		.then((deletedCount) => {
 			if (!deletedCount) {
 				errCode = 404;
+				console.log(`\n❌❌❌ Error Admin ${controllerName} Schedule not deleted.`);
 				throw new Error('Nie usunięto terminu.');
 			}
 			console.log('\n✅✅✅ admin postDeleteSchedule deleted the schedule record');

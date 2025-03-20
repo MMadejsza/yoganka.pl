@@ -69,6 +69,7 @@ function DetailsTableAttendance({type, stats, isAdminPage}) {
 		isPending: deleteAttendanceRecordIsPending,
 		isError: deleteAttendanceRecordIsError,
 		error: deleteAttendanceRecordError,
+		reset,
 	} = useMutation({
 		mutationFn: (formData) => {
 			setDeleteWarningTriggered(false);
@@ -107,7 +108,10 @@ function DetailsTableAttendance({type, stats, isAdminPage}) {
 	});
 
 	const handleDelete = (params) => {
+		reset();
 		if (!deleteWarningTriggered) {
+			setFeedbackConfirmation(0);
+
 			setDeleteWarnings([
 				'Rekordu wliczanego do statystyk w systemie. Nie powinno być potrzeby tego robić. ',
 				'Skontaktuj się z IT lub kliknij jeszcze raz w ciągu 5s w celu potwierdzenia.',
@@ -128,7 +132,7 @@ function DetailsTableAttendance({type, stats, isAdminPage}) {
 			isAdminPage={isAdminPage}
 			adminActions={true}
 			onQuickAction={[
-				{symbol: 'delete_forever', method: handleDelete},
+				{extraClass: 'dimmed', symbol: 'delete', method: handleDelete},
 				{symbol: 'person_remove', method: markAbsent},
 			]}
 		/>

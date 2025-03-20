@@ -21,7 +21,7 @@ function DetailsProductSchedules({scheduleRecords, placement, status}) {
 	let initialFeedbackConfirmation;
 	const [feedbackConfirmation, setFeedbackConfirmation] = useState(initialFeedbackConfirmation);
 	let processedScheduleRecordsArr = scheduleRecords;
-	let headers = ['ID', 'Dzień', 'Data', 'Godzina', 'Lokacja', 'Frekwencja', 'Akcje'];
+	let headers = ['ID', 'Dzień', 'Data', 'Godzina', 'Lokacja', 'Frekwencja', ''];
 	let keys = ['id', 'day', 'date', 'time', 'location', 'attendance', ''];
 	let form;
 	let feedback;
@@ -73,6 +73,8 @@ function DetailsProductSchedules({scheduleRecords, placement, status}) {
 		console.log(params);
 		reset();
 		if (!deleteWarningTriggered && !params.isDisabled) {
+			setFeedbackConfirmation(0);
+
 			setDeleteWarnings([
 				'Wszystkich powiązanych opinii',
 				'Wszystkich powiązanych z terminem obecności, a więc wpłynie na statystyki zajęć i użytkowników',
@@ -155,7 +157,7 @@ function DetailsProductSchedules({scheduleRecords, placement, status}) {
 					status={status}
 					isAdminPage={true}
 					adminActions={true}
-					onQuickAction={[{symbol: 'delete_forever', method: handleDelete}]}
+					onQuickAction={[{symbol: 'delete', method: handleDelete}]}
 				/>
 			) : (
 				notPublished
