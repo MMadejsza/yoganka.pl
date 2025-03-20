@@ -2,7 +2,13 @@ import React, {useState} from 'react';
 import DetailsCustomerForm from './DetailsCustomerForm.jsx';
 import {calculateAge} from '../../utils/customerViewsUtils.js';
 
-function DetailsCustomer({customerData, isUserAccountPage, customerAccessed, adminAccessed}) {
+function DetailsCustomer({
+	customerData,
+	isUserAccountPage,
+	customerAccessed,
+	adminAccessed,
+	isBookingView,
+}) {
 	console.log('customerData', customerData);
 	const title = isUserAccountPage
 		? `Dane kontaktowe:`
@@ -80,23 +86,25 @@ function DetailsCustomer({customerData, isUserAccountPage, customerAccessed, adm
 				<h2 className='user-container__section-title modal__title--day'>{title}</h2>
 				{content}
 
-				<div className='user-container__action'>
-					<button
-						className='modal__btn'
-						onClick={isEditing == false ? handleStartEditing : handleCloseEditing}>
-						{isEditing == false ? (
-							<>
-								<span className='material-symbols-rounded nav__icon'>edit</span>{' '}
-								Edytuj
-							</>
-						) : (
-							<>
-								<span className='material-symbols-rounded nav__icon'>undo</span>{' '}
-								Wróć
-							</>
-						)}
-					</button>
-				</div>
+				{!isBookingView && (
+					<div className='user-container__action'>
+						<button
+							className='modal__btn'
+							onClick={isEditing == false ? handleStartEditing : handleCloseEditing}>
+							{isEditing == false ? (
+								<>
+									<span className='material-symbols-rounded nav__icon'>edit</span>{' '}
+									Edytuj
+								</>
+							) : (
+								<>
+									<span className='material-symbols-rounded nav__icon'>undo</span>{' '}
+									Wróć
+								</>
+							)}
+						</button>
+					</div>
+				)}
 			</div>
 		</>
 	);

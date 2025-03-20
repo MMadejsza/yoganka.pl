@@ -10,6 +10,7 @@ function ViewBooking({data, isUserAccountPage}) {
 	const customerAccessed = location.pathname.includes('ustawienia');
 	console.log('customerAccessed', customerAccessed);
 	const adminAccessed = location.pathname.includes('admin-console');
+	const isBookingView = location.pathname.includes('show-all-bookings');
 	console.log('adminAccessed', adminAccessed);
 	// console.clear();
 	console.log(
@@ -38,6 +39,7 @@ function ViewBooking({data, isUserAccountPage}) {
 						isUserAccountPage={isUserAccountPage}
 						customerAccessed={customerAccessed}
 						adminAccessed={adminAccessed}
+						isBookingView={isBookingView}
 					/>
 				</div>
 			)}
