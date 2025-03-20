@@ -33,7 +33,7 @@ export const simpleListAllToTable = (res, model) => {
 							attributeType === 'DATETIME') &&
 						jsonRecord[key]
 					) {
-						newRecord[newKey] = jsonRecord[key]; //formatIsoDateTime(jsonRecord[key]);
+						newRecord[newKey] = formatIsoDateTime(jsonRecord[key]);
 					} else {
 						newRecord[newKey] = jsonRecord[key]; // Assignment
 					}

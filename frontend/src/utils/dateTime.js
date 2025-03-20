@@ -4,10 +4,11 @@ export const getWeekDay = (dateStr) => {
 	return days[date.getDay()];
 };
 
-export const formatIsoDateTime = (isoString, isSchedule) => {
+export const formatIsoDateTime = (dateInput, isSchedule) => {
+	const isoString = typeof dateInput === 'string' ? dateInput : new Date(dateInput).toISOString();
+
 	// Create object Date
 	const date = new Date(isoString);
-
 	// format [date] [time (hh:mm)]
 	let formattedDate = isoString.slice(0, 10);
 	if (isSchedule) {
