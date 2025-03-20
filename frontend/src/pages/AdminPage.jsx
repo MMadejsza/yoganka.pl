@@ -9,10 +9,10 @@ import ModalTable from '../components/adminConsole/ModalTable.jsx';
 
 const sideNavTabs = [
 	{name: 'Użytkownicy', icon: 'group', link: '/admin-console/show-all-users'},
-	{name: 'Klienci', icon: 'sentiment_satisfied', link: '/admin-console/show-all-customers'},
+	{name: 'Uczestnicy', icon: 'sentiment_satisfied', link: '/admin-console/show-all-customers'},
 	{name: 'Zajęcia', icon: 'inventory', link: '/admin-console/show-all-products'},
 	{name: 'Grafik', icon: 'calendar_month', link: '/admin-console/show-all-schedules'},
-	{name: `Booking'i`, icon: 'event_available', link: '/admin-console/show-all-bookings'},
+	{name: `Rezerwacje`, icon: 'event_available', link: '/admin-console/show-all-bookings'},
 	{name: `Faktury`, icon: 'receipt_long', link: '/admin-console/show-all-invoices'},
 	{name: `Newsletter'y`, icon: 'contact_mail', link: '/admin-console/show-all-newsletters'},
 	{name: `Opinie`, icon: 'reviews', link: '/admin-console/show-all-participants-feedback'},
@@ -24,11 +24,21 @@ const sideNavActions = [
 		link: 'add-user',
 	},
 ];
+
+const noCreateOptionPages = [
+	'show-all-schedules',
+	'show-all-invoices',
+	'show-all-newsletters',
+	'show-all-participants-feedback',
+];
 const allowedPaths = sideNavTabs.map((tab) => tab.link);
 
 function AdminPage() {
 	const navigate = useNavigate();
 	const location = useLocation(); // fetch current path
+	const shouldAllowCreation = !noCreateOptionPages.some((lockedPath) =>
+		location.pathname.includes(lockedPath),
+	);
 	const isAdminPage = location.pathname.includes('admin-console') ?? false;
 	const isInactiveTable = ['invoices', 'newsletters', 'feedback'].some((path) =>
 		location.pathname.includes(path),
@@ -133,12 +143,14 @@ function AdminPage() {
 						classy='admin-intro'
 						header={`Admin Panel`}></Section>
 					<SideNav menuSet={sideNavTabs} />
-					<SideNav
-						menuSet={sideNavActions}
-						side='right'
-						type='action'
-						onclose={handleCloseModal}
-					/>
+					{shouldAllowCreation && (
+						<SideNav
+							menuSet={sideNavActions}
+							side='right'
+							type='action'
+							onclose={handleCloseModal}
+						/>
+					)}
 				</>
 			)}
 			{table}
