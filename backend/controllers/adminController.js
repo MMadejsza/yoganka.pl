@@ -866,7 +866,13 @@ export const postEditSchedule = async (req, res, next) => {
 
 	const scheduleId = req.params.id;
 
-	const {newCapacity, newStartDate, newStartTime, newLocation} = req.body;
+	console.log(`❗❗❗req.body`, req.body);
+	const {
+		capacity: newCapacity,
+		date: newStartDate,
+		startTime: newStartTime,
+		location: newLocation,
+	} = req.body;
 
 	if (
 		!newCapacity ||
@@ -892,14 +898,14 @@ export const postEditSchedule = async (req, res, next) => {
 			return schedule;
 		})
 		.then((foundSchedule) => {
-			const {Capacity, Date, Location, StartTime} = foundSchedule;
+			const {Capacity, Date: scheduleDate, Location, StartTime} = foundSchedule;
 			if (new Date(`${foundSchedule.Date}T${foundSchedule.StartTime}:00`) < new Date()) {
 				errCode = 400;
 				console.log('\n❓❓❓ Admin schedule is past - not to edit');
 				throw new Error('Nie można edytować minionego terminu.');
 			} else if (
 				Capacity == newCapacity &&
-				Date === newStartDate &&
+				scheduleDate === newStartDate &&
 				Location === newLocation &&
 				StartTime === newStartTime
 			) {
@@ -913,7 +919,7 @@ export const postEditSchedule = async (req, res, next) => {
 			models.ScheduleRecord.update(
 				{
 					Capacity: newCapacity,
-					StartDate: newStartDate,
+					Date: newStartDate,
 					StartTime: newStartTime,
 					Location: newLocation,
 				},
@@ -1319,8 +1325,15 @@ export const postEditProduct = async (req, res, next) => {
 	log(controllerName);
 	const productId = req.params.id;
 
-	const {newType, newStartDate, newLocation, newDuration, newPrice, newStatus} = req.body;
-
+	const {
+		type: newType,
+		date: newStartDate,
+		location: newLocation,
+		duration: newDuration,
+		price: newPrice,
+		status: newStatus,
+	} = req.body;
+	console.log('❗❗❗ req.body ', req.body);
 	if (
 		!newType ||
 		!newType.trim() ||
@@ -1333,7 +1346,7 @@ export const postEditProduct = async (req, res, next) => {
 		!newStatus ||
 		!newStatus.trim()
 	) {
-		console.log('\n❌❌❌ Error postEditCustomer:', 'No enough data');
+		console.log('\n❌❌❌ Error postEditProduct:', 'No enough data');
 		errCode = 400;
 		throw new Error('Nie podano wszystkich danych.');
 	}

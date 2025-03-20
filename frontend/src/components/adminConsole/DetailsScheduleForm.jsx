@@ -17,7 +17,7 @@ function DetailsScheduleForm({scheduleData}) {
 		queryFn: fetchStatus,
 	});
 
-	const {mutate, isPending, isError, error} = useMutation({
+	const {mutate, isPending, isError, error, reset} = useMutation({
 		mutationFn: (formData) => {
 			return fetch(`/api/admin-console/edit-schedule-data/${scheduleData.ScheduleID}`, {
 				method: 'POST',
@@ -118,6 +118,7 @@ function DetailsScheduleForm({scheduleData}) {
 		handleDateReset();
 		handleStartTimeReset();
 		handleLocationReset();
+		reset();
 	};
 
 	// Submit handling
