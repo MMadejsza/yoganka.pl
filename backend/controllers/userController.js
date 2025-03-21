@@ -2,7 +2,7 @@ import * as models from '../models/_index.js';
 import columnMaps from '../utils/columnsMapping.js';
 import {formatIsoDateTime, getWeekDay} from '../utils/formatDateTime.js';
 import {Sequelize, Op, fn, col} from 'sequelize';
-import {errorCode, callLog, catchErr} from '../utils/controllersUtils.js';
+import {errorCode, callLog, successLog, catchErr} from '../utils/controllersUtils.js';
 let errCode = errorCode;
 const person = 'User';
 
@@ -122,7 +122,7 @@ export const getSettings = (req, res, next) => {
 				errCode = 404;
 				throw new Error('Nie pobrano ustawień.');
 			}
-			console.log('\n✅✅✅ getSettings fetched');
+			successLog(person, controllerName);
 			return res
 				.status(200)
 				.json({confirmation: 1, message: 'Ustawienia pobrana pomyślnie.', preferences});
@@ -172,18 +172,18 @@ export const putEditSettings = (req, res, next) => {
 					preferences.Animation = !!animation;
 					preferences.Theme = !!theme;
 					return preferences.save().then(() => {
-						console.log('\n✅✅✅ putEditSettings Preferences Updated');
+						successLog(person, controllerName, 'updated');
 						return {confirmation: 1, message: 'Ustawienia zostały zaktualizowane'};
 					});
 				}
 			} else {
 				// New preferences created
-				console.log('\n✅✅✅ putEditSettings Preferences Created');
+				successLog(person, controllerName, 'created');
 				return {confirmation: 1, message: 'Ustawienia zostały utworzone'};
 			}
 		})
 		.then((result) => {
-			console.log('\n✅✅✅ Preferences Result sent back');
+			successLog(person, controllerName, 'sent');
 			return res.status(200).json({
 				confirmation: result.confirmation,
 				message: result.message,
@@ -309,7 +309,7 @@ export const getAllSchedules = (req, res, next) => {
 			];
 
 			// ✅ Return response to frontend
-			console.log('\n✅✅✅ user getAllSchedules schedules fetched');
+			successLog(person, controllerName);
 			res.json({
 				confirmation: 1,
 				message: 'Terminy pobrane pomyślnie.',
@@ -372,7 +372,7 @@ export const getScheduleByID = (req, res, next) => {
 				schedule.full = beingAttendedSchedules.length >= schedule.Capacity;
 			}
 
-			console.log('\n✅✅✅ getScheduleByID schedule fetched');
+			successLog(person, controllerName);
 			return res.status(200).json({schedule, user: req.user});
 			// return res.status(200).json({schedule});
 		})
