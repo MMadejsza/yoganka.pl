@@ -3,17 +3,16 @@ import {useParams} from 'react-router-dom';
 import {useQuery, useMutation} from '@tanstack/react-query';
 import {queryClient, fetchItem, mutateOnEdit} from '../../utils/http.js';
 import {useInput} from '../../hooks/useInput.js';
+import {useFeedback} from '../../hooks/useFeedback.js';
 import {useAuthStatus} from '../../hooks/useAuthStatus.js';
 import {phoneValidations} from '../../utils/validation.js';
 import InputLogin from '../login/InputLogin.jsx';
 import UserFeedbackBox from './FeedbackBox.jsx';
 
 function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
-	console.log('customerAccessed adminAccessed', customerAccessed, adminAccessed);
+	// console.log('DetailsCustomerForm customerAccessed adminAccessed', customerAccessed, adminAccessed);
 	const params = useParams();
-	let initialFeedbackConfirmation;
-	const [feedbackConfirmation, setFeedbackConfirmation] = useState(initialFeedbackConfirmation);
-
+	const {feedback, updateFeedback, resetFeedback} = useFeedback();
 	const {data: status} = useAuthStatus();
 
 	const queryKey = customerAccessed
@@ -33,7 +32,7 @@ function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
 		isLoading: isCustomerLoading,
 		isEditCustomerDetailsError: isCustomerError,
 	} = useQuery({
-		queryKey: queryKey,
+		queryKey,
 		queryFn: ({signal}) => dynamicFetch(signal),
 		staleTime: 0,
 		refetchOnMount: true,
@@ -60,18 +59,18 @@ function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
 					`/admin-console/show-all-users/${params.id}`,
 				]);
 
-			if (res.confirmation) {
-				setFeedbackConfirmation(1);
-			} else {
-				setFeedbackConfirmation(0);
-			}
+			// updating feedback
+			updateFeedback(res);
+		},
+		onError: (err) => {
+			// updating feedback
+			updateFeedback(err);
 		},
 	});
 	// Fallback to feed custom hooks when data isn't available
 	const phoneDefault = data?.customer.Phone || ' ';
 	const loyaltyDefault = data?.customer.Loyalty || 5;
 	const notesDefault = data?.customer.Notes || ' ';
-
 	const methodDefault = data?.customer.PreferredContactMethod || ' ';
 
 	// using custom hook with extracting and reassigning its 'return' for particular inputs and assign validation methods from imported utils. Every inout has its won state now
@@ -124,13 +123,11 @@ function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
 	} = useInput(notesDefault);
 
 	if (isCustomerLoading) return <div>Ładowanie...</div>;
-	if (isCustomerError) return <div>Błąd ładowania ustawień.</div>;
-	console.log(data);
-	console.log(methodDefault);
 
 	// Reset all te inputs
 	const handleReset = () => {
-		setFeedbackConfirmation(undefined);
+		resetFeedback();
+
 		handlePhoneReset();
 		handleCMethodReset();
 		handleLoyaltyReset();
@@ -140,7 +137,7 @@ function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
 	// Submit handling
 	const handleSubmit = async (e) => {
 		e.preventDefault(); // No reloading
-		console.log('Submit triggered');
+		// console.log('Submit triggered');
 
 		if (phoneHasError || cMethodHasError || loyaltyHasError || notesHasError) {
 			return;
@@ -163,18 +160,7 @@ function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
 	// Extract values only
 	const {formType, title, actionTitle} = formLabels;
 
-	let form;
-	let feedback = feedbackConfirmation !== undefined && (
-		<UserFeedbackBox
-			status={feedbackConfirmation}
-			isPending={isEditCustomerDetailsPending}
-			isError={isEditCustomerDetailsError}
-			error={editCustomerDetailsError}
-			size='small'
-		/>
-	);
-
-	form = (
+	const form = (
 		<form
 			onSubmit={handleSubmit}
 			className={`user-container__details-list modal-checklist__list form`}>
@@ -270,7 +256,18 @@ function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
 	);
 	return (
 		<>
-			{form} {feedback}
+			{form}{' '}
+			{feedback.status !== undefined && (
+				<UserFeedbackBox
+					status={feedback.status}
+					isPending={isEditCustomerDetailsPending}
+					isError={isEditCustomerDetailsError}
+					error={editCustomerDetailsError}
+					successMsg={feedback.message}
+					warnings={feedback.warnings}
+					size='small'
+				/>
+			)}
 		</>
 	);
 }

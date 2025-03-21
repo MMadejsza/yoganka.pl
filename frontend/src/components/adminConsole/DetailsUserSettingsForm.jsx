@@ -55,8 +55,14 @@ function DetailsUserSettingsForm({settingsData, customerAccessed, adminAccessed}
 		mutationFn: (formDataObj) => mutateOnEdit(status, formDataObj, dynamicMutationAddress),
 
 		onSuccess: (res) => {
-			queryClient.invalidateQueries(['query', '/show-account']);
-			queryClient.invalidateQueries(['query', `/admin-console/show-all-users/${params.id}`]);
+			if (adminAccessed) {
+				queryClient.invalidateQueries([
+					'query',
+					`/admin-console/show-all-users/${params.id}`,
+				]);
+			} else {
+				queryClient.invalidateQueries(['query', '/show-account']);
+			}
 
 			// updating feedback
 			updateFeedback(res);

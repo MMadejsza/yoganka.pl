@@ -302,7 +302,9 @@ export const getAllCustomers = (req, res, next) => {
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 export const getCustomerByID = (req, res, next) => {
-	console.log(`\n➡️ admin called getCustomerByID`, new Date().toISOString());
+	const controllerName = 'getCustomerByID';
+	callLog(person, controllerName);
+
 	// console.log(req.user);
 	const PK = req.params.id;
 	models.Customer.findByPk(PK, {
