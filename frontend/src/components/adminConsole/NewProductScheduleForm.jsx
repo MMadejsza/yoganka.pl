@@ -1,8 +1,8 @@
-import {useState} from 'react';
 import {useLocation, useParams} from 'react-router-dom';
 import {useMutation} from '@tanstack/react-query';
 import {queryClient, mutateOnCreate} from '../../utils/http.js';
 import {useInput} from '../../hooks/useInput.js';
+import {useFeedback} from '../../hooks/useFeedback.js';
 import {useAuthStatus} from '../../hooks/useAuthStatus.js';
 import InputLogin from '../login/InputLogin.jsx';
 import FeedbackBox from './FeedbackBox.jsx';
@@ -11,9 +11,8 @@ import * as val from '../../utils/validation.js';
 function NewProductScheduleForm() {
 	const params = useParams();
 	const location = useLocation();
-	let initialFeedbackConfirmation;
-	const [feedbackConfirmation, setFeedbackConfirmation] = useState(initialFeedbackConfirmation);
-	const [successMsg, setSuccessMsg] = useState(null);
+
+	const {feedback, updateFeedback, resetFeedback} = useFeedback();
 
 	const {data: status} = useAuthStatus();
 
@@ -28,15 +27,10 @@ function NewProductScheduleForm() {
 
 		onSuccess: (res) => {
 			queryClient.invalidateQueries([`/admin-console/show-all-products/${params.id}`]);
-			if (res.confirmation || res.code == 200) {
-				setSuccessMsg(res.message);
-				setFeedbackConfirmation(1);
-			} else {
-				setFeedbackConfirmation(0);
-			}
+			updateFeedback(res);
 		},
 		onError: (err) => {
-			setFeedbackConfirmation(0);
+			updateFeedback(err);
 		},
 	});
 
@@ -110,7 +104,8 @@ function NewProductScheduleForm() {
 
 	// Reset all te inputs
 	const handleReset = () => {
-		setFeedbackConfirmation(undefined);
+		resetFeedback();
+
 		handleDateReset();
 		handleTimeReset();
 		handleLocationReset();
@@ -156,18 +151,7 @@ function NewProductScheduleForm() {
 	// Extract values only
 	const {formType, title, actionTitle} = formLabels;
 
-	let form;
-	let feedback = feedbackConfirmation !== undefined && (
-		<FeedbackBox
-			status={feedbackConfirmation}
-			successMsg={successMsg}
-			isPending={isCreateSchedulePending}
-			isError={isCreateScheduleError}
-			error={createScheduleError}
-		/>
-	);
-
-	form = (
+	const form = (
 		<form
 			onSubmit={handleSubmit}
 			className={`table-form`}>
@@ -303,7 +287,18 @@ function NewProductScheduleForm() {
 
 	return (
 		<>
-			{form} {feedback}
+			{feedback.status !== undefined && (
+				<FeedbackBox
+					status={feedback.status}
+					isPending={isCreateSchedulePending}
+					isError={isCreateScheduleError}
+					error={createScheduleError}
+					successMsg={feedback.message}
+					warnings={feedback.warnings}
+					size='small'
+				/>
+			)}
+			{form}
 		</>
 	);
 }

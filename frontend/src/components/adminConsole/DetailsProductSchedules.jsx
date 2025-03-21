@@ -117,7 +117,7 @@ function DetailsProductSchedules({scheduleRecords, placement, status}) {
 					</button>
 				)}
 			</h2>
-			{feedback && (
+			{feedback.status != undefined && (
 				<UserFeedbackBox
 					warnings={feedback.warnings}
 					status={feedback.status}
