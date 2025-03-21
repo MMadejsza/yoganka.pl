@@ -292,7 +292,7 @@ function DetailsUserSettingsForm({settingsData, customerAccessed, adminAccessed}
 
 	return (
 		<>
-			{form}{' '}
+			{form}
 			{feedback.status !== undefined && (
 				<UserFeedbackBox
 					status={feedback.status}

@@ -4,15 +4,13 @@ import {queryClient, mutateOnEdit} from '../../utils/http.js';
 import {formatIsoDateTime} from '../../utils/dateTime.js';
 import {useInput} from '../../hooks/useInput.js';
 import {useAuthStatus} from '../../hooks/useAuthStatus.js';
+import {useFeedback} from '../../hooks/useFeedback.js';
 import InputLogin from '../login/InputLogin.jsx';
 import UserFeedbackBox from './FeedbackBox.jsx';
 
 function DetailsScheduleForm({scheduleData}) {
 	// !dodaj 'zamknij zapisy
-	let initialFeedbackConfirmation;
-	const [feedbackConfirmation, setFeedbackConfirmation] = useState(initialFeedbackConfirmation);
-	const [successMsg, setSuccessMsg] = useState(null);
-
+	const {feedback, updateFeedback, resetFeedback} = useFeedback();
 	const {data: status} = useAuthStatus();
 
 	const {
@@ -35,12 +33,12 @@ function DetailsScheduleForm({scheduleData}) {
 			]);
 			queryClient.invalidateQueries(['query', `/admin-console/show-all-schedules`]);
 
-			if (res.confirmation) {
-				setSuccessMsg(res.message);
-				setFeedbackConfirmation(1);
-			} else {
-				setFeedbackConfirmation(0);
-			}
+			// updating feedback
+			updateFeedback(res);
+		},
+		onError: (err) => {
+			// updating feedback
+			updateFeedback(err);
 		},
 	});
 	// Fallback to feed custom hooks when data isn't available
@@ -104,7 +102,8 @@ function DetailsScheduleForm({scheduleData}) {
 
 	// Reset all te inputs
 	const handleReset = () => {
-		setFeedbackConfirmation(undefined);
+		resetFeedback();
+
 		handleCapacityReset();
 		handleDateReset();
 		handleStartTimeReset();
@@ -140,19 +139,7 @@ function DetailsScheduleForm({scheduleData}) {
 	// Extract values only
 	const {formType, title, actionTitle} = formLabels;
 
-	let form;
-	let feedback = (feedbackConfirmation !== undefined || isEditScheduleDataError) && (
-		<UserFeedbackBox
-			status={feedbackConfirmation}
-			successMsg={successMsg}
-			isPending={isEditScheduleDataPending}
-			isError={isEditScheduleDataError}
-			error={editScheduleDataError}
-			size='small'
-		/>
-	);
-
-	form = (
+	const form = (
 		<form
 			onSubmit={handleSubmit}
 			className={`user-container__details-list modal-checklist__list form`}>
@@ -239,7 +226,18 @@ function DetailsScheduleForm({scheduleData}) {
 	);
 	return (
 		<>
-			{form} {feedback}
+			{form}
+			{feedback.status !== undefined && (
+				<UserFeedbackBox
+					status={feedback.status}
+					isPending={isEditScheduleDataPending}
+					isError={isEditScheduleDataError}
+					error={editScheduleDataError}
+					successMsg={feedback.message}
+					warnings={feedback.warnings}
+					size='small'
+				/>
+			)}
 		</>
 	);
 }

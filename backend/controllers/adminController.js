@@ -882,11 +882,13 @@ export const putEditSchedule = async (req, res, next) => {
 			) {
 				// Nothing changed
 				console.log('\n❓❓❓ Admin schedule no change');
-				return {confirmation: 0, message: 'Brak zmian'};
+				res.status(200).json({confirmation: 0, message: 'Brak zmian'});
+				return null;
 			}
 			return foundSchedule;
 		})
 		.then((fetchedSchedule) => {
+			if (!fetchedSchedule) return;
 			models.ScheduleRecord.update(
 				{
 					Capacity: newCapacity,
