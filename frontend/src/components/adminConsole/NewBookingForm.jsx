@@ -2,6 +2,8 @@ import {useState} from 'react';
 import {useMutation, useQuery} from '@tanstack/react-query';
 import {useInput} from '../../hooks/useInput.js';
 import {useAuthStatus} from '../../hooks/useAuthStatus.js';
+import {useFeedback} from '../../hooks/useFeedback.js';
+
 import InputLogin from '../login/InputLogin.jsx';
 import UserFeedbackBox from './FeedbackBox.jsx';
 import {queryClient, fetchData, mutateOnCreate} from '../../utils/http.js';
@@ -9,10 +11,7 @@ import {getWeekDay} from '../../utils/dateTime.js';
 import * as val from '../../utils/validation.js';
 
 function NewBookingForm({onClose}) {
-	let initialFeedbackConfirmation;
-	const [feedbackConfirmation, setFeedbackConfirmation] = useState(initialFeedbackConfirmation);
-	const [successMsg, setSuccessMsg] = useState(null);
-
+	const {feedback, updateFeedback, resetFeedback} = useFeedback();
 	const {data: status} = useAuthStatus();
 
 	const {
@@ -108,15 +107,12 @@ function NewBookingForm({onClose}) {
 
 		onSuccess: (res) => {
 			queryClient.invalidateQueries(['/admin-console/show-all-bookings']);
-			if (res.confirmation || res.code == 200) {
-				setSuccessMsg(res.message);
-				setFeedbackConfirmation(1);
-			} else {
-				setFeedbackConfirmation(0);
-			}
+			// updating feedback
+			updateFeedback(res);
 		},
 		onError: (err) => {
-			setFeedbackConfirmation(0);
+			// updating feedback
+			updateFeedback(err);
 		},
 	});
 
@@ -158,7 +154,8 @@ function NewBookingForm({onClose}) {
 
 	// Reset all te inputs
 	const handleReset = () => {
-		setFeedbackConfirmation(undefined);
+		resetFeedback();
+
 		handleCustomerReset();
 		handleProductReset();
 		handleScheduleReset();
@@ -180,8 +177,12 @@ function NewBookingForm({onClose}) {
 		if (areErrors) {
 			return;
 		} else if (schedulesList?.length <= 0) {
-			setFeedbackConfirmation(0);
-			error.message = 'Pole termin nie może być puste.';
+			// updating feedback
+			updateFeedback({
+				status: -1,
+				message: 'Pole termin nie może być puste.',
+				warnings: null,
+			});
 		}
 		console.log('Submit passed errors');
 
@@ -211,20 +212,9 @@ function NewBookingForm({onClose}) {
 	// Extract values only
 	const {formType, title, actionTitle} = formLabels;
 
-	let form;
-	let feedback = feedbackConfirmation !== undefined && (
-		<UserFeedbackBox
-			status={feedbackConfirmation}
-			successMsg={successMsg}
-			isPending={isCreateBookingPending}
-			isError={isCreateBookingError}
-			error={createBookingError}
-			size='small'
-		/>
-	);
 	const isSubmitDisabled =
 		!scheduleValue || scheduleValue === '' || scheduleValue === false || areErrors;
-	form = productsList && customersList && (
+	const form = productsList && customersList && (
 		<form
 			onSubmit={handleSubmit}
 			className={`user-container__details-list modal-checklist__list`}>
@@ -357,7 +347,18 @@ function NewBookingForm({onClose}) {
 	return (
 		<>
 			<div className='user-container modal__summary'>
-				{form} {feedback}
+				{form}
+				{feedback.status !== undefined && (
+					<UserFeedbackBox
+						status={feedback.status}
+						isPending={isCreateBookingPending}
+						isError={isCreateBookingError}
+						error={createBookingError}
+						successMsg={feedback.message}
+						warnings={feedback.warnings}
+						size='small'
+					/>
+				)}
 			</div>
 		</>
 	);
