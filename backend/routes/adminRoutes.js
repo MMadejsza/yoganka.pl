@@ -2,7 +2,7 @@ import express from 'express';
 import * as adminC from '../controllers/adminController.js';
 const router = express.Router();
 
-//! GET
+//! GET___________________________________________________
 //@ routes DYNAMICALLY fetched from browser url - in english (set by AdminPage fetchData())
 router.get('/show-all-users', adminC.getAllUsers);
 router.get('/show-all-users/:id', adminC.getUserByID);
@@ -24,14 +24,14 @@ router.get('/show-all-bookings', adminC.getAllBookings);
 router.get('/show-all-bookings/:id', adminC.getBookingByID);
 router.get('/show-all-invoices', adminC.getAllInvoices);
 
-//! POST - CREATE
+//! POST - CREATE__________________________________________
 router.post('/create-user', adminC.postCreateUser);
 router.post('/create-customer', adminC.postCreateCustomer);
 router.post('/create-schedule', adminC.postCreateScheduleRecord);
 router.post('/create-product', adminC.postCreateProduct);
 router.post('/create-booking', adminC.postCreateBooking);
 
-//! PUT -EDIT
+//! PUT - EDIT______________________________________________
 router.put('/edit-customer-data/:id', adminC.putEditCustomerDetails);
 router.put('/edit-mark-absent', adminC.putEditMarkAbsent);
 router.put('/edit-mark-present', adminC.putEditMarkPresent);
@@ -39,7 +39,7 @@ router.put('/edit-user-settings/:id', adminC.putEditUserSettings);
 router.put('/edit-product-data/:id', adminC.putEditProduct);
 router.put('/edit-schedule-data/:id', adminC.putEditSchedule);
 
-//! DELETE
+//! DELETE_________________________________________________
 router.delete('/delete-user/:id', adminC.deleteUser);
 router.delete('/delete-customer/:id', adminC.deleteCustomer);
 router.delete('/delete-attendance-record', adminC.deleteAttendanceRecord);

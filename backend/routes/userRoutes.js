@@ -4,7 +4,7 @@ import isAuth from '../middleware/is-auth-user.js';
 
 const router = express.Router();
 
-//! GET
+//! GET____________________________________________________
 //@ routes dynamically fetched from browser url
 //# set by ViewFrame fetchItem()
 router.get('/grafik/:id', userC.getScheduleByID);
@@ -17,7 +17,7 @@ router.get('/grafik', userC.getAllSchedules);
 router.get('/show-user-settings', isAuth, userC.getSettings);
 router.get('/show-account', isAuth, userC.getAccount);
 
-//! PUT -EDIT
+//! PUT - EDIT_______________________________________________
 router.put('/edit-user-settings', isAuth, userC.putEditSettings);
 
 export default router;

@@ -8,7 +8,8 @@ import {formatIsoDateTime, getWeekDay} from '../utils/formatDateTime.js';
 import {errorCode, log, catchErr} from './_controllers.js';
 let errCode = errorCode;
 
-//@ USERS
+//! USERS_____________________________________________
+//@ GET
 export const getAllUsers = (req, res, next) => {
 	const controllerName = 'getAllUsers';
 	log(controllerName);
@@ -105,6 +106,22 @@ export const getUserByID = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
+export const getUserSettings = (req, res, next) => {
+	const controllerName = 'getUserSettings';
+	log(controllerName);
+
+	models.UserPrefSettings.findByPk(req.params.id)
+		.then((preferences) => {
+			if (!preferences) {
+				errCode = 404;
+				throw new Error('Nie pobrano ustawień.');
+			}
+			console.log('\n✅✅✅ admin getUserSettings fetched');
+			return res.status(200).json({confirmation: 1, preferences});
+		})
+		.catch((err) => catchErr(res, errCode, err, controllerName));
+};
+//@ POST
 export const postCreateUser = (req, res, next) => {
 	const controllerName = 'postCreateUser';
 	log(controllerName);
@@ -143,42 +160,7 @@ export const postCreateUser = (req, res, next) => {
 
 		.catch((err) => catchErr(res, errCode, err, controllerName, {type: 'signup', code: 409}));
 };
-export const deleteUser = (req, res, next) => {
-	const controllerName = 'deleteUser';
-	log(controllerName);
-
-	const id = req.params.id;
-	models.User.destroy({
-		where: {
-			UserID: id,
-		},
-	})
-		.then((deletedCount) => {
-			if (!deletedCount) {
-				errCode = 404;
-				throw new Error('Nie usunięto użytkownika.');
-			}
-			console.log('\n✅✅✅ admin deleteUser deleted the user');
-			return res.status(200).json({confirmation: 1, message: 'Konto usunięte pomyślnie.'});
-		})
-		.catch((err) => catchErr(res, errCode, err, controllerName));
-};
-export const getUserSettings = (req, res, next) => {
-	const controllerName = 'getUserSettings';
-	log(controllerName);
-
-	models.UserPrefSettings.findByPk(req.params.id)
-		.then((preferences) => {
-			if (!preferences) {
-				errCode = 404;
-				throw new Error('Nie pobrano ustawień.');
-			}
-			console.log('\n✅✅✅ admin getUserSettings fetched');
-			return res.status(200).json({confirmation: 1, preferences});
-		})
-		.catch((err) => catchErr(res, errCode, err, controllerName));
-};
-
+//@ PUT
 export const putEditUserSettings = (req, res, next) => {
 	const controllerName = 'putEditUserSettings';
 	log(controllerName);
@@ -240,8 +222,30 @@ export const putEditUserSettings = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
+//@ DELETE
+export const deleteUser = (req, res, next) => {
+	const controllerName = 'deleteUser';
+	log(controllerName);
 
-//@ CUSTOMERS
+	const id = req.params.id;
+	models.User.destroy({
+		where: {
+			UserID: id,
+		},
+	})
+		.then((deletedCount) => {
+			if (!deletedCount) {
+				errCode = 404;
+				throw new Error('Nie usunięto użytkownika.');
+			}
+			console.log('\n✅✅✅ admin deleteUser deleted the user');
+			return res.status(200).json({confirmation: 1, message: 'Konto usunięte pomyślnie.'});
+		})
+		.catch((err) => catchErr(res, errCode, err, controllerName));
+};
+
+//! CUSTOMERS_____________________________________________
+//@ GET
 export const getAllCustomers = (req, res, next) => {
 	const controllerName = 'getAllCustomers';
 	log(controllerName);
@@ -379,6 +383,24 @@ export const getCustomerByID = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
+export const getCustomerDetails = (req, res, next) => {
+	const controllerName = 'getputEditCustomerDetails';
+	log(controllerName);
+
+	models.Customer.findByPk(req.params.id)
+		.then((customer) => {
+			if (!customer) {
+				errCode = 404;
+				throw new Error('Nie znaleziono danych uczestnika.');
+			}
+			console.log('\n✅✅✅ Fetched admin getputEditCustomerDetails customer');
+			return res
+				.status(200)
+				.json({confirmation: 1, customer, message: 'Dane uczestnika pobrane pomyślnie.'});
+		})
+		.catch((err) => catchErr(res, errCode, err, controllerName));
+};
+//@ POST
 export const postCreateCustomer = (req, res, next) => {
 	const controllerName = 'postCreateCustomer';
 	log(controllerName);
@@ -418,43 +440,7 @@ export const postCreateCustomer = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName, {code: 409}));
 };
-export const deleteCustomer = (req, res, next) => {
-	const controllerName = 'deleteCustomer';
-	log(controllerName);
-
-	const id = req.params.id;
-	models.Customer.destroy({
-		where: {
-			CustomerID: id,
-		},
-	})
-		.then((deletedCount) => {
-			if (!deletedCount) {
-				errCode = 404;
-				throw new Error('Nie usunięto profilu uczestnika.');
-			}
-			console.log('\n✅✅✅ admin deleteUser deleted the customer');
-			return res.status(200).json({confirmation: 1, message: 'Profil usunięty pomyślnie.'});
-		})
-		.catch((err) => catchErr(res, errCode, err, controllerName));
-};
-export const getCustomerDetails = (req, res, next) => {
-	const controllerName = 'getputEditCustomerDetails';
-	log(controllerName);
-
-	models.Customer.findByPk(req.params.id)
-		.then((customer) => {
-			if (!customer) {
-				errCode = 404;
-				throw new Error('Nie znaleziono danych uczestnika.');
-			}
-			console.log('\n✅✅✅ Fetched admin getputEditCustomerDetails customer');
-			return res
-				.status(200)
-				.json({confirmation: 1, customer, message: 'Dane uczestnika pobrane pomyślnie.'});
-		})
-		.catch((err) => catchErr(res, errCode, err, controllerName));
-};
+//@ PUT
 export const putEditCustomerDetails = (req, res, next) => {
 	const controllerName = 'putEditCustomerDetails';
 	log(controllerName);
@@ -523,8 +509,30 @@ export const putEditCustomerDetails = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
+//@ DELETE
+export const deleteCustomer = (req, res, next) => {
+	const controllerName = 'deleteCustomer';
+	log(controllerName);
 
-//@ SCHEDULES
+	const id = req.params.id;
+	models.Customer.destroy({
+		where: {
+			CustomerID: id,
+		},
+	})
+		.then((deletedCount) => {
+			if (!deletedCount) {
+				errCode = 404;
+				throw new Error('Nie usunięto profilu uczestnika.');
+			}
+			console.log('\n✅✅✅ admin deleteUser deleted the customer');
+			return res.status(200).json({confirmation: 1, message: 'Profil usunięty pomyślnie.'});
+		})
+		.catch((err) => catchErr(res, errCode, err, controllerName));
+};
+
+//! SCHEDULES_____________________________________________
+//@ GET
 export const getAllSchedules = (req, res, next) => {
 	const controllerName = 'getAllSchedules';
 	log(controllerName);
@@ -751,6 +759,7 @@ export const getProductSchedules = (req, res, next) => {
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 export const getBookedSchedules = (req, res, next) => {};
+//@ POST
 export const postCreateScheduleRecord = (req, res, next) => {
 	const controllerName = 'postCreateScheduleRecord';
 	log(controllerName);
@@ -815,60 +824,7 @@ export const postCreateScheduleRecord = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
-export const deleteSchedule = (req, res, next) => {
-	const controllerName = 'deleteSchedule';
-	log(controllerName);
-	const id = req.params.id;
-	console.log(`${controllerName} deleting id: `, id);
-
-	models.ScheduleRecord.findOne({
-		where: {
-			ScheduleID: id,
-		},
-	})
-		.then((foundSchedule) => {
-			if (!foundSchedule) {
-				errCode = 404;
-				console.log(`\n❌❌❌ Error Admin ${controllerName} Schedule to delete not found.`);
-				throw new Error('Nie znaleziono terminu do usunięcia.');
-			} else if (
-				new Date(`${foundSchedule.Date}T${foundSchedule.StartTime}:00`) < new Date()
-			) {
-				errCode = 400;
-				console.log(
-					`\n❌❌❌ Error Admin ${controllerName} Schedule is passed - can't be deleted.`,
-				);
-				throw new Error(
-					'Nie można usunąć terminu który już minął. Posiada też wartość historyczną dla statystyk.',
-				);
-			}
-
-			return models.BookedSchedule.findOne({
-				where: {ScheduleID: id},
-			}).then((foundRecord) => {
-				if (foundRecord) {
-					errCode = 409;
-					console.log(
-						`\n❌❌❌ Error Admin ${controllerName} Schedule is booked - can't be deleted.`,
-					);
-					throw new Error(
-						'Nie można usunąć terminu, który posiada rekordy obecności (obecny/anulowany). Najpierw USUŃ rekordy obecności w konkretnym terminie.',
-					);
-				}
-				return foundSchedule.destroy();
-			});
-		})
-		.then((deletedCount) => {
-			if (!deletedCount) {
-				errCode = 404;
-				console.log(`\n❌❌❌ Error Admin ${controllerName} Schedule not deleted.`);
-				throw new Error('Nie usunięto terminu.');
-			}
-			console.log('\n✅✅✅ admin deleteSchedule deleted the schedule record');
-			return res.status(200).json({confirmation: 1, message: 'Termin usunięty pomyślnie.'});
-		})
-		.catch((err) => catchErr(res, errCode, err, controllerName));
-};
+//@ PUT
 export const putEditSchedule = async (req, res, next) => {
 	const controllerName = 'putEditSchedule';
 	log(controllerName);
@@ -951,38 +907,66 @@ export const putEditSchedule = async (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
-//@ ATTENDANCE
-export const deleteAttendanceRecord = (req, res, next) => {
-	const controllerName = 'deleteAttendanceRecord';
+//@ DELETE
+export const deleteSchedule = (req, res, next) => {
+	const controllerName = 'deleteSchedule';
 	log(controllerName);
-	console.log(req.body);
+	const id = req.params.id;
+	console.log(`${controllerName} deleting id: `, id);
 
-	const {attendanceCustomerID, attendanceBookingID} = req.body;
-
-	models.BookedSchedule.findOne({
-		where: {CustomerID: attendanceCustomerID, BookingID: attendanceBookingID},
+	models.ScheduleRecord.findOne({
+		where: {
+			ScheduleID: id,
+		},
 	})
-		.then((foundRecord) => {
-			if (!foundRecord) {
+		.then((foundSchedule) => {
+			if (!foundSchedule) {
 				errCode = 404;
-				throw new Error('Nie znaleziono rekordu obecności w dzienniku.');
+				console.log(`\n❌❌❌ Error Admin ${controllerName} Schedule to delete not found.`);
+				throw new Error('Nie znaleziono terminu do usunięcia.');
+			} else if (
+				new Date(`${foundSchedule.Date}T${foundSchedule.StartTime}:00`) < new Date()
+			) {
+				errCode = 400;
+				console.log(
+					`\n❌❌❌ Error Admin ${controllerName} Schedule is passed - can't be deleted.`,
+				);
+				throw new Error(
+					'Nie można usunąć terminu który już minął. Posiada też wartość historyczną dla statystyk.',
+				);
 			}
-			return foundRecord.destroy();
+
+			return models.BookedSchedule.findOne({
+				where: {ScheduleID: id},
+			}).then((foundRecord) => {
+				if (foundRecord) {
+					errCode = 409;
+					console.log(
+						`\n❌❌❌ Error Admin ${controllerName} Schedule is booked - can't be deleted.`,
+					);
+					throw new Error(
+						'Nie można usunąć terminu, który posiada rekordy obecności (obecny/anulowany). Najpierw USUŃ rekordy obecności w konkretnym terminie.',
+					);
+				}
+				return foundSchedule.destroy();
+			});
 		})
 		.then((deletedCount) => {
 			if (!deletedCount) {
 				errCode = 404;
-				throw new Error('Nie usunięto rekordu.');
+				console.log(`\n❌❌❌ Error Admin ${controllerName} Schedule not deleted.`);
+				throw new Error('Nie usunięto terminu.');
 			}
-
-			console.log('\n✅✅✅ admin deleteAttendanceRecord UPDATE successful');
-			return res.status(200).json({
-				confirmation: 1,
-				message: 'Rekord obecności usunięty.',
-			});
+			console.log('\n✅✅✅ admin deleteSchedule deleted the schedule record');
+			return res.status(200).json({confirmation: 1, message: 'Termin usunięty pomyślnie.'});
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
+
+//! ATTENDANCE_____________________________________________
+//@ GET
+//@ POST
+//@ PUT
 export const putEditMarkAbsent = (req, res, next) => {
 	const controllerName = 'putEditMarkAbsent';
 	log(controllerName);
@@ -1043,7 +1027,41 @@ export const putEditMarkPresent = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
-//@ FEEDBACK
+//@ DELETE
+export const deleteAttendanceRecord = (req, res, next) => {
+	const controllerName = 'deleteAttendanceRecord';
+	log(controllerName);
+	console.log(req.body);
+
+	const {attendanceCustomerID, attendanceBookingID} = req.body;
+
+	models.BookedSchedule.findOne({
+		where: {CustomerID: attendanceCustomerID, BookingID: attendanceBookingID},
+	})
+		.then((foundRecord) => {
+			if (!foundRecord) {
+				errCode = 404;
+				throw new Error('Nie znaleziono rekordu obecności w dzienniku.');
+			}
+			return foundRecord.destroy();
+		})
+		.then((deletedCount) => {
+			if (!deletedCount) {
+				errCode = 404;
+				throw new Error('Nie usunięto rekordu.');
+			}
+
+			console.log('\n✅✅✅ admin deleteAttendanceRecord UPDATE successful');
+			return res.status(200).json({
+				confirmation: 1,
+				message: 'Rekord obecności usunięty.',
+			});
+		})
+		.catch((err) => catchErr(res, errCode, err, controllerName));
+};
+
+//! FEEDBACK_____________________________________________
+//@ GET
 export const getAllParticipantsFeedback = (req, res, next) => {
 	const controllerName = 'getAllParticipantsFeedback';
 	log(controllerName);
@@ -1200,6 +1218,9 @@ export const getAllParticipantsFeedbackByID = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
+//@ POST
+//@ PUT
+//@ DELETE
 export const deleteFeedback = (req, res, next) => {
 	const controllerName = 'deleteFeedback';
 	log(controllerName);
@@ -1220,18 +1241,24 @@ export const deleteFeedback = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
-//@ NEWSLETTERS
+
+//! NEWSLETTERS_____________________________________________
+//@ GET
 export const getAllNewsletters = (req, res, next) => {
 	const controllerName = 'getAllNewsletters';
 	log(controllerName);
 
 	simpleListAllToTable(res, models.Newsletter);
 };
-//# SUBS
 export const getAllSubscribedNewsletters = (req, res, next) => {
 	simpleListAllToTable(res, models.SubscribedNewsletter);
 };
-//@ PRODUCTS
+//@ POST
+//@ PUT
+//@ DELETE
+
+//! PRODUCTS_____________________________________________
+//@ GET
 export const getAllProducts = (req, res, next) => {
 	const controllerName = 'getAllProducts';
 	log(controllerName);
@@ -1296,6 +1323,7 @@ export const getProductByID = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
+//@ POST
 export const postCreateProduct = async (req, res, next) => {
 	const controllerName = 'postCreateProduct';
 	log(controllerName);
@@ -1329,6 +1357,7 @@ export const postCreateProduct = async (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName, {code: 409}));
 };
+//@ PUT
 export const putEditProduct = async (req, res, next) => {
 	const controllerName = 'putEditProduct';
 	log(controllerName);
@@ -1414,6 +1443,7 @@ export const putEditProduct = async (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
+//@ DELETE
 export const deleteProduct = (req, res, next) => {
 	const controllerName = 'deleteProduct';
 	log(controllerName);
@@ -1434,7 +1464,9 @@ export const deleteProduct = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
-//@ BOOKINGS
+
+//! BOOKINGS_____________________________________________
+//@ GET
 export const getAllBookings = (req, res, next) => {
 	const controllerName = 'getAllBookings';
 	log(controllerName);
@@ -1566,6 +1598,7 @@ export const getBookingByID = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
+//@ POST
 export const postCreateBooking = (req, res, next) => {
 	const controllerName = 'postCreateBooking';
 	log(controllerName);
@@ -1717,6 +1750,8 @@ export const postCreateBooking = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
+//@ PUT
+//@ DELETE
 export const deleteBooking = (req, res, next) => {
 	const controllerName = 'deleteBooking';
 	log(controllerName);
@@ -1740,7 +1775,9 @@ export const deleteBooking = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
-//@ INVOICES
+
+//! INVOICES_____________________________________________
+//@ GET
 export const getAllInvoices = (req, res, next) => {
 	const controllerName = 'getAllInvoices';
 	log(controllerName);
@@ -1822,3 +1859,6 @@ export const getAllInvoices = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
+//@ POST
+//@ PUT
+//@ DELETE

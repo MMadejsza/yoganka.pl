@@ -3,6 +3,99 @@ import * as models from '../models/_index.js';
 import {errorCode, log, catchErr} from './_controllers.js';
 let errCode = errorCode;
 
+//! CUSTOMERS_____________________________________________
+//@ GET
+export const getCustomerDetails = (req, res, next) => {
+	const controllerName = 'getCustomerDetails';
+	log(controllerName);
+	const customer = req.user.Customer;
+	// console.log(customer);
+	return res.status(200).json({confirmation: 1, customer});
+};
+//@ PUT
+export const putEditCustomerDetails = (req, res, next) => {
+	const controllerName = 'putEditCustomerDetails';
+	log(controllerName);
+
+	console.log(req.body);
+
+	const customerId = req.user.Customer.CustomerID;
+	const {phone: newPhone, cMethod: newContactMethod} = req.body;
+
+	if (!newPhone || !newPhone.trim()) {
+		console.log('\n❌❌❌ Error putEditCustomerDetails:', 'No phone');
+		errCode = 400;
+		throw new Error('Numer telefonu nie może być pusty');
+	}
+
+	models.Customer.update(
+		{Phone: newPhone, PreferredContactMethod: newContactMethod},
+		{where: {CustomerID: customerId}},
+	)
+		.then((customerResult) => {
+			return {customerResult};
+		})
+		.then((results) => {
+			console.log('\n✅✅✅ putEditCustomerDetails Update successful');
+			const affectedCustomerRows = results.customerResult[0];
+			const status = affectedCustomerRows >= 1;
+			return res.status(200).json({
+				confirmation: status,
+				affectedCustomerRows,
+				message: 'Profil zaktualizowany pomyslnie.',
+			});
+		})
+		.catch((err) => catchErr(res, errCode, err, controllerName));
+};
+
+//! BOOKINGS_____________________________________________
+//@ GET
+export const getBookingByID = (req, res, next) => {
+	const controllerName = 'getBookingByID';
+	log(controllerName);
+
+	const PK = req.params.id;
+
+	models.Booking.findByPk(PK, {
+		through: {attributes: []}, // omit data from mid table
+		required: false,
+		attributes: {
+			exclude: ['CustomerID'],
+		},
+		include: [
+			{
+				model: models.Customer,
+				attributes: {exclude: []},
+			},
+			{
+				model: models.ScheduleRecord,
+				attributes: {exclude: ['UserID']},
+				through: {attributes: []}, // omit data from mid table
+				include: [
+					{
+						model: models.Product,
+						attributes: {exclude: []},
+					},
+				],
+			},
+		],
+	})
+		.then((booking) => {
+			if (!booking) {
+				errCode = 404;
+				throw new Error('Nie znaleziono rezerwacji.');
+			}
+			console.log('\n✅✅✅ getBookingByID booking fetched');
+			return res.status(200).json({
+				confirmation: 1,
+				message: 'Rezerwacja pobrana pomyślnie.',
+				isLoggedIn: req.session.isLoggedIn,
+				booking,
+			});
+		})
+		.catch((err) => catchErr(res, errCode, err, controllerName));
+};
+//@ POST
 export const postCreateBookSchedule = (req, res, next) => {
 	const controllerName = 'postCreateBookSchedule';
 	log(controllerName);
@@ -169,6 +262,9 @@ export const postCreateBookSchedule = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
+
+//! ATTENDANCE_____________________________________________
+//@ PUT
 export const putEditMarkAbsent = (req, res, next) => {
 	const controllerName = 'putEditMarkAbsent';
 	log(controllerName);
@@ -208,94 +304,6 @@ export const putEditMarkAbsent = (req, res, next) => {
 
 					throw new Error('Nie znaleziono terminu.');
 				}
-			});
-		})
-		.catch((err) => catchErr(res, errCode, err, controllerName));
-};
-
-export const getCustomerDetails = (req, res, next) => {
-	const controllerName = 'getCustomerDetails';
-	log(controllerName);
-	const customer = req.user.Customer;
-	// console.log(customer);
-	return res.status(200).json({confirmation: 1, customer});
-};
-export const putEditCustomerDetails = (req, res, next) => {
-	const controllerName = 'putEditCustomerDetails';
-	log(controllerName);
-
-	console.log(req.body);
-
-	const customerId = req.user.Customer.CustomerID;
-	const {phone: newPhone, cMethod: newContactMethod} = req.body;
-
-	if (!newPhone || !newPhone.trim()) {
-		console.log('\n❌❌❌ Error putEditCustomerDetails:', 'No phone');
-		errCode = 400;
-		throw new Error('Numer telefonu nie może być pusty');
-	}
-
-	models.Customer.update(
-		{Phone: newPhone, PreferredContactMethod: newContactMethod},
-		{where: {CustomerID: customerId}},
-	)
-		.then((customerResult) => {
-			return {customerResult};
-		})
-		.then((results) => {
-			console.log('\n✅✅✅ putEditCustomerDetails Update successful');
-			const affectedCustomerRows = results.customerResult[0];
-			const status = affectedCustomerRows >= 1;
-			return res.status(200).json({
-				confirmation: status,
-				affectedCustomerRows,
-				message: 'Profil zaktualizowany pomyslnie.',
-			});
-		})
-		.catch((err) => catchErr(res, errCode, err, controllerName));
-};
-
-export const getBookingByID = (req, res, next) => {
-	const controllerName = 'getBookingByID';
-	log(controllerName);
-
-	const PK = req.params.id;
-
-	models.Booking.findByPk(PK, {
-		through: {attributes: []}, // omit data from mid table
-		required: false,
-		attributes: {
-			exclude: ['CustomerID'],
-		},
-		include: [
-			{
-				model: models.Customer,
-				attributes: {exclude: []},
-			},
-			{
-				model: models.ScheduleRecord,
-				attributes: {exclude: ['UserID']},
-				through: {attributes: []}, // omit data from mid table
-				include: [
-					{
-						model: models.Product,
-						attributes: {exclude: []},
-					},
-				],
-			},
-		],
-	})
-		.then((booking) => {
-			if (!booking) {
-				errCode = 404;
-				throw new Error('Nie znaleziono rezerwacji.');
-			}
-			console.log('\n✅✅✅ getBookingByID booking fetched');
-			return res.status(200).json({
-				confirmation: 1,
-				message: 'Rezerwacja pobrana pomyślnie.',
-				isLoggedIn: req.session.isLoggedIn,
-				booking,
 			});
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));

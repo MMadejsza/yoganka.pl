@@ -5,7 +5,7 @@ import isAuthUser from '../middleware/is-auth-user.js';
 
 const router = express.Router();
 
-//! GET
+//! GET__________________________________________________________
 //@ routes DYNAMICALLY fetched from browser url
 //# set by ViewFrame fetchItem()
 router.get('/konto/rezerwacje/:id', isAuth, customerC.getBookingByID);
@@ -13,10 +13,10 @@ router.get('/konto/rezerwacje/:id', isAuth, customerC.getBookingByID);
 //@ routes MANUALLY set
 router.get('/get-customer-details', isAuth, customerC.getCustomerDetails);
 
-//! POST - CREATE
+//! POST - CREATE________________________________________________
 router.post('/create-booking', isAuthUser, customerC.postCreateBookSchedule);
 
-//! PUT -EDIT
+//! PUT - EDIT____________________________________________________
 router.put('/edit-mark-absent/:scheduleID', isAuth, customerC.putEditMarkAbsent);
 router.put('/edit-customer-data', isAuth, customerC.putEditCustomerDetails);
 

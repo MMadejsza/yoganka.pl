@@ -5,36 +5,194 @@ import {Sequelize, Op, fn, col} from 'sequelize';
 import {errorCode, log, catchErr} from './_controllers.js';
 let errCode = errorCode;
 
-export const getShowUserByID = (req, res, next) => {
-	const controllerName = 'getShowUserByID';
+//! USER_____________________________________________
+//@ GET
+export const getAccount = (req, res, next) => {
+	const controllerName = 'getAccount';
 	log(controllerName);
 
-	const PK = req.user.UserID;
-	models.User.findByPk(PK, {
-		include: [
-			{
-				model: models.Customer, // Add Customer
-				required: false, // May not exist
-			},
-			{
-				model: models.UserPrefSettings, // User settings if exist
-				required: false,
-			},
-		],
-	})
-		.then((user) => {
-			if (!user) {
-				errCode = 404;
-				throw new Error('Nie znaleziono użytkownika.');
-			}
+	// @ Fetching USER
+	// check if there is logged in User
+	if (!req.user) {
+		errCode = 401;
+		throw new Error('Użytkownik nie jest zalogowany');
+	}
 
-			console.log('\n✅✅✅ getShowUserByID user fetched');
+	// if only user
+	if (!req.user.Customer) {
+		const user = req.user;
+		console.log('\n✅✅✅ getAccount user fetched');
+		return res
+			.status(200)
+			.json({confirmation: 1, message: 'Profil uczestnika pobrany pomyślnie.', user});
+	} else {
+		let PK = req.user.Customer.CustomerID;
+		return models.Customer.findByPk(PK, {
+			include: [
+				{
+					model: models.User, // Add Customer
+					required: false, // May not exist
+					include: [
+						{
+							model: models.UserPrefSettings, // Customer phone numbers
+							required: false,
+							attributes: {
+								exclude: ['UserID'], // deleting
+							},
+						},
+					],
+				},
+				{
+					model: models.Booking, // His reservations
+					required: false,
+					include: [
+						{
+							model: models.Invoice, // eventual invoices
+							required: false,
+							attributes: {
+								exclude: ['BookingID'], // deleting
+							},
+						},
+					],
+					where: {CustomerID: req.user.Customer.CustomerID},
+					attributes: {
+						exclude: ['ProductID', 'CustomerID'], // deleting
+					},
+				},
+				{
+					model: models.BookedSchedule,
+					required: false,
+					include: [
+						{
+							model: models.ScheduleRecord, // schedules trough booked schedule
+							required: false,
+
+							include: [
+								{
+									model: models.Product, //schedule's product
+									required: false,
+								},
+								{
+									model: models.Feedback, // harmonogram -> opinie
+									required: false,
+									where: {CustomerID: req.user.Customer.CustomerID}, // but only for particular customer
+									attributes: {
+										exclude: ['CustomerID', 'ScheduleID'], // deleting
+									},
+								},
+							],
+							attributes: {
+								exclude: ['ProductID'], // deleting
+							},
+						},
+					],
+					attributes: {
+						exclude: ['CustomerID', 'ScheduleID'], // deleting
+					},
+				},
+			],
+			attributes: {
+				exclude: ['UserID'], // deleting
+			},
+		})
+			.then((customer) => {
+				if (!customer) {
+					errCode = 404;
+					throw new Error('Nie pobrano danych uczestnika.');
+				}
+				console.log('\n✅✅✅ showAccount customer fetched');
+				return res.status(200).json({
+					customer,
+					confirmation: 1,
+					message: 'Profil uczestnika pobrany pomyślnie.',
+				});
+			})
+			.catch((err) => catchErr(res, errCode, err, controllerName));
+	}
+};
+export const getSettings = (req, res, next) => {
+	const controllerName = 'getSettings';
+	log(controllerName);
+	const PK = req.user.UserPrefSetting?.UserPrefID;
+
+	models.UserPrefSettings.findByPk(PK)
+		.then((preferences) => {
+			if (!preferences) {
+				errCode = 404;
+				throw new Error('Nie pobrano ustawień.');
+			}
+			console.log('\n✅✅✅ getSettings fetched');
 			return res
 				.status(200)
-				.json({user, confirmation: 1, message: '✅ Konto pobrane pomyślnie'});
+				.json({confirmation: 1, message: 'Ustawienia pobrana pomyślnie.', preferences});
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
+//@ PUT
+export const putEditSettings = (req, res, next) => {
+	const controllerName = 'putEditSettings';
+	log(controllerName);
+
+	const userID = req.user.UserID;
+
+	const {handedness, font, notifications, animation, theme} = req.body;
+	console.log(`❗❗❗`, req.body);
+
+	// if preferences don't exist - create new ones:
+	models.UserPrefSettings.findOrCreate({
+		where: {UserID: userID},
+		defaults: {
+			UserID: userID,
+			Handedness: !!handedness || false,
+			FontSize: parseInt(font) || 14,
+			Notifications: !!notifications || false,
+			Animation: !!animation || false,
+			Theme: !!theme || false,
+		},
+	})
+		.then(([preferences, created]) => {
+			if (!created) {
+				// Nothing changed
+				if (
+					preferences.Handedness == !!handedness &&
+					preferences.FontSize == parseInt(font) &&
+					preferences.Notifications == !!notifications &&
+					preferences.Animation == !!animation &&
+					preferences.Theme == !!theme
+				) {
+					// Nothing changed
+					console.log('\n❓❓❓ putEditSettings no change');
+					return {confirmation: 0, message: 'Brak zmian'};
+				} else {
+					// Update
+					preferences.Handedness = !!handedness;
+					preferences.FontSize = parseInt(font);
+					preferences.Notifications = !!notifications;
+					preferences.Animation = !!animation;
+					preferences.Theme = !!theme;
+					return preferences.save().then(() => {
+						console.log('\n✅✅✅ putEditSettings Preferences Updated');
+						return {confirmation: 1, message: 'Ustawienia zostały zaktualizowane'};
+					});
+				}
+			} else {
+				// New preferences created
+				console.log('\n✅✅✅ putEditSettings Preferences Created');
+				return {confirmation: 1, message: 'Ustawienia zostały utworzone'};
+			}
+		})
+		.then((result) => {
+			console.log('\n✅✅✅ Preferences Result sent back');
+			return res.status(200).json({
+				confirmation: result.confirmation,
+				message: result.message,
+			});
+		})
+		.catch((err) => catchErr(res, errCode, err, controllerName, {code: 409}));
+};
+
+//! SCHEDULES_____________________________________________
+//@ GET
 export const getAllSchedules = (req, res, next) => {
 	const controllerName = 'getAllSchedules';
 	log(controllerName);
@@ -218,189 +376,4 @@ export const getScheduleByID = (req, res, next) => {
 			// return res.status(200).json({schedule});
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
-};
-
-export const getAccount = (req, res, next) => {
-	const controllerName = 'getAccount';
-	log(controllerName);
-
-	// @ Fetching USER
-	// check if there is logged in User
-	if (!req.user) {
-		errCode = 401;
-		throw new Error('Użytkownik nie jest zalogowany');
-	}
-
-	// if only user
-	if (!req.user.Customer) {
-		const user = req.user;
-		console.log('\n✅✅✅ getAccount user fetched');
-		return res
-			.status(200)
-			.json({confirmation: 1, message: 'Profil uczestnika pobrany pomyślnie.', user});
-	} else {
-		let PK = req.user.Customer.CustomerID;
-		return models.Customer.findByPk(PK, {
-			include: [
-				{
-					model: models.User, // Add Customer
-					required: false, // May not exist
-					include: [
-						{
-							model: models.UserPrefSettings, // Customer phone numbers
-							required: false,
-							attributes: {
-								exclude: ['UserID'], // deleting
-							},
-						},
-					],
-				},
-				{
-					model: models.Booking, // His reservations
-					required: false,
-					include: [
-						{
-							model: models.Invoice, // eventual invoices
-							required: false,
-							attributes: {
-								exclude: ['BookingID'], // deleting
-							},
-						},
-					],
-					where: {CustomerID: req.user.Customer.CustomerID},
-					attributes: {
-						exclude: ['ProductID', 'CustomerID'], // deleting
-					},
-				},
-				{
-					model: models.BookedSchedule,
-					required: false,
-					include: [
-						{
-							model: models.ScheduleRecord, // schedules trough booked schedule
-							required: false,
-
-							include: [
-								{
-									model: models.Product, //schedule's product
-									required: false,
-								},
-								{
-									model: models.Feedback, // harmonogram -> opinie
-									required: false,
-									where: {CustomerID: req.user.Customer.CustomerID}, // but only for particular customer
-									attributes: {
-										exclude: ['CustomerID', 'ScheduleID'], // deleting
-									},
-								},
-							],
-							attributes: {
-								exclude: ['ProductID'], // deleting
-							},
-						},
-					],
-					attributes: {
-						exclude: ['CustomerID', 'ScheduleID'], // deleting
-					},
-				},
-			],
-			attributes: {
-				exclude: ['UserID'], // deleting
-			},
-		})
-			.then((customer) => {
-				if (!customer) {
-					errCode = 404;
-					throw new Error('Nie pobrano danych uczestnika.');
-				}
-				console.log('\n✅✅✅ showAccount customer fetched');
-				return res.status(200).json({
-					customer,
-					confirmation: 1,
-					message: 'Profil uczestnika pobrany pomyślnie.',
-				});
-			})
-			.catch((err) => catchErr(res, errCode, err, controllerName));
-	}
-};
-
-export const getSettings = (req, res, next) => {
-	const controllerName = 'getSettings';
-	log(controllerName);
-	const PK = req.user.UserPrefSetting?.UserPrefID;
-
-	models.UserPrefSettings.findByPk(PK)
-		.then((preferences) => {
-			if (!preferences) {
-				errCode = 404;
-				throw new Error('Nie pobrano ustawień.');
-			}
-			console.log('\n✅✅✅ getSettings fetched');
-			return res
-				.status(200)
-				.json({confirmation: 1, message: 'Ustawienia pobrana pomyślnie.', preferences});
-		})
-		.catch((err) => catchErr(res, errCode, err, controllerName));
-};
-
-export const putEditSettings = (req, res, next) => {
-	const controllerName = 'putEditSettings';
-	log(controllerName);
-
-	const userID = req.user.UserID;
-
-	const {handedness, font, notifications, animation, theme} = req.body;
-	console.log(`❗❗❗`, req.body);
-
-	// if preferences don't exist - create new ones:
-	models.UserPrefSettings.findOrCreate({
-		where: {UserID: userID},
-		defaults: {
-			UserID: userID,
-			Handedness: !!handedness || false,
-			FontSize: parseInt(font) || 14,
-			Notifications: !!notifications || false,
-			Animation: !!animation || false,
-			Theme: !!theme || false,
-		},
-	})
-		.then(([preferences, created]) => {
-			if (!created) {
-				// Nothing changed
-				if (
-					preferences.Handedness == !!handedness &&
-					preferences.FontSize == parseInt(font) &&
-					preferences.Notifications == !!notifications &&
-					preferences.Animation == !!animation &&
-					preferences.Theme == !!theme
-				) {
-					// Nothing changed
-					console.log('\n❓❓❓ putEditSettings no change');
-					return {confirmation: 0, message: 'Brak zmian'};
-				} else {
-					// Update
-					preferences.Handedness = !!handedness;
-					preferences.FontSize = parseInt(font);
-					preferences.Notifications = !!notifications;
-					preferences.Animation = !!animation;
-					preferences.Theme = !!theme;
-					return preferences.save().then(() => {
-						console.log('\n✅✅✅ putEditSettings Preferences Updated');
-						return {confirmation: 1, message: 'Ustawienia zostały zaktualizowane'};
-					});
-				}
-			} else {
-				// New preferences created
-				console.log('\n✅✅✅ putEditSettings Preferences Created');
-				return {confirmation: 1, message: 'Ustawienia zostały utworzone'};
-			}
-		})
-		.then((result) => {
-			console.log('\n✅✅✅ Preferences Result sent back');
-			return res.status(200).json({
-				confirmation: result.confirmation,
-				message: result.message,
-			});
-		})
-		.catch((err) => catchErr(res, errCode, err, controllerName, {code: 409}));
 };
