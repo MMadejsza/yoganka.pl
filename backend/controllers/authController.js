@@ -3,6 +3,8 @@ import bcrypt from 'bcryptjs';
 import {errorCode, log, catchErr} from '../utils/controllersUtils.js';
 let errCode = errorCode;
 
+//! LOGIN / SIGNUP_____________________________________________
+//@ GET
 export const getStatus = (req, res, next) => {
 	const controllerName = 'getStatus';
 	log(controllerName);
@@ -17,6 +19,7 @@ export const getStatus = (req, res, next) => {
 		token: res.locals.csrfToken,
 	});
 };
+//@ POST
 export const postSignup = (req, res, next) => {
 	const controllerName = 'postSignup';
 	log(controllerName);
