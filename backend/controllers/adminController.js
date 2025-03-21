@@ -5,7 +5,7 @@ import db from '../utils/db.js';
 import {simpleListAllToTable, listAllToTable} from '../utils/listAllToTable.js';
 import columnMaps from '../utils/columnsMapping.js';
 import {formatIsoDateTime, getWeekDay} from '../utils/formatDateTime.js';
-import {errorCode, log, catchErr} from './controllersUtils.js';
+import {errorCode, log, catchErr} from '../utils/controllersUtils.js';
 let errCode = errorCode;
 
 //! USERS_____________________________________________

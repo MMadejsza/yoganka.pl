@@ -1,6 +1,6 @@
 import columnMaps from './columnsMapping.js';
 import {formatIsoDateTime} from './formatDateTime.js';
-import {errorCode, log, catchErr} from '../controllers/controllersUtils.js';
+import {errorCode, log, catchErr} from './controllersUtils.js';
 let errCode = errorCode;
 
 export const simpleListAllToTable = (res, model) => {

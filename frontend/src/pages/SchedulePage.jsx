@@ -58,12 +58,13 @@ function SchedulePage() {
 				},
 				credentials: 'include',
 			}).then((response) => {
-				if (!response.ok) {
-					return response.json().then((errorData) => {
-						throw new Error(errorData.message || 'Błąd podczas rezerwacji');
-					});
-				}
-				return response.json();
+				return response.json().then((data) => {
+					if (!response.ok) {
+						// reject with backend data
+						return Promise.reject(data);
+					}
+					return data;
+				});
 			}),
 		onSuccess: (res) => {
 			if (res.isNewCustomer) {
