@@ -3,6 +3,7 @@ export const queryClient = new QueryClient();
 
 // Util function for managing behavior of fetch for http requests
 
+//! FETCH - QUERY FN_______________________________________________
 export async function fetchStatus() {
 	// await promise solve
 	const response = await fetch(`/api/login-pass/status`, {credentials: 'include'});
@@ -64,6 +65,7 @@ export async function fetchData(link) {
 	return data;
 }
 
+//! MUTATE - MUTATE FN_____________________________________________
 export async function mutateOnLoginOrSignup(status, formData, path) {
 	return fetch(path, {
 		method: 'POST',
@@ -83,7 +85,6 @@ export async function mutateOnLoginOrSignup(status, formData, path) {
 		});
 	});
 }
-
 export async function mutateOnCreate(status, formData, path) {
 	return fetch(path, {
 		method: 'POST',
@@ -103,7 +104,6 @@ export async function mutateOnCreate(status, formData, path) {
 		});
 	});
 }
-
 export async function mutateOnEdit(status, formData, path) {
 	return fetch(path, {
 		method: 'PUT',
@@ -123,7 +123,6 @@ export async function mutateOnEdit(status, formData, path) {
 		});
 	});
 }
-
 export async function mutateOnDelete(status, formData, path) {
 	return fetch(path, {
 		method: 'DELETE',
