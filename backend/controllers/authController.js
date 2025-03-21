@@ -31,7 +31,7 @@ export const postSignup = (req, res, next) => {
 	models.User.findOne({where: {email}})
 		.then((user) => {
 			if (user) {
-				errCode = 409;
+				errCode = 303;
 				throw new Error('Użytkownik już istnieje.');
 			}
 
@@ -59,7 +59,7 @@ export const postSignup = (req, res, next) => {
 					});
 				});
 		})
-		.catch((err) => catchErr(res, errCode, err, controllerName, {type: 'signup', code: 409}));
+		.catch((err) => catchErr(res, errCode, err, controllerName, {type: 'signup', code: 303}));
 };
 export const postLogin = (req, res, next) => {
 	const controllerName = 'postLogin';
@@ -83,7 +83,7 @@ export const postLogin = (req, res, next) => {
 			}
 			successLog(person, controllerName, 'fetched');
 			// regardless match or mismatch catch takes only if something is wrong with bcrypt itself. otherwise it goes to the next block with promise as boolean
-			bcrypt.compare(password, fetchedUser.PasswordHash).then((doMatch) => {
+			return bcrypt.compare(password, fetchedUser.PasswordHash).then((doMatch) => {
 				if (doMatch) {
 					successLog(person, controllerName, 'pass match as well');
 					req.session.isLoggedIn = true;

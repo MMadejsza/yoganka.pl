@@ -4,9 +4,9 @@ import {useQuery, useMutation} from '@tanstack/react-query';
 import {queryClient, fetchItem, mutateOnEdit} from '../../utils/http.js';
 import {useInput} from '../../hooks/useInput.js';
 import {useAuthStatus} from '../../hooks/useAuthStatus.js';
+import {useFeedback} from '../../hooks/useFeedback.js';
 import InputLogin from '../login/InputLogin.jsx';
 import UserFeedbackBox from './FeedbackBox.jsx';
-import {useFeedback} from '../../hooks/useFeedback.js';
 
 function DetailsUserSettingsForm({settingsData, customerAccessed, adminAccessed}) {
 	const params = useParams();

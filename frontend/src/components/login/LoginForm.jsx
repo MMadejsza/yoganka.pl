@@ -1,10 +1,13 @@
 import {useState} from 'react';
-import {useNavigate} from 'react-router-dom';
+// import {useNavigate} from 'react-router-dom';
 import {useMutation} from '@tanstack/react-query';
 import {queryClient, mutateOnLoginOrSignup} from '../../utils/http.js';
 import {useInput} from '../../hooks/useInput.js';
-import InputLogin from './InputLogin.jsx';
 import {useAuthStatus} from '../../hooks/useAuthStatus.js';
+import {useFeedback} from '../../hooks/useFeedback.js';
+import InputLogin from './InputLogin.jsx';
+import UserFeedbackBox from '../adminConsole/FeedbackBox.jsx';
+
 import {
 	emailValidations,
 	passwordValidations,
@@ -12,34 +15,36 @@ import {
 } from '../../utils/validation.js';
 
 function LoginFrom() {
-	const navigate = useNavigate();
+	// passing a function to determine redirect target based on the result in the hook (updateFEedback(result)).
+	const {feedback, updateFeedback, resetFeedback} = useFeedback({
+		getRedirectTarget: (result) => {
+			if (result.type === 'signup' && (result.code === 303 || result.code === 200)) {
+				setFirstTime(!firstTime);
+				return null;
+			}
+			// for login success (or other cases), go back one step in history.
+			return -1;
+		},
+		onClose: () => {
+			// Optionally toggle a state if needed (for example, to switch form type)
+			setFirstTime(!firstTime);
+		},
+	});
+	const {data: status} = useAuthStatus();
 
 	const [firstTime, setFirstTime] = useState(false); // state to switch between registration and login in term of labels and http request method
-
-	const {data: status} = useAuthStatus();
 
 	const {mutate, isPending, isError, error} = useMutation({
 		mutationFn: ({formData, modifier}) =>
 			mutateOnLoginOrSignup(status, formData, `/api/login-pass/${modifier}`),
 
 		onSuccess: (res) => {
-			if (res.type == 'signup' && (res.code == 303 || res.code == 200)) {
-				navigate('/login');
-				setFirstTime(!firstTime);
-				console.log(res);
-			}
 			queryClient.invalidateQueries(['authStatus']);
 
-			navigate(-1);
+			updateFeedback(res);
 		},
-		onError: () => {
-			if (error.code == 404) {
-				navigate('/login');
-				if (error.type != 'login') {
-					setFirstTime(!firstTime);
-				}
-				console.log(error);
-			}
+		onError: (err) => {
+			updateFeedback(err);
 		},
 	});
 
@@ -83,11 +88,14 @@ function LoginFrom() {
 	// Decide ig http request is Get or Post
 	const handleFormSwitch = (e) => {
 		e.preventDefault(); // No reloading
+		resetFeedback();
 		setFirstTime(!firstTime);
 	};
 
 	// Reset all te inputs
 	const handleReset = () => {
+		resetFeedback();
+
 		handleEmailReset();
 		handlePasswordReset();
 		handleConfirmedPasswordReset();
@@ -96,7 +104,8 @@ function LoginFrom() {
 	// Submit handling
 	const handleSubmit = async (e) => {
 		e.preventDefault(); // No reloading
-		console.log('Submit triggered');
+		// console.log('Submit triggered');
+		resetFeedback();
 
 		if (emailHasError || passwordHasError || (firstTime && confirmedPasswordHasError)) {
 			return;
@@ -132,7 +141,6 @@ function LoginFrom() {
 	const {formType, title, switchTitle, actionTitle} = formLabels;
 
 	let content;
-	let errorMsg;
 	let userIsEditing =
 		confirmedPasswordIsFocused ||
 		emailIsFocused ||
@@ -141,9 +149,6 @@ function LoginFrom() {
 		emailDidEdit ||
 		passwordDidEdit;
 
-	if (isError) {
-		errorMsg = <div className='feedback-box feedback-box--error'>{error.message}</div>;
-	}
 	if (isPending) {
 		content = 'Wysyłanie...';
 	} else
@@ -208,7 +213,17 @@ function LoginFrom() {
 						/>
 					)}
 
-					{!userIsEditing && errorMsg}
+					{!userIsEditing && feedback.status !== undefined && (
+						<UserFeedbackBox
+							status={feedback.status}
+							isPending={isPending}
+							isError={isError}
+							error={error}
+							successMsg={feedback.message}
+							warnings={feedback.warnings}
+							size='small'
+						/>
+					)}
 
 					<button
 						type='reset'
