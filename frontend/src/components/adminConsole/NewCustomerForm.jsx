@@ -1,17 +1,14 @@
-import {useState} from 'react';
 import {useMutation, useQuery} from '@tanstack/react-query';
 import {queryClient, fetchData, mutateOnCreate} from '../../utils/http.js';
 import {useInput} from '../../hooks/useInput.js';
+import {useFeedback} from '../../hooks/useFeedback.js';
 import {useAuthStatus} from '../../hooks/useAuthStatus.js';
 import InputLogin from '../login/InputLogin.jsx';
 import UserFeedbackBox from './FeedbackBox.jsx';
 import * as val from '../../utils/validation.js';
 
 function NewCustomerForm({onClose}) {
-	let initialFeedbackConfirmation;
-	const [feedbackConfirmation, setFeedbackConfirmation] = useState(initialFeedbackConfirmation);
-	const [successMsg, setSuccessMsg] = useState(null);
-
+	const {feedback, updateFeedback, resetFeedback} = useFeedback();
 	const {data: status} = useAuthStatus();
 
 	const {
@@ -42,15 +39,10 @@ function NewCustomerForm({onClose}) {
 
 		onSuccess: (res) => {
 			queryClient.invalidateQueries(['/admin-console/show-all-customers']);
-			if (res.confirmation || res.code == 200) {
-				setFeedbackConfirmation(1);
-				setSuccessMsg(res.message);
-			} else {
-				setFeedbackConfirmation(0);
-			}
+			updateFeedback(res);
 		},
 		onError: (err) => {
-			setFeedbackConfirmation(0);
+			updateFeedback(err);
 		},
 	});
 
@@ -157,7 +149,8 @@ function NewCustomerForm({onClose}) {
 
 	// Reset all te inputs
 	const handleReset = () => {
-		setFeedbackConfirmation(undefined);
+		resetFeedback();
+
 		handleUserReset();
 		handleLoyaltyReset();
 		handleCustomerTypeReset();
@@ -192,7 +185,7 @@ function NewCustomerForm({onClose}) {
 		const fd = new FormData(e.target);
 		const formDataObj = Object.fromEntries(fd.entries());
 		console.log('sent data:', formDataObj);
-		mutate(formDataObj);
+		createCustomer(formDataObj);
 		handleReset();
 	};
 
@@ -206,19 +199,7 @@ function NewCustomerForm({onClose}) {
 	// Extract values only
 	const {formType, title, actionTitle} = formLabels;
 
-	let form;
-	let feedback = feedbackConfirmation !== undefined && (
-		<UserFeedbackBox
-			status={feedbackConfirmation}
-			successMsg={successMsg}
-			isPending={isCreateCustomerPending}
-			isError={isCreateCustomerError}
-			error={createCustomerError}
-			size='small'
-		/>
-	);
-
-	form = usersList && (
+	const form = usersList && (
 		<form
 			onSubmit={handleSubmit}
 			className={`user-container__details-list modal-checklist__list`}>
@@ -405,7 +386,18 @@ function NewCustomerForm({onClose}) {
 		<>
 			{/* <section className={formType}> */}
 			<div className='user-container modal__summary'>
-				{form} {feedback}
+				{form}
+				{feedback.status !== undefined && (
+					<UserFeedbackBox
+						status={feedback.status}
+						isPending={isCreateCustomerPending}
+						isError={isCreateCustomerError}
+						error={createCustomerError}
+						successMsg={feedback.message}
+						warnings={feedback.warnings}
+						size='small'
+					/>
+				)}
 			</div>
 			{/* </section> */}
 		</>
