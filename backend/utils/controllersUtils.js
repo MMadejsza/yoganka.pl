@@ -1,7 +1,7 @@
 // !HELPERS
 export const errorCode = 500;
-export const log = (controllerName) => {
-	console.log(`\n➡️➡️➡️ Admin called`, controllerName);
+export const log = (person, controllerName) => {
+	console.log(`\n➡️➡️➡️ ${person} called ${controllerName}`);
 };
 export const catchErr = (res, errCode, err, controllerName, extraProps = {}) => {
 	console.log(`\n❌❌❌ Error Admin ${controllerName}`, err.message);

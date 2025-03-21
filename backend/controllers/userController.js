@@ -9,7 +9,7 @@ let errCode = errorCode;
 //@ GET
 export const getAccount = (req, res, next) => {
 	const controllerName = 'getAccount';
-	log(controllerName);
+	log('User', controllerName);
 
 	// @ Fetching USER
 	// check if there is logged in User
@@ -112,7 +112,7 @@ export const getAccount = (req, res, next) => {
 };
 export const getSettings = (req, res, next) => {
 	const controllerName = 'getSettings';
-	log(controllerName);
+	log('User', controllerName);
 	const PK = req.user.UserPrefSetting?.UserPrefID;
 
 	models.UserPrefSettings.findByPk(PK)
@@ -131,7 +131,7 @@ export const getSettings = (req, res, next) => {
 //@ PUT
 export const putEditSettings = (req, res, next) => {
 	const controllerName = 'putEditSettings';
-	log(controllerName);
+	log('User', controllerName);
 
 	const userID = req.user.UserID;
 
@@ -195,7 +195,7 @@ export const putEditSettings = (req, res, next) => {
 //@ GET
 export const getAllSchedules = (req, res, next) => {
 	const controllerName = 'getAllSchedules';
-	log(controllerName);
+	log('User', controllerName);
 
 	const model = models.ScheduleRecord;
 
@@ -320,7 +320,7 @@ export const getAllSchedules = (req, res, next) => {
 };
 export const getScheduleByID = (req, res, next) => {
 	const controllerName = 'getScheduleByID';
-	log(controllerName);
+	log('User', controllerName);
 
 	const isUser = !!req.user;
 	const isCustomer = !!req.user?.Customer;

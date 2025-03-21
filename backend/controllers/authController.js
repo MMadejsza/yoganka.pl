@@ -7,7 +7,7 @@ let errCode = errorCode;
 //@ GET
 export const getStatus = (req, res, next) => {
 	const controllerName = 'getStatus';
-	log(controllerName);
+	log('User', controllerName);
 	console.log(`\n✅✅✅ getStatus`, {
 		isLoggedIn: res.locals.isLoggedIn || false,
 		role: res.locals.role,
@@ -22,7 +22,7 @@ export const getStatus = (req, res, next) => {
 //@ POST
 export const postSignup = (req, res, next) => {
 	const controllerName = 'postSignup';
-	log(controllerName);
+	log('User', controllerName);
 
 	const {email, password, confirmedPassword, date} = req.body;
 
@@ -59,7 +59,7 @@ export const postSignup = (req, res, next) => {
 };
 export const postLogin = (req, res, next) => {
 	const controllerName = 'postLogin';
-	log(controllerName);
+	log('User', controllerName);
 
 	const {email, password, date} = req.body;
 
@@ -101,7 +101,7 @@ export const postLogin = (req, res, next) => {
 };
 export const postLogout = (req, res, next) => {
 	const controllerName = 'postLogout';
-	log(controllerName);
+	log('User', controllerName);
 
 	req.session.destroy((err) => {
 		console.log('postLogout');

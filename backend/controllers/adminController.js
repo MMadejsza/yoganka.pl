@@ -12,7 +12,7 @@ let errCode = errorCode;
 //@ GET
 export const getAllUsers = (req, res, next) => {
 	const controllerName = 'getAllUsers';
-	log(controllerName);
+	log('Admin', controllerName);
 
 	const model = models.User;
 	model
@@ -78,7 +78,7 @@ export const getAllUsers = (req, res, next) => {
 };
 export const getUserByID = (req, res, next) => {
 	const controllerName = 'getUserByID';
-	log(controllerName);
+	log('Admin', controllerName);
 
 	const PK = req.params.id || req.user.UserID;
 	models.User.findByPk(PK, {
@@ -108,7 +108,7 @@ export const getUserByID = (req, res, next) => {
 };
 export const getUserSettings = (req, res, next) => {
 	const controllerName = 'getUserSettings';
-	log(controllerName);
+	log('Admin', controllerName);
 
 	models.UserPrefSettings.findByPk(req.params.id)
 		.then((preferences) => {
@@ -124,7 +124,7 @@ export const getUserSettings = (req, res, next) => {
 //@ POST
 export const postCreateUser = (req, res, next) => {
 	const controllerName = 'postCreateUser';
-	log(controllerName);
+	log('Admin', controllerName);
 	const {email, password, confirmedPassword, date} = req.body;
 
 	models.User.findOne({where: {email}})
@@ -163,7 +163,7 @@ export const postCreateUser = (req, res, next) => {
 //@ PUT
 export const putEditUserSettings = (req, res, next) => {
 	const controllerName = 'putEditUserSettings';
-	log(controllerName);
+	log('Admin', controllerName);
 
 	const userID = req.params.id;
 	const {handedness, font, notifications, animation, theme} = req.body;
@@ -225,7 +225,7 @@ export const putEditUserSettings = (req, res, next) => {
 //@ DELETE
 export const deleteUser = (req, res, next) => {
 	const controllerName = 'deleteUser';
-	log(controllerName);
+	log('Admin', controllerName);
 
 	const id = req.params.id;
 	models.User.destroy({
@@ -248,7 +248,7 @@ export const deleteUser = (req, res, next) => {
 //@ GET
 export const getAllCustomers = (req, res, next) => {
 	const controllerName = 'getAllCustomers';
-	log(controllerName);
+	log('Admin', controllerName);
 	const model = models.Customer;
 
 	// We create dynamic joint columns based on the map
@@ -385,7 +385,7 @@ export const getCustomerByID = (req, res, next) => {
 };
 export const getCustomerDetails = (req, res, next) => {
 	const controllerName = 'getputEditCustomerDetails';
-	log(controllerName);
+	log('Admin', controllerName);
 
 	models.Customer.findByPk(req.params.id)
 		.then((customer) => {
@@ -403,7 +403,7 @@ export const getCustomerDetails = (req, res, next) => {
 //@ POST
 export const postCreateCustomer = (req, res, next) => {
 	const controllerName = 'postCreateCustomer';
-	log(controllerName);
+	log('Admin', controllerName);
 	const {userID, customerType, firstName, lastName, DoB, phone, cMethod, loyalty, notes} =
 		req.body;
 	let customerPromise;
@@ -443,7 +443,7 @@ export const postCreateCustomer = (req, res, next) => {
 //@ PUT
 export const putEditCustomerDetails = (req, res, next) => {
 	const controllerName = 'putEditCustomerDetails';
-	log(controllerName);
+	log('Admin', controllerName);
 
 	const customerId = req.params.id;
 
@@ -512,7 +512,7 @@ export const putEditCustomerDetails = (req, res, next) => {
 //@ DELETE
 export const deleteCustomer = (req, res, next) => {
 	const controllerName = 'deleteCustomer';
-	log(controllerName);
+	log('Admin', controllerName);
 
 	const id = req.params.id;
 	models.Customer.destroy({
@@ -535,7 +535,7 @@ export const deleteCustomer = (req, res, next) => {
 //@ GET
 export const getAllSchedules = (req, res, next) => {
 	const controllerName = 'getAllSchedules';
-	log(controllerName);
+	log('Admin', controllerName);
 	const model = models.ScheduleRecord;
 
 	// We create dynamic joint columns based on the map
@@ -762,7 +762,7 @@ export const getBookedSchedules = (req, res, next) => {};
 //@ POST
 export const postCreateScheduleRecord = (req, res, next) => {
 	const controllerName = 'postCreateScheduleRecord';
-	log(controllerName);
+	log('Admin', controllerName);
 	const {productID, date, capacity, location, startTime, repeatCount, shouldRepeat} = req.body;
 	const inputsContent = [date, capacity, location, startTime, repeatCount || 1, shouldRepeat];
 
@@ -827,7 +827,7 @@ export const postCreateScheduleRecord = (req, res, next) => {
 //@ PUT
 export const putEditSchedule = async (req, res, next) => {
 	const controllerName = 'putEditSchedule';
-	log(controllerName);
+	log('Admin', controllerName);
 
 	const scheduleId = req.params.id;
 
@@ -910,7 +910,7 @@ export const putEditSchedule = async (req, res, next) => {
 //@ DELETE
 export const deleteSchedule = (req, res, next) => {
 	const controllerName = 'deleteSchedule';
-	log(controllerName);
+	log('Admin', controllerName);
 	const id = req.params.id;
 	console.log(`${controllerName} deleting id: `, id);
 
@@ -969,7 +969,7 @@ export const deleteSchedule = (req, res, next) => {
 //@ PUT
 export const putEditMarkAbsent = (req, res, next) => {
 	const controllerName = 'putEditMarkAbsent';
-	log(controllerName);
+	log('Admin', controllerName);
 
 	const {attendanceCustomerID, attendanceBookingID} = req.body;
 
@@ -999,7 +999,7 @@ export const putEditMarkAbsent = (req, res, next) => {
 };
 export const putEditMarkPresent = (req, res, next) => {
 	const controllerName = 'putEditMarkPresent';
-	log(controllerName);
+	log('Admin', controllerName);
 	console.log(req.body);
 	const {cancelledAttendanceCustomerID, cancelledAttendanceBookingID} = req.body;
 
@@ -1030,7 +1030,7 @@ export const putEditMarkPresent = (req, res, next) => {
 //@ DELETE
 export const deleteAttendanceRecord = (req, res, next) => {
 	const controllerName = 'deleteAttendanceRecord';
-	log(controllerName);
+	log('Admin', controllerName);
 	console.log(req.body);
 
 	const {attendanceCustomerID, attendanceBookingID} = req.body;
@@ -1064,7 +1064,7 @@ export const deleteAttendanceRecord = (req, res, next) => {
 //@ GET
 export const getAllParticipantsFeedback = (req, res, next) => {
 	const controllerName = 'getAllParticipantsFeedback';
-	log(controllerName);
+	log('Admin', controllerName);
 
 	const model = models.Feedback;
 
@@ -1223,7 +1223,7 @@ export const getAllParticipantsFeedbackByID = (req, res, next) => {
 //@ DELETE
 export const deleteFeedback = (req, res, next) => {
 	const controllerName = 'deleteFeedback';
-	log(controllerName);
+	log('Admin', controllerName);
 
 	const id = req.params.id;
 	models.Feedback.destroy({
@@ -1246,7 +1246,7 @@ export const deleteFeedback = (req, res, next) => {
 //@ GET
 export const getAllNewsletters = (req, res, next) => {
 	const controllerName = 'getAllNewsletters';
-	log(controllerName);
+	log('Admin', controllerName);
 
 	simpleListAllToTable(res, models.Newsletter);
 };
@@ -1261,12 +1261,12 @@ export const getAllSubscribedNewsletters = (req, res, next) => {
 //@ GET
 export const getAllProducts = (req, res, next) => {
 	const controllerName = 'getAllProducts';
-	log(controllerName);
+	log('Admin', controllerName);
 	simpleListAllToTable(res, models.Product);
 };
 export const getProductByID = (req, res, next) => {
 	const controllerName = 'getProductByID';
-	log(controllerName);
+	log('Admin', controllerName);
 
 	const PK = req.params.id;
 	models.Product.findByPk(PK, {
@@ -1326,7 +1326,7 @@ export const getProductByID = (req, res, next) => {
 //@ POST
 export const postCreateProduct = async (req, res, next) => {
 	const controllerName = 'postCreateProduct';
-	log(controllerName);
+	log('Admin', controllerName);
 
 	const {name, productType, StartDate, duration, location, price, status} = req.body;
 
@@ -1360,7 +1360,7 @@ export const postCreateProduct = async (req, res, next) => {
 //@ PUT
 export const putEditProduct = async (req, res, next) => {
 	const controllerName = 'putEditProduct';
-	log(controllerName);
+	log('Admin', controllerName);
 	const productId = req.params.id;
 
 	const {
@@ -1446,7 +1446,7 @@ export const putEditProduct = async (req, res, next) => {
 //@ DELETE
 export const deleteProduct = (req, res, next) => {
 	const controllerName = 'deleteProduct';
-	log(controllerName);
+	log('Admin', controllerName);
 
 	const id = req.params.id;
 	models.Product.destroy({
@@ -1469,7 +1469,7 @@ export const deleteProduct = (req, res, next) => {
 //@ GET
 export const getAllBookings = (req, res, next) => {
 	const controllerName = 'getAllBookings';
-	log(controllerName);
+	log('Admin', controllerName);
 	const model = models.Booking;
 
 	// We create dynamic joint columns based on the map
@@ -1556,7 +1556,7 @@ export const getAllBookings = (req, res, next) => {
 };
 export const getBookingByID = (req, res, next) => {
 	const controllerName = 'getBookingByID';
-	log(controllerName);
+	log('Admin', controllerName);
 
 	const PK = req.params.id;
 	models.Booking.findByPk(PK, {
@@ -1601,7 +1601,7 @@ export const getBookingByID = (req, res, next) => {
 //@ POST
 export const postCreateBooking = (req, res, next) => {
 	const controllerName = 'postCreateBooking';
-	log(controllerName);
+	log('Admin', controllerName);
 
 	const {
 		customerID,
@@ -1754,7 +1754,7 @@ export const postCreateBooking = (req, res, next) => {
 //@ DELETE
 export const deleteBooking = (req, res, next) => {
 	const controllerName = 'deleteBooking';
-	log(controllerName);
+	log('Admin', controllerName);
 
 	const id = req.params.id;
 	models.Booking.destroy({
@@ -1780,7 +1780,7 @@ export const deleteBooking = (req, res, next) => {
 //@ GET
 export const getAllInvoices = (req, res, next) => {
 	const controllerName = 'getAllInvoices';
-	log(controllerName);
+	log('Admin', controllerName);
 
 	const model = models.Invoice;
 

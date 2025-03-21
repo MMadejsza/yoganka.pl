@@ -7,7 +7,7 @@ let errCode = errorCode;
 //@ GET
 export const getCustomerDetails = (req, res, next) => {
 	const controllerName = 'getCustomerDetails';
-	log(controllerName);
+	log('Customer', controllerName);
 	const customer = req.user.Customer;
 	// console.log(customer);
 	return res.status(200).json({confirmation: 1, customer});
@@ -15,7 +15,7 @@ export const getCustomerDetails = (req, res, next) => {
 //@ PUT
 export const putEditCustomerDetails = (req, res, next) => {
 	const controllerName = 'putEditCustomerDetails';
-	log(controllerName);
+	log('Customer', controllerName);
 
 	console.log(req.body);
 
@@ -52,7 +52,7 @@ export const putEditCustomerDetails = (req, res, next) => {
 //@ GET
 export const getBookingByID = (req, res, next) => {
 	const controllerName = 'getBookingByID';
-	log(controllerName);
+	log('Customer', controllerName);
 
 	const PK = req.params.id;
 
@@ -98,7 +98,7 @@ export const getBookingByID = (req, res, next) => {
 //@ POST
 export const postCreateBookSchedule = (req, res, next) => {
 	const controllerName = 'postCreateBookSchedule';
-	log(controllerName);
+	log('Customer', controllerName);
 
 	// @ Fetching USER
 	let currentCustomer;
@@ -267,7 +267,7 @@ export const postCreateBookSchedule = (req, res, next) => {
 //@ PUT
 export const putEditMarkAbsent = (req, res, next) => {
 	const controllerName = 'putEditMarkAbsent';
-	log(controllerName);
+	log('Customer', controllerName);
 	const scheduleID = req.params.scheduleID;
 
 	models.ScheduleRecord.findOne({where: {ScheduleID: scheduleID}})
