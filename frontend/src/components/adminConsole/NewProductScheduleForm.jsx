@@ -1,8 +1,9 @@
 import {useState} from 'react';
 import {useLocation, useParams} from 'react-router-dom';
-import {useMutation, useQuery} from '@tanstack/react-query';
-import {queryClient, fetchStatus, mutateOnCreate} from '../../utils/http.js';
+import {useMutation} from '@tanstack/react-query';
+import {queryClient, mutateOnCreate} from '../../utils/http.js';
 import {useInput} from '../../hooks/useInput.js';
+import {useAuthStatus} from '../../hooks/useAuthStatus.js';
 import InputLogin from '../login/InputLogin.jsx';
 import FeedbackBox from './FeedbackBox.jsx';
 import * as val from '../../utils/validation.js';
@@ -14,10 +15,7 @@ function NewProductScheduleForm() {
 	const [feedbackConfirmation, setFeedbackConfirmation] = useState(initialFeedbackConfirmation);
 	const [successMsg, setSuccessMsg] = useState(null);
 
-	const {data: status} = useQuery({
-		queryKey: ['authStatus'],
-		queryFn: fetchStatus,
-	});
+	const {data: status} = useAuthStatus();
 
 	const {
 		mutate: createSchedule,

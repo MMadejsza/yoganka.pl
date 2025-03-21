@@ -1,9 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import {useQuery, useMutation} from '@tanstack/react-query';
-import {fetchStatus, queryClient, mutateOnLoginOrSignup} from '../../utils/http.js';
 import {Link, NavLink, useNavigate, useLocation} from 'react-router-dom';
-import Logo from '../Logo.jsx';
+import {useMutation} from '@tanstack/react-query';
+import {queryClient, mutateOnLoginOrSignup} from '../../utils/http.js';
+import {useAuthStatus} from '../../hooks/useAuthStatus.js';
 import {smoothScrollInto} from '../../utils/utils.jsx';
+import Logo from '../Logo.jsx';
+
 const menuSet = [
 	{
 		name: 'Wyjazdy',
@@ -88,11 +90,7 @@ function Nav({setIsNavOpen}) {
 	const navigate = useNavigate();
 	const location = useLocation();
 
-	const {data: status} = useQuery({
-		queryKey: ['authStatus'],
-		queryFn: fetchStatus,
-		cache: 'no-store',
-	});
+	const {data: status} = useAuthStatus();
 
 	console.log('nav data', status);
 	const logoutMutation = useMutation({

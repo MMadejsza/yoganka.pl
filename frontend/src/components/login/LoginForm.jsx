@@ -1,9 +1,10 @@
 import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {useMutation, useQuery} from '@tanstack/react-query';
-import {queryClient, fetchStatus, mutateOnLoginOrSignup} from '../../utils/http.js';
+import {useMutation} from '@tanstack/react-query';
+import {queryClient, mutateOnLoginOrSignup} from '../../utils/http.js';
 import {useInput} from '../../hooks/useInput.js';
 import InputLogin from './InputLogin.jsx';
+import {useAuthStatus} from '../../hooks/useAuthStatus.js';
 import {
 	emailValidations,
 	passwordValidations,
@@ -15,14 +16,11 @@ function LoginFrom() {
 
 	const [firstTime, setFirstTime] = useState(false); // state to switch between registration and login in term of labels and http request method
 
-	const {data: status} = useQuery({
-		queryKey: ['authStatus'],
-		queryFn: fetchStatus,
-	});
+	const {data: status} = useAuthStatus();
 
 	const {mutate, isPending, isError, error} = useMutation({
-		mutationFn: (formDataObj) =>
-			mutateOnLoginOrSignup(status, formDataObj, `/api/login-pass/${modifier}`),
+		mutationFn: ({formData, modifier}) =>
+			mutateOnLoginOrSignup(status, formData, `/api/login-pass/${modifier}`),
 
 		onSuccess: (res) => {
 			if (res.type == 'signup' && (res.code == 303 || res.code == 200)) {

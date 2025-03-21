@@ -1,7 +1,8 @@
 import {useState} from 'react';
-import {useMutation, useQuery} from '@tanstack/react-query';
-import {queryClient, fetchStatus} from '../../utils/http.js';
+import {useMutation} from '@tanstack/react-query';
+import {queryClient} from '../../utils/http.js';
 import {useInput} from '../../hooks/useInput.js';
+import {useAuthStatus} from '../../hooks/useAuthStatus.js';
 import InputLogin from '../login/InputLogin.jsx';
 import UserFeedbackBox from './FeedbackBox.jsx';
 import {
@@ -15,10 +16,7 @@ function NewUserForm({onClose}) {
 	const [feedbackConfirmation, setFeedbackConfirmation] = useState(initialFeedbackConfirmation);
 	const [successMsg, setSuccessMsg] = useState(null);
 
-	const {data: status} = useQuery({
-		queryKey: ['authStatus'],
-		queryFn: fetchStatus,
-	});
+	const {data: status} = useAuthStatus();
 
 	const {
 		mutate: createUser,

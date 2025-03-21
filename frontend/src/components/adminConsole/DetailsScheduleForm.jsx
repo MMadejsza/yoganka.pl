@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
-import {useQuery, useMutation} from '@tanstack/react-query';
-import {queryClient, fetchStatus, mutateOnEdit} from '../../utils/http.js';
+import {useMutation} from '@tanstack/react-query';
+import {queryClient, mutateOnEdit} from '../../utils/http.js';
 import {formatIsoDateTime} from '../../utils/dateTime.js';
 import {useInput} from '../../hooks/useInput.js';
+import {useAuthStatus} from '../../hooks/useAuthStatus.js';
 import InputLogin from '../login/InputLogin.jsx';
 import UserFeedbackBox from './FeedbackBox.jsx';
 
@@ -12,10 +13,7 @@ function DetailsScheduleForm({scheduleData}) {
 	const [feedbackConfirmation, setFeedbackConfirmation] = useState(initialFeedbackConfirmation);
 	const [successMsg, setSuccessMsg] = useState(null);
 
-	const {data: status} = useQuery({
-		queryKey: ['authStatus'],
-		queryFn: fetchStatus,
-	});
+	const {data: status} = useAuthStatus();
 
 	const {
 		mutate: editScheduleData,

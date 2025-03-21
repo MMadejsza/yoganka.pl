@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
 import {useParams} from 'react-router-dom';
-import {useMutation, useQuery} from '@tanstack/react-query';
+import {useMutation} from '@tanstack/react-query';
+import {useAuthStatus} from '../../hooks/useAuthStatus.js';
 import UserFeedbackBox from './FeedbackBox.jsx';
 import ModalTable from './ModalTable';
 import NewAttendanceForm from './NewAttendanceForm';
-import {queryClient, fetchStatus, mutateOnEdit, mutateOnDelete} from '../../utils/http.js';
+import {queryClient, mutateOnEdit, mutateOnDelete} from '../../utils/http.js';
 
 function DetailsTableAttendance({type, stats, isAdminPage}) {
 	// console.log('\n✅✅✅DetailsTableAttendance:');
@@ -17,10 +18,7 @@ function DetailsTableAttendance({type, stats, isAdminPage}) {
 	const [successMsg, setSuccessMsg] = useState(null);
 	const [deleteWarnings, setDeleteWarnings] = useState(null);
 
-	const {data: status} = useQuery({
-		queryKey: ['authStatus'],
-		queryFn: fetchStatus,
-	});
+	const {data: status} = useAuthStatus();
 
 	const {
 		mutate: markAbsent,

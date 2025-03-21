@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import {useParams, useLocation, useNavigate} from 'react-router-dom';
-import {fetchItem, fetchStatus, queryClient, mutateOnDelete} from '../../utils/http.js';
+import {fetchItem, queryClient, mutateOnDelete} from '../../utils/http.js';
 import {useQuery, useMutation} from '@tanstack/react-query';
+import {useAuthStatus} from '../../hooks/useAuthStatus.js';
 import ModalFrame from './ModalFrame.jsx';
 import ViewUser from './ViewUser.jsx';
 import ViewCustomer from './ViewCustomer.jsx';
@@ -50,10 +51,7 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 		? customer
 		: data;
 
-	const {data: status} = useQuery({
-		queryKey: ['authStatus'],
-		queryFn: fetchStatus,
-	});
+	const {data: status} = useAuthStatus();
 
 	let dataDeleteQuery;
 	const {

@@ -52,7 +52,7 @@ export const postSignup = (req, res, next) => {
 					});
 				});
 		})
-		.catch((err) => catchErr(err, controllerName, {type: 'signup', code: 409}));
+		.catch((err) => catchErr(res, errCode, err, controllerName, {type: 'signup', code: 409}));
 };
 export const postLogin = (req, res, next) => {
 	const controllerName = 'postLogin';
@@ -94,7 +94,7 @@ export const postLogin = (req, res, next) => {
 				}
 			});
 		})
-		.catch((err) => catchErr(err, controllerName, {type: 'signup', code: 404}));
+		.catch((err) => catchErr(res, errCode, err, controllerName, {type: 'signup', code: 404}));
 };
 export const postLogout = (req, res, next) => {
 	const controllerName = 'postLogout';

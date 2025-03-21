@@ -2,8 +2,9 @@ import {useState} from 'react';
 import {useParams} from 'react-router-dom';
 
 import {useMutation, useQuery} from '@tanstack/react-query';
-import {queryClient, fetchData, fetchStatus} from '../../utils/http.js';
+import {queryClient, fetchData} from '../../utils/http.js';
 import {useInput} from '../../hooks/useInput.js';
+import {useAuthStatus} from '../../hooks/useAuthStatus.js';
 import InputLogin from '../login/InputLogin.jsx';
 import UserFeedbackBox from './FeedbackBox.jsx';
 import * as val from '../../utils/validation.js';
@@ -14,10 +15,7 @@ function NewAttendanceForm({onClose}) {
 	const [feedbackConfirmation, setFeedbackConfirmation] = useState(initialFeedbackConfirmation);
 	const [successMsg, setSuccessMsg] = useState(null);
 
-	const {data: status} = useQuery({
-		queryKey: ['authStatus'],
-		queryFn: fetchStatus,
-	});
+	const {data: status} = useAuthStatus();
 
 	const {
 		data: customersList,

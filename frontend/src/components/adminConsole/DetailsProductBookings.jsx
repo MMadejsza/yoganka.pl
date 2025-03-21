@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
 import {useParams} from 'react-router-dom';
-import {useMutation, useQuery} from '@tanstack/react-query';
+import {useMutation} from '@tanstack/react-query';
+import {useAuthStatus} from '../../hooks/useAuthStatus.js';
 import ModalTable from './ModalTable';
 import UserFeedbackBox from './FeedbackBox.jsx';
-import {queryClient, fetchStatus, mutateOnEdit} from '../../utils/http.js';
+import {queryClient, mutateOnEdit} from '../../utils/http.js';
 
 function DetailsProductBookings({type, stats, isAdminPage}) {
 	console.log('\n✅✅✅DetailsProductBookings:');
@@ -17,10 +18,7 @@ function DetailsProductBookings({type, stats, isAdminPage}) {
 	const [feedbackConfirmation, setFeedbackConfirmation] = useState(initialFeedbackConfirmation);
 	const [successMsg, setSuccessMsg] = useState(null);
 
-	const {data: status} = useQuery({
-		queryKey: ['authStatus'],
-		queryFn: fetchStatus,
-	});
+	const {data: status} = useAuthStatus();
 
 	const {
 		mutate: markPresent,

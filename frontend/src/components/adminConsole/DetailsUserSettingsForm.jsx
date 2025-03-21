@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 import {useParams} from 'react-router-dom';
 import {useQuery, useMutation} from '@tanstack/react-query';
-import {queryClient, fetchItem, fetchStatus, mutateOnEdit} from '../../utils/http.js';
+import {queryClient, fetchItem, mutateOnEdit} from '../../utils/http.js';
 import {useInput} from '../../hooks/useInput.js';
+import {useAuthStatus} from '../../hooks/useAuthStatus.js';
 import InputLogin from '../login/InputLogin.jsx';
 import UserFeedbackBox from './FeedbackBox.jsx';
 
@@ -13,10 +14,7 @@ function DetailsUserSettingsForm({settingsData, customerAccessed, adminAccessed}
 	const [successMsg, setSuccessMsg] = useState(null);
 
 	console.log('settingsData', settingsData);
-	const {data: status} = useQuery({
-		queryKey: ['authStatus'],
-		queryFn: fetchStatus,
-	});
+	const {data: status} = useAuthStatus();
 
 	const queryKey = customerAccessed
 		? ['formFilling', 'userSettings']

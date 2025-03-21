@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
-import {useQuery, useMutation} from '@tanstack/react-query';
+import {useMutation} from '@tanstack/react-query';
 
 import DetailsSchedule from './DetailsSchedule.jsx';
 import DetailsProduct from './DetailsProduct.jsx';
@@ -11,7 +11,8 @@ import DetailsProductReviews from './DetailsProductReviews.jsx';
 import ViewScheduleNewCustomerForm from './ViewScheduleNewCustomerForm.jsx';
 
 import {calculateScheduleStats} from '../../utils/productViewsUtils.js';
-import {fetchStatus, queryClient, mutateOnEdit} from '../../utils/http.js';
+import {queryClient, mutateOnEdit} from '../../utils/http.js';
+import {useAuthStatus} from '../../hooks/useAuthStatus.js';
 
 function ViewSchedule({data, bookingOps, onClose, isModalOpen, isAdminPanel}) {
 	// console.clear();
@@ -24,10 +25,7 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen, isAdminPanel}) {
 	const navigate = useNavigate();
 	const userAccountPage = location.pathname.includes('konto');
 
-	const {data: status} = useQuery({
-		queryKey: ['authStatus'],
-		queryFn: fetchStatus,
-	});
+	const {data: status} = useAuthStatus();
 
 	const {
 		mutate: cancel,

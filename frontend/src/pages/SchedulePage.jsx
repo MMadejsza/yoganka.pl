@@ -1,10 +1,10 @@
-import {useQuery} from '@tanstack/react-query';
-import {useLocation, useNavigate, useMatch} from 'react-router-dom';
 import {useState, useEffect} from 'react';
-import {fetchData, fetchStatus, queryClient, mutateOnCreate} from '../utils/http.js';
+import {useLocation, useNavigate, useMatch} from 'react-router-dom';
+import {useQuery, useMutation} from '@tanstack/react-query';
+import {fetchData, queryClient, mutateOnCreate} from '../utils/http.js';
+import {useAuthStatus} from '../hooks/useAuthStatus.js';
 import ViewFrame from '../components/adminConsole/ViewFrame.jsx';
 import Section from '../components/Section.jsx';
-import {useMutation} from '@tanstack/react-query';
 import ModalTable from '../components/adminConsole/ModalTable';
 
 function SchedulePage() {
@@ -15,10 +15,7 @@ function SchedulePage() {
 	const [isModalOpen, setIsModalOpen] = useState(modalMatch);
 	const [isBookedSuccessfully, setIsBookedSuccessfully] = useState(false);
 
-	const {data: status} = useQuery({
-		queryKey: ['authStatus'],
-		queryFn: fetchStatus,
-	});
+	const {data: status} = useAuthStatus();
 
 	const {data, isError, error} = useQuery({
 		// as id for later caching received data to not send the same request again where location.pathname is key
