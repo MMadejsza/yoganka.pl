@@ -4,16 +4,14 @@ import {queryClient, mutateOnEdit} from '../../utils/http.js';
 import {formatIsoDateTime} from '../../utils/dateTime.js';
 import {useInput} from '../../hooks/useInput.js';
 import {useAuthStatus} from '../../hooks/useAuthStatus.js';
+import {useFeedback} from '../../hooks/useFeedback.js';
 import InputLogin from '../login/InputLogin.jsx';
 import UserFeedbackBox from './FeedbackBox.jsx';
 
 function DetailsProductForm({productData}) {
-	let initialFeedbackConfirmation;
-	const [feedbackConfirmation, setFeedbackConfirmation] = useState(initialFeedbackConfirmation);
-
 	const {data: status} = useAuthStatus();
+	const {feedback, updateFeedback, resetFeedback} = useFeedback();
 
-	let successMsg;
 	const {
 		mutate: editProductData,
 		isPending: isEditProductDataPending,
@@ -33,16 +31,12 @@ function DetailsProductForm({productData}) {
 				`/admin-console/show-all-products/${productData.ProductID}`,
 			]);
 			queryClient.invalidateQueries(['query', `/admin-console/show-all-products`]);
-
-			if (res.confirmation || res.code == 200) {
-				successMsg = res.message;
-				setFeedbackConfirmation(1);
-			} else {
-				setFeedbackConfirmation(0);
-			}
+			// updating feedback
+			updateFeedback(res);
 		},
 		onError: (err) => {
-			setFeedbackConfirmation(0);
+			// updating feedback
+			updateFeedback(res);
 		},
 	});
 	// Fallback to feed custom hooks when data isn't available
@@ -131,7 +125,8 @@ function DetailsProductForm({productData}) {
 
 	// Reset all te inputs
 	const handleReset = () => {
-		setFeedbackConfirmation(undefined);
+		resetFeedback();
+
 		handleTypeReset();
 		handleDateReset();
 		handleLocationReset();
@@ -143,7 +138,7 @@ function DetailsProductForm({productData}) {
 	// Submit handling
 	const handleSubmit = async (e) => {
 		e.preventDefault(); // No reloading
-		console.log('Submit triggered');
+		// console.log('Submit triggered');
 
 		if (
 			typeHasError ||
@@ -180,19 +175,7 @@ function DetailsProductForm({productData}) {
 	// Extract values only
 	const {formType, title, actionTitle} = formLabels;
 
-	let form;
-	let feedback = feedbackConfirmation !== undefined && (
-		<UserFeedbackBox
-			status={feedbackConfirmation}
-			successMsg={successMsg}
-			isPending={isEditProductDataPending}
-			isError={isEditProductDataError}
-			error={editProductDataError}
-			size='small'
-		/>
-	);
-
-	form = (
+	const form = (
 		<form
 			onSubmit={handleSubmit}
 			className={`user-container__details-list modal-checklist__list form`}>
@@ -315,7 +298,18 @@ function DetailsProductForm({productData}) {
 	);
 	return (
 		<>
-			{form} {feedback}
+			{form}
+			{feedback.status !== undefined && (
+				<UserFeedbackBox
+					status={feedback.status}
+					isPending={isEditProductDataPending}
+					isError={isEditProductDataError}
+					error={editProductDataError}
+					successMsg={feedback.message}
+					warnings={feedback.warnings}
+					size='small'
+				/>
+			)}
 		</>
 	);
 }
