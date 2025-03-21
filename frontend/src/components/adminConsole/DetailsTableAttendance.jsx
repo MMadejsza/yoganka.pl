@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {useParams} from 'react-router-dom';
 import {useMutation} from '@tanstack/react-query';
 import {useAuthStatus} from '../../hooks/useAuthStatus.js';
+import {useFeedback} from '../../hooks/useFeedback';
 import UserFeedbackBox from './FeedbackBox.jsx';
 import ModalTable from './ModalTable';
 import NewAttendanceForm from './NewAttendanceForm';
@@ -12,13 +13,13 @@ function DetailsTableAttendance({type, stats, isAdminPage}) {
 	let bookingsArray = stats.attendedBookings;
 	let params = useParams();
 	const [isFormVisible, setIsFormVisible] = useState();
-	let initialFeedbackConfirmation;
-	const [feedbackConfirmation, setFeedbackConfirmation] = useState(initialFeedbackConfirmation);
-	const [deleteWarningTriggered, setDeleteWarningTriggered] = useState(false);
-	const [successMsg, setSuccessMsg] = useState(null);
-	const [deleteWarnings, setDeleteWarnings] = useState(null);
 
+	const [deleteWarningTriggered, setDeleteWarningTriggered] = useState(false);
 	const {data: status} = useAuthStatus();
+	const {feedback, updateFeedback, resetFeedback} = useFeedback({
+		getRedirectTarget: () => null,
+		onClose: () => {},
+	});
 
 	const {
 		mutate: markAbsent,
@@ -27,9 +28,8 @@ function DetailsTableAttendance({type, stats, isAdminPage}) {
 		error: markAbsentError,
 	} = useMutation({
 		mutationFn: (formDataObj) => {
-			setFeedbackConfirmation(0);
+			resetFeedback();
 			setDeleteWarningTriggered(false);
-			setDeleteWarnings(null);
 			return mutateOnEdit(status, formDataObj, `/api/admin-console/edit-mark-absent`);
 		},
 
@@ -37,15 +37,10 @@ function DetailsTableAttendance({type, stats, isAdminPage}) {
 			queryClient.invalidateQueries([`/admin-console/show-all-schedules/${params.id}`]);
 			console.log('res', res);
 
-			if (res.confirmation || res.code == 200) {
-				setSuccessMsg(res.message);
-				setFeedbackConfirmation(1);
-			} else {
-				setFeedbackConfirmation(0);
-			}
+			updateFeedback(res);
 		},
 		onError: (err) => {
-			setFeedbackConfirmation(0);
+			updateFeedback(err);
 		},
 	});
 
@@ -69,31 +64,30 @@ function DetailsTableAttendance({type, stats, isAdminPage}) {
 			queryClient.invalidateQueries([`/admin-console/show-all-schedules/${params.id}`]);
 			console.log('res', res);
 
-			if (res.confirmation || res.code == 200) {
-				setSuccessMsg(res.message);
-				setFeedbackConfirmation(1);
-			} else {
-				setFeedbackConfirmation(0);
-			}
+			updateFeedback(res);
 		},
 		onError: (err) => {
-			setFeedbackConfirmation(0);
+			updateFeedback(err);
 		},
 	});
 
 	const handleDelete = (params) => {
 		reset();
 		if (!deleteWarningTriggered) {
-			setFeedbackConfirmation(0);
-
-			setDeleteWarnings([
-				'Rekordu wliczanego do statystyk w systemie. Nie powinno być potrzeby tego robić. ',
-				'Skontaktuj się z IT lub kliknij jeszcze raz w ciągu 5s w celu potwierdzenia.',
-			]);
+			// 1st click
+			updateFeedback({
+				confirmation: 0,
+				message: '',
+				warnings: [
+					'Rekordu wliczanego do statystyk w systemie. Nie powinno być potrzeby tego robić.',
+					'Skontaktuj się z IT lub kliknij jeszcze raz w ciągu 5s w celu potwierdzenia.',
+				],
+			});
 			setDeleteWarningTriggered(true);
 		} else {
+			resetFeedback();
+			reset();
 			deleteAttendanceRecord(params);
-			setDeleteWarnings(null);
 		}
 	};
 
@@ -111,17 +105,6 @@ function DetailsTableAttendance({type, stats, isAdminPage}) {
 			]}
 		/>
 	);
-	let feedback = (feedbackConfirmation !== undefined || deleteWarningTriggered) && (
-		<UserFeedbackBox
-			warnings={deleteWarnings}
-			status={feedbackConfirmation}
-			successMsg={successMsg}
-			isPending={deleteAttendanceRecordIsPending || markAbsentIsPending}
-			isError={deleteAttendanceRecordIsError || markAbsentIsError}
-			error={deleteAttendanceRecordError || markAbsentError}
-			size='small'
-		/>
-	);
 
 	const form = <NewAttendanceForm />;
 
@@ -130,7 +113,17 @@ function DetailsTableAttendance({type, stats, isAdminPage}) {
 			<h2 className='user-container__section-title modal__title--day admin-action'>
 				{`Obecność (${bookingsArray.length})`}
 			</h2>
-			{feedback}
+			{(feedback.status != undefined || deleteWarningTriggered) && (
+				<UserFeedbackBox
+					warnings={feedback.warnings}
+					status={feedback.status}
+					successMsg={feedback.message}
+					isPending={deleteAttendanceRecordIsPending || markAbsentIsPending}
+					isError={deleteAttendanceRecordIsError || markAbsentIsError}
+					error={deleteAttendanceRecordError || markAbsentError}
+					size='small'
+				/>
+			)}
 			{isFormVisible && form}
 			{table}
 		</>

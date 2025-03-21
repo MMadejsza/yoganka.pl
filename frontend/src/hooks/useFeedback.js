@@ -15,6 +15,15 @@ export function useFeedback({getRedirectTarget = () => null, onClose = () => {}}
 	const updateFeedback = useCallback(
 		(result) => {
 			console.log('updateFeedback res: ', result);
+			// if warnings - don't redirect or close
+			if (result.confirmation === 0 && result.warnings && result.warnings.length > 0) {
+				setFeedback({
+					status: undefined, // to let box render warnings
+					message: result.message,
+					warnings: result.warnings,
+				});
+				return;
+			}
 			// Result must have confirmation, message, warnings
 			const newStatus =
 				result.confirmation === true || result.confirmation === 1

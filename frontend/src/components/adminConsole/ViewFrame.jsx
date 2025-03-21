@@ -3,6 +3,7 @@ import {useParams, useLocation, useNavigate} from 'react-router-dom';
 import {fetchItem, queryClient, mutateOnDelete} from '../../utils/http.js';
 import {useQuery, useMutation} from '@tanstack/react-query';
 import {useAuthStatus} from '../../hooks/useAuthStatus.js';
+import {useFeedback} from '../../hooks/useFeedback';
 import ModalFrame from './ModalFrame.jsx';
 import ViewUser from './ViewUser.jsx';
 import ViewCustomer from './ViewCustomer.jsx';
@@ -28,11 +29,8 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 
 	console.log('✅ role', role);
 
-	const [editingState, setEditingState] = useState(false);
+	// const [editingState, setEditingState] = useState(false);
 	const [deleteWarningTriggered, setDeleteWarningTriggered] = useState(false);
-	let initialFeedbackConfirmation;
-	const [deleteConfirmation, setDeleteConfirmation] = useState(initialFeedbackConfirmation);
-	const [deleteErrorMessage, setDeleteErrorMessage] = useState(null);
 
 	const {data, isPending, isError, error} = useQuery({
 		queryKey: ['query', location.pathname],
@@ -52,42 +50,6 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 		: data;
 
 	const {data: status} = useAuthStatus();
-
-	let dataDeleteQuery;
-	const {
-		mutate: deleteRecord,
-		isPending: isDeletePending,
-		isError: isDeleteError,
-		error: deleteError,
-		reset,
-	} = useMutation({
-		mutationFn: (formDataObj) =>
-			mutateOnDelete(status, formDataObj, `/api/admin-console/${dataDeleteQuery}`),
-
-		onSuccess: (res) => {
-			setDeleteConfirmation(res.confirmation);
-			queryClient.invalidateQueries(['query', `/admin-console/show-all-users/${params.id}`]);
-		},
-		onError: (err) => {
-			setDeleteConfirmation(0);
-			setDeleteErrorMessage(err.message);
-			console.error('Błąd usuwania:', err);
-		},
-	});
-
-	const handleDelete = () => {
-		if (!deleteWarningTriggered) {
-			// 1st click
-			setDeleteWarningTriggered(true);
-		} else {
-			// 2nd click
-			reset();
-			deleteRecord();
-		}
-	};
-	const handleCancelDelete = () => {
-		setDeleteWarningTriggered(false);
-	};
 
 	const resolveModifier = () => {
 		let controller = {};
@@ -205,6 +167,7 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 	let dataEditor;
 	let deleteWarnings;
 	let redirectToPage;
+	let dataDeleteQuery;
 
 	if (isPending) {
 		dataDisplay = 'Loading...';
@@ -231,6 +194,47 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 		redirectToPage = redirectTo;
 	}
 
+	const {feedback, updateFeedback, resetFeedback} = useFeedback({
+		getRedirectTarget: () => redirectToPage || null,
+		onClose: onClose,
+	});
+
+	const {
+		mutate: deleteRecord,
+		isPending: isDeletePending,
+		isError: isDeleteError,
+		error: deleteError,
+		reset,
+	} = useMutation({
+		mutationFn: (formDataObj) =>
+			mutateOnDelete(status, formDataObj, `/api/admin-console/${dataDeleteQuery}`),
+
+		onSuccess: (res) => {
+			queryClient.invalidateQueries(['query', `/admin-console/show-all-users/${params.id}`]);
+			updateFeedback(res);
+		},
+		onError: (err) => {
+			updateFeedback(err);
+		},
+	});
+
+	const handleDelete = () => {
+		if (!deleteWarningTriggered) {
+			// 1st click
+			updateFeedback({confirmation: 0, message: '', warnings: deleteWarnings});
+			setDeleteWarningTriggered(true);
+		} else {
+			// 2nd click
+			resetFeedback(); //!_______________________________________________________________________________
+			reset();
+			deleteRecord({});
+		}
+	};
+	const handleCancelDelete = () => {
+		resetFeedback();
+		setDeleteWarningTriggered(false);
+	};
+
 	const actionBtn = (onClick, type, symbol) => {
 		const content = type == 'danger' ? `Usuń ${deleteTitle}` : 'Wróć';
 
@@ -253,13 +257,15 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 					dataDisplay
 				) : (
 					<UserFeedbackBox
-						warnings={!deleteErrorMessage ? deleteWarnings : []}
-						status={deleteConfirmation}
+						warnings={feedback.warnings}
+						status={feedback.status}
+						successMsg={feedback.message}
 						isPending={isDeletePending}
 						isError={isDeleteError}
-						error={deleteErrorMessage ? {message: deleteErrorMessage} : null}
+						error={deleteError ? {message: deleteError.message} : null}
 						redirectTarget={redirectToPage}
 						onClose={onClose}
+						size='small'
 					/>
 				)}
 				<div className='user-container__actions-block'>
