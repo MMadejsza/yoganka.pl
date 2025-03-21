@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {useParams} from 'react-router-dom';
 import {useMutation} from '@tanstack/react-query';
 import {useAuthStatus} from '../../hooks/useAuthStatus.js';
+import {useFeedback} from '../../hooks/useFeedback.js';
 import ModalTable from './ModalTable';
 import UserFeedbackBox from './FeedbackBox.jsx';
 import {queryClient, mutateOnEdit} from '../../utils/http.js';
@@ -11,12 +12,9 @@ function DetailsProductBookings({type, stats, isAdminPage}) {
 	console.log('\nisAdminPage:', isAdminPage);
 
 	let params = useParams();
+	const {feedback, updateFeedback, resetFeedback} = useFeedback();
 	let bookingsArray = stats.totalBookings || stats.bookings;
 	let cancelledBookingsArr = bookingsArray.filter((b) => b.Attendance == false);
-
-	let initialFeedbackConfirmation;
-	const [feedbackConfirmation, setFeedbackConfirmation] = useState(initialFeedbackConfirmation);
-	const [successMsg, setSuccessMsg] = useState(null);
 
 	const {data: status} = useAuthStatus();
 
@@ -33,28 +31,14 @@ function DetailsProductBookings({type, stats, isAdminPage}) {
 			queryClient.invalidateQueries([`/admin-console/show-all-schedules/${params.id}`]);
 			console.log('res', res);
 
-			if (res.confirmation || res.code == 200) {
-				setSuccessMsg(res.message);
-				setFeedbackConfirmation(1);
-			} else {
-				setFeedbackConfirmation(0);
-			}
+			// updating feedback
+			updateFeedback(res);
 		},
 		onError: (err) => {
-			setFeedbackConfirmation(0);
+			// updating feedback
+			updateFeedback(err);
 		},
 	});
-
-	let feedback = feedbackConfirmation !== undefined && (
-		<UserFeedbackBox
-			status={feedbackConfirmation}
-			successMsg={successMsg}
-			isPending={markPresentIsPending}
-			isError={markPresentIsError}
-			error={markPresentError}
-			size='small'
-		/>
-	);
 
 	const table = (
 		<ModalTable
@@ -69,7 +53,17 @@ function DetailsProductBookings({type, stats, isAdminPage}) {
 			<h2 className='user-container__section-title modal__title--day'>
 				{`Rezerwacje anulowanych obecności (${cancelledBookingsArr.length}):`}
 			</h2>
-			{feedback}
+			{feedback.status !== undefined && (
+				<UserFeedbackBox
+					status={feedback.status}
+					isPending={markPresentIsPending}
+					isError={markPresentIsError}
+					error={markPresentError}
+					successMsg={feedback.message}
+					warnings={feedback.warnings}
+					size='small'
+				/>
+			)}
 			<ModalTable
 				headers={['ID', 'Data rezerwacji', 'Uczestnik', 'Zadatek', 'Metoda płatności', '']}
 				keys={['BookingID', 'Date', 'customer', 'AmountPaid', 'PaymentMethod', '']}
