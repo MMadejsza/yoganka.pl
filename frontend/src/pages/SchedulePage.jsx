@@ -1,7 +1,7 @@
 import {useQuery} from '@tanstack/react-query';
 import {useLocation, useNavigate, useMatch} from 'react-router-dom';
 import {useState, useEffect} from 'react';
-import {fetchData, fetchStatus, queryClient} from '../utils/http.js';
+import {fetchData, fetchStatus, queryClient, mutateOnCreate} from '../utils/http.js';
 import ViewFrame from '../components/adminConsole/ViewFrame.jsx';
 import Section from '../components/Section.jsx';
 import {useMutation} from '@tanstack/react-query';
@@ -39,33 +39,9 @@ function SchedulePage() {
 		error: bookError,
 		reset,
 	} = useMutation({
-		mutationFn: async ({scheduleID, productName, productPrice, customerDetails}) =>
-			await fetch(`/api/customer/create-booking`, {
-				method: 'POST',
-				body: JSON.stringify({
-					customerDetails: customerDetails || null,
-					schedule: scheduleID,
-					product: productName,
-					status: 'Paid',
-					amountPaid: productPrice,
-					amountDue: 0,
-					paymentMethod: 'Credit Card',
-					paymentStatus: 'Completed',
-				}),
-				headers: {
-					'Content-Type': 'application/json',
-					'CSRF-Token': status.token,
-				},
-				credentials: 'include',
-			}).then((response) => {
-				return response.json().then((data) => {
-					if (!response.ok) {
-						// reject with backend data
-						return Promise.reject(data);
-					}
-					return data;
-				});
-			}),
+		mutationFn: (formDataObj) =>
+			mutateOnCreate(status, formDataObj, `/api/customer/create-booking`),
+
 		onSuccess: (res) => {
 			if (res.isNewCustomer) {
 				queryClient.invalidateQueries(['authStatus']);

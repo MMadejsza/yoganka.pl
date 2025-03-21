@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useMutation, useQuery} from '@tanstack/react-query';
-import {queryClient, fetchStatus} from '../../utils/http.js';
+import {queryClient, fetchStatus, mutateOnLoginOrSignup} from '../../utils/http.js';
 import {useInput} from '../../hooks/useInput.js';
 import InputLogin from './InputLogin.jsx';
 import {
@@ -21,25 +21,9 @@ function LoginFrom() {
 	});
 
 	const {mutate, isPending, isError, error} = useMutation({
-		mutationFn: ({formData, modifier}) => {
-			return fetch(`/api/login-pass/${modifier}`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					'CSRF-Token': status.token,
-				},
-				body: JSON.stringify(formData),
-				credentials: 'include', // include cookies
-			}).then((response) => {
-				return response.json().then((data) => {
-					if (!response.ok) {
-						// reject with backend data
-						return Promise.reject(data);
-					}
-					return data;
-				});
-			});
-		},
+		mutationFn: (formDataObj) =>
+			mutateOnLoginOrSignup(status, formDataObj, `/api/login-pass/${modifier}`),
+
 		onSuccess: (res) => {
 			if (res.type == 'signup' && (res.code == 303 || res.code == 200)) {
 				navigate('/login');

@@ -22,49 +22,6 @@ export async function fetchStatus() {
 	// return it
 	return data;
 }
-
-export async function fetchData(link) {
-	// console.log(`fetchData link: ${link}`);
-	// await promise solve
-	const response = await fetch(`/api${link}`);
-	// if error
-	if (!response.ok) {
-		// instantiate error with message
-		const error = new Error('Error occurs while fetching from db');
-		// encode response status code
-		error.code = response.status;
-		// encode as message actual error from db
-		error.info = await response.json();
-		// return it for handling by tanstack
-		throw error;
-	}
-	// if ok - translate response to json
-	const data = response.json();
-	// return it
-	return data;
-}
-export async function create(link, status, formData) {
-	console.log(`create link: ${link}`);
-	const response = await fetch(`/api${link}`, {
-		method: 'POST',
-		body: JSON.stringify(formData),
-		headers: {
-			'Content-Type': 'application/json',
-			'CSRF-Token': status.token,
-		},
-	});
-	if (!response.ok) {
-		const error = new Error('❌ An error occurred while creating the event');
-		error.code = response.status;
-		error.info = await response.json();
-		throw error;
-	}
-
-	const result = await response.json();
-	// console.log('✅ Serwer:', result);
-	return result;
-}
-
 export async function fetchItem(callPath, {signal}, minRightsPrefix) {
 	console.log('✅✅✅✅ fetchItem Called');
 	console.log('✅✅✅ callPath ', callPath);
@@ -86,18 +43,103 @@ export async function fetchItem(callPath, {signal}, minRightsPrefix) {
 	const data = await response.json();
 	return data;
 }
-
-export async function deleteItem({id}) {
-	const response = await fetch(`api/show-all-users/${id}`, {
-		method: 'DELETE',
-	});
-
+export async function fetchData(link) {
+	// console.log(`fetchData link: ${link}`);
+	// await promise solve
+	const response = await fetch(`/api${link}`);
+	// if error
 	if (!response.ok) {
-		const error = new Error('An error occurred while deleting the event');
+		// instantiate error with message
+		const error = new Error('Error occurs while fetching from db');
+		// encode response status code
 		error.code = response.status;
+		// encode as message actual error from db
 		error.info = await response.json();
+		// return it for handling by tanstack
 		throw error;
 	}
+	// if ok - translate response to json
+	const data = response.json();
+	// return it
+	return data;
+}
 
-	return response.json();
+export async function mutateOnLoginOrSignup(status, formData, path) {
+	return fetch(path, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			'CSRF-Token': status.token,
+		},
+		body: JSON.stringify(formData),
+		credentials: 'include', // include cookies
+	}).then((response) => {
+		return response.json().then((data) => {
+			if (!response.ok) {
+				// reject with backend data
+				return Promise.reject(data);
+			}
+			return data;
+		});
+	});
+}
+
+export async function mutateOnCreate(status, formData, path) {
+	return fetch(path, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			'CSRF-Token': status.token,
+		},
+		body: JSON.stringify(formData),
+		credentials: 'include', // include cookies
+	}).then((response) => {
+		return response.json().then((data) => {
+			if (!response.ok) {
+				// reject with backend data
+				return Promise.reject(data);
+			}
+			return data;
+		});
+	});
+}
+
+export async function mutateOnEdit(status, formData, path) {
+	return fetch(path, {
+		method: 'PUT',
+		headers: {
+			'Content-Type': 'application/json',
+			'CSRF-Token': status.token,
+		},
+		body: JSON.stringify(formData),
+		credentials: 'include', // include cookies
+	}).then((response) => {
+		return response.json().then((data) => {
+			if (!response.ok) {
+				// reject with backend data
+				return Promise.reject(data);
+			}
+			return data;
+		});
+	});
+}
+
+export async function mutateOnDelete(status, formData, path) {
+	return fetch(path, {
+		method: 'DELETE',
+		headers: {
+			'Content-Type': 'application/json',
+			'CSRF-Token': status.token,
+		},
+		body: JSON.stringify(formData),
+		credentials: 'include', // include cookies
+	}).then((response) => {
+		return response.json().then((data) => {
+			if (!response.ok) {
+				// reject with backend data
+				return Promise.reject(data);
+			}
+			return data;
+		});
+	});
 }

@@ -49,10 +49,14 @@ function ModalTable({
 		if (!isUserGoing && isLoggedIn && !isArchived && isAuthorized) {
 			e.stopPropagation();
 			method({
-				scheduleID: row['ID'],
-				productName: row['Nazwa'],
-				productPrice: row['Zadatek'],
 				customerDetails: '',
+				schedule: row['ID'],
+				product: row['Nazwa'],
+				status: 'Paid',
+				amountPaid: row['Zadatek'],
+				amountDue: 0,
+				paymentMethod: 'Credit Card',
+				paymentStatus: 'Completed',
 				attendanceCustomerID: row.customerID,
 				attendanceBookingID: row.id,
 				cancelledAttendanceCustomerID: row.CustomerID,

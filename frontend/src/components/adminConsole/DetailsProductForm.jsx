@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useQuery, useMutation} from '@tanstack/react-query';
-import {queryClient, fetchStatus} from '../../utils/http.js';
+import {queryClient, fetchStatus, mutateOnEdit} from '../../utils/http.js';
 import {formatIsoDateTime} from '../../utils/dateTime.js';
 import {useInput} from '../../hooks/useInput.js';
 import InputLogin from '../login/InputLogin.jsx';
@@ -16,26 +16,19 @@ function DetailsProductForm({productData}) {
 	});
 
 	let successMsg;
-	const {mutate, isPending, isError, error} = useMutation({
-		mutationFn: (formData) => {
-			return fetch(`/api/admin-console/edit-product-data/${productData.ProductID}`, {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json',
-					'CSRF-Token': status.token,
-				},
-				body: JSON.stringify(formData),
-				credentials: 'include', // include cookies
-			}).then((response) => {
-				return response.json().then((data) => {
-					if (!response.ok) {
-						// reject with backend data
-						return Promise.reject(data);
-					}
-					return data;
-				});
-			});
-		},
+	const {
+		mutate: editProductData,
+		isPending: isEditProductDataPending,
+		isError: isEditProductDataError,
+		error: editProductDataError,
+	} = useMutation({
+		mutationFn: (formDataObj) =>
+			mutateOnEdit(
+				status,
+				formDataObj,
+				`/api/admin-console/edit-product-data/${productData.ProductID}`,
+			),
+
 		onSuccess: (res) => {
 			queryClient.invalidateQueries([
 				'query',
@@ -176,7 +169,7 @@ function DetailsProductForm({productData}) {
 		formDataObj.price = parseFloat(formDataObj.price).toFixed(2);
 		console.log('sent data:', JSON.stringify(formDataObj));
 
-		mutate(formDataObj);
+		editProductData(formDataObj);
 		handleReset();
 	};
 
@@ -194,9 +187,9 @@ function DetailsProductForm({productData}) {
 		<UserFeedbackBox
 			status={feedbackConfirmation}
 			successMsg={successMsg}
-			isPending={isPending}
-			isError={isError}
-			error={error}
+			isPending={isEditProductDataPending}
+			isError={isEditProductDataError}
+			error={editProductDataError}
 			size='small'
 		/>
 	);

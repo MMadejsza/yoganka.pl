@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import {useLocation, useParams} from 'react-router-dom';
 import {useMutation, useQuery} from '@tanstack/react-query';
-import {queryClient, fetchStatus} from '../../utils/http.js';
+import {queryClient, fetchStatus, mutateOnCreate} from '../../utils/http.js';
 import {useInput} from '../../hooks/useInput.js';
 import InputLogin from '../login/InputLogin.jsx';
 import FeedbackBox from './FeedbackBox.jsx';
@@ -19,26 +19,15 @@ function NewProductScheduleForm() {
 		queryFn: fetchStatus,
 	});
 
-	const {mutate, isPending, isError, error} = useMutation({
-		mutationFn: (formData) => {
-			return fetch(`/api/admin-console/create-schedule`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					'CSRF-Token': status.token,
-				},
-				body: JSON.stringify(formData),
-				credentials: 'include', // include cookies
-			}).then((response) => {
-				return response.json().then((data) => {
-					if (!response.ok) {
-						// reject with backend data
-						return Promise.reject(data);
-					}
-					return data;
-				});
-			});
-		},
+	const {
+		mutate: createSchedule,
+		isPending: isCreateSchedulePending,
+		isError: isCreateScheduleError,
+		error: createScheduleError,
+	} = useMutation({
+		mutationFn: (formDataObj) =>
+			mutateOnCreate(status, formDataObj, `/api/admin-console/create-schedule`),
+
 		onSuccess: (res) => {
 			queryClient.invalidateQueries([`/admin-console/show-all-products/${params.id}`]);
 			if (res.confirmation || res.code == 200) {
@@ -155,7 +144,7 @@ function NewProductScheduleForm() {
 			formDataObj.productID = params.id;
 		}
 		console.log('sent data:', formDataObj);
-		mutate(formDataObj);
+		createSchedule(formDataObj);
 		handleReset();
 	};
 
@@ -174,10 +163,9 @@ function NewProductScheduleForm() {
 		<FeedbackBox
 			status={feedbackConfirmation}
 			successMsg={successMsg}
-			isPending={isPending}
-			isError={isError}
-			error={error}
-			// size='small'
+			isPending={isCreateSchedulePending}
+			isError={isCreateScheduleError}
+			error={createScheduleError}
 		/>
 	);
 

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useQuery, useMutation} from '@tanstack/react-query';
-import {queryClient, fetchStatus} from '../../utils/http.js';
+import {queryClient, fetchStatus, mutateOnEdit} from '../../utils/http.js';
 import {formatIsoDateTime} from '../../utils/dateTime.js';
 import {useInput} from '../../hooks/useInput.js';
 import InputLogin from '../login/InputLogin.jsx';
@@ -17,26 +17,19 @@ function DetailsScheduleForm({scheduleData}) {
 		queryFn: fetchStatus,
 	});
 
-	const {mutate, isPending, isError, error, reset} = useMutation({
-		mutationFn: (formData) => {
-			return fetch(`/api/admin-console/edit-schedule-data/${scheduleData.ScheduleID}`, {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json',
-					'CSRF-Token': status.token,
-				},
-				body: JSON.stringify(formData),
-				credentials: 'include', // include cookies
-			}).then((response) => {
-				return response.json().then((data) => {
-					if (!response.ok) {
-						// reject with backend data
-						return Promise.reject(data);
-					}
-					return data;
-				});
-			});
-		},
+	const {
+		mutate: editScheduleData,
+		isPending: isEditScheduleDataPending,
+		isError: isEditScheduleDataError,
+		error: editScheduleDataError,
+		reset: editScheduleDataReset,
+	} = useMutation({
+		mutationFn: (formDataObj) =>
+			mutateOnEdit(
+				status,
+				formDataObj,
+				`/api/admin-console/edit-schedule-data/${scheduleData.ScheduleID}`,
+			),
 		onSuccess: (res) => {
 			queryClient.invalidateQueries([
 				'query',
@@ -118,7 +111,7 @@ function DetailsScheduleForm({scheduleData}) {
 		handleDateReset();
 		handleStartTimeReset();
 		handleLocationReset();
-		reset();
+		editScheduleDataReset();
 	};
 
 	// Submit handling
@@ -136,7 +129,7 @@ function DetailsScheduleForm({scheduleData}) {
 		formDataObj.capacity = parseInt(formDataObj.capacity);
 		console.log('sent data:', JSON.stringify(formDataObj));
 
-		mutate(formDataObj);
+		editScheduleData(formDataObj);
 		handleReset();
 	};
 
@@ -150,13 +143,13 @@ function DetailsScheduleForm({scheduleData}) {
 	const {formType, title, actionTitle} = formLabels;
 
 	let form;
-	let feedback = (feedbackConfirmation !== undefined || isError) && (
+	let feedback = (feedbackConfirmation !== undefined || isEditScheduleDataError) && (
 		<UserFeedbackBox
 			status={feedbackConfirmation}
 			successMsg={successMsg}
-			isPending={isPending}
-			isError={isError}
-			error={error}
+			isPending={isEditScheduleDataPending}
+			isError={isEditScheduleDataError}
+			error={editScheduleDataError}
 			size='small'
 		/>
 	);

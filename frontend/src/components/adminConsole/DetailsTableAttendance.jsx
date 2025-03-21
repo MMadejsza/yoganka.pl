@@ -4,7 +4,7 @@ import {useMutation, useQuery} from '@tanstack/react-query';
 import UserFeedbackBox from './FeedbackBox.jsx';
 import ModalTable from './ModalTable';
 import NewAttendanceForm from './NewAttendanceForm';
-import {queryClient, fetchStatus} from '../../utils/http.js';
+import {queryClient, fetchStatus, mutateOnEdit, mutateOnDelete} from '../../utils/http.js';
 
 function DetailsTableAttendance({type, stats, isAdminPage}) {
 	// console.log('\n✅✅✅DetailsTableAttendance:');
@@ -28,28 +28,13 @@ function DetailsTableAttendance({type, stats, isAdminPage}) {
 		isError: markAbsentIsError,
 		error: markAbsentError,
 	} = useMutation({
-		mutationFn: (formData) => {
+		mutationFn: (formDataObj) => {
 			setFeedbackConfirmation(0);
 			setDeleteWarningTriggered(false);
 			setDeleteWarnings(null);
-			return fetch(`/api/admin-console/edit-mark-absent`, {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json',
-					'CSRF-Token': status.token,
-				},
-				body: JSON.stringify(formData),
-				credentials: 'include', // include cookies
-			}).then((response) => {
-				return response.json().then((data) => {
-					if (!response.ok) {
-						// reject with backend data
-						return Promise.reject(data);
-					}
-					return data;
-				});
-			});
+			return mutateOnEdit(status, formDataObj, `/api/admin-console/edit-mark-absent`);
 		},
+
 		onSuccess: (res) => {
 			queryClient.invalidateQueries([`/admin-console/show-all-schedules/${params.id}`]);
 			console.log('res', res);
@@ -73,27 +58,15 @@ function DetailsTableAttendance({type, stats, isAdminPage}) {
 		error: deleteAttendanceRecordError,
 		reset,
 	} = useMutation({
-		mutationFn: (formData) => {
+		mutationFn: (formDataObj) => {
 			setDeleteWarningTriggered(false);
-
-			return fetch(`/api/admin-console/delete-attendance-record`, {
-				method: 'DELETE',
-				headers: {
-					'Content-Type': 'application/json',
-					'CSRF-Token': status.token,
-				},
-				body: JSON.stringify(formData),
-				credentials: 'include', // include cookies
-			}).then((response) => {
-				return response.json().then((data) => {
-					if (!response.ok) {
-						// reject with backend data
-						return Promise.reject(data);
-					}
-					return data;
-				});
-			});
+			return mutateOnDelete(
+				status,
+				formDataObj,
+				`/api/admin-console/delete-attendance-record`,
+			);
 		},
+
 		onSuccess: (res) => {
 			queryClient.invalidateQueries([`/admin-console/show-all-schedules/${params.id}`]);
 			console.log('res', res);

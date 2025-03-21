@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useParams, useLocation, useNavigate} from 'react-router-dom';
-import {fetchItem, fetchStatus, queryClient} from '../../utils/http.js';
+import {fetchItem, fetchStatus, queryClient, mutateOnDelete} from '../../utils/http.js';
 import {useQuery, useMutation} from '@tanstack/react-query';
 import ModalFrame from './ModalFrame.jsx';
 import ViewUser from './ViewUser.jsx';
@@ -63,24 +63,9 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 		error: deleteError,
 		reset,
 	} = useMutation({
-		mutationFn: () => {
-			return fetch(`/api/admin-console/${dataDeleteQuery}`, {
-				method: 'DELETE',
-				headers: {
-					'Content-Type': 'application/json',
-					'CSRF-Token': status.token,
-				},
-				credentials: 'include', // include cookies
-			}).then((response) => {
-				return response.json().then((data) => {
-					if (!response.ok) {
-						// reject with backend data
-						return Promise.reject(data);
-					}
-					return data;
-				});
-			});
-		},
+		mutationFn: (formDataObj) =>
+			mutateOnDelete(status, formDataObj, `/api/admin-console/${dataDeleteQuery}`),
+
 		onSuccess: (res) => {
 			setDeleteConfirmation(res.confirmation);
 			queryClient.invalidateQueries(['query', `/admin-console/show-all-users/${params.id}`]);

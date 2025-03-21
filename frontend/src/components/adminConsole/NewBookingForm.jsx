@@ -3,7 +3,7 @@ import {useMutation, useQuery} from '@tanstack/react-query';
 import {useInput} from '../../hooks/useInput.js';
 import InputLogin from '../login/InputLogin.jsx';
 import UserFeedbackBox from './FeedbackBox.jsx';
-import {queryClient, fetchData, fetchStatus} from '../../utils/http.js';
+import {queryClient, fetchData, fetchStatus, mutateOnCreate} from '../../utils/http.js';
 import {getWeekDay} from '../../utils/dateTime.js';
 import * as val from '../../utils/validation.js';
 
@@ -68,6 +68,7 @@ function NewBookingForm({onClose}) {
 	const pickedCustomerID = customerValue || null;
 	const {
 		data: schedulesList,
+		isPending: isSchedulesListPending,
 		isError: isSchedulesError,
 		error: schedulesError,
 	} = useQuery({
@@ -98,26 +99,15 @@ function NewBookingForm({onClose}) {
 	);
 	console.log('schedulesOptionsList: ', schedulesOptionsList);
 
-	const {mutate, isPending, isError, error} = useMutation({
-		mutationFn: (formData) => {
-			return fetch(`/api/admin-console/create-booking`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					'CSRF-Token': status.token,
-				},
-				body: JSON.stringify(formData),
-				credentials: 'include', // include cookies
-			}).then((response) => {
-				return response.json().then((data) => {
-					if (!response.ok) {
-						// reject with backend data
-						return Promise.reject(data);
-					}
-					return data;
-				});
-			});
-		},
+	const {
+		mutate: createBooking,
+		isPending: isCreateBookingPending,
+		isError: isCreateBookingError,
+		error: createBookingError,
+	} = useMutation({
+		mutationFn: (formDataObj) =>
+			mutateOnCreate(status, formDataObj, `/api/admin-console/create-booking`),
+
 		onSuccess: (res) => {
 			queryClient.invalidateQueries(['/admin-console/show-all-bookings']);
 			if (res.confirmation || res.code == 200) {
@@ -209,7 +199,7 @@ function NewBookingForm({onClose}) {
 		}
 
 		console.log('sent data:', formDataObj);
-		mutate(formDataObj);
+		createBooking(formDataObj);
 		handleReset();
 	};
 
@@ -228,9 +218,9 @@ function NewBookingForm({onClose}) {
 		<UserFeedbackBox
 			status={feedbackConfirmation}
 			successMsg={successMsg}
-			isPending={isPending}
-			isError={isError}
-			error={error}
+			isPending={isCreateBookingPending}
+			isError={isCreateBookingError}
+			error={createBookingError}
 			size='small'
 		/>
 	);

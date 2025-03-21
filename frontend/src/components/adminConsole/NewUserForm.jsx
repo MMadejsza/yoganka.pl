@@ -20,26 +20,15 @@ function NewUserForm({onClose}) {
 		queryFn: fetchStatus,
 	});
 
-	const {mutate, isPending, isError, error} = useMutation({
-		mutationFn: (formData) => {
-			return fetch(`/api/admin-console/create-user`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					'CSRF-Token': status.token,
-				},
-				body: JSON.stringify(formData),
-				credentials: 'include', // include cookies
-			}).then((response) => {
-				return response.json().then((data) => {
-					if (!response.ok) {
-						// reject with backend data
-						return Promise.reject(data);
-					}
-					return data;
-				});
-			});
-		},
+	const {
+		mutate: createUser,
+		isPending: isCreateUserPending,
+		isError: isCreateUserError,
+		error: createUserError,
+	} = useMutation({
+		mutationFn: (formDataObj) =>
+			mutateOnCreate(status, formDataObj, `/api/admin-console/create-user`),
+
 		onSuccess: (res) => {
 			queryClient.invalidateQueries(['/admin-console/show-all-users']);
 			if (res.confirmation || res.code == 200) {
@@ -112,7 +101,7 @@ function NewUserForm({onClose}) {
 		const data = Object.fromEntries(fd.entries());
 		data.date = new Date().toISOString();
 		console.log('sent data:', data);
-		mutate(data);
+		createUser(data);
 
 		handleReset();
 	};
@@ -132,9 +121,9 @@ function NewUserForm({onClose}) {
 		<UserFeedbackBox
 			status={feedbackConfirmation}
 			successMsg={successMsg}
-			isPending={isPending}
-			isError={isError}
-			error={error}
+			isPending={isCreateUserPending}
+			isError={isCreateUserError}
+			error={createUserError}
 			size='small'
 		/>
 	);

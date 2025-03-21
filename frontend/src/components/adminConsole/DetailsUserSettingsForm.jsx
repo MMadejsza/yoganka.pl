@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {useParams} from 'react-router-dom';
 import {useQuery, useMutation} from '@tanstack/react-query';
-import {queryClient, fetchItem, fetchStatus} from '../../utils/http.js';
+import {queryClient, fetchItem, fetchStatus, mutateOnEdit} from '../../utils/http.js';
 import {useInput} from '../../hooks/useInput.js';
 import InputLogin from '../login/InputLogin.jsx';
 import UserFeedbackBox from './FeedbackBox.jsx';
@@ -48,26 +48,14 @@ function DetailsUserSettingsForm({settingsData, customerAccessed, adminAccessed}
 		: null;
 	console.log('dynamicMutationAddress', dynamicMutationAddress);
 
-	const {mutate, isPending, isError, error} = useMutation({
-		mutationFn: (formData) => {
-			return fetch(dynamicMutationAddress, {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json',
-					'CSRF-Token': status.token,
-				},
-				body: JSON.stringify(formData),
-				credentials: 'include', // include cookies
-			}).then((response) => {
-				return response.json().then((data) => {
-					if (!response.ok) {
-						// reject with backend data
-						return Promise.reject(data);
-					}
-					return data;
-				});
-			});
-		},
+	const {
+		mutate: editUserSettings,
+		isPending: isEditUserSettingsPending,
+		isError: isEditUserSettingsError,
+		error: editUserSettingsError,
+	} = useMutation({
+		mutationFn: (formDataObj) => mutateOnEdit(status, formDataObj, dynamicMutationAddress),
+
 		onSuccess: (res) => {
 			queryClient.invalidateQueries(['query', '/show-account']);
 			queryClient.invalidateQueries(['query', `/admin-console/show-all-users/${params.id}`]);
@@ -181,7 +169,7 @@ function DetailsUserSettingsForm({settingsData, customerAccessed, adminAccessed}
 		const fd = new FormData(e.target);
 		const formDataObj = Object.fromEntries(fd.entries());
 		console.log('sent data:', formDataObj);
-		mutate(formDataObj);
+		editUserSettings(formDataObj);
 		handleReset();
 
 		//! assign registration date
@@ -200,9 +188,9 @@ function DetailsUserSettingsForm({settingsData, customerAccessed, adminAccessed}
 	let feedback = feedbackConfirmation !== undefined && (
 		<UserFeedbackBox
 			status={feedbackConfirmation}
-			isPending={isPending}
-			isError={isError}
-			error={error}
+			isPending={isEditUserSettingsPending}
+			isError={isEditUserSettingsError}
+			error={editUserSettingsError}
 			successMsg={successMsg}
 			size='small'
 		/>

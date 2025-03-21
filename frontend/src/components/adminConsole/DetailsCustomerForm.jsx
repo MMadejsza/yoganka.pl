@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {useParams} from 'react-router-dom';
 import {useQuery, useMutation} from '@tanstack/react-query';
-import {queryClient, fetchItem, fetchStatus} from '../../utils/http.js';
+import {queryClient, fetchItem, fetchStatus, mutateOnEdit} from '../../utils/http.js';
 import {useInput} from '../../hooks/useInput.js';
 import {phoneValidations} from '../../utils/validation.js';
 import InputLogin from '../login/InputLogin.jsx';
@@ -33,7 +33,7 @@ function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
 	const {
 		data,
 		isLoading: isCustomerLoading,
-		isError: isCustomerError,
+		isEditCustomerDetailsError: isCustomerError,
 	} = useQuery({
 		queryKey: queryKey,
 		queryFn: ({signal}) => dynamicFetch(signal),
@@ -47,26 +47,13 @@ function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
 		: adminAccessed
 		? `/api/admin-console` + `/edit-customer-data/${customerData.CustomerID}`
 		: null;
-	const {mutate, isPending, isError, error} = useMutation({
-		mutationFn: (formData) => {
-			return fetch(dynamicMutationAddress, {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json',
-					'CSRF-Token': status.token,
-				},
-				body: JSON.stringify(formData),
-				credentials: 'include', // include cookies
-			}).then((response) => {
-				return response.json().then((data) => {
-					if (!response.ok) {
-						// reject with backend data
-						return Promise.reject(data);
-					}
-					return data;
-				});
-			});
-		},
+	const {
+		mutate: editCustomerDetails,
+		isPending: isEditCustomerDetailsPending,
+		isError: isEditCustomerDetailsError,
+		error: editCustomerDetailsError,
+	} = useMutation({
+		mutationFn: (formDataObj) => mutateOnEdit(status, formDataObj, dynamicMutationAddress),
 		onSuccess: (res) => {
 			if (customerAccessed) queryClient.invalidateQueries(['query', '/show-account']);
 			else
@@ -165,7 +152,7 @@ function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
 		const fd = new FormData(e.target);
 		const formDataObj = Object.fromEntries(fd.entries());
 		console.log('sent data:', formDataObj);
-		mutate(formDataObj);
+		editCustomerDetails(formDataObj);
 		handleReset();
 	};
 
@@ -182,9 +169,9 @@ function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
 	let feedback = feedbackConfirmation !== undefined && (
 		<UserFeedbackBox
 			status={feedbackConfirmation}
-			isPending={isPending}
-			isError={isError}
-			error={error}
+			isPending={isEditCustomerDetailsPending}
+			isError={isEditCustomerDetailsError}
+			error={editCustomerDetailsError}
 			size='small'
 		/>
 	);

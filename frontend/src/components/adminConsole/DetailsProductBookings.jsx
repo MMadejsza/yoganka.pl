@@ -3,7 +3,7 @@ import {useParams} from 'react-router-dom';
 import {useMutation, useQuery} from '@tanstack/react-query';
 import ModalTable from './ModalTable';
 import UserFeedbackBox from './FeedbackBox.jsx';
-import {queryClient, fetchStatus} from '../../utils/http.js';
+import {queryClient, fetchStatus, mutateOnEdit} from '../../utils/http.js';
 
 function DetailsProductBookings({type, stats, isAdminPage}) {
 	console.log('\n✅✅✅DetailsProductBookings:');
@@ -23,30 +23,14 @@ function DetailsProductBookings({type, stats, isAdminPage}) {
 	});
 
 	const {
-		mutate: restore,
-		isPending: restoreIsPending,
-		isError: restoreIsError,
-		error: restoreError,
+		mutate: markPresent,
+		isPending: markPresentIsPending,
+		isError: markPresentIsError,
+		error: markPresentError,
 	} = useMutation({
-		mutationFn: (formData) => {
-			return fetch(`/api/admin-console/edit-mark-present`, {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json',
-					'CSRF-Token': status.token,
-				},
-				body: JSON.stringify(formData),
-				credentials: 'include', // include cookies
-			}).then((response) => {
-				return response.json().then((data) => {
-					if (!response.ok) {
-						// reject with backend data
-						return Promise.reject(data);
-					}
-					return data;
-				});
-			});
-		},
+		mutationFn: (formDataObj) =>
+			mutateOnEdit(status, formDataObj, `/api/admin-console/edit-mark-present`),
+
 		onSuccess: (res) => {
 			queryClient.invalidateQueries([`/admin-console/show-all-schedules/${params.id}`]);
 			console.log('res', res);
@@ -67,9 +51,9 @@ function DetailsProductBookings({type, stats, isAdminPage}) {
 		<UserFeedbackBox
 			status={feedbackConfirmation}
 			successMsg={successMsg}
-			isPending={restoreIsPending}
-			isError={restoreIsError}
-			error={restoreError}
+			isPending={markPresentIsPending}
+			isError={markPresentIsError}
+			error={markPresentError}
 			size='small'
 		/>
 	);
@@ -95,7 +79,7 @@ function DetailsProductBookings({type, stats, isAdminPage}) {
 				active={false}
 				isAdminPage={isAdminPage}
 				adminActions={true}
-				onQuickAction={[{symbol: 'restore', method: restore}]}
+				onQuickAction={[{symbol: 'restore', method: markPresent}]}
 			/>
 		</>
 	);

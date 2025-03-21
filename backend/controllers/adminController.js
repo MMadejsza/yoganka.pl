@@ -988,11 +988,11 @@ export const putEditMarkAbsent = (req, res, next) => {
 		})
 		.then((updatedRecord) => {
 			console.log('\n✅✅✅ admin putEditMarkAbsent UPDATE successful');
-			const status = updatedRecord ? 1 : 0;
+
 			return res.status(200).json({
-				confirmation: status,
+				confirmation: 1,
 				message: 'Uczestnik oznaczony jako nieobecny.',
-				affectedRows: status ? 2 : 0,
+				affectedRows: 2,
 			});
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));

@@ -4,7 +4,7 @@ import {useMutation} from '@tanstack/react-query';
 import ModalTable from './ModalTable';
 import NewProductScheduleForm from './NewProductScheduleForm';
 import UserFeedbackBox from './FeedbackBox.jsx';
-import {queryClient} from '../../utils/http.js';
+import {queryClient, mutateOnDelete} from '../../utils/http.js';
 import {getWeekDay} from '../../utils/dateTime.js';
 
 function DetailsProductSchedules({scheduleRecords, placement, status}) {
@@ -33,26 +33,13 @@ function DetailsProductSchedules({scheduleRecords, placement, status}) {
 		error: deleteScheduleRecordError,
 		reset,
 	} = useMutation({
-		mutationFn: (formData) => {
-			setDeleteWarningTriggered(false);
-			return fetch(`/api/admin-console/delete-schedule/${formData.deleteScheduleID}`, {
-				method: 'DELETE',
-				headers: {
-					'Content-Type': 'application/json',
-					'CSRF-Token': status.token,
-				},
-				body: JSON.stringify(formData),
-				credentials: 'include', // include cookies
-			}).then((response) => {
-				return response.json().then((data) => {
-					if (!response.ok) {
-						// reject with backend data
-						return Promise.reject(data);
-					}
-					return data;
-				});
-			});
-		},
+		mutationFn: (formDataObj) =>
+			mutateOnDelete(
+				status,
+				formDataObj,
+				`/api/admin-console/delete-schedule/${formData.deleteScheduleID}`,
+			),
+
 		onSuccess: (res) => {
 			queryClient.invalidateQueries([`/admin-console/show-all-products/${params.id}`]);
 			console.log('res', res);

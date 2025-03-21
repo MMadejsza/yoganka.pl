@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {useMutation, useQuery} from '@tanstack/react-query';
-import {queryClient, fetchData, fetchStatus} from '../../utils/http.js';
+import {queryClient, fetchData, fetchStatus, mutateOnCreate} from '../../utils/http.js';
 import {useInput} from '../../hooks/useInput.js';
 import InputLogin from '../login/InputLogin.jsx';
 import UserFeedbackBox from './FeedbackBox.jsx';
@@ -33,26 +33,15 @@ function NewCustomerForm({onClose}) {
 	);
 	console.log('usersOptionsList: ', usersOptionsList);
 
-	const {mutate, isPending, isError, error} = useMutation({
-		mutationFn: (formData) => {
-			return fetch(`/api/admin-console/create-customer`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					'CSRF-Token': status.token,
-				},
-				body: JSON.stringify(formData),
-				credentials: 'include', // include cookies
-			}).then((response) => {
-				return response.json().then((data) => {
-					if (!response.ok) {
-						// reject with backend data
-						return Promise.reject(data);
-					}
-					return data;
-				});
-			});
-		},
+	const {
+		mutate: createCustomer,
+		isPending: isCreateCustomerPending,
+		isError: isCreateCustomerError,
+		error: createCustomerError,
+	} = useMutation({
+		mutationFn: (formDataObj) =>
+			mutateOnCreate(status, formDataObj, `/api/admin-console/create-customer`),
+
 		onSuccess: (res) => {
 			queryClient.invalidateQueries(['/admin-console/show-all-customers']);
 			if (res.confirmation || res.code == 200) {
@@ -224,9 +213,9 @@ function NewCustomerForm({onClose}) {
 		<UserFeedbackBox
 			status={feedbackConfirmation}
 			successMsg={successMsg}
-			isPending={isPending}
-			isError={isError}
-			error={error}
+			isPending={isCreateCustomerPending}
+			isError={isCreateCustomerError}
+			error={createCustomerError}
 			size='small'
 		/>
 	);

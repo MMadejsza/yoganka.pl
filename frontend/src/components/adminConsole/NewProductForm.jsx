@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {useMutation, useQuery} from '@tanstack/react-query';
-import {queryClient, fetchStatus} from '../../utils/http.js';
+import {queryClient, fetchStatus, mutateOnCreate} from '../../utils/http.js';
 import {useInput} from '../../hooks/useInput.js';
 import InputLogin from '../login/InputLogin.jsx';
 import FeedbackBox from './FeedbackBox.jsx';
@@ -16,26 +16,15 @@ function NewProductForm({onClose}) {
 		queryFn: fetchStatus,
 	});
 
-	const {mutate, isPending, isError, error} = useMutation({
-		mutationFn: (formData) => {
-			return fetch(`/api/admin-console/create-product`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					'CSRF-Token': status.token,
-				},
-				body: JSON.stringify(formData),
-				credentials: 'include', // include cookies
-			}).then((response) => {
-				return response.json().then((data) => {
-					if (!response.ok) {
-						// reject with backend data
-						return Promise.reject(data);
-					}
-					return data;
-				});
-			});
-		},
+	const {
+		mutate: createProduct,
+		isPending: isCreateProductPending,
+		isError: isCreateProductError,
+		error: createProductError,
+	} = useMutation({
+		mutationFn: (formDataObj) =>
+			mutateOnCreate(status, formDataObj, `/api/admin-console/create-product`),
+
 		onSuccess: (res) => {
 			queryClient.invalidateQueries(['/admin-console/show-all-products']);
 			if (res.confirmation || res.code == 200) {
@@ -162,7 +151,7 @@ function NewProductForm({onClose}) {
 		const fd = new FormData(e.target);
 		const formDataObj = Object.fromEntries(fd.entries());
 		console.log('sent data:', formDataObj);
-		mutate(formDataObj);
+		createProduct(formDataObj);
 		handleReset();
 	};
 
@@ -181,9 +170,9 @@ function NewProductForm({onClose}) {
 		<FeedbackBox
 			status={feedbackConfirmation}
 			successMsg={successMsg}
-			isPending={isPending}
-			isError={isError}
-			error={error}
+			isPending={isCreateProductPending}
+			isError={isCreateProductError}
+			error={createProductError}
 			size='small'
 		/>
 	);

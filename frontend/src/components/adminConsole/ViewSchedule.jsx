@@ -1,3 +1,7 @@
+import React, {useState, useEffect} from 'react';
+import {useLocation, useNavigate} from 'react-router-dom';
+import {useQuery, useMutation} from '@tanstack/react-query';
+
 import DetailsSchedule from './DetailsSchedule.jsx';
 import DetailsProduct from './DetailsProduct.jsx';
 import DetailsScheduleStats from './DetailsScheduleStats.jsx';
@@ -5,12 +9,9 @@ import DetailsProductBookings from './DetailsProductBookings.jsx';
 import DetailsTableAttendance from './DetailsTableAttendance.jsx';
 import DetailsProductReviews from './DetailsProductReviews.jsx';
 import ViewScheduleNewCustomerForm from './ViewScheduleNewCustomerForm.jsx';
-import {calculateScheduleStats} from '../../utils/productViewsUtils.js';
-import React, {useState, useEffect} from 'react';
 
-import {useLocation, useNavigate} from 'react-router-dom';
-import {useQuery, useMutation} from '@tanstack/react-query';
-import {fetchStatus, queryClient} from '../../utils/http.js';
+import {calculateScheduleStats} from '../../utils/productViewsUtils.js';
+import {fetchStatus, queryClient, mutateOnEdit} from '../../utils/http.js';
 
 function ViewSchedule({data, bookingOps, onClose, isModalOpen, isAdminPanel}) {
 	// console.clear();
@@ -34,23 +35,9 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen, isAdminPanel}) {
 		error: cancelError,
 		reset: cancelReset,
 	} = useMutation({
-		mutationFn: async () =>
-			await fetch(`/api/customer/edit-mark-absent/${scheduleID}`, {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json',
-					'CSRF-Token': status.token,
-				},
-				credentials: 'include',
-			}).then((response) => {
-				return response.json().then((data) => {
-					if (!response.ok) {
-						// reject with backend data
-						return Promise.reject(data);
-					}
-					return data;
-				});
-			}),
+		mutationFn: (formDataObj) =>
+			mutateOnEdit(status, formDataObj, `/api/customer/edit-mark-absent/${scheduleID}`),
+
 		onSuccess: (res) => {
 			queryClient.invalidateQueries(['data', '/grafik']);
 			queryClient.invalidateQueries(['account']);
@@ -122,10 +109,14 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen, isAdminPanel}) {
 						? () => setIsFillingTheForm(true)
 						: () =>
 								bookingOps.onBook({
-									scheduleID: schedule.ScheduleID,
-									productName: product.Name,
-									productPrice: product.Price,
-									customerDetails: newCustomerDetails,
+									customerDetails: newCustomerDetails || null,
+									schedule: schedule.ScheduleID,
+									product: product.Name,
+									status: 'Paid',
+									amountPaid: product.Price,
+									amountDue: 0,
+									paymentMethod: 'Credit Card',
+									paymentStatus: 'Completed',
 								})
 					: null
 			}

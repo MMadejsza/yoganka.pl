@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {useQuery, useMutation} from '@tanstack/react-query';
-import {fetchStatus, queryClient} from '../../utils/http.js';
+import {fetchStatus, queryClient, mutateOnLoginOrSignup} from '../../utils/http.js';
 import {Link, NavLink, useNavigate, useLocation} from 'react-router-dom';
 import Logo from '../Logo.jsx';
 import {smoothScrollInto} from '../../utils/utils.jsx';
@@ -96,17 +96,9 @@ function Nav({setIsNavOpen}) {
 
 	console.log('nav data', status);
 	const logoutMutation = useMutation({
-		mutationFn: async () =>
-			await fetch('/api/login-pass/logout', {
-				method: 'POST',
-				credentials: 'include',
-				headers: {
-					'CSRF-Token': status.token,
-				},
-			}).then((res) => {
-				if (!res.ok) throw new Error('Wylogowanie nie powiodło się');
-				return res.json();
-			}),
+		mutationFn: (formDataObj) =>
+			mutateOnLoginOrSignup(status, formDataObj, '/api/login-pass/logout'),
+
 		onSuccess: () => {
 			// Invalidate query to reload layout
 			queryClient.invalidateQueries(['authStatus']);
