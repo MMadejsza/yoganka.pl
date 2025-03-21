@@ -44,7 +44,6 @@ const router = createBrowserRouter([
 			},
 			{path: 'grafik', element: <SchedulePage />},
 			{path: 'grafik/:id', element: <SchedulePage />},
-			// {path: 'grafik/book/:id', element: <SchedulePage />},
 			{
 				path: 'admin-console',
 				element: <AdminPage />,

@@ -40,7 +40,7 @@ function SchedulePage() {
 		reset,
 	} = useMutation({
 		mutationFn: async ({scheduleID, productName, productPrice, customerDetails}) =>
-			await fetch(`/api/customer/grafik/book/${scheduleID}`, {
+			await fetch(`/api/customer/create-booking`, {
 				method: 'POST',
 				body: JSON.stringify({
 					customerDetails: customerDetails || null,

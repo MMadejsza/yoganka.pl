@@ -19,7 +19,7 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 	const isAdminPanel = location.pathname.includes('admin-console');
 	// const isUserSettings = location.pathname.includes('konto/ustawienia');
 	const isCustomerQuery = location.pathname.includes('konto/rezerwacje') ? '/customer' : '';
-	const minRightsPrefix = role == 'ADMIN' ? 'admin-console' : '';
+	const minRightsPrefix = role == 'ADMIN' ? '' : '';
 	const noFetchPaths = ['statystyki', 'zajecia', 'rezerwacje', 'faktury'];
 
 	console.log('ViewFrame callPath: ', callPath);

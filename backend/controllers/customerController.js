@@ -169,8 +169,8 @@ export const postBookSchedule = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
-export const postCancelSchedule = (req, res, next) => {
-	const controllerName = 'postCancelSchedule';
+export const putEditMarkAbsent = (req, res, next) => {
+	const controllerName = 'putEditMarkAbsent';
 	log(controllerName);
 	const scheduleID = req.params.id;
 
@@ -198,7 +198,7 @@ export const postCancelSchedule = (req, res, next) => {
 				},
 			).then(([updatedCount]) => {
 				if (updatedCount > 0) {
-					console.log('\n✅✅✅ postCancelSchedule Update successful');
+					console.log('\n✅✅✅ putEditMarkAbsent Update successful');
 					return res.status(200).json({
 						confirmation: 1,
 						message: 'Miejsce zwolnione - dziękujemy za informację :)',

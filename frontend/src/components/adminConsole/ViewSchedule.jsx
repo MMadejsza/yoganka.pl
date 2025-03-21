@@ -35,8 +35,8 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen, isAdminPanel}) {
 		reset: cancelReset,
 	} = useMutation({
 		mutationFn: async () =>
-			await fetch(`/api/customer/grafik/cancel/${scheduleID}`, {
-				method: 'POST',
+			await fetch(`/api/customer/edit-mark-absent/${scheduleID}`, {
+				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json',
 					'CSRF-Token': status.token,
