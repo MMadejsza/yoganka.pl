@@ -1,8 +1,8 @@
-import {useState} from 'react';
 import {useMutation} from '@tanstack/react-query';
-import {queryClient} from '../../utils/http.js';
+import {queryClient, mutateOnCreate} from '../../utils/http.js';
 import {useInput} from '../../hooks/useInput.js';
 import {useAuthStatus} from '../../hooks/useAuthStatus.js';
+import {useFeedback} from '../../hooks/useFeedback.js';
 import InputLogin from '../login/InputLogin.jsx';
 import UserFeedbackBox from './FeedbackBox.jsx';
 import {
@@ -11,11 +11,8 @@ import {
 	getConfirmedPasswordValidations,
 } from '../../utils/validation.js';
 
-function NewUserForm({onClose}) {
-	let initialFeedbackConfirmation;
-	const [feedbackConfirmation, setFeedbackConfirmation] = useState(initialFeedbackConfirmation);
-	const [successMsg, setSuccessMsg] = useState(null);
-
+function NewUserForm() {
+	const {feedback, updateFeedback, resetFeedback} = useFeedback();
 	const {data: status} = useAuthStatus();
 
 	const {
@@ -29,15 +26,10 @@ function NewUserForm({onClose}) {
 
 		onSuccess: (res) => {
 			queryClient.invalidateQueries(['/admin-console/show-all-users']);
-			if (res.confirmation || res.code == 200) {
-				setSuccessMsg(res.message);
-				setFeedbackConfirmation(1);
-			} else {
-				setFeedbackConfirmation(0);
-			}
+			updateFeedback(res);
 		},
 		onError: (err) => {
-			setFeedbackConfirmation(0);
+			updateFeedback(err);
 		},
 	});
 
@@ -80,6 +72,8 @@ function NewUserForm({onClose}) {
 
 	// Reset all te inputs
 	const handleReset = () => {
+		resetFeedback();
+
 		handleEmailReset();
 		handlePasswordReset();
 		handleConfirmedPasswordReset();
@@ -114,19 +108,7 @@ function NewUserForm({onClose}) {
 	// Extract values only
 	const {formType, title, actionTitle} = formLabels;
 
-	let form;
-	let feedback = feedbackConfirmation !== undefined && (
-		<UserFeedbackBox
-			status={feedbackConfirmation}
-			successMsg={successMsg}
-			isPending={isCreateUserPending}
-			isError={isCreateUserError}
-			error={createUserError}
-			size='small'
-		/>
-	);
-
-	form = (
+	const form = (
 		<form
 			onSubmit={handleSubmit}
 			className={`user-container__details-list modal-checklist__list`}>
@@ -203,7 +185,18 @@ function NewUserForm({onClose}) {
 	return (
 		<>
 			<section className={formType}>
-				{form} {feedback}
+				{form}
+				{feedback.status !== undefined && (
+					<UserFeedbackBox
+						status={feedback.status}
+						isPending={isCreateUserPending}
+						isError={isCreateUserError}
+						error={createUserError}
+						successMsg={feedback.message}
+						warnings={feedback.warnings}
+						size='small'
+					/>
+				)}
 			</section>
 		</>
 	);
