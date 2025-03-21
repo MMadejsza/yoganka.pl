@@ -152,6 +152,8 @@ export const postCreateBookSchedule = (req, res, next) => {
 			Notes: cDetails.notes,
 		}).then((newCustomer) => {
 			successLog(person, controllerName, 'customer created');
+			req.session.user.Customer = newCustomer;
+			req.session.role = 'CUSTOMER';
 			return models.User.update({Role: person}, {where: {UserID: req.user.UserID}}).then(
 				() => newCustomer,
 			);

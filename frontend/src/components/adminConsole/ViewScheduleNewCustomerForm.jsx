@@ -1,12 +1,7 @@
-import {useNavigate, useLocation} from 'react-router-dom';
 import {useInput} from '../../hooks/useInput.js';
 import InputLogin from '../login/InputLogin.jsx';
 import * as val from '../../utils/validation.js';
 function ViewScheduleNewCustomerForm({onSave}) {
-	const navigate = useNavigate();
-	const location = useLocation();
-	const params = new URLSearchParams(location.search);
-	const customerConfirmation = params.get('customerConfirmation');
 	const minAge = () => {
 		const today = new Date();
 		const year = today.getFullYear() - 18;
@@ -122,6 +117,7 @@ function ViewScheduleNewCustomerForm({onSave}) {
 		}
 		console.log('Submit passed errors');
 
+		// passing given details to sabe as a customer in state of ViewSchedule
 		onSave({
 			isFirstTimeBuyer: false,
 			cType: 'Indywidualny',
@@ -297,15 +293,6 @@ function ViewScheduleNewCustomerForm({onSave}) {
 				className={`form-action-btn modal__btn modal__btn--small`}>
 				{actionTitle}
 			</button>
-			{customerConfirmation == 1 ? (
-				<div className='user-container__section-record modal-checklist__li confirmation'>
-					Zmiany zatwierdzone
-				</div>
-			) : customerConfirmation == 0 ? (
-				<div className='user-container__section-record modal-checklist__li dimmed'>
-					Brak zmian
-				</div>
-			) : null}
 		</form>
 	);
 
