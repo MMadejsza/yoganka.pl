@@ -1,6 +1,6 @@
 import * as models from '../models/_index.js';
 import bcrypt from 'bcryptjs';
-import {errorCode, log, catchErr} from './_controllers.js';
+import {errorCode, log, catchErr} from './controllersUtils.js';
 let errCode = errorCode;
 
 export const getStatus = (req, res, next) => {

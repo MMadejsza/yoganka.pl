@@ -1,6 +1,6 @@
 import db from '../utils/db.js';
 import * as models from '../models/_index.js';
-import {errorCode, log, catchErr} from './_controllers.js';
+import {errorCode, log, catchErr} from './controllersUtils.js';
 let errCode = errorCode;
 
 //! CUSTOMERS_____________________________________________
