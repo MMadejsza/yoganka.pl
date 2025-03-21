@@ -183,8 +183,6 @@ function NewProductScheduleForm() {
 
 	form = (
 		<form
-			// action='/api/login-pass/login'
-			method='POST'
 			onSubmit={handleSubmit}
 			className={`table-form`}>
 			<h1 className='form__title'>{title}</h1>

@@ -168,8 +168,6 @@ function LoginFrom() {
 		content = (
 			<section className={formType}>
 				<form
-					// action='/api/login-pass/login'
-					method='POST'
 					onSubmit={handleSubmit}
 					className={`${formType}-form`}>
 					<h1 className='form__title'>{title}</h1>

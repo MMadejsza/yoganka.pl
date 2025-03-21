@@ -163,7 +163,6 @@ function DetailsScheduleForm({scheduleData}) {
 
 	form = (
 		<form
-			method='POST'
 			onSubmit={handleSubmit}
 			className={`user-container__details-list modal-checklist__list form`}>
 			<h1 className='form__title'>{title}</h1>

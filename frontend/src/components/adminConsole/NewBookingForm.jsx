@@ -238,8 +238,6 @@ function NewBookingForm({onClose}) {
 		!scheduleValue || scheduleValue === '' || scheduleValue === false || areErrors;
 	form = productsList && customersList && (
 		<form
-			// action='/api/login-pass/login'
-			method='POST'
 			onSubmit={handleSubmit}
 			className={`user-container__details-list modal-checklist__list`}>
 			<h1 className='form__title'>{title}</h1>
