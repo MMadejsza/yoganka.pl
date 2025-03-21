@@ -5,17 +5,11 @@ function UserFeedbackBox({
 	status,
 	successMsg,
 	isPending,
-	isError,
 	error,
 	size,
 	redirectTarget,
 	onClose,
 }) {
-	// console.log('userFeedbackBox status', status);
-	// console.log('userFeedbackBox isPending', isPending);
-	// console.log('userFeedbackBox isError', isError);
-	// console.log('userFeedbackBox error', error);
-	// console.log('userFeedbackBox size', size);
 	const navigate = useNavigate();
 
 	const statusClass =
@@ -23,16 +17,35 @@ function UserFeedbackBox({
 			? 'error'
 			: isPending
 			? 'neutral'
-			: isError
-			? 'error'
-			: status == 1
+			: status === 1
 			? 'success'
+			: status === 0
+			? 'neutral'
+			: status === -1
+			? 'error'
 			: 'neutral';
 	const sizeClass = size === 'small' ? 'feedback-box--small' : '';
 	const readyClasses = `feedback-box feedback-box--${statusClass} ${sizeClass}`;
 
 	let statusMsg;
-	if (warnings && !error && !status) {
+
+	if (isPending) {
+		statusMsg = 'Wysyłanie...';
+	} else if (status === 1) {
+		statusMsg = successMsg || 'Zmiany zatwierdzone';
+		if (redirectTarget) {
+			setTimeout(() => {
+				navigate(redirectTarget);
+				onClose();
+			}, 1000);
+		}
+	} else if (status === 0) {
+		// Neutral result (e.g. no changes were made)
+		statusMsg = error?.message || 'Brak zmian';
+	} else if (status === -1) {
+		// Error result
+		statusMsg = error?.message || 'Wystąpił błąd';
+	} else if (warnings && (status === undefined || status === null)) {
 		statusMsg = (
 			<>
 				<h1 className='feedback-box__title'>
@@ -44,37 +57,11 @@ function UserFeedbackBox({
 						key={msg}>
 						❌ {msg}
 					</p>
-				))}{' '}
+				))}
 			</>
 		);
-	} else if (status == 1) {
-		statusMsg = successMsg || 'Zmiany zatwierdzone';
-		if (redirectTarget) {
-			setTimeout(() => {
-				statusMsg = null;
-				navigate(redirectTarget);
-				onClose();
-			}, 1000);
-		}
-	} else if (status == 0) {
-		statusMsg = error?.message || 'Brak zmian';
-	} else if (isPending) {
-		statusMsg = 'Wysyłanie...';
-	} else if (isError) {
-		if (error.code == 401) {
-			statusMsg = 'Zaloguj się';
-			console.log(error.message);
-			setTimeout(() => {
-				navigate('/login');
-			}, 1000);
-		} else if (error.code == 404) {
-			setTimeout(() => {
-				navigate('/login');
-			}, 1000);
-			console.log(error);
-		} else {
-			statusMsg = error.message;
-		}
+	} else {
+		statusMsg = null;
 	}
 
 	return <div className={readyClasses}>{statusMsg}</div>;

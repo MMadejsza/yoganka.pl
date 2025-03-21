@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {useParams} from 'react-router-dom';
 import {useQuery, useMutation} from '@tanstack/react-query';
 import {queryClient, fetchItem, mutateOnEdit} from '../../utils/http.js';
@@ -6,32 +6,32 @@ import {useInput} from '../../hooks/useInput.js';
 import {useAuthStatus} from '../../hooks/useAuthStatus.js';
 import InputLogin from '../login/InputLogin.jsx';
 import UserFeedbackBox from './FeedbackBox.jsx';
+import {useFeedback} from '../../hooks/useFeedback.js';
 
 function DetailsUserSettingsForm({settingsData, customerAccessed, adminAccessed}) {
 	const params = useParams();
-	let initialFeedbackConfirmation;
-	const [feedbackConfirmation, setFeedbackConfirmation] = useState(initialFeedbackConfirmation);
-	const [successMsg, setSuccessMsg] = useState(null);
-
-	console.log('settingsData', settingsData);
+	const {feedback, updateFeedback, resetFeedback} = useFeedback({
+		// Optionally set a redirectTarget and onClose if needed
+		redirectTarget: null,
+		onClose: () => {},
+	});
 	const {data: status} = useAuthStatus();
+	console.log('settingsData', settingsData);
 
 	const queryKey = customerAccessed
 		? ['formFilling', 'userSettings']
 		: adminAccessed
 		? ['formFilling', 'userSettings', settingsData?.UserPrefID || '']
 		: null;
+
 	const dynamicFetchAddress = customerAccessed
 		? '/show-user-settings'
 		: adminAccessed
 		? `/admin-console/show-user-settings/${settingsData?.UserPrefID}`
 		: null;
-	const {
-		data,
-		isLoading: isFormLoading,
-		isError: isFormError,
-	} = useQuery({
-		queryKey: queryKey,
+
+	const {data, isLoading: isFormLoading} = useQuery({
+		queryKey,
 		queryFn: ({signal}) => fetchItem(dynamicFetchAddress, {signal}),
 		staleTime: 0,
 		refetchOnMount: true,
@@ -57,12 +57,14 @@ function DetailsUserSettingsForm({settingsData, customerAccessed, adminAccessed}
 		onSuccess: (res) => {
 			queryClient.invalidateQueries(['query', '/show-account']);
 			queryClient.invalidateQueries(['query', `/admin-console/show-all-users/${params.id}`]);
-			if (res.confirmation) {
-				setSuccessMsg(res.message);
-				setFeedbackConfirmation(1);
-			} else {
-				setFeedbackConfirmation(0);
-			}
+
+			// updating feedback
+			updateFeedback(res);
+		},
+
+		onError: (err) => {
+			// updating feedback
+			updateFeedback(err);
 		},
 	});
 
@@ -140,7 +142,8 @@ function DetailsUserSettingsForm({settingsData, customerAccessed, adminAccessed}
 
 	// Reset all te inputs
 	const handleReset = () => {
-		setFeedbackConfirmation(undefined);
+		resetFeedback();
+
 		handleHandednessReset();
 		handleFontReset();
 		handleNotificationsReset();
@@ -182,19 +185,7 @@ function DetailsUserSettingsForm({settingsData, customerAccessed, adminAccessed}
 	// Extract values only
 	const {formType, title, actionTitle} = formLabels;
 
-	let form;
-	let feedback = feedbackConfirmation !== undefined && (
-		<UserFeedbackBox
-			status={feedbackConfirmation}
-			isPending={isEditUserSettingsPending}
-			isError={isEditUserSettingsError}
-			error={editUserSettingsError}
-			successMsg={successMsg}
-			size='small'
-		/>
-	);
-
-	form = (
+	const form = (
 		<form
 			onSubmit={handleSubmit}
 			className={`user-container__details-list modal-checklist__list`}>
@@ -299,7 +290,18 @@ function DetailsUserSettingsForm({settingsData, customerAccessed, adminAccessed}
 
 	return (
 		<>
-			{form} {feedback}
+			{form}{' '}
+			{feedback.status !== undefined && (
+				<UserFeedbackBox
+					status={feedback.status}
+					isPending={isEditUserSettingsPending}
+					isError={isEditUserSettingsError}
+					error={editUserSettingsError}
+					successMsg={feedback.message}
+					warnings={feedback.warnings}
+					size='small'
+				/>
+			)}
 		</>
 	);
 }
