@@ -1,17 +1,14 @@
-import {useState} from 'react';
 import {useMutation} from '@tanstack/react-query';
 import {queryClient, mutateOnCreate} from '../../utils/http.js';
 import {useInput} from '../../hooks/useInput.js';
+import {useFeedback} from '../../hooks/useFeedback.js';
 import {useAuthStatus} from '../../hooks/useAuthStatus.js';
 import InputLogin from '../login/InputLogin.jsx';
 import FeedbackBox from './FeedbackBox.jsx';
 import * as val from '../../utils/validation.js';
 
-function NewProductForm({onClose}) {
-	let initialFeedbackConfirmation;
-	const [feedbackConfirmation, setFeedbackConfirmation] = useState(initialFeedbackConfirmation);
-	const [successMsg, setSuccessMsg] = useState(null);
-
+function NewProductForm() {
+	const {feedback, updateFeedback, resetFeedback} = useFeedback();
 	const {data: status} = useAuthStatus();
 
 	const {
@@ -25,15 +22,10 @@ function NewProductForm({onClose}) {
 
 		onSuccess: (res) => {
 			queryClient.invalidateQueries(['/admin-console/show-all-products']);
-			if (res.confirmation || res.code == 200) {
-				setSuccessMsg(res.message);
-				setFeedbackConfirmation(1);
-			} else {
-				setFeedbackConfirmation(0);
-			}
+			updateFeedback(res);
 		},
 		onError: (err) => {
-			setFeedbackConfirmation(0);
+			updateFeedback(err);
 		},
 	});
 
@@ -118,7 +110,8 @@ function NewProductForm({onClose}) {
 
 	// Reset all te inputs
 	const handleReset = () => {
-		setFeedbackConfirmation(undefined);
+		resetFeedback();
+
 		handleNameReset();
 		handleProductTypeReset();
 		handleLocationReset();
@@ -163,19 +156,7 @@ function NewProductForm({onClose}) {
 	// Extract values only
 	const {formType, title, actionTitle} = formLabels;
 
-	let form;
-	let feedback = feedbackConfirmation !== undefined && (
-		<FeedbackBox
-			status={feedbackConfirmation}
-			successMsg={successMsg}
-			isPending={isCreateProductPending}
-			isError={isCreateProductError}
-			error={createProductError}
-			size='small'
-		/>
-	);
-
-	form = (
+	const form = (
 		<form
 			onSubmit={handleSubmit}
 			className={`user-container__details-list modal-checklist__list`}>
@@ -330,7 +311,18 @@ function NewProductForm({onClose}) {
 	return (
 		<>
 			<div className='user-container modal__summary'>
-				{form} {feedback}
+				{form}
+				{feedback.status !== undefined && (
+					<FeedbackBox
+						status={feedback.status}
+						isPending={isCreateProductPending}
+						isError={isCreateProductError}
+						error={createProductError}
+						successMsg={feedback.message}
+						warnings={feedback.warnings}
+						size='small'
+					/>
+				)}
 			</div>
 		</>
 	);
