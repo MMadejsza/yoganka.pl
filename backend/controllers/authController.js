@@ -1,6 +1,6 @@
 import * as models from '../models/_index.js';
 import bcrypt from 'bcryptjs';
-import {errorCode, callLog, catchErr} from '../utils/controllersUtils.js';
+import {errorCode, callLog, successLog, catchErr} from '../utils/controllersUtils.js';
 let errCode = errorCode;
 const person = 'User';
 
@@ -9,7 +9,8 @@ const person = 'User';
 export const getStatus = (req, res, next) => {
 	const controllerName = 'getStatus';
 	callLog(person, controllerName);
-	console.log(`\n✅✅✅ getStatus`, {
+	successLog(person, controllerName);
+	console.log({
 		isLoggedIn: res.locals.isLoggedIn || false,
 		role: res.locals.role,
 		token: res.locals.csrfToken,
@@ -38,6 +39,7 @@ export const postSignup = (req, res, next) => {
 			return bcrypt
 				.hash(password, 12)
 				.then((passwordHashed) => {
+					successLog(person, controllerName, 'hashed');
 					return models.User.create({
 						RegistrationDate: date,
 						PasswordHash: passwordHashed,
@@ -48,6 +50,7 @@ export const postSignup = (req, res, next) => {
 					});
 				})
 				.then((newUser) => {
+					successLog(person, controllerName);
 					return res.status(200).json({
 						type: 'signup',
 						code: 200,
@@ -78,10 +81,11 @@ export const postLogin = (req, res, next) => {
 			if (!fetchedUser) {
 				return;
 			}
+			successLog(person, controllerName, 'fetched');
 			// regardless match or mismatch catch takes only if something is wrong with bcrypt itself. otherwise it goes to the next block with promise as boolean
 			bcrypt.compare(password, fetchedUser.PasswordHash).then((doMatch) => {
 				if (doMatch) {
-					console.log('match');
+					successLog(person, controllerName, 'pass match as well');
 					req.session.isLoggedIn = true;
 					req.session.user = fetchedUser;
 					req.session.role = fetchedUser.Role.toUpperCase();
@@ -103,7 +107,7 @@ export const postLogin = (req, res, next) => {
 export const postLogout = (req, res, next) => {
 	const controllerName = 'postLogout';
 	callLog(person, controllerName);
-
+	successLog(person, controllerName);
 	req.session.destroy((err) => {
 		console.log('postLogout');
 		if (err) {
