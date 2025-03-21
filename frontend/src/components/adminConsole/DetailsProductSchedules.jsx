@@ -5,26 +5,15 @@ import ModalTable from './ModalTable';
 import NewProductScheduleForm from './NewProductScheduleForm';
 import UserFeedbackBox from './FeedbackBox.jsx';
 import {queryClient, mutateOnDelete} from '../../utils/http.js';
+import {useFeedback} from '../../hooks/useFeedback';
 import {getWeekDay} from '../../utils/dateTime.js';
 
 function DetailsProductSchedules({scheduleRecords, placement, status}) {
 	let params = useParams();
 	const [isFormVisible, setIsFormVisible] = useState();
 	const [deleteWarningTriggered, setDeleteWarningTriggered] = useState(false);
-	const [successMsg, setSuccessMsg] = useState(null);
-	const [deleteWarnings, setDeleteWarnings] = useState(null);
-	const notPublished = (
-		<>
-			<div style={{fontWeight: 'bold', fontSize: '2rem'}}>Nie opublikowano</div>
-		</>
-	);
-	let initialFeedbackConfirmation;
-	const [feedbackConfirmation, setFeedbackConfirmation] = useState(initialFeedbackConfirmation);
-	let processedScheduleRecordsArr = scheduleRecords;
-	let headers = ['ID', 'Dzień', 'Data', 'Godzina', 'Lokacja', 'Frekwencja', ''];
-	let keys = ['id', 'day', 'date', 'time', 'location', 'attendance', ''];
-	let form;
-	let feedback;
+
+	const {feedback, updateFeedback} = useFeedback();
 
 	const {
 		mutate: deleteScheduleRecord,
@@ -37,22 +26,16 @@ function DetailsProductSchedules({scheduleRecords, placement, status}) {
 			mutateOnDelete(
 				status,
 				formDataObj,
-				`/api/admin-console/delete-schedule/${formData.deleteScheduleID}`,
+				`/api/admin-console/delete-schedule/${formDataObj.deleteScheduleID}`,
 			),
 
 		onSuccess: (res) => {
 			queryClient.invalidateQueries([`/admin-console/show-all-products/${params.id}`]);
-			console.log('res', res);
 
-			if (res.confirmation || res.code == 200) {
-				setSuccessMsg(res.message);
-				setFeedbackConfirmation(1);
-			} else {
-				setFeedbackConfirmation(0);
-			}
+			updateFeedback(res);
 		},
 		onError: (err) => {
-			setFeedbackConfirmation(0);
+			updateFeedback(err);
 		},
 	});
 
@@ -60,19 +43,31 @@ function DetailsProductSchedules({scheduleRecords, placement, status}) {
 		console.log(params);
 		reset();
 		if (!deleteWarningTriggered && !params.isDisabled) {
-			setFeedbackConfirmation(0);
-
-			setDeleteWarnings([
-				'Wszystkich powiązanych opinii',
-				'Wszystkich powiązanych z terminem obecności, a więc wpłynie na statystyki zajęć i użytkowników',
-				'(nie ma potrzeby usuwania terminu)',
-			]);
+			updateFeedback({
+				confirmation: 0,
+				message: '',
+				warnings: [
+					'Wszystkich powiązanych opinii',
+					'Wszystkich powiązanych z terminem obecności, a więc wpłynie na statystyki zajęć i użytkowników',
+					'(nie ma potrzeby usuwania terminu)',
+				],
+			});
 			setDeleteWarningTriggered(true);
 		} else {
 			deleteScheduleRecord(params);
-			setDeleteWarnings(null);
 		}
 	};
+
+	const notPublished = (
+		<>
+			<div style={{fontWeight: 'bold', fontSize: '2rem'}}>Nie opublikowano</div>
+		</>
+	);
+
+	let processedScheduleRecordsArr = scheduleRecords;
+	let headers = ['ID', 'Dzień', 'Data', 'Godzina', 'Lokacja', 'Frekwencja', ''];
+	let keys = ['id', 'day', 'date', 'time', 'location', 'attendance', ''];
+	let form;
 
 	if (placement == 'booking') {
 		headers = ['ID', 'Produkt', 'Data', 'Dzień', 'Godzina', 'Lokacja', 'Zadatek'];
@@ -103,17 +98,6 @@ function DetailsProductSchedules({scheduleRecords, placement, status}) {
 		});
 
 		form = <NewProductScheduleForm />;
-		feedback = (feedbackConfirmation !== undefined || deleteWarningTriggered) && (
-			<UserFeedbackBox
-				warnings={deleteWarnings}
-				status={feedbackConfirmation}
-				successMsg={successMsg}
-				isPending={deleteScheduleRecordIsPending}
-				isError={deleteScheduleRecordIsError}
-				error={deleteScheduleRecordError}
-				size='small'
-			/>
-		);
 	}
 
 	return (
@@ -133,7 +117,17 @@ function DetailsProductSchedules({scheduleRecords, placement, status}) {
 					</button>
 				)}
 			</h2>
-			{feedback}
+			{feedback && (
+				<UserFeedbackBox
+					warnings={feedback.warnings}
+					status={feedback.status}
+					successMsg={feedback.message}
+					isPending={deleteScheduleRecordIsPending}
+					isError={deleteScheduleRecordIsError}
+					error={deleteScheduleRecordError}
+					size='small'
+				/>
+			)}
 			{isFormVisible && form}
 			{scheduleRecords.length > 0 ? (
 				<ModalTable
