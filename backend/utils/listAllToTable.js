@@ -1,11 +1,11 @@
 import columnMaps from './columnsMapping.js';
 import {formatIsoDateTime} from './formatDateTime.js';
-import {errorCode, log, catchErr} from './controllersUtils.js';
+import {errorCode, callLog, catchErr} from './controllersUtils.js';
 let errCode = errorCode;
 
 export const simpleListAllToTable = (res, model) => {
 	const controllerName = 'simpleListAllToTable';
-	log(controllerName);
+	callLog('?', controllerName);
 
 	model
 		.findAll()
@@ -57,7 +57,7 @@ export const simpleListAllToTable = (res, model) => {
 
 export const listAllToTable = (res, model, references) => {
 	const controllerName = 'listAllToTable';
-	log(controllerName);
+	callLog('?', controllerName);
 	model
 		.findAll(references)
 		.then((records) => {

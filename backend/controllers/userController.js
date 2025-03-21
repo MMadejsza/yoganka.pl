@@ -2,14 +2,15 @@ import * as models from '../models/_index.js';
 import columnMaps from '../utils/columnsMapping.js';
 import {formatIsoDateTime, getWeekDay} from '../utils/formatDateTime.js';
 import {Sequelize, Op, fn, col} from 'sequelize';
-import {errorCode, log, catchErr} from '../utils/controllersUtils.js';
+import {errorCode, callLog, catchErr} from '../utils/controllersUtils.js';
 let errCode = errorCode;
+const person = 'User';
 
 //! USER_____________________________________________
 //@ GET
 export const getAccount = (req, res, next) => {
 	const controllerName = 'getAccount';
-	log('User', controllerName);
+	callLog(person, controllerName);
 
 	// @ Fetching USER
 	// check if there is logged in User
@@ -112,7 +113,7 @@ export const getAccount = (req, res, next) => {
 };
 export const getSettings = (req, res, next) => {
 	const controllerName = 'getSettings';
-	log('User', controllerName);
+	callLog(person, controllerName);
 	const PK = req.user.UserPrefSetting?.UserPrefID;
 
 	models.UserPrefSettings.findByPk(PK)
@@ -131,7 +132,7 @@ export const getSettings = (req, res, next) => {
 //@ PUT
 export const putEditSettings = (req, res, next) => {
 	const controllerName = 'putEditSettings';
-	log('User', controllerName);
+	callLog(person, controllerName);
 
 	const userID = req.user.UserID;
 
@@ -195,7 +196,7 @@ export const putEditSettings = (req, res, next) => {
 //@ GET
 export const getAllSchedules = (req, res, next) => {
 	const controllerName = 'getAllSchedules';
-	log('User', controllerName);
+	callLog(person, controllerName);
 
 	const model = models.ScheduleRecord;
 
@@ -320,7 +321,7 @@ export const getAllSchedules = (req, res, next) => {
 };
 export const getScheduleByID = (req, res, next) => {
 	const controllerName = 'getScheduleByID';
-	log('User', controllerName);
+	callLog(person, controllerName);
 
 	const isUser = !!req.user;
 	const isCustomer = !!req.user?.Customer;

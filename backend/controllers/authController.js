@@ -1,13 +1,14 @@
 import * as models from '../models/_index.js';
 import bcrypt from 'bcryptjs';
-import {errorCode, log, catchErr} from '../utils/controllersUtils.js';
+import {errorCode, callLog, catchErr} from '../utils/controllersUtils.js';
 let errCode = errorCode;
+const person = 'User';
 
 //! LOGIN / SIGNUP_____________________________________________
 //@ GET
 export const getStatus = (req, res, next) => {
 	const controllerName = 'getStatus';
-	log('User', controllerName);
+	callLog(person, controllerName);
 	console.log(`\n✅✅✅ getStatus`, {
 		isLoggedIn: res.locals.isLoggedIn || false,
 		role: res.locals.role,
@@ -22,7 +23,7 @@ export const getStatus = (req, res, next) => {
 //@ POST
 export const postSignup = (req, res, next) => {
 	const controllerName = 'postSignup';
-	log('User', controllerName);
+	callLog(person, controllerName);
 
 	const {email, password, confirmedPassword, date} = req.body;
 
@@ -59,7 +60,7 @@ export const postSignup = (req, res, next) => {
 };
 export const postLogin = (req, res, next) => {
 	const controllerName = 'postLogin';
-	log('User', controllerName);
+	callLog(person, controllerName);
 
 	const {email, password, date} = req.body;
 
@@ -101,7 +102,7 @@ export const postLogin = (req, res, next) => {
 };
 export const postLogout = (req, res, next) => {
 	const controllerName = 'postLogout';
-	log('User', controllerName);
+	callLog(person, controllerName);
 
 	req.session.destroy((err) => {
 		console.log('postLogout');

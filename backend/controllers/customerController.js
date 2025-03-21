@@ -1,13 +1,14 @@
 import db from '../utils/db.js';
 import * as models from '../models/_index.js';
-import {errorCode, log, catchErr} from '../utils/controllersUtils.js';
+import {errorCode, callLog, catchErr} from '../utils/controllersUtils.js';
 let errCode = errorCode;
+const person = 'Customer';
 
 //! CUSTOMERS_____________________________________________
 //@ GET
 export const getCustomerDetails = (req, res, next) => {
 	const controllerName = 'getCustomerDetails';
-	log('Customer', controllerName);
+	callLog(person, controllerName);
 	const customer = req.user.Customer;
 	// console.log(customer);
 	return res.status(200).json({confirmation: 1, customer});
@@ -15,7 +16,7 @@ export const getCustomerDetails = (req, res, next) => {
 //@ PUT
 export const putEditCustomerDetails = (req, res, next) => {
 	const controllerName = 'putEditCustomerDetails';
-	log('Customer', controllerName);
+	callLog(person, controllerName);
 
 	console.log(req.body);
 
@@ -52,7 +53,7 @@ export const putEditCustomerDetails = (req, res, next) => {
 //@ GET
 export const getBookingByID = (req, res, next) => {
 	const controllerName = 'getBookingByID';
-	log('Customer', controllerName);
+	callLog(person, controllerName);
 
 	const PK = req.params.id;
 
@@ -98,7 +99,7 @@ export const getBookingByID = (req, res, next) => {
 //@ POST
 export const postCreateBookSchedule = (req, res, next) => {
 	const controllerName = 'postCreateBookSchedule';
-	log('Customer', controllerName);
+	callLog(person, controllerName);
 
 	// @ Fetching USER
 	let currentCustomer;
@@ -141,7 +142,7 @@ export const postCreateBookSchedule = (req, res, next) => {
 			ReferralSource: cDetails.rSource || '-',
 			Notes: cDetails.notes,
 		}).then((newCustomer) => {
-			return models.User.update({Role: 'customer'}, {where: {UserID: req.user.UserID}}).then(
+			return models.User.update({Role: person}, {where: {UserID: req.user.UserID}}).then(
 				() => newCustomer,
 			);
 		});
@@ -267,7 +268,7 @@ export const postCreateBookSchedule = (req, res, next) => {
 //@ PUT
 export const putEditMarkAbsent = (req, res, next) => {
 	const controllerName = 'putEditMarkAbsent';
-	log('Customer', controllerName);
+	callLog(person, controllerName);
 	const scheduleID = req.params.scheduleID;
 
 	models.ScheduleRecord.findOne({where: {ScheduleID: scheduleID}})

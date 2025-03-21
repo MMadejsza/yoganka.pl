@@ -5,14 +5,15 @@ import db from '../utils/db.js';
 import {simpleListAllToTable, listAllToTable} from '../utils/listAllToTable.js';
 import columnMaps from '../utils/columnsMapping.js';
 import {formatIsoDateTime, getWeekDay} from '../utils/formatDateTime.js';
-import {errorCode, log, catchErr} from '../utils/controllersUtils.js';
+import {errorCode, callLog, successLog, catchErr} from '../utils/controllersUtils.js';
 let errCode = errorCode;
+const person = 'Admin';
 
 //! USERS_____________________________________________
 //@ GET
 export const getAllUsers = (req, res, next) => {
 	const controllerName = 'getAllUsers';
-	log('Admin', controllerName);
+	callLog(person, controllerName);
 
 	const model = models.User;
 	model
@@ -65,7 +66,7 @@ export const getAllUsers = (req, res, next) => {
 			const totalHeaders = keysForHeaders;
 
 			// ✅ Return response to frontend
-			console.log('\n✅✅✅ getAllUsers fetched');
+			successLog(person, controllerName);
 			res.json({
 				confirmation: 1,
 				message: 'Konta pobrane pomyślnie.',
@@ -78,7 +79,7 @@ export const getAllUsers = (req, res, next) => {
 };
 export const getUserByID = (req, res, next) => {
 	const controllerName = 'getUserByID';
-	log('Admin', controllerName);
+	callLog(person, controllerName);
 
 	const PK = req.params.id || req.user.UserID;
 	models.User.findByPk(PK, {
@@ -99,7 +100,7 @@ export const getUserByID = (req, res, next) => {
 				throw new Error('Nie znaleziono użytkownika.');
 			}
 
-			console.log('\n✅✅✅ getUserByID user fetched');
+			successLog(person, controllerName);
 			return res
 				.status(200)
 				.json({confirmation: 1, isLoggedIn: req.session.isLoggedIn, user});
@@ -108,7 +109,7 @@ export const getUserByID = (req, res, next) => {
 };
 export const getUserSettings = (req, res, next) => {
 	const controllerName = 'getUserSettings';
-	log('Admin', controllerName);
+	callLog(person, controllerName);
 
 	models.UserPrefSettings.findByPk(req.params.id)
 		.then((preferences) => {
@@ -116,7 +117,7 @@ export const getUserSettings = (req, res, next) => {
 				errCode = 404;
 				throw new Error('Nie pobrano ustawień.');
 			}
-			console.log('\n✅✅✅ admin getUserSettings fetched');
+			successLog(person, controllerName);
 			return res.status(200).json({confirmation: 1, preferences});
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
@@ -124,7 +125,7 @@ export const getUserSettings = (req, res, next) => {
 //@ POST
 export const postCreateUser = (req, res, next) => {
 	const controllerName = 'postCreateUser';
-	log('Admin', controllerName);
+	callLog(person, controllerName);
 	const {email, password, confirmedPassword, date} = req.body;
 
 	models.User.findOne({where: {email}})
@@ -148,7 +149,7 @@ export const postCreateUser = (req, res, next) => {
 					});
 				})
 				.then((newUser) => {
-					console.log('\n✅✅✅ postCreateUser User created.');
+					successLog(person, controllerName);
 					return res.status(200).json({
 						type: 'signup',
 						code: 200,
@@ -163,7 +164,7 @@ export const postCreateUser = (req, res, next) => {
 //@ PUT
 export const putEditUserSettings = (req, res, next) => {
 	const controllerName = 'putEditUserSettings';
-	log('Admin', controllerName);
+	callLog(person, controllerName);
 
 	const userID = req.params.id;
 	const {handedness, font, notifications, animation, theme} = req.body;
@@ -203,18 +204,18 @@ export const putEditUserSettings = (req, res, next) => {
 					preferences.Theme = !!theme;
 
 					return preferences.save().then(() => {
-						console.log('\n✅✅✅ putEditUserSettings Admin Preferences Updated');
+						successLog(person, controllerName, 'updated');
 						return {confirmation: 1, message: 'Ustawienia zostały zaktualizowane.'};
 					});
 				}
 			} else {
 				// New preferences created
-				console.log('\n✅✅✅ putEditUserSettings Admin Preferences Created');
+				successLog(person, controllerName, 'created');
 				return {confirmation: 1, message: 'Ustawienia zostały utworzone'};
 			}
 		})
 		.then((result) => {
-			console.log('\n✅✅✅ Admin Preferences Result sent back');
+			successLog(person, controllerName, 'sent');
 			return res.status(200).json({
 				confirmation: result.confirmation,
 				message: result.message,
@@ -225,7 +226,7 @@ export const putEditUserSettings = (req, res, next) => {
 //@ DELETE
 export const deleteUser = (req, res, next) => {
 	const controllerName = 'deleteUser';
-	log('Admin', controllerName);
+	callLog(person, controllerName);
 
 	const id = req.params.id;
 	models.User.destroy({
@@ -238,7 +239,7 @@ export const deleteUser = (req, res, next) => {
 				errCode = 404;
 				throw new Error('Nie usunięto użytkownika.');
 			}
-			console.log('\n✅✅✅ admin deleteUser deleted the user');
+			successLog(person, controllerName);
 			return res.status(200).json({confirmation: 1, message: 'Konto usunięte pomyślnie.'});
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
@@ -248,7 +249,7 @@ export const deleteUser = (req, res, next) => {
 //@ GET
 export const getAllCustomers = (req, res, next) => {
 	const controllerName = 'getAllCustomers';
-	log('Admin', controllerName);
+	callLog(person, controllerName);
 	const model = models.Customer;
 
 	// We create dynamic joint columns based on the map
@@ -290,7 +291,7 @@ export const getAllCustomers = (req, res, next) => {
 			// New headers (keys from columnMap)
 			const totalHeaders = keysForHeaders;
 			// ✅ Return response to frontend
-			console.log('\n✅✅✅ getAllCustomers customers fetched');
+			successLog(person, controllerName);
 			res.json({
 				confirmation: 1,
 				isLoggedIn: req.session.isLoggedIn,
@@ -376,7 +377,7 @@ export const getCustomerByID = (req, res, next) => {
 				errCode = 404;
 				throw new Error('Nie znaleziono profilu uczestnika.');
 			}
-			console.log('\n✅✅✅ getCustomerByID customer fetched');
+			successLog(person, controllerName);
 			return res
 				.status(200)
 				.json({confirmation: 1, isLoggedIn: req.session.isLoggedIn, customer});
@@ -384,8 +385,8 @@ export const getCustomerByID = (req, res, next) => {
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 export const getCustomerDetails = (req, res, next) => {
-	const controllerName = 'getputEditCustomerDetails';
-	log('Admin', controllerName);
+	const controllerName = 'getEditCustomerDetails';
+	callLog(person, controllerName);
 
 	models.Customer.findByPk(req.params.id)
 		.then((customer) => {
@@ -393,7 +394,7 @@ export const getCustomerDetails = (req, res, next) => {
 				errCode = 404;
 				throw new Error('Nie znaleziono danych uczestnika.');
 			}
-			console.log('\n✅✅✅ Fetched admin getputEditCustomerDetails customer');
+			successLog(person, controllerName);
 			return res
 				.status(200)
 				.json({confirmation: 1, customer, message: 'Dane uczestnika pobrane pomyślnie.'});
@@ -403,7 +404,7 @@ export const getCustomerDetails = (req, res, next) => {
 //@ POST
 export const postCreateCustomer = (req, res, next) => {
 	const controllerName = 'postCreateCustomer';
-	log('Admin', controllerName);
+	callLog(person, controllerName);
 	const {userID, customerType, firstName, lastName, DoB, phone, cMethod, loyalty, notes} =
 		req.body;
 	let customerPromise;
@@ -431,7 +432,7 @@ export const postCreateCustomer = (req, res, next) => {
 			}));
 		})
 		.then((newCustomer) => {
-			console.log('\n✅✅✅ postCreateCustomer customer created.');
+			successLog(person, controllerName);
 			return res.status(200).json({
 				code: 200,
 				confirmation: 1,
@@ -443,7 +444,7 @@ export const postCreateCustomer = (req, res, next) => {
 //@ PUT
 export const putEditCustomerDetails = (req, res, next) => {
 	const controllerName = 'putEditCustomerDetails';
-	log('Admin', controllerName);
+	callLog(person, controllerName);
 
 	const customerId = req.params.id;
 
@@ -465,7 +466,7 @@ export const putEditCustomerDetails = (req, res, next) => {
 			errCode = 404;
 			if (!customer) throw new Error('Nie znaleziono danych uczestnika.');
 
-			console.log('\n✅✅✅ Fetched admin putEditCustomerDetails customer');
+			successLog(person, controllerName, 'fetched');
 			return customer;
 		})
 		.then((foundCustomer) => {
@@ -496,7 +497,7 @@ export const putEditCustomerDetails = (req, res, next) => {
 					return {customerResult};
 				})
 				.then((results) => {
-					console.log('\n✅✅✅ admin putEditCustomerDetails UPDATE successful');
+					successLog(person, controllerName);
 					const affectedCustomerRows = results.customerResult[0];
 					const status = affectedCustomerRows >= 1;
 					return res.status(200).json({
@@ -512,7 +513,7 @@ export const putEditCustomerDetails = (req, res, next) => {
 //@ DELETE
 export const deleteCustomer = (req, res, next) => {
 	const controllerName = 'deleteCustomer';
-	log('Admin', controllerName);
+	callLog(person, controllerName);
 
 	const id = req.params.id;
 	models.Customer.destroy({
@@ -525,7 +526,7 @@ export const deleteCustomer = (req, res, next) => {
 				errCode = 404;
 				throw new Error('Nie usunięto profilu uczestnika.');
 			}
-			console.log('\n✅✅✅ admin deleteUser deleted the customer');
+			successLog(person, controllerName);
 			return res.status(200).json({confirmation: 1, message: 'Profil usunięty pomyślnie.'});
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
@@ -535,7 +536,7 @@ export const deleteCustomer = (req, res, next) => {
 //@ GET
 export const getAllSchedules = (req, res, next) => {
 	const controllerName = 'getAllSchedules';
-	log('Admin', controllerName);
+	callLog(person, controllerName);
 	const model = models.ScheduleRecord;
 
 	// We create dynamic joint columns based on the map
@@ -630,7 +631,7 @@ export const getAllSchedules = (req, res, next) => {
 			// New headers (keys from columnMap)
 			const totalHeaders = keysForHeaders;
 			// ✅ Return response to frontend
-			console.log('✅✅✅ admin getAllSchedules schedules fetched');
+			successLog(person, controllerName);
 			res.json({
 				confirmation: 1,
 				message: 'Terminy pobrane pomyślnie.',
@@ -715,7 +716,7 @@ export const getScheduleByID = (req, res, next) => {
 			schedule.isCompleted = scheduleDateTime <= now;
 
 			// Zwracamy pełen obiekt użytkownika (zgodnie z działającym kodem)
-			console.log('✅✅✅ admin getScheduleByID schedule fetched');
+			successLog(person, controllerName);
 			return res.status(200).json({
 				confirmation: 1,
 				message: 'Termin pobrany pomyślnie',
@@ -749,7 +750,7 @@ export const getProductSchedules = (req, res, next) => {
 			);
 		})
 		.then((filteredFoundSchedules) => {
-			console.log(`✅✅✅ admin ${controllerName} schedule fetched`);
+			successLog(person, controllerName);
 			res.status(200).json({
 				confirmation: 1,
 				message: 'Terminy pobrane pomyślnie.',
@@ -762,7 +763,7 @@ export const getBookedSchedules = (req, res, next) => {};
 //@ POST
 export const postCreateScheduleRecord = (req, res, next) => {
 	const controllerName = 'postCreateScheduleRecord';
-	log('Admin', controllerName);
+	callLog(person, controllerName);
 	const {productID, date, capacity, location, startTime, repeatCount, shouldRepeat} = req.body;
 	const inputsContent = [date, capacity, location, startTime, repeatCount || 1, shouldRepeat];
 
@@ -795,7 +796,7 @@ export const postCreateScheduleRecord = (req, res, next) => {
 			},
 			{transaction},
 		).then((record) => {
-			console.log('\n✅✅✅ postCreateScheduleRecord created for:', currentDate);
+			successLog(person, controllerName, `created for: ${currentDate}`);
 			// Update the date based on shouldRepeat:
 			if (shouldRepeat == 7) {
 				currentDate = addDays(currentDate, 7);
@@ -815,7 +816,7 @@ export const postCreateScheduleRecord = (req, res, next) => {
 		return createRecord(0, currentDate, [], t);
 	})
 		.then((createdRecords) => {
-			console.log('\n✅✅✅ postCreateScheduleRecord created all records successfully.');
+			successLog(person, controllerName);
 			res.status(201).json({
 				confirmation: 1,
 				message: 'Terminy utworzone pomyślnie.',
@@ -827,7 +828,7 @@ export const postCreateScheduleRecord = (req, res, next) => {
 //@ PUT
 export const putEditSchedule = async (req, res, next) => {
 	const controllerName = 'putEditSchedule';
-	log('Admin', controllerName);
+	callLog(person, controllerName);
 
 	const scheduleId = req.params.id;
 
@@ -859,7 +860,8 @@ export const putEditSchedule = async (req, res, next) => {
 				errCode = 404;
 				throw new Error('Nie znaleziono danych terminu.');
 			}
-			console.log('\n✅✅✅ Fetched admin putEditSchedule schedule');
+			successLog(person, controllerName, 'fetched');
+
 			return schedule;
 		})
 		.then((foundSchedule) => {
@@ -894,7 +896,7 @@ export const putEditSchedule = async (req, res, next) => {
 					return {scheduleResult};
 				})
 				.then((results) => {
-					console.log('\n✅✅✅ admin putEditSchedule UPDATE successful');
+					successLog(person, controllerName);
 					const affectedScheduleRows = results.scheduleResult[0];
 					const status = affectedScheduleRows >= 1;
 					return res.status(200).json({
@@ -910,7 +912,7 @@ export const putEditSchedule = async (req, res, next) => {
 //@ DELETE
 export const deleteSchedule = (req, res, next) => {
 	const controllerName = 'deleteSchedule';
-	log('Admin', controllerName);
+	callLog(person, controllerName);
 	const id = req.params.id;
 	console.log(`${controllerName} deleting id: `, id);
 
@@ -957,7 +959,7 @@ export const deleteSchedule = (req, res, next) => {
 				console.log(`\n❌❌❌ Error Admin ${controllerName} Schedule not deleted.`);
 				throw new Error('Nie usunięto terminu.');
 			}
-			console.log('\n✅✅✅ admin deleteSchedule deleted the schedule record');
+			successLog(person, controllerName);
 			return res.status(200).json({confirmation: 1, message: 'Termin usunięty pomyślnie.'});
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
@@ -969,7 +971,7 @@ export const deleteSchedule = (req, res, next) => {
 //@ PUT
 export const putEditMarkAbsent = (req, res, next) => {
 	const controllerName = 'putEditMarkAbsent';
-	log('Admin', controllerName);
+	callLog(person, controllerName);
 
 	const {attendanceCustomerID, attendanceBookingID} = req.body;
 
@@ -983,12 +985,11 @@ export const putEditMarkAbsent = (req, res, next) => {
 			}
 			return foundRecord.update({
 				Attendance: 0,
-				DidAction: 'Admin',
+				DidAction: person,
 			});
 		})
 		.then((updatedRecord) => {
-			console.log('\n✅✅✅ admin putEditMarkAbsent UPDATE successful');
-
+			successLog(person, controllerName);
 			return res.status(200).json({
 				confirmation: 1,
 				message: 'Uczestnik oznaczony jako nieobecny.',
@@ -999,7 +1000,7 @@ export const putEditMarkAbsent = (req, res, next) => {
 };
 export const putEditMarkPresent = (req, res, next) => {
 	const controllerName = 'putEditMarkPresent';
-	log('Admin', controllerName);
+	callLog(person, controllerName);
 	console.log(req.body);
 	const {cancelledAttendanceCustomerID, cancelledAttendanceBookingID} = req.body;
 
@@ -1013,11 +1014,11 @@ export const putEditMarkPresent = (req, res, next) => {
 			}
 			return foundRecord.update({
 				Attendance: 1,
-				DidAction: 'Admin',
+				DidAction: person,
 			});
 		})
 		.then((updatedRecord) => {
-			console.log('\n✅✅✅ admin putEditMarkPresent UPDATE successful');
+			successLog(person, controllerName);
 			const status = updatedRecord ? true : false;
 			return res.status(200).json({
 				confirmation: status,
@@ -1030,7 +1031,7 @@ export const putEditMarkPresent = (req, res, next) => {
 //@ DELETE
 export const deleteAttendanceRecord = (req, res, next) => {
 	const controllerName = 'deleteAttendanceRecord';
-	log('Admin', controllerName);
+	callLog(person, controllerName);
 	console.log(req.body);
 
 	const {attendanceCustomerID, attendanceBookingID} = req.body;
@@ -1051,7 +1052,7 @@ export const deleteAttendanceRecord = (req, res, next) => {
 				throw new Error('Nie usunięto rekordu.');
 			}
 
-			console.log('\n✅✅✅ admin deleteAttendanceRecord UPDATE successful');
+			successLog(person, controllerName);
 			return res.status(200).json({
 				confirmation: 1,
 				message: 'Rekord obecności usunięty.',
@@ -1064,7 +1065,7 @@ export const deleteAttendanceRecord = (req, res, next) => {
 //@ GET
 export const getAllParticipantsFeedback = (req, res, next) => {
 	const controllerName = 'getAllParticipantsFeedback';
-	log('Admin', controllerName);
+	callLog(person, controllerName);
 
 	const model = models.Feedback;
 
@@ -1144,7 +1145,7 @@ export const getAllParticipantsFeedback = (req, res, next) => {
 			const totalHeaders = keysForHeaders;
 
 			// ✅ Return response to frontend
-			console.log('\n✅✅✅ getAllParticipantsFeedback reviews fetched');
+			successLog(person, controllerName);
 			res.json({
 				confirmation: 1,
 				message: 'Opinie pobrane pomyślnie',
@@ -1206,7 +1207,7 @@ export const getAllParticipantsFeedbackByID = (req, res, next) => {
 				],
 				attributes: {exclude: ['CustomerID', 'ScheduleID']},
 			}).then((otherReviews) => {
-				console.log('\n✅✅✅ getAllParticipantsFeedbackByID Feedback fetched');
+				successLog(person, controllerName);
 				return res.status(200).json({
 					confirmation: 1,
 					message: 'Opinia pobrana pomyślnie',
@@ -1223,7 +1224,7 @@ export const getAllParticipantsFeedbackByID = (req, res, next) => {
 //@ DELETE
 export const deleteFeedback = (req, res, next) => {
 	const controllerName = 'deleteFeedback';
-	log('Admin', controllerName);
+	callLog(person, controllerName);
 
 	const id = req.params.id;
 	models.Feedback.destroy({
@@ -1236,7 +1237,7 @@ export const deleteFeedback = (req, res, next) => {
 				errCode = 404;
 				throw new Error('Nie usunięto opinii.');
 			}
-			console.log('\n✅✅✅ admin deleteFeedback deleted the feedback');
+			successLog(person, controllerName);
 			return res.status(200).json({confirmation: 1, message: 'Opinia usunięta pomyślnie.'});
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
@@ -1246,7 +1247,7 @@ export const deleteFeedback = (req, res, next) => {
 //@ GET
 export const getAllNewsletters = (req, res, next) => {
 	const controllerName = 'getAllNewsletters';
-	log('Admin', controllerName);
+	callLog(person, controllerName);
 
 	simpleListAllToTable(res, models.Newsletter);
 };
@@ -1261,12 +1262,12 @@ export const getAllSubscribedNewsletters = (req, res, next) => {
 //@ GET
 export const getAllProducts = (req, res, next) => {
 	const controllerName = 'getAllProducts';
-	log('Admin', controllerName);
+	callLog(person, controllerName);
 	simpleListAllToTable(res, models.Product);
 };
 export const getProductByID = (req, res, next) => {
 	const controllerName = 'getProductByID';
-	log('Admin', controllerName);
+	callLog(person, controllerName);
 
 	const PK = req.params.id;
 	models.Product.findByPk(PK, {
@@ -1313,7 +1314,7 @@ export const getProductByID = (req, res, next) => {
 				errCode = 404;
 				throw new Error('Nie znaleziono produktu.');
 			}
-			console.log('\n✅✅✅ getProductByID product fetched');
+			successLog(person, controllerName);
 			return res.status(200).json({
 				confirmation: 1,
 				message: 'Produkt pobrany pomyślnie pomyślnie.',
@@ -1326,7 +1327,7 @@ export const getProductByID = (req, res, next) => {
 //@ POST
 export const postCreateProduct = async (req, res, next) => {
 	const controllerName = 'postCreateProduct';
-	log('Admin', controllerName);
+	callLog(person, controllerName);
 
 	const {name, productType, StartDate, duration, location, price, status} = req.body;
 
@@ -1348,7 +1349,7 @@ export const postCreateProduct = async (req, res, next) => {
 			}));
 		})
 		.then((newProduct) => {
-			console.log('\n✅✅✅ postCreateProduct Stworzono pomyślnie.');
+			successLog(person, controllerName);
 			return res.status(200).json({
 				code: 200,
 				confirmation: 1,
@@ -1360,7 +1361,7 @@ export const postCreateProduct = async (req, res, next) => {
 //@ PUT
 export const putEditProduct = async (req, res, next) => {
 	const controllerName = 'putEditProduct';
-	log('Admin', controllerName);
+	callLog(person, controllerName);
 	const productId = req.params.id;
 
 	const {
@@ -1395,7 +1396,7 @@ export const putEditProduct = async (req, res, next) => {
 				errCode = 404;
 				throw new Error('Nie znaleziono danych uczestnika.');
 			}
-			console.log('\n✅✅✅ Fetched admin putEditProduct product');
+			successLog(person, controllerName, 'fetched');
 			return product;
 		})
 		.then((foundProduct) => {
@@ -1430,7 +1431,7 @@ export const putEditProduct = async (req, res, next) => {
 					return {productResult};
 				})
 				.then((results) => {
-					console.log('\n✅✅✅ admin putEditProduct UPDATE successful');
+					successLog(person, controllerName);
 					const affectedProductRows = results.productResult[0];
 					const status = affectedProductRows >= 1;
 					return res.status(200).json({
@@ -1446,7 +1447,7 @@ export const putEditProduct = async (req, res, next) => {
 //@ DELETE
 export const deleteProduct = (req, res, next) => {
 	const controllerName = 'deleteProduct';
-	log('Admin', controllerName);
+	callLog(person, controllerName);
 
 	const id = req.params.id;
 	models.Product.destroy({
@@ -1459,7 +1460,7 @@ export const deleteProduct = (req, res, next) => {
 				errCode = 404;
 				throw new Error('Nie usunięto zajęć.');
 			}
-			console.log('\n✅✅✅ admin deleteProduct deleted the product');
+			successLog(person, controllerName);
 			return res.status(200).json({confirmation: 1, message: 'Produkt usunięty pomyślnie.'});
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
@@ -1469,7 +1470,7 @@ export const deleteProduct = (req, res, next) => {
 //@ GET
 export const getAllBookings = (req, res, next) => {
 	const controllerName = 'getAllBookings';
-	log('Admin', controllerName);
+	callLog(person, controllerName);
 	const model = models.Booking;
 
 	// We create dynamic joint columns based on the map
@@ -1536,11 +1537,9 @@ export const getAllBookings = (req, res, next) => {
 				return newRecord;
 			});
 
-			// Nagłówki
 			const totalHeaders = keysForHeaders;
 			req.session.isLoggedIn = true;
-			// ✅ Zwrócenie odpowiedzi do frontend
-			console.log('\n✅✅✅ getAllBookings bookings fetched');
+			successLog(person, controllerName);
 			res.json({
 				confirmation: 1,
 				message: 'Rezerwacje pobrane pomyślnie.',
@@ -1556,7 +1555,7 @@ export const getAllBookings = (req, res, next) => {
 };
 export const getBookingByID = (req, res, next) => {
 	const controllerName = 'getBookingByID';
-	log('Admin', controllerName);
+	callLog(person, controllerName);
 
 	const PK = req.params.id;
 	models.Booking.findByPk(PK, {
@@ -1588,7 +1587,7 @@ export const getBookingByID = (req, res, next) => {
 				errCode = 404;
 				throw new Error('Nie znaleziono rezerwacji.');
 			}
-			console.log('\n✅✅✅ admin getBookingByID Schedule fetched');
+			successLog(person, controllerName);
 			return res.status(200).json({
 				confirmation: 1,
 				message: 'Rezerwacja pobrana pomyślnie.',
@@ -1601,7 +1600,7 @@ export const getBookingByID = (req, res, next) => {
 //@ POST
 export const postCreateBooking = (req, res, next) => {
 	const controllerName = 'postCreateBooking';
-	log('Admin', controllerName);
+	callLog(person, controllerName);
 
 	const {
 		customerID,
@@ -1730,7 +1729,7 @@ export const postCreateBooking = (req, res, next) => {
 						// console.log('scheduleId:', req.body.schedule);
 						return booking
 							.addScheduleRecord(scheduleID, {
-								through: {CustomerID: customerID, DidAction: 'Admin'},
+								through: {CustomerID: customerID, DidAction: person},
 								transaction: t,
 								individualHooks: true,
 							})
@@ -1740,7 +1739,7 @@ export const postCreateBooking = (req, res, next) => {
 			});
 	})
 		.then((booking) => {
-			console.log('\n✅✅✅ admin postCreateBookSchedule Rezerwacja utworzona pomyślnie');
+			successLog(person, controllerName);
 			res.status(201).json({
 				isNewCustomer,
 				confirmation: 1,
@@ -1754,7 +1753,7 @@ export const postCreateBooking = (req, res, next) => {
 //@ DELETE
 export const deleteBooking = (req, res, next) => {
 	const controllerName = 'deleteBooking';
-	log('Admin', controllerName);
+	callLog(person, controllerName);
 
 	const id = req.params.id;
 	models.Booking.destroy({
@@ -1767,7 +1766,7 @@ export const deleteBooking = (req, res, next) => {
 				errCode = 404;
 				throw new Error('\n❌ Nie usunięto rezerwacji.');
 			}
-			console.log('\n✅✅✅ admin deleteBooking deleted the feedback');
+			successLog(person, controllerName);
 			return res.status(200).json({
 				confirmation: 1,
 				message: 'Rezerwacja usunięta pomyślnie.',
@@ -1780,7 +1779,7 @@ export const deleteBooking = (req, res, next) => {
 //@ GET
 export const getAllInvoices = (req, res, next) => {
 	const controllerName = 'getAllInvoices';
-	log('Admin', controllerName);
+	callLog(person, controllerName);
 
 	const model = models.Invoice;
 
@@ -1848,7 +1847,7 @@ export const getAllInvoices = (req, res, next) => {
 			const totalHeaders = keysForHeaders;
 			req.session.isLoggedIn = true;
 			// ✅ Return response to frontend
-			console.log('\n✅✅✅ getAllInvoices invoices fetched');
+			successLog(person, controllerName);
 			res.json({
 				confirmation: 1,
 				message: 'Faktury pobrane pomyślnie.',
