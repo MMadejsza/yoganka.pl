@@ -172,7 +172,7 @@ export const postBookSchedule = (req, res, next) => {
 export const putEditMarkAbsent = (req, res, next) => {
 	const controllerName = 'putEditMarkAbsent';
 	log(controllerName);
-	const scheduleID = req.params.id;
+	const scheduleID = req.params.scheduleID;
 
 	models.ScheduleRecord.findOne({where: {ScheduleID: scheduleID}})
 		.then((scheduleRecord) => {

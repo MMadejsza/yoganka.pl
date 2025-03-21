@@ -24,7 +24,7 @@ function DetailsUserSettingsForm({settingsData, customerAccessed, adminAccessed}
 		? ['formFilling', 'userSettings', settingsData?.UserPrefID || '']
 		: null;
 	const dynamicFetchAddress = customerAccessed
-		? '/konto/ustawienia/preferencje'
+		? '/show-user-settings'
 		: adminAccessed
 		? `/admin-console/show-user-settings/${settingsData?.UserPrefID}`
 		: null;
@@ -42,7 +42,7 @@ function DetailsUserSettingsForm({settingsData, customerAccessed, adminAccessed}
 	console.log(data);
 
 	const dynamicMutationAddress = customerAccessed
-		? '/api/konto/ustawienia/update/preferencje'
+		? '/api/edit-user-settings'
 		: adminAccessed
 		? `/api/admin-console/edit-user-settings/${settingsData?.UserPrefID}`
 		: null;
@@ -69,7 +69,7 @@ function DetailsUserSettingsForm({settingsData, customerAccessed, adminAccessed}
 			});
 		},
 		onSuccess: (res) => {
-			queryClient.invalidateQueries(['query', '/konto/ustawienia']);
+			queryClient.invalidateQueries(['query', '/show-account']);
 			queryClient.invalidateQueries(['query', `/admin-console/show-all-users/${params.id}`]);
 			if (res.confirmation) {
 				setSuccessMsg(res.message);
@@ -210,8 +210,6 @@ function DetailsUserSettingsForm({settingsData, customerAccessed, adminAccessed}
 
 	form = (
 		<form
-			action='/api/konto/ustawienia/update/preferencje'
-			method='POST'
 			onSubmit={handleSubmit}
 			className={`user-container__details-list modal-checklist__list`}>
 			<h1 className='form__title'>{title}</h1>

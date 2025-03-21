@@ -24,7 +24,7 @@ function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
 		? ['formFilling', 'putEditCustomer', customerData.CustomerID]
 		: null;
 	const dynamicFetch = (signal) => {
-		if (customerAccessed) return fetchItem('/customer/konto/ustawienia/uczestnik', {signal});
+		if (customerAccessed) return fetchItem('/customer/get-customer-data', {signal});
 		else
 			return fetchItem(`/admin-console/show-customer-data/${customerData.CustomerID}`, {
 				signal,
@@ -65,7 +65,7 @@ function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
 			});
 		},
 		onSuccess: (res) => {
-			if (customerAccessed) queryClient.invalidateQueries(['query', '/konto/ustawienia']);
+			if (customerAccessed) queryClient.invalidateQueries(['query', '/show-account']);
 			else
 				queryClient.invalidateQueries([
 					'query',
