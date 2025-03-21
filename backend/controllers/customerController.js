@@ -20,14 +20,22 @@ export const putEditCustomerDetails = (req, res, next) => {
 	callLog(person, controllerName);
 
 	console.log(req.body);
-
-	const customerId = req.user.Customer.CustomerID;
+	const customer = req.user.Customer;
+	const customerId = customer.CustomerID;
 	const {phone: newPhone, cMethod: newContactMethod} = req.body;
 
 	if (!newPhone || !newPhone.trim()) {
 		console.log('\n❌❌❌ Error putEditCustomerDetails:', 'No phone');
 		errCode = 400;
 		throw new Error('Numer telefonu nie może być pusty');
+	}
+
+	if (customer.Phone === newPhone && customer.PreferredContactMethod === newContactMethod) {
+		console.log('\n❓❓❓ Brak zmian');
+		return res.status(200).json({
+			confirmation: 0,
+			message: 'Brak zmian',
+		});
 	}
 
 	models.Customer.update(
@@ -42,9 +50,9 @@ export const putEditCustomerDetails = (req, res, next) => {
 			const affectedCustomerRows = results.customerResult[0];
 			const status = affectedCustomerRows >= 1;
 			return res.status(200).json({
+				message: 'Profil zaktualizowany pomyslnie.',
 				confirmation: status,
 				affectedCustomerRows,
-				message: 'Profil zaktualizowany pomyslnie.',
 			});
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
@@ -264,7 +272,7 @@ export const postCreateBookSchedule = (req, res, next) => {
 			res.status(201).json({
 				isNewCustomer,
 				confirmation: 1,
-				message: 'Rezerwacja utworzona pomyślnie.',
+				message: 'Miejsce zaklepane - do zobaczenia ;)',
 				booking,
 			});
 		})

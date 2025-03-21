@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 import {useMutation} from '@tanstack/react-query';
 
@@ -13,6 +13,8 @@ import ViewScheduleNewCustomerForm from './ViewScheduleNewCustomerForm.jsx';
 import {calculateScheduleStats} from '../../utils/productViewsUtils.js';
 import {queryClient, mutateOnEdit} from '../../utils/http.js';
 import {useAuthStatus} from '../../hooks/useAuthStatus.js';
+import {useFeedback} from '../../hooks/useFeedback.js';
+import FeedbackBox from './FeedbackBox.jsx';
 
 function ViewSchedule({data, bookingOps, onClose, isModalOpen, isAdminPanel}) {
 	// console.clear();
@@ -21,68 +23,44 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen, isAdminPanel}) {
 	    Schedule object from backend:`,
 		data,
 	);
+	const {schedule} = data;
+	const {ScheduleID: scheduleID} = schedule;
+	const {Product: product} = schedule;
+
 	const location = useLocation();
-	const navigate = useNavigate();
 	const userAccountPage = location.pathname.includes('konto');
-
+	const navigate = useNavigate();
 	const {data: status} = useAuthStatus();
+	console.log(`status`, status);
+	const {feedback, updateFeedback, resetFeedback} = useFeedback({
+		getRedirectTarget: (result) => (result.confirmation === 1 ? '/konto' : null),
+		onClose: onClose,
+	});
 
-	const {
-		mutate: cancel,
-		isError: isCancelError,
-		error: cancelError,
-		reset: cancelReset,
-	} = useMutation({
+	const {mutate: cancel} = useMutation({
 		mutationFn: (formDataObj) =>
 			mutateOnEdit(status, formDataObj, `/api/customer/edit-mark-absent/${scheduleID}`),
 
 		onSuccess: (res) => {
 			queryClient.invalidateQueries(['data', '/grafik']);
 			queryClient.invalidateQueries(['account']);
-			setIsCancelledSuccessfully(true);
+			updateFeedback(res);
+		},
+		onError: (err) => {
+			updateFeedback(err);
 		},
 	});
 
-	const [isCancelledSuccessfully, setIsCancelledSuccessfully] = useState(false);
-
-	console.log(`status.role`, status.role);
+	// console.log(`status.role`, status.role);
 	const [newCustomerDetails, setNewCustomerDetails] = useState({
 		isFirstTimeBuyer: status.role == 'USER',
 	});
-	console.log(`newCustomerDetails: `, newCustomerDetails);
+	// console.log(`newCustomerDetails: `, newCustomerDetails);
 	const [isFillingTheForm, setIsFillingTheForm] = useState(false);
 
-	useEffect(() => {
-		if (isCancelledSuccessfully) {
-			const timer = setTimeout(() => {
-				cancelReset();
-				onClose();
-				navigate('/konto');
-				setIsCancelledSuccessfully(false);
-			}, 1000);
-
-			return () => clearTimeout(timer);
-		}
-	}, [isCancelledSuccessfully, cancelReset, navigate, isModalOpen, onClose]);
-
-	const {schedule} = data;
-	const {ScheduleID: scheduleID} = schedule;
-	const {Product: product} = schedule;
-	const type = product.Type;
-	const isFull = schedule.full;
-	const wasPreviouslyReserved = schedule.wasUserReserved;
-	const isAlreadyBooked = schedule.isUserGoing;
-
-	const today = new Date();
-	const scheduleDateTime = new Date(`${schedule.Date}T${schedule.StartTime}:00`);
-	const isArchived = scheduleDateTime < today;
-	const bookedSuccessfully = !userAccountPage && bookingOps?.confirmation;
-	const isSuccessNotification = bookedSuccessfully || isCancelledSuccessfully;
-	let scheduleStats = null;
-
-	const userAccessed = status.role != 'ADMIN';
-
 	const {isLoggedIn} = status;
+	const userAccessed = status.role != 'ADMIN';
+	let scheduleStats = null;
 	if (!userAccessed && isAdminPanel) scheduleStats = calculateScheduleStats(product, schedule);
 
 	const handleCancellation = () => {
@@ -93,10 +71,34 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen, isAdminPanel}) {
 		setIsFillingTheForm(false);
 	};
 
-	const shouldShowFeedback = isSuccessNotification;
+	// Wrapper for bookingOps.onBook, updating feedback
+	const handleBooking = async () => {
+		try {
+			const res = await bookingOps.onBook({
+				customerDetails: newCustomerDetails || null,
+				schedule: schedule.ScheduleID,
+				product: product.Name,
+				status: 'Paid',
+				amountPaid: product.Price,
+				amountDue: 0,
+				paymentMethod: 'Credit Card',
+				paymentStatus: 'Completed',
+			});
+			updateFeedback(res);
+		} catch (err) {
+			updateFeedback(err);
+		}
+	};
+
+	const today = new Date();
+	const scheduleDateTime = new Date(`${schedule.Date}T${schedule.StartTime}:00`);
+	const isArchived = scheduleDateTime < today;
+	const shouldShowFeedback =
+		feedback.status === 1 || feedback.status === 0 || feedback.status === -1;
 	const shouldShowCancelBtn =
-		isLoggedIn && isAlreadyBooked && userAccountPage && !shouldShowFeedback;
-	const shouldShowBookBtn = !isArchived && !isAlreadyBooked && !bookingOps?.isError;
+		status?.isLoggedIn && schedule.isUserGoing && userAccountPage && !shouldShowFeedback;
+	const shouldShowBookBtn = !isArchived && !schedule.isUserGoing && !bookingOps?.isError;
+	const isFull = schedule.full;
 	const shouldDisableBookBtn = (isFull && shouldShowBookBtn) || isFillingTheForm;
 
 	const bookingBtn = isLoggedIn ? (
@@ -105,24 +107,14 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen, isAdminPanel}) {
 				!shouldDisableBookBtn
 					? newCustomerDetails.isFirstTimeBuyer
 						? () => setIsFillingTheForm(true)
-						: () =>
-								bookingOps.onBook({
-									customerDetails: newCustomerDetails || null,
-									schedule: schedule.ScheduleID,
-									product: product.Name,
-									status: 'Paid',
-									amountPaid: product.Price,
-									amountDue: 0,
-									paymentMethod: 'Credit Card',
-									paymentStatus: 'Completed',
-								})
+						: handleBooking
 					: null
 			}
 			className={`book modal__btn ${shouldDisableBookBtn && 'disabled'}`}>
 			<span className='material-symbols-rounded nav__icon'>
 				{shouldDisableBookBtn
 					? 'block'
-					: wasPreviouslyReserved
+					: schedule.wasUserReserved
 					? 'cycle'
 					: newCustomerDetails.isFirstTimeBuyer
 					? 'edit'
@@ -132,7 +124,7 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen, isAdminPanel}) {
 				? isFillingTheForm
 					? 'Wypełnij formularz'
 					: 'Brak Miejsc'
-				: wasPreviouslyReserved
+				: schedule.wasUserReserved
 				? 'Wróć na zajęcia'
 				: newCustomerDetails.isFirstTimeBuyer
 				? 'Uzupełnij dane osobowe'
@@ -147,13 +139,19 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen, isAdminPanel}) {
 		</button>
 	);
 
-	const feedbackBox = (
-		<div className='feedback-box feedback-box--success'>
-			{isCancelledSuccessfully
-				? 'Miejsce zwolnione - dziękujemy za informacje :)'
-				: 'Miejsce zaklepane - do zobaczenia ;)'}
-		</div>
-	);
+	const feedbackBox =
+		feedback.status !== undefined ? (
+			<FeedbackBox
+				warnings={feedback.warnings}
+				status={feedback.status}
+				successMsg={feedback.message}
+				isPending={false}
+				error={feedback.status === -1 ? {message: feedback.message} : null}
+				size='small'
+				redirectTarget={feedback.redirectTarget}
+				onClose={onClose}
+			/>
+		) : null;
 
 	return (
 		<>
@@ -206,14 +204,14 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen, isAdminPanel}) {
 					<div className='user-container__main-details  schedules modal-checklist'>
 						<DetailsTableAttendance
 							stats={scheduleStats}
-							type={type}
+							type={product.type}
 							isAdminPage={isAdminPanel}
 						/>
 					</div>
 					<div className='user-container__main-details  schedules modal-checklist'>
 						<DetailsProductBookings
 							stats={scheduleStats}
-							type={type}
+							type={product.type}
 							isAdminPage={isAdminPanel}
 						/>
 					</div>
@@ -225,13 +223,6 @@ function ViewSchedule({data, bookingOps, onClose, isModalOpen, isAdminPanel}) {
 					</div>
 				</>
 			)}
-
-			{bookingOps?.isError ||
-				(isCancelError && (
-					<div className='feedback-box feedback-box--error'>
-						{bookingOps.error?.message || cancelError.message}
-					</div>
-				))}
 
 			{shouldShowFeedback ? feedbackBox : shouldShowBookBtn ? bookingBtn : null}
 

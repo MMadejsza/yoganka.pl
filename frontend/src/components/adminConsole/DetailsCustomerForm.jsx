@@ -29,7 +29,7 @@ function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
 	const {
 		data,
 		isLoading: isCustomerLoading,
-		isEditCustomerDetailsError: isCustomerError,
+		isError: isCustomerError,
 	} = useQuery({
 		queryKey,
 		queryFn: ({signal}) => dynamicFetch(signal),

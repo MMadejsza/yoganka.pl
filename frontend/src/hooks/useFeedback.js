@@ -14,6 +14,7 @@ export function useFeedback({getRedirectTarget = () => null, onClose = () => {}}
 	// Function to update feedback - for example after mutation
 	const updateFeedback = useCallback(
 		(result) => {
+			console.log('updateFeedback res: ', result);
 			// Result must have confirmation, message, warnings
 			const newStatus =
 				result.confirmation === true || result.confirmation === 1
@@ -33,12 +34,12 @@ export function useFeedback({getRedirectTarget = () => null, onClose = () => {}}
 			if (redirectTarget !== null) {
 				setTimeout(() => {
 					setFeedback({status: undefined, message: '', warnings: null});
+					onClose();
 					if (redirectTarget === -1) {
 						navigate(-1);
 					} else {
-						navigate(redirectTarget);
+						navigate(redirectTarget, {replace: true});
 					}
-					onClose();
 				}, 1000);
 			} else {
 				onClose();

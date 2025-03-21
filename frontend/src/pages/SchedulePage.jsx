@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useState} from 'react';
 import {useLocation, useNavigate, useMatch} from 'react-router-dom';
 import {useQuery, useMutation} from '@tanstack/react-query';
 import {fetchData, queryClient, mutateOnCreate} from '../utils/http.js';
@@ -13,7 +13,6 @@ function SchedulePage() {
 
 	const modalMatch = !!useMatch('/grafik/:id');
 	const [isModalOpen, setIsModalOpen] = useState(modalMatch);
-	const [isBookedSuccessfully, setIsBookedSuccessfully] = useState(false);
 
 	const {data: status} = useAuthStatus();
 
@@ -31,7 +30,7 @@ function SchedulePage() {
 	});
 
 	const {
-		mutate: book,
+		mutateAsync: book, //async to let it return promise for child viewSchedule and let serve the feedback there based on the result of it
 		isError: isBookError,
 		error: bookError,
 		reset,
@@ -44,23 +43,8 @@ function SchedulePage() {
 				queryClient.invalidateQueries(['authStatus']);
 			}
 			queryClient.invalidateQueries(['data', location.pathname]);
-			setIsBookedSuccessfully(true);
 		},
 	});
-
-	// To handle timeout for feedback box in the child viewSchedule + cleanup
-	useEffect(() => {
-		if (isBookedSuccessfully) {
-			const timer = setTimeout(() => {
-				reset();
-				if (isModalOpen) handleCloseModal();
-				navigate('/grafik');
-				setIsBookedSuccessfully(false);
-			}, 1000);
-
-			return () => clearTimeout(timer);
-		}
-	}, [isBookedSuccessfully, reset, navigate]);
 
 	const background = {
 		pathname: location.pathname,
@@ -126,7 +110,6 @@ function SchedulePage() {
 					onBook: book,
 					isError: isBookError,
 					error: bookError,
-					confirmation: isBookedSuccessfully,
 				}}
 				role={status.role}
 			/>
