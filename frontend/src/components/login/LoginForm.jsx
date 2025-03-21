@@ -15,24 +15,34 @@ import {
 } from '../../utils/validation.js';
 
 function LoginFrom() {
+	const [firstTime, setFirstTime] = useState(false); // state to switch between registration and login in term of labels and http request method
+
+	const handleClose = () => {
+		if (firstTime) {
+			setFirstTime(false);
+		}
+	};
+
 	// passing a function to determine redirect target based on the result in the hook (updateFEedback(result)).
 	const {feedback, updateFeedback, resetFeedback} = useFeedback({
 		getRedirectTarget: (result) => {
-			if (result.type === 'signup' && (result.code === 303 || result.code === 200)) {
-				setFirstTime(!firstTime);
-				return null;
+			// if success:
+			if (result.confirmation === 1) {
+				if (result.type === 'signup' && (result.code === 303 || result.code === 200)) {
+					setFirstTime(!firstTime);
+					return ''; // no redirect - the same url
+				}
+				if (result.type === 'login') {
+					return -1; // after login go back
+				}
 			}
-			// for login success (or other cases), go back one step in history.
-			return -1;
+			// if error
+			return null;
 		},
-		onClose: () => {
-			// Optionally toggle a state if needed (for example, to switch form type)
-			setFirstTime(!firstTime);
-		},
+		onClose: handleClose,
 	});
-	const {data: status} = useAuthStatus();
 
-	const [firstTime, setFirstTime] = useState(false); // state to switch between registration and login in term of labels and http request method
+	const {data: status} = useAuthStatus();
 
 	const {mutate, isPending, isError, error} = useMutation({
 		mutationFn: ({formData, modifier}) =>

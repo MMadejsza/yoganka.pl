@@ -41,7 +41,7 @@ function UserFeedbackBox({
 		}
 	} else if (status === 0) {
 		// Neutral result (e.g. no changes were made)
-		statusMsg = error?.message || 'Brak zmian';
+		statusMsg = successMsg || 'Brak zmian';
 	} else if (status === -1) {
 		// Error result
 		statusMsg = error?.message || 'Wystąpił błąd';

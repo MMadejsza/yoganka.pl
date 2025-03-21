@@ -67,6 +67,7 @@ export async function fetchData(link) {
 
 //! MUTATE - MUTATE FN_____________________________________________
 export async function mutateOnLoginOrSignup(status, formData, path) {
+	console.log(`mutateOnLoginOrSignup path`, path);
 	return fetch(path, {
 		method: 'POST',
 		headers: {
@@ -86,6 +87,8 @@ export async function mutateOnLoginOrSignup(status, formData, path) {
 	});
 }
 export async function mutateOnCreate(status, formData, path) {
+	console.log(`mutateOnCreate path`, path);
+
 	return fetch(path, {
 		method: 'POST',
 		headers: {
@@ -105,6 +108,8 @@ export async function mutateOnCreate(status, formData, path) {
 	});
 }
 export async function mutateOnEdit(status, formData, path) {
+	console.log(`mutateOnEdit path`, path);
+
 	return fetch(path, {
 		method: 'PUT',
 		headers: {
@@ -124,6 +129,8 @@ export async function mutateOnEdit(status, formData, path) {
 	});
 }
 export async function mutateOnDelete(status, formData, path) {
+	console.log(`mutateOnEdit path`, path);
+
 	return fetch(path, {
 		method: 'DELETE',
 		headers: {

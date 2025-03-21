@@ -481,11 +481,13 @@ export const putEditCustomerDetails = (req, res, next) => {
 			) {
 				// Nothing changed
 				console.log('\n❓❓❓ Admin Customer no change');
-				return {confirmation: 0, message: 'Brak zmian'};
+				res.status(200).json({confirmation: 0, message: 'Brak zmian'});
+				return null;
 			}
 			return foundCustomer;
 		})
 		.then((fetchedCustomer) => {
+			if (!fetchedCustomer) return;
 			models.Customer.update(
 				{
 					Phone: newPhone,

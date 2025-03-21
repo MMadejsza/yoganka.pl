@@ -1,4 +1,3 @@
-import React, {useState} from 'react';
 import {useParams} from 'react-router-dom';
 import {useQuery, useMutation} from '@tanstack/react-query';
 import {queryClient, fetchItem, mutateOnEdit} from '../../utils/http.js';
@@ -256,7 +255,7 @@ function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
 	);
 	return (
 		<>
-			{form}{' '}
+			{form}
 			{feedback.status !== undefined && (
 				<UserFeedbackBox
 					status={feedback.status}

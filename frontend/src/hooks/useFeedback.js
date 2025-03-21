@@ -15,7 +15,14 @@ export function useFeedback({getRedirectTarget = () => null, onClose = () => {}}
 	const updateFeedback = useCallback(
 		(result) => {
 			// Result must have confirmation, message, warnings
-			const newStatus = result.confirmation === 1 ? 1 : -1;
+			const newStatus =
+				result.confirmation === true || result.confirmation === 1
+					? 1
+					: result.confirmation === false || result.confirmation === 0
+					? 0
+					: result.confirmation === -1
+					? -1
+					: -1;
 			setFeedback({
 				status: newStatus,
 				message: result.message,
@@ -33,6 +40,8 @@ export function useFeedback({getRedirectTarget = () => null, onClose = () => {}}
 					}
 					onClose();
 				}, 1000);
+			} else {
+				onClose();
 			}
 		},
 		[navigate, getRedirectTarget, onClose],

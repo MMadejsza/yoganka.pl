@@ -10,11 +10,7 @@ import UserFeedbackBox from './FeedbackBox.jsx';
 
 function DetailsUserSettingsForm({settingsData, customerAccessed, adminAccessed}) {
 	const params = useParams();
-	const {feedback, updateFeedback, resetFeedback} = useFeedback({
-		// Optionally set a redirectTarget and onClose if needed
-		redirectTarget: null,
-		onClose: () => {},
-	});
+	const {feedback, updateFeedback, resetFeedback} = useFeedback();
 	const {data: status} = useAuthStatus();
 	console.log('settingsData', settingsData);
 
