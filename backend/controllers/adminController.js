@@ -163,8 +163,8 @@ export const deleteUser = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
-export const getEditSettings = (req, res, next) => {
-	const controllerName = 'getEditSettings';
+export const getUserSettings = (req, res, next) => {
+	const controllerName = 'getUserSettings';
 	log(controllerName);
 
 	models.UserPrefSettings.findByPk(req.params.id)
@@ -173,14 +173,14 @@ export const getEditSettings = (req, res, next) => {
 				errCode = 404;
 				throw new Error('Nie pobrano ustawień.');
 			}
-			console.log('\n✅✅✅ admin getEditSettings fetched');
+			console.log('\n✅✅✅ admin getUserSettings fetched');
 			return res.status(200).json({confirmation: 1, preferences});
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 
-export const putEditSettings = (req, res, next) => {
-	const controllerName = 'putEditSettings';
+export const putEditUserSettings = (req, res, next) => {
+	const controllerName = 'putEditUserSettings';
 	log(controllerName);
 
 	const userID = req.params.id;
@@ -210,7 +210,7 @@ export const putEditSettings = (req, res, next) => {
 					preferences.Theme == !!theme
 				) {
 					// Nothing changed
-					console.log('\n❓❓❓ putEditSettings Admin Preferences no change');
+					console.log('\n❓❓❓ putEditUserSettings Admin Preferences no change');
 					return {confirmation: 0, message: 'Brak zmian.'};
 				} else {
 					// Update
@@ -221,13 +221,13 @@ export const putEditSettings = (req, res, next) => {
 					preferences.Theme = !!theme;
 
 					return preferences.save().then(() => {
-						console.log('\n✅✅✅ putEditSettings Admin Preferences Updated');
+						console.log('\n✅✅✅ putEditUserSettings Admin Preferences Updated');
 						return {confirmation: 1, message: 'Ustawienia zostały zaktualizowane.'};
 					});
 				}
 			} else {
 				// New preferences created
-				console.log('\n✅✅✅ putEditSettings Admin Preferences Created');
+				console.log('\n✅✅✅ putEditUserSettings Admin Preferences Created');
 				return {confirmation: 1, message: 'Ustawienia zostały utworzone'};
 			}
 		})
@@ -438,8 +438,8 @@ export const deleteCustomer = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
-export const getEditCustomer = (req, res, next) => {
-	const controllerName = 'getputEditCustomer';
+export const getCustomerDetails = (req, res, next) => {
+	const controllerName = 'getputEditCustomerDetails';
 	log(controllerName);
 
 	models.Customer.findByPk(req.params.id)
@@ -448,15 +448,15 @@ export const getEditCustomer = (req, res, next) => {
 				errCode = 404;
 				throw new Error('Nie znaleziono danych uczestnika.');
 			}
-			console.log('\n✅✅✅ Fetched admin getputEditCustomer customer');
+			console.log('\n✅✅✅ Fetched admin getputEditCustomerDetails customer');
 			return res
 				.status(200)
 				.json({confirmation: 1, customer, message: 'Dane uczestnika pobrane pomyślnie.'});
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
-export const putEditCustomer = (req, res, next) => {
-	const controllerName = 'putEditCustomer';
+export const putEditCustomerDetails = (req, res, next) => {
+	const controllerName = 'putEditCustomerDetails';
 	log(controllerName);
 
 	const customerId = req.params.id;
@@ -470,7 +470,7 @@ export const putEditCustomer = (req, res, next) => {
 
 	if (!newPhone || !newPhone.trim()) {
 		errCode = 400;
-		console.log('\n❌❌❌ Error putEditCustomer No phone');
+		console.log('\n❌❌❌ Error putEditCustomerDetails No phone');
 		throw new Error('Numer telefonu nie może być pusty.');
 	}
 
@@ -479,7 +479,7 @@ export const putEditCustomer = (req, res, next) => {
 			errCode = 404;
 			if (!customer) throw new Error('Nie znaleziono danych uczestnika.');
 
-			console.log('\n✅✅✅ Fetched admin putEditCustomer customer');
+			console.log('\n✅✅✅ Fetched admin putEditCustomerDetails customer');
 			return customer;
 		})
 		.then((foundCustomer) => {
@@ -510,7 +510,7 @@ export const putEditCustomer = (req, res, next) => {
 					return {customerResult};
 				})
 				.then((results) => {
-					console.log('\n✅✅✅ admin putEditCustomer UPDATE successful');
+					console.log('\n✅✅✅ admin putEditCustomerDetails UPDATE successful');
 					const affectedCustomerRows = results.customerResult[0];
 					const status = affectedCustomerRows >= 1;
 					return res.status(200).json({
@@ -1707,7 +1707,7 @@ export const postCreateBooking = (req, res, next) => {
 			});
 	})
 		.then((booking) => {
-			console.log('\n✅✅✅ admin postBookSchedule Rezerwacja utworzona pomyślnie');
+			console.log('\n✅✅✅ admin postCreateBookSchedule Rezerwacja utworzona pomyślnie');
 			res.status(201).json({
 				isNewCustomer,
 				confirmation: 1,

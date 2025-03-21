@@ -3,8 +3,8 @@ import * as models from '../models/_index.js';
 import {errorCode, log, catchErr} from './_controllers.js';
 let errCode = errorCode;
 
-export const postBookSchedule = (req, res, next) => {
-	const controllerName = 'postBookSchedule';
+export const postCreateBookSchedule = (req, res, next) => {
+	const controllerName = 'postCreateBookSchedule';
 	log(controllerName);
 
 	// @ Fetching USER
@@ -159,7 +159,7 @@ export const postBookSchedule = (req, res, next) => {
 			});
 	})
 		.then((booking) => {
-			console.log('\n✅✅✅ postBookSchedule Rezerwacja utworzona pomyślnie');
+			console.log('\n✅✅✅ postCreateBookSchedule Rezerwacja utworzona pomyślnie');
 			res.status(201).json({
 				isNewCustomer,
 				confirmation: 1,
@@ -213,15 +213,15 @@ export const putEditMarkAbsent = (req, res, next) => {
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
 
-export const getEditCustomer = (req, res, next) => {
-	const controllerName = 'getEditCustomer';
+export const getCustomerDetails = (req, res, next) => {
+	const controllerName = 'getCustomerDetails';
 	log(controllerName);
 	const customer = req.user.Customer;
 	// console.log(customer);
 	return res.status(200).json({confirmation: 1, customer});
 };
-export const putEditCustomer = (req, res, next) => {
-	const controllerName = 'putEditCustomer';
+export const putEditCustomerDetails = (req, res, next) => {
+	const controllerName = 'putEditCustomerDetails';
 	log(controllerName);
 
 	console.log(req.body);
@@ -230,7 +230,7 @@ export const putEditCustomer = (req, res, next) => {
 	const {phone: newPhone, cMethod: newContactMethod} = req.body;
 
 	if (!newPhone || !newPhone.trim()) {
-		console.log('\n❌❌❌ Error putEditCustomer:', 'No phone');
+		console.log('\n❌❌❌ Error putEditCustomerDetails:', 'No phone');
 		errCode = 400;
 		throw new Error('Numer telefonu nie może być pusty');
 	}
@@ -243,7 +243,7 @@ export const putEditCustomer = (req, res, next) => {
 			return {customerResult};
 		})
 		.then((results) => {
-			console.log('\n✅✅✅ putEditCustomer Update successful');
+			console.log('\n✅✅✅ putEditCustomerDetails Update successful');
 			const affectedCustomerRows = results.customerResult[0];
 			const status = affectedCustomerRows >= 1;
 			return res.status(200).json({

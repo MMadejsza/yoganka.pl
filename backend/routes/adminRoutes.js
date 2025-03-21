@@ -6,10 +6,10 @@ const router = express.Router();
 //@ routes DYNAMICALLY fetched from browser url - in english (set by AdminPage fetchData())
 router.get('/show-all-users', adminC.getAllUsers);
 router.get('/show-all-users/:id', adminC.getUserByID);
-router.get('/show-user-settings/:id', adminC.getEditSettings);
+router.get('/show-user-settings/:id', adminC.getUserSettings);
 router.get('/show-all-customers', adminC.getAllCustomers);
 router.get('/show-all-customers/:id', adminC.getCustomerByID);
-router.get('/show-customer-data/:id', adminC.getEditCustomer);
+router.get('/show-customer-data/:id', adminC.getCustomerDetails);
 router.get('/show-all-schedules', adminC.getAllSchedules);
 router.get('/show-all-schedules/:id', adminC.getScheduleByID);
 router.get('/show-product-schedules/:pId/:cId', adminC.getProductSchedules);
@@ -32,10 +32,10 @@ router.post('/create-product', adminC.postCreateProduct);
 router.post('/create-booking', adminC.postCreateBooking);
 
 //! PUT -EDIT
-router.put('/edit-customer-data/:id', adminC.putEditCustomer);
+router.put('/edit-customer-data/:id', adminC.putEditCustomerDetails);
 router.put('/edit-mark-absent', adminC.putEditMarkAbsent);
 router.put('/edit-mark-present', adminC.putEditMarkPresent);
-router.put('/edit-user-settings/:id', adminC.putEditSettings);
+router.put('/edit-user-settings/:id', adminC.putEditUserSettings);
 router.put('/edit-product-data/:id', adminC.putEditProduct);
 router.put('/edit-schedule-data/:id', adminC.putEditSchedule);
 

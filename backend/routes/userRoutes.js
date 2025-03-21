@@ -7,11 +7,11 @@ const router = express.Router();
 //! GET
 //@ routes dynamically fetched from browser url
 //# set by ViewFrame fetchItem()
-router.get('/grafik/:id', userC.getShowScheduleByID);
-router.get('/konto/grafik/:id', isAuth, userC.getShowScheduleByID);
+router.get('/grafik/:id', userC.getScheduleByID);
+router.get('/konto/grafik/:id', isAuth, userC.getScheduleByID);
 
 //# set by SchedulePage fetchData() and  fetchItem()
-router.get('/grafik', userC.getShowAllSchedules);
+router.get('/grafik', userC.getAllSchedules);
 
 //@ routes MANUALLY set
 router.get('/show-user-settings', isAuth, userC.getSettings);

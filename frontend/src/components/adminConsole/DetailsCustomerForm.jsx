@@ -19,12 +19,12 @@ function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
 	});
 
 	const queryKey = customerAccessed
-		? ['formFilling', 'putEditCustomer']
+		? ['formFilling', 'putEditCustomerDetails']
 		: adminAccessed
-		? ['formFilling', 'putEditCustomer', customerData.CustomerID]
+		? ['formFilling', 'putEditCustomerDetails', customerData.CustomerID]
 		: null;
 	const dynamicFetch = (signal) => {
-		if (customerAccessed) return fetchItem('/customer/get-customer-data', {signal});
+		if (customerAccessed) return fetchItem('/customer/get-customer-details', {signal});
 		else
 			return fetchItem(`/admin-console/show-customer-data/${customerData.CustomerID}`, {
 				signal,

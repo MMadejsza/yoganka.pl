@@ -11,13 +11,13 @@ const router = express.Router();
 router.get('/konto/rezerwacje/:id', isAuth, customerC.getBookingByID);
 
 //@ routes MANUALLY set
-router.get('/get-customer-data', isAuth, customerC.getEditCustomer);
+router.get('/get-customer-details', isAuth, customerC.getCustomerDetails);
 
 //! POST - CREATE
-router.post('/create-booking', isAuthUser, customerC.postBookSchedule);
+router.post('/create-booking', isAuthUser, customerC.postCreateBookSchedule);
 
 //! PUT -EDIT
 router.put('/edit-mark-absent/:scheduleID', isAuth, customerC.putEditMarkAbsent);
-router.put('/edit-customer-data', isAuth, customerC.putEditCustomer);
+router.put('/edit-customer-data', isAuth, customerC.putEditCustomerDetails);
 
 export default router;

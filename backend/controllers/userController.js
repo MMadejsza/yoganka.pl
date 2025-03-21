@@ -35,8 +35,8 @@ export const getShowUserByID = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
-export const getShowAllSchedules = (req, res, next) => {
-	const controllerName = 'getShowAllSchedules';
+export const getAllSchedules = (req, res, next) => {
+	const controllerName = 'getAllSchedules';
 	log(controllerName);
 
 	const model = models.ScheduleRecord;
@@ -150,7 +150,7 @@ export const getShowAllSchedules = (req, res, next) => {
 			];
 
 			// ✅ Return response to frontend
-			console.log('\n✅✅✅ user getShowAllSchedules schedules fetched');
+			console.log('\n✅✅✅ user getAllSchedules schedules fetched');
 			res.json({
 				confirmation: 1,
 				message: 'Terminy pobrane pomyślnie.',
@@ -160,8 +160,8 @@ export const getShowAllSchedules = (req, res, next) => {
 		})
 		.catch((err) => catchErr(res, errCode, err, controllerName));
 };
-export const getShowScheduleByID = (req, res, next) => {
-	const controllerName = 'getShowScheduleByID';
+export const getScheduleByID = (req, res, next) => {
+	const controllerName = 'getScheduleByID';
 	log(controllerName);
 
 	const isUser = !!req.user;
@@ -213,7 +213,7 @@ export const getShowScheduleByID = (req, res, next) => {
 				schedule.full = beingAttendedSchedules.length >= schedule.Capacity;
 			}
 
-			console.log('\n✅✅✅ getShowScheduleByID schedule fetched');
+			console.log('\n✅✅✅ getScheduleByID schedule fetched');
 			return res.status(200).json({schedule, user: req.user});
 			// return res.status(200).json({schedule});
 		})
