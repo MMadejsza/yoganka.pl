@@ -5,409 +5,415 @@
 @use '_global_mixins-keyframes' as mixin;
 
 @media (min-width: 1025px) or (min-width: 1400px) {
-	body:has(.admin-console) {
-		.modal.visible {
-			width: 98vw;
-			max-width: 1200px;
-		}
-	}
-	.wrapper:has(.admin-console) {
-		grid-template-rows: auto auto 1fr auto;
-		grid-template-areas:
-			'table table table table table'
-			'table table table table table'
-			'space space space space space'
-			'footer footer footer footer footer';
-	}
-	.admin-console {
-		grid-area: table;
-		grid-column: 1 /-1;
-		max-height: 100%;
+  body:has(.admin-console) {
+    .modal.visible {
+      width: 98vw;
+      max-width: 1200px;
+    }
+  }
+  .wrapper:has(.admin-console) {
+    grid-template-rows: auto auto 1fr auto;
+    grid-template-areas:
+      'table table table table table'
+      'table table table table table'
+      'space space space space space'
+      'footer footer footer footer footer';
+  }
+  .admin-console {
+    grid-area: table;
+    grid-column: 1 /-1;
+    max-height: 100%;
 
-		grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
-		grid-template-rows: auto auto auto auto auto 1fr auto;
-	}
-	.admin-intro {
-		margin-top: 11rem;
+    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+    grid-template-rows: auto auto auto auto auto 1fr auto;
+  }
+  .admin-intro {
+    margin-top: 11rem;
 
-		&__header {
-			width: 100%;
-			padding: 1rem;
-			text-shadow: map.get(var.$shadows, active-text-icons-shadow);
-			background-color: rgba(map.get(var.$colors, base), 0.75);
-		}
-	}
-	.side-nav {
-		.nav {
-			$width: min-content;
-			position: fixed;
-			top: 50%;
-			transform: translateY(-50%);
-			right: 50%;
-			left: -187px;
-			width: $width;
-			z-index: 5;
+    &__header {
+      width: 100%;
+      padding: 1rem;
+      text-shadow: map.get(var.$shadows, active-text-icons-shadow);
+      background-color: rgba(map.get(var.$colors, base), 0.75);
+    }
+  }
+  .side-nav {
+    .nav {
+      $width: min-content;
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      right: 50%;
+      left: -187px;
+      width: $width;
+      z-index: 5;
 
-			border-top-left-radius: 0;
-			border-bottom-left-radius: 0;
-			border-top-right-radius: map.get(var.$sizes, border-radius);
-			border-bottom-right-radius: map.get(var.$sizes, border-radius);
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      border-top-right-radius: map.get(var.$sizes, border-radius);
+      border-bottom-right-radius: map.get(var.$sizes, border-radius);
 
-			@include mixin.flex(row, $align: center);
-			flex-wrap: wrap;
-			&:hover {
-				left: 0;
-			}
+      @include mixin.flex(row, $align: center);
+      flex-wrap: wrap;
+      &:hover {
+        left: 0;
+      }
 
-			&.right {
-				right: -105px;
-				left: auto;
-				border-top-right-radius: 0;
-				border-bottom-right-radius: 0;
-				border-top-left-radius: map.get(var.$sizes, border-radius);
-				border-bottom-left-radius: map.get(var.$sizes, border-radius);
-				&:hover {
-					right: 0;
-				}
-				.nav__link {
-					margin: 0 1rem 0 0;
-				}
-				.nav__list {
-					@include mixin.flex(column, $align: flex-start);
-				}
-				.nav__icon {
-					order: -1;
-					margin: 0rem 1.5rem 0 1rem;
-				}
-			}
+      &.right {
+        right: -105px;
+        left: auto;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-top-left-radius: map.get(var.$sizes, border-radius);
+        border-bottom-left-radius: map.get(var.$sizes, border-radius);
+        &:hover {
+          right: 0;
+        }
+        .nav__link {
+          margin: 0 1rem 0 0;
+        }
+        .nav__list {
+          @include mixin.flex(column, $align: flex-start);
+        }
+        .nav__icon {
+          order: -1;
+          margin: 0rem 1.5rem 0 1rem;
+        }
+      }
 
-			&__list {
-				@include mixin.flex(column, $align: flex-end);
-				flex-wrap: wrap;
-				gap: 1rem;
-				margin-top: 0;
-			}
+      &__list {
+        @include mixin.flex(column, $align: flex-end);
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-top: 0;
+      }
 
-			&__link {
-				margin: 0 0 0 1rem;
-				line-height: 4.5rem;
-				font-size: 1.8rem;
-				text-align: right;
+      &__link {
+        margin: 0 0 0 1rem;
+        line-height: 4.5rem;
+        font-size: 1.8rem;
+        text-align: right;
 
-				.nav__icon {
-					min-width: 33px;
-					margin: 0rem 1rem 0 1.5rem;
-					font-size: 3rem;
-				}
+        .nav__icon {
+          min-width: 33px;
+          margin: 0rem 1rem 0 1.5rem;
+          font-size: 3rem;
+        }
 
-				&.active,
-				&.active .nav__icon {
-					color: map.get(var.$colors, accent-bcg);
-					text-shadow: map.get(var.$shadows, active-text-icons-shadow);
-				}
-			}
-		}
-	}
-	%hover {
-		color: map.get(var.$colors, accent-bcg);
-		text-shadow: map.get(var.$shadows, active-text-icons-shadow);
-	}
+        &.active,
+        &.active .nav__icon {
+          color: map.get(var.$colors, accent-bcg);
+          text-shadow: map.get(var.$shadows, active-text-icons-shadow);
+        }
+      }
+    }
+  }
+  %hover {
+    color: map.get(var.$colors, accent-bcg);
+    text-shadow: map.get(var.$shadows, active-text-icons-shadow);
+  }
 
-	.data-table {
-		width: 100%;
-		border-collapse: separate;
-		border-spacing: 0;
-		font-size: 1.5rem;
+  .data-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 1.5rem;
 
-		&__headers {
-			margin-bottom: 1rem;
-			font-size: 1.7rem;
-			border-bottom: 2px solid black;
-			background-color: rgba(map.get(var.$colors, nav), 1);
-			box-shadow: map.get(var.$shadows, box-shadow);
-			border-top-left-radius: map.get(var.$sizes, border-radius);
-			border-top-right-radius: map.get(var.$sizes, border-radius);
-		}
+    &__headers {
+      margin-bottom: 1rem;
+      font-size: 1.7rem;
+      border-bottom: 2px solid black;
+      background-color: rgba(map.get(var.$colors, nav), 1);
+      box-shadow: map.get(var.$shadows, box-shadow);
+      border-top-left-radius: map.get(var.$sizes, border-radius);
+      border-top-right-radius: map.get(var.$sizes, border-radius);
+    }
 
-		&__single-header {
-			transition: map.get(var.$behavior, base-transition);
-			padding: 1rem;
-		}
-		&__single-header:first-child {
-			border-top-left-radius: map.get(var.$sizes, border-radius);
-		}
-		&__single-header:last-child {
-			border-top-right-radius: map.get(var.$sizes, border-radius);
-		}
-		&__cells {
-			transition: map.get(var.$behavior, base-transition);
+    &__single-header {
+      transition: map.get(var.$behavior, base-transition);
+      padding: 1rem;
+    }
+    &__single-header:first-child {
+      border-top-left-radius: map.get(var.$sizes, border-radius);
+    }
+    &__single-header:last-child {
+      border-top-right-radius: map.get(var.$sizes, border-radius);
+    }
+    &__cells {
+      transition: map.get(var.$behavior, base-transition);
 
-			&:nth-child(2n) {
-				background-color: color.adjust(map.get(var.$colors, nav), $lightness: 15%);
-			}
-			&.active:hover {
-				position: relative;
-				z-index: 3;
-				opacity: 1;
-				transform: scale(1.05) translateY(0.5rem);
-				box-shadow: map.get(var.$shadows, tile-shadow);
-				border-radius: map.get(var.$sizes, border-radius);
-				.data-table__single-cell:first-child {
-					border-top-left-radius: map.get(var.$sizes, border-radius);
-					border-bottom-left-radius: map.get(var.$sizes, border-radius);
-				}
-				.data-table__single-cell:last-child {
-					border-top-right-radius: map.get(var.$sizes, border-radius);
-					border-bottom-right-radius: map.get(var.$sizes, border-radius);
-				}
-			}
+      &:nth-child(2n) {
+        background-color: color.adjust(
+          map.get(var.$colors, nav),
+          $lightness: 15%
+        );
+      }
+      &.active:hover {
+        position: relative;
+        z-index: 3;
+        opacity: 1;
+        transform: scale(1.05) translateY(0.5rem);
+        box-shadow: map.get(var.$shadows, tile-shadow);
+        border-radius: map.get(var.$sizes, border-radius);
+        .data-table__single-cell:first-child {
+          border-top-left-radius: map.get(var.$sizes, border-radius);
+          border-bottom-left-radius: map.get(var.$sizes, border-radius);
+        }
+        .data-table__single-cell:last-child {
+          border-top-right-radius: map.get(var.$sizes, border-radius);
+          border-bottom-right-radius: map.get(var.$sizes, border-radius);
+        }
+      }
 
-			&:first-child {
-				padding-top: 2rem;
-			}
+      &:first-child {
+        padding-top: 2rem;
+      }
 
-			// &:not(.booked) span {
-			// 	cursor: pointer;
-			// 	color: map.get(var.$colors, accent-bcg);
-			// 	text-shadow: map.get(var.$shadows, active-text-icons-shadow);
-			// }
+      // &:not(.booked) span {
+      // 	cursor: pointer;
+      // 	color: map.get(var.$colors, accent-bcg);
+      // 	text-shadow: map.get(var.$shadows, active-text-icons-shadow);
+      // }
 
-			&.booked {
-				background-color: color.adjust(green, $lightness: 80%);
-				opacity: 0.6;
-			}
-			&.booked span {
-				color: green;
-			}
-			&.full,
-			&.archived {
-				background-color: map.get(var.$colors, nav);
-				opacity: 0.25;
-				& span {
-					color: inherit;
-				}
-			}
-		}
+      &.booked {
+        background-color: color.adjust(green, $lightness: 80%);
+        opacity: 0.6;
+      }
+      &.booked span {
+        color: green;
+      }
+      &.full,
+      &.archived {
+        background-color: map.get(var.$colors, nav);
+        opacity: 0.25;
+        & span {
+          color: inherit;
+        }
+      }
+    }
 
-		&__single-cell {
-			width: min-content;
-			padding: 1rem;
-			transition: map.get(var.$behavior, base-transition);
-			white-space: preserve;
-		}
-	}
-	.user-container {
-		width: 100%;
-		height: auto;
-		max-height: 90vh;
-		padding-bottom: 5rem;
-		overflow-y: auto;
-		@include mixin.flex(row, space-evenly, flex-start);
-		align-content: flex-start;
-		flex-wrap: wrap;
-		gap: 1.5rem;
+    &__single-cell {
+      width: min-content;
+      padding: 1rem;
+      transition: map.get(var.$behavior, base-transition);
+      white-space: preserve;
+    }
+  }
+  .user-container {
+    width: 100%;
+    height: auto;
+    max-height: 90vh;
+    padding-bottom: 5rem;
+    overflow-y: auto;
+    @include mixin.flex(row, space-evenly, flex-start);
+    align-content: flex-start;
+    flex-wrap: wrap;
+    gap: 1.5rem;
 
-		&--account {
-			max-height: none;
-			overflow: visible;
-		}
-		&__actions-block {
-			margin-top: 2rem;
-			flex-basis: 100%;
-			@include mixin.flex(row, center, space-evenly);
-			gap: 1.5rem;
-		}
-		&__action {
-			@include mixin.flex(row, center);
-			flex-basis: 100%;
-			& .modal__btn {
-				flex-basis: 10%;
-				min-height: 32px;
-				font-size: 1.5rem;
-				height: 1rem;
-				line-height: 1rem;
-			}
-		}
-		&__user-title {
-			flex-basis: 100%;
-			margin: 0;
-			&:nth-last-of-type(1) {
-				margin-bottom: 3rem;
-			}
-		}
-		&__user-status {
-			font-size: 1.5rem;
-			flex-basis: 100%;
-		}
-		.modal-checklist {
-			@include mixin.flex(column, flex-start, center);
-			flex-basis: 30%;
-			gap: 0.5rem;
-			&--booking {
-				flex-basis: 40%;
-			}
-			&__li {
-				gap: 1rem;
-				&--phone {
-					flex-wrap: wrap;
-				}
-			}
-		}
-		&__side-details {
-			opacity: 0.5;
-		}
-		.schedules {
-			flex-basis: 100%;
-			gap: 0;
-			&__summary,
-			&__records {
-				width: 100%;
-				margin-top: 3rem;
-				font-size: 1.8rem;
-				@include mixin.flex(row, space-evenly);
-				flex-wrap: wrap;
-				&-label {
-					font-weight: bold;
-				}
-			}
-			&__record {
-				flex-basis: 100%;
-				@include mixin.flex(row, space-evenly);
-				&:nth-child(odd) {
-					background-color: color.adjust(map.get(var.$colors, nav), $lightness: 8%);
-				}
-				&--header {
-					font-weight: bold;
-				}
-				&-content {
-					width: 20%;
-				}
-			}
-		}
-		&__details-list {
-			@include mixin.flex(column, center, center);
-			width: 100%;
-			max-width: 600px;
-			margin-bottom: 1rem;
-			& button:not(.password) {
-				margin-top: 1rem;
-				align-self: center;
-			}
-		}
-		&__section-title {
-			flex-basis: 100%;
-			font-size: 2.2rem;
-			margin-bottom: 2.2rem;
-			color: map.get(var.$colors, tile-title);
-			&.admin-action {
-				@include mixin.flex(row, center, center);
-				gap: 1rem;
+    &--account {
+      max-height: none;
+      overflow: visible;
+    }
+    &__actions-block {
+      margin-top: 2rem;
+      flex-basis: 100%;
+      @include mixin.flex(row, center, space-evenly);
+      gap: 1.5rem;
+    }
+    &__action {
+      @include mixin.flex(row, center);
+      flex-basis: 100%;
+      & .modal__btn {
+        flex-basis: 10%;
+        min-height: 32px;
+        font-size: 1.5rem;
+        height: 1rem;
+        line-height: 1rem;
+      }
+    }
+    &__user-title {
+      flex-basis: 100%;
+      margin: 0;
+      &:nth-last-of-type(1) {
+        margin-bottom: 3rem;
+      }
+    }
+    &__user-status {
+      font-size: 1.5rem;
+      flex-basis: 100%;
+    }
+    .modal-checklist {
+      @include mixin.flex(column, flex-start, center);
+      flex-basis: 30%;
+      gap: 0.5rem;
+      &--booking {
+        flex-basis: 40%;
+      }
+      &__li {
+        gap: 1rem;
+        &--phone {
+          flex-wrap: wrap;
+        }
+      }
+    }
+    &__side-details {
+      opacity: 0.5;
+    }
+    .schedules {
+      flex-basis: 100%;
+      gap: 0;
+      &__summary,
+      &__records {
+        width: 100%;
+        margin-top: 3rem;
+        font-size: 1.8rem;
+        @include mixin.flex(row, space-evenly);
+        flex-wrap: wrap;
+        &-label {
+          font-weight: bold;
+        }
+      }
+      &__record {
+        flex-basis: 100%;
+        @include mixin.flex(row, space-evenly);
+        &:nth-child(odd) {
+          background-color: color.adjust(
+            map.get(var.$colors, nav),
+            $lightness: 8%
+          );
+        }
+        &--header {
+          font-weight: bold;
+        }
+        &-content {
+          width: 20%;
+        }
+      }
+    }
+    &__details-list {
+      @include mixin.flex(column, center, center);
+      width: 100%;
+      max-width: 600px;
+      margin-bottom: 1rem;
+      & button:not(.password) {
+        margin-top: 1rem;
+        align-self: center;
+      }
+    }
+    &__section-title {
+      flex-basis: 100%;
+      font-size: 2.2rem;
+      margin-bottom: 2.2rem;
+      color: map.get(var.$colors, tile-title);
+      &.admin-action {
+        @include mixin.flex(row, center, center);
+        gap: 1rem;
 
-				text-decoration: none;
-			}
-		}
-		&__section-record {
-			&-label {
-				font-weight: 600;
-			}
-			&-content {
-				ul {
-					@include mixin.flex(column);
-				}
-			}
-		}
-	}
+        text-decoration: none;
+      }
+    }
+    &__section-record {
+      &-label {
+        font-weight: 600;
+      }
+      &-content {
+        ul {
+          @include mixin.flex(column);
+        }
+      }
+    }
+  }
 
-	.form {
-		@include mixin.flex(column, center, center);
-		gap: 1.5rem;
-		max-width: 600px;
+  .form {
+    @include mixin.flex(column, center, center);
+    gap: 1.5rem;
+    max-width: 600px;
 
-		&__input-set {
-			width: 100%;
-			@include mixin.flex(row, space-between);
-			font-size: 1.8rem;
-			gap: 1.5rem;
-			label {
-				flex-basis: 35%;
-				text-align: right;
-			}
-		}
-		input,
-		.settings-form__notes-textarea {
-			flex-basis: 55%;
-			padding: 0.5rem 1.5rem;
-			font-family: 'EB Garamond', serif;
-			border-radius: map.get(var.$sizes, border-radius);
-		}
-		.settings-form__notes-textarea {
-			flex-basis: 100%;
-			font-family: 'EB Garamond', serif;
-		}
-		button:last-child {
-			margin-top: 1.2rem;
-		}
+    &__input-set {
+      width: 100%;
+      @include mixin.flex(row, space-between);
+      font-size: 1.8rem;
+      gap: 1.5rem;
+      label {
+        flex-basis: 35%;
+        text-align: right;
+      }
+    }
+    input,
+    .settings-form__notes-textarea {
+      flex-basis: 55%;
+      padding: 0.5rem 1.5rem;
+      font-family: 'EB Garamond', serif;
+      border-radius: map.get(var.$sizes, border-radius);
+    }
+    .settings-form__notes-textarea {
+      flex-basis: 100%;
+      font-family: 'EB Garamond', serif;
+    }
+    button:last-child {
+      margin-top: 1.2rem;
+    }
 
-		&.new-customer {
-			max-width: 50%;
+    &.new-customer {
+      max-width: 50%;
 
-			select {
-				width: 100%;
-				padding-left: 5rem;
-			}
-		}
-	}
-	.table-form {
-		width: 100%;
-		&__content {
-			flex-basis: 100%;
-			width: 100%;
-			padding: 0 1rem;
-			@include mixin.flex(row, space-between, center);
-			gap: 1.5rem;
-			transition: map.get(var.$behavior, base-transition);
+      select {
+        width: 100%;
+        padding-left: 5rem;
+      }
+    }
+  }
+  .table-form {
+    width: 100%;
+    &__content {
+      flex-basis: 100%;
+      width: 100%;
+      padding: 0 1rem;
+      @include mixin.flex(row, space-between, center);
+      gap: 1.5rem;
+      transition: map.get(var.$behavior, base-transition);
 
-			.frequency-inputs {
-				@include mixin.flex(row, center, center);
-			}
-			input,
-			select {
-				width: min-content;
-				max-width: 125px;
-				padding: 0 1rem;
-				text-align: center;
-			}
-			.modal-checklist__li {
-				width: min-content;
-				gap: 0;
-				&:nth-child(2) {
-					input {
-						width: 75px;
-					}
-				}
-			}
-		}
-	}
-	.action-btns {
-		flex-basis: 10%;
-		height: 100%;
-		@include mixin.flex(row, center, center);
-		gap: 1rem;
-	}
-	.table-form-btn {
-		@include mixin.flex(row, center, center);
-		cursor: pointer;
-		height: 100%;
-		width: min-content;
-		border: none;
-		transition: map.get(var.$behavior, base-transition);
+      .frequency-inputs {
+        @include mixin.flex(row, center, center);
+      }
+      input,
+      select {
+        width: min-content;
+        max-width: 125px;
+        padding: 0 1rem;
+        text-align: center;
+      }
+      .modal-checklist__li {
+        width: min-content;
+        gap: 0;
+        &:nth-child(2) {
+          input {
+            width: 75px;
+          }
+        }
+      }
+    }
+  }
+  .action-btns {
+    flex-basis: 10%;
+    height: 100%;
+    @include mixin.flex(row, center, center);
+    gap: 1rem;
+  }
+  .table-form-btn {
+    @include mixin.flex(row, center, center);
+    cursor: pointer;
+    height: 100%;
+    width: min-content;
+    border: none;
+    transition: map.get(var.$behavior, base-transition);
 
-		&:hover {
-			text-shadow: map.get(var.$shadows, active-text-icons-shadow);
-		}
+    &:hover {
+      text-shadow: map.get(var.$shadows, active-text-icons-shadow);
+    }
 
-		&--submit {
-			color: map.get(var.$colors, accent-bcg);
-		}
-	}
+    &--submit {
+      color: map.get(var.$colors, accent-bcg);
+    }
+  }
 }

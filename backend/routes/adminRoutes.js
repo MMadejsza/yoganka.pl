@@ -14,10 +14,19 @@ router.get('/show-all-schedules', adminC.getAllSchedules);
 router.get('/show-all-schedules/:id', adminC.getScheduleByID);
 router.get('/show-product-schedules/:pId/:cId', adminC.getProductSchedules);
 router.get('/show-booked-schedules', adminC.getBookedSchedules);
-router.get('/show-all-participants-feedback', adminC.getAllParticipantsFeedback);
-router.get('/show-all-participants-feedback/:id', adminC.getAllParticipantsFeedbackByID);
+router.get(
+  '/show-all-participants-feedback',
+  adminC.getAllParticipantsFeedback
+);
+router.get(
+  '/show-all-participants-feedback/:id',
+  adminC.getAllParticipantsFeedbackByID
+);
 router.get('/show-all-newsletters', adminC.getAllNewsletters);
-router.get('/show-all-subscribed-newsletters', adminC.getAllSubscribedNewsletters);
+router.get(
+  '/show-all-subscribed-newsletters',
+  adminC.getAllSubscribedNewsletters
+);
 router.get('/show-all-products', adminC.getAllProducts);
 router.get('/show-all-products/:id', adminC.getProductByID);
 router.get('/show-all-bookings', adminC.getAllBookings);

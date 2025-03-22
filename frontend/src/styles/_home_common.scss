@@ -5,156 +5,156 @@
 
 //! COMMON BLOCKS
 * {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-	list-style: none;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style: none;
 }
 html {
-	--section-padding-y: #{map.get(var.$sizes, section-padding-y)};
-	scroll-behavior: smooth;
-	font-family: 'EB Garamond', serif;
-	font-weight: 400;
-	font-size: 8.5px;
-	text-align: center;
-	color: map.get(var.$colors, base-text);
+  --section-padding-y: #{map.get(var.$sizes, section-padding-y)};
+  scroll-behavior: smooth;
+  font-family: 'EB Garamond', serif;
+  font-weight: 400;
+  font-size: 8.5px;
+  text-align: center;
+  color: map.get(var.$colors, base-text);
 
-	background-color: map.get(var.$colors, base);
+  background-color: map.get(var.$colors, base);
 }
 body {
-	margin: 0 auto;
-	min-height: 100vh;
-	display: grid;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: grid;
 }
 .wrapper {
-	display: grid;
-	min-height: 100vh;
-	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-	grid-template-rows: auto auto auto auto auto 1fr auto;
-	grid-template-areas:
-		'header header header header header '
-		'about about about about about'
-		'offer offer offer offer offer'
-		'cert cert cert cert cert'
-		'partners partners partners partners partners'
-		'space space space space space'
-		'footer footer footer footer footer';
-	justify-content: center;
-	// gap: 5rem 0;
-	-webkit-overflow-scrolling: touch;
+  display: grid;
+  min-height: 100vh;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-rows: auto auto auto auto auto 1fr auto;
+  grid-template-areas:
+    'header header header header header '
+    'about about about about about'
+    'offer offer offer offer offer'
+    'cert cert cert cert cert'
+    'partners partners partners partners partners'
+    'space space space space space'
+    'footer footer footer footer footer';
+  justify-content: center;
+  // gap: 5rem 0;
+  -webkit-overflow-scrolling: touch;
 }
 .space {
-	grid-area: space;
+  grid-area: space;
 }
 
 .wrapper > *:last-child {
-	margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 ul {
-	list-style: none;
+  list-style: none;
 }
 img {
-	display: block;
-	max-width: 100%;
+  display: block;
+  max-width: 100%;
 }
 a {
-	color: inherit;
-	cursor: pointer;
-	transition: map.get(var.$behavior, base-transition);
+  color: inherit;
+  cursor: pointer;
+  transition: map.get(var.$behavior, base-transition);
 }
 i {
-	--fa-animation-iteration-count: 2;
-	--fa-animation-duration: 1.1s;
-	--fa-animation-delay: 0.8s;
-	// --fa-animation-timing: ease-in;
+  --fa-animation-iteration-count: 2;
+  --fa-animation-duration: 1.1s;
+  --fa-animation-delay: 0.8s;
+  // --fa-animation-timing: ease-in;
 }
 button {
-	background-color: transparent;
-	border: none;
+  background-color: transparent;
+  border: none;
 }
 .blur {
-	backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 .section-header {
-	grid: 1 / -1;
-	padding: 1rem 0.5rem;
+  grid: 1 / -1;
+  padding: 1rem 0.5rem;
 
-	font-size: 4rem;
-	line-height: 6rem;
-	text-transform: uppercase;
-	color: map.get(var.$colors, tile-title);
+  font-size: 4rem;
+  line-height: 6rem;
+  text-transform: uppercase;
+  color: map.get(var.$colors, tile-title);
 }
 
 span.click-suggestion {
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
-	bottom: 1%;
-	z-index: 2;
-	color: rgba(map.get(var.$colors, tile-title), 0.25);
-	transition: map.get(var.$behavior, base-transition);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 1%;
+  z-index: 2;
+  color: rgba(map.get(var.$colors, tile-title), 0.25);
+  transition: map.get(var.$behavior, base-transition);
 }
 .stopScroll {
-	overflow: hidden;
+  overflow: hidden;
 }
 .wrapper > section:not(.partners):not(:first-of-type) {
-	margin-bottom: 5rem;
+  margin-bottom: 5rem;
 }
 .wrapper > section:not(:first-of-type),
 .modal__modal-body > section:not(:first-of-type),
 footer {
-	padding: 0 var(--section-padding-y) 2rem;
-	box-shadow: map.get(var.$shadows, section-shadow);
+  padding: 0 var(--section-padding-y) 2rem;
+  box-shadow: map.get(var.$shadows, section-shadow);
 }
 * input {
-	outline: none;
-	border: none;
-	cursor: auto;
-	background-color: map.get(var.$colors, base);
+  outline: none;
+  border: none;
+  cursor: auto;
+  background-color: map.get(var.$colors, base);
 }
 // page
 .error {
-	grid-area: space;
-	place-self: center;
-	margin: 2rem auto;
-	text-align: center;
+  grid-area: space;
+  place-self: center;
+  margin: 2rem auto;
+  text-align: center;
 }
 // box
 .feedback-box {
-	width: 80%;
-	flex-basis: 80%;
-	min-height: 8vh;
-	margin: 3rem 0;
-	padding: 1.5rem;
-	text-align: center;
-	font-size: 2rem;
-	border-radius: map.get(var.$sizes, border-radius);
-	box-shadow: map.get(var.$shadows, box-shadow);
-	@include mixin.flex(row, center, center);
-	flex-wrap: wrap;
-	gap: 1.5rem;
+  width: 80%;
+  flex-basis: 80%;
+  min-height: 8vh;
+  margin: 3rem 0;
+  padding: 1.5rem;
+  text-align: center;
+  font-size: 2rem;
+  border-radius: map.get(var.$sizes, border-radius);
+  box-shadow: map.get(var.$shadows, box-shadow);
+  @include mixin.flex(row, center, center);
+  flex-wrap: wrap;
+  gap: 1.5rem;
 
-	&--error {
-		color: #c62828;
-		background-color: rgba(244, 67, 54, 0.25);
-	}
-	&--success {
-		color: #2e7d32;
-		background-color: rgba(76, 175, 80, 0.25);
-	}
-	&--neutral {
-		color: map.get(var.$colors, tile-title);
-		background-color: rgba(map.get(var.$colors, nav), 0.2);
-	}
-	&--small {
-		margin-top: 1.5rem;
-		min-height: 3rem;
-	}
-	&__title,
-	&__warning {
-		flex-basis: 100%;
-	}
+  &--error {
+    color: #c62828;
+    background-color: rgba(244, 67, 54, 0.25);
+  }
+  &--success {
+    color: #2e7d32;
+    background-color: rgba(76, 175, 80, 0.25);
+  }
+  &--neutral {
+    color: map.get(var.$colors, tile-title);
+    background-color: rgba(map.get(var.$colors, nav), 0.2);
+  }
+  &--small {
+    margin-top: 1.5rem;
+    min-height: 3rem;
+  }
+  &__title,
+  &__warning {
+    flex-basis: 100%;
+  }
 }
 
 //! COMMON BLOCKS END

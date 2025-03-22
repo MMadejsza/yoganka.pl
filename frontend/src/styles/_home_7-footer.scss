@@ -4,71 +4,71 @@
 
 //! FOOTER
 .footer {
-	grid-area: footer;
-	padding: 0rem 1rem 2rem 1rem;
-	font-size: 1.7rem;
-	color: map.get(var.$colors, tile-text-muted);
+  grid-area: footer;
+  padding: 0rem 1rem 2rem 1rem;
+  font-size: 1.7rem;
+  color: map.get(var.$colors, tile-text-muted);
 
-	background-color: rgba(map.get(var.$colors, nav), 0.8);
-	box-shadow: map.get(var.$shadows, tile-shadow);
-	border-top-left-radius: map.get(var.$sizes, border-radius);
-	border-top-right-radius: map.get(var.$sizes, border-radius);
+  background-color: rgba(map.get(var.$colors, nav), 0.8);
+  box-shadow: map.get(var.$shadows, tile-shadow);
+  border-top-left-radius: map.get(var.$sizes, border-radius);
+  border-top-right-radius: map.get(var.$sizes, border-radius);
 
-	@include mixin.flex(column, space-evenly, center, 1rem);
+  @include mixin.flex(column, space-evenly, center, 1rem);
 
-	&__logo {
-		width: 45vw;
-		max-width: 280px;
-		margin: 2rem;
-	}
+  &__logo {
+    width: 45vw;
+    max-width: 280px;
+    margin: 2rem;
+  }
 
-	& a {
-		height: auto;
-		font-size: 1.5rem;
-		text-decoration: underline;
-	}
+  & a {
+    height: auto;
+    font-size: 1.5rem;
+    text-decoration: underline;
+  }
 
-	// no & for specificity
-	.footer__social-link {
-		position: relative;
-		color: map.get(var.$colors, accent-bcg);
-	}
-	&__social-icon {
-		font-size: 3.5rem;
-	}
+  // no & for specificity
+  .footer__social-link {
+    position: relative;
+    color: map.get(var.$colors, accent-bcg);
+  }
+  &__social-icon {
+    font-size: 3.5rem;
+  }
 
-	&__company-details {
-		@include mixin.flex(column, space-evenly, $gap: 1rem);
+  &__company-details {
+    @include mixin.flex(column, space-evenly, $gap: 1rem);
 
-		& a {
-			font-size: 2.2rem;
-			line-height: 150%;
-		}
-	}
+    & a {
+      font-size: 2.2rem;
+      line-height: 150%;
+    }
+  }
 
-	&__socials {
-		@include mixin.flex(row, center, center, 3rem);
-	}
+  &__socials {
+    @include mixin.flex(row, center, center, 3rem);
+  }
 
-	&__qr {
-		position: absolute;
-		width: 0;
-		top: 25px;
-		right: 0;
-		opacity: 0;
-		transition: map.get(var.$behavior, base-transition);
-	}
+  &__qr {
+    position: absolute;
+    width: 0;
+    top: 25px;
+    right: 0;
+    opacity: 0;
+    transition: map.get(var.$behavior, base-transition);
+  }
 
-	&__qr-image {
-		transition: map.get(var.$behavior, base-transition);
-		border-radius: map.get(var.$sizes, border-radius);
-	}
+  &__qr-image {
+    transition: map.get(var.$behavior, base-transition);
+    border-radius: map.get(var.$sizes, border-radius);
+  }
 
-	&__legal {
-		font-size: 1.9rem;
-	}
+  &__legal {
+    font-size: 1.9rem;
+  }
 
-	&__credit-link {
-		color: map.get(var.$colors, tile-text-muted);
-	}
+  &__credit-link {
+    color: map.get(var.$colors, tile-text-muted);
+  }
 }

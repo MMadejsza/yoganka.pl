@@ -1,12 +1,12 @@
-import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
-import { useParams } from "react-router-dom";
-import { useFeedback } from "../../hooks/useFeedback";
-import { getWeekDay } from "../../utils/dateTime.js";
-import { mutateOnDelete, queryClient } from "../../utils/http.js";
-import FeedbackBox from "./FeedbackBox.jsx";
-import ModalTable from "./ModalTable";
-import NewProductScheduleForm from "./NewProductScheduleForm";
+import { useMutation } from '@tanstack/react-query';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useFeedback } from '../../hooks/useFeedback';
+import { getWeekDay } from '../../utils/dateTime.js';
+import { mutateOnDelete, queryClient } from '../../utils/http.js';
+import FeedbackBox from './FeedbackBox.jsx';
+import ModalTable from './ModalTable';
+import NewProductScheduleForm from './NewProductScheduleForm';
 
 function DetailsProductSchedules({ scheduleRecords, placement, status }) {
   let params = useParams();
@@ -22,36 +22,36 @@ function DetailsProductSchedules({ scheduleRecords, placement, status }) {
     error: deleteScheduleRecordError,
     reset,
   } = useMutation({
-    mutationFn: (formDataObj) =>
+    mutationFn: formDataObj =>
       mutateOnDelete(
         status,
         formDataObj,
-        `/api/admin-console/delete-schedule/${formDataObj.deleteScheduleID}`,
+        `/api/admin-console/delete-schedule/${formDataObj.deleteScheduleID}`
       ),
 
-    onSuccess: (res) => {
+    onSuccess: res => {
       queryClient.invalidateQueries([
         `/admin-console/show-all-products/${params.id}`,
       ]);
 
       updateFeedback(res);
     },
-    onError: (err) => {
+    onError: err => {
       updateFeedback(err);
     },
   });
 
-  const handleDelete = (params) => {
+  const handleDelete = params => {
     console.log(params);
     reset();
     if (!deleteWarningTriggered && !params.isDisabled) {
       updateFeedback({
         confirmation: 0,
-        message: "",
+        message: '',
         warnings: [
-          "Wszystkich powiązanych opinii",
-          "Wszystkich powiązanych z terminem obecności, a więc wpłynie na statystyki zajęć i użytkowników",
-          "(nie ma potrzeby usuwania terminu)",
+          'Wszystkich powiązanych opinii',
+          'Wszystkich powiązanych z terminem obecności, a więc wpłynie na statystyki zajęć i użytkowników',
+          '(nie ma potrzeby usuwania terminu)',
         ],
       });
       setDeleteWarningTriggered(true);
@@ -62,29 +62,29 @@ function DetailsProductSchedules({ scheduleRecords, placement, status }) {
 
   const notPublished = (
     <>
-      <div style={{ fontWeight: "bold", fontSize: "2rem" }}>
+      <div style={{ fontWeight: 'bold', fontSize: '2rem' }}>
         Nie opublikowano
       </div>
     </>
   );
 
   let processedScheduleRecordsArr = scheduleRecords;
-  let headers = ["ID", "Dzień", "Data", "Godzina", "Lokacja", "Frekwencja", ""];
-  let keys = ["id", "day", "date", "time", "location", "attendance", ""];
+  let headers = ['ID', 'Dzień', 'Data', 'Godzina', 'Lokacja', 'Frekwencja', ''];
+  let keys = ['id', 'day', 'date', 'time', 'location', 'attendance', ''];
   let form;
 
-  if (placement == "booking") {
+  if (placement == 'booking') {
     headers = [
-      "ID",
-      "Produkt",
-      "Data",
-      "Dzień",
-      "Godzina",
-      "Lokacja",
-      "Zadatek",
+      'ID',
+      'Produkt',
+      'Data',
+      'Dzień',
+      'Godzina',
+      'Lokacja',
+      'Zadatek',
     ];
-    keys = ["id", "product", "date", "day", "time", "location", "price"];
-    processedScheduleRecordsArr = scheduleRecords.map((schedule) => {
+    keys = ['id', 'product', 'date', 'day', 'time', 'location', 'price'];
+    processedScheduleRecordsArr = scheduleRecords.map(schedule => {
       return {
         id: schedule.ScheduleID,
         product: schedule.Product.Name,
@@ -96,7 +96,7 @@ function DetailsProductSchedules({ scheduleRecords, placement, status }) {
       };
     });
   } else {
-    processedScheduleRecordsArr = scheduleRecords.map((schedule) => {
+    processedScheduleRecordsArr = scheduleRecords.map(schedule => {
       return {
         id: schedule.ScheduleID,
         date: schedule.Date,
@@ -115,18 +115,18 @@ function DetailsProductSchedules({ scheduleRecords, placement, status }) {
 
   return (
     <>
-      <h2 className="user-container__section-title modal__title--day admin-action ">
+      <h2 className='user-container__section-title modal__title--day admin-action '>
         Terminy
-        {placement != "booking" && (
+        {placement != 'booking' && (
           <button
-            onClick={(e) => {
+            onClick={e => {
               e.preventDefault;
               setIsFormVisible(!isFormVisible);
             }}
             className={`form-action-btn table-form-btn table-form-btn--submit`}
           >
-            <span className="material-symbols-rounded nav__icon nav__icon--side account">
-              {!isFormVisible ? "add_circle" : "undo"}
+            <span className='material-symbols-rounded nav__icon nav__icon--side account'>
+              {!isFormVisible ? 'add_circle' : 'undo'}
             </span>
           </button>
         )}
@@ -139,7 +139,7 @@ function DetailsProductSchedules({ scheduleRecords, placement, status }) {
           isPending={deleteScheduleRecordIsPending}
           isError={deleteScheduleRecordIsError}
           error={deleteScheduleRecordError}
-          size="small"
+          size='small'
         />
       )}
       {isFormVisible && form}
@@ -152,7 +152,7 @@ function DetailsProductSchedules({ scheduleRecords, placement, status }) {
           status={status}
           isAdminPage={true}
           adminActions={true}
-          onQuickAction={[{ symbol: "delete", method: handleDelete }]}
+          onQuickAction={[{ symbol: 'delete', method: handleDelete }]}
         />
       ) : (
         notPublished

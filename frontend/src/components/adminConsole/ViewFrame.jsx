@@ -1,285 +1,307 @@
-import React, {useState} from 'react';
-import {useParams, useLocation, useNavigate} from 'react-router-dom';
-import {fetchItem, queryClient, mutateOnDelete} from '../../utils/http.js';
-import {useQuery, useMutation} from '@tanstack/react-query';
-import {useAuthStatus} from '../../hooks/useAuthStatus.js';
-import {useFeedback} from '../../hooks/useFeedback';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useAuthStatus } from '../../hooks/useAuthStatus.js';
+import { useFeedback } from '../../hooks/useFeedback';
+import { fetchItem, mutateOnDelete, queryClient } from '../../utils/http.js';
+import FeedbackBox from './FeedbackBox.jsx';
 import ModalFrame from './ModalFrame.jsx';
-import ViewUser from './ViewUser.jsx';
+import ViewBooking from './ViewBooking.jsx';
 import ViewCustomer from './ViewCustomer.jsx';
 import ViewProduct from './ViewProduct.jsx';
-import ViewSchedule from './ViewSchedule.jsx';
-import ViewBooking from './ViewBooking.jsx';
 import ViewReview from './ViewReview.jsx';
-import FeedbackBox from './FeedbackBox.jsx';
+import ViewSchedule from './ViewSchedule.jsx';
+import ViewUser from './ViewUser.jsx';
 
-function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, customer, role}) {
-	const navigate = useNavigate();
-	const params = useParams();
-	const location = useLocation();
-	const callPath = location.pathname;
-	const isAdminPanel = location.pathname.includes('admin-console');
-	// const isUserSettings = location.pathname.includes('konto/ustawienia');
-	const isCustomerQuery = location.pathname.includes('konto/rezerwacje') ? '/customer' : '';
-	const minRightsPrefix = role == 'ADMIN' ? '' : '';
-	const noFetchPaths = ['statystyki', 'zajecia', 'rezerwacje', 'faktury'];
+function ViewFrame({
+  modifier,
+  visited,
+  onClose,
+  bookingOps,
+  userAccountPage,
+  customer,
+  role,
+}) {
+  const navigate = useNavigate();
+  const params = useParams();
+  const location = useLocation();
+  const callPath = location.pathname;
+  const isAdminPanel = location.pathname.includes('admin-console');
+  // const isUserSettings = location.pathname.includes('konto/ustawienia');
+  const isCustomerQuery = location.pathname.includes('konto/rezerwacje')
+    ? '/customer'
+    : '';
+  const minRightsPrefix = role == 'ADMIN' ? '' : '';
+  const noFetchPaths = ['statystyki', 'zajecia', 'rezerwacje', 'faktury'];
 
-	console.log('ViewFrame callPath: ', callPath);
-	console.log('ViewFrame isCustomerQuery: ', isCustomerQuery);
+  console.log('ViewFrame callPath: ', callPath);
+  console.log('ViewFrame isCustomerQuery: ', isCustomerQuery);
 
-	console.log('✅ role', role);
+  console.log('✅ role', role);
 
-	// const [editingState, setEditingState] = useState(false);
-	const [deleteWarningTriggered, setDeleteWarningTriggered] = useState(false);
+  // const [editingState, setEditingState] = useState(false);
+  const [deleteWarningTriggered, setDeleteWarningTriggered] = useState(false);
 
-	const {data, isPending, isError, error} = useQuery({
-		queryKey: ['query', location.pathname],
-		queryFn: ({signal}) => fetchItem(callPath, {signal}, isCustomerQuery || minRightsPrefix),
-		staleTime: 0,
-		refetchOnMount: true,
-		enabled: !!params.id || location.pathname.includes('ustawienia'),
-	});
+  const { data, isPending, isError, error } = useQuery({
+    queryKey: ['query', location.pathname],
+    queryFn: ({ signal }) =>
+      fetchItem(callPath, { signal }, isCustomerQuery || minRightsPrefix),
+    staleTime: 0,
+    refetchOnMount: true,
+    enabled: !!params.id || location.pathname.includes('ustawienia'),
+  });
 
-	if (data) {
-		console.log('ViewFrame data: ', data);
-	}
-	const effectiveData = noFetchPaths.some((pathPart) =>
-		location.pathname.split('/').pop().includes(pathPart),
-	)
-		? customer
-		: data;
+  if (data) {
+    console.log('ViewFrame data: ', data);
+  }
+  const effectiveData = noFetchPaths.some(pathPart =>
+    location.pathname.split('/').pop().includes(pathPart)
+  )
+    ? customer
+    : data;
 
-	const {data: status} = useAuthStatus();
+  const { data: status } = useAuthStatus();
 
-	const resolveModifier = () => {
-		let controller = {};
-		switch (modifier) {
-			case 'user':
-				controller.recordDisplay = (
-					<ViewUser
-						data={data}
-						isUserAccountPage={location.pathname.includes('ustawienia') ?? false}
-					/>
-				);
-				controller.deleteBtnTitle = 'Konto';
-				controller.deleteQuery = `delete-user/${data.user.UserID}`;
-				controller.redirectTo = '/admin-console/show-all-users';
-				controller.warnings = [
-					'Powiązanego profilu uczestnika',
-					'Wszystkich powiązanych rezerwacji',
-					'Wszystkich powiązanych faktur',
-					'Wszystkich zarezerwowanych terminów',
-					'Wszystkich powiązanych opinii',
-					"oraz newsletter'ów",
-				];
-				// controller.recordEditor = <UserForm />;
-				return controller;
-			case 'customer':
-				controller.recordDisplay = <ViewCustomer data={data} />;
-				controller.recordEditor = '';
-				controller.deleteBtnTitle = 'Profil Uczestnika';
+  const resolveModifier = () => {
+    let controller = {};
+    switch (modifier) {
+      case 'user':
+        controller.recordDisplay = (
+          <ViewUser
+            data={data}
+            isUserAccountPage={
+              location.pathname.includes('ustawienia') ?? false
+            }
+          />
+        );
+        controller.deleteBtnTitle = 'Konto';
+        controller.deleteQuery = `delete-user/${data.user.UserID}`;
+        controller.redirectTo = '/admin-console/show-all-users';
+        controller.warnings = [
+          'Powiązanego profilu uczestnika',
+          'Wszystkich powiązanych rezerwacji',
+          'Wszystkich powiązanych faktur',
+          'Wszystkich zarezerwowanych terminów',
+          'Wszystkich powiązanych opinii',
+          "oraz newsletter'ów",
+        ];
+        // controller.recordEditor = <UserForm />;
+        return controller;
+      case 'customer':
+        controller.recordDisplay = <ViewCustomer data={data} />;
+        controller.recordEditor = '';
+        controller.deleteBtnTitle = 'Profil Uczestnika';
 
-				controller.deleteQuery = `delete-customer/${data.customer.CustomerID}`;
-				controller.redirectTo = '/admin-console/show-all-customers';
-				controller.warnings = [
-					'Wszystkich powiązanych rezerwacji',
-					'Wszystkich powiązanych faktur',
-					'Wszystkich zarezerwowanych terminów',
-					'Wszystkich powiązanych opinii',
-				];
-				return controller;
-			case 'product':
-				controller.recordDisplay = (
-					<ViewProduct
-						data={data}
-						isAdminPanel={isAdminPanel}
-					/>
-				);
-				controller.recordEditor = '';
-				controller.deleteBtnTitle = 'Produkt';
-				controller.deleteQuery = `delete-product/${data.product.ProductID}`;
-				controller.redirectTo = '/admin-console/show-all-products';
-				controller.warnings = [
-					'Wszystkich powiązanych terminów',
-					'Wszystkich powiązanych opinii',
-				];
-				return controller;
-			case 'schedule':
-				controller.recordDisplay = (
-					<ViewSchedule
-						data={data}
-						bookingOps={bookingOps}
-						onClose={onClose}
-						isModalOpen={visited}
-						isAdminPanel={isAdminPanel}
-					/>
-				);
-				controller.recordEditor = '';
-				controller.deleteBtnTitle = 'Termin';
-				controller.deleteQuery = `delete-schedule/${data.schedule.ScheduleID}`;
-				controller.redirectTo = '/admin-console/show-all-schedules';
-				controller.warnings = [
-					'Wszystkich powiązanych opinii',
-					'Wszystkich powiązanych z terminem obecności, a więc wpłynie na statystyki zajęć i użytkowników',
-					'(nie ma potrzeby usuwania terminu)',
-				];
-				return controller;
-			case 'booking':
-				controller.recordDisplay = (
-					<ViewBooking
-						data={data}
-						isUserAccountPage={userAccountPage}
-						onClose={onClose}
-						isModalOpen={visited}
-					/>
-				);
-				controller.recordEditor = '';
-				controller.deleteBtnTitle = 'Rezerwację';
-				controller.deleteQuery = `delete-booking/${data.booking.BookingID}`;
-				controller.redirectTo = '/admin-console/show-all-bookings';
-				controller.warnings = [
-					'Wszystkich powiązanych faktur',
-					'Wszystkich powiązanych z rezerwacją obecności, a więc wpłynie na statystyki zajęć i użytkowników',
-				];
-				return controller;
+        controller.deleteQuery = `delete-customer/${data.customer.CustomerID}`;
+        controller.redirectTo = '/admin-console/show-all-customers';
+        controller.warnings = [
+          'Wszystkich powiązanych rezerwacji',
+          'Wszystkich powiązanych faktur',
+          'Wszystkich zarezerwowanych terminów',
+          'Wszystkich powiązanych opinii',
+        ];
+        return controller;
+      case 'product':
+        controller.recordDisplay = (
+          <ViewProduct data={data} isAdminPanel={isAdminPanel} />
+        );
+        controller.recordEditor = '';
+        controller.deleteBtnTitle = 'Produkt';
+        controller.deleteQuery = `delete-product/${data.product.ProductID}`;
+        controller.redirectTo = '/admin-console/show-all-products';
+        controller.warnings = [
+          'Wszystkich powiązanych terminów',
+          'Wszystkich powiązanych opinii',
+        ];
+        return controller;
+      case 'schedule':
+        controller.recordDisplay = (
+          <ViewSchedule
+            data={data}
+            bookingOps={bookingOps}
+            onClose={onClose}
+            isModalOpen={visited}
+            isAdminPanel={isAdminPanel}
+          />
+        );
+        controller.recordEditor = '';
+        controller.deleteBtnTitle = 'Termin';
+        controller.deleteQuery = `delete-schedule/${data.schedule.ScheduleID}`;
+        controller.redirectTo = '/admin-console/show-all-schedules';
+        controller.warnings = [
+          'Wszystkich powiązanych opinii',
+          'Wszystkich powiązanych z terminem obecności, a więc wpłynie na statystyki zajęć i użytkowników',
+          '(nie ma potrzeby usuwania terminu)',
+        ];
+        return controller;
+      case 'booking':
+        controller.recordDisplay = (
+          <ViewBooking
+            data={data}
+            isUserAccountPage={userAccountPage}
+            onClose={onClose}
+            isModalOpen={visited}
+          />
+        );
+        controller.recordEditor = '';
+        controller.deleteBtnTitle = 'Rezerwację';
+        controller.deleteQuery = `delete-booking/${data.booking.BookingID}`;
+        controller.redirectTo = '/admin-console/show-all-bookings';
+        controller.warnings = [
+          'Wszystkich powiązanych faktur',
+          'Wszystkich powiązanych z rezerwacją obecności, a więc wpłynie na statystyki zajęć i użytkowników',
+        ];
+        return controller;
 
-			case 'invoices':
-				controller.recordDisplay = (
-					<ViewReview
-						data={customer}
-						onClose={onClose}
-						isModalOpen={visited}
-					/>
-				);
-				controller.recordEditor = '';
-				controller.deleteBtnTitle = 'Opinię';
-				controller.deleteQuery = `delete-feedback/${data.feedback.FeedbackID}`;
-				controller.redirectTo = '/admin-console/show-all-participants-feedback';
-				controller.warnings = '';
-				return controller;
+      case 'invoices':
+        controller.recordDisplay = (
+          <ViewReview data={customer} onClose={onClose} isModalOpen={visited} />
+        );
+        controller.recordEditor = '';
+        controller.deleteBtnTitle = 'Opinię';
+        controller.deleteQuery = `delete-feedback/${data.feedback.FeedbackID}`;
+        controller.redirectTo = '/admin-console/show-all-participants-feedback';
+        controller.warnings = '';
+        return controller;
 
-			default:
-				break;
-		}
-	};
+      default:
+        break;
+    }
+  };
 
-	let dataDisplay;
-	let dataEditor;
-	let deleteWarnings;
-	let redirectToPage;
-	let dataDeleteQuery;
+  let dataDisplay;
+  let dataEditor;
+  let deleteWarnings;
+  let redirectToPage;
+  let dataDeleteQuery;
 
-	if (isPending) {
-		dataDisplay = 'Loading...';
-	}
-	if (isError) {
-		if (error.code == 401) {
-			navigate('/login');
-		} else {
-			console.log(error, error.code, error.message);
-			dataDisplay = 'Error in UserDetails fetch...';
-		}
-	}
+  if (isPending) {
+    dataDisplay = 'Loading...';
+  }
+  if (isError) {
+    if (error.code == 401) {
+      navigate('/login');
+    } else {
+      console.log(error, error.code, error.message);
+      dataDisplay = 'Error in UserDetails fetch...';
+    }
+  }
 
-	console.log(`ViewFrame customer: `, customer);
-	let deleteTitle;
-	if (effectiveData) {
-		const {recordDisplay, recordEditor, deleteBtnTitle, warnings, deleteQuery, redirectTo} =
-			resolveModifier();
-		dataDisplay = recordDisplay;
-		dataEditor = recordEditor;
-		deleteTitle = deleteBtnTitle;
-		deleteWarnings = warnings;
-		dataDeleteQuery = deleteQuery;
-		redirectToPage = redirectTo;
-	}
+  console.log(`ViewFrame customer: `, customer);
+  let deleteTitle;
+  if (effectiveData) {
+    const {
+      recordDisplay,
+      recordEditor,
+      deleteBtnTitle,
+      warnings,
+      deleteQuery,
+      redirectTo,
+    } = resolveModifier();
+    dataDisplay = recordDisplay;
+    dataEditor = recordEditor;
+    deleteTitle = deleteBtnTitle;
+    deleteWarnings = warnings;
+    dataDeleteQuery = deleteQuery;
+    redirectToPage = redirectTo;
+  }
 
-	const {feedback, updateFeedback, resetFeedback} = useFeedback({
-		getRedirectTarget: () => redirectToPage || null,
-		onClose: onClose,
-	});
+  const { feedback, updateFeedback, resetFeedback } = useFeedback({
+    getRedirectTarget: () => redirectToPage || null,
+    onClose: onClose,
+  });
 
-	const {
-		mutate: deleteRecord,
-		isPending: isDeletePending,
-		isError: isDeleteError,
-		error: deleteError,
-		reset,
-	} = useMutation({
-		mutationFn: (formDataObj) =>
-			mutateOnDelete(status, formDataObj, `/api/admin-console/${dataDeleteQuery}`),
+  const {
+    mutate: deleteRecord,
+    isPending: isDeletePending,
+    isError: isDeleteError,
+    error: deleteError,
+    reset,
+  } = useMutation({
+    mutationFn: formDataObj =>
+      mutateOnDelete(
+        status,
+        formDataObj,
+        `/api/admin-console/${dataDeleteQuery}`
+      ),
 
-		onSuccess: (res) => {
-			queryClient.invalidateQueries(['query', `/admin-console/show-all-users/${params.id}`]);
-			updateFeedback(res);
-		},
-		onError: (err) => {
-			updateFeedback(err);
-		},
-	});
+    onSuccess: res => {
+      queryClient.invalidateQueries([
+        'query',
+        `/admin-console/show-all-users/${params.id}`,
+      ]);
+      updateFeedback(res);
+    },
+    onError: err => {
+      updateFeedback(err);
+    },
+  });
 
-	const handleDelete = () => {
-		if (!deleteWarningTriggered) {
-			// 1st click
-			updateFeedback({confirmation: 0, message: '', warnings: deleteWarnings});
-			setDeleteWarningTriggered(true);
-		} else {
-			// 2nd click
-			resetFeedback(); //!_______________________________________________________________________________
-			reset();
-			deleteRecord({});
-		}
-	};
-	const handleCancelDelete = () => {
-		resetFeedback();
-		setDeleteWarningTriggered(false);
-	};
+  const handleDelete = () => {
+    if (!deleteWarningTriggered) {
+      // 1st click
+      updateFeedback({
+        confirmation: 0,
+        message: '',
+        warnings: deleteWarnings,
+      });
+      setDeleteWarningTriggered(true);
+    } else {
+      // 2nd click
+      resetFeedback(); //!_______________________________________________________________________________
+      reset();
+      deleteRecord({});
+    }
+  };
+  const handleCancelDelete = () => {
+    resetFeedback();
+    setDeleteWarningTriggered(false);
+  };
 
-	const actionBtn = (onClick, type, symbol) => {
-		const content = type == 'danger' ? `Usuń ${deleteTitle}` : 'Wróć';
+  const actionBtn = (onClick, type, symbol) => {
+    const content = type == 'danger' ? `Usuń ${deleteTitle}` : 'Wróć';
 
-		return (
-			<button
-				onClick={onClick}
-				className={`user-container__action modal__btn modal__btn--small modal__btn--small-${type}`}>
-				{<span className='material-symbols-rounded nav__icon'>{symbol}</span>}
-				{content}
-			</button>
-		);
-	};
+    return (
+      <button
+        onClick={onClick}
+        className={`user-container__action modal__btn modal__btn--small modal__btn--small-${type}`}
+      >
+        {<span className='material-symbols-rounded nav__icon'>{symbol}</span>}
+        {content}
+      </button>
+    );
+  };
 
-	return (
-		<ModalFrame
-			visited={visited}
-			onClose={onClose}>
-			<div className='user-container modal__summary'>
-				{!deleteWarningTriggered ? (
-					dataDisplay
-				) : (
-					<FeedbackBox
-						warnings={feedback.warnings}
-						status={feedback.status}
-						successMsg={feedback.message}
-						isPending={isDeletePending}
-						isError={isDeleteError}
-						error={deleteError ? {message: deleteError.message} : null}
-						redirectTarget={redirectToPage}
-						onClose={onClose}
-						size='small'
-					/>
-				)}
-				<div className='user-container__actions-block'>
-					{isAdminPanel && (
-						<>
-							{actionBtn(handleDelete, 'danger', 'delete_forever')}
-							{deleteWarningTriggered &&
-								actionBtn(handleCancelDelete, 'success', 'undo')}
-						</>
-					)}
-				</div>
-			</div>
-		</ModalFrame>
-	);
+  return (
+    <ModalFrame visited={visited} onClose={onClose}>
+      <div className='user-container modal__summary'>
+        {!deleteWarningTriggered ? (
+          dataDisplay
+        ) : (
+          <FeedbackBox
+            warnings={feedback.warnings}
+            status={feedback.status}
+            successMsg={feedback.message}
+            isPending={isDeletePending}
+            isError={isDeleteError}
+            error={deleteError ? { message: deleteError.message } : null}
+            redirectTarget={redirectToPage}
+            onClose={onClose}
+            size='small'
+          />
+        )}
+        <div className='user-container__actions-block'>
+          {isAdminPanel && (
+            <>
+              {actionBtn(handleDelete, 'danger', 'delete_forever')}
+              {deleteWarningTriggered &&
+                actionBtn(handleCancelDelete, 'success', 'undo')}
+            </>
+          )}
+        </div>
+      </div>
+    </ModalFrame>
+  );
 }
 
 export default ViewFrame;

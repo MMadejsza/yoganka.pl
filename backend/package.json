@@ -1,29 +1,30 @@
 {
-	"name": "backend",
-	"version": "1.0.0",
-	"type": "module",
-	"description": "backend modules",
-	"main": "app.js",
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "nodemon app.js"
-	},
-	"author": "MMadejsza",
-	"license": "ISC",
-	"dependencies": {
-		"backend": "file:",
-		"bcryptjs": "^3.0.2",
-		"body-parser": "^1.20.3",
-		"csurf": "^1.10.0",
-		"date-fns": "^4.1.0",
-		"express": "^4.21.2",
-		"express-mysql-session": "^3.0.3",
-		"express-session": "^1.18.1",
-		"mysql2": "^3.12.0",
-		"sequelize": "^6.37.5"
-	},
-	"devDependencies": {
-		"@types/sequelize": "^4.28.20",
-		"nodemon": "^3.1.9"
-	}
+  "name": "backend",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "backend modules",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "author": "MMadejsza",
+  "license": "ISC",
+  "dependencies": {
+    "backend": "file:",
+    "bcryptjs": "^3.0.2",
+    "body-parser": "^1.20.3",
+    "csurf": "^1.10.0",
+    "date-fns": "^4.1.0",
+    "express": "^4.21.2",
+    "express-mysql-session": "^3.0.3",
+    "express-session": "^1.18.1",
+    "mysql2": "^3.12.0",
+    "sequelize": "^6.37.5"
+  },
+  "devDependencies": {
+    "@types/sequelize": "^4.28.20",
+    "nodemon": "^3.1.9",
+    "prettier-plugin-organize-imports": "^4.1.0"
+  }
 }

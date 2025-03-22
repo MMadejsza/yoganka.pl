@@ -1,119 +1,130 @@
-import * as models from '../models/_index.js';
 import bcrypt from 'bcryptjs';
-import {errorCode, callLog, successLog, catchErr} from '../utils/controllersUtils.js';
+import * as models from '../models/_index.js';
+import {
+  callLog,
+  catchErr,
+  errorCode,
+  successLog,
+} from '../utils/controllersUtils.js';
 let errCode = errorCode;
 const person = 'User';
 
 //! LOGIN / SIGNUP_____________________________________________
 //@ GET
 export const getStatus = (req, res, next) => {
-	const controllerName = 'getStatus';
-	callLog(person, controllerName);
-	successLog(person, controllerName);
-	console.log({
-		isLoggedIn: res.locals.isLoggedIn || false,
-		role: res.locals.role,
-		token: res.locals.csrfToken,
-	});
-	return res.status(200).json({
-		isLoggedIn: res.locals.isLoggedIn || false,
-		role: res.locals.role,
-		token: res.locals.csrfToken,
-	});
+  const controllerName = 'getStatus';
+  callLog(person, controllerName);
+  successLog(person, controllerName);
+  console.log({
+    isLoggedIn: res.locals.isLoggedIn || false,
+    role: res.locals.role,
+    token: res.locals.csrfToken,
+  });
+  return res.status(200).json({
+    isLoggedIn: res.locals.isLoggedIn || false,
+    role: res.locals.role,
+    token: res.locals.csrfToken,
+  });
 };
 //@ POST
 export const postSignup = (req, res, next) => {
-	const controllerName = 'postSignup';
-	callLog(person, controllerName);
+  const controllerName = 'postSignup';
+  callLog(person, controllerName);
 
-	const {email, password, confirmedPassword, date} = req.body;
+  const { email, password, confirmedPassword, date } = req.body;
 
-	models.User.findOne({where: {email}})
-		.then((user) => {
-			if (user) {
-				errCode = 303;
-				throw new Error('Użytkownik już istnieje.');
-			}
+  models.User.findOne({ where: { email } })
+    .then(user => {
+      if (user) {
+        errCode = 303;
+        throw new Error('Użytkownik już istnieje.');
+      }
 
-			// it returns the promise
-			return bcrypt
-				.hash(password, 12)
-				.then((passwordHashed) => {
-					successLog(person, controllerName, 'hashed');
-					return models.User.create({
-						RegistrationDate: date,
-						PasswordHash: passwordHashed,
-						LastLoginDate: date,
-						Email: email,
-						Role: 'user',
-						ProfilePictureSrcSetJSON: null,
-					});
-				})
-				.then((newUser) => {
-					successLog(person, controllerName);
-					return res.status(200).json({
-						type: 'signup',
-						code: 200,
-						confirmation: 1,
-						message: '✅ Zarejestrowano pomyślnie',
-					});
-				});
-		})
-		.catch((err) => catchErr(res, errCode, err, controllerName, {type: 'signup', code: 303}));
+      // it returns the promise
+      return bcrypt
+        .hash(password, 12)
+        .then(passwordHashed => {
+          successLog(person, controllerName, 'hashed');
+          return models.User.create({
+            RegistrationDate: date,
+            PasswordHash: passwordHashed,
+            LastLoginDate: date,
+            Email: email,
+            Role: 'user',
+            ProfilePictureSrcSetJSON: null,
+          });
+        })
+        .then(newUser => {
+          successLog(person, controllerName);
+          return res.status(200).json({
+            type: 'signup',
+            code: 200,
+            confirmation: 1,
+            message: '✅ Zarejestrowano pomyślnie',
+          });
+        });
+    })
+    .catch(err =>
+      catchErr(res, errCode, err, controllerName, { type: 'signup', code: 303 })
+    );
 };
 export const postLogin = (req, res, next) => {
-	const controllerName = 'postLogin';
-	callLog(person, controllerName);
+  const controllerName = 'postLogin';
+  callLog(person, controllerName);
 
-	const {email, password, date} = req.body;
+  const { email, password, date } = req.body;
 
-	models.User.findOne({where: {email}})
-		.then((user) => {
-			if (!user) {
-				errCode = 404;
-				console.log("\n❌❌❌ User doesn't exist");
-				throw new Error('Użytkownik nie istnieje.');
-			}
-			user.update({LastLoginDate: date});
-			return user;
-		})
-		.then((fetchedUser) => {
-			if (!fetchedUser) {
-				return;
-			}
-			successLog(person, controllerName, 'fetched');
-			// regardless match or mismatch catch takes only if something is wrong with bcrypt itself. otherwise it goes to the next block with promise as boolean
-			return bcrypt.compare(password, fetchedUser.PasswordHash).then((doMatch) => {
-				if (doMatch) {
-					successLog(person, controllerName, 'pass match as well');
-					req.session.isLoggedIn = true;
-					req.session.user = fetchedUser;
-					req.session.role = fetchedUser.Role.toUpperCase();
-					return res.status(200).json({
-						type: 'login',
-						code: 200,
-						confirmation: 1,
-						message: 'Zalogowano pomyślnie',
-					});
-				} else {
-					errCode = 400;
-					console.log('\n❌❌❌ Password incorrect');
-					throw new Error('Hasło nieprawidłowe.');
-				}
-			});
-		})
-		.catch((err) => catchErr(res, errCode, err, controllerName, {type: 'signup', code: 404}));
+  models.User.findOne({ where: { email } })
+    .then(user => {
+      if (!user) {
+        errCode = 404;
+        console.log("\n❌❌❌ User doesn't exist");
+        throw new Error('Użytkownik nie istnieje.');
+      }
+      user.update({ LastLoginDate: date });
+      return user;
+    })
+    .then(fetchedUser => {
+      if (!fetchedUser) {
+        return;
+      }
+      successLog(person, controllerName, 'fetched');
+      // regardless match or mismatch catch takes only if something is wrong with bcrypt itself. otherwise it goes to the next block with promise as boolean
+      return bcrypt
+        .compare(password, fetchedUser.PasswordHash)
+        .then(doMatch => {
+          if (doMatch) {
+            successLog(person, controllerName, 'pass match as well');
+            req.session.isLoggedIn = true;
+            req.session.user = fetchedUser;
+            req.session.role = fetchedUser.Role.toUpperCase();
+            return res.status(200).json({
+              type: 'login',
+              code: 200,
+              confirmation: 1,
+              message: 'Zalogowano pomyślnie',
+            });
+          } else {
+            errCode = 400;
+            console.log('\n❌❌❌ Password incorrect');
+            throw new Error('Hasło nieprawidłowe.');
+          }
+        });
+    })
+    .catch(err =>
+      catchErr(res, errCode, err, controllerName, { type: 'signup', code: 404 })
+    );
 };
 export const postLogout = (req, res, next) => {
-	const controllerName = 'postLogout';
-	callLog(person, controllerName);
-	successLog(person, controllerName);
-	req.session.destroy((err) => {
-		console.log('postLogout');
-		if (err) {
-			return next(err);
-		}
-		res.clearCookie('session_CID');
-		res.json({success: true});
-	});
+  const controllerName = 'postLogout';
+  callLog(person, controllerName);
+  successLog(person, controllerName);
+  req.session.destroy(err => {
+    console.log('postLogout');
+    if (err) {
+      return next(err);
+    }
+    res.clearCookie('session_CID');
+    res.json({ success: true });
+  });
 };

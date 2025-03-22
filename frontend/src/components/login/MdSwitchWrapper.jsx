@@ -1,23 +1,18 @@
-import React, {useRef, useEffect} from 'react';
+import { useEffect, useRef } from 'react';
 
-export default function MdSwitchWrapper({checked, onChange, ...props}) {
-	const ref = useRef(null);
+export default function MdSwitchWrapper({ checked, onChange, ...props }) {
+  const ref = useRef(null);
 
-	useEffect(() => {
-		const node = ref.current;
-		const handleInput = (e) => onChange?.(e.target.selected);
-		node.addEventListener('input', handleInput);
-		return () => node.removeEventListener('input', handleInput);
-	}, [onChange]);
+  useEffect(() => {
+    const node = ref.current;
+    const handleInput = e => onChange?.(e.target.selected);
+    node.addEventListener('input', handleInput);
+    return () => node.removeEventListener('input', handleInput);
+  }, [onChange]);
 
-	useEffect(() => {
-		if (ref.current) ref.current.selected = checked;
-	}, [checked]);
+  useEffect(() => {
+    if (ref.current) ref.current.selected = checked;
+  }, [checked]);
 
-	return (
-		<md-switch
-			ref={ref}
-			{...props}
-		/>
-	);
+  return <md-switch ref={ref} {...props} />;
 }

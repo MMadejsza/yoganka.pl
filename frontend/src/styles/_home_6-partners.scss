@@ -4,62 +4,62 @@
 
 //! PARTNERS
 .partners {
-	grid-area: partners;
-	overflow: hidden;
+  grid-area: partners;
+  overflow: hidden;
 
-	&__gallery {
-		background-color: map.get(var.$colors, tile);
+  &__gallery {
+    background-color: map.get(var.$colors, tile);
 
-		@include mixin.flex($justify: space-around, $align: center, $gap: 2rem);
+    @include mixin.flex($justify: space-around, $align: center, $gap: 2rem);
 
-		@include mixin.animation(15s, slide, infinite, linear);
-	}
+    @include mixin.animation(15s, slide, infinite, linear);
+  }
 
-	&__gallery-slide {
-		@include mixin.flex($align: center);
-		position: relative;
-		font-size: 0;
+  &__gallery-slide {
+    @include mixin.flex($align: center);
+    position: relative;
+    font-size: 0;
 
-		&:hover .partners__gallery {
-			animation-play-state: paused;
-		}
+    &:hover .partners__gallery {
+      animation-play-state: paused;
+    }
 
-		&::before {
-			@extend %slider-shade-overlay;
-			@include mixin.slider-shade-wing('left', map.get(var.$colors, base));
-		}
+    &::before {
+      @extend %slider-shade-overlay;
+      @include mixin.slider-shade-wing('left', map.get(var.$colors, base));
+    }
 
-		&::after {
-			@extend %slider-shade-overlay;
-			@include mixin.slider-shade-wing('right', map.get(var.$colors, base));
-		}
-	}
+    &::after {
+      @extend %slider-shade-overlay;
+      @include mixin.slider-shade-wing('right', map.get(var.$colors, base));
+    }
+  }
 
-	&__link {
-		width: 55vw;
-		max-width: 225px;
-		max-height: 225px;
-		padding: 0;
+  &__link {
+    width: 55vw;
+    max-width: 225px;
+    max-height: 225px;
+    padding: 0;
 
-		border-radius: map.get(var.$sizes, border-radius);
+    border-radius: map.get(var.$sizes, border-radius);
 
-		@include mixin.flex($justify: center, $align: center);
+    @include mixin.flex($justify: center, $align: center);
 
-		&:last-child {
-			margin-right: 2.5rem;
-		}
-	}
+    &:last-child {
+      margin-right: 2.5rem;
+    }
+  }
 
-	&__image {
-		display: block;
-		max-width: 100%;
-		object-fit: contain;
+  &__image {
+    display: block;
+    max-width: 100%;
+    object-fit: contain;
 
-		filter: grayscale(1);
-		transition: map.get(var.$behavior, base-transition);
-	}
-	.glide__bullets {
-		bottom: 20%;
-	}
+    filter: grayscale(1);
+    transition: map.get(var.$behavior, base-transition);
+  }
+  .glide__bullets {
+    bottom: 20%;
+  }
 }
 //! PARTNERS END

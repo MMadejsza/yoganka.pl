@@ -3,196 +3,198 @@
 @use '_global_variables-templates' as var;
 @use '_global_mixins-keyframes' as mixin;
 html {
-	--bar-width: 3.5rem;
+  --bar-width: 3.5rem;
 }
 //! NAV
 
 .burger {
-	$bar-height: 0.4rem;
-	$bar-width: 3.5rem;
-	$bars-space: 2.5 * $bar-height;
-	$burger-offset: 0.7;
-	$burger-height: 3 * $bar-height + 2 * $bars-space;
+  $bar-height: 0.4rem;
+  $bar-width: 3.5rem;
+  $bars-space: 2.5 * $bar-height;
+  $burger-offset: 0.7;
+  $burger-height: 3 * $bar-height + 2 * $bars-space;
 
-	top: $burger-offset * $bar-width;
-	right: $burger-offset * $bar-width;
-	width: $bar-width;
-	height: $burger-height;
-	position: fixed;
-	z-index: 7;
-	cursor: pointer;
+  top: $burger-offset * $bar-width;
+  right: $burger-offset * $bar-width;
+  width: $bar-width;
+  height: $burger-height;
+  position: fixed;
+  z-index: 7;
+  cursor: pointer;
 
-	transition: map.get(var.$behavior, base-transition);
-	@include mixin.flex(column, space-between);
+  transition: map.get(var.$behavior, base-transition);
+  @include mixin.flex(column, space-between);
 
-	&__bar {
-		width: $bar-width;
-		height: $bar-height;
-		background-color: map.get(var.$colors, accent-bcg);
-		transition: map.get(var.$behavior, base-transition);
-		border-radius: $bar-height * 0.5;
+  &__bar {
+    width: $bar-width;
+    height: $bar-height;
+    background-color: map.get(var.$colors, accent-bcg);
+    transition: map.get(var.$behavior, base-transition);
+    border-radius: $bar-height * 0.5;
 
-		//Initial state
-		&--top,
-		&--bottom {
-			transform-origin: center;
-		}
-	}
+    //Initial state
+    &--top,
+    &--bottom {
+      transform-origin: center;
+    }
+  }
 
-	&::after {
-		content: '';
-		position: absolute;
-		border-radius: 7%;
-		width: 250%;
-		height: 140%;
-		z-index: -1;
-		top: 50%;
-		left: 50%;
-		transform: translate(-32%, -50%);
-		box-shadow: rgba(0, 0, 0, 0.8) 0px 0px 5px -2.5px;
-		transition: map.get(var.$behavior, base-transition);
-	}
+  &::after {
+    content: '';
+    position: absolute;
+    border-radius: 7%;
+    width: 250%;
+    height: 140%;
+    z-index: -1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-32%, -50%);
+    box-shadow: rgba(0, 0, 0, 0.8) 0px 0px 5px -2.5px;
+    transition: map.get(var.$behavior, base-transition);
+  }
 
-	// Active state
-	&.active {
-		.burger__bar--top {
-			transform: translateY($burger-height * 0.5 - $bar-height * 0.5) rotate(45deg);
-		}
+  // Active state
+  &.active {
+    .burger__bar--top {
+      transform: translateY($burger-height * 0.5 - $bar-height * 0.5)
+        rotate(45deg);
+    }
 
-		.burger__bar--middle {
-			transform: translateX(-100%);
-			opacity: 0;
-		}
+    .burger__bar--middle {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
 
-		.burger__bar--bottom {
-			transform: translateY(-$burger-height * 0.5 + $bar-height * 0.5) rotate(-45deg);
-		}
+    .burger__bar--bottom {
+      transform: translateY(-$burger-height * 0.5 + $bar-height * 0.5)
+        rotate(-45deg);
+    }
 
-		& + .nav {
-			right: 0;
-		}
-	}
+    & + .nav {
+      right: 0;
+    }
+  }
 
-	&.active::after {
-		opacity: 0;
-	}
+  &.active::after {
+    opacity: 0;
+  }
 }
 .nav {
-	$width: 210px;
-	position: fixed;
-	top: 0;
-	right: calc($width * -1 - 25px);
-	width: $width;
-	height: 100%;
-	z-index: 6;
+  $width: 210px;
+  position: fixed;
+  top: 0;
+  right: calc($width * -1 - 25px);
+  width: $width;
+  height: 100%;
+  z-index: 6;
 
-	text-transform: uppercase;
-	letter-spacing: 1px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 
-	border-top-left-radius: map.get(var.$sizes, border-radius);
-	border-bottom-left-radius: map.get(var.$sizes, border-radius);
-	box-shadow: map.get(var.$shadows, tile-shadow);
-	background-color: map.get(var.$colors, nav);
-	transition: map.get(var.$behavior, base-transition);
+  border-top-left-radius: map.get(var.$sizes, border-radius);
+  border-bottom-left-radius: map.get(var.$sizes, border-radius);
+  box-shadow: map.get(var.$shadows, tile-shadow);
+  background-color: map.get(var.$colors, nav);
+  transition: map.get(var.$behavior, base-transition);
 
-	@include mixin.flex(column, space-between, center);
-	& .main-nav-container {
-		@include mixin.flex(column, center, center);
-	}
-	&__list {
-		@include mixin.flex(column);
-		margin-top: 1rem;
-		list-style: none;
+  @include mixin.flex(column, space-between, center);
+  & .main-nav-container {
+    @include mixin.flex(column, center, center);
+  }
+  &__list {
+    @include mixin.flex(column);
+    margin-top: 1rem;
+    list-style: none;
 
-		&--side {
-			margin-bottom: 2rem;
-			@include mixin.flex(row);
-		}
-	}
+    &--side {
+      margin-bottom: 2rem;
+      @include mixin.flex(row);
+    }
+  }
 
-	&__item {
-		position: relative;
-		min-width: 50px;
-		overflow: hidden;
-		text-align: left;
+  &__item {
+    position: relative;
+    min-width: 50px;
+    overflow: hidden;
+    text-align: left;
 
-		&--side {
-			display: grid;
+    &--side {
+      display: grid;
 
-			* {
-				place-self: center;
-			}
-		}
-		&:hover {
-			text-shadow: map.get(var.$shadows, active-text-icons-shadow);
-			cursor: pointer;
-		}
-	}
+      * {
+        place-self: center;
+      }
+    }
+    &:hover {
+      text-shadow: map.get(var.$shadows, active-text-icons-shadow);
+      cursor: pointer;
+    }
+  }
 
-	&__link {
-		display: flex;
-		align-items: center;
-		margin: 0 2rem;
-		cursor: pointer;
+  &__link {
+    display: flex;
+    align-items: center;
+    margin: 0 2rem;
+    cursor: pointer;
 
-		line-height: 6rem;
-		font-size: 2.2rem;
-		text-decoration: none;
-		color: map.get(var.$colors, tile-text-muted);
+    line-height: 6rem;
+    font-size: 2.2rem;
+    text-decoration: none;
+    color: map.get(var.$colors, tile-text-muted);
 
-		&--side {
-			margin: 0;
-			line-height: 150%;
-		}
+    &--side {
+      margin: 0;
+      line-height: 150%;
+    }
 
-		.nav__icon {
-			min-width: 28.5px;
-			left: map.get(var.$sizes, icon-position);
-			margin-right: 1rem;
+    .nav__icon {
+      min-width: 28.5px;
+      left: map.get(var.$sizes, icon-position);
+      margin-right: 1rem;
 
-			color: map.get(var.$colors, accent-bcg);
-			font-size: 3.5rem;
+      color: map.get(var.$colors, accent-bcg);
+      font-size: 3.5rem;
 
-			transition: map.get(var.$behavior, base-transition);
-			&::before {
-				margin: 0;
-				padding: 0;
-			}
-			&.account {
-				font-size: 4.5rem;
-			}
-			&--side {
-				color: map.get(var.$colors, tile-text-muted);
-			}
-		}
+      transition: map.get(var.$behavior, base-transition);
+      &::before {
+        margin: 0;
+        padding: 0;
+      }
+      &.account {
+        font-size: 4.5rem;
+      }
+      &--side {
+        color: map.get(var.$colors, tile-text-muted);
+      }
+    }
 
-		&.active:first-child .nav__logo {
-			box-shadow: map.get(var.$shadows, active-logo-shadow);
-			transition: map.get(var.$behavior, base-transition);
-		}
-		&.active,
-		&.active .nav__icon {
-			color: map.get(var.$colors, accent-bcg);
-			text-shadow: map.get(var.$shadows, active-text-icons-shadow);
-		}
-	}
+    &.active:first-child .nav__logo {
+      box-shadow: map.get(var.$shadows, active-logo-shadow);
+      transition: map.get(var.$behavior, base-transition);
+    }
+    &.active,
+    &.active .nav__icon {
+      color: map.get(var.$colors, accent-bcg);
+      text-shadow: map.get(var.$shadows, active-text-icons-shadow);
+    }
+  }
 
-	&__logo-container {
-		display: flex;
-		justify-content: center;
-	}
-	&__logo {
-		display: block;
-		min-width: 145px;
-		width: 25vw;
-		margin-top: 3rem;
-		padding: 1rem;
-	}
-	button {
-		font-family: 'EB Garamond', serif;
-	}
+  &__logo-container {
+    display: flex;
+    justify-content: center;
+  }
+  &__logo {
+    display: block;
+    min-width: 145px;
+    width: 25vw;
+    margin-top: 3rem;
+    padding: 1rem;
+  }
+  button {
+    font-family: 'EB Garamond', serif;
+  }
 }
 .nav.highlighted {
-	animation: 3s highlights ease-in-out;
+  animation: 3s highlights ease-in-out;
 }
 //! NAV  END

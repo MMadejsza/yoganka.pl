@@ -1,5 +1,10 @@
 import express from 'express';
-import {getStatus, postLogin, postLogout, postSignup} from '../controllers/authController.js';
+import {
+  getStatus,
+  postLogin,
+  postLogout,
+  postSignup,
+} from '../controllers/authController.js';
 
 const router = express.Router();
 

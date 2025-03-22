@@ -17,7 +17,11 @@ router.get('/get-customer-details', isAuth, customerC.getCustomerDetails);
 router.post('/create-booking', isAuthUser, customerC.postCreateBookSchedule);
 
 //! PUT - EDIT____________________________________________________
-router.put('/edit-mark-absent/:scheduleID', isAuth, customerC.putEditMarkAbsent);
+router.put(
+  '/edit-mark-absent/:scheduleID',
+  isAuth,
+  customerC.putEditMarkAbsent
+);
 router.put('/edit-customer-data', isAuth, customerC.putEditCustomerDetails);
 
 export default router;
