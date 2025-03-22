@@ -106,7 +106,7 @@ export const calculateProductStats = (product, schedules) => {
 			bookingsNumber: schedule.Bookings.length,
 			participants: scheduleParticipantsAmount,
 			capacity: schedule.Capacity,
-			attendance: scheduleAttendance,
+			Attendance: scheduleAttendance,
 		});
 	}
 

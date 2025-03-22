@@ -91,7 +91,7 @@ function DetailsProductSchedules({scheduleRecords, placement, status}) {
 				day: getWeekDay(schedule.Date),
 				time: schedule.StartTime,
 				location: schedule.Location,
-				attendance: `${schedule.participants}/${schedule.capacity} (${schedule.attendance}%)`,
+				Attendance: `${schedule.participants}/${schedule.capacity} (${schedule.attendance}%)`,
 				attendanceCount: schedule.attendance,
 				isActionDisabled: schedule.participants > 0 || new Date(schedule.Date) < new Date(),
 			};

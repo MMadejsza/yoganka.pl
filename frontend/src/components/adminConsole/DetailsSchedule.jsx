@@ -5,11 +5,11 @@ import {durationToSeconds, secondsToDuration} from '../../utils/customerViewsUti
 import {getWeekDay} from '../../utils/dateTime.js';
 
 function DetailsSchedule({data, placement, isAdminPanel}) {
-	// console.log(
-	// 	`📝
-	//     Schedule object from backend:`,
-	// 	data,
-	// );
+	console.log(
+		`📝
+	    Schedule object from backend:`,
+		data,
+	);
 	const isScheduleView = placement == 'scheduleView';
 	const schedule = data;
 	const product = data.Product;

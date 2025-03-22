@@ -348,7 +348,8 @@ export const getScheduleByID = (req, res, next) => {
 			// Convert to JSON
 			const schedule = scheduleData.toJSON();
 			let isUserGoing = false;
-
+			schedule.Attendance = 0;
+			schedule.full = false;
 			// We substitute bookings content for security
 			if (schedule.BookedSchedules && schedule.BookedSchedules?.length > 0) {
 				let wasUserReserved;
