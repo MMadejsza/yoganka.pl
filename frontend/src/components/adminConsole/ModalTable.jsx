@@ -83,8 +83,16 @@ function ModalTable({
 			</thead>
 			<tbody>
 				{content.map((row, rowIndex) => {
-					const isArchived = new Date(row.Data?.split('.').reverse().join('-')) < today;
-
+					const isArchived =
+						new Date(
+							`${row.Data?.split('.').reverse().join('-')}T${
+								row.Godzina ?? '00:00:00'
+							}`,
+						) < today;
+					// console.log(
+					// 	`${row.Data?.split('.').reverse().join('-')}T${row.Godzina ?? '00:00:00'}`,
+					// );
+					// console.log(`isArchived`, isArchived);
 					return (
 						<tr
 							className={`data-table__cells ${active ? 'active' : ''}  ${
