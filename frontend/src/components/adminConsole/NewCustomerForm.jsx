@@ -210,7 +210,7 @@ function NewCustomerForm({onClose}) {
 				formType={formType}
 				type='select'
 				options={usersOptionsList.map((userObj) => ({
-					label: `(ID: ${userObj.ID}) ${userObj['E-mail']}`,
+					label: `(ID: ${userObj.ID}) ${userObj.Email}`,
 					value: userObj.ID,
 				}))}
 				id='user'
