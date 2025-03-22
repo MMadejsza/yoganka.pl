@@ -194,7 +194,8 @@ export const putEditUserSettings = (req, res, next) => {
 				) {
 					// Nothing changed
 					console.log('\n❓❓❓ putEditUserSettings Admin Preferences no change');
-					return {confirmation: 0, message: 'Brak zmian.'};
+					res.status(200).json({confirmation: 0, message: 'Brak zmian'});
+					return null;
 				} else {
 					// Update
 					preferences.Handedness = !!handedness;
@@ -215,6 +216,7 @@ export const putEditUserSettings = (req, res, next) => {
 			}
 		})
 		.then((result) => {
+			if (!result) return;
 			successLog(person, controllerName, 'sent');
 			return res.status(200).json({
 				confirmation: result.confirmation,
@@ -1417,11 +1419,16 @@ export const putEditProduct = async (req, res, next) => {
 			) {
 				// Nothing changed
 				console.log('\n❓❓❓ Admin Product no change');
-				return {confirmation: 0, message: 'Brak zmian'};
+				res.status(200).json({
+					confirmation: 0,
+					message: 'Brak zmian',
+				});
+				return null;
 			}
 			return foundProduct;
 		})
 		.then((fetchedProduct) => {
+			if (!fetchedProduct) return;
 			models.Product.update(
 				{
 					Type: newType,

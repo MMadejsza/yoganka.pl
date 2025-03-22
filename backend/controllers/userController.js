@@ -162,8 +162,9 @@ export const putEditSettings = (req, res, next) => {
 					preferences.Theme == !!theme
 				) {
 					// Nothing changed
-					console.log('\n❓❓❓ putEditSettings no change');
-					return {confirmation: 0, message: 'Brak zmian'};
+					console.log('\n❓❓❓ User putEditSettings no change');
+					res.status(200).json({confirmation: 0, message: 'Brak zmian'});
+					return null;
 				} else {
 					// Update
 					preferences.Handedness = !!handedness;
@@ -183,6 +184,7 @@ export const putEditSettings = (req, res, next) => {
 			}
 		})
 		.then((result) => {
+			if (!result) return;
 			successLog(person, controllerName, 'sent');
 			return res.status(200).json({
 				confirmation: result.confirmation,

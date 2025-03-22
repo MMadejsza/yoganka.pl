@@ -31,7 +31,7 @@ export const putEditCustomerDetails = (req, res, next) => {
 	}
 
 	if (customer.Phone === newPhone && customer.PreferredContactMethod === newContactMethod) {
-		console.log('\n❓❓❓ Brak zmian');
+		console.log('\n❓❓❓ Customer pudEditCustomer No change');
 		return res.status(200).json({
 			confirmation: 0,
 			message: 'Brak zmian',
