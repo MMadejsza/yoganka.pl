@@ -3,7 +3,7 @@ import {useParams} from 'react-router-dom';
 import {useMutation} from '@tanstack/react-query';
 import {useAuthStatus} from '../../hooks/useAuthStatus.js';
 import {useFeedback} from '../../hooks/useFeedback';
-import UserFeedbackBox from './FeedbackBox.jsx';
+import FeedbackBox from './FeedbackBox.jsx';
 import ModalTable from './ModalTable';
 import NewAttendanceForm from './NewAttendanceForm';
 import {queryClient, mutateOnEdit, mutateOnDelete} from '../../utils/http.js';
@@ -114,7 +114,7 @@ function DetailsTableAttendance({type, stats, isAdminPage}) {
 				{`Obecność (${bookingsArray.length})`}
 			</h2>
 			{(feedback.status != undefined || deleteWarningTriggered) && (
-				<UserFeedbackBox
+				<FeedbackBox
 					warnings={feedback.warnings}
 					status={feedback.status}
 					successMsg={feedback.message}

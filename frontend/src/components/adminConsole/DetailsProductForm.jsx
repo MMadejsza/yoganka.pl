@@ -6,7 +6,7 @@ import {useInput} from '../../hooks/useInput.js';
 import {useAuthStatus} from '../../hooks/useAuthStatus.js';
 import {useFeedback} from '../../hooks/useFeedback.js';
 import InputLogin from '../login/InputLogin.jsx';
-import UserFeedbackBox from './FeedbackBox.jsx';
+import FeedbackBox from './FeedbackBox.jsx';
 
 function DetailsProductForm({productData}) {
 	const {data: status} = useAuthStatus();
@@ -300,7 +300,7 @@ function DetailsProductForm({productData}) {
 		<>
 			{form}
 			{feedback.status !== undefined && (
-				<UserFeedbackBox
+				<FeedbackBox
 					status={feedback.status}
 					isPending={isEditProductDataPending}
 					isError={isEditProductDataError}

@@ -6,7 +6,7 @@ import {useInput} from '../../hooks/useInput.js';
 import {useAuthStatus} from '../../hooks/useAuthStatus.js';
 import {useFeedback} from '../../hooks/useFeedback.js';
 import InputLogin from '../login/InputLogin.jsx';
-import UserFeedbackBox from './FeedbackBox.jsx';
+import FeedbackBox from './FeedbackBox.jsx';
 
 function DetailsUserSettingsForm({settingsData, customerAccessed, adminAccessed}) {
 	const params = useParams();
@@ -294,7 +294,7 @@ function DetailsUserSettingsForm({settingsData, customerAccessed, adminAccessed}
 		<>
 			{form}
 			{feedback.status !== undefined && (
-				<UserFeedbackBox
+				<FeedbackBox
 					status={feedback.status}
 					isPending={isEditUserSettingsPending}
 					isError={isEditUserSettingsError}

@@ -11,7 +11,7 @@ import ViewProduct from './ViewProduct.jsx';
 import ViewSchedule from './ViewSchedule.jsx';
 import ViewBooking from './ViewBooking.jsx';
 import ViewReview from './ViewReview.jsx';
-import UserFeedbackBox from './FeedbackBox.jsx';
+import FeedbackBox from './FeedbackBox.jsx';
 
 function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, customer, role}) {
 	const navigate = useNavigate();
@@ -256,7 +256,7 @@ function ViewFrame({modifier, visited, onClose, bookingOps, userAccountPage, cus
 				{!deleteWarningTriggered ? (
 					dataDisplay
 				) : (
-					<UserFeedbackBox
+					<FeedbackBox
 						warnings={feedback.warnings}
 						status={feedback.status}
 						successMsg={feedback.message}

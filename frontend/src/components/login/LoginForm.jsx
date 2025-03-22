@@ -6,7 +6,7 @@ import {useInput} from '../../hooks/useInput.js';
 import {useAuthStatus} from '../../hooks/useAuthStatus.js';
 import {useFeedback} from '../../hooks/useFeedback.js';
 import InputLogin from './InputLogin.jsx';
-import UserFeedbackBox from '../adminConsole/FeedbackBox.jsx';
+import FeedbackBox from '../adminConsole/FeedbackBox.jsx';
 
 import {
 	emailValidations,
@@ -224,7 +224,7 @@ function LoginFrom() {
 					)}
 
 					{!userIsEditing && feedback.status !== undefined && (
-						<UserFeedbackBox
+						<FeedbackBox
 							status={feedback.status}
 							isPending={isPending}
 							isError={isError}

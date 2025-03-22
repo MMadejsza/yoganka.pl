@@ -1,6 +1,6 @@
 import {useNavigate} from 'react-router-dom';
 
-function UserFeedbackBox({
+function FeedbackBox({
 	warnings,
 	status,
 	successMsg,
@@ -67,4 +67,4 @@ function UserFeedbackBox({
 	return <div className={readyClasses}>{statusMsg}</div>;
 }
 
-export default UserFeedbackBox;
+export default FeedbackBox;

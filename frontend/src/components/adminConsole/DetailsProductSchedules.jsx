@@ -3,7 +3,7 @@ import {useParams} from 'react-router-dom';
 import {useMutation} from '@tanstack/react-query';
 import ModalTable from './ModalTable';
 import NewProductScheduleForm from './NewProductScheduleForm';
-import UserFeedbackBox from './FeedbackBox.jsx';
+import FeedbackBox from './FeedbackBox.jsx';
 import {queryClient, mutateOnDelete} from '../../utils/http.js';
 import {useFeedback} from '../../hooks/useFeedback';
 import {getWeekDay} from '../../utils/dateTime.js';
@@ -118,7 +118,7 @@ function DetailsProductSchedules({scheduleRecords, placement, status}) {
 				)}
 			</h2>
 			{feedback.status != undefined && (
-				<UserFeedbackBox
+				<FeedbackBox
 					warnings={feedback.warnings}
 					status={feedback.status}
 					successMsg={feedback.message}

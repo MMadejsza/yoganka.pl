@@ -4,7 +4,7 @@ import {useInput} from '../../hooks/useInput.js';
 import {useFeedback} from '../../hooks/useFeedback.js';
 import {useAuthStatus} from '../../hooks/useAuthStatus.js';
 import InputLogin from '../login/InputLogin.jsx';
-import UserFeedbackBox from './FeedbackBox.jsx';
+import FeedbackBox from './FeedbackBox.jsx';
 import * as val from '../../utils/validation.js';
 
 function NewCustomerForm({onClose}) {
@@ -388,7 +388,7 @@ function NewCustomerForm({onClose}) {
 			<div className='user-container modal__summary'>
 				{form}
 				{feedback.status !== undefined && (
-					<UserFeedbackBox
+					<FeedbackBox
 						status={feedback.status}
 						isPending={isCreateCustomerPending}
 						isError={isCreateCustomerError}

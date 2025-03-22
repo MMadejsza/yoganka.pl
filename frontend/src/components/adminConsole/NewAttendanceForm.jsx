@@ -1,21 +1,17 @@
-import {useState} from 'react';
 import {useParams} from 'react-router-dom';
-
 import {useMutation, useQuery} from '@tanstack/react-query';
 import {queryClient, fetchData} from '../../utils/http.js';
 import {useInput} from '../../hooks/useInput.js';
+import {useFeedback} from '../../hooks/useFeedback.js';
 import {useAuthStatus} from '../../hooks/useAuthStatus.js';
 import InputLogin from '../login/InputLogin.jsx';
-import UserFeedbackBox from './FeedbackBox.jsx';
+import FeedbackBox from './FeedbackBox.jsx';
 import * as val from '../../utils/validation.js';
 
-function NewAttendanceForm({onClose}) {
-	let initialFeedbackConfirmation;
+function NewAttendanceForm() {
 	const params = useParams();
-	const [feedbackConfirmation, setFeedbackConfirmation] = useState(initialFeedbackConfirmation);
-	const [successMsg, setSuccessMsg] = useState(null);
-
 	const {data: status} = useAuthStatus();
+	const {feedback, updateFeedback, resetFeedback} = useFeedback();
 
 	const {
 		data: customersList,
@@ -68,15 +64,11 @@ function NewAttendanceForm({onClose}) {
 		},
 		onSuccess: (res) => {
 			queryClient.invalidateQueries([`/admin-console/show-all-schedules/${params.id}`]);
-			if (res.confirmation || res.code == 200) {
-				setSuccessMsg(res.message);
-				setFeedbackConfirmation(1);
-			} else {
-				setFeedbackConfirmation(0);
-			}
+
+			updateFeedback(res);
 		},
 		onError: (err) => {
-			setFeedbackConfirmation(0);
+			updateFeedback(err);
 		},
 	});
 
@@ -96,7 +88,8 @@ function NewAttendanceForm({onClose}) {
 
 	// Reset all te inputs
 	const handleReset = () => {
-		setFeedbackConfirmation(undefined);
+		resetFeedback();
+
 		handleCustomerReset();
 		handlePaymentMethodReset();
 	};
@@ -116,7 +109,7 @@ function NewAttendanceForm({onClose}) {
 		const formDataObj = Object.fromEntries(fd.entries());
 
 		console.log('sent data:', formDataObj);
-		// mutate(formDataObj);
+		mutate(formDataObj);
 		handleReset();
 	};
 
@@ -129,20 +122,9 @@ function NewAttendanceForm({onClose}) {
 
 	// Extract values only
 	const {formType, title, actionTitle} = formLabels;
-
-	let form;
-	let feedback = feedbackConfirmation !== undefined && (
-		<UserFeedbackBox
-			status={feedbackConfirmation}
-			successMsg={successMsg}
-			isPending={isPending}
-			isError={isError}
-			error={error}
-			size='small'
-		/>
-	);
 	const isSubmitDisabled = areErrors;
-	form = customersList && (
+
+	const form = customersList && (
 		<form
 			onSubmit={handleSubmit}
 			className={`table-form`}>
@@ -210,7 +192,18 @@ function NewAttendanceForm({onClose}) {
 	return (
 		<>
 			<div className='user-container modal__summary'>
-				{form} {feedback}
+				{form}
+				{feedback.status !== undefined && (
+					<FeedbackBox
+						status={feedback.status}
+						successMsg={feedback.message}
+						warnings={feedback.warnings}
+						isPending
+						isError
+						error
+						size='small'
+					/>
+				)}
 			</div>
 		</>
 	);

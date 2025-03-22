@@ -4,7 +4,7 @@ import {useMutation} from '@tanstack/react-query';
 import {useAuthStatus} from '../../hooks/useAuthStatus.js';
 import {useFeedback} from '../../hooks/useFeedback.js';
 import ModalTable from './ModalTable';
-import UserFeedbackBox from './FeedbackBox.jsx';
+import FeedbackBox from './FeedbackBox.jsx';
 import {queryClient, mutateOnEdit} from '../../utils/http.js';
 
 function DetailsProductBookings({type, stats, isAdminPage}) {
@@ -54,7 +54,7 @@ function DetailsProductBookings({type, stats, isAdminPage}) {
 				{`Rezerwacje anulowanych obecności (${cancelledBookingsArr.length}):`}
 			</h2>
 			{feedback.status !== undefined && (
-				<UserFeedbackBox
+				<FeedbackBox
 					status={feedback.status}
 					isPending={markPresentIsPending}
 					isError={markPresentIsError}

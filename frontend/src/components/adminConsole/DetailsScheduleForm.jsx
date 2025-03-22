@@ -6,7 +6,7 @@ import {useInput} from '../../hooks/useInput.js';
 import {useAuthStatus} from '../../hooks/useAuthStatus.js';
 import {useFeedback} from '../../hooks/useFeedback.js';
 import InputLogin from '../login/InputLogin.jsx';
-import UserFeedbackBox from './FeedbackBox.jsx';
+import FeedbackBox from './FeedbackBox.jsx';
 
 function DetailsScheduleForm({scheduleData}) {
 	// !dodaj 'zamknij zapisy
@@ -228,7 +228,7 @@ function DetailsScheduleForm({scheduleData}) {
 		<>
 			{form}
 			{feedback.status !== undefined && (
-				<UserFeedbackBox
+				<FeedbackBox
 					status={feedback.status}
 					isPending={isEditScheduleDataPending}
 					isError={isEditScheduleDataError}

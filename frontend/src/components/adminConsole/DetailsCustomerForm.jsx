@@ -6,7 +6,7 @@ import {useFeedback} from '../../hooks/useFeedback.js';
 import {useAuthStatus} from '../../hooks/useAuthStatus.js';
 import {phoneValidations} from '../../utils/validation.js';
 import InputLogin from '../login/InputLogin.jsx';
-import UserFeedbackBox from './FeedbackBox.jsx';
+import FeedbackBox from './FeedbackBox.jsx';
 
 function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
 	// console.log('DetailsCustomerForm customerAccessed adminAccessed', customerAccessed, adminAccessed);
@@ -257,7 +257,7 @@ function DetailsCustomerForm({customerData, customerAccessed, adminAccessed}) {
 		<>
 			{form}
 			{feedback.status !== undefined && (
-				<UserFeedbackBox
+				<FeedbackBox
 					status={feedback.status}
 					isPending={isEditCustomerDetailsPending}
 					isError={isEditCustomerDetailsError}

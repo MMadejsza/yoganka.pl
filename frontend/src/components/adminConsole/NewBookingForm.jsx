@@ -5,7 +5,7 @@ import {useAuthStatus} from '../../hooks/useAuthStatus.js';
 import {useFeedback} from '../../hooks/useFeedback.js';
 
 import InputLogin from '../login/InputLogin.jsx';
-import UserFeedbackBox from './FeedbackBox.jsx';
+import FeedbackBox from './FeedbackBox.jsx';
 import {queryClient, fetchData, mutateOnCreate} from '../../utils/http.js';
 import {getWeekDay} from '../../utils/dateTime.js';
 import * as val from '../../utils/validation.js';
@@ -349,7 +349,7 @@ function NewBookingForm({onClose}) {
 			<div className='user-container modal__summary'>
 				{form}
 				{feedback.status !== undefined && (
-					<UserFeedbackBox
+					<FeedbackBox
 						status={feedback.status}
 						isPending={isCreateBookingPending}
 						isError={isCreateBookingError}
