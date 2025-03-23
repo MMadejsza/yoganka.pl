@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-export function useModalRoute(
+export function useModalByURL(
   modalPath,
   initialOpen = false,
   animationDuration = 400

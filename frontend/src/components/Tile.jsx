@@ -1,39 +1,38 @@
-import { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useModalByURL } from '../hooks/useModalByURL';
 import { smoothScrollInto } from '../utils/utils.jsx';
 import ImgDynamic from './imgsRelated/ImgDynamic.jsx';
 import Modal from './Modal.jsx';
 
 function Tile({ data, today, clickable }) {
-  const clickableClass = clickable;
-  const classes = data.type === 'class';
   const isPast = data.date < today;
-  const navigate = useNavigate();
-  const location = useLocation();
-  const isModalPath = location.pathname.includes(data.link);
-  const [isModalOpen, setIsModalOpen] = useState(isModalPath);
-
+  const classes = data.type === 'class';
   const conditionalClasses = [
     'tile',
-    clickableClass ? 'clickable' : '',
+    clickable ? 'clickable' : '',
     classes ? 'tile--classes' : '',
     isPast ? 'past' : '',
     data.extraClass ? `tile--${data.extraClass}` : '',
   ].join(' ');
+  const modalPath = `/${data.type === 'camp' ? 'wyjazdy' : 'wydarzenia'}/${data.link}`;
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-    const subpage = data.type == 'camp' ? 'wyjazdy' : 'wydarzenia';
-    navigate(`/${subpage}/${data.link}`, { state: { background: location } });
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    navigate(location.state?.background?.pathname || '/', { replace: true });
-  };
-  // archive
   if (isPast && data.modal) data.modal.glance.price = '-';
 
+  // Custom hook for handling modal behavior
+  const { isOpen, isVisible, isClosing, openModal, closeModal } =
+    useModalByURL(modalPath);
+
+  // Function for clicking the tile
+  const handleOpenModal = () => {
+    if (clickable) {
+      openModal();
+    }
+  };
+
+  // Function for closing the tile from hook
+  const handleCloseModal = closeModal;
+
+  // Img paths definition
   const imgPaths = [
     { path: `${data.imgPath}/320_${data.fileName}_0.jpg`, size: '320w' },
     { path: `${data.imgPath}/480_${data.fileName}_0.jpg`, size: '600w' },
@@ -50,17 +49,24 @@ function Tile({ data, today, clickable }) {
       alt={data.name}
     />
   );
-  const renderDates =
-    // <div>
-    // 	{
-    data.front.dates.map((date, index) => (
-      <h3 className='tile__date' key={index}>
-        {date}
-      </h3>
-    ));
-  // 	}
-  // </div>
+
+  // Dates rendering definition
+  const renderDates = data.front.dates.map((date, index) => (
+    <h3 className='tile__date' key={index}>
+      {date}
+    </h3>
+  ));
+
+  // Btns rendering definition
   const renderBtns = data.front.btnsContent.map((btn, index) => {
+    // Chose if material design symbol or icon
+    const symbolOrIcon = btn.icon ? (
+      <i className={`${btn.icon} nav__icon`}></i>
+    ) : btn.symbol ? (
+      <span className='material-symbols-rounded nav__icon'>{btn.symbol}</span>
+    ) : null;
+
+    // If btn supposes to redirect to different page - use Link (no reloading)
     if (btn.action === 'subPage') {
       return (
         <Link
@@ -69,11 +75,12 @@ function Tile({ data, today, clickable }) {
           title={btn.title}
           className={`tile__btn tile__btn--${data.fileName}`}
         >
-          {btn.icon ? <i className={btn.icon} /> : null}
+          {symbolOrIcon}
           {btn.text}
         </Link>
       );
     } else {
+      // Case where Btn was to scroll to different section of the page (archived behavior for now)
       return (
         <a
           onClick={btn.action === 'scroll' ? e => smoothScrollInto(e) : null}
@@ -83,13 +90,7 @@ function Tile({ data, today, clickable }) {
           title={btn.title}
           className={`tile__btn tile__btn--${data.fileName}`}
         >
-          {btn.icon ? (
-            <i className={`${btn.icon} nav__icon`}></i>
-          ) : btn.symbol ? (
-            <span className='material-symbols-rounded nav__icon'>
-              {btn.symbol}
-            </span>
-          ) : null}
+          {symbolOrIcon}
           {btn.text}
         </a>
       );
@@ -112,34 +113,26 @@ function Tile({ data, today, clickable }) {
       )}
 
       {clickable ? (
-        data.front.desc ? (
-          <p className='tile__desc'>
-            {data.front.desc}
-            <span className='material-symbols-rounded click-suggestion'>
-              web_traffic
-            </span>
-          </p>
-        ) : (
-          <p className='tile__desc'>
-            {data.front.desc}
-            <span className='material-symbols-rounded click-suggestion'>
-              web_traffic
-            </span>
-          </p>
-        )
+        <p className='tile__desc'>
+          {data.front.desc ?? null}
+          <span className='material-symbols-rounded click-suggestion'>
+            web_traffic
+          </span>
+        </p>
       ) : (
         <p className='tile__desc'>{data.front.desc}</p>
       )}
 
       {data.front.btnsContent?.length > 0 && renderBtns}
 
-      {isModalOpen && clickable && (
+      {isOpen && clickable && (
         <Modal
-          visited={isModalOpen}
+          visited={isVisible}
           tile={data}
           singleImg={renderSingleImg}
           onClose={handleCloseModal}
           today={today}
+          isClosing={isClosing}
         />
       )}
     </div>
