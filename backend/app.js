@@ -21,8 +21,8 @@ app.use((req, res, next) => {
   next();
 });
 
-const csrfProtection = csurf();
-
+//! not sequelize?
+//! You don't have explicit rate-limiting or DoS protection middleware (like express-rate-limit) — worth noting in improvements.
 const options = {
   host: 'localhost',
   port: 3306,
@@ -51,7 +51,9 @@ app.use(
     },
   })
 );
-// All the 'post' methods will be looking for the token now
+
+// All the post/put/delete methods will be looking for the token now
+const csrfProtection = csurf();
 app.use(csrfProtection);
 
 app.use((req, res, next) => {
@@ -64,12 +66,6 @@ app.use((req, res, next) => {
       {
         model: models.Customer, // Add Customer
         required: false, // May not exist
-        // include: [
-        // 	{
-        // 		model: models.CustomerPhones, // Customer phone numbers
-        // 		required: false,
-        // 	},
-        // ],
       },
       {
         model: models.UserPrefSettings, // User settings if exist

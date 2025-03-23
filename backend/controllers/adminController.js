@@ -122,10 +122,15 @@ export const getUserSettings = (req, res, next) => {
   models.UserPrefSettings.findByPk(req.params.id)
     .then(preferences => {
       if (!preferences) {
-        errCode = 404;
-        throw new Error('Nie pobrano ustawień.');
+        successLog(person, controllerName, 'fetched default');
+
+        res.status(200).json({
+          confirmation: 1,
+          message: 'Brak własnych ustawień - załadowane domyślne.',
+        });
+        return null;
       }
-      successLog(person, controllerName);
+      successLog(person, controllerName, 'fetched custom settings');
       return res.status(200).json({ confirmation: 1, preferences });
     })
     .catch(err => catchErr(res, errCode, err, controllerName));
@@ -404,13 +409,11 @@ export const getCustomerByID = (req, res, next) => {
         throw new Error('Nie znaleziono profilu uczestnika.');
       }
       successLog(person, controllerName);
-      return res
-        .status(200)
-        .json({
-          confirmation: 1,
-          isLoggedIn: req.session.isLoggedIn,
-          customer,
-        });
+      return res.status(200).json({
+        confirmation: 1,
+        isLoggedIn: req.session.isLoggedIn,
+        customer,
+      });
     })
     .catch(err => catchErr(res, errCode, err, controllerName));
 };
@@ -425,13 +428,11 @@ export const getCustomerDetails = (req, res, next) => {
         throw new Error('Nie znaleziono danych uczestnika.');
       }
       successLog(person, controllerName);
-      return res
-        .status(200)
-        .json({
-          confirmation: 1,
-          customer,
-          message: 'Dane uczestnika pobrane pomyślnie.',
-        });
+      return res.status(200).json({
+        confirmation: 1,
+        customer,
+        message: 'Dane uczestnika pobrane pomyślnie.',
+      });
     })
     .catch(err => catchErr(res, errCode, err, controllerName));
 };
