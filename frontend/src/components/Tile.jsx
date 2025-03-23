@@ -127,11 +127,11 @@ function Tile({ data, today, clickable }) {
 
       {isOpen && clickable && (
         <Modal
-          visited={isVisible}
           tile={data}
           singleImg={renderSingleImg}
           onClose={handleCloseModal}
           today={today}
+          isVisible={isVisible}
           isClosing={isClosing}
         />
       )}
