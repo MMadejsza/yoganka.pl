@@ -1,17 +1,17 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import AccountPage from './pages/AccountPage.jsx';
+import AdminPage from './pages/AdminPage.jsx';
+import B2BPage from './pages/B2BPage.jsx';
 import CampsPage from './pages/CampsPage.jsx';
+import ErrorPage from './pages/ErrorPage.jsx';
 import EventsPage from './pages/EventsPage.jsx';
 import HomePage from './pages/HomePage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import RootPage from './pages/RootPage.jsx';
+import SchedulePage from './pages/SchedulePage.jsx';
 import { queryClient } from './utils/http.js';
 // import ClassesPage from './pages/ClassesPage.jsx';
-import AccountPage from './pages/AccountPage.jsx';
-import AdminPage from './pages/AdminPage.jsx';
-import B2BPage from './pages/B2BPage.jsx';
-import ErrorPage from './pages/ErrorPage.jsx';
-import SchedulePage from './pages/SchedulePage.jsx';
 
 const router = createBrowserRouter([
   {
