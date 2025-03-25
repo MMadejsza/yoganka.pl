@@ -17,13 +17,13 @@ const router = express.Router();
 
 //! GET___________________________________________________
 router.get('/status', getStatus);
-router.get('/password-token/:token', getPasswordToken);
+router.get('/password-token/:token', resetPasswordLimiter, getPasswordToken);
 
 //! POST - CREATE__________________________________________
 router.post('/login', loginLimiter, postLogin);
 router.post('/signup', postSignup);
 router.post('/logout', postLogout);
-router.post('/reset', postResetPassword);
+router.post('/reset', resetPasswordLimiter, postResetPassword);
 
 //! PUT - EDIT____________________________________________________
 router.put('/new-password/:token', resetPasswordLimiter, putEditPassword);

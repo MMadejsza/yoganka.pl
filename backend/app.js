@@ -1,7 +1,9 @@
 import csurf from 'csurf';
+import 'dotenv/config';
 import express from 'express';
 import MySQLStoreFactory from 'express-mysql-session';
 import session from 'express-session';
+import helmet from 'helmet';
 import isAuth from './middleware/is-auth-admin.js';
 import * as models from './models/_index.js';
 import adminRoutes from './routes/adminRoutes.js';
@@ -11,6 +13,7 @@ import userRoutes from './routes/userRoutes.js';
 import db from './utils/db.js';
 
 const app = express();
+app.use(helmet()); // for HTTP Heading protection
 
 // middleware funnels
 app.use(express.json());
@@ -23,11 +26,11 @@ app.use((req, res, next) => {
 
 //! not sequelize?
 const options = {
-  host: 'localhost',
-  port: 3306,
-  user: 'admin1',
-  password: 'admin1',
-  database: 'yoganka',
+  host: process.env.SQLSTORE_HOST,
+  port: Number(process.env.SQLSTORE_PORT),
+  user: process.env.SQLSTORE_USER,
+  password: process.env.SQLSTORE_PASS,
+  database: process.env.SQLSTORE_DB,
 };
 
 const MySQLStore = MySQLStoreFactory(session);
@@ -38,7 +41,7 @@ app.use(
     key: 'session_CID',
     // secret is used for signing the hash, resave:false - session will not be saved on every request, saveUninitialized: false - that it won't be saved if nothing is stored in this session
     // ! to change
-    secret: 'my secret',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     store: sessionStore,
