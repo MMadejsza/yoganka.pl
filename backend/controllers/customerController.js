@@ -179,6 +179,11 @@ export const postCreateBookSchedule = (req, res, next) => {
     customerPromise = Promise.resolve(req.user.Customer);
   }
 
+  if (!req.body.schedule) {
+    errCode = 400;
+    throw new Error('Brak identyfikatora terminu.');
+  }
+
   //@ BOOKING
   db.transaction(t => {
     return customerPromise
@@ -335,7 +340,9 @@ export const putEditMarkAbsent = (req, res, next) => {
         } else {
           errCode = 404;
 
-          throw new Error('Nie znaleziono terminu.');
+          throw new Error(
+            'Nie znaleziono rezerwacji dla podanego terminu lub rezerwacja nie należy do klienta.'
+          );
         }
       });
     })
