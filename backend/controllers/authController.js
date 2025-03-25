@@ -81,6 +81,11 @@ export const postSignup = (req, res, next) => {
 
   const { email, password, confirmedPassword, date } = req.body;
 
+  if (password !== confirmedPassword) {
+    errCode = 400;
+    throw new Error('Hasła nie są zgodne.');
+  }
+
   models.User.findOne({ where: { email } })
     .then(user => {
       if (user) {
