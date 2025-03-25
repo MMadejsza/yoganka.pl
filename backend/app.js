@@ -1,11 +1,12 @@
 import csurf from 'csurf';
 import 'dotenv/config';
 import express from 'express';
-import MySQLStoreFactory from 'express-mysql-session';
-import session from 'express-session';
 import helmet from 'helmet';
 import isAuth from './middleware/is-auth-admin.js';
-import * as models from './models/_index.js';
+import { loadUserFromSession } from './middleware/loadUser.js';
+import { setLocals } from './middleware/setLocals.js';
+import { setSession } from './middleware/setSession.js';
+
 import adminRoutes from './routes/adminRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import customerRoutes from './routes/customerRoutes.js';
@@ -24,70 +25,16 @@ app.use((req, res, next) => {
   next();
 });
 
-//! not sequelize?
-const options = {
-  host: process.env.SQLSTORE_HOST,
-  port: Number(process.env.SQLSTORE_PORT),
-  user: process.env.SQLSTORE_USER,
-  password: process.env.SQLSTORE_PASS,
-  database: process.env.SQLSTORE_DB,
-};
-
-const MySQLStore = MySQLStoreFactory(session);
-const sessionStore = new MySQLStore(options);
-
-app.use(
-  session({
-    key: 'session_CID',
-    // secret is used for signing the hash, resave:false - session will not be saved on every request, saveUninitialized: false - that it won't be saved if nothing is stored in this session
-    // ! to change
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    store: sessionStore,
-    cookie: {
-      maxAge: 86400000, // 1 day in milliseconds
-      // httpOnly: true,    // Protect from the access from the JavaScript
-      // secure: false,     // Set to true if you use HTTPS
-      // sameSite: 'lax'    // Extra security from CSRF
-    },
-  })
-);
+app.use(setSession);
 
 // All the post/put/delete methods will be looking for the token now
 const csrfProtection = csurf();
 app.use(csrfProtection);
 
-app.use((req, res, next) => {
-  if (!req.session.user) {
-    return next();
-  }
+app.use(loadUserFromSession);
 
-  models.User.findByPk(req.session.user.UserID, {
-    include: [
-      {
-        model: models.Customer, // Add Customer
-        required: false, // May not exist
-      },
-      {
-        model: models.UserPrefSettings, // User settings if exist
-        required: false,
-      },
-    ],
-  })
-    .then(user => {
-      req.user = user;
-      next();
-    })
-    .catch(err => console.log(err));
-});
-
-app.use((req, res, next) => {
-  res.locals.isLoggedIn = req.session.isLoggedIn;
-  res.locals.role = req.session.role;
-  res.locals.csrfToken = req.csrfToken();
-  next();
-});
+// data for rendering conditionals and rules (frontend)
+app.use(setLocals);
 
 // Filtering that works only for /admin/*
 app.use(`/login-pass`, authRoutes);
