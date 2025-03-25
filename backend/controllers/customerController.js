@@ -73,8 +73,10 @@ export const getBookingByID = (req, res, next) => {
   callLog(person, controllerName);
 
   const PK = req.params.id;
+  const customerID = req.user.Customer && req.user.Customer.CustomerID;
 
-  models.Booking.findByPk(PK, {
+  models.Booking.findOne({
+    where: { BookingID: PK, CustomerID: customerID },
     through: { attributes: [] }, // omit data from mid table
     required: false,
     attributes: {
@@ -101,7 +103,9 @@ export const getBookingByID = (req, res, next) => {
     .then(booking => {
       if (!booking) {
         errCode = 404;
-        throw new Error('Nie znaleziono rezerwacji.');
+        throw new Error(
+          'Nie znaleziono rezerwacji lub rezerwacja nie należy do zalogowanego klienta.'
+        );
       }
       successLog(person, controllerName);
       return res.status(200).json({
