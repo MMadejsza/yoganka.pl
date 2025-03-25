@@ -15,6 +15,7 @@ import db from './utils/db.js';
 const app = express();
 
 // Use helmet to secure HTTP headers
+//! FOR FURTHER CONFIG
 app.use(helmet());
 
 // Parse incoming JSON and URL-encoded payloads
