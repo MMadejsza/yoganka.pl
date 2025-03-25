@@ -22,7 +22,6 @@ app.use((req, res, next) => {
 });
 
 //! not sequelize?
-//! You don't have explicit rate-limiting or DoS protection middleware (like express-rate-limit) — worth noting in improvements.
 const options = {
   host: 'localhost',
   port: 3306,
@@ -44,7 +43,7 @@ app.use(
     saveUninitialized: false,
     store: sessionStore,
     cookie: {
-      maxAge: 86400000, // 1 day in milisekundach
+      maxAge: 86400000, // 1 day in milliseconds
       // httpOnly: true,    // Protect from the access from the JavaScript
       // secure: false,     // Set to true if you use HTTPS
       // sameSite: 'lax'    // Extra security from CSRF
@@ -86,36 +85,6 @@ app.use((req, res, next) => {
   res.locals.csrfToken = req.csrfToken();
   next();
 });
-
-// app.use((req, res, next) => {
-// 	models.User.findByPk(1, {
-// 		include: [
-// 			{
-// 				model: models.Customer, // Add Customer
-// 				required: false, // May not exist
-// 				include: [
-// 					{
-// 						model: models.CustomerPhones, // Customer phone numbers
-// 						required: false,
-// 					},
-// 				],
-// 			},
-// 			{
-// 				model: models.UserPrefSettings, // User settings if exist
-// 				required: false,
-// 			},
-// 		],
-// 	}) // May not exist)
-// 		.then((user) => {
-// 			console.log('✅✅✅ Found user:');
-// 			req.user = user;
-// 			next();
-// 		})
-// 		.catch((err) => {
-// 			console.log(err);
-// 			next(err);
-// 		});
-// });
 
 // Filtering that works only for /admin/*
 app.use(`/login-pass`, authRoutes);
