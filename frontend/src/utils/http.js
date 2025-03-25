@@ -88,6 +88,26 @@ export async function mutateOnLoginOrSignup(status, formData, path) {
     });
   });
 }
+export async function mutateOnNewPassword(status, formData, path) {
+  console.log(`mutateOnNewPassword path`, path);
+  return fetch(path, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'CSRF-Token': status.token,
+    },
+    body: JSON.stringify(formData),
+    credentials: 'include', // include cookies
+  }).then(response => {
+    return response.json().then(data => {
+      if (!response.ok) {
+        // reject with backend data
+        return Promise.reject(data);
+      }
+      return data;
+    });
+  });
+}
 export async function mutateOnCreate(status, formData, path) {
   console.log(`mutateOnCreate path`, path);
 
