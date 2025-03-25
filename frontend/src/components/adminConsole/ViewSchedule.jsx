@@ -1,20 +1,18 @@
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-
+import { useAuthStatus } from '../../hooks/useAuthStatus.js';
+import { useFeedback } from '../../hooks/useFeedback.js';
+import { mutateOnEdit, queryClient } from '../../utils/http.js';
+import { calculateScheduleStats } from '../../utils/productViewsUtils.js';
 import DetailsProduct from './DetailsProduct.jsx';
 import DetailsProductBookings from './DetailsProductBookings.jsx';
 import DetailsProductReviews from './DetailsProductReviews.jsx';
 import DetailsSchedule from './DetailsSchedule.jsx';
 import DetailsScheduleStats from './DetailsScheduleStats.jsx';
 import DetailsTableAttendance from './DetailsTableAttendance.jsx';
-import ViewScheduleNewCustomerForm from './ViewScheduleNewCustomerForm.jsx';
-
-import { useAuthStatus } from '../../hooks/useAuthStatus.js';
-import { useFeedback } from '../../hooks/useFeedback.js';
-import { mutateOnEdit, queryClient } from '../../utils/http.js';
-import { calculateScheduleStats } from '../../utils/productViewsUtils.js';
 import FeedbackBox from './FeedbackBox.jsx';
+import ViewScheduleNewCustomerForm from './ViewScheduleNewCustomerForm.jsx';
 
 function ViewSchedule({
   data,
