@@ -5,7 +5,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "b": "vite build && vite preview"
+    "b": "vite build && vite preview",
+    "format": "prettier --write \"**/*.{js,json,md}\""
   },
   "dependencies": {
     "@glidejs/glide": "^3.6.2",
@@ -30,6 +31,7 @@
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
+    "prettier": "^2.8.8",
     "prettier-plugin-organize-imports": "^4.1.0",
     "sass": "^1.80.5",
     "terser": "^5.37.0",

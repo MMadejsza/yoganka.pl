@@ -6,7 +6,8 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "format": "prettier --write \"**/*.{js,json,md}\""
   },
   "author": "MMadejsza",
   "license": "ISC",
@@ -29,6 +30,7 @@
   "devDependencies": {
     "@types/sequelize": "^4.28.20",
     "nodemon": "^3.1.9",
+    "prettier": "^2.8.8",
     "prettier-plugin-organize-imports": "^4.1.0"
   }
 }
