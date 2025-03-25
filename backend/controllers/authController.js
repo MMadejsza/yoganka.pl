@@ -252,7 +252,12 @@ export const putEditPassword = (req, res, next) => {
   callLog(person, controllerName);
   const token = req.params.token;
   const { password, confirmedPassword, userID } = req.body;
-  console.log(req.body);
+  // console.log(req.body);
+
+  if (password !== confirmedPassword) {
+    errCode = 400;
+    throw new Error('Hasła nie są zgodne.');
+  }
 
   models.User.findOne({
     where: {
