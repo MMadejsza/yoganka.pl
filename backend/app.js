@@ -95,6 +95,13 @@ app.use(`/admin-console`, isAuth, adminRoutes);
 app.use(`/customer`, customerRoutes);
 app.use(`/`, userRoutes);
 
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res
+    .status(err.status || 500)
+    .send({ message: err.message || 'Internal Server Error' });
+});
+
 app.use((req, res) => {
   res.status(404).send(`<h1>Page not found</h1>`);
 });
