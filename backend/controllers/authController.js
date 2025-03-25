@@ -1,4 +1,6 @@
 import bcrypt from 'bcryptjs';
+import 'dotenv/config';
+import nodemailer from 'nodemailer';
 import * as models from '../models/_index.js';
 import {
   callLog,
@@ -8,6 +10,17 @@ import {
 } from '../utils/controllersUtils.js';
 let errCode = errorCode;
 const person = 'User';
+
+// setting up mailer for confirmation emails
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST,
+  port: Number(process.env.SMTP_PORT),
+  secure: true, //  SSL
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+});
 
 //! LOGIN / SIGNUP_____________________________________________
 //@ GET
@@ -56,6 +69,24 @@ export const postSignup = (req, res, next) => {
         })
         .then(newUser => {
           successLog(person, controllerName);
+
+          transporter
+            .sendMail({
+              from: process.env.SMTP_USER,
+              to: email,
+              subject: 'Rejestracja przebiegła pomyślnie.',
+              html: '<h1>RejestracjaDziała elegancko!</h1>',
+            })
+            .then(() => {
+              successLog(person, controllerName, 'mail sent');
+            })
+            .catch(mailErr => {
+              console.error(
+                `[${controllerName}] Błąd przy wysyłaniu maila:`,
+                mailErr
+              );
+            });
+
           return res.status(200).json({
             type: 'signup',
             code: 200,

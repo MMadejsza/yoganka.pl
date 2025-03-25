@@ -45,8 +45,6 @@ function LoginFrom() {
     onClose: handleClose,
   });
 
-  const { data: status } = useAuthStatus();
-
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: ({ formData, modifier }) =>
       mutateOnLoginOrSignup(status, formData, `/api/login-pass/${modifier}`),
@@ -98,6 +96,11 @@ function LoginFrom() {
     hasError: confirmedPasswordHasError,
   } = useInput('', getConfirmedPasswordValidations(passwordValue));
 
+  const { data: status, isLoading: isStatusLoading } = useAuthStatus();
+  if (isStatusLoading || !status?.token) {
+    return <p>Ładowanie formularza logowania...</p>;
+  }
+
   // Decide ig http request is Get or Post
   const handleFormSwitch = e => {
     e.preventDefault(); // No reloading
@@ -117,6 +120,12 @@ function LoginFrom() {
   // Submit handling
   const handleSubmit = async e => {
     e.preventDefault(); // No reloading
+    if (!status?.token) {
+      console.warn(
+        'Błąd autentykcji sesji. Przeładuj stronę i spróbuj ponownie.'
+      );
+      return;
+    }
     // console.log('Submit triggered');
     resetFeedback();
 

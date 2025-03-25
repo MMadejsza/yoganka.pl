@@ -28,13 +28,11 @@ export const getAccount = (req, res, next) => {
   if (!req.user.Customer) {
     const user = req.user;
     console.log('\n✅✅✅ getAccount user fetched');
-    return res
-      .status(200)
-      .json({
-        confirmation: 1,
-        message: 'Profil uczestnika pobrany pomyślnie.',
-        user,
-      });
+    return res.status(200).json({
+      confirmation: 1,
+      message: 'Profil uczestnika pobrany pomyślnie.',
+      user,
+    });
   } else {
     let PK = req.user.Customer.CustomerID;
     return models.Customer.findByPk(PK, {
@@ -129,16 +127,20 @@ export const getSettings = (req, res, next) => {
     .then(preferences => {
       if (!preferences) {
         errCode = 404;
-        throw new Error('Nie pobrano ustawień.');
-      }
-      successLog(person, controllerName);
-      return res
-        .status(200)
-        .json({
+        successLog(person, controllerName, 'default');
+        return res.status(200).json({
           confirmation: 1,
-          message: 'Ustawienia pobrana pomyślnie.',
+          message: 'Ustawienia domyślne.',
           preferences,
         });
+        // throw new Error('Nie pobrano ustawień.');
+      }
+      successLog(person, controllerName, 'custom');
+      return res.status(200).json({
+        confirmation: 1,
+        message: 'Ustawienia pobrana pomyślnie.',
+        preferences,
+      });
     })
     .catch(err => catchErr(res, errCode, err, controllerName));
 };
@@ -150,7 +152,7 @@ export const putEditSettings = (req, res, next) => {
   const userID = req.user.UserID;
 
   const { handedness, font, notifications, animation, theme } = req.body;
-  console.log(`❗❗❗`, req.body);
+  // console.log(`❗❗❗`, req.body);
 
   // if preferences don't exist - create new ones:
   models.UserPrefSettings.findOrCreate({
