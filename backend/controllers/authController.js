@@ -47,6 +47,15 @@ export const getPasswordToken = (req, res, next) => {
   callLog(person, controllerName);
   const token = req.params.token;
 
+  if (!token) {
+    errCode = 400;
+    throw Error('Link jest niekompletny.');
+  }
+  if (token.length !== 64) {
+    errCode = 400;
+    throw Error('Link jest nieprawidłowy.');
+  }
+
   models.User.findOne({
     where: { resetToken: token, resetTokenExpiration: { [Op.gt]: Date.now() } },
   })
@@ -54,12 +63,12 @@ export const getPasswordToken = (req, res, next) => {
       if (!user) {
         errCode = 400;
         console.log('\n❌❌❌ Wrong token');
-        throw Error('Token wygasł lub jest nieprawidłowy.');
+        throw Error('Link wygasł lub jest nieprawidłowy.');
       }
       return res.status(200).json({
         confirmation: 1,
         userID: user.UserID,
-        message: 'Token jest prawidłowy.',
+        message: 'Link jest prawidłowy.',
       });
     })
     .catch(err => catchErr(res, errCode, err, controllerName));
