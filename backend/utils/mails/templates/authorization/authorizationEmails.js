@@ -2,29 +2,37 @@ import 'dotenv/config';
 import { mainTransporter } from '../../transporter.js';
 
 export const sendSignupConfirmationMail = ({ to }) => {
-  const subject = `Witaj na macie • Yoganka`;
+  const subject = `🌸 Witaj na macie • Yoganka`;
   const html = `
-    <main>
-      <h1>Konto utworzone - witamy na pokładzie! 🧘‍♀️🌿</h1>
+    <main style="font-family: sans-serif; color: #333;">
+      <h1 style="color: #7E57C2;">Twoje konto zostało utworzone! 🧘‍♀️</h1>
 
-      <h3>📋 Teraz masz możliwość:</h3>
+      <p>Dziękujemy za dołączenie do społeczności Yoganki – cieszymy się, że jesteś z nami 💜</p>
+
+      <h3>📋 Co możesz teraz zrobić?</h3>
       <ul>
-        <li>⚙️ Zmiany preferencji strony</li>
-        <li>📅 Rezerwowania terminów</li>
+        <li>⚙️ Ustawić swoje preferencje</li>
+        <li>📅 Przeglądać grafik zajęć</li>
       </ul>
 
       <h3>🌟 A po pierwszej rezerwacji:</h3>
       <ul>
-        <li>📅 Rezerwowania terminów</li>
-        <li>🧾 Sprawdzania całej swojej historii z Yoganką</li>
-        <li>
-          📊 Śledzenia swoich statystyk
-          <span style="opacity: 0.6">(W budowie)</span>
+        <li>📌 Śledzić historię swoich zajęć</li>
+        <li>📊 Sprawdzać swoje statystyki 
+          <span style="opacity: 0.6;">(w przygotowaniu)</span>
         </li>
+        <li>🧾 Zarządzać swoimi płatnościami i dostępami</li>
       </ul>
 
-      <h1>Nie mogę się doczekać kiedy wejdziesz ze mną na matę! 🙏✨</h1>
-    </main>   
+      <p style="margin-top: 2rem;">
+        Do zobaczenia na macie – z dobrym oddechem i spokojem 🌿
+      </p>
+
+      <p style="margin-top: 2rem;">
+        Z uśmiechem,<br>
+        <strong>Ekipa Yoganki ✨</strong>
+      </p>
+    </main>
   `;
 
   return mainTransporter
