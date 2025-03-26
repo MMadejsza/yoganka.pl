@@ -26,5 +26,7 @@ export const sendCustomerCreatedMail = ({ to, firstName }) => {
       subject,
       html,
     })
-    .catch(err => console.warn(`⚠️ Mail nie został wysłany: ${err.message}`)); // nie przerywa kontrolera
+    .catch(err => {
+      console.warn('⚠️ Sending email failed:', err.message);
+    });
 };

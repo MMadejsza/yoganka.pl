@@ -54,6 +54,6 @@ export const sendCustomerDeletedMail = ({ to }) => {
       html,
     })
     .catch(err => {
-      console.warn('⚠️ Nie udało się wysłać maila:', err.message);
+      console.warn('⚠️ Sending email failed:', err.message);
     });
 };

@@ -2,11 +2,13 @@ import 'dotenv/config';
 import { mainTransporter } from '../../transporter.js';
 import { sendReservationFreshMail as baseReservationFreshMail } from '../customerActions/reservationEmails.js';
 
+//! OVERWRITTEN CUSTOMER_____________________________________________
 export const sendReservationFreshMail = configObject => {
   configObject.isAdmin = true;
   baseReservationFreshMail(configObject);
 };
 
+//! ADMIN ONLY_____________________________________________
 export const sendReservationCancelledMail = ({ to, bookingID }) => {
   const subject = `❗️ Rezerwacja anulowana • nr ${bookingID} (anulowane przez administratora)`;
   const html = `

@@ -6,6 +6,7 @@ import {
   sendAttendanceMarkedAbsentMail as baseMarkedAbsentMail,
 } from '../customerActions/attendanceEmails.js';
 
+//! OVERWRITTEN CUSTOMER_____________________________________________
 export const sendAttendanceFirstBookingForScheduleMail = configObject => {
   configObject.isAdmin = true;
   baseAttendanceFirstBookingForScheduleMail(configObject);
@@ -21,6 +22,7 @@ export const sendAttendanceMarkedAbsentMail = configObject => {
   baseMarkedAbsentMail(configObject);
 };
 
+//! ADMIN ONLY_____________________________________________
 export const sendAttendanceRecordDeletedMail = ({
   to,
   productName,
