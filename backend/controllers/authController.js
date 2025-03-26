@@ -9,7 +9,10 @@ import {
   errorCode,
   successLog,
 } from '../utils/controllersUtils.js';
-import { mainTransporter } from '../utils/mails/transporter.js';
+import {
+  sendResetPassRequestMail,
+  sendSignupConfirmationMail,
+} from '../utils/mails/templates/authorization/authorizationEmails.js';
 let errCode = errorCode;
 const person = 'User';
 
@@ -30,7 +33,8 @@ export const getStatus = (req, res, next) => {
     token: res.locals.csrfToken,
   });
 };
-// to check if users in-url given password is valid
+
+// To check if users in-url given password is valid
 export const getPasswordToken = (req, res, next) => {
   const controllerName = 'getPasswordToken';
   callLog(person, controllerName);
@@ -99,19 +103,7 @@ export const postSignup = (req, res, next) => {
         .then(newUser => {
           successLog(person, controllerName);
 
-          mainTransporter
-            .sendMail({
-              from: process.env.SMTP_USER,
-              to: email,
-              subject: 'Rejestracja przebiegła pomyślnie.',
-              html: '<h1>RejestracjaDziała elegancko!</h1>',
-            })
-            .then(() => {
-              successLog(person, controllerName, 'mail sent');
-            })
-            .catch(
-              catchErr(res, errCode, err, controllerName, { type: 'signup' })
-            );
+          sendSignupConfirmationMail({ to: email });
 
           return res.status(200).json({
             type: 'signup',
@@ -208,15 +200,8 @@ export const postResetPassword = (req, res, next) => {
         return user.save();
       })
       .then(result => {
-        mainTransporter.sendMail({
-          from: process.env.SMTP_USER,
-          to: req.body.email,
-          subject: 'Resetowanie hasła',
-          html: `
-              <p>Poproszono o reset hasła</p>
-              <p>Kliknij w <a href="http://localhost:5000/login/${token}">link</a> aby ustawic nowe hasło.</p>              
-              `,
-        });
+        sendResetPassRequestMail({ to: req.body.email, token: token });
+
         return res.status(200).json({
           type: 'reset',
           code: 200,

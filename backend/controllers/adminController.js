@@ -11,7 +11,6 @@ import {
 import db from '../utils/db.js';
 import { formatIsoDateTime, getWeekDay } from '../utils/formatDateTime.js';
 import { simpleListAllToTable } from '../utils/listAllToTable.js';
-// import { mainTransporter } from '../utils/transporter.js';
 let errCode = errorCode;
 const person = 'Admin';
 
