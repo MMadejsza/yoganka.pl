@@ -16,7 +16,11 @@ import {
   sendAttendanceRecordDeletedMail,
   sendAttendanceReturningMail,
 } from '../utils/mails/templates/adminOnlyActions/attendanceEmails.js';
-import { sendCustomerCreatedMail } from '../utils/mails/templates/adminOnlyActions/creationEmails.js';
+import {
+  sendAccountCreatedMail,
+  sendCustomerCreatedMail,
+} from '../utils/mails/templates/adminOnlyActions/creationEmails.js';
+import { sendUserAccountDeletedMail } from '../utils/mails/templates/adminOnlyActions/deletionEmails.js';
 import {
   sendReservationCancelledMail,
   sendReservationFreshMail,
@@ -173,6 +177,9 @@ export const postCreateUser = (req, res, next) => {
           });
         })
         .then(newUser => {
+          // Notification email
+          sendAccountCreatedMail({ to: email });
+
           successLog(person, controllerName);
           return res.status(200).json({
             type: 'signup',
@@ -182,7 +189,6 @@ export const postCreateUser = (req, res, next) => {
           });
         });
     })
-
     .catch(err =>
       catchErr(res, errCode, err, controllerName, { type: 'signup', code: 409 })
     );
@@ -262,20 +268,42 @@ export const deleteUser = (req, res, next) => {
   callLog(person, controllerName);
 
   const id = req.params.id;
-  models.User.destroy({
-    where: {
-      UserID: id,
-    },
-  })
+  let userEmail;
+
+  // Fetch user to delete to get email
+  models.User.findByPk(id)
+    .then(user => {
+      if (!user) {
+        errCode = 404;
+        throw new Error('Nie znaleziono użytkownika.');
+      }
+
+      // Assign for notification email
+      userEmail = user.Email;
+
+      // Finally delete
+      return models.User.destroy({
+        where: {
+          UserID: id,
+        },
+      });
+    })
     .then(deletedCount => {
       if (!deletedCount) {
         errCode = 404;
         throw new Error('Nie usunięto użytkownika.');
       }
+
+      // Send notification
+      if (userEmail) {
+        sendUserAccountDeletedMail({ to: userEmail });
+      }
+
       successLog(person, controllerName);
-      return res
-        .status(200)
-        .json({ confirmation: 1, message: 'Konto usunięte pomyślnie.' });
+      return res.status(200).json({
+        confirmation: 1,
+        message: 'Konto usunięte pomyślnie.',
+      });
     })
     .catch(err => catchErr(res, errCode, err, controllerName));
 };
