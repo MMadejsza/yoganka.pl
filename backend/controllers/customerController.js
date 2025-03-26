@@ -11,8 +11,10 @@ import {
   sendAttendanceFirstBookingForScheduleMail,
   sendAttendanceMarkedAbsentMail,
   sendAttendanceReturningMail,
-  sendReservationFreshMail,
-} from '../utils/mails/templates/customerActions/reservationEmails.js';
+} from '../utils/mails/templates/customerActions/attendanceEmails.js';
+import { sendCustomerCreatedMail } from '../utils/mails/templates/customerActions/creationEmails.js';
+import { sendReservationFreshMail } from '../utils/mails/templates/customerActions/reservationEmails.js';
+
 let errCode = errorCode;
 const person = 'Customer';
 
@@ -172,6 +174,12 @@ export const postCreateBookSchedule = (req, res, next) => {
       ReferralSource: cDetails.rSource || '-',
       Notes: cDetails.notes,
     }).then(newCustomer => {
+      // Notification email
+      sendCustomerCreatedMail({
+        to: req.User.Email,
+        firstName,
+      });
+
       successLog(person, controllerName, 'customer created');
       req.session.user.Customer = newCustomer;
       req.session.role = 'CUSTOMER';

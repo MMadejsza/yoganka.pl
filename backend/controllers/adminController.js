@@ -15,6 +15,8 @@ import {
   sendAttendanceMarkedAbsentMail,
   sendAttendanceRecordDeletedMail,
   sendAttendanceReturningMail,
+} from '../utils/mails/templates/adminOnlyActions/attendanceEmails.js';
+import {
   sendReservationCancelledMail,
   sendReservationFreshMail,
 } from '../utils/mails/templates/adminOnlyActions/reservationEmails.js';
@@ -447,6 +449,7 @@ export const getCustomerDetails = (req, res, next) => {
 export const postCreateCustomer = (req, res, next) => {
   const controllerName = 'postCreateCustomer';
   callLog(person, controllerName);
+
   const {
     userID,
     customerType,
@@ -458,14 +461,28 @@ export const postCreateCustomer = (req, res, next) => {
     loyalty,
     notes,
   } = req.body;
-  let customerPromise;
+  let customerPromise, customerEmail;
+
   models.Customer.findOne({ where: { UserID: userID } })
     .then(customer => {
       if (customer) {
         errCode = 409;
         throw new Error('Profil uczestnika już istnieje.');
       }
-      return (customerPromise = models.Customer.create({
+
+      return models.User.findByPk(userID, {
+        attributes: ['Email'],
+      });
+    })
+    .then(user => {
+      if (!user) {
+        errCode = 404;
+        throw new Error('Nie znaleziono użytkownika.');
+      }
+
+      customerEmail = user.Email;
+
+      return models.Customer.create({
         CustomerType: customerType || 'Indywidualny',
         UserID: userID,
         FirstName: firstName,
@@ -481,7 +498,7 @@ export const postCreateCustomer = (req, res, next) => {
           { Role: 'customer' },
           { where: { UserID: userID } }
         ).then(() => newCustomer);
-      }));
+      });
     })
     .then(newCustomer => {
       successLog(person, controllerName);
