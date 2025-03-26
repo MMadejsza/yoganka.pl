@@ -1,7 +1,6 @@
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import 'dotenv/config';
-import nodemailer from 'nodemailer';
 import { Op } from 'sequelize';
 import * as models from '../models/_index.js';
 import {
@@ -10,19 +9,9 @@ import {
   errorCode,
   successLog,
 } from '../utils/controllersUtils.js';
+import { mainTransporter } from '../utils/transporter.js';
 let errCode = errorCode;
 const person = 'User';
-
-// setting up mailer for confirmation emails
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: Number(process.env.SMTP_PORT),
-  secure: true, //  SSL
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
 
 //! LOGIN / SIGNUP_____________________________________________
 //@ GET
@@ -110,7 +99,7 @@ export const postSignup = (req, res, next) => {
         .then(newUser => {
           successLog(person, controllerName);
 
-          transporter
+          mainTransporter
             .sendMail({
               from: process.env.SMTP_USER,
               to: email,
@@ -219,7 +208,7 @@ export const postResetPassword = (req, res, next) => {
         return user.save();
       })
       .then(result => {
-        transporter.sendMail({
+        mainTransporter.sendMail({
           from: process.env.SMTP_USER,
           to: req.body.email,
           subject: 'Resetowanie hasła',
