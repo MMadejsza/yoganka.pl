@@ -12,6 +12,9 @@ import db from '../utils/db.js';
 import { formatIsoDateTime, getWeekDay } from '../utils/formatDateTime.js';
 import { simpleListAllToTable } from '../utils/listAllToTable.js';
 import {
+  sendAttendanceMarkedAbsentMail,
+  sendAttendanceRecordDeletedMail,
+  sendAttendanceReturningMail,
   sendReservationCancelledMail,
   sendReservationFreshMail,
 } from '../utils/mails/templates/adminOnlyActions/reservationEmails.js';
@@ -1134,29 +1137,75 @@ export const putEditMarkAbsent = (req, res, next) => {
 export const putEditMarkPresent = (req, res, next) => {
   const controllerName = 'putEditMarkPresent';
   callLog(person, controllerName);
-  console.log(req.body);
+
   const { cancelledAttendanceCustomerID, cancelledAttendanceBookingID } =
     req.body;
 
+  let currentScheduleRecord, customerEmail;
+
+  // Find schedule
   models.BookedSchedule.findOne({
     where: {
       CustomerID: cancelledAttendanceCustomerID,
       BookingID: cancelledAttendanceBookingID,
     },
+    include: [
+      {
+        model: models.ScheduleRecord,
+        required: true,
+      },
+    ],
   })
     .then(foundRecord => {
       if (!foundRecord) {
         errCode = 404;
         throw new Error('Nie znaleziono rekordu obecności w dzienniku.');
       }
-      return foundRecord.update({
-        Attendance: 1,
-        DidAction: person,
+
+      // Assign for email data
+      currentScheduleRecord = foundRecord.ScheduleRecord;
+
+      // Find the customer for email address
+      return models.Customer.findByPk(cancelledAttendanceCustomerID, {
+        include: [{ model: models.User, attributes: ['Email'] }],
       });
     })
+    .then(customer => {
+      if (!customer || !customer.User) {
+        errCode = 404;
+        throw new Error('Nie znaleziono użytkownika przypisanego do klienta.');
+      }
+
+      // Assign for email data
+      customerEmail = customer.User.Email;
+
+      // Finally update attendance
+      return models.BookedSchedule.update(
+        {
+          Attendance: 1,
+          DidAction: person,
+        },
+        {
+          where: {
+            CustomerID: cancelledAttendanceCustomerID,
+            BookingID: cancelledAttendanceBookingID,
+          },
+        }
+      );
+    })
     .then(updatedRecord => {
+      // Send confirmation email
+      sendAttendanceReturningMail({
+        to: customerEmail,
+        productName: currentScheduleRecord?.ProductName || '',
+        date: currentScheduleRecord.Date,
+        startTime: currentScheduleRecord.StartTime,
+        location: currentScheduleRecord.Location,
+      });
+
       successLog(person, controllerName);
       const status = updatedRecord ? true : false;
+      // Send confirmation to frontend
       return res.status(200).json({
         confirmation: status,
         message: 'Uczestnik oznaczony jako obecny.',
@@ -1169,26 +1218,59 @@ export const putEditMarkPresent = (req, res, next) => {
 export const deleteAttendanceRecord = (req, res, next) => {
   const controllerName = 'deleteAttendanceRecord';
   callLog(person, controllerName);
-  console.log(req.body);
 
   const { attendanceCustomerID, attendanceBookingID } = req.body;
 
+  // Find booking to get info for email as well
   models.BookedSchedule.findOne({
     where: { CustomerID: attendanceCustomerID, BookingID: attendanceBookingID },
+    include: [
+      {
+        model: models.ScheduleRecord,
+        required: true,
+      },
+      {
+        model: models.Customer,
+        required: true,
+        include: [
+          {
+            model: models.User,
+            attributes: ['Email'],
+          },
+        ],
+      },
+    ],
   })
     .then(foundRecord => {
       if (!foundRecord) {
+        // No attendance found
         errCode = 404;
         throw new Error('Nie znaleziono rekordu obecności w dzienniku.');
       }
+
+      const { ScheduleRecord, Customer } = foundRecord;
+      const to = Customer.User.Email;
+
+      // Send confirmation
+      sendAttendanceRecordDeletedMail({
+        to,
+        productName: ScheduleRecord?.ProductName || 'Zajęcia',
+        date: ScheduleRecord.Date,
+        startTime: ScheduleRecord.StartTime,
+        location: ScheduleRecord.Location,
+        isAdmin: true,
+      });
+
+      // Return deleted number
       return foundRecord.destroy();
     })
-    .then(deletedCount => {
-      if (!deletedCount) {
+    .then(deleted => {
+      if (!deleted) {
         errCode = 404;
         throw new Error('Nie usunięto rekordu.');
       }
 
+      // Confirmation for frontend
       successLog(person, controllerName);
       return res.status(200).json({
         confirmation: 1,

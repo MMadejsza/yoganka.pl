@@ -27,12 +27,16 @@ export const sendSignupConfirmationMail = ({ to }) => {
     </main>   
   `;
 
-  return mainTransporter.sendMail({
-    from: process.env.SMTP_MAIN_USER,
-    to,
-    subject,
-    html,
-  });
+  return mainTransporter
+    .sendMail({
+      from: process.env.SMTP_MAIN_USER,
+      to,
+      subject,
+      html,
+    })
+    .catch(err => {
+      console.warn('⚠️ Sending email failed:', err.message);
+    });
 };
 
 export const sendResetPassRequestMail = ({ to, token }) => {
@@ -47,10 +51,14 @@ export const sendResetPassRequestMail = ({ to, token }) => {
   </main>
   `;
 
-  return mainTransporter.sendMail({
-    from: process.env.SMTP_MAIN_USER,
-    to,
-    subject,
-    html,
-  });
+  return mainTransporter
+    .sendMail({
+      from: process.env.SMTP_MAIN_USER,
+      to,
+      subject,
+      html,
+    })
+    .catch(err => {
+      console.warn('⚠️ Sending email failed:', err.message);
+    });
 };

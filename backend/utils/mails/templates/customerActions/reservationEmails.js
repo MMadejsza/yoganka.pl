@@ -27,12 +27,16 @@ export const sendReservationFreshMail = ({
     </main>
   `;
 
-  return mainTransporter.sendMail({
-    from: process.env.SMTP_MAIN_USER,
-    to,
-    subject,
-    html,
-  });
+  return mainTransporter
+    .sendMail({
+      from: process.env.SMTP_MAIN_USER,
+      to,
+      subject,
+      html,
+    })
+    .catch(err => {
+      console.warn('⚠️ Sending email failed:', err.message);
+    });
 };
 
 export const sendAttendanceReturningMail = ({
@@ -63,12 +67,16 @@ export const sendAttendanceReturningMail = ({
     </main>
   `;
 
-  return mainTransporter.sendMail({
-    from: process.env.SMTP_MAIN_USER,
-    to,
-    subject,
-    html,
-  });
+  return mainTransporter
+    .sendMail({
+      from: process.env.SMTP_MAIN_USER,
+      to,
+      subject,
+      html,
+    })
+    .catch(err => {
+      console.warn('⚠️ Sending email failed:', err.message);
+    });
 };
 
 export const sendAttendanceMarkedAbsentMail = ({
@@ -99,10 +107,54 @@ export const sendAttendanceMarkedAbsentMail = ({
     </main>
   `;
 
-  return mainTransporter.sendMail({
-    from: process.env.SMTP_MAIN_USER,
-    to,
-    subject,
-    html,
-  });
+  return mainTransporter
+    .sendMail({
+      from: process.env.SMTP_MAIN_USER,
+      to,
+      subject,
+      html,
+    })
+    .catch(err => {
+      console.warn('⚠️ Sending email failed:', err.message);
+    });
+};
+
+export const sendAttendanceFirstBookingForScheduleMail = ({
+  to,
+  productName,
+  date,
+  startTime,
+  location,
+  isAdmin,
+}) => {
+  const subject = `✅ Rezerwacja potwierdzona • ${productName} ${isAdmin ? '(dodane przez administratora)' : ''}`;
+  const html = `
+    <main>
+      <h1>Twoja obecność została potwierdzona ✨</h1>
+
+      <p>Dziękujemy za zapisanie się na ten termin. Cieszymy się, że będziesz z nami 🌿</p>
+
+      <h3>🧘‍♀️ Szczegóły zajęć:</h3>
+      <p>
+        <strong>${productName}</strong><br>
+        📅 ${date} o ${startTime}<br>
+        📍 ${location}
+      </p>
+
+      <p>To Twoja pierwsza obecność na tym konkretnym terminie – mata już czeka!</p>
+
+      <p style="margin-top: 2rem;">Z pozdrowieniami,<br><strong>Zespół Yoganki 💜</strong></p>
+    </main>
+  `;
+
+  return mainTransporter
+    .sendMail({
+      from: process.env.SMTP_MAIN_USER,
+      to,
+      subject,
+      html,
+    })
+    .catch(err => {
+      console.warn('⚠️ Sending email failed:', err.message);
+    });
 };
