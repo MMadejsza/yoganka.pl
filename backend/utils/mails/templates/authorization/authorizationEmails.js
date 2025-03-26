@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { mainTransporter } from '../../transporter.js';
 
 export const sendSignupConfirmationMail = ({ to }) => {

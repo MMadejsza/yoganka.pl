@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { mainTransporter } from '../../transporter.js';
 
 export const sendReservationFreshMail = ({
@@ -8,16 +9,22 @@ export const sendReservationFreshMail = ({
   location,
   isAdmin,
 }) => {
-  const subject = `Mata zaklepana! Do zobaczenia na: ${productName} ${isAdmin ? '(Wysłane przez administratora)' : ''}`;
+  const subject = `🧘‍♀️ Mata zaklepana • ${productName} ${isAdmin ? '(rezerwacja od administratora)' : ''}`;
   const html = `
-    <h1>Mata już na Ciebie czeka!</h1>
-    <h3>Zajęcia:</h3>
-    <p>
-      ${productName}<br>
-      ${date} ${startTime}<br>
-      ${location}
-    </p>
-    <p>Dziękujemy za rezerwację - do zobaczenia wkrótce! :)</p>
+    <main>
+      <h1>Twoje miejsce jest zarezerwowane 🌿</h1>
+
+      <h3>🧘‍♀️ Zajęcia:</h3>
+      <p>
+        <strong>${productName}</strong><br>
+        📅 ${date} o ${startTime}<br>
+        📍 ${location}
+      </p>
+
+      <p>✨ Dziękujemy za rezerwację. Czekamy na Ciebie z dobrą energią i spokojem 🙏</p>
+
+      <p style="margin-top: 2rem;">Do zobaczenia na macie,<br><strong>Zespół Yoganki 💜</strong></p>
+    </main>
   `;
 
   return mainTransporter.sendMail({
@@ -36,16 +43,24 @@ export const sendAttendanceReturningMail = ({
   location,
   isAdmin,
 }) => {
-  const subject = `Witamy z powrotem na zajeciach! ${isAdmin ? '(Wysłane przez administratora)' : ''}`;
+  const subject = `🌸 Dobrze, że wracasz • Yoganka ${isAdmin ? '(rezerwacja od administratora)' : ''}`;
   const html = `
-     <h1>Już myśleliśmy, że ta mata zmieni właściciela... - ale na szczęście nie!</h1>
-    <h3>Zajęcia:</h3>
-    <p>
-      ${productName}<br>
-      ${date} ${startTime}<br>
-      ${location}
-    </p>
-    <p>Dziękujemy za informację - do zobaczenia wkrótce! :)</p>
+    <main>
+      <h1>Twoja mata tęskniła! 💜</h1>
+
+      <p>Jesteśmy szczęśliwi, że znów będziemy razem praktykować. Dzięki za informację o Twoim powrocie 🙏</p>
+
+      <h3>🧘‍♀️ Szczegóły zajęć:</h3>
+      <p>
+        <strong>${productName}</strong><br>
+        📅 ${date} o ${startTime}<br>
+        📍 ${location}
+      </p>
+
+      <p>Do zobaczenia na macie – z dobrą energią i spokojnym oddechem 🌿</p>
+
+      <p style="margin-top: 2rem;">Z uśmiechem,<br><strong>Ekipa Yoganki ✨</strong></p>
+    </main>
   `;
 
   return mainTransporter.sendMail({
@@ -64,16 +79,24 @@ export const sendAttendanceMarkedAbsentMail = ({
   location,
   isAdmin,
 }) => {
-  const subject = `Szkoda, że musisz lecieć... :( ${isAdmin ? '(Wysłane przez administratora)' : ''}`;
+  const subject = `🌙 Do zobaczenia następnym razem • Yoganka ${isAdmin ? '(oznaczenie od administratora)' : ''}`;
   const html = `
-    <h1>Mata zwolniona ale... mamy nadzieję, że jednak wrócisz!</h1>
-    <h3>Zajęcia:</h3>
-    <p>
-      ${productName}<br>
-      ${date} ${startTime}<br>
-      ${location}
-    </p>
-    <p>W każdym razie dziękujemy za informację i do zobaczenie na innych zajęciach! :)</p>
+    <main>
+      <h1>Twoja mata będzie dziś odpoczywać 🌿</h1>
+
+      <p>Rozumiemy, że czasem trzeba odpuścić – to też część praktyki 🙏</p>
+
+      <h3>📋 Zajęcia, na które się nie pojawisz:</h3>
+      <p>
+        <strong>${productName}</strong><br>
+        📅 ${date} o ${startTime}<br>
+        📍 ${location}
+      </p>
+
+      <p>Będziemy na Ciebie czekać na kolejnych zajęciach – z otwartym sercem i spokojnym oddechem 💜</p>
+
+      <p style="margin-top: 2rem;">Do zobaczenia w swoim czasie,<br><strong>Zespół Yoganki ✨</strong></p>
+    </main>
   `;
 
   return mainTransporter.sendMail({
