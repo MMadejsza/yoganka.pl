@@ -16,10 +16,12 @@ import {
   sendAttendanceRecordDeletedMail,
   sendAttendanceReturningMail,
 } from '../utils/mails/templates/adminOnlyActions/attendanceEmails.js';
+import { sendCustomerCreatedMail } from '../utils/mails/templates/adminOnlyActions/creationEmails.js';
 import {
   sendReservationCancelledMail,
   sendReservationFreshMail,
 } from '../utils/mails/templates/adminOnlyActions/reservationEmails.js';
+
 let errCode = errorCode;
 const person = 'Admin';
 
@@ -461,7 +463,7 @@ export const postCreateCustomer = (req, res, next) => {
     loyalty,
     notes,
   } = req.body;
-  let customerPromise, customerEmail;
+  let customerEmail;
 
   models.Customer.findOne({ where: { UserID: userID } })
     .then(customer => {
@@ -470,6 +472,7 @@ export const postCreateCustomer = (req, res, next) => {
         throw new Error('Profil uczestnika już istnieje.');
       }
 
+      // Getting user for email purposes
       return models.User.findByPk(userID, {
         attributes: ['Email'],
       });
@@ -480,8 +483,10 @@ export const postCreateCustomer = (req, res, next) => {
         throw new Error('Nie znaleziono użytkownika.');
       }
 
+      // Assign email
       customerEmail = user.Email;
 
+      // Create user
       return models.Customer.create({
         CustomerType: customerType || 'Indywidualny',
         UserID: userID,
@@ -494,13 +499,18 @@ export const postCreateCustomer = (req, res, next) => {
         Loyalty: loyalty || 5,
         Notes: notes,
       }).then(newCustomer => {
-        return models.User.update(
-          { Role: 'customer' },
-          { where: { UserID: userID } }
-        ).then(() => newCustomer);
+        return user
+          .update({ Role: 'customer' }, { where: { UserID: userID } })
+          .then(() => newCustomer);
       });
     })
     .then(newCustomer => {
+      // Notification email
+      sendCustomerCreatedMail({
+        to: customerEmail,
+        firstName,
+      });
+
       successLog(person, controllerName);
       return res.status(200).json({
         code: 200,
