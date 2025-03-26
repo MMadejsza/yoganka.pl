@@ -1063,23 +1063,66 @@ export const putEditMarkAbsent = (req, res, next) => {
   const controllerName = 'putEditMarkAbsent';
   callLog(person, controllerName);
 
-  const { attendanceCustomerID, attendanceBookingID } = req.body;
+  const { attendanceCustomerID, attendanceBookingID, product } = req.body;
+  let currentScheduleRecord, customerEmail;
 
+  // Find schedule
   models.BookedSchedule.findOne({
     where: { CustomerID: attendanceCustomerID, BookingID: attendanceBookingID },
+    include: [
+      {
+        model: models.ScheduleRecord,
+        required: true,
+      },
+    ],
   })
     .then(foundRecord => {
       if (!foundRecord) {
         errCode = 404;
         throw new Error('Nie znaleziono rekordu obecności w dzienniku.');
       }
-      return foundRecord.update({
-        Attendance: 0,
-        DidAction: person,
+      // Assign for email data
+      currentScheduleRecord = foundRecord.ScheduleRecord;
+
+      // Find the customer for email address
+      return models.Customer.findByPk(attendanceCustomerID, {
+        include: [{ model: models.User, attributes: ['Email'] }],
       });
     })
-    .then(updatedRecord => {
+    .then(customer => {
+      if (!customer || !customer.User) {
+        errCode = 404;
+        throw new Error('Nie znaleziono użytkownika przypisanego do klienta.');
+      }
+      // Assign for email data
+      customerEmail = customer.User.Email;
+
+      // Finally update attendance
+      return models.BookedSchedule.update(
+        {
+          Attendance: 0,
+          DidAction: person,
+        },
+        {
+          where: {
+            CustomerID: attendanceCustomerID,
+            BookingID: attendanceBookingID,
+          },
+        }
+      );
+    })
+    .then(() => {
+      // Send confirmation email
+      sendAttendanceMarkedAbsentMail({
+        to: customerEmail,
+        productName: product,
+        date: currentScheduleRecord.Date,
+        startTime: currentScheduleRecord.StartTime,
+        location: currentScheduleRecord.Location,
+      });
+
       successLog(person, controllerName);
+      // Send confirmation to frontend
       return res.status(200).json({
         confirmation: 1,
         message: 'Uczestnik oznaczony jako nieobecny.',
