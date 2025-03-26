@@ -9,7 +9,7 @@ import {
   errorCode,
   successLog,
 } from '../utils/controllersUtils.js';
-import { mainTransporter } from '../utils/transporter.js';
+import { mainTransporter } from '../utils/mails/transporter.js';
 let errCode = errorCode;
 const person = 'User';
 
