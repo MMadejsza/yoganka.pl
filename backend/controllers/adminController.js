@@ -2,15 +2,15 @@ import { addDays, addMonths, addYears } from 'date-fns';
 import { Op, Sequelize } from 'sequelize';
 import * as models from '../models/_index.js';
 import columnMaps from '../utils/columnsMapping.js';
+import db from '../utils/db.js';
+import { formatIsoDateTime, getWeekDay } from '../utils/formatDateTime.js';
+import { simpleListAllToTable } from '../utils/listAllToTable.js';
 import {
   callLog,
   catchErr,
   errorCode,
   successLog,
-} from '../utils/controllersUtils.js';
-import db from '../utils/db.js';
-import { formatIsoDateTime, getWeekDay } from '../utils/formatDateTime.js';
-import { simpleListAllToTable } from '../utils/listAllToTable.js';
+} from '../utils/loggingUtils.js';
 import {
   sendAttendanceMarkedAbsentMail,
   sendAttendanceRecordDeletedMail,

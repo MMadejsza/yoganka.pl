@@ -8,7 +8,7 @@ import {
   catchErr,
   errorCode,
   successLog,
-} from '../utils/controllersUtils.js';
+} from '../utils/loggingUtils.js';
 import {
   sendResetPassRequestMail,
   sendSignupConfirmationMail,

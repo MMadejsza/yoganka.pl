@@ -1,12 +1,12 @@
 import 'dotenv/config';
 import * as models from '../models/_index.js';
+import db from '../utils/db.js';
 import {
   callLog,
   catchErr,
   errorCode,
   successLog,
-} from '../utils/controllersUtils.js';
-import db from '../utils/db.js';
+} from '../utils/loggingUtils.js';
 import {
   sendAttendanceFirstBookingForScheduleMail,
   sendAttendanceMarkedAbsentMail,

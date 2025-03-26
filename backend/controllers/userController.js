@@ -1,13 +1,13 @@
 import { Op, Sequelize, col, fn } from 'sequelize';
 import * as models from '../models/_index.js';
 import columnMaps from '../utils/columnsMapping.js';
+import { formatIsoDateTime, getWeekDay } from '../utils/formatDateTime.js';
 import {
   callLog,
   catchErr,
   errorCode,
   successLog,
-} from '../utils/controllersUtils.js';
-import { formatIsoDateTime, getWeekDay } from '../utils/formatDateTime.js';
+} from '../utils/loggingUtils.js';
 let errCode = errorCode;
 const person = 'User';
 
