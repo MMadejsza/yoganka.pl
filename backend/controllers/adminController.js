@@ -20,7 +20,10 @@ import {
   sendAccountCreatedMail,
   sendCustomerCreatedMail,
 } from '../utils/mails/templates/adminOnlyActions/creationEmails.js';
-import { sendUserAccountDeletedMail } from '../utils/mails/templates/adminOnlyActions/deletionEmails.js';
+import {
+  sendCustomerDeletedMail,
+  sendUserAccountDeletedMail,
+} from '../utils/mails/templates/adminOnlyActions/deletionEmails.js';
 import {
   sendReservationCancelledMail,
   sendReservationFreshMail,
@@ -625,16 +628,32 @@ export const deleteCustomer = (req, res, next) => {
   callLog(person, controllerName);
 
   const id = req.params.id;
-  models.Customer.destroy({
-    where: {
-      CustomerID: id,
-    },
+  let userEmail;
+
+  models.Customer.findOne({
+    where: { CustomerID: id },
+    include: [
+      {
+        model: models.User,
+        attributes: ['Email'],
+      },
+    ],
   })
-    .then(deletedCount => {
-      if (!deletedCount) {
+    .then(customer => {
+      if (!customer) {
         errCode = 404;
-        throw new Error('Nie usunięto profilu uczestnika.');
+        throw new Error('Nie znaleziono profilu uczestnika.');
       }
+
+      userEmail = customer.User?.Email;
+      return customer.destroy();
+    })
+    .then(() => {
+      // Email notification
+      if (userEmail) {
+        sendCustomerDeletedMail({ to: userEmail });
+      }
+
       successLog(person, controllerName);
       return res
         .status(200)

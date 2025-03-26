@@ -29,3 +29,31 @@ export const sendUserAccountDeletedMail = ({ to }) => {
       console.warn('⚠️ Sending email failed:', err.message);
     });
 };
+
+export const sendCustomerDeletedMail = ({ to }) => {
+  const subject = `❌ Profil uczestnika został usunięty • Yoganka`;
+  const html = `
+      <main>
+        <h1>Twój profil uczestnika został usunięty</h1>
+
+        <p>Rekord uczestnika został usunięty przez administratora Yoganki.</p>
+
+        <p>W razie pytań lub pomyłki – napisz do nas: 
+          <a href="mailto:${process.env.SMTP_MAIN_USER}">${process.env.SMTP_MAIN_USER}</a>
+        </p>
+
+        <p style="margin-top: 2rem;">Zespół Yoganki 💜</p>
+      </main>
+    `;
+
+  return mainTransporter
+    .sendMail({
+      from: process.env.SMTP_MAIN_USER,
+      to,
+      subject,
+      html,
+    })
+    .catch(err => {
+      console.warn('⚠️ Nie udało się wysłać maila:', err.message);
+    });
+};
