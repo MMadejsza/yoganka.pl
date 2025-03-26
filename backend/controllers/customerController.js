@@ -11,7 +11,7 @@ import {
   sendAttendanceMarkedAbsentMail,
   sendAttendanceReturningMail,
   sendReservationFreshMail,
-} from '../utils/mails/templates/customerActions/reservationEmail.js';
+} from '../utils/mails/templates/customerActions/reservationEmails.js';
 let errCode = errorCode;
 const person = 'Customer';
 

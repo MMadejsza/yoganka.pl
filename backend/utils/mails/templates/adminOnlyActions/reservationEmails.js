@@ -2,7 +2,7 @@ import {
   sendAttendanceReturningMail as baseAttendanceReturningMail,
   sendAttendanceMarkedAbsentMail as baseMarkedAbsentMail,
   sendReservationFreshMail as baseReservationFreshMail,
-} from '../customerActions/reservationEmail.js';
+} from '../customerActions/reservationEmails.js';
 
 export const sendReservationFreshMail = configObject => {
   configObject.isAdmin = true;
