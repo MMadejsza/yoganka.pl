@@ -9,10 +9,13 @@ import Product from './productModel.js';
 import ScheduleRecord from './scheduleRecordModel.js';
 import User from './userModel.js';
 import UserPrefSettings from './userSettingsModel.js';
+import VerificationToken from './verificationTokens.js';
 
 //!
 //! ASSOCIATIONS BETWEEN THE USER MODEL AND OTHER MODELS
 //!
+User.hasMany(VerificationToken, { foreignKey: 'UserID' });
+VerificationToken.belongsTo(User, { foreignKey: 'UserID' });
 
 //@ User and Customer (1:1, total participation on Customer)
 // When a User is deleted, the associated Customer is also deleted.
