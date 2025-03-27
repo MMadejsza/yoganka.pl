@@ -16,7 +16,7 @@ import {
 let errCode = errorCode;
 const person = 'User';
 
-//! LOGIN / SIGNUP_____________________________________________
+//! STATUS_____________________________________________________
 //@ GET
 export const getStatus = (req, res, next) => {
   const controllerName = 'getStatus';
@@ -33,90 +33,8 @@ export const getStatus = (req, res, next) => {
     token: res.locals.csrfToken,
   });
 };
-
-// To check if users in-url given password is valid
-export const getPasswordToken = (req, res, next) => {
-  const controllerName = 'getPasswordToken';
-  callLog(person, controllerName);
-  const token = req.params.token;
-
-  if (!token) {
-    errCode = 400;
-    throw Error('Link jest niekompletny.');
-  }
-  if (token.length !== 64) {
-    errCode = 400;
-    throw Error('Link jest nieprawidłowy.');
-  }
-
-  models.User.findOne({
-    where: { resetToken: token, resetTokenExpiration: { [Op.gt]: Date.now() } },
-  })
-    .then(user => {
-      if (!user) {
-        errCode = 400;
-        console.log('\n❌❌❌ Wrong token');
-        throw Error('Link wygasł lub jest nieprawidłowy.');
-      }
-      return res.status(200).json({
-        confirmation: 1,
-        userID: user.UserID,
-        message: 'Link jest prawidłowy.',
-      });
-    })
-    .catch(err => catchErr(res, errCode, err, controllerName));
-};
-
+//! LOG IN / OUT_______________________________________________
 //@ POST
-export const postSignup = (req, res, next) => {
-  const controllerName = 'postSignup';
-  callLog(person, controllerName);
-
-  const { email, password, confirmedPassword, date } = req.body;
-
-  if (password !== confirmedPassword) {
-    errCode = 400;
-    throw new Error('Hasła nie są zgodne.');
-  }
-
-  models.User.findOne({ where: { email } })
-    .then(user => {
-      if (user) {
-        errCode = 303;
-        throw new Error('Użytkownik już istnieje.');
-      }
-
-      // it returns the promise
-      return bcrypt
-        .hash(password, 12)
-        .then(passwordHashed => {
-          successLog(person, controllerName, 'hashed');
-          return models.User.create({
-            RegistrationDate: date,
-            PasswordHash: passwordHashed,
-            LastLoginDate: date,
-            Email: email,
-            Role: 'user',
-            ProfilePictureSrcSetJSON: null,
-          });
-        })
-        .then(newUser => {
-          successLog(person, controllerName);
-
-          sendSignupConfirmationMail({ to: email });
-
-          return res.status(200).json({
-            type: 'signup',
-            code: 200,
-            confirmation: 1,
-            message: '✅ Zarejestrowano pomyślnie',
-          });
-        });
-    })
-    .catch(err =>
-      catchErr(res, errCode, err, controllerName, { type: 'signup', code: 303 })
-    );
-};
 export const postLogin = (req, res, next) => {
   const controllerName = 'postLogin';
   callLog(person, controllerName);
@@ -177,6 +95,96 @@ export const postLogout = (req, res, next) => {
     res.json({ success: true });
   });
 };
+
+//! SIGN UP____________________________________________________
+//@ POST
+export const postSignup = (req, res, next) => {
+  const controllerName = 'postSignup';
+  callLog(person, controllerName);
+
+  const { email, password, confirmedPassword, date } = req.body;
+
+  if (password !== confirmedPassword) {
+    errCode = 400;
+    throw new Error('Hasła nie są zgodne.');
+  }
+
+  models.User.findOne({ where: { email } })
+    .then(user => {
+      if (user) {
+        errCode = 303;
+        throw new Error('Użytkownik już istnieje.');
+      }
+
+      // it returns the promise
+      return bcrypt
+        .hash(password, 12)
+        .then(passwordHashed => {
+          successLog(person, controllerName, 'hashed');
+
+          return models.User.create({
+            RegistrationDate: date,
+            PasswordHash: passwordHashed,
+            LastLoginDate: date,
+            Email: email,
+            Role: 'user',
+            ProfilePictureSrcSetJSON: null,
+          });
+        })
+        .then(newUser => {
+          successLog(person, controllerName);
+
+          sendSignupConfirmationMail({ to: email });
+
+          return res.status(200).json({
+            type: 'signup',
+            code: 200,
+            confirmation: 1,
+            message: '✅ Zarejestrowano pomyślnie',
+          });
+        });
+    })
+    .catch(err =>
+      catchErr(res, errCode, err, controllerName, { type: 'signup', code: 303 })
+    );
+};
+
+//! PASSWORD___________________________________________________
+//@ GET
+// To check if users in-url given password is valid
+export const getPasswordToken = (req, res, next) => {
+  const controllerName = 'getPasswordToken';
+  callLog(person, controllerName);
+  const token = req.params.token;
+
+  if (!token) {
+    errCode = 400;
+    throw Error('Link jest niekompletny.');
+  }
+  if (token.length !== 64) {
+    errCode = 400;
+    throw Error('Link jest nieprawidłowy.');
+  }
+
+  models.User.findOne({
+    where: { resetToken: token, resetTokenExpiration: { [Op.gt]: Date.now() } },
+  })
+    .then(user => {
+      if (!user) {
+        errCode = 400;
+        console.log('\n❌❌❌ Wrong token');
+        throw Error('Link wygasł lub jest nieprawidłowy.');
+      }
+      return res.status(200).json({
+        confirmation: 1,
+        userID: user.UserID,
+        message: 'Link jest prawidłowy.',
+      });
+    })
+    .catch(err => catchErr(res, errCode, err, controllerName));
+};
+
+//@ POST
 export const postResetPassword = (req, res, next) => {
   const controllerName = 'postResetPassword';
 
@@ -220,6 +228,7 @@ export const postResetPassword = (req, res, next) => {
   callLog(person, controllerName);
   successLog(person, controllerName);
 };
+
 //@ PUT
 export const putEditPassword = (req, res, next) => {
   const controllerName = 'putEditPassword';
