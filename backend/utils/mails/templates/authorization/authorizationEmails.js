@@ -1,13 +1,28 @@
 import 'dotenv/config';
 import { mainTransporter } from '../../transporter.js';
 
-export const sendSignupConfirmationMail = ({ to }) => {
+export const sendSignupConfirmationMail = ({ to, token }) => {
+  const verificationLink = `${'http://localhost:5000'}/verify/${token}`;
   const subject = `🌸 Witaj na macie • Yoganka`;
   const html = `
     <main style="font-family: sans-serif; color: #333;">
       <h1 style="color: #7E57C2;">Twoje konto zostało utworzone! 🧘‍♀️</h1>
 
       <p>Dziękujemy za dołączenie do społeczności Yoganki – cieszymy się, że jesteś z nami 💜</p>
+
+      <p>W celu aktywacji konta, kliknij w poniższy link:</p>
+      <p><a href="${verificationLink}" style="color: #7E57C2; text-decoration: none;">Aktywuj konto</a></p>
+
+      <p style="margin-top: 1rem; color: #555;">
+        🕊️ Aby zachować równowagę w naszej przestrzeni, prosimy o aktywację konta w ciągu 24 godzin.<br>
+        W przeciwnym razie Twoja mata zostanie zwinięta i miejsce usunięte z systemu.
+      </p>
+      <p style="margin: 1.5rem 0;">
+        <a href="${verificationLink}" 
+          style="display: inline-block; padding: 0.75rem 1.25rem; background-color: #7E57C2; color: #fff; border-radius: 8px; text-decoration: none; font-weight: bold;">
+          🌿 Aktywuj swoje konto teraz
+        </a>
+      </p>
 
       <h3>📋 Co możesz teraz zrobić?</h3>
       <ul>

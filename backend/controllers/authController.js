@@ -48,6 +48,15 @@ export const postLogin = (req, res, next) => {
         console.log("\n❌❌❌ User doesn't exist");
         throw new Error('Użytkownik nie istnieje.');
       }
+
+      if (user.EmailVerified === false) {
+        errCode = 403;
+        console.log('\n⛔ Konto nieaktywne – brak potwierdzenia maila');
+        throw new Error(
+          'Aby się zalogować, najpierw potwierdź swój adres e-mail.'
+        );
+      }
+
       user.update({ LastLoginDate: date });
       return user;
     })
@@ -97,6 +106,60 @@ export const postLogout = (req, res, next) => {
 };
 
 //! SIGN UP____________________________________________________
+//@ GET
+export const getEmailToken = (req, res, next) => {
+  const controllerName = 'getEmailToken';
+  callLog(person, controllerName);
+  const token = req.params.token;
+
+  if (!token) {
+    errCode = 400;
+    throw new Error('Brakuje tokenu w linku.');
+  }
+
+  if (token.length !== 64) {
+    errCode = 400;
+    throw new Error('Link jest nieprawidłowy.');
+  }
+
+  models.VerificationToken.findOne({
+    where: {
+      Token: token,
+      Type: 'email',
+      ExpirationDate: { [Op.gt]: new Date() }, // Validation if still active
+    },
+    include: [
+      {
+        model: models.User, // to assign the status for linked account
+        required: true,
+      },
+    ],
+  })
+    .then(validTokenRecord => {
+      if (!validTokenRecord) {
+        errCode = 400;
+        console.log('\n❌ Nieprawidłowy lub wygasły token weryfikacyjny.');
+        throw new Error('Link jest nieważny lub wygasł.');
+      }
+
+      // To change the status of the linked account
+      const user = validTokenRecord.User;
+      user.EmailVerified = true;
+
+      return user.save();
+    })
+    .then(() => {
+      successLog(person, controllerName);
+      // ✅ Możesz przekierować na stronę "konto aktywowane"
+      return res.redirect('/email-verified-success'); // lub wysłać HTML/JSON
+    })
+    .catch(err =>
+      catchErr(res, errCode, err, controllerName, {
+        type: 'verifyEmail',
+        code: 400,
+      })
+    );
+};
 //@ POST
 export const postSignup = (req, res, next) => {
   const controllerName = 'postSignup';
@@ -122,6 +185,7 @@ export const postSignup = (req, res, next) => {
         .then(passwordHashed => {
           successLog(person, controllerName, 'hashed');
 
+          // create inactive account first
           return models.User.create({
             RegistrationDate: date,
             PasswordHash: passwordHashed,
@@ -134,13 +198,31 @@ export const postSignup = (req, res, next) => {
         .then(newUser => {
           successLog(person, controllerName);
 
-          sendSignupConfirmationMail({ to: email });
+          // Set token and it expiry threshold
+          const emailVerificationToken = crypto.randomBytes(32).toString('hex');
+          const tokenExpiration = Date.now() + 1000 * 60 * 60 * 24; // 24 hrs
+
+          // Insert token into db
+          return models.VerificationToken.create({
+            UserID: newUser.UserID,
+            Type: 'email',
+            Token: emailVerificationToken,
+            ExpirationDate: new Date(tokenExpiration),
+          }).then(() => ({ newUser, emailVerificationToken }));
+        })
+        .then(({ newUser, emailVerificationToken }) => {
+          // Send activation email with token
+          sendSignupConfirmationMail({
+            to: email,
+            token: emailVerificationToken,
+          });
 
           return res.status(200).json({
             type: 'signup',
             code: 200,
             confirmation: 1,
-            message: '✅ Zarejestrowano pomyślnie',
+            message:
+              '✅ Zarejestrowano pomyślnie. Sprawdź maila, aby aktywować konto.',
           });
         });
     })
@@ -166,18 +248,28 @@ export const getPasswordToken = (req, res, next) => {
     throw Error('Link jest nieprawidłowy.');
   }
 
-  models.User.findOne({
-    where: { resetToken: token, resetTokenExpiration: { [Op.gt]: Date.now() } },
+  models.VerificationToken.findOne({
+    where: {
+      Token: token,
+      Type: 'password',
+      ExpirationDate: { [Op.gt]: new Date() }, // Validation
+    },
+    include: [
+      {
+        model: models.User,
+        required: true, // If there will be no user assigned - error = extra validation
+      },
+    ],
   })
-    .then(user => {
-      if (!user) {
+    .then(validTokenRecord => {
+      if (!validTokenRecord) {
         errCode = 400;
         console.log('\n❌❌❌ Wrong token');
         throw Error('Link wygasł lub jest nieprawidłowy.');
       }
       return res.status(200).json({
         confirmation: 1,
-        userID: user.UserID,
+        userID: validTokenRecord.UserID,
         message: 'Link jest prawidłowy.',
       });
     })
@@ -203,11 +295,14 @@ export const postResetPassword = (req, res, next) => {
           throw new Error('Użytkownik nie istnieje.');
         }
 
-        user.resetToken = token;
-        user.resetTokenExpiration = Date.now() + 3600000;
-        return user.save();
+        return models.VerificationToken.create({
+          UserID: user.UserID,
+          Type: 'password',
+          Token: token,
+          ExpirationDate: new Date(Date.now() + 3600000), // 1 hour
+        }).then(() => user);
       })
-      .then(result => {
+      .then(user => {
         sendResetPassRequestMail({ to: req.body.email, token: token });
 
         return res.status(200).json({
@@ -242,22 +337,31 @@ export const putEditPassword = (req, res, next) => {
     throw new Error('Hasła nie są zgodne.');
   }
 
-  models.User.findOne({
+  // Find te token for this user
+  models.VerificationToken.findOne({
     where: {
-      UserID: userID,
-      resetToken: token,
-      resetTokenExpiration: { [Op.gt]: Date.now() },
+      Token: token,
+      Type: 'password',
+      ExpirationDate: { [Op.gt]: new Date() }, // Validation if token is up to date
     },
+    include: [
+      {
+        model: models.User,
+        required: true,
+        where: { UserID: userID }, // dodatkowy warunek dla pewności
+      },
+    ],
   })
-    .then(user => {
-      if (!user) throw new Error('Sesja wygasła');
+    .then(validTokenRecord => {
+      if (!validTokenRecord) throw new Error('Sesja wygasła');
+      // save assigned user for later methods
+      const user = validTokenRecord.User;
+
       return bcrypt.hash(password, 12).then(hashedPassword => {
         if (!hashedPassword)
           throw Error('Błąd szyfrowania hasła - prośba odrzucona.');
         user.PasswordHash = hashedPassword;
-        // resetting token
-        user.resetToken = null;
-        user.resetTokenExpiration = null;
+        // save user but remain the token in the db for eventual abuse logging later on
         return user.save();
       });
     })
