@@ -1862,6 +1862,7 @@ export const getAllBookings = (req, res, next) => {
 
       const totalHeaders = keysForHeaders;
       req.session.isLoggedIn = true;
+      req.session.save();
       successLog(person, controllerName);
       res.json({
         confirmation: 1,
@@ -1957,8 +1958,7 @@ export const postCreateBooking = (req, res, next) => {
     console.log('\n❌❌❌ paymentMethod empty');
     throw new Error('Pole metody płatności nie może być puste.');
   }
-  let currentScheduleRecord;
-  let customerEmail;
+  let currentScheduleRecord, customerEmail;
   let isNewCustomer = false;
   db.transaction(t => {
     // Fetch schedule and lock it for other paralele transactions
@@ -2219,6 +2219,7 @@ export const getAllInvoices = (req, res, next) => {
       // New headers (keys from columnMap)
       const totalHeaders = keysForHeaders;
       req.session.isLoggedIn = true;
+      req.session.save();
       // ✅ Return response to frontend
       successLog(person, controllerName);
       res.json({

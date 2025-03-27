@@ -5,7 +5,7 @@ export const loadUserFromSession = (req, res, next) => {
     return next();
   }
 
-  models.User.findByPk(req.session.user.UserID, {
+  return models.User.findByPk(req.session.user.UserID, {
     include: [
       {
         model: models.Customer, // Add Customer

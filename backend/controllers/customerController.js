@@ -132,10 +132,9 @@ export const postCreateBookSchedule = (req, res, next) => {
   callLog(person, controllerName);
   console.log(`req.body`, req.body);
   // @ Fetching USER
-  let currentCustomer;
+  let customerPromise, currentCustomer, currentScheduleRecord;
   let isNewCustomer = false;
   // If it's not a Customer yet
-  let customerPromise;
   if (!req.user.Customer) {
     const cDetails = req.body.customerDetails;
     console.log(
@@ -175,23 +174,23 @@ export const postCreateBookSchedule = (req, res, next) => {
       Notes: cDetails.notes,
     }).then(newCustomer => {
       // Notification email
-      if (req.User.Email) {
+      if (req.user.Email) {
         sendCustomerCreatedMail({
-          to: req.User.Email,
-          firstName,
+          to: req.user.Email,
+          firstName: cDetails.fname,
         });
       }
-
-      successLog(person, controllerName, 'customer created');
       req.session.user.Customer = newCustomer;
       req.session.role = 'CUSTOMER';
+      req.session.save();
+
+      isNewCustomer = true;
+      successLog(person, controllerName, 'customer created');
       return models.User.update(
-        { Role: person },
+        { Role: 'CUSTOMER' },
         { where: { UserID: req.user.UserID } }
       ).then(() => newCustomer);
     });
-
-    isNewCustomer = true;
   } else {
     customerPromise = Promise.resolve(req.user.Customer);
   }
@@ -200,7 +199,6 @@ export const postCreateBookSchedule = (req, res, next) => {
     errCode = 400;
     throw new Error('Brak identyfikatora terminu.');
   }
-  let currentScheduleRecord;
 
   //@ BOOKING
   db.transaction(t => {
@@ -325,9 +323,9 @@ export const postCreateBookSchedule = (req, res, next) => {
               })
               .then(() => {
                 // reserving the schedule confirmation
-                if (customerEmail) {
+                if (req.user.Email) {
                   sendAttendanceFirstBookingForScheduleMail({
-                    to: customerEmail,
+                    to: req.user.Email,
                     productName: currentScheduleRecord?.ProductName || '',
                     date: currentScheduleRecord.Date,
                     startTime: currentScheduleRecord.StartTime,

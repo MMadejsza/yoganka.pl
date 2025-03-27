@@ -27,6 +27,7 @@ function LoginFrom({ successMsg, errorMsg }) {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const verified = searchParams.get('verified');
+  const redirectParam = searchParams.get('redirect');
   const location = useLocation();
   const [firstTime, setFirstTime] = useState(false); // state to switch between registration and login in term of labels and http request method
   const [resetPassword, setResetPassword] = useState(false);
@@ -49,11 +50,11 @@ function LoginFrom({ successMsg, errorMsg }) {
           (result.code === 303 || result.code === 200)
         ) {
           setFirstTime(!firstTime);
-          return ''; // no redirect - the same url
+          return '/'; // no redirect - the same url
         }
         if (result.type === 'login') {
           if (!location.pathname.includes('login/')) return -1;
-          return '/'; // after login go back
+          return redirectParam ? redirectParam : '/'; // after login go back to given site in param or main page
         }
       }
       // if error

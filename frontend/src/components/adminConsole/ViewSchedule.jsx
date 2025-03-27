@@ -148,7 +148,11 @@ function ViewSchedule({
             : 'Rezerwuj'}
     </button>
   ) : (
-    <button onClick={() => navigate('/login')} className='book modal__btn'>
+    // dynamic redirection back to schedule when logged in, in Login form useFeedback
+    <button
+      onClick={() => navigate(`/login?redirect=/grafik/${schedule.ScheduleID}`)}
+      className='book modal__btn'
+    >
       <span className='material-symbols-rounded nav__icon'>login</span>
       Zaloguj się
     </button>

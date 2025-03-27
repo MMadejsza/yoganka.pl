@@ -101,9 +101,7 @@ export const sendAttendanceFirstBookingForScheduleMail = ({
           <strong>${productName}</strong><br>
           📅 ${date} o ${startTime}<br>
           📍 ${location}
-        </p>
-  
-        <p>To Twoja pierwsza obecność na tym konkretnym terminie – mata już czeka!</p>
+        </p>  
   
         <p style="margin-top: 2rem;">Z pozdrowieniami,<br><strong>Zespół Yoganki 💜</strong></p>
       </main>

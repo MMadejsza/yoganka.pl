@@ -74,6 +74,7 @@ export const postLogin = (req, res, next) => {
             req.session.isLoggedIn = true;
             req.session.user = fetchedUser;
             req.session.role = fetchedUser.Role.toUpperCase();
+            req.session.save();
             return res.status(200).json({
               type: 'login',
               code: 200,
