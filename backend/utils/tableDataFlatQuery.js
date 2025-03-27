@@ -3,7 +3,7 @@ import { formatIsoDateTime } from './formatDateTime.js';
 import { callLog, catchErr, errorCode } from './loggingUtils.js';
 let errCode = errorCode;
 
-export const simpleListAllToTable = (res, model) => {
+export const tableDataFlatQuery = (res, model) => {
   const controllerName = 'simpleListAllToTable';
   callLog('?', controllerName);
 

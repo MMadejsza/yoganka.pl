@@ -3,7 +3,6 @@ import { Op, Sequelize } from 'sequelize';
 import * as models from '../models/_index.js';
 import columnMaps from '../utils/columnsMapping.js';
 import db from '../utils/db.js';
-import { flatTableDataQuery } from '../utils/flatTableDataQuery.js';
 import { formatIsoDateTime, getWeekDay } from '../utils/formatDateTime.js';
 import {
   callLog,
@@ -28,6 +27,7 @@ import {
   sendReservationCancelledMail,
   sendReservationFreshMail,
 } from '../utils/mails/templates/adminOnlyActions/reservationEmails.js';
+import { tableDataFlatQuery } from '../utils/tableDataFlatQuery.js';
 
 let errCode = errorCode;
 const person = 'Admin';
@@ -1557,10 +1557,10 @@ export const getAllNewsletters = (req, res, next) => {
   const controllerName = 'getAllNewsletters';
   callLog(person, controllerName);
 
-  flatTableDataQuery(res, models.Newsletter);
+  tableDataFlatQuery(res, models.Newsletter);
 };
 export const getAllSubscribedNewsletters = (req, res, next) => {
-  flatTableDataQuery(res, models.SubscribedNewsletter);
+  tableDataFlatQuery(res, models.SubscribedNewsletter);
 };
 //@ POST
 //@ PUT
@@ -1571,7 +1571,7 @@ export const getAllSubscribedNewsletters = (req, res, next) => {
 export const getAllProducts = (req, res, next) => {
   const controllerName = 'getAllProducts';
   callLog(person, controllerName);
-  flatTableDataQuery(res, models.Product);
+  tableDataFlatQuery(res, models.Product);
 };
 export const getProductByID = (req, res, next) => {
   const controllerName = 'getProductByID';
