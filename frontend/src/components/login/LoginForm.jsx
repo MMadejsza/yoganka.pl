@@ -1,6 +1,11 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom';
 import { useAuthStatus } from '../../hooks/useAuthStatus.js';
 import { useFeedback } from '../../hooks/useFeedback.js';
 import { useInput } from '../../hooks/useInput.js';
@@ -9,19 +14,19 @@ import {
   mutateOnNewPassword,
   queryClient,
 } from '../../utils/http.js';
-
-import FeedbackBox from '../adminConsole/FeedbackBox.jsx';
-import InputLogin from './InputLogin.jsx';
-
 import {
   emailValidations,
   getConfirmedPasswordValidations,
   passwordValidations,
 } from '../../utils/validation.js';
+import FeedbackBox from '../adminConsole/FeedbackBox.jsx';
+import InputLogin from './InputLogin.jsx';
 
-function LoginFrom() {
+function LoginFrom({ successMsg, errorMsg }) {
   const params = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const verified = searchParams.get('verified');
   const location = useLocation();
   const [firstTime, setFirstTime] = useState(false); // state to switch between registration and login in term of labels and http request method
   const [resetPassword, setResetPassword] = useState(false);
@@ -55,6 +60,20 @@ function LoginFrom() {
     onClose: handleClose,
   });
 
+  useEffect(() => {
+    if (verified === '1') {
+      updateFeedback({
+        confirmation: 1,
+        message: 'Twój adres e-mail został potwierdzony!',
+      });
+    } else if (verified === '0') {
+      updateFeedback({
+        confirmation: -1,
+        message: 'Weryfikacja e-maila nie powiodła się.',
+      });
+    }
+  }, [verified, updateFeedback]);
+
   // check if eventually given in URL token is valid
   const {
     data: tokenValidity,
@@ -62,7 +81,7 @@ function LoginFrom() {
     isError: isTokenError,
     error: tokenError,
   } = useQuery({
-    queryKey: ['editPasswordToken', params.token],
+    queryKey: [`edit-passwordToken`, params.token],
     queryFn: async () => {
       const res = await fetch(
         `/api/login-pass/password-token/${params.token}`,
@@ -165,12 +184,17 @@ function LoginFrom() {
     return <p>Weryfikacja tokenu...</p>;
   }
 
-  // Decide ig http request is Get or Post
-  const handleFormSwitch = e => {
-    if (e) e.preventDefault(); // No reloading
+  // Decide if http request is Get or Post
+  const switchToSignupOrLogin = () => {
     resetFeedback();
-    setResetPassword(!resetPassword);
-    setFirstTime(!firstTime);
+    setResetPassword(false);
+    setFirstTime(prev => !prev);
+  };
+
+  const switchToResetPassword = () => {
+    resetFeedback();
+    setFirstTime(false);
+    setResetPassword(prev => !prev);
   };
 
   // Reset all te inputs
@@ -194,17 +218,17 @@ function LoginFrom() {
     console.log('Submit triggered');
     resetFeedback();
 
-    if (resetPassword) {
+    if (params.token) {
+      if (confirmedPasswordHasError || passwordHasError) return;
+    } else if (resetPassword) {
       if (emailHasError) return;
-    } else {
-      if (
-        (!params.token && emailHasError) ||
-        passwordHasError ||
-        ((firstTime || params.token) && confirmedPasswordHasError)
-      ) {
+    } else if (firstTime) {
+      if (emailHasError || passwordHasError || confirmedPasswordHasError)
         return;
-      }
+    } else {
+      if (emailHasError || passwordHasError) return;
     }
+
     console.log('Submit passed errors');
 
     const fd = new FormData(e.target);
@@ -214,15 +238,17 @@ function LoginFrom() {
     console.log('sent data:', data);
 
     if (params.token) {
-      // handleFormSwitch(e);
+      // new password
       data.userID = tokenValidity.userID;
       setNewPassword({ formData: data });
     } else if (resetPassword) {
-      handleFormSwitch(e);
+      // reset password
       mutate({ formData: data, modifier: 'reset' });
     } else if (firstTime) {
+      // register
       mutate({ formData: data, modifier: 'signup' });
     } else {
+      // login
       mutate({ formData: data, modifier: 'login' });
     }
 
@@ -237,26 +263,24 @@ function LoginFrom() {
     resetPassTitle: 'Resetuj hasło',
     actionTitle: 'Zaloguj się',
   };
-  if (firstTime) {
-    formLabels.formType = 'register';
-    formLabels.title = 'Rejestracja:';
-    formLabels.switchTitle = 'Zaloguj się';
-    formLabels.resetPassTitle = 'Resetuj hasło';
-    formLabels.actionTitle = 'Zarejestruj się';
-  }
-  if (resetPassword) {
-    formLabels.formType = 'register';
-    formLabels.title = 'Resetowanie hasła:';
-    formLabels.switchTitle = 'Zaloguj się';
-    formLabels.resetPassTitle = 'Resetuj hasło';
-    formLabels.actionTitle = 'Resetuj hasło';
-  }
   if (params.token) {
     formLabels.formType = 'register';
     formLabels.title = 'Nowe hasło:';
     formLabels.switchTitle = 'Zaloguj się';
     formLabels.resetPassTitle = 'Resetuj hasło';
     formLabels.actionTitle = 'Zatwierdź';
+  } else if (resetPassword) {
+    formLabels.formType = 'register';
+    formLabels.title = 'Resetowanie hasła:';
+    formLabels.switchTitle = 'Zaloguj się';
+    formLabels.resetPassTitle = 'Resetuj hasło';
+    formLabels.actionTitle = 'Resetuj hasło';
+  } else if (firstTime) {
+    formLabels.formType = 'register';
+    formLabels.title = 'Rejestracja:';
+    formLabels.switchTitle = 'Zaloguj się';
+    formLabels.resetPassTitle = 'Resetuj hasło';
+    formLabels.actionTitle = 'Zarejestruj się';
   }
   // Extract values only
   const { formType, title, switchTitle, actionTitle, resetPassTitle } =
@@ -302,7 +326,7 @@ function LoginFrom() {
             />
           )}
 
-          {!resetPassword && (
+          {(!resetPassword || firstTime) && (
             <>
               <InputLogin
                 formType={formType}
@@ -348,8 +372,8 @@ function LoginFrom() {
               status={feedback.status}
               isPending={isPending || isNewPasswordPending || isTokenLoading}
               isError={isError || isNewPasswordError || isTokenError}
-              error={error || newPasswordError || tokenError}
-              successMsg={feedback.message}
+              error={errorMsg || error || newPasswordError || tokenError}
+              successMsg={successMsg || feedback.message}
               warnings={feedback.warnings}
               size='small'
             />
@@ -367,7 +391,7 @@ function LoginFrom() {
               {!resetPassword && (
                 <button
                   type='button'
-                  onClick={handleFormSwitch}
+                  onClick={switchToResetPassword}
                   className='form-switch-btn modal__btn modal__btn--secondary'
                 >
                   {resetPassTitle}
@@ -376,7 +400,7 @@ function LoginFrom() {
               <button
                 type='button'
                 className='modal__btn modal__btn--secondary'
-                onClick={handleFormSwitch}
+                onClick={switchToSignupOrLogin}
               >
                 {switchTitle}
               </button>

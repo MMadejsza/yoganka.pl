@@ -10,18 +10,18 @@ export const sendSignupConfirmationMail = ({ to, token }) => {
 
       <p>Dziękujemy za dołączenie do społeczności Yoganki – cieszymy się, że jesteś z nami 💜</p>
 
-      <p>W celu aktywacji konta, kliknij w poniższy link:</p>
-      <p><a href="${verificationLink}" style="color: #7E57C2; text-decoration: none;">Aktywuj konto</a></p>
-
-      <p style="margin-top: 1rem; color: #555;">
-        🕊️ Aby zachować równowagę w naszej przestrzeni, prosimy o aktywację konta w ciągu 24 godzin.<br>
-        W przeciwnym razie Twoja mata zostanie zwinięta i miejsce usunięte z systemu.
-      </p>
+      
+      <p>W celu aktywacji konta, kliknij:</p>      
       <p style="margin: 1.5rem 0;">
         <a href="${verificationLink}" 
-          style="display: inline-block; padding: 0.75rem 1.25rem; background-color: #7E57C2; color: #fff; border-radius: 8px; text-decoration: none; font-weight: bold;">
-          🌿 Aktywuj swoje konto teraz
+        style="display: inline-block; padding: 0.75rem 1.25rem; background-color: #7E57C2; color: #fff; border-radius: 8px; text-decoration: none; font-weight: bold;">
+        🌿 Aktywuj swoje konto teraz
         </a>
+      </p>
+      
+      <p style="margin-top: 1rem; color: #555;">
+      🕊️ Aby zachować równowagę w naszej przestrzeni, prosimy o aktywację konta w ciągu 24 godzin.<br>
+      W przeciwnym razie Twoja mata zostanie zwinięta i miejsce usunięte z systemu.
       </p>
 
       <h3>📋 Co możesz teraz zrobić?</h3>

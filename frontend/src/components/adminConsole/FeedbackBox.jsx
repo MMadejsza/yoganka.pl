@@ -37,7 +37,7 @@ function FeedbackBox({
       setTimeout(() => {
         navigate(redirectTarget);
         onClose();
-      }, 1000);
+      }, 3000);
     }
   } else if (status === 0) {
     // Neutral result (e.g. no changes were made)

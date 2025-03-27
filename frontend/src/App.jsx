@@ -4,6 +4,7 @@ import AccountPage from './pages/AccountPage.jsx';
 import AdminPage from './pages/AdminPage.jsx';
 import B2BPage from './pages/B2BPage.jsx';
 import CampsPage from './pages/CampsPage.jsx';
+import EmailVerifyPage from './pages/EmailVerifyPage.jsx';
 import ErrorPage from './pages/ErrorPage.jsx';
 import EventsPage from './pages/EventsPage.jsx';
 import HomePage from './pages/HomePage.jsx';
@@ -21,6 +22,7 @@ const router = createBrowserRouter([
       { index: true, element: <HomePage /> },
       { path: 'login', element: <LoginPage /> },
       { path: 'login/:token', element: <LoginPage /> },
+      { path: 'verify/:token', element: <EmailVerifyPage /> },
       { path: 'wyjazdy', element: <CampsPage /> },
       { path: 'wyjazdy/:link', element: <CampsPage /> },
       { path: 'wydarzenia', element: <EventsPage /> },

@@ -17,10 +17,6 @@ const User = sequelizeDb.define(
         return rawValue ? rawValue.toISOString() : null;
       },
     },
-    PasswordHash: {
-      type: DataTypes.STRING(255),
-      allowNull: false,
-    },
     LastLoginDate: {
       type: DataTypes.DATE,
       allowNull: true,
@@ -28,6 +24,10 @@ const User = sequelizeDb.define(
         const rawValue = this.getDataValue('RegistrationDate');
         return rawValue ? rawValue.toISOString() : null;
       },
+    },
+    PasswordHash: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
     },
     Email: {
       type: DataTypes.STRING(255),
@@ -44,7 +44,7 @@ const User = sequelizeDb.define(
     EmailVerified: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      default: false,
+      defaultValue: false,
     },
   },
   {
