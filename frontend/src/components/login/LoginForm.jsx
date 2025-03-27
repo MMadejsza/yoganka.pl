@@ -30,7 +30,9 @@ function LoginFrom({ successMsg, errorMsg }) {
   const location = useLocation();
   const [firstTime, setFirstTime] = useState(false); // state to switch between registration and login in term of labels and http request method
   const [resetPassword, setResetPassword] = useState(false);
+  const [feedbackUpdated, setFeedbackUpdated] = useState(false); //to flag confirmation message after account activation and stop useEffect from constant checking
 
+  // call back to avoid overwriting at each render and infinite loop with confirmation of activating email
   const handleClose = () => {
     if (firstTime) {
       setFirstTime(false);
@@ -61,18 +63,27 @@ function LoginFrom({ successMsg, errorMsg }) {
   });
 
   useEffect(() => {
-    if (verified === '1') {
-      updateFeedback({
-        confirmation: 1,
-        message: 'Twój adres e-mail został potwierdzony!',
-      });
-    } else if (verified === '0') {
-      updateFeedback({
-        confirmation: -1,
-        message: 'Weryfikacja e-maila nie powiodła się.',
-      });
+    console.log(
+      'Feedback effect: verified =',
+      verified,
+      'feedbackUpdated =',
+      feedbackUpdated
+    );
+    if (!feedbackUpdated && (verified === '1' || verified === '0')) {
+      if (verified === '1') {
+        updateFeedback({
+          confirmation: 1,
+          message: 'Twój adres e-mail został potwierdzony!',
+        });
+      } else if (verified === '0') {
+        updateFeedback({
+          confirmation: -1,
+          message: 'Weryfikacja e-maila nie powiodła się.',
+        });
+      }
+      setFeedbackUpdated(true);
     }
-  }, [verified, updateFeedback]);
+  }, [verified, updateFeedback, feedbackUpdated, navigate]);
 
   // check if eventually given in URL token is valid
   const {

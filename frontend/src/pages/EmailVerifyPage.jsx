@@ -21,7 +21,13 @@ function EmailVerifyPage() {
   }, [token, navigate]);
 
   // Msg for the meanwhile before redirection
-  return <p>⏳ Weryfikujemy Twój adres e-mail...</p>;
+  return (
+    <main className='loginBox'>
+      <section className={'login'}>
+        <p className='form__title'>⏳ Weryfikujemy Twój adres e-mail...</p>
+      </section>
+    </main>
+  );
 }
 
 export default EmailVerifyPage;

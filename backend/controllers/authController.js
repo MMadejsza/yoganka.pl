@@ -114,7 +114,7 @@ export const getEmailToken = (req, res, next) => {
 
   if (!token) {
     errCode = 400;
-    throw new Error('Brakuje tokenu w linku.');
+    throw new Error('Link prawdopodobnie wygasł.');
   }
 
   if (token.length !== 64) {
@@ -150,8 +150,11 @@ export const getEmailToken = (req, res, next) => {
     })
     .then(() => {
       successLog(person, controllerName);
-      // ✅ Możesz przekierować na stronę "konto aktywowane"
-      return res.redirect('/email-verified-success'); // lub wysłać HTML/JSON
+
+      return res.status(200).json({
+        confirmation: 1,
+        message: 'konto aktywowane.',
+      });
     })
     .catch(err =>
       catchErr(res, errCode, err, controllerName, {
