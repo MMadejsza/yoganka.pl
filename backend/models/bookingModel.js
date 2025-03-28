@@ -2,49 +2,40 @@ import { DataTypes } from 'sequelize';
 import sequelizeDb from '../utils/db.js';
 
 /** @type {import('sequelize').Model} */
-const Booking = sequelizeDb.define(
-  'Booking',
+
+const BookedSchedule = sequelizeDb.define(
+  'BookedSchedule',
   {
+    ScheduleID: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      references: {
+        model: 'ScheduleRecord', // The name of the target table
+        key: 'ScheduleID', // The name of the column in the target table
+      },
+    },
     BookingID: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      autoIncrement: true,
+
+      references: {
+        model: 'Booking', // The name of the target table
+        key: 'BookingID', // The name of the column in the target table
+      },
     },
     CustomerID: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      references: {
-        model: 'customers', // The name of the target table
-        key: 'CustomerID', // The name of the column in the target table
-      },
     },
-    Date: {
-      type: DataTypes.DATEONLY, // YYYY-MM-DD
+    Attendance: {
+      type: DataTypes.BOOLEAN,
       allowNull: false,
+      defaultValue: true,
     },
-    Product: {
-      type: DataTypes.STRING(255),
+    TimeStamp: {
+      type: DataTypes.DATE,
       allowNull: false,
-    },
-    Status: {
-      type: DataTypes.STRING(50),
-      allowNull: false,
-    },
-    AmountPaid: {
-      type: DataTypes.DECIMAL(10, 2),
-      allowNull: false,
-    },
-    AmountDue: {
-      type: DataTypes.DECIMAL(10, 2),
-      allowNull: false,
-    },
-    PaymentMethod: {
-      type: DataTypes.STRING(50),
-      allowNull: false,
-    },
-    PaymentStatus: {
-      type: DataTypes.STRING(50),
-      allowNull: false,
+      defaultValue: DataTypes.NOW,
     },
     DidAction: {
       type: DataTypes.STRING(10),
@@ -53,8 +44,21 @@ const Booking = sequelizeDb.define(
     },
   },
   {
-    tableName: 'bookings',
-    timestamps: false,
+    tableName: 'booked_schedules', // exact mysql table name
+    timestamps: true,
+    updatedAt: 'TimeStamp', //mapping to TimeStamp
+    createdAt: false,
+    indexes: [
+      {
+        unique: true,
+        fields: ['CustomerID', 'ScheduleID'], //unique key for combination of  CustomerID i ScheduleID
+      },
+    ],
   }
 );
-export default Booking;
+BookedSchedule.beforeCreate(instance => {
+  if (!instance.TimeStamp) {
+    instance.TimeStamp = new Date();
+  }
+});
+export default BookedSchedule;
