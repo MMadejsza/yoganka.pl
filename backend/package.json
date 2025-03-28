@@ -5,8 +5,10 @@
   "description": "backend modules",
   "main": "app.js",
   "scripts": {
+    "dev": "vite-node app.js",
+    "start": "node app.js",
+    "dev:nodemon": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js",
     "format": "prettier --write \"**/*.{js,json,md}\""
   },
   "author": "MMadejsza",
@@ -31,6 +33,8 @@
     "@types/sequelize": "^4.28.20",
     "nodemon": "^3.1.9",
     "prettier": "^2.8.8",
-    "prettier-plugin-organize-imports": "^4.1.0"
+    "prettier-plugin-organize-imports": "^4.1.0",
+    "vite": "^6.2.3",
+    "vite-node": "^3.0.9"
   }
 }
