@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import * as models from '../models/_index.js';
 import db from '../utils/db.js';
+import { isAdult } from '../utils/formatDateTime.js';
 import {
   callLog,
   catchErr,
@@ -22,7 +23,7 @@ const person = 'Customer';
 //@ GET
 export const getCustomerDetails = (req, res, next) => {
   const controllerName = 'getCustomerDetails';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
   const customer = req.user.Customer;
 
   successLog(person, controllerName);
@@ -31,7 +32,7 @@ export const getCustomerDetails = (req, res, next) => {
 //@ PUT
 export const putEditCustomerDetails = (req, res, next) => {
   const controllerName = 'putEditCustomerDetails';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
 
   console.log(req.body);
   const customer = req.user.Customer;
@@ -72,20 +73,20 @@ export const putEditCustomerDetails = (req, res, next) => {
         affectedCustomerRows,
       });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 
 //! BOOKINGS_____________________________________________
 //@ GET
-export const getBookingByID = (req, res, next) => {
-  const controllerName = 'getBookingByID';
-  callLog(person, controllerName);
+export const getPaymentByID = (req, res, next) => {
+  const controllerName = 'getPaymentByID';
+  callLog(req, person, controllerName);
 
   const PK = req.params.id;
   const customerID = req.user.Customer && req.user.Customer.CustomerID;
 
-  models.Booking.findOne({
-    where: { BookingID: PK, CustomerID: customerID },
+  models.Payment.findOne({
+    where: { PaymentID: PK, CustomerID: customerID },
     through: { attributes: [] }, // omit data from mid table
     required: false,
     attributes: {
@@ -109,8 +110,8 @@ export const getBookingByID = (req, res, next) => {
       },
     ],
   })
-    .then(booking => {
-      if (!booking) {
+    .then(payment => {
+      if (!payment) {
         errCode = 404;
         throw new Error(
           'Nie znaleziono rezerwacji lub rezerwacja nie należy do zalogowanego klienta.'
@@ -119,17 +120,17 @@ export const getBookingByID = (req, res, next) => {
       successLog(person, controllerName);
       return res.status(200).json({
         confirmation: 1,
-        message: 'Rezerwacja pobrana pomyślnie.',
+        message: 'Płatność pobrana pomyślnie.',
         isLoggedIn: req.session.isLoggedIn,
-        booking,
+        payment,
       });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 //@ POST
 export const postCreateBookSchedule = (req, res, next) => {
   const controllerName = 'postCreateBookSchedule';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
   console.log(`req.body`, req.body);
   // @ Fetching USER
   let customerPromise, currentCustomer, currentScheduleRecord;
@@ -160,6 +161,10 @@ export const postCreateBookSchedule = (req, res, next) => {
     if (!cDetails.phone || !cDetails.phone.trim()) {
       console.log('\n❌❌❌ phone field empty');
       throw new Error('Numer telefonu nie może być pusty.');
+    }
+    if (!isAdult(cDetails.dob)) {
+      console.log('\n❌❌❌ Customer below 18');
+      throw new Error('Uczestnik musi być pełnoletni.');
     }
 
     customerPromise = models.Customer.create({
@@ -228,7 +233,7 @@ export const postCreateBookSchedule = (req, res, next) => {
         }
         // console.log('scheduleRecord', scheduleRecord);
         // Count the current amount of reservations
-        return models.BookedSchedule.count({
+        return models.Booking.count({
           where: { ScheduleID: req.body.schedule, Attendance: 1 },
           transaction: t,
           lock: t.LOCK.UPDATE, //@
@@ -242,7 +247,7 @@ export const postCreateBookSchedule = (req, res, next) => {
           }
 
           // IF still enough spaces - check if booked in the past
-          return models.Booking.findOne({
+          return models.Payment.findOne({
             where: {
               CustomerID: currentCustomer.CustomerID,
             },
@@ -254,7 +259,7 @@ export const postCreateBookSchedule = (req, res, next) => {
                   attributes: [
                     'Attendance',
                     'CustomerID',
-                    'BookingID',
+                    'PaymentID',
                     'ScheduleID',
                   ],
                   where: { CustomerID: currentCustomer.CustomerID },
@@ -267,9 +272,9 @@ export const postCreateBookSchedule = (req, res, next) => {
           });
         });
       })
-      .then(existingBooking => {
-        if (existingBooking) {
-          // console.log('existingBooking', existingBooking);
+      .then(existingPayment => {
+        if (existingPayment) {
+          // console.log('existingPayment', existingPayment);
 
           if (req.user.Email) {
             sendAttendanceReturningMail({
@@ -281,14 +286,14 @@ export const postCreateBookSchedule = (req, res, next) => {
             });
           }
 
-          //! assuming single schedule/booking
-          return existingBooking.ScheduleRecords[0].BookedSchedule.update(
+          //! assuming single schedule/payment
+          return existingPayment.ScheduleRecords[0].Booking.update(
             { Attendance: true },
             { transaction: t }
-          ).then(() => existingBooking);
+          ).then(() => existingPayment);
         } else {
-          // booking doesn't exist - create new one
-          return models.Booking.create(
+          // payment doesn't exist - create new one
+          return models.Payment.create(
             {
               CustomerID: currentCustomer.CustomerID,
               Date: new Date(),
@@ -300,8 +305,8 @@ export const postCreateBookSchedule = (req, res, next) => {
               PaymentStatus: req.body.paymentStatus,
             },
             { transaction: t }
-          ).then(booking => {
-            // After creating the reservation, we connected addScheduleRecord which was generated by Sequelize for many-to-many relationship between reservation and ScheduleRecord. The method adds entry to intermediate table (booked_schedules) and connects created reservation with schedule feeder (ScheduleRecord).
+          ).then(payment => {
+            // After creating the reservation, we connected addScheduleRecord which was generated by Sequelize for many-to-many relationship between reservation and ScheduleRecord. The method adds entry to intermediate table (bookingss) and connects created reservation with schedule feeder (ScheduleRecord).
 
             // Reservation with payment fro ex. membership confirmation
             if (req.user.Email) {
@@ -314,8 +319,8 @@ export const postCreateBookSchedule = (req, res, next) => {
               });
             }
 
-            successLog(person, controllerName, 'booking created');
-            return booking
+            successLog(person, controllerName, 'payment created');
+            return payment
               .addScheduleRecord(req.body.schedule, {
                 through: { CustomerID: currentCustomer.CustomerID },
                 transaction: t,
@@ -334,29 +339,29 @@ export const postCreateBookSchedule = (req, res, next) => {
                 }
 
                 successLog(person, controllerName, 'attendance marked');
-                return booking;
+                return payment;
               });
           });
         }
       });
   })
-    .then(booking => {
+    .then(payment => {
       successLog(person, controllerName);
       res.status(201).json({
         isNewCustomer,
         confirmation: 1,
         message: 'Miejsce zaklepane - do zobaczenia ;)',
-        booking,
+        payment,
       });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 
 //! ATTENDANCE_____________________________________________
 //@ PUT
 export const putEditMarkAbsent = (req, res, next) => {
   const controllerName = 'putEditMarkAbsent';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
   const scheduleID = req.params.scheduleID;
   let currentScheduleRecord;
   console.log('putEditMarkAbsent', req.body);
@@ -385,7 +390,7 @@ export const putEditMarkAbsent = (req, res, next) => {
         errCode = 401;
         throw new Error('Nie można zwolnić miejsca dla minionego terminu.');
       }
-      return models.BookedSchedule.update(
+      return models.Booking.update(
         { Attendance: false },
         {
           where: {
@@ -420,5 +425,5 @@ export const putEditMarkAbsent = (req, res, next) => {
         }
       });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };

@@ -7,7 +7,7 @@ function DetailsCustomer({
   isUserAccountPage,
   customerAccessed,
   adminAccessed,
-  isBookingView,
+  isPaymentView,
 }) {
   console.log('customerData', customerData);
   const title = isUserAccountPage
@@ -91,7 +91,7 @@ function DetailsCustomer({
         </h2>
         {content}
 
-        {!isBookingView && (
+        {!isPaymentView && (
           <div className='user-container__action'>
             <button
               className='modal__btn'

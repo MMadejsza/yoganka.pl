@@ -9,7 +9,9 @@ export const sendAttendanceReturningMail = ({
   location,
   isAdmin,
 }) => {
-  const subject = `🌸 Dobrze, że wracasz • Yoganka ${isAdmin ? '(rezerwacja od administratora)' : ''}`;
+  const subject = `🌸 Dobrze, że wracasz • Yoganka ${
+    isAdmin ? '(rezerwacja od administratora)' : ''
+  }`;
   const html = `
       <main>
         <h1>Twoja mata tęskniła! 💜</h1>
@@ -49,7 +51,9 @@ export const sendAttendanceMarkedAbsentMail = ({
   location,
   isAdmin,
 }) => {
-  const subject = `🌙 Do zobaczenia następnym razem • Yoganka ${isAdmin ? '(oznaczenie od administratora)' : ''}`;
+  const subject = `🌙 Do zobaczenia następnym razem • Yoganka ${
+    isAdmin ? '(oznaczenie od administratora)' : ''
+  }`;
   const html = `
       <main>
         <h1>Twoja mata będzie dziś odpoczywać 🌿</h1>
@@ -89,7 +93,9 @@ export const sendAttendanceFirstBookingForScheduleMail = ({
   location,
   isAdmin,
 }) => {
-  const subject = `✅ Rezerwacja potwierdzona • ${productName} ${isAdmin ? '(dodane przez administratora)' : ''}`;
+  const subject = `✅ Płatność potwierdzona • ${productName} ${
+    isAdmin ? '(dodane przez administratora)' : ''
+  }`;
   const html = `
       <main>
         <h1>Twoja obecność została potwierdzona ✨</h1>

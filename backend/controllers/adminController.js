@@ -1,9 +1,14 @@
+import bcrypt from 'bcryptjs';
 import { addDays, addMonths, addYears } from 'date-fns';
 import { Op, Sequelize } from 'sequelize';
 import * as models from '../models/_index.js';
 import columnMaps from '../utils/columnsMapping.js';
 import db from '../utils/db.js';
-import { formatIsoDateTime, getWeekDay } from '../utils/formatDateTime.js';
+import {
+  formatIsoDateTime,
+  getWeekDay,
+  isAdult,
+} from '../utils/formatDateTime.js';
 import {
   callLog,
   catchErr,
@@ -36,7 +41,7 @@ const person = 'Admin';
 //@ GET
 export const getAllUsers = (req, res, next) => {
   const controllerName = 'getAllUsers';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
 
   const model = models.User;
   model
@@ -101,11 +106,11 @@ export const getAllUsers = (req, res, next) => {
         ), // With new names
       });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 export const getUserByID = (req, res, next) => {
   const controllerName = 'getUserByID';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
 
   const PK = req.params.id || req.user.UserID;
   models.User.findByPk(PK, {
@@ -131,11 +136,11 @@ export const getUserByID = (req, res, next) => {
         .status(200)
         .json({ confirmation: 1, isLoggedIn: req.session.isLoggedIn, user });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 export const getUserSettings = (req, res, next) => {
   const controllerName = 'getUserSettings';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
 
   models.UserPrefSettings.findByPk(req.params.id)
     .then(preferences => {
@@ -151,12 +156,12 @@ export const getUserSettings = (req, res, next) => {
       successLog(person, controllerName, 'fetched custom settings');
       return res.status(200).json({ confirmation: 1, preferences });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 //@ POST
 export const postCreateUser = (req, res, next) => {
   const controllerName = 'postCreateUser';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
   const { email, password, confirmedPassword, date } = req.body;
 
   models.User.findOne({ where: { email } })
@@ -195,13 +200,16 @@ export const postCreateUser = (req, res, next) => {
         });
     })
     .catch(err =>
-      catchErr(res, errCode, err, controllerName, { type: 'signup', code: 409 })
+      catchErr(person, res, errCode, err, controllerName, {
+        type: 'signup',
+        code: 409,
+      })
     );
 };
 //@ PUT
 export const putEditUserSettings = (req, res, next) => {
   const controllerName = 'putEditUserSettings';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
 
   const userID = req.params.id;
   const { handedness, font, notifications, animation, theme } = req.body;
@@ -265,12 +273,12 @@ export const putEditUserSettings = (req, res, next) => {
         message: result.message,
       });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 //@ DELETE
 export const deleteUser = (req, res, next) => {
   const controllerName = 'deleteUser';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
 
   const id = req.params.id;
   let userEmail;
@@ -310,14 +318,14 @@ export const deleteUser = (req, res, next) => {
         message: 'Konto usunięte pomyślnie.',
       });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 
 //! CUSTOMERS_____________________________________________
 //@ GET
 export const getAllCustomers = (req, res, next) => {
   const controllerName = 'getAllCustomers';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
   const model = models.Customer;
 
   // We create dynamic joint columns based on the map
@@ -372,11 +380,11 @@ export const getAllCustomers = (req, res, next) => {
         ), // With new names
       });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 export const getCustomerByID = (req, res, next) => {
   const controllerName = 'getCustomerByID';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
 
   // console.log(req.user);
   const PK = req.params.id;
@@ -396,14 +404,14 @@ export const getCustomerByID = (req, res, next) => {
         ],
       },
       {
-        model: models.Booking, // His reservations
+        model: models.Payment, // His reservations
         required: false,
         include: [
           {
             model: models.Invoice, // eventual invoices
             required: false,
             attributes: {
-              exclude: ['BookingID'], // deleting
+              exclude: ['PaymentID'], // deleting
             },
           },
         ],
@@ -412,7 +420,7 @@ export const getCustomerByID = (req, res, next) => {
         },
       },
       {
-        model: models.BookedSchedule,
+        model: models.Booking,
         required: false,
         include: [
           {
@@ -459,11 +467,11 @@ export const getCustomerByID = (req, res, next) => {
         customer,
       });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 export const getCustomerDetails = (req, res, next) => {
   const controllerName = 'getEditCustomerDetails';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
 
   models.Customer.findByPk(req.params.id)
     .then(customer => {
@@ -478,12 +486,13 @@ export const getCustomerDetails = (req, res, next) => {
         message: 'Dane uczestnika pobrane pomyślnie.',
       });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 //@ POST
 export const postCreateCustomer = (req, res, next) => {
   const controllerName = 'postCreateCustomer';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
+  console.log(`req.body`, req.body);
 
   const {
     userID,
@@ -498,6 +507,27 @@ export const postCreateCustomer = (req, res, next) => {
   } = req.body;
   let customerEmail;
 
+  if (firstName || firstName.trim()) {
+    console.log('\n❌❌❌ fName field empty');
+    throw new Error('Imię nie może być puste.');
+  }
+  if (lastName || lastName.trim()) {
+    console.log('\n❌❌❌ lname field empty');
+    throw new Error('Nazwisko nie może być puste.');
+  }
+  if (DoB || DoB.trim()) {
+    console.log('\n❌❌❌ dob field empty');
+    throw new Error('Data urodzenia nie może być pusta.');
+  }
+  if (phone || phone.trim()) {
+    console.log('\n❌❌❌ phone field empty');
+    throw new Error('Numer telefonu nie może być pusty.');
+  }
+  if (!isAdult(DoB)) {
+    console.log('\n❌❌❌ Customer below 18');
+    throw new Error('Uczestnik musi być pełnoletni.');
+  }
+
   models.Customer.findOne({ where: { UserID: userID } })
     .then(customer => {
       if (customer) {
@@ -507,7 +537,7 @@ export const postCreateCustomer = (req, res, next) => {
 
       // Getting user for email purposes
       return models.User.findByPk(userID, {
-        attributes: ['Email'],
+        attributes: ['UserID', 'Email'],
       });
     })
     .then(user => {
@@ -532,9 +562,7 @@ export const postCreateCustomer = (req, res, next) => {
         Loyalty: loyalty || 5,
         Notes: notes,
       }).then(newCustomer => {
-        return user
-          .update({ Role: 'customer' }, { where: { UserID: userID } })
-          .then(() => newCustomer);
+        return user.update({ Role: 'customer' }).then(() => newCustomer);
       });
     })
     .then(newCustomer => {
@@ -553,12 +581,14 @@ export const postCreateCustomer = (req, res, next) => {
         message: 'Zarejestrowano pomyślnie.',
       });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName, { code: 409 }));
+    .catch(err =>
+      catchErr(person, res, errCode, err, controllerName, { code: 409 })
+    );
 };
 //@ PUT
 export const putEditCustomerDetails = (req, res, next) => {
   const controllerName = 'putEditCustomerDetails';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
 
   const customerId = req.params.id;
 
@@ -622,14 +652,14 @@ export const putEditCustomerDetails = (req, res, next) => {
             affectedCustomerRows,
           });
         })
-        .catch(err => catchErr(res, errCode, err, controllerName));
+        .catch(err => catchErr(person, res, errCode, err, controllerName));
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 //@ DELETE
 export const deleteCustomer = (req, res, next) => {
   const controllerName = 'deleteCustomer';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
 
   const id = req.params.id;
   let userEmail;
@@ -663,14 +693,14 @@ export const deleteCustomer = (req, res, next) => {
         .status(200)
         .json({ confirmation: 1, message: 'Profil usunięty pomyślnie.' });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 
 //! SCHEDULES_____________________________________________
 //@ GET
 export const getAllSchedules = (req, res, next) => {
   const controllerName = 'getAllSchedules';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
   const model = models.ScheduleRecord;
 
   // We create dynamic joint columns based on the map
@@ -687,9 +717,9 @@ export const getAllSchedules = (req, res, next) => {
           attributes: ['Type', 'Name', 'Price'],
         },
         {
-          model: models.Booking,
+          model: models.Payment,
           required: false,
-          attributes: ['BookingID'], //booking Id is enough
+          attributes: ['PaymentID'], //booking Id is enough
           through: {
             attributes: ['Attendance', 'CustomerID'], // dołącz dodatkowe atrybuty
           },
@@ -728,19 +758,18 @@ export const getAllSchedules = (req, res, next) => {
           if (key === 'Product' && jsonRecord[key]) {
             newRecord['Typ'] = jsonRecord[key].Type; //  flatten object
             newRecord['Nazwa'] = jsonRecord[key].Name;
-          } else if (key === 'Bookings') {
-            newRecord.wasUserReserved = jsonRecord.Bookings.some(
+          } else if (key === 'Payments') {
+            newRecord.wasUserReserved = jsonRecord.Payments.some(
               booking =>
-                booking.BookedSchedule.CustomerID ===
-                req.user?.Customer?.CustomerID
+                booking.Booking.CustomerID === req.user?.Customer?.CustomerID
             );
-            newRecord.isUserGoing = jsonRecord.Bookings.some(booking => {
-              const isBooked = booking.BookedSchedule;
-              const customerID = booking.BookedSchedule.CustomerID;
+            newRecord.isUserGoing = jsonRecord.Payments.some(booking => {
+              const isBooked = booking.Booking;
+              const customerID = booking.Booking.CustomerID;
               const loggedInID = req.user?.Customer?.CustomerID;
               const isGoing =
-                booking.BookedSchedule.Attendance === 1 ||
-                booking.BookedSchedule.Attendance === true;
+                booking.Booking.Attendance === 1 ||
+                booking.Booking.Attendance === true;
 
               return isBooked && customerID == loggedInID && isGoing;
             });
@@ -749,17 +778,18 @@ export const getAllSchedules = (req, res, next) => {
           }
         }
         // console.log(jsonRecord);
-        const activeBookings = jsonRecord.Bookings.filter(
+        const activePayments = jsonRecord.Payments.filter(
           booking =>
-            booking.BookedSchedule &&
-            (booking.BookedSchedule.Attendance === 1 ||
-              booking.BookedSchedule.Attendance === true)
+            booking.Booking &&
+            (booking.Booking.Attendance === 1 ||
+              booking.Booking.Attendance === true)
         );
         newRecord['Dzień'] = getWeekDay(jsonRecord['Date']);
         newRecord['Zadatek'] = jsonRecord.Product.Price;
-        newRecord['Miejsca'] =
-          `${activeBookings.length}/${jsonRecord.Capacity}`;
-        newRecord.full = activeBookings.length >= jsonRecord.Capacity;
+        newRecord[
+          'Miejsca'
+        ] = `${activePayments.length}/${jsonRecord.Capacity}`;
+        newRecord.full = activePayments.length >= jsonRecord.Capacity;
         return newRecord; // Return new record object
       });
 
@@ -776,7 +806,7 @@ export const getAllSchedules = (req, res, next) => {
         ), // With new names
       });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 export const getScheduleByID = (req, res, next) => {
   const controllerName = 'getScheduleByID';
@@ -790,7 +820,7 @@ export const getScheduleByID = (req, res, next) => {
         required: true,
       },
       {
-        model: models.BookedSchedule,
+        model: models.Booking,
         required: false,
         include: [
           {
@@ -798,7 +828,7 @@ export const getScheduleByID = (req, res, next) => {
             attributes: { exclude: ['UserID'] },
           },
           {
-            model: models.Booking,
+            model: models.Payment,
             // attributes: {exclude: ['UserID']},
           },
         ],
@@ -821,40 +851,38 @@ export const getScheduleByID = (req, res, next) => {
         errCode = 404;
         throw new Error('Nie znaleziono terminu.');
       }
-      // Konwersja rekordu na zwykły obiekt
+
       let schedule = scheduleData.toJSON();
 
-      // [Zmienione] Dodano logikę przetwarzania rezerwacji podobną do działającego kodu:
       let isUserGoing = false;
       schedule.Attendance = 0;
 
-      if (schedule.BookedSchedules && schedule.BookedSchedules.length > 0) {
+      if (schedule.Bookings && schedule.Bookings.length > 0) {
         let wasUserReserved;
-        const beingAttendedSchedules = schedule.BookedSchedules.filter(
+        const beingAttendedSchedules = schedule.Bookings.filter(
           bs => bs.Attendance == 1 || bs.Attendance == true
         );
         if (req.user && req.user.Customer) {
-          wasUserReserved = schedule.BookedSchedules.some(
+          wasUserReserved = schedule.Bookings.some(
             bs => bs.CustomerID === req.user?.Customer.CustomerID
           );
           isUserGoing = beingAttendedSchedules.some(
             bs => bs.CustomerID === req.user.Customer.CustomerID
           );
-          schedule.attendanceCount = beingAttendedSchedules.length; // [Zmienione] – nowa właściwość
+          schedule.attendanceCount = beingAttendedSchedules.length;
         }
         schedule.Attendance = beingAttendedSchedules.length;
         schedule.isUserGoing = isUserGoing;
         schedule.wasUserReserved = wasUserReserved;
         schedule.full = beingAttendedSchedules.length >= schedule.Capacity;
       }
-      // [Zmienione] Ustalanie statusu terminu (jak w działającym kodzie)
+
       const scheduleDateTime = new Date(
         `${schedule.Date}T${schedule.StartTime}:00`
       );
       const now = new Date();
       schedule.isCompleted = scheduleDateTime <= now;
 
-      // Zwracamy pełen obiekt użytkownika (zgodnie z działającym kodem)
       successLog(person, controllerName);
       return res.status(200).json({
         confirmation: 1,
@@ -863,7 +891,7 @@ export const getScheduleByID = (req, res, next) => {
         user: req.user,
       });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 export const getProductSchedules = (req, res, next) => {
   const controllerName = 'getProductSchedulesByID';
@@ -876,7 +904,7 @@ export const getProductSchedules = (req, res, next) => {
   models.ScheduleRecord.findAll({ where: { ProductID: productID } })
     .then(foundSchedules => {
       //find all bookings for given customer
-      return models.BookedSchedule.findAll({
+      return models.Booking.findAll({
         where: { CustomerID: customerID },
       }).then(bookedByCustomerSchedules => {
         // filter bookings which have not been booked yet by him
@@ -896,13 +924,13 @@ export const getProductSchedules = (req, res, next) => {
         content: filteredFoundSchedules,
       });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
-export const getBookedSchedules = (req, res, next) => {};
+export const getBookings = (req, res, next) => {};
 //@ POST
 export const postCreateScheduleRecord = (req, res, next) => {
   const controllerName = 'postCreateScheduleRecord';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
   const {
     productID,
     date,
@@ -977,12 +1005,12 @@ export const postCreateScheduleRecord = (req, res, next) => {
         records: createdRecords,
       });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 //@ PUT
 export const putEditSchedule = async (req, res, next) => {
   const controllerName = 'putEditSchedule';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
 
   const scheduleId = req.params.id;
 
@@ -1069,14 +1097,14 @@ export const putEditSchedule = async (req, res, next) => {
             affectedScheduleRows,
           });
         })
-        .catch(err => catchErr(res, errCode, err, controllerName));
+        .catch(err => catchErr(person, res, errCode, err, controllerName));
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 //@ DELETE
 export const deleteSchedule = (req, res, next) => {
   const controllerName = 'deleteSchedule';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
   const id = req.params.id;
   console.log(`${controllerName} deleting id: `, id);
 
@@ -1105,7 +1133,7 @@ export const deleteSchedule = (req, res, next) => {
         );
       }
 
-      return models.BookedSchedule.findOne({
+      return models.Booking.findOne({
         where: { ScheduleID: id },
       }).then(foundRecord => {
         if (foundRecord) {
@@ -1133,7 +1161,7 @@ export const deleteSchedule = (req, res, next) => {
         .status(200)
         .json({ confirmation: 1, message: 'Termin usunięty pomyślnie.' });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 
 //! ATTENDANCE_____________________________________________
@@ -1142,14 +1170,14 @@ export const deleteSchedule = (req, res, next) => {
 //@ PUT
 export const putEditMarkAbsent = (req, res, next) => {
   const controllerName = 'putEditMarkAbsent';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
 
-  const { attendanceCustomerID, attendanceBookingID, product } = req.body;
+  const { attendanceCustomerID, attendancePaymentID, product } = req.body;
   let currentScheduleRecord, customerEmail;
 
   // Find schedule
-  models.BookedSchedule.findOne({
-    where: { CustomerID: attendanceCustomerID, BookingID: attendanceBookingID },
+  models.Booking.findOne({
+    where: { CustomerID: attendanceCustomerID, PaymentID: attendancePaymentID },
     include: [
       {
         model: models.ScheduleRecord,
@@ -1179,7 +1207,7 @@ export const putEditMarkAbsent = (req, res, next) => {
       customerEmail = customer.User.Email;
 
       // Finally update attendance
-      return models.BookedSchedule.update(
+      return models.Booking.update(
         {
           Attendance: 0,
           DidAction: person,
@@ -1187,7 +1215,7 @@ export const putEditMarkAbsent = (req, res, next) => {
         {
           where: {
             CustomerID: attendanceCustomerID,
-            BookingID: attendanceBookingID,
+            PaymentID: attendancePaymentID,
           },
         }
       );
@@ -1212,22 +1240,22 @@ export const putEditMarkAbsent = (req, res, next) => {
         affectedRows: 2,
       });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 export const putEditMarkPresent = (req, res, next) => {
   const controllerName = 'putEditMarkPresent';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
 
-  const { cancelledAttendanceCustomerID, cancelledAttendanceBookingID } =
+  const { cancelledAttendanceCustomerID, cancelledAttendancePaymentID } =
     req.body;
 
   let currentScheduleRecord, customerEmail;
 
   // Find schedule
-  models.BookedSchedule.findOne({
+  models.Booking.findOne({
     where: {
       CustomerID: cancelledAttendanceCustomerID,
-      BookingID: cancelledAttendanceBookingID,
+      PaymentID: cancelledAttendancePaymentID,
     },
     include: [
       {
@@ -1260,7 +1288,7 @@ export const putEditMarkPresent = (req, res, next) => {
       customerEmail = customer.User.Email;
 
       // Finally update attendance
-      return models.BookedSchedule.update(
+      return models.Booking.update(
         {
           Attendance: 1,
           DidAction: person,
@@ -1268,7 +1296,7 @@ export const putEditMarkPresent = (req, res, next) => {
         {
           where: {
             CustomerID: cancelledAttendanceCustomerID,
-            BookingID: cancelledAttendanceBookingID,
+            PaymentID: cancelledAttendancePaymentID,
           },
         }
       );
@@ -1294,18 +1322,18 @@ export const putEditMarkPresent = (req, res, next) => {
         affectedRows: status ? 1 : 0,
       });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 //@ DELETE
 export const deleteAttendanceRecord = (req, res, next) => {
   const controllerName = 'deleteAttendanceRecord';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
 
-  const { attendanceCustomerID, attendanceBookingID } = req.body;
+  const { attendanceCustomerID, attendancePaymentID } = req.body;
 
   // Find booking to get info for email as well
-  models.BookedSchedule.findOne({
-    where: { CustomerID: attendanceCustomerID, BookingID: attendanceBookingID },
+  models.Booking.findOne({
+    where: { CustomerID: attendanceCustomerID, PaymentID: attendancePaymentID },
     include: [
       {
         model: models.ScheduleRecord,
@@ -1358,17 +1386,18 @@ export const deleteAttendanceRecord = (req, res, next) => {
       successLog(person, controllerName);
       return res.status(200).json({
         confirmation: 1,
-        message: 'Rekord obecności usunięty.',
+        message:
+          'Rekord obecności usunięty. Rekord płatności pozostał nieruszony.',
       });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 
 //! FEEDBACK_____________________________________________
 //@ GET
 export const getAllParticipantsFeedback = (req, res, next) => {
   const controllerName = 'getAllParticipantsFeedback';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
 
   const model = models.Feedback;
 
@@ -1437,8 +1466,9 @@ export const getAllParticipantsFeedback = (req, res, next) => {
 
             newRecord[dataKey] = formatIsoDateTime(jsonRecord[key]['Date']);
             newRecord[startTimeKey] = jsonRecord[key]['StartTime'];
-            newRecord[nameKey] =
-              `${jsonRecord[key].Product?.Name} (${jsonRecord[key].ScheduleID})`;
+            newRecord[
+              nameKey
+            ] = `${jsonRecord[key].Product?.Name} (${jsonRecord[key].ScheduleID})`;
           } else {
             newRecord[newKey] = jsonRecord[key]; // Assignment
           }
@@ -1461,7 +1491,7 @@ export const getAllParticipantsFeedback = (req, res, next) => {
         content: formattedRecords, // With new names
       });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 export const getAllParticipantsFeedbackByID = (req, res, next) => {
   console.log(`\n➡️ admin called getAllParticipantsFeedbackByID`);
@@ -1523,14 +1553,14 @@ export const getAllParticipantsFeedbackByID = (req, res, next) => {
         });
       });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 //@ POST
 //@ PUT
 //@ DELETE
 export const deleteFeedback = (req, res, next) => {
   const controllerName = 'deleteFeedback';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
 
   const id = req.params.id;
   models.Feedback.destroy({
@@ -1548,19 +1578,19 @@ export const deleteFeedback = (req, res, next) => {
         .status(200)
         .json({ confirmation: 1, message: 'Opinia usunięta pomyślnie.' });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 
 //! NEWSLETTERS_____________________________________________
 //@ GET
 export const getAllNewsletters = (req, res, next) => {
   const controllerName = 'getAllNewsletters';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
 
-  tableDataFlatQuery(res, models.Newsletter);
+  tableDataFlatQuery(req, res, models.Newsletter);
 };
 export const getAllSubscribedNewsletters = (req, res, next) => {
-  tableDataFlatQuery(res, models.SubscribedNewsletter);
+  tableDataFlatQuery(req, res, models.SubscribedNewsletter);
 };
 //@ POST
 //@ PUT
@@ -1570,12 +1600,12 @@ export const getAllSubscribedNewsletters = (req, res, next) => {
 //@ GET
 export const getAllProducts = (req, res, next) => {
   const controllerName = 'getAllProducts';
-  callLog(person, controllerName);
-  tableDataFlatQuery(res, models.Product);
+  callLog(req, person, controllerName);
+  tableDataFlatQuery(req, res, models.Product);
 };
 export const getProductByID = (req, res, next) => {
   const controllerName = 'getProductByID';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
 
   const PK = req.params.id;
   models.Product.findByPk(PK, {
@@ -1585,8 +1615,8 @@ export const getProductByID = (req, res, next) => {
         required: false,
         include: [
           {
-            model: models.Booking, // Booking which has relation through BookedSchedule
-            as: 'Bookings',
+            model: models.Payment, // Payment which has relation through Bookings
+            as: 'Payments',
             through: {}, // omit data from mid table
             required: false,
             attributes: {
@@ -1630,12 +1660,12 @@ export const getProductByID = (req, res, next) => {
         product,
       });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 //@ POST
 export const postCreateProduct = async (req, res, next) => {
   const controllerName = 'postCreateProduct';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
 
   const { name, productType, StartDate, duration, location, price, status } =
     req.body;
@@ -1665,12 +1695,14 @@ export const postCreateProduct = async (req, res, next) => {
         message: 'Stworzono pomyślnie.',
       });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName, { code: 409 }));
+    .catch(err =>
+      catchErr(person, res, errCode, err, controllerName, { code: 409 })
+    );
 };
 //@ PUT
 export const putEditProduct = async (req, res, next) => {
   const controllerName = 'putEditProduct';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
   const productId = req.params.id;
 
   const {
@@ -1755,14 +1787,14 @@ export const putEditProduct = async (req, res, next) => {
             affectedProductRows,
           });
         })
-        .catch(err => catchErr(res, errCode, err, controllerName));
+        .catch(err => catchErr(person, res, errCode, err, controllerName));
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 //@ DELETE
 export const deleteProduct = (req, res, next) => {
   const controllerName = 'deleteProduct';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
 
   const id = req.params.id;
   models.Product.destroy({
@@ -1780,15 +1812,15 @@ export const deleteProduct = (req, res, next) => {
         .status(200)
         .json({ confirmation: 1, message: 'Produkt usunięty pomyślnie.' });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 
 //! BOOKINGS_____________________________________________
 //@ GET
-export const getAllBookings = (req, res, next) => {
-  const controllerName = 'getAllBookings';
-  callLog(person, controllerName);
-  const model = models.Booking;
+export const getAllPayments = (req, res, next) => {
+  const controllerName = 'getAllPayments';
+  callLog(req, person, controllerName);
+  const model = models.Payment;
 
   // We create dynamic joint columns based on the map
   const columnMap = columnMaps[model.name] || {};
@@ -1808,7 +1840,7 @@ export const getAllBookings = (req, res, next) => {
         },
         {
           model: models.ScheduleRecord,
-          through: { model: models.BookedSchedule }, // M:N relation
+          through: { model: models.Booking }, // M:N relation
           include: [
             {
               model: models.Product,
@@ -1825,7 +1857,7 @@ export const getAllBookings = (req, res, next) => {
     .then(records => {
       if (!records) {
         errCode = 404;
-        throw new Error('Nie znaleziono rezerwacji.');
+        throw new Error('Nie znaleziono płatności.');
       }
       const formattedRecords = records.map(record => {
         const attributes = model.getAttributes();
@@ -1845,9 +1877,7 @@ export const getAllBookings = (req, res, next) => {
             newRecord[newKey] = `${customer} (${customerID})`;
           } else if (key === 'ScheduleRecords') {
             const products = jsonRecord[key]
-              .map(
-                sr => `${sr.Product?.Name} (${sr.BookedSchedule?.ScheduleID})`
-              )
+              .map(sr => `${sr.Product?.Name} (${sr.Bookings?.ScheduleID})`)
               .filter(Boolean);
             newRecord['Terminy'] = jsonRecord[key];
             newRecord['Produkty'] =
@@ -1866,7 +1896,7 @@ export const getAllBookings = (req, res, next) => {
       successLog(person, controllerName);
       res.json({
         confirmation: 1,
-        message: 'Rezerwacje pobrane pomyślnie.',
+        message: 'Płatności pobrane pomyślnie.',
         isLoggedIn: req.session.isLoggedIn,
         totalHeaders,
         records: records,
@@ -1876,14 +1906,14 @@ export const getAllBookings = (req, res, next) => {
         ),
       });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
-export const getBookingByID = (req, res, next) => {
-  const controllerName = 'getBookingByID';
-  callLog(person, controllerName);
+export const getPaymentByID = (req, res, next) => {
+  const controllerName = 'getPaymentByID';
+  callLog(req, person, controllerName);
 
   const PK = req.params.id;
-  models.Booking.findByPk(PK, {
+  models.Payment.findByPk(PK, {
     through: { attributes: [] }, // omit data from mid table
     required: false,
     attributes: {
@@ -1907,25 +1937,25 @@ export const getBookingByID = (req, res, next) => {
       },
     ],
   })
-    .then(booking => {
-      if (!booking) {
+    .then(payment => {
+      if (!payment) {
         errCode = 404;
-        throw new Error('Nie znaleziono rezerwacji.');
+        throw new Error('Nie znaleziono płatności.');
       }
       successLog(person, controllerName);
       return res.status(200).json({
         confirmation: 1,
-        message: 'Rezerwacja pobrana pomyślnie.',
+        message: 'Płatność pobrana pomyślnie.',
         isLoggedIn: req.session.isLoggedIn,
-        booking,
+        payment,
       });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 //@ POST
-export const postCreateBooking = (req, res, next) => {
-  const controllerName = 'postCreateBooking';
-  callLog(person, controllerName);
+export const postCreatePayment = (req, res, next) => {
+  const controllerName = 'postCreatePayment';
+  callLog(req, person, controllerName);
 
   const {
     customerID,
@@ -1983,7 +2013,7 @@ export const postCreateBooking = (req, res, next) => {
         // 	throw new Error('Nie można rezerwować terminu, który już minął.');
         // }
         // Count the current amount of reservations
-        return models.BookedSchedule.count({
+        return models.Booking.count({
           where: { ScheduleID: scheduleID, Attendance: 1 },
           transaction: t,
           lock: t.LOCK.UPDATE, //@
@@ -1997,7 +2027,7 @@ export const postCreateBooking = (req, res, next) => {
           }
 
           // IF still enough spaces - check if booked in the past
-          return models.Booking.findOne({
+          return models.Payment.findOne({
             where: {
               CustomerID: customerID,
             },
@@ -2009,7 +2039,7 @@ export const postCreateBooking = (req, res, next) => {
                   attributes: [
                     'Attendance',
                     'CustomerID',
-                    'BookingID',
+                    'PaymentID',
                     'ScheduleID',
                   ],
                   where: { CustomerID: customerID },
@@ -2022,8 +2052,8 @@ export const postCreateBooking = (req, res, next) => {
           });
         });
       })
-      .then(existingBooking => {
-        if (existingBooking) {
+      .then(existingPayment => {
+        if (existingPayment) {
           //! assuming single schedule/booking
           throw new Error(
             'Uczestnik już rezerwował ten termin. Można mu ewentualnie poprawić obecność w zakładce wspomnianego terminu w "Grafik" w panelu admina.'
@@ -2038,15 +2068,15 @@ export const postCreateBooking = (req, res, next) => {
             paymentMethod == 1
               ? 'Gotówka (M)'
               : paymentMethod == 2
-                ? 'BLIK (M)'
-                : 'Przelew (M)';
+              ? 'BLIK (M)'
+              : 'Przelew (M)';
 
           models.Customer.findByPk(customerID, {
             include: [{ model: models.User, attributes: ['Email'] }],
             required: true,
           }).then(customer => (customerEmail = customer.User.Email));
 
-          return models.Booking.create(
+          return models.Payment.create(
             {
               CustomerID: customerID,
               Date: new Date(),
@@ -2069,7 +2099,7 @@ export const postCreateBooking = (req, res, next) => {
               });
             }
 
-            // After creating the reservation, we connected addScheduleRecord which was generated by Sequelize for many-to-many relationship between reservation and ScheduleRecord. The method adds entry to intermediate table (booked_schedules) and connects created reservation with schedule feeder (ScheduleRecord).
+            // After creating the reservation, we connected addScheduleRecord which was generated by Sequelize for many-to-many relationship between reservation and ScheduleRecord. The method adds entry to intermediate table (bookingss) and connects created reservation with schedule feeder (ScheduleRecord).
             return booking
               .addScheduleRecord(scheduleID, {
                 through: { CustomerID: customerID, DidAction: person },
@@ -2086,23 +2116,23 @@ export const postCreateBooking = (req, res, next) => {
       res.status(201).json({
         isNewCustomer,
         confirmation: 1,
-        message: 'Rezerwacja utworzona pomyślnie.',
+        message: 'Płatność utworzona pomyślnie.',
         booking,
       });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 //@ PUT
 //@ DELETE
-export const deleteBooking = (req, res, next) => {
-  const controllerName = 'deleteBooking';
-  callLog(person, controllerName);
+export const deletePayment = (req, res, next) => {
+  const controllerName = 'deletePayment';
+  callLog(req, person, controllerName);
 
   const id = req.params.id;
 
   // First - find the targeted booking with attached customer and user for email
-  return models.Booking.findOne({
-    where: { BookingID: id },
+  return models.Payment.findOne({
+    where: { PaymentID: id },
     include: [
       {
         model: models.Customer,
@@ -2113,7 +2143,7 @@ export const deleteBooking = (req, res, next) => {
     .then(booking => {
       if (!booking) {
         errCode = 404;
-        throw new Error('\n❌ Nie znaleziono rezerwacji.');
+        throw new Error('\n❌ Nie znaleziono płatności.');
       }
 
       // Assign email
@@ -2123,35 +2153,35 @@ export const deleteBooking = (req, res, next) => {
       if (customerEmail) {
         sendReservationCancelledMail({
           to: customerEmail,
-          bookingID: booking.BookingID,
+          bookingID: booking.PaymentID,
         });
       }
 
       // Now delete
-      return models.Booking.destroy({
-        where: { BookingID: id },
+      return models.Payment.destroy({
+        where: { PaymentID: id },
       });
     })
     .then(deletedCount => {
       if (!deletedCount) {
         errCode = 500;
-        throw new Error('\n❌ Wystąpił problem przy usuwaniu rezerwacji.');
+        throw new Error('\n❌ Wystąpił problem przy usuwaniu płatności.');
       }
 
       successLog(person, controllerName);
       return res.status(200).json({
         confirmation: 1,
-        message: 'Rezerwacja usunięta pomyślnie.',
+        message: 'Płatność usunięta pomyślnie.',
       });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 
 //! INVOICES_____________________________________________
 //@ GET
 export const getAllInvoices = (req, res, next) => {
   const controllerName = 'getAllInvoices';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
 
   const model = models.Invoice;
 
@@ -2165,10 +2195,10 @@ export const getAllInvoices = (req, res, next) => {
     .findAll({
       include: [
         {
-          model: models.Booking,
+          model: models.Payment,
           include: [
             {
-              model: models.Customer, // from Booking
+              model: models.Customer, // from Payment
               attributes: [
                 [
                   Sequelize.literal("CONCAT(FirstName, ' ', LastName)"),
@@ -2205,7 +2235,7 @@ export const getAllInvoices = (req, res, next) => {
             attributeType === 'DATETIME'
           ) {
             newRecord[newKey] = formatIsoDateTime(jsonRecord[key]);
-          } else if (key === 'Booking' && jsonRecord[key]) {
+          } else if (key === 'Payment' && jsonRecord[key]) {
             //# Name
             newRecord[newKey] = jsonRecord[key].Customer?.['Imię Nazwisko'];
           } else {
@@ -2230,7 +2260,7 @@ export const getAllInvoices = (req, res, next) => {
         content: formattedRecords, // With new names
       });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 //@ POST
 //@ PUT

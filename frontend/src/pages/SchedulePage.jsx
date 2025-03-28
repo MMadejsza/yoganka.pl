@@ -106,7 +106,7 @@ function SchedulePage() {
         modifier='schedule'
         visited={isModalOpen}
         onClose={handleCloseModal}
-        bookingOps={{
+        paymentOps={{
           onBook: book,
           isError: isBookError,
           error: bookError,

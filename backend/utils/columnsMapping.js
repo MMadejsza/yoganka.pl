@@ -54,14 +54,14 @@ const columnMaps = {
     ['Zadatek']: 'Zadatek',
   },
 
-  Booking: {
+  Payment: {
     // CustomerID: 'ID klienta',
     // ScheduleID: 'ID harmonogramu',
     // Name: 'Produkt',
     // Status: 'Status',
     // AmountDue: 'Kwota do zapłaty',
     // ['Imię Nazwisko']: 'Klient',
-    BookingID: 'ID',
+    PaymentID: 'ID',
     Date: 'Data Rezerwacji',
     Customer: 'Uczestnik',
     Product: 'Produkty',
@@ -72,9 +72,9 @@ const columnMaps = {
 
   Invoice: {
     InvoiceID: 'ID FV',
-    BookingID: 'ID Rezerwacji',
+    PaymentID: 'ID Rezerwacji',
     InvoiceDate: 'Wystawiona',
-    Booking: 'Uczestnik',
+    Payment: 'Uczestnik',
     DueDate: 'Termin',
     PaymentStatus: 'Status płatności',
     TotalAmount: 'Wartość',

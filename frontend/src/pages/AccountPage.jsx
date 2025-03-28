@@ -3,8 +3,8 @@ import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { fetchItem } from '../utils/http.js';
 
-import AccountBookings from '../components/adminConsole/AccountBookings.jsx';
 import AccountDashboard from '../components/adminConsole/AccountDashboard.jsx';
+import AccountPayments from '../components/adminConsole/AccountPayments.jsx';
 import AccountSchedulesHistory from '../components/adminConsole/AccountSchedulesHistory.jsx';
 import AccountSettings from '../components/adminConsole/AccountSettings.jsx';
 import UserTabs from '../components/adminConsole/UserTabs.jsx';
@@ -47,7 +47,7 @@ function AccountPage() {
         content = <AccountSchedulesHistory data={customer} />;
         break;
       case 'rezerwacje':
-        content = <AccountBookings data={customer} />;
+        content = <AccountPayments data={customer} />;
         break;
       case 'ustawienia':
         content = (

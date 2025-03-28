@@ -11,10 +11,10 @@ import { formatIsoDateTime } from './dateTime.js';
 export const calculateProductStats = (product, schedules) => {
   console.log(`❗❗❗ calculateProductStats product`, product);
   console.log(`❗❗❗ calculateProductStats schedules`, schedules);
-  // console.log(`schedules: `, schedules);
-  const attendedBookings = [];
+  console.log(`schedules: `, schedules);
+  const attendedPayments = [];
   const scheduleRecords = [];
-  const bookings = [];
+  const payments = [];
   const attendances = [];
   const reviews = [];
   const participantAges = [];
@@ -54,40 +54,40 @@ export const calculateProductStats = (product, schedules) => {
       }
     }
 
-    const allBookings = schedule.Bookings ?? [];
+    const allPayments = schedule.Payments ?? [];
     let scheduleParticipantsAmount = 0;
     let scheduleAttendance = 0;
-    if (allBookings.length > 0) {
+    if (allPayments.length > 0) {
       totalTimeInSeconds += durationToSeconds(product.Duration);
 
       // # BOOKING Level
-      for (let booking of allBookings) {
-        totalRevenue += parseFloat(booking.AmountPaid);
-        participantAges.push(calculateAge(booking.Customer.DoB));
+      for (let payment of allPayments) {
+        totalRevenue += parseFloat(payment.AmountPaid);
+        participantAges.push(calculateAge(payment.Customer.DoB));
 
-        booking.Attendance = 0;
-        const formattedCustomer = `${booking.Customer.FirstName} ${booking.Customer.LastName} (${booking.Customer.CustomerID})`;
-        if (booking.BookedSchedule?.Attendance == true) {
+        payment.Attendance = 0;
+        const formattedCustomer = `${payment.Customer.FirstName} ${payment.Customer.LastName} (${payment.Customer.CustomerID})`;
+        if (payment.Booking?.Attendance == true) {
           scheduleParticipantsAmount += 1;
           totalParticipantsAmount += 1;
-          booking.Attendance = true;
+          payment.Attendance = true;
 
           const isoTimeStamp = new Date(
-            booking.BookedSchedule.TimeStamp
+            payment.Booking.TimeStamp
           ).toISOString();
-          attendedBookings.push({
-            id: booking.BookingID,
-            date: formatIsoDateTime(booking.Date),
-            customerID: booking.Customer.CustomerID,
+          attendedPayments.push({
+            id: payment.PaymentID,
+            date: formatIsoDateTime(payment.Date),
+            customerID: payment.Customer.CustomerID,
             customer: formattedCustomer,
-            value: booking.AmountPaid,
+            value: payment.AmountPaid,
             timestamp: formatIsoDateTime(isoTimeStamp),
-            method: booking.PaymentMethod,
+            method: payment.PaymentMethod,
             Attendance: 1,
           });
         }
-        booking.customer = formattedCustomer;
-        bookings.push(booking);
+        payment.customer = formattedCustomer;
+        payments.push(payment);
       }
       scheduleAttendance = Math.round(
         (scheduleParticipantsAmount / schedule.Capacity) * 100
@@ -107,7 +107,7 @@ export const calculateProductStats = (product, schedules) => {
       Date: schedule.Date,
       StartTime: schedule.StartTime,
       Location: schedule.Location,
-      bookingsNumber: schedule.Bookings.length,
+      paymentsNumber: schedule.Payments.length,
       participants: scheduleParticipantsAmount,
       capacity: schedule.Capacity,
       Attendance: scheduleAttendance,
@@ -176,8 +176,8 @@ export const calculateProductStats = (product, schedules) => {
 
   const stats = {
     scheduleRecords: scheduleRecords,
-    attendedBookings: attendedBookings,
-    totalBookings: bookings,
+    attendedPayments: attendedPayments,
+    totalPayments: payments,
     reviews: reviews,
     totalSchedulesAmount: totalSchedules,
     totalTime: formattedDuration,
@@ -202,59 +202,59 @@ export const calculateScheduleStats = (product, schedule) => {
   console.log(`❗❗❗ calculateScheduleStats schedule`, schedule);
 
   // Inicjalizacja zmiennych statystycznych
-  const attendedBookings = [];
-  const totalBookings = [];
+  const attendedPayments = [];
+  const totalPayments = [];
   const reviews = [];
   const participantAges = [];
   let totalRevenue = 0;
   let totalTimeInSeconds = 0;
-  let totalBookingsAmount = 0;
-  let attendedBookingsAmount = 0;
+  let totalPaymentsAmount = 0;
+  let attendedPaymentsAmount = 0;
   let totalReviews = 0;
   let sumFeedbackRating = 0;
   let feedbackCount = 0;
 
   const now = new Date();
 
-  // Używamy BookedSchedules (z atrybutem Attendance) do określenia faktycznego uczestnictwa
+  // Używamy Bookings (z atrybutem Attendance) do określenia faktycznego uczestnictwa
   const attendedRecords = schedule
-    ? schedule.BookedSchedules?.filter(
+    ? schedule.Bookings?.filter(
         abs => abs.Attendance === true || abs.Attendance === 1
       )
     : [];
 
-  schedule.BookedSchedules.forEach(bs => {
+  schedule.Bookings.forEach(bs => {
     // Tworzymy obiekt Date z daty i godziny terminu
     const scheduleDateTime = new Date(`${bs.Date}T${bs.StartTime}:00`);
     // Uważamy termin za "odbyte", jeśli jego data już minęła
-    bs.Booking.customer = `${bs.Customer.FirstName} ${bs.Customer.LastName} (${bs.Customer.CustomerID})`;
-    bs.Booking.Attendance = bs.Attendance;
-    totalBookings.push(bs.Booking);
+    bs.Payment.customer = `${bs.Customer.FirstName} ${bs.Customer.LastName} (${bs.Customer.CustomerID})`;
+    bs.Payment.Attendance = bs.Attendance;
+    totalPayments.push(bs.Payment);
     if (scheduleDateTime > now) return;
-    totalBookingsAmount++;
+    totalPaymentsAmount++;
     // Sumujemy czas trwania zajęć tylko wtedy, gdy są potwierdzeni uczestnicy
     if (attendedRecords.length > 0) {
       totalTimeInSeconds += durationToSeconds(product.Duration);
     }
     // Liczymy przychód na podstawie wszystkich rezerwacji, niezależnie od tego, czy użytkownik przyszedł
-    totalRevenue += parseFloat(bs.Booking.AmountPaid);
+    totalRevenue += parseFloat(bs.Payment.AmountPaid);
   });
 
-  // Przetwarzamy dane z potwierdzonych uczestnictw (BookedSchedules)
+  // Przetwarzamy dane z potwierdzonych uczestnictw (Bookings)
   attendedRecords.forEach(record => {
-    attendedBookingsAmount++;
+    attendedPaymentsAmount++;
     participantAges.push(calculateAge(record.Customer.DoB));
     const isoTimeStamp = new Date(record.TimeStamp).toISOString();
-    attendedBookings.push({
-      id: record.BookingID, // Zakładamy, że rekord BookedSchedule zawiera odniesienie do BookingID
+    attendedPayments.push({
+      id: record.PaymentID, // Zakładamy, że rekord Bookings zawiera odniesienie do PaymentID
       date:
-        formatIsoDateTime(record.Booking.Date) || formatIsoDateTime(bs.Date), //! Jeśli dostępna, inaczej używamy daty terminu
+        formatIsoDateTime(record.Payment.Date) || formatIsoDateTime(bs.Date), //! Jeśli dostępna, inaczej używamy daty terminu
       customer: `${record.Customer.FirstName} ${record.Customer.LastName}`,
       timestamp: `${formatIsoDateTime(isoTimeStamp)}`,
 
       customerID: record.Customer.CustomerID,
-      value: record.Booking.AmountPaid, // Informacja z BookedSchedule – dla odniesienia (nie wpływa na revenue)
-      method: record.Booking.PaymentMethod,
+      value: record.Payment.AmountPaid, // Informacja z Bookings – dla odniesienia (nie wpływa na revenue)
+      method: record.Payment.PaymentMethod,
     });
   });
 
@@ -296,22 +296,22 @@ export const calculateScheduleStats = (product, schedule) => {
   // Uśredniamy na podstawie liczby minionych terminów (nawet pustych)
 
   console.log(
-    `➡️ stats avgAttendancePercentage = ${attendedBookingsAmount}/${product.TotalSpaces}`
+    `➡️ stats avgAttendancePercentage = ${attendedPaymentsAmount}/${product.TotalSpaces}`
   );
   const avgAttendancePercentage =
-    attendedBookingsAmount > 0
-      ? Math.round((attendedBookingsAmount / schedule.Capacity) * 100)
+    attendedPaymentsAmount > 0
+      ? Math.round((attendedPaymentsAmount / schedule.Capacity) * 100)
       : 0;
   const avgReviewersPercentage =
-    attendedBookingsAmount > 0
-      ? Math.round((totalReviews / attendedBookingsAmount) * 100)
+    attendedPaymentsAmount > 0
+      ? Math.round((totalReviews / attendedPaymentsAmount) * 100)
       : 0;
 
   const stats = {
-    totalBookings: totalBookings,
-    totalBookingsAmount: totalBookingsAmount,
-    attendedBookings: attendedBookings,
-    totalParticipantsAmount: attendedBookingsAmount,
+    totalPayments: totalPayments,
+    totalPaymentsAmount: totalPaymentsAmount,
+    attendedPayments: attendedPayments,
+    totalParticipantsAmount: attendedPaymentsAmount,
     medianParticipantsAge: medianAge,
     avgAttendancePercentage: `${avgAttendancePercentage}%`,
     reviews: reviews,

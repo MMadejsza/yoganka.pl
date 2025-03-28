@@ -2,10 +2,11 @@ import columnMaps from './columnsMapping.js';
 import { formatIsoDateTime } from './formatDateTime.js';
 import { callLog, catchErr, errorCode } from './loggingUtils.js';
 let errCode = errorCode;
+const person = 'table';
 
-export const tableDataFlatQuery = (res, model) => {
+export const tableDataFlatQuery = (req, res, model) => {
   const controllerName = 'simpleListAllToTable';
-  callLog('?', controllerName);
+  callLog(req, '?', controllerName);
 
   model
     .findAll()
@@ -53,5 +54,5 @@ export const tableDataFlatQuery = (res, model) => {
         content: formattedRecords, //.sort((a, b) => new Date(b.Data) - new Date(a.Data)),
       });
     })
-    .catch(err => catchErr(err, controllerName));
+    .catch(err => catchErr(person, err, controllerName));
 };

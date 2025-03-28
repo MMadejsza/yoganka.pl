@@ -9,7 +9,7 @@ import * as val from '../../utils/validation.js';
 import InputLogin from '../login/InputLogin.jsx';
 import FeedbackBox from './FeedbackBox.jsx';
 
-function NewBookingForm({ onClose }) {
+function NewPaymentForm() {
   const { feedback, updateFeedback, resetFeedback } = useFeedback();
   const { data: status } = useAuthStatus();
 
@@ -96,16 +96,16 @@ function NewBookingForm({ onClose }) {
   console.log('schedulesOptionsList: ', schedulesOptionsList);
 
   const {
-    mutate: createBooking,
-    isPending: isCreateBookingPending,
-    isError: isCreateBookingError,
-    error: createBookingError,
+    mutate: createPayment,
+    isPending: isCreatePaymentPending,
+    isError: isCreatePaymentError,
+    error: createPaymentError,
   } = useMutation({
     mutationFn: formDataObj =>
-      mutateOnCreate(status, formDataObj, `/api/admin-console/create-booking`),
+      mutateOnCreate(status, formDataObj, `/api/admin-console/create-payment`),
 
     onSuccess: res => {
-      queryClient.invalidateQueries(['/admin-console/show-all-bookings']);
+      queryClient.invalidateQueries(['/admin-console/show-all-payments']);
       // updating feedback
       updateFeedback(res);
     },
@@ -197,7 +197,7 @@ function NewBookingForm({ onClose }) {
     }
 
     console.log('sent data:', formDataObj);
-    createBooking(formDataObj);
+    createPayment(formDataObj);
     handleReset();
   };
 
@@ -362,9 +362,9 @@ function NewBookingForm({ onClose }) {
         {feedback.status !== undefined && (
           <FeedbackBox
             status={feedback.status}
-            isPending={isCreateBookingPending}
-            isError={isCreateBookingError}
-            error={createBookingError}
+            isPending={isCreatePaymentPending}
+            isError={isCreatePaymentError}
+            error={createPaymentError}
             successMsg={feedback.message}
             warnings={feedback.warnings}
             size='small'
@@ -375,4 +375,4 @@ function NewBookingForm({ onClose }) {
   );
 }
 
-export default NewBookingForm;
+export default NewPaymentForm;

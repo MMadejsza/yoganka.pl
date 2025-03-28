@@ -1,7 +1,9 @@
 // !HELPERS
 export const errorCode = 500;
 
-export const callLog = (person, controllerName) => {
+export const callLog = (req, person, controllerName) => {
+  console.clear();
+  console.log(`\n➡️➡️➡️  Request: ${req.method} ${req.url}`);
   console.log(`\n➡️➡️➡️  ${person} called ${controllerName}`);
 };
 
@@ -13,13 +15,14 @@ export const successLog = (person, controllerName, msg) => {
 };
 
 export const catchErr = (
+  person,
   res,
   errCode,
   err,
   controllerName,
   extraProps = {}
 ) => {
-  console.log(`\n❌❌❌ Error Admin ${controllerName}`, err.message);
+  console.log(`\n❌❌❌ Error ${person} ${controllerName}`, err.message);
   return res.status(errCode).json({
     confirmation: -1,
     message: err.message,

@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { calculateStats } from '../../utils/customerViewsUtils.js';
-import ModalTable from './ModalTable';
+import ModalTable from './ModalTable.jsx';
 import ViewFrame from './ViewFrame.jsx';
 
-function ViewCustomerTotalBookings({ data }) {
+function ViewCustomerTotalPayments({ data }) {
   // console.clear();
   console.log(
     `📝 
-        ViewCustomerTotalBookings object from backend:`,
+        ViewCustomerTotalPayments object from backend:`,
     data
   );
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ function ViewCustomerTotalBookings({ data }) {
   };
 
   const customerStats = calculateStats(data);
-  const content = customerStats.bookings.sort(
+  const content = customerStats.payments.sort(
     (a, b) => new Date(b.date) - new Date(a.date)
   );
   // console.log(`✅ content: `, content);
@@ -41,14 +41,7 @@ function ViewCustomerTotalBookings({ data }) {
   let table;
   table = (
     <ModalTable
-      headers={[
-        'ID',
-        'Data Rezerwacji',
-        'Zajęcia',
-        'Kwota całkowita',
-        'Metoda płatności',
-        'Status płatności',
-      ]}
+      headers={['ID', 'Data', 'Zajęcia', 'Kwota całkowita', 'Metoda', 'Status']}
       keys={['id', 'date', 'classes', 'totalValue', 'method', 'status']}
       content={content}
       active={false}
@@ -58,12 +51,12 @@ function ViewCustomerTotalBookings({ data }) {
 
   return (
     <>
-      <h2 className='user-container__section-title modal__title--day'>{`Historia rezerwacji (${customerStats.bookings.length}):`}</h2>
+      <h2 className='user-container__section-title modal__title--day'>{`Historia płatności (${customerStats.payments.length}):`}</h2>
 
       {table}
       {isModalOpen && (
         <ViewFrame
-          modifier='booking'
+          modifier='payment'
           visited={isModalOpen}
           onClose={handleCloseModal}
           userAccountPage={true}
@@ -74,4 +67,4 @@ function ViewCustomerTotalBookings({ data }) {
   );
 }
 
-export default ViewCustomerTotalBookings;
+export default ViewCustomerTotalPayments;

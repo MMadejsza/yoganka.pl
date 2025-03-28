@@ -9,6 +9,7 @@ import ModalTable from './ModalTable';
 import NewProductScheduleForm from './NewProductScheduleForm';
 
 function DetailsProductSchedules({ scheduleRecords, placement, status }) {
+  console.log('DetailsProductSchedules scheduleRecords', scheduleRecords);
   let params = useParams();
   const [isFormVisible, setIsFormVisible] = useState();
   const [deleteWarningTriggered, setDeleteWarningTriggered] = useState(false);
@@ -73,7 +74,7 @@ function DetailsProductSchedules({ scheduleRecords, placement, status }) {
   let keys = ['id', 'day', 'date', 'time', 'location', 'attendance', ''];
   let form;
 
-  if (placement == 'booking') {
+  if (placement == 'payment') {
     headers = [
       'ID',
       'Produkt',
@@ -103,8 +104,8 @@ function DetailsProductSchedules({ scheduleRecords, placement, status }) {
         day: getWeekDay(schedule.Date),
         time: schedule.StartTime,
         location: schedule.Location,
-        Attendance: `${schedule.participants}/${schedule.capacity} (${schedule.attendance}%)`,
-        attendanceCount: schedule.attendance,
+        attendance: `${schedule.participants}/${schedule.capacity} (${schedule.Attendance}%)`,
+        attendanceCount: schedule.Attendance,
         isActionDisabled:
           schedule.participants > 0 || new Date(schedule.Date) < new Date(),
       };

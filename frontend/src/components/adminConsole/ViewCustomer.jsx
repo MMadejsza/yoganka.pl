@@ -6,7 +6,7 @@ import DetailsCustomerSchedules from './DetailsCustomerSchedules.jsx';
 import DetailsCustomerStats from './DetailsCustomerStats.jsx';
 import DetailsUser from './DetailsUser.jsx';
 import DetailsUserSettings from './DetailsUserSettings.jsx';
-import ViewCustomerTotalBookings from './ViewCustomerTotalBookings.jsx';
+import ViewCustomerTotalPayments from './ViewCustomerTotalPayments.jsx';
 
 import { calculateStats } from '../../utils/customerViewsUtils.js';
 
@@ -71,9 +71,9 @@ function ViewCustomer({ data }) {
       <div className='user-container__main-details user-container__side-details--schedules schedules modal-checklist'>
         <DetailsCustomerReviews reviews={customerStats.reviews} />
       </div>
-      {/*//@ Bookings */}
+      {/*//@ Payments */}
       <div className='user-container__main-details user-container__side-details--schedules schedules modal-checklist'>
-        <ViewCustomerTotalBookings data={customer} />
+        <ViewCustomerTotalPayments data={customer} />
       </div>
 
       {/*//@ Invoices */}

@@ -10,7 +10,7 @@ export const sendReservationFreshMail = configObject => {
 
 //! ADMIN ONLY_____________________________________________
 export const sendReservationCancelledMail = ({ to, bookingID }) => {
-  const subject = `❗️ Rezerwacja anulowana • nr ${bookingID} (anulowane przez administratora)`;
+  const subject = `❗️ Płatność anulowana • nr ${bookingID} (anulowane przez administratora)`;
   const html = `
     <main>
       <h1>Twoja rezerwacja została anulowana ❌</h1>

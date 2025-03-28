@@ -3,8 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { NavLink } from 'react-router-dom';
 import ModalFrame from './ModalFrame.jsx';
-import NewBookingForm from './NewBookingForm.jsx';
 import NewCustomerForm from './NewCustomerForm.jsx';
+import NewPaymentForm from './NewPaymentForm.jsx';
 import NewProductForm from './NewProductForm.jsx';
 import NewUserForm from './NewUserForm.jsx';
 
@@ -38,9 +38,9 @@ function SideNav({ menuSet, side, type, onclose }) {
         destComponent = <NewUserForm />;
         break;
 
-      case path.includes('show-all-bookings'):
-        destination = 'show-all-bookings/add-booking';
-        destComponent = <NewBookingForm />;
+      case path.includes('show-all-payments'):
+        destination = 'show-all-payments/add-payment';
+        destComponent = <NewPaymentForm />;
         break;
     }
     return { dest: destination, comp: destComponent };

@@ -25,9 +25,9 @@ const sideNavTabs = [
     link: '/admin-console/show-all-schedules',
   },
   {
-    name: `Rezerwacje`,
+    name: `Płatności`,
     icon: 'event_available',
-    link: '/admin-console/show-all-bookings',
+    link: '/admin-console/show-all-payments',
   },
   {
     name: `Faktury`,
@@ -102,8 +102,8 @@ function AdminPage() {
       case path.includes('show-all-schedules'):
         modifier = 'schedule';
         return modifier;
-      case path.includes('show-all-bookings'):
-        modifier = 'booking';
+      case path.includes('show-all-payments'):
+        modifier = 'payment';
         return modifier;
       case path.includes('show-all-participants-feedback'):
         modifier = 'feedback';

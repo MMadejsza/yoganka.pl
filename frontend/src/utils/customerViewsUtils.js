@@ -82,7 +82,7 @@ export const calculateStats = customer => {
   const today = new Date().toISOString().split('T')[0];
   const scheduleRecords = [];
   // const scheduleRecords = [];
-  const totalBookings = [];
+  const totalPayments = [];
   const invoices = [];
   const reviews = [];
   let totalRevenue = 0;
@@ -96,24 +96,24 @@ export const calculateStats = customer => {
     totalEventsAmount +
     totalClassesAmount +
     totalOnlineAmount;
-  // console.log(customer.Bookings);
-  for (let booking of customer.Bookings) {
-    totalRevenue += parseFloat(booking.AmountPaid);
+  // console.log(customer.Payments);
+  for (let payment of customer.Payments) {
+    totalRevenue += parseFloat(payment.AmountPaid);
     // console.log(`totalRevenue: ${totalRevenue}`);
 
-    totalBookings.push({
-      id: booking.BookingID,
-      date: formatIsoDateTime(booking.Date),
-      classes: booking.Product,
-      totalValue: booking.AmountPaid,
-      method: booking.PaymentMethod,
-      status: booking.PaymentStatus,
+    totalPayments.push({
+      id: payment.PaymentID,
+      date: formatIsoDateTime(payment.Date),
+      classes: payment.Product,
+      totalValue: payment.AmountPaid,
+      method: payment.PaymentMethod,
+      status: payment.PaymentStatus,
     });
 
-    const invoice = booking.Invoice;
+    const invoice = payment.Invoice;
     if (invoice) {
       const invoiceID = invoice.InvoiceID;
-      const invoiceBID = booking.BookingID;
+      const invoiceBID = payment.PaymentID;
       const invoiceDate = invoice.InvoiceDate;
       const invoiceDue = invoice.DueDate;
       const invoiceTotalValue = invoice.TotalAmount;
@@ -132,12 +132,12 @@ export const calculateStats = customer => {
     // console.groupEnd();
   }
 
-  const attendedSchedules = customer.BookedSchedules?.filter(
+  const attendedSchedules = customer.Bookings?.filter(
     schedule => schedule.Attendance == 1 || schedule.Attendance == true
   );
-  for (let bookedSchedule of attendedSchedules) {
+  for (let booking of attendedSchedules) {
     // console.group(`schedule: ${schedule}`);
-    const { ScheduleRecord: schedule } = bookedSchedule;
+    const { ScheduleRecord: schedule } = booking;
     const scheduleID = schedule.ScheduleID;
     const scheduleDate = schedule.Date;
     const scheduleStartTime = schedule.StartTime;
@@ -203,7 +203,7 @@ export const calculateStats = customer => {
   const splitDuration = secondsToDuration(totalTimeInSeconds, 'hours');
   const stats = {
     records: scheduleRecords,
-    bookings: totalBookings,
+    payments: totalPayments,
     recordsKeys: ['', 'id', 'date', 'day', 'time', 'type', 'name', 'location'],
     reviews: reviews,
     invoices: invoices,

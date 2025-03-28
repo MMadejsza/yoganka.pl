@@ -13,7 +13,7 @@ router.get('/show-customer-data/:id', adminC.getCustomerDetails);
 router.get('/show-all-schedules', adminC.getAllSchedules);
 router.get('/show-all-schedules/:id', adminC.getScheduleByID);
 router.get('/show-product-schedules/:pId/:cId', adminC.getProductSchedules);
-router.get('/show-booked-schedules', adminC.getBookedSchedules);
+router.get('/show-booked-schedules', adminC.getBookings);
 router.get(
   '/show-all-participants-feedback',
   adminC.getAllParticipantsFeedback
@@ -29,8 +29,8 @@ router.get(
 );
 router.get('/show-all-products', adminC.getAllProducts);
 router.get('/show-all-products/:id', adminC.getProductByID);
-router.get('/show-all-bookings', adminC.getAllBookings);
-router.get('/show-all-bookings/:id', adminC.getBookingByID);
+router.get('/show-all-payments', adminC.getAllPayments);
+router.get('/show-all-payments/:id', adminC.getPaymentByID);
 router.get('/show-all-invoices', adminC.getAllInvoices);
 
 //! POST - CREATE__________________________________________
@@ -38,7 +38,7 @@ router.post('/create-user', adminC.postCreateUser);
 router.post('/create-customer', adminC.postCreateCustomer);
 router.post('/create-schedule', adminC.postCreateScheduleRecord);
 router.post('/create-product', adminC.postCreateProduct);
-router.post('/create-booking', adminC.postCreateBooking);
+router.post('/create-payment', adminC.postCreatePayment);
 
 //! PUT - EDIT______________________________________________
 router.put('/edit-customer-data/:id', adminC.putEditCustomerDetails);
@@ -54,7 +54,7 @@ router.delete('/delete-customer/:id', adminC.deleteCustomer);
 router.delete('/delete-attendance-record', adminC.deleteAttendanceRecord);
 router.delete('/delete-product/:id', adminC.deleteProduct);
 router.delete('/delete-schedule/:id', adminC.deleteSchedule);
-router.delete('/delete-booking/:id', adminC.deleteBooking);
+router.delete('/delete-payment/:id', adminC.deletePayment);
 router.delete('/delete-feedback/:id', adminC.deleteFeedback);
 
 export default router;

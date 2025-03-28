@@ -10,7 +10,7 @@ import NewAttendanceForm from './NewAttendanceForm';
 
 function DetailsTableAttendance({ type, stats, isAdminPage }) {
   // console.log('\n✅✅✅DetailsTableAttendance:');
-  let bookingsArray = stats.attendedBookings;
+  let paymentsArray = stats.attendedPayments;
   let params = useParams();
   const [isFormVisible, setIsFormVisible] = useState();
 
@@ -103,7 +103,7 @@ function DetailsTableAttendance({ type, stats, isAdminPage }) {
     <ModalTable
       headers={['ID Ucz.', 'Data zapisania', , 'Uczestnik', '']}
       keys={['customerID', 'timestamp', , 'customer', '']}
-      content={bookingsArray}
+      content={paymentsArray}
       active={false}
       isAdminPage={isAdminPage}
       adminActions={true}
@@ -119,7 +119,7 @@ function DetailsTableAttendance({ type, stats, isAdminPage }) {
   return (
     <>
       <h2 className='user-container__section-title modal__title--day admin-action'>
-        {`Obecność (${bookingsArray.length})`}
+        {`Obecność (${paymentsArray.length})`}
       </h2>
       {(feedback.status != undefined || deleteWarningTriggered) && (
         <FeedbackBox

@@ -1,10 +1,10 @@
-import BookedSchedule from './bookingModel.js';
+import Booking from './bookingModel.js';
 import Customer from './customerModel.js';
 import Feedback from './feedbackModel.js';
 import Invoice from './invoiceModel.js';
 import Newsletter from './newsletterModel.js';
 import SubscribedNewsletter from './newsletterSubscribedModel.js';
-import Booking from './paymentModel.js';
+import Payment from './paymentModel.js';
 import Product from './productModel.js';
 import ScheduleRecord from './scheduleRecordModel.js';
 import User from './userModel.js';
@@ -31,18 +31,18 @@ UserPrefSettings.belongsTo(User, { foreignKey: 'UserID' });
 //! ASSOCIATIONS BETWEEN THE CUSTOMER MODEL AND OTHER MODELS
 //!
 
-//@ Customer and Booking (1:M, total participation on Booking)
-// Deleting a Customer will delete all associated Bookings.
-Customer.hasMany(Booking, { foreignKey: 'CustomerID', onDelete: 'CASCADE' });
-Booking.belongsTo(Customer, { foreignKey: 'CustomerID' });
+//@ Customer and Payment (1:M, total participation on Payment)
+// Deleting a Customer will delete all associated Payments.
+Customer.hasMany(Payment, { foreignKey: 'CustomerID', onDelete: 'CASCADE' });
+Payment.belongsTo(Customer, { foreignKey: 'CustomerID' });
 
-//@ Customer and BookedSchedule (1:M, total participation on BookedSchedule)
-// Deleting a Customer will delete all associated BookedSchedule records.
-Customer.hasMany(BookedSchedule, {
+//@ Customer and Booking (1:M, total participation on Booking)
+// Deleting a Customer will delete all associated Booking records.
+Customer.hasMany(Booking, {
   foreignKey: 'CustomerID',
   onDelete: 'CASCADE',
 });
-BookedSchedule.belongsTo(Customer, { foreignKey: 'CustomerID' });
+Booking.belongsTo(Customer, { foreignKey: 'CustomerID' });
 
 //@ Customer and Feedback (1:M, total participation on Feedback)
 // Deleting a Customer will delete all associated Feedback entries.
@@ -73,42 +73,42 @@ ScheduleRecord.belongsTo(Product, { foreignKey: 'ProductID' });
 //! ASSOCIATIONS BETWEEN THE BOOKING MODEL AND OTHER MODELS
 //!
 
-//@ Booking and BookedSchedule (M:M, total participation on both sides)
-// Through the join table BookedSchedule, deleting a Booking will delete its associated BookedSchedule records.
-Booking.belongsToMany(ScheduleRecord, {
-  through: { model: BookedSchedule, onDelete: 'CASCADE' },
-  foreignKey: 'BookingID',
+//@ Payment and Booking (M:M, total participation on both sides)
+// Through the join table Booking, deleting a Payment will delete its associated Booking records.
+Payment.belongsToMany(ScheduleRecord, {
+  through: { model: Booking, onDelete: 'CASCADE' },
+  foreignKey: 'PaymentID',
 });
-BookedSchedule.belongsTo(Booking, {
-  foreignKey: 'BookingID',
+Booking.belongsTo(Payment, {
+  foreignKey: 'PaymentID',
   onDelete: 'CASCADE',
 });
 
-//@ Booking and Invoice (1:1, total participation on Invoice)
-// Deleting a Booking will delete the associated Invoice.
-Booking.hasOne(Invoice, { foreignKey: 'BookingID', onDelete: 'CASCADE' });
-Invoice.belongsTo(Booking, { foreignKey: 'BookingID' });
+//@ Payment and Invoice (1:1, total participation on Invoice)
+// Deleting a Payment will delete the associated Invoice.
+Payment.hasOne(Invoice, { foreignKey: 'PaymentID', onDelete: 'CASCADE' });
+Invoice.belongsTo(Payment, { foreignKey: 'PaymentID' });
 
 //!
 //! ASSOCIATIONS BETWEEN THE SCHEDULERECORD MODEL AND BOOKEDSCHEDULE
 //!
 
-//@ ScheduleRecord and BookedSchedule (1:M, total participation on BookedSchedule)
-// Deleting a ScheduleRecord will delete all associated BookedSchedule records.
-ScheduleRecord.hasMany(BookedSchedule, {
+//@ ScheduleRecord and Booking (1:M, total participation on Booking)
+// Deleting a ScheduleRecord will delete all associated Booking records.
+ScheduleRecord.hasMany(Booking, {
   foreignKey: 'ScheduleID',
   onDelete: 'CASCADE',
 });
-BookedSchedule.belongsTo(ScheduleRecord, {
+Booking.belongsTo(ScheduleRecord, {
   foreignKey: 'ScheduleID',
   onDelete: 'CASCADE',
 });
 
 // Additional many-to-many association (already defined above)
-//@ ScheduleRecord and Booking (M:M)
-// This association uses BookedSchedule as the join table.
-ScheduleRecord.belongsToMany(Booking, {
-  through: BookedSchedule,
+//@ ScheduleRecord and Payment (M:M)
+// This association uses Booking as the join table.
+ScheduleRecord.belongsToMany(Payment, {
+  through: Booking,
   foreignKey: 'ScheduleID',
 });
 
@@ -130,12 +130,12 @@ User.belongsToMany(Newsletter, {
 });
 
 export {
-  BookedSchedule,
   Booking,
   Customer,
   Feedback,
   Invoice,
   Newsletter,
+  Payment,
   Product,
   ScheduleRecord,
   SubscribedNewsletter,

@@ -2,10 +2,10 @@ import { DataTypes } from 'sequelize';
 import sequelizeDb from '../utils/db.js';
 
 /** @type {import('sequelize').Model} */
-const Booking = sequelizeDb.define(
-  'Booking',
+const Payment = sequelizeDb.define(
+  'Payment',
   {
-    BookingID: {
+    PaymentID: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
@@ -53,8 +53,8 @@ const Booking = sequelizeDb.define(
     },
   },
   {
-    tableName: 'bookings',
+    tableName: 'payments',
     timestamps: false,
   }
 );
-export default Booking;
+export default Payment;

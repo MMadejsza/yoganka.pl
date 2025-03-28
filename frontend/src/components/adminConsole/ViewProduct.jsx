@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchStatus } from '../../utils/http.js';
 import { calculateProductStats } from '../../utils/productViewsUtils.js';
 import DetailsProduct from './DetailsProduct.jsx';
-import DetailsProductBookings from './DetailsProductBookings.jsx';
+import DetailsProductPayments from './DetailsProductPayments.jsx';
 import DetailsProductReviews from './DetailsProductReviews.jsx';
 import DetailsProductSchedules from './DetailsProductSchedules.jsx';
 import DetailsProductStats from './DetailsProductStats.jsx';
@@ -62,9 +62,9 @@ function ViewProduct({ data, isAdminPanel }) {
           />
         </div>
       )}
-      {/*//@ All bookings */}
+      {/*//@ All payments */}
       <div className='user-container__main-details  schedules modal-checklist'>
-        <DetailsProductBookings
+        <DetailsProductPayments
           stats={prodStats}
           type={type}
           isAdminPage={isAdminPanel}

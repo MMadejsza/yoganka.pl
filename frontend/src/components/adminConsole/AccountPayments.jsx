@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { calculateStats } from '../../utils/customerViewsUtils.js';
-import ModalTable from './ModalTable';
+import ModalTable from './ModalTable.jsx';
 import ViewFrame from './ViewFrame.jsx';
 
-function AccountBookings({ data }) {
+function AccountPayments({ data }) {
   // console.clear();
   console.log(
     `📝 
-        AccountBookings object from backend:`,
+        AccountPayments object from backend:`,
     data
   );
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ function AccountBookings({ data }) {
   };
 
   const customerStats = calculateStats(data);
-  const content = customerStats.bookings.sort(
+  const content = customerStats.payments.sort(
     (a, b) => new Date(b.date) - new Date(a.date)
   );
   // console.log(`✅ content: `, content);
@@ -40,7 +40,7 @@ function AccountBookings({ data }) {
 
   let table, tableTitle;
   tableTitle = (
-    <h2 className='user-container__section-title'>Historia rezerwacji:</h2>
+    <h2 className='user-container__section-title'>Historia płatności:</h2>
   );
   table = (
     <ModalTable
@@ -65,7 +65,7 @@ function AccountBookings({ data }) {
       {table}
       {isModalOpen && (
         <ViewFrame
-          modifier='booking'
+          modifier='payment'
           visited={isModalOpen}
           onClose={handleCloseModal}
           userAccountPage={true}
@@ -75,4 +75,4 @@ function AccountBookings({ data }) {
   );
 }
 
-export default AccountBookings;
+export default AccountPayments;

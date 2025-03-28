@@ -1,11 +1,11 @@
 import { formatIsoDateTime } from '../../utils/dateTime.js';
 
-function DetailsBooking({ bookingData }) {
-  const booking = bookingData;
+function DetailsPayment({ paymentData }) {
+  const payment = paymentData;
   console.log(
     `📝
 	    Schedule object from backend:`,
-    bookingData
+    paymentData
   );
 
   return (
@@ -14,17 +14,17 @@ function DetailsBooking({ bookingData }) {
       <ul className='user-container__details-list modal-checklist__list'>
         <li className='user-container__section-record modal-checklist__li'>
           <p className='user-container__section-record-label'>
-            Data rezerwacji:
+            Data płatności:
           </p>
           <p className='user-container__section-record-content'>
-            {`${formatIsoDateTime(booking.Date)}`}
+            {`${formatIsoDateTime(payment.Date)}`}
           </p>
         </li>
         <li className='user-container__section-record modal-checklist__li'>
           <p className='user-container__section-record-label'>Kwota:</p>
           <p className='user-container__section-record-content'>
             {' '}
-            {`${booking.AmountPaid}zł`}
+            {`${payment.AmountPaid}zł`}
           </p>
         </li>
         <li className='user-container__section-record modal-checklist__li'>
@@ -32,22 +32,22 @@ function DetailsBooking({ bookingData }) {
             Metoda Płatności:
           </p>
           <p className='user-container__section-record-content'>
-            {booking.PaymentMethod}
+            {payment.PaymentMethod}
           </p>
         </li>
         <li className='user-container__section-record modal-checklist__li'>
           <p className='user-container__section-record-label'>Opłacono:</p>
           <p className='user-container__section-record-content'>
-            {booking.Status}
+            {payment.Status}
           </p>
         </li>
-        {booking.AmountDue && booking.AmountDue != '0.00' && (
+        {payment.AmountDue && payment.AmountDue != '0.00' && (
           <li className='user-container__section-record modal-checklist__li'>
             <p className='user-container__section-record-label'>
               Pozostało do zapłaty:
             </p>
             <p className='user-container__section-record-content'>
-              {`${booking.AmountDue}zł`}
+              {`${payment.AmountDue}zł`}
             </p>
           </li>
         )}
@@ -56,4 +56,4 @@ function DetailsBooking({ bookingData }) {
   );
 }
 
-export default DetailsBooking;
+export default DetailsPayment;

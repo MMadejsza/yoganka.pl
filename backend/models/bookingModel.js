@@ -3,8 +3,8 @@ import sequelizeDb from '../utils/db.js';
 
 /** @type {import('sequelize').Model} */
 
-const BookedSchedule = sequelizeDb.define(
-  'BookedSchedule',
+const Booking = sequelizeDb.define(
+  'Booking',
   {
     ScheduleID: {
       type: DataTypes.INTEGER,
@@ -14,13 +14,13 @@ const BookedSchedule = sequelizeDb.define(
         key: 'ScheduleID', // The name of the column in the target table
       },
     },
-    BookingID: {
+    PaymentID: {
       type: DataTypes.INTEGER,
       primaryKey: true,
 
       references: {
-        model: 'Booking', // The name of the target table
-        key: 'BookingID', // The name of the column in the target table
+        model: 'Payment', // The name of the target table
+        key: 'PaymentID', // The name of the column in the target table
       },
     },
     CustomerID: {
@@ -44,7 +44,7 @@ const BookedSchedule = sequelizeDb.define(
     },
   },
   {
-    tableName: 'booked_schedules', // exact mysql table name
+    tableName: 'bookings', // exact mysql table name
     timestamps: true,
     updatedAt: 'TimeStamp', //mapping to TimeStamp
     createdAt: false,
@@ -56,9 +56,9 @@ const BookedSchedule = sequelizeDb.define(
     ],
   }
 );
-BookedSchedule.beforeCreate(instance => {
+Booking.beforeCreate(instance => {
   if (!instance.TimeStamp) {
     instance.TimeStamp = new Date();
   }
 });
-export default BookedSchedule;
+export default Booking;

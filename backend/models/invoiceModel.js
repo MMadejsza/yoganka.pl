@@ -9,12 +9,12 @@ const Invoice = sequelizeDb.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    BookingID: {
+    PaymentID: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'bookings', // The name of the target table
-        key: 'BookingID', // The name of the column in the target table
+        model: 'payments', // The name of the target table
+        key: 'PaymentID', // The name of the column in the target table
       },
     },
     InvoiceDate: {

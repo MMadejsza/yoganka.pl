@@ -29,8 +29,11 @@ export const formatIsoDateTime = (dateInput, isSchedule) => {
   if (isSchedule) {
     return `${formattedDate}`;
   }
-  return `${formattedDate} (${getWeekDay(date)}${formattedTime ? ` - ` + formattedTime : ``})`;
+  return `${formattedDate} (${getWeekDay(date)}${
+    formattedTime ? ` - ` + formattedTime : ``
+  })`;
 };
+
 export const getWeekDay = dateStr => {
   const date = new Date(dateStr);
   const days = [
@@ -43,4 +46,18 @@ export const getWeekDay = dateStr => {
     'Sobota',
   ];
   return days[date.getDay()];
+};
+
+export const isAdult = dob => {
+  const birthDate = new Date(dob);
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const m = today.getMonth() - birthDate.getMonth();
+
+  // If birthday this year hasn't passed -> age --1
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+
+  return age >= 18;
 };

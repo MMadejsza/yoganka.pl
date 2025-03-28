@@ -6,8 +6,8 @@ import { useFeedback } from '../../hooks/useFeedback';
 import { fetchItem, mutateOnDelete, queryClient } from '../../utils/http.js';
 import FeedbackBox from './FeedbackBox.jsx';
 import ModalFrame from './ModalFrame.jsx';
-import ViewBooking from './ViewBooking.jsx';
 import ViewCustomer from './ViewCustomer.jsx';
+import ViewPayment from './ViewPayment.jsx';
 import ViewProduct from './ViewProduct.jsx';
 import ViewReview from './ViewReview.jsx';
 import ViewSchedule from './ViewSchedule.jsx';
@@ -17,7 +17,7 @@ function ViewFrame({
   modifier,
   visited,
   onClose,
-  bookingOps,
+  paymentOps,
   userAccountPage,
   customer,
   role,
@@ -79,9 +79,9 @@ function ViewFrame({
         controller.redirectTo = '/admin-console/show-all-users';
         controller.warnings = [
           'Powiązanego profilu uczestnika',
-          'Wszystkich powiązanych rezerwacji',
+          'Wszystkich powiązanych płatności',
+          'Wszystkich powiązanych obecności',
           'Wszystkich powiązanych faktur',
-          'Wszystkich zarezerwowanych terminów',
           'Wszystkich powiązanych opinii',
           "oraz newsletter'ów",
         ];
@@ -95,9 +95,9 @@ function ViewFrame({
         controller.deleteQuery = `delete-customer/${data.customer.CustomerID}`;
         controller.redirectTo = '/admin-console/show-all-customers';
         controller.warnings = [
-          'Wszystkich powiązanych rezerwacji',
+          'Wszystkich powiązanych płatności',
           'Wszystkich powiązanych faktur',
-          'Wszystkich zarezerwowanych terminów',
+          'Wszystkich powiązanych obecności',
           'Wszystkich powiązanych opinii',
         ];
         return controller;
@@ -118,7 +118,7 @@ function ViewFrame({
         controller.recordDisplay = (
           <ViewSchedule
             data={data}
-            bookingOps={bookingOps}
+            paymentOps={paymentOps}
             onClose={onClose}
             isModalOpen={visited}
             isAdminPanel={isAdminPanel}
@@ -131,12 +131,12 @@ function ViewFrame({
         controller.warnings = [
           'Wszystkich powiązanych opinii',
           'Wszystkich powiązanych z terminem obecności, a więc wpłynie na statystyki zajęć i użytkowników',
-          '(nie ma potrzeby usuwania terminu)',
+          '(Jesli nie dodano go omyłkowo to nie ma potrzeby usuwania terminu - można go zarchiwizować)',
         ];
         return controller;
-      case 'booking':
+      case 'payment':
         controller.recordDisplay = (
-          <ViewBooking
+          <ViewPayment
             data={data}
             isUserAccountPage={userAccountPage}
             onClose={onClose}
@@ -145,8 +145,8 @@ function ViewFrame({
         );
         controller.recordEditor = '';
         controller.deleteBtnTitle = 'Rezerwację';
-        controller.deleteQuery = `delete-booking/${data.booking.BookingID}`;
-        controller.redirectTo = '/admin-console/show-all-bookings';
+        controller.deleteQuery = `delete-payment/${data.payment.PaymentID}`;
+        controller.redirectTo = '/admin-console/show-all-payments';
         controller.warnings = [
           'Wszystkich powiązanych faktur',
           'Wszystkich powiązanych z rezerwacją obecności, a więc wpłynie na statystyki zajęć i użytkowników',

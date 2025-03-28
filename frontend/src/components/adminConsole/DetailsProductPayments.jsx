@@ -4,16 +4,16 @@ import { useAuthStatus } from '../../hooks/useAuthStatus.js';
 import { useFeedback } from '../../hooks/useFeedback.js';
 import { mutateOnEdit, queryClient } from '../../utils/http.js';
 import FeedbackBox from './FeedbackBox.jsx';
-import ModalTable from './ModalTable';
+import ModalTable from './ModalTable.jsx';
 
-function DetailsProductBookings({ type, stats, isAdminPage }) {
-  console.log('\n✅✅✅DetailsProductBookings:');
+function DetailsProductPayments({ type, stats, isAdminPage }) {
+  console.log('\n✅✅✅DetailsProductPayments:');
   console.log('\nisAdminPage:', isAdminPage);
 
   let params = useParams();
   const { feedback, updateFeedback, resetFeedback } = useFeedback();
-  let bookingsArray = stats.totalBookings || stats.bookings;
-  let cancelledBookingsArr = bookingsArray.filter(b => b.Attendance == false);
+  let paymentsArray = stats.totalPayments || stats.payments;
+  let cancelledPaymentsArr = paymentsArray.filter(b => b.Attendance == false);
 
   const { data: status } = useAuthStatus();
 
@@ -43,22 +43,16 @@ function DetailsProductBookings({ type, stats, isAdminPage }) {
 
   const table = (
     <ModalTable
-      headers={[
-        'ID',
-        'Data rezerwacji',
-        'Uczestnik',
-        'Zadatek',
-        'Metoda płatności',
-      ]}
-      keys={['BookingID', 'Date', 'customer', 'AmountPaid', 'PaymentMethod']}
-      content={bookingsArray}
+      headers={['ID', 'Data', 'Uczestnik', 'Zadatek', 'Metoda płatności']}
+      keys={['PaymentID', 'Date', 'customer', 'AmountPaid', 'PaymentMethod']}
+      content={paymentsArray}
       active={false}
     />
   );
-  const cancelledTable = cancelledBookingsArr?.length > 0 && (
+  const cancelledTable = cancelledPaymentsArr?.length > 0 && (
     <>
       <h2 className='user-container__section-title modal__title--day'>
-        {`Rezerwacje anulowanych obecności (${cancelledBookingsArr.length}):`}
+        {`Płatności anulowanych obecności (${cancelledPaymentsArr.length}):`}
       </h2>
       {feedback.status !== undefined && (
         <FeedbackBox
@@ -72,23 +66,16 @@ function DetailsProductBookings({ type, stats, isAdminPage }) {
         />
       )}
       <ModalTable
-        headers={[
-          'ID',
-          'Data rezerwacji',
-          'Uczestnik',
-          'Zadatek',
-          'Metoda płatności',
-          '',
-        ]}
+        headers={['ID', 'Data', 'Uczestnik', 'Zadatek', 'Metoda płatności', '']}
         keys={[
-          'BookingID',
+          'PaymentID',
           'Date',
           'customer',
           'AmountPaid',
           'PaymentMethod',
           '',
         ]}
-        content={cancelledBookingsArr}
+        content={cancelledPaymentsArr}
         active={false}
         isAdminPage={isAdminPage}
         adminActions={true}
@@ -98,11 +85,11 @@ function DetailsProductBookings({ type, stats, isAdminPage }) {
   );
 
   const title =
-    type === 'Camp' || type === 'Event' ? 'Rezerwacje' : 'Wszystkie rezerwacje';
+    type === 'Camp' || type === 'Event' ? 'Płatności' : 'Wszystkie płatności';
   return (
     <>
       <h2 className='user-container__section-title modal__title--day'>
-        {`${title} (${bookingsArray.length}):`}
+        {`${title} (${paymentsArray.length}):`}
       </h2>
       {table}
       {cancelledTable}
@@ -110,4 +97,4 @@ function DetailsProductBookings({ type, stats, isAdminPage }) {
   );
 }
 
-export default DetailsProductBookings;
+export default DetailsProductPayments;

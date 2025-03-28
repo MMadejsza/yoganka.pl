@@ -9,8 +9,8 @@ function AccountDashboard({ data, queryStatus }) {
   const today = new Date().toISOString().split('T')[0];
   const navigate = useNavigate();
   const location = useLocation(); // fetch current path
-  const matchRezerwacje = useMatch('/konto/rezerwacje/:id');
-  const [isModalOpen, setIsModalOpen] = useState(matchRezerwacje);
+  const matchPłatności = useMatch('/konto/rezerwacje/:id');
+  const [isModalOpen, setIsModalOpen] = useState(matchPłatności);
 
   const background = {
     pathname: location.pathname,

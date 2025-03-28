@@ -68,8 +68,17 @@ export const dobValidations = [
   {
     // Can't be future
     rule: value => {
-      const date = new Date(value);
-      return date < new Date();
+      const birthDate = new Date(value);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const m = today.getMonth() - birthDate.getMonth();
+
+      // If birthday this year hasn't passed -> age --1
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+
+      return age >= 18;
     },
     message: 'Pełnoletność',
   },

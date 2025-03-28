@@ -6,7 +6,7 @@ import { useFeedback } from '../../hooks/useFeedback.js';
 import { mutateOnEdit, queryClient } from '../../utils/http.js';
 import { calculateScheduleStats } from '../../utils/productViewsUtils.js';
 import DetailsProduct from './DetailsProduct.jsx';
-import DetailsProductBookings from './DetailsProductBookings.jsx';
+import DetailsProductPayments from './DetailsProductPayments.jsx';
 import DetailsProductReviews from './DetailsProductReviews.jsx';
 import DetailsSchedule from './DetailsSchedule.jsx';
 import DetailsScheduleStats from './DetailsScheduleStats.jsx';
@@ -16,7 +16,7 @@ import ViewScheduleNewCustomerForm from './ViewScheduleNewCustomerForm.jsx';
 
 function ViewSchedule({
   data,
-  bookingOps,
+  paymentOps,
   onClose,
   isModalOpen,
   isAdminPanel,
@@ -80,10 +80,10 @@ function ViewSchedule({
     setIsFillingTheForm(false);
   };
 
-  // Wrapper for bookingOps.onBook, updating feedback
-  const handleBooking = async () => {
+  // Wrapper for paymentOps.onBook, updating feedback
+  const handlePayment = async () => {
     try {
-      const res = await bookingOps.onBook({
+      const res = await paymentOps.onBook({
         customerDetails: newCustomerDetails || null,
         schedule: schedule.ScheduleID,
         product: product.Name,
@@ -112,18 +112,18 @@ function ViewSchedule({
     userAccountPage &&
     !shouldShowFeedback;
   const shouldShowBookBtn =
-    !isArchived && !schedule.isUserGoing && !bookingOps?.isError;
+    !isArchived && !schedule.isUserGoing && !paymentOps?.isError;
   const isFull = schedule.full;
   const shouldDisableBookBtn =
     (isFull && shouldShowBookBtn) || isFillingTheForm;
 
-  const bookingBtn = isLoggedIn ? (
+  const paymentBtn = isLoggedIn ? (
     <button
       onClick={
         !shouldDisableBookBtn
           ? newCustomerDetails.isFirstTimeBuyer
             ? () => setIsFillingTheForm(true)
-            : handleBooking
+            : handlePayment
           : null
       }
       className={`book modal__btn ${shouldDisableBookBtn && 'disabled'}`}
@@ -218,7 +218,7 @@ function ViewSchedule({
             />
           </div>
 
-          {/*//@ all bookings if not event/camp? */}
+          {/*//@ all payments if not event/camp? */}
 
           <div className='user-container__main-details  schedules modal-checklist'>
             <DetailsTableAttendance
@@ -228,7 +228,7 @@ function ViewSchedule({
             />
           </div>
           <div className='user-container__main-details  schedules modal-checklist'>
-            <DetailsProductBookings
+            <DetailsProductPayments
               stats={scheduleStats}
               type={product.type}
               isAdminPage={isAdminPanel}
@@ -243,7 +243,7 @@ function ViewSchedule({
         </>
       )}
 
-      {shouldShowFeedback ? feedbackBox : shouldShowBookBtn ? bookingBtn : null}
+      {shouldShowFeedback ? feedbackBox : shouldShowBookBtn ? paymentBtn : null}
 
       {shouldShowCancelBtn && (
         <button

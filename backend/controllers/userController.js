@@ -15,7 +15,7 @@ const person = 'User';
 //@ GET
 export const getAccount = (req, res, next) => {
   const controllerName = 'getAccount';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
 
   // @ Fetching USER
   // check if there is logged in User
@@ -51,14 +51,14 @@ export const getAccount = (req, res, next) => {
           ],
         },
         {
-          model: models.Booking, // His reservations
+          model: models.Payment, // His reservations
           required: false,
           include: [
             {
               model: models.Invoice, // eventual invoices
               required: false,
               attributes: {
-                exclude: ['BookingID'], // deleting
+                exclude: ['PaymentID'], // deleting
               },
             },
           ],
@@ -68,7 +68,7 @@ export const getAccount = (req, res, next) => {
           },
         },
         {
-          model: models.BookedSchedule,
+          model: models.Booking,
           required: false,
           include: [
             {
@@ -115,12 +115,12 @@ export const getAccount = (req, res, next) => {
           message: 'Profil uczestnika pobrany pomyślnie.',
         });
       })
-      .catch(err => catchErr(res, errCode, err, controllerName));
+      .catch(err => catchErr(person, res, errCode, err, controllerName));
   }
 };
 export const getSettings = (req, res, next) => {
   const controllerName = 'getSettings';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
   const PK = req.user.UserPrefSetting?.UserPrefID;
 
   models.UserPrefSettings.findByPk(PK)
@@ -142,12 +142,12 @@ export const getSettings = (req, res, next) => {
         preferences,
       });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 //@ PUT
 export const putEditSettings = (req, res, next) => {
   const controllerName = 'putEditSettings';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
 
   const userID = req.user.UserID;
 
@@ -209,14 +209,16 @@ export const putEditSettings = (req, res, next) => {
         message: result.message,
       });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName, { code: 409 }));
+    .catch(err =>
+      catchErr(person, res, errCode, err, controllerName, { code: 409 })
+    );
 };
 
 //! SCHEDULES_____________________________________________
 //@ GET
 export const getAllSchedules = (req, res, next) => {
   const controllerName = 'getAllSchedules';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
 
   const model = models.ScheduleRecord;
 
@@ -232,9 +234,9 @@ export const getAllSchedules = (req, res, next) => {
           attributes: ['Type', 'Name', 'Price'],
         },
         {
-          model: models.Booking,
+          model: models.Payment,
           required: false,
-          attributes: ['BookingID'], //booking Id is enough
+          attributes: ['PaymentID'], //payment Id is enough
           through: {
             attributes: ['Attendance', 'CustomerID'], // dołącz dodatkowe atrybuty
           },
@@ -283,19 +285,18 @@ export const getAllSchedules = (req, res, next) => {
           } else if (key === 'Product' && jsonRecord[key]) {
             newRecord['Typ'] = jsonRecord[key].Type; //  flatten object
             newRecord['Nazwa'] = jsonRecord[key].Name;
-          } else if (key === 'Bookings') {
-            newRecord.wasUserReserved = jsonRecord.Bookings.some(
-              booking =>
-                booking.BookedSchedule.CustomerID ===
-                req.user?.Customer?.CustomerID
+          } else if (key === 'Payments') {
+            newRecord.wasUserReserved = jsonRecord.Payments.some(
+              payment =>
+                payment.Booking.CustomerID === req.user?.Customer?.CustomerID
             );
-            newRecord.isUserGoing = jsonRecord.Bookings.some(booking => {
-              const isBooked = booking.BookedSchedule;
-              const customerID = booking.BookedSchedule.CustomerID;
+            newRecord.isUserGoing = jsonRecord.Payments.some(payment => {
+              const isBooked = payment.Booking;
+              const customerID = payment.Booking.CustomerID;
               const loggedInID = req.user?.Customer?.CustomerID;
               const isGoing =
-                booking.BookedSchedule.Attendance === 1 ||
-                booking.BookedSchedule.Attendance === true;
+                payment.Booking.Attendance === 1 ||
+                payment.Booking.Attendance === true;
 
               return isBooked && customerID == loggedInID && isGoing;
             });
@@ -304,17 +305,18 @@ export const getAllSchedules = (req, res, next) => {
           }
         }
         // console.log(jsonRecord);
-        const activeBookings = jsonRecord.Bookings.filter(
-          booking =>
-            booking.BookedSchedule &&
-            (booking.BookedSchedule.Attendance === 1 ||
-              booking.BookedSchedule.Attendance === true)
+        const activePayments = jsonRecord.Payments.filter(
+          payment =>
+            payment.Booking &&
+            (payment.Booking.Attendance === 1 ||
+              payment.Booking.Attendance === true)
         );
         newRecord['Dzień'] = getWeekDay(jsonRecord['Date']);
         newRecord['Zadatek'] = jsonRecord.Product.Price;
-        newRecord['Miejsca'] =
-          `${activeBookings.length}/${jsonRecord.Capacity}`;
-        newRecord.full = activeBookings.length >= jsonRecord.Capacity;
+        newRecord[
+          'Miejsca'
+        ] = `${activePayments.length}/${jsonRecord.Capacity}`;
+        newRecord.full = activePayments.length >= jsonRecord.Capacity;
         return newRecord; // Return new record object
       });
 
@@ -339,11 +341,11 @@ export const getAllSchedules = (req, res, next) => {
         content: formattedRecords, // With new names
       });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 export const getScheduleByID = (req, res, next) => {
   const controllerName = 'getScheduleByID';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
 
   const isUser = !!req.user;
   const isCustomer = !!req.user?.Customer;
@@ -356,7 +358,7 @@ export const getScheduleByID = (req, res, next) => {
         required: true,
       },
       {
-        model: models.BookedSchedule,
+        model: models.Booking,
         required: false,
       },
     ],
@@ -364,7 +366,7 @@ export const getScheduleByID = (req, res, next) => {
     .then(scheduleData => {
       if (!scheduleData) {
         errCode = 404;
-        throw new Error('Nie znaleziono rezerwacji.');
+        throw new Error('Nie znaleziono terminu.');
       }
 
       // Convert to JSON
@@ -372,22 +374,20 @@ export const getScheduleByID = (req, res, next) => {
       let isUserGoing = false;
       schedule.Attendance = 0;
       schedule.full = false;
-      // We substitute bookings content for security
-      if (schedule.BookedSchedules && schedule.BookedSchedules?.length > 0) {
+      // We substitute payments content for security
+      if (schedule.Bookings && schedule.Bookings?.length > 0) {
         let wasUserReserved;
-        const beingAttendedSchedules = schedule.BookedSchedules.filter(
+        const beingAttendedSchedules = schedule.Bookings.filter(
           schedule => schedule.Attendance == 1 || schedule.Attendance == true
         );
         if (isUser && isCustomer) {
-          wasUserReserved = schedule.BookedSchedules.some(
-            bookedSchedule =>
-              bookedSchedule.CustomerID === req.user?.Customer.CustomerID
+          wasUserReserved = schedule.Bookings.some(
+            booking => booking.CustomerID === req.user?.Customer.CustomerID
           );
           isUserGoing = beingAttendedSchedules.some(
-            bookedSchedule =>
-              bookedSchedule.CustomerID === req.user.Customer.CustomerID
+            booking => booking.CustomerID === req.user.Customer.CustomerID
           );
-          schedule.BookedSchedules = beingAttendedSchedules.length;
+          schedule.Bookings = beingAttendedSchedules.length;
         }
         schedule.Attendance = beingAttendedSchedules.length;
         schedule.isUserGoing = isUserGoing;
@@ -399,5 +399,5 @@ export const getScheduleByID = (req, res, next) => {
       return res.status(200).json({ schedule, user: req.user });
       // return res.status(200).json({schedule});
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };

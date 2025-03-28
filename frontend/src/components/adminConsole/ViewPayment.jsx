@@ -1,32 +1,32 @@
 import { useLocation } from 'react-router-dom';
-import DetailsBooking from './DetailsBooking.jsx';
 import DetailsCustomer from './DetailsCustomer.jsx';
+import DetailsPayment from './DetailsPayment.jsx';
 import DetailsProductSchedules from './DetailsProductSchedules.jsx';
 
 // import {calculateStats} from '../../utils/productViewsUtils.js';
 
-function ViewBooking({ data, isUserAccountPage }) {
+function ViewPayment({ data, isUserAccountPage }) {
   const location = useLocation();
   const customerAccessed = location.pathname.includes('ustawienia');
   console.log('customerAccessed', customerAccessed);
   const adminAccessed = location.pathname.includes('admin-console');
-  const isBookingView = location.pathname.includes('show-all-bookings');
+  const isPaymentView = location.pathname.includes('show-all-payments');
   console.log('adminAccessed', adminAccessed);
   // console.clear();
   console.log(
     `📝
-	    ViewBooking object from backend:`,
+	    ViewPayment object from backend:`,
     data
   );
-  const { booking } = data;
-  const { Customer: customer } = booking;
-  const { ScheduleRecords: schedules } = booking;
+  const { payment } = data;
+  const { Customer: customer } = payment;
+  const { ScheduleRecords: schedules } = payment;
 
   return (
     <>
-      <h1 className='user-container__user-title modal__title'>{`Rezerwacja (ID: ${
-        booking.BookingID
-      }${booking.DidAction == 'Admin' ? '- Manual by Admin' : ''})`}</h1>
+      <h1 className='user-container__user-title modal__title'>{`Płatność (ID: ${
+        payment.PaymentID
+      }${payment.DidAction == 'Admin' ? '- Manual by Admin' : ''})`}</h1>
       {!isUserAccountPage && (
         <h2 className='user-container__user-title modal__title'>{` ${customer.FirstName} ${customer.LastName}`}</h2>
       )}
@@ -39,16 +39,16 @@ function ViewBooking({ data, isUserAccountPage }) {
             isUserAccountPage={isUserAccountPage}
             customerAccessed={customerAccessed}
             adminAccessed={adminAccessed}
-            isBookingView={isBookingView}
+            isPaymentView={isPaymentView}
           />
         </div>
       )}
 
-      {/*//@ Booking main details */}
-      <div className='user-container__main-details modal-checklist modal-checklist--booking'>
-        <DetailsBooking
-          bookingData={booking}
-          placement={'booking'}
+      {/*//@ Payment main details */}
+      <div className='user-container__main-details modal-checklist modal-checklist--payment'>
+        <DetailsPayment
+          paymentData={payment}
+          placement={'payment'}
           isUserAccountPage={isUserAccountPage}
         />
       </div>
@@ -57,11 +57,11 @@ function ViewBooking({ data, isUserAccountPage }) {
       <div className='user-container__main-details  schedules modal-checklist'>
         <DetailsProductSchedules
           scheduleRecords={schedules}
-          placement='booking'
+          placement='payment'
         />
       </div>
     </>
   );
 }
 
-export default ViewBooking;
+export default ViewPayment;

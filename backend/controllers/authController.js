@@ -20,7 +20,7 @@ const person = 'User';
 //@ GET
 export const getStatus = (req, res, next) => {
   const controllerName = 'getStatus';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
   successLog(person, controllerName);
   console.log({
     isLoggedIn: res.locals.isLoggedIn || false,
@@ -37,7 +37,7 @@ export const getStatus = (req, res, next) => {
 //@ POST
 export const postLogin = (req, res, next) => {
   const controllerName = 'postLogin';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
 
   const { email, password, date } = req.body;
 
@@ -89,12 +89,15 @@ export const postLogin = (req, res, next) => {
         });
     })
     .catch(err =>
-      catchErr(res, errCode, err, controllerName, { type: 'signup', code: 404 })
+      catchErr(person, res, errCode, err, controllerName, {
+        type: 'signup',
+        code: 404,
+      })
     );
 };
 export const postLogout = (req, res, next) => {
   const controllerName = 'postLogout';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
   successLog(person, controllerName);
   req.session.destroy(err => {
     console.log('postLogout');
@@ -110,7 +113,7 @@ export const postLogout = (req, res, next) => {
 //@ GET
 export const getEmailToken = (req, res, next) => {
   const controllerName = 'getEmailToken';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
   const token = req.params.token;
 
   if (!token) {
@@ -160,7 +163,7 @@ export const getEmailToken = (req, res, next) => {
       });
     })
     .catch(err =>
-      catchErr(res, errCode, err, controllerName, {
+      catchErr(person, res, errCode, err, controllerName, {
         type: 'verifyEmail',
         code: 400,
       })
@@ -169,7 +172,7 @@ export const getEmailToken = (req, res, next) => {
 //@ POST
 export const postSignup = (req, res, next) => {
   const controllerName = 'postSignup';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
 
   const { email, password, confirmedPassword, date } = req.body;
 
@@ -233,7 +236,10 @@ export const postSignup = (req, res, next) => {
         });
     })
     .catch(err =>
-      catchErr(res, errCode, err, controllerName, { type: 'signup', code: 303 })
+      catchErr(person, res, errCode, err, controllerName, {
+        type: 'signup',
+        code: 303,
+      })
     );
 };
 
@@ -242,7 +248,7 @@ export const postSignup = (req, res, next) => {
 // To check if users in-url given password is valid
 export const getPasswordToken = (req, res, next) => {
   const controllerName = 'getPasswordToken';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
   const token = req.params.token;
 
   if (!token) {
@@ -280,7 +286,7 @@ export const getPasswordToken = (req, res, next) => {
         message: 'Link jest prawidłowy.',
       });
     })
-    .catch(err => catchErr(res, errCode, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 
 //@ POST
@@ -289,7 +295,7 @@ export const postResetPassword = (req, res, next) => {
 
   crypto.randomBytes(32, (err, buffer) => {
     if (err) {
-      catchErr(res, errCode, err, controllerName);
+      catchErr(person, res, errCode, err, controllerName);
     }
     // buffer is in hex format
     const token = buffer.toString('hex');
@@ -320,21 +326,21 @@ export const postResetPassword = (req, res, next) => {
         });
       })
       .catch(err =>
-        catchErr(res, errCode, err, controllerName, {
+        catchErr(person, res, errCode, err, controllerName, {
           type: 'reset',
           code: 404,
         })
       );
   });
 
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
   successLog(person, controllerName);
 };
 
 //@ PUT
 export const putEditPassword = (req, res, next) => {
   const controllerName = 'putEditPassword';
-  callLog(person, controllerName);
+  callLog(req, person, controllerName);
   const token = req.params.token;
   const { password, confirmedPassword, userID } = req.body;
   // console.log(req.body);
@@ -382,7 +388,7 @@ export const putEditPassword = (req, res, next) => {
       });
     })
     .catch(err =>
-      catchErr(res, errCode, err, controllerName, {
+      catchErr(person, res, errCode, err, controllerName, {
         type: 'editPassword',
         code: 404,
       })
