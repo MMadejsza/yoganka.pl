@@ -3,12 +3,9 @@ import { addDays, addMonths, addYears } from 'date-fns';
 import { Op, Sequelize } from 'sequelize';
 import * as models from '../models/_index.js';
 import columnMaps from '../utils/columnsMapping.js';
+import { tableDataFlatQuery } from '../utils/controllersUtils.js';
+import { formatIsoDateTime, getWeekDay, isAdult } from '../utils/dateUtils.js';
 import db from '../utils/db.js';
-import {
-  formatIsoDateTime,
-  getWeekDay,
-  isAdult,
-} from '../utils/formatDateTime.js';
 import {
   callLog,
   catchErr,
@@ -32,7 +29,6 @@ import {
   sendReservationCancelledMail,
   sendReservationFreshMail,
 } from '../utils/mails/templates/adminOnlyActions/reservationEmails.js';
-import { tableDataFlatQuery } from '../utils/tableDataFlatQuery.js';
 
 let errCode = errorCode;
 const person = 'Admin';

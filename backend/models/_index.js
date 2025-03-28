@@ -9,7 +9,7 @@ import Product from './productModel.js';
 import ScheduleRecord from './scheduleRecordModel.js';
 import User from './userModel.js';
 import UserPrefSettings from './userSettingsModel.js';
-import VerificationToken from './verificationTokens.js';
+import VerificationToken from './verificationTokensModel.js';
 
 //!
 //! ASSOCIATIONS BETWEEN THE USER MODEL AND OTHER MODELS

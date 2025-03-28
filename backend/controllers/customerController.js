@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import * as models from '../models/_index.js';
+import { isAdult } from '../utils/dateUtils.js';
 import db from '../utils/db.js';
-import { isAdult } from '../utils/formatDateTime.js';
 import {
   callLog,
   catchErr,

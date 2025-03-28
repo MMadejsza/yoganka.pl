@@ -1,7 +1,7 @@
 import { Op, Sequelize, col, fn } from 'sequelize';
 import * as models from '../models/_index.js';
 import columnMaps from '../utils/columnsMapping.js';
-import { formatIsoDateTime, getWeekDay } from '../utils/formatDateTime.js';
+import { formatIsoDateTime, getWeekDay } from '../utils/dateUtils.js';
 import {
   callLog,
   catchErr,
