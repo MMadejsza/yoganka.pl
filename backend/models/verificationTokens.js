@@ -25,6 +25,11 @@ const VerificationToken = sequelizeDb.define(
       type: DataTypes.DATE,
       allowNull: false,
     },
+    Used: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
   },
   {
     tableName: 'verification_tokens',

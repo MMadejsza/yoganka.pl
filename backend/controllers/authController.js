@@ -128,6 +128,7 @@ export const getEmailToken = (req, res, next) => {
       Token: token,
       Type: 'email',
       ExpirationDate: { [Op.gt]: new Date() }, // Validation if still active
+      Used: false,
     },
     include: [
       {
@@ -146,6 +147,7 @@ export const getEmailToken = (req, res, next) => {
       // To change the status of the linked account
       const user = validTokenRecord.User;
       user.EmailVerified = true;
+      validTokenRecord.Used = true;
 
       return user.save();
     })
@@ -257,6 +259,7 @@ export const getPasswordToken = (req, res, next) => {
       Token: token,
       Type: 'password',
       ExpirationDate: { [Op.gt]: new Date() }, // Validation
+      Used: false,
     },
     include: [
       {
