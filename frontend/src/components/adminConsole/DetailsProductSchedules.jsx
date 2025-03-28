@@ -11,9 +11,9 @@ import NewProductScheduleForm from './NewProductScheduleForm';
 function DetailsProductSchedules({ scheduleRecords, placement, status }) {
   console.log('DetailsProductSchedules scheduleRecords', scheduleRecords);
   let params = useParams();
+  const isInPaymentView = placement == 'payment';
   const [isFormVisible, setIsFormVisible] = useState();
   const [deleteWarningTriggered, setDeleteWarningTriggered] = useState(false);
-
   const { feedback, updateFeedback } = useFeedback();
 
   const {
@@ -74,7 +74,7 @@ function DetailsProductSchedules({ scheduleRecords, placement, status }) {
   let keys = ['id', 'day', 'date', 'time', 'location', 'attendance', ''];
   let form;
 
-  if (placement == 'payment') {
+  if (isInPaymentView) {
     headers = [
       'ID',
       'Produkt',
@@ -118,7 +118,7 @@ function DetailsProductSchedules({ scheduleRecords, placement, status }) {
     <>
       <h2 className='user-container__section-title modal__title--day admin-action '>
         Terminy
-        {placement != 'booking' && (
+        {!isInPaymentView && (
           <button
             onClick={e => {
               e.preventDefault;

@@ -33,25 +33,26 @@ function ViewProduct({ data, isAdminPanel }) {
       <h3 className='user-container__user-status modal__title'>
         {product.Status}
       </h3>
+
       {/*//@ Product main details */}
       <div className='user-container__main-details modal-checklist'>
         <DetailsProduct data={product} placement={'productView'} />
       </div>
+
       {/*//@ Product business details */}
       <div className='user-container__main-details modal-checklist'>
         <DetailsProductStats data={product} prodStats={prodStats} />
         {/* //! Jélsi jeden schedule i camp/event to wywietl jego ustawienia eby zmieni np. liczbe miejsc*/}
       </div>
+
       {/*//@ Schedules if not event/camp*/}
-      {prodStats.totalSchedulesAmount > 1 && (
-        <div className='user-container__main-details  schedules modal-checklist'>
-          <DetailsProductSchedules
-            scheduleRecords={prodStats.scheduleRecords}
-            status={status}
-            isAdminPage={isAdminPanel}
-          />
-        </div>
-      )}
+      <div className='user-container__main-details  schedules modal-checklist'>
+        <DetailsProductSchedules
+          scheduleRecords={prodStats.scheduleRecords}
+          status={status}
+          isAdminPage={isAdminPanel}
+        />
+      </div>
 
       {(type == 'Camp' || type == 'Event') && (
         <div className='user-container__main-details  schedules modal-checklist'>
@@ -62,6 +63,7 @@ function ViewProduct({ data, isAdminPanel }) {
           />
         </div>
       )}
+
       {/*//@ All payments */}
       <div className='user-container__main-details  schedules modal-checklist'>
         <DetailsProductPayments
@@ -70,6 +72,7 @@ function ViewProduct({ data, isAdminPanel }) {
           isAdminPage={isAdminPanel}
         />
       </div>
+
       {/*//@ Feedback */}
       <div className='user-container__main-details  schedules modal-checklist'>
         <DetailsProductReviews stats={prodStats} />
