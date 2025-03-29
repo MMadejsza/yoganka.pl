@@ -243,13 +243,7 @@ function ViewSchedule({
         </>
       )}
 
-      {shouldShowFeedback
-        ? feedbackBox
-        : shouldShowBookBtn
-          ? userAccountPage
-            ? paymentBtn
-            : null
-          : null}
+      {shouldShowFeedback ? feedbackBox : shouldShowBookBtn ? paymentBtn : null}
 
       {shouldShowCancelBtn && (
         <button
