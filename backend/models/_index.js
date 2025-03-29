@@ -8,7 +8,7 @@ import Payment from './paymentModel.js';
 import Product from './productModel.js';
 import ScheduleRecord from './scheduleRecordModel.js';
 import User from './userModel.js';
-import UserPrefSettings from './userSettingsModel.js';
+import UserPrefSetting from './userSettingsModel.js';
 import VerificationToken from './verificationTokensModel.js';
 
 //
@@ -25,10 +25,10 @@ VerificationToken.belongsTo(User, { foreignKey: 'user_id' });
 User.hasOne(Customer, { foreignKey: 'user_id', onDelete: 'CASCADE' });
 Customer.belongsTo(User, { foreignKey: 'user_id' });
 
-// User ⇄ UserPrefSettings (1:1, total participation on UserPrefSettings)
-// When a User is deleted, the associated UserPrefSettings are also deleted.
-User.hasOne(UserPrefSettings, { foreignKey: 'user_id', onDelete: 'CASCADE' });
-UserPrefSettings.belongsTo(User, { foreignKey: 'user_id' });
+// User ⇄ UserPrefSetting (1:1, total participation on UserPrefSetting)
+// When a User is deleted, the associated UserPrefSetting are also deleted.
+User.hasOne(UserPrefSetting, { foreignKey: 'user_id', onDelete: 'CASCADE' });
+UserPrefSetting.belongsTo(User, { foreignKey: 'user_id' });
 
 //
 // ASSOCIATIONS BETWEEN THE CUSTOMER MODEL AND OTHER MODELS
@@ -132,6 +132,6 @@ export {
   ScheduleRecord,
   SubscribedNewsletter,
   User,
-  UserPrefSettings,
+  UserPrefSetting,
   VerificationToken,
 };

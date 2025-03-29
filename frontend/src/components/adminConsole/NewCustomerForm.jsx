@@ -211,11 +211,11 @@ function NewCustomerForm({ onClose }) {
         formType={formType}
         type='select'
         options={usersOptionsList.map(userObj => ({
-          label: `(ID: ${userObj.ID}) ${userObj.Email}`,
+          label: `(ID: ${userObj.ID}) ${userObj.email}`,
           value: userObj.ID,
         }))}
         id='user'
-        name='userID'
+        name='userId'
         label='Przypisz do konta:'
         value={userValue}
         onFocus={handleUserFocus}
@@ -284,8 +284,8 @@ function NewCustomerForm({ onClose }) {
         embedded={true}
         formType={formType}
         type='date'
-        id='DoB'
-        name='DoB'
+        id='dob'
+        name='dob'
         label='Urodziny:*'
         value={DoBValue}
         onFocus={handleDoBFocus}

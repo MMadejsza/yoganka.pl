@@ -27,16 +27,16 @@ function ViewUser({ data, isUserAccountPage }) {
   const user = data.user || data.customer.User;
   const customer = data.customer || data.user.Customer;
   const isAdmin =
-    data.user?.Role == 'Admin' || data.customer?.User.Role == 'Admin'; //|| data.user.User?.Role == 'Admin';
+    data.user?.role == 'Admin' || data.customer?.User.role == 'Admin'; //|| data.user.User?.role == 'Admin';
   const name = customer
-    ? `${customer.FirstName} ${customer.LastName}`
-    : user.Email;
+    ? `${customer.firstName} ${customer.lastName}`
+    : user.email;
 
   return (
     <>
       {!isUserAccountPage && (
         <h2 className='user-container__user-title modal__title dimmed'>
-          {JSON.parse(user.ProfilePictureSrcSetJSON)?.profile}
+          {JSON.parse(user.profilePictureSrcSetJson)?.profile}
         </h2>
       )}
       {!isUserAccountPage && (

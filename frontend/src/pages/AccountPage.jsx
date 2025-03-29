@@ -34,9 +34,9 @@ function AccountPage() {
     console.log('AccountPage data: ', data);
     if (data.customer) {
       customer = data.customer;
-      name = `${customer.FirstName} ${customer.LastName}`;
+      name = `${customer.firstName} ${customer.lastName}`;
     } else {
-      name = data.user.Email;
+      name = data.user.email;
       console.log(name);
     }
 

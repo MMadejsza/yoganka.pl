@@ -21,13 +21,13 @@ function DetailsProductForm({ productData }) {
       mutateOnEdit(
         status,
         formDataObj,
-        `/api/admin-console/edit-product-data/${productData.ProductID}`
+        `/api/admin-console/edit-product-data/${productData.productId}`
       ),
 
     onSuccess: res => {
       queryClient.invalidateQueries([
         'query',
-        `/admin-console/show-all-products/${productData.ProductID}`,
+        `/admin-console/show-all-products/${productData.productId}`,
       ]);
       queryClient.invalidateQueries([
         'query',
@@ -42,15 +42,15 @@ function DetailsProductForm({ productData }) {
     },
   });
   // Fallback to feed custom hooks when data isn't available
-  const typeDefault = productData?.Type || 'Class';
-  const dateDefault = productData?.StartDate || formatIsoDateTime(new Date());
-  const locationDefault = productData?.Location || ' ';
-  const timeString = productData?.Duration;
+  const typeDefault = productData?.type || 'Class';
+  const dateDefault = productData?.startDate || formatIsoDateTime(new Date());
+  const locationDefault = productData?.location || ' ';
+  const timeString = productData?.duration;
   const [hours, minutes, seconds] = timeString.split(':').map(Number);
   const totalHours = hours + minutes / 60 + seconds / 3600;
   const durationDefault = totalHours || 1;
-  const priceDefault = productData?.Price || 500.0;
-  const statusDefault = productData?.Status || 'Aktywny';
+  const priceDefault = productData?.price || 500.0;
+  const statusDefault = productData?.status || 'Aktywny';
 
   // using custom hook with extracting and reassigning its 'return' for particular inputs and assign validation methods from imported utils. Every inout has its won state now
   const {

@@ -75,7 +75,7 @@ function ViewFrame({
           />
         );
         controller.deleteBtnTitle = 'Konto';
-        controller.deleteQuery = `delete-user/${data.user.UserID}`;
+        controller.deleteQuery = `delete-user/${data.user.userId}`;
         controller.redirectTo = '/admin-console/show-all-users';
         controller.warnings = [
           'Powiązanego profilu uczestnika',
@@ -92,7 +92,7 @@ function ViewFrame({
         controller.recordEditor = '';
         controller.deleteBtnTitle = 'Profil Uczestnika';
 
-        controller.deleteQuery = `delete-customer/${data.customer.CustomerID}`;
+        controller.deleteQuery = `delete-customer/${data.customer.customerId}`;
         controller.redirectTo = '/admin-console/show-all-customers';
         controller.warnings = [
           'Wszystkich powiązanych płatności',
@@ -107,7 +107,7 @@ function ViewFrame({
         );
         controller.recordEditor = '';
         controller.deleteBtnTitle = 'Produkt';
-        controller.deleteQuery = `delete-product/${data.product.ProductID}`;
+        controller.deleteQuery = `delete-product/${data.product.productId}`;
         controller.redirectTo = '/admin-console/show-all-products';
         controller.warnings = [
           'Wszystkich powiązanych terminów',
@@ -126,7 +126,7 @@ function ViewFrame({
         );
         controller.recordEditor = '';
         controller.deleteBtnTitle = 'Termin';
-        controller.deleteQuery = `delete-schedule/${data.schedule.ScheduleID}`;
+        controller.deleteQuery = `delete-schedule/${data.schedule.scheduleId}`;
         controller.redirectTo = '/admin-console/show-all-schedules';
         controller.warnings = [
           'Wszystkich powiązanych opinii',
@@ -145,7 +145,7 @@ function ViewFrame({
         );
         controller.recordEditor = '';
         controller.deleteBtnTitle = 'Rezerwację';
-        controller.deleteQuery = `delete-payment/${data.payment.PaymentID}`;
+        controller.deleteQuery = `delete-payment/${data.payment.paymentId}`;
         controller.redirectTo = '/admin-console/show-all-payments';
         controller.warnings = [
           'Wszystkich powiązanych faktur',
@@ -159,7 +159,7 @@ function ViewFrame({
         );
         controller.recordEditor = '';
         controller.deleteBtnTitle = 'Opinię';
-        controller.deleteQuery = `delete-feedback/${data.feedback.FeedbackID}`;
+        controller.deleteQuery = `delete-feedback/${data.feedback.feedbackId}`;
         controller.redirectTo = '/admin-console/show-all-participants-feedback';
         controller.warnings = '';
         return controller;

@@ -21,14 +21,14 @@ function DetailsCustomerForm({
   const queryKey = customerAccessed
     ? ['formFilling', 'putEditCustomerDetails']
     : adminAccessed
-      ? ['formFilling', 'putEditCustomerDetails', customerData.CustomerID]
+      ? ['formFilling', 'putEditCustomerDetails', customerData.customerId]
       : null;
   const dynamicFetch = signal => {
     if (customerAccessed)
       return fetchItem('/customer/get-customer-details', { signal });
     else
       return fetchItem(
-        `/admin-console/show-customer-data/${customerData.CustomerID}`,
+        `/admin-console/show-customer-data/${customerData.customerId}`,
         {
           signal,
         }
@@ -49,7 +49,7 @@ function DetailsCustomerForm({
   const dynamicMutationAddress = customerAccessed
     ? '/api/customer' + '/edit-customer-data'
     : adminAccessed
-      ? `/api/admin-console` + `/edit-customer-data/${customerData.CustomerID}`
+      ? `/api/admin-console` + `/edit-customer-data/${customerData.customerId}`
       : null;
   const {
     mutate: editCustomerDetails,
@@ -77,10 +77,10 @@ function DetailsCustomerForm({
     },
   });
   // Fallback to feed custom hooks when data isn't available
-  const phoneDefault = data?.customer.Phone || ' ';
-  const loyaltyDefault = data?.customer.Loyalty || 5;
-  const notesDefault = data?.customer.Notes || ' ';
-  const methodDefault = data?.customer.PreferredContactMethod || ' ';
+  const phoneDefault = data?.customer.phone || ' ';
+  const loyaltyDefault = data?.customer.loyalty || 5;
+  const notesDefault = data?.customer.notes || ' ';
+  const methodDefault = data?.customer.preferredContactMethod || ' ';
 
   // using custom hook with extracting and reassigning its 'return' for particular inputs and assign validation methods from imported utils. Every inout has its won state now
   const {

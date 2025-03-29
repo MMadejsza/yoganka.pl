@@ -12,7 +12,7 @@ function DetailsCustomer({
   console.log('customerData', customerData);
   const title = isUserAccountPage
     ? `Dane kontaktowe:`
-    : `Uczestnik (ID ${customerData.CustomerID}):`;
+    : `Uczestnik (ID ${customerData.customerId}):`;
 
   const [isEditing, setIsEditing] = useState(false);
   const handleStartEditing = () => {
@@ -33,7 +33,7 @@ function DetailsCustomer({
       <li className='user-container__section-record modal-checklist__li'>
         <p className='user-container__section-record-label'>Numer telefonu:</p>
         <p className='user-container__section-record-content'>
-          {customerData.Phone}
+          {customerData.phone}
         </p>
       </li>
 
@@ -41,18 +41,18 @@ function DetailsCustomer({
         <>
           <li className='user-container__section-record modal-checklist__li'>
             <p className='user-container__section-record-label'>Typ:</p>
-            <p className='user-container__section-record-content'>{`${customerData.CustomerType}`}</p>
+            <p className='user-container__section-record-content'>{`${customerData.customerType}`}</p>
           </li>
           <li className='user-container__section-record modal-checklist__li'>
             <p className='user-container__section-record-label'>Wiek:</p>
             <p className='user-container__section-record-content'>{`${calculateAge(
-              customerData.DoB
-            )}   |  (${customerData.DoB})`}</p>
+              customerData.dob
+            )}   |  (${customerData.dob})`}</p>
           </li>
           <li className='user-container__section-record modal-checklist__li'>
             <p className='user-container__section-record-label'>Z polecenia:</p>
             <p className='user-container__section-record-content'>
-              {customerData.ReferralSource}
+              {customerData.referralSource}
             </p>
           </li>
         </>
@@ -62,7 +62,7 @@ function DetailsCustomer({
           Kontaktuj się przez:
         </p>
         <p className='user-container__section-record-content'>
-          {customerData.PreferredContactMethod}
+          {customerData.preferredContactMethod}
         </p>
       </li>
       {!isUserAccountPage && (
@@ -70,13 +70,13 @@ function DetailsCustomer({
           <li className='user-container__section-record modal-checklist__li'>
             <p className='user-container__section-record-label'>Notatki:</p>
             <p className='user-container__section-record-content'>
-              {customerData.Notes}
+              {customerData.notes}
             </p>
           </li>
           <li className='user-container__section-record modal-checklist__li'>
             <p className='user-container__section-record-label'>Lojalność:</p>
             <p className='user-container__section-record-content'>
-              {customerData.Loyalty}
+              {customerData.loyalty}
             </p>
           </li>{' '}
         </>

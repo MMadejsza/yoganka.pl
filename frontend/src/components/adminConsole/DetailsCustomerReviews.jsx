@@ -24,15 +24,15 @@ function DetailsCustomerReviews({ reviews, placement }) {
   } else {
     processedFeedbackArr = feedbackArray.map((feedback, index) => {
       return {
-        id: feedback.FeedbackID,
-        date: feedback.SubmissionDate,
+        id: feedback.feedbackId,
+        date: feedback.submissionDate,
         product: feedback.ScheduleRecord.Product.name,
         schedule: `(ID: ${feedback.ScheduleRecord.scheduleId}) ${
           feedback.ScheduleRecord.date
         }\n${getWeekDay(feedback.ScheduleRecord.date)}${feedback.ScheduleRecord.startTime}`,
-        rating: feedback.Rating,
-        review: feedback.Text,
-        delay: feedback.Delay,
+        rating: feedback.rating,
+        review: feedback.text,
+        delay: feedback.delay,
       };
     });
   }

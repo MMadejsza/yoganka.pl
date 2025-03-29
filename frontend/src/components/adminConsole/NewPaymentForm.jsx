@@ -233,7 +233,7 @@ function NewPaymentForm() {
           value: customerObj.ID,
         }))}
         id='customer'
-        name='customerID'
+        name='customerId'
         label='Uczestnik:*'
         value={customerValue}
         onFocus={handleCustomerFocus}
@@ -272,11 +272,11 @@ function NewPaymentForm() {
         options={
           schedulesOptionsList?.length > 0
             ? schedulesOptionsList.map(scheduleObj => ({
-                key: scheduleObj.ScheduleID,
-                label: `(ID: ${scheduleObj.ScheduleID}) ${getWeekDay(
-                  scheduleObj.Date
-                )} ${scheduleObj.Date} ${scheduleObj.StartTime}`,
-                value: scheduleObj.ScheduleID,
+                key: scheduleObj.scheduleId,
+                label: `(ID: ${scheduleObj.scheduleId}) ${getWeekDay(
+                  scheduleObj.date
+                )} ${scheduleObj.date} ${scheduleObj.startTime}`,
+                value: scheduleObj.scheduleId,
               }))
             : [
                 {

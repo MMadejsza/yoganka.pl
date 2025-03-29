@@ -15,9 +15,9 @@ function DetailsSchedule({ data, placement, isAdminPanel }) {
   const isScheduleView = placement == 'scheduleView';
   const schedule = data;
   const product = data.Product;
-  const totalSeconds = durationToSeconds(product.Duration);
+  const totalSeconds = durationToSeconds(product.duration);
   const splitDuration =
-    product.Type == 'Camp'
+    product.type == 'Camp'
       ? secondsToDuration(totalSeconds)
       : secondsToDuration(totalSeconds, 'hours');
   const formattedDuration = `${
@@ -28,7 +28,7 @@ function DetailsSchedule({ data, placement, isAdminPanel }) {
     splitDuration.minutes != '0' ? splitDuration.minutes + ' minut' : ''
   }`;
   const isPassedSchedule =
-    new Date(`${data.Date}T${data.StartTime}:00`) < new Date();
+    new Date(`${data.date}T${data.startTime}:00`) < new Date();
 
   const [isEditing, setIsEditing] = useState(false);
   const handleStartEditing = () => {
@@ -47,25 +47,25 @@ function DetailsSchedule({ data, placement, isAdminPanel }) {
           {isAdminPanel ? 'ID:' : 'Numer:'}
         </p>
         <p className='user-container__section-record-content dimmed'>
-          {schedule.ScheduleID}
+          {schedule.scheduleId}
         </p>
       </li>
       <li className='user-container__section-record modal-checklist__li'>
         <p className='user-container__section-record-label'>Uczestnicy:</p>
         <p className='user-container__section-record-content'>
-          {`${schedule.Attendance} / ${schedule.Capacity}`}
+          {`${schedule.attendance} / ${schedule.capacity}`}
         </p>
       </li>
       <li className='user-container__section-record modal-checklist__li'>
         <p className='user-container__section-record-label'>Data:</p>
         <p className='user-container__section-record-content'>
-          {`${schedule.Date} (${getWeekDay(schedule.Date)})`}
+          {`${schedule.date} (${getWeekDay(schedule.date)})`}
         </p>
       </li>
       <li className='user-container__section-record modal-checklist__li'>
         <p className='user-container__section-record-label'>Godzina:</p>
         <p className='user-container__section-record-content'>
-          {schedule.StartTime}
+          {schedule.startTime}
         </p>
       </li>
       <li className='user-container__section-record modal-checklist__li'>
@@ -75,7 +75,7 @@ function DetailsSchedule({ data, placement, isAdminPanel }) {
       <li className='user-container__section-record modal-checklist__li'>
         <p className='user-container__section-record-label'>Miejsce:</p>
         <p className='user-container__section-record-content'>
-          {schedule.Location}
+          {schedule.location}
         </p>
       </li>
     </ul>

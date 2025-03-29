@@ -26,7 +26,7 @@ function ViewCustomer({ data }) {
   const user = data.customer.User;
   const customer = data.customer;
   const name = customer
-    ? `${customer.FirstName} ${customer.LastName}`
+    ? `${customer.firstName} ${customer.lastName}`
     : user.Login;
 
   const customerStats = calculateStats(customer);

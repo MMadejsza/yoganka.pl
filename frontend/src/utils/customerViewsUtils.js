@@ -98,26 +98,26 @@ export const calculateStats = customer => {
     totalOnlineAmount;
   // console.log(customer.Payments);
   for (let payment of customer.Payments) {
-    totalRevenue += parseFloat(payment.AmountPaid);
+    totalRevenue += parseFloat(payment.amountPaid);
     // console.log(`totalRevenue: ${totalRevenue}`);
 
     totalPayments.push({
-      id: payment.PaymentID,
-      date: formatIsoDateTime(payment.Date),
-      classes: payment.Product,
-      totalValue: payment.AmountPaid,
-      method: payment.PaymentMethod,
-      status: payment.PaymentStatus,
+      id: payment.paymentId,
+      date: formatIsoDateTime(payment.date),
+      classes: payment.product,
+      totalValue: payment.amountPaid,
+      method: payment.paymentMethod,
+      status: payment.paymentStatus,
     });
 
     const invoice = payment.Invoice;
     if (invoice) {
-      const invoiceID = invoice.InvoiceID;
-      const invoiceBID = payment.PaymentID;
-      const invoiceDate = invoice.InvoiceDate;
-      const invoiceDue = invoice.DueDate;
-      const invoiceTotalValue = invoice.TotalAmount;
-      const invoiceStatus = invoice.PaymentStatus;
+      const invoiceID = invoice.invoiceId;
+      const invoiceBID = payment.paymentId;
+      const invoiceDate = invoice.invoiceDate;
+      const invoiceDue = invoice.dueDate;
+      const invoiceTotalValue = invoice.totalAmount;
+      const invoiceStatus = invoice.paymentStatus;
 
       invoices.push({
         id: invoiceID,
@@ -133,7 +133,7 @@ export const calculateStats = customer => {
   }
 
   const attendedSchedules = customer.Bookings?.filter(
-    schedule => schedule.Attendance == 1 || schedule.Attendance == true
+    schedule => schedule.attendance == 1 || schedule.attendance == true
   );
   for (let booking of attendedSchedules) {
     // console.group(`schedule: ${schedule}`);
@@ -184,7 +184,7 @@ export const calculateStats = customer => {
     if (schedule.Feedbacks && schedule.Feedbacks.length > 0) {
       const feedback = schedule.Feedbacks[0];
       reviews.push({
-        id: feedback.FeedbackID,
+        id: feedback.feedbackId,
         product: schedule.Product.name,
         schedule: `
 				(ID: ${scheduleID})
@@ -192,10 +192,10 @@ export const calculateStats = customer => {
 				${getWeekDay(scheduleDate)}
 				${scheduleStartTime}
 				`,
-        date: formatIsoDateTime(feedback.SubmissionDate),
-        rating: feedback.Rating,
-        review: feedback.Text,
-        delay: feedback.Delay,
+        date: formatIsoDateTime(feedback.submissionDate),
+        rating: feedback.rating,
+        review: feedback.text,
+        delay: feedback.delay,
       });
     }
   }

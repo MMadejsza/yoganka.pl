@@ -47,6 +47,6 @@ body:
   - type: textarea
     id: notes
     attributes:
-      label: 📂 Additional Notes
+      label: 📂 Additional notes
       description: Add any additional notes, screenshots links, or examples to clarify the task requirements.
       placeholder: "Optional" 

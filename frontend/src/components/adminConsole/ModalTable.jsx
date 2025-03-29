@@ -58,11 +58,11 @@ function ModalTable({
         amountDue: 0,
         paymentMethod: 'Credit Card',
         paymentStatus: 'Completed',
-        attendanceCustomerID: row.customerID,
+        attendanceCustomerID: row.customerId,
         attendancePaymentID: row.id,
-        cancelledAttendanceCustomerID: row.CustomerID,
-        cancelledAttendancePaymentID: row.PaymentID,
-        deleteScheduleID: row.id,
+        cancelledAttendanceCustomerID: row.customerId,
+        cancelledAttendancePaymentID: row.paymentId,
+        deletescheduleId: row.id,
         isDisabled: row.isActionDisabled,
       });
     }

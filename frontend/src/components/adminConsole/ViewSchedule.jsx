@@ -28,7 +28,7 @@ function ViewSchedule({
     data
   );
   const { schedule } = data;
-  const { ScheduleID: scheduleID } = schedule;
+  const { scheduleId: scheduleID } = schedule;
   const { Product: product } = schedule;
 
   const location = useLocation();
@@ -85,10 +85,10 @@ function ViewSchedule({
     try {
       const res = await paymentOps.onBook({
         customerDetails: newCustomerDetails || null,
-        schedule: schedule.ScheduleID,
-        product: product.Name,
+        schedule: schedule.scheduleId,
+        product: product.name,
         status: 'Paid',
-        amountPaid: product.Price,
+        amountPaid: product.price,
         amountDue: 0,
         paymentMethod: 'Credit Card',
         paymentStatus: 'Completed',
@@ -101,7 +101,7 @@ function ViewSchedule({
 
   const today = new Date();
   const scheduleDateTime = new Date(
-    `${schedule.Date}T${schedule.StartTime}:00`
+    `${schedule.date}T${schedule.startTime}:00`
   );
   const isArchived = scheduleDateTime < today;
   const shouldShowFeedback =
@@ -150,7 +150,7 @@ function ViewSchedule({
   ) : (
     // dynamic redirection back to schedule when logged in, in Login form useFeedback
     <button
-      onClick={() => navigate(`/login?redirect=/grafik/${schedule.ScheduleID}`)}
+      onClick={() => navigate(`/login?redirect=/grafik/${schedule.scheduleId}`)}
       className='book modal__btn'
     >
       <span className='material-symbols-rounded nav__icon'>login</span>
@@ -176,12 +176,12 @@ function ViewSchedule({
     <>
       {userAccessed ? (
         <>
-          <h1 className='user-container__user-title modal__title'>{`${product.Name}`}</h1>
+          <h1 className='user-container__user-title modal__title'>{`${product.name}`}</h1>
         </>
       ) : (
         <>
-          <h1 className='user-container__user-title modal__title'>{`Termin (ID:${schedule.ScheduleID})`}</h1>
-          <h1 className='user-container__user-status modal__title'>{`Dla: "${product.Name} (ID:${product.ProductID})"`}</h1>
+          <h1 className='user-container__user-title modal__title'>{`Termin (ID:${schedule.scheduleId})`}</h1>
+          <h1 className='user-container__user-status modal__title'>{`Dla: "${product.name} (ID:${product.productId})"`}</h1>
         </>
       )}
 

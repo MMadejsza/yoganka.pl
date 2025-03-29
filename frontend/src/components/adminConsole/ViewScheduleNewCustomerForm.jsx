@@ -190,8 +190,8 @@ function ViewScheduleNewCustomerForm({ onSave }) {
         embedded={true}
         formType={formType}
         type='date'
-        id='DoB'
-        name='DoB'
+        id='dob'
+        name='dob'
         label='Urodziny:*'
         value={DoBValue}
         max={minAge()}

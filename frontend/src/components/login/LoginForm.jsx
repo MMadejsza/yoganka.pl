@@ -251,7 +251,7 @@ function LoginFrom({ successMsg, errorMsg }) {
 
     if (params.token) {
       // new password
-      data.userID = tokenValidity.userID;
+      data.userId = tokenValidity.userId;
       setNewPassword({ formData: data });
     } else if (resetPassword) {
       // reset password

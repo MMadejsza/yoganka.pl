@@ -5,14 +5,14 @@ export const loadUserFromSession = (req, res, next) => {
     return next();
   }
 
-  return models.User.findByPk(req.session.user.UserID, {
+  return models.User.findByPk(req.session.user.userId, {
     include: [
       {
         model: models.Customer, // Add Customer
         required: false, // May not exist
       },
       {
-        model: models.UserPrefSettings, // User settings if exist
+        model: models.UserPrefSetting, // User settings if exist
         required: false,
       },
     ],

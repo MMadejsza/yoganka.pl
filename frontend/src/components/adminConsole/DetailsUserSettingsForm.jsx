@@ -20,13 +20,13 @@ function DetailsUserSettingsForm({
   const queryKey = customerAccessed
     ? ['formFilling', 'userSettings']
     : adminAccessed
-      ? ['formFilling', 'userSettings', settingsData?.UserPrefID || '']
+      ? ['formFilling', 'userSettings', settingsData?.userPrefId || '']
       : null;
 
   const dynamicFetchAddress = customerAccessed
     ? '/show-user-settings'
     : adminAccessed
-      ? `/admin-console/show-user-settings/${settingsData?.UserPrefID}`
+      ? `/admin-console/show-user-settings/${settingsData?.userPrefId}`
       : null;
 
   const { data, isLoading: isFormLoading } = useQuery({
@@ -41,7 +41,7 @@ function DetailsUserSettingsForm({
   const dynamicMutationAddress = customerAccessed
     ? '/api/edit-user-settings'
     : adminAccessed
-      ? `/api/admin-console/edit-user-settings/${settingsData?.UserPrefID}`
+      ? `/api/admin-console/edit-user-settings/${settingsData?.userPrefId}`
       : null;
   console.log('dynamicMutationAddress', dynamicMutationAddress);
 
@@ -76,11 +76,11 @@ function DetailsUserSettingsForm({
 
   // Fallback to feed custom hooks when data isn't available
   const preferences = data?.preferences || {
-    Handedness: false,
-    FontSize: 14,
-    Notifications: false,
-    Animation: false,
-    Theme: false,
+    handedness: false,
+    fontSize: 14,
+    notifications: false,
+    animation: false,
+    theme: false,
   };
 
   // using custom hook with extracting and reassigning its 'return' for particular inputs and assign validation methods from imported utils. Every inout has its won state now
@@ -95,7 +95,7 @@ function DetailsUserSettingsForm({
     isFocused: handednessIsFocused,
     validationResults: handednessValidationResults,
     hasError: handednessHasError,
-  } = useInput(!!preferences.Handedness);
+  } = useInput(!!preferences.handedness);
 
   const {
     value: fontValue,
@@ -107,7 +107,7 @@ function DetailsUserSettingsForm({
     isFocused: fontIsFocused,
     validationResults: fontValidationResults,
     hasError: fontHasError,
-  } = useInput(preferences.FontSize);
+  } = useInput(preferences.fontSize);
 
   const {
     value: notificationsValue,
@@ -119,7 +119,7 @@ function DetailsUserSettingsForm({
     isFocused: notificationsIsFocused,
     validationResults: notificationsValidationResults,
     hasError: notificationsHasError,
-  } = useInput(!!preferences.Notifications);
+  } = useInput(!!preferences.notifications);
 
   const {
     value: animationsValue,
@@ -131,7 +131,7 @@ function DetailsUserSettingsForm({
     isFocused: animationIsFocused,
     validationResults: animationValidationResults,
     hasError: animationHasError,
-  } = useInput(!!preferences.Animation);
+  } = useInput(!!preferences.animation);
   const {
     value: themeValue,
     handleChange: handleThemeChange,
@@ -142,7 +142,7 @@ function DetailsUserSettingsForm({
     isFocused: themeIsFocused,
     validationResults: themeValidationResults,
     hasError: themeHasError,
-  } = useInput(!!preferences.Theme);
+  } = useInput(!!preferences.theme);
 
   if (isFormLoading) return <div>Ładowanie...</div>;
 

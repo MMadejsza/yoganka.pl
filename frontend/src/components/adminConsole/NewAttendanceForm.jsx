@@ -141,7 +141,7 @@ function NewAttendanceForm() {
             value: customerObj.ID,
           }))}
           id='customer'
-          name='customerID'
+          name='customerId'
           label='Uczestnik:*'
           value={customerValue}
           onFocus={handleCustomerFocus}

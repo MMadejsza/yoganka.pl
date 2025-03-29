@@ -13,7 +13,7 @@ function DetailsProductPayments({ type, stats, isAdminPage }) {
   let params = useParams();
   const { feedback, updateFeedback, resetFeedback } = useFeedback();
   let paymentsArray = stats.totalPayments || stats.payments;
-  let cancelledPaymentsArr = paymentsArray.filter(b => b.Attendance == false);
+  let cancelledPaymentsArr = paymentsArray.filter(b => b.attendance == false);
 
   const { data: status } = useAuthStatus();
 
@@ -44,7 +44,7 @@ function DetailsProductPayments({ type, stats, isAdminPage }) {
   const table = (
     <ModalTable
       headers={['ID', 'Data', 'Uczestnik', 'Zadatek', 'Metoda płatności']}
-      keys={['PaymentID', 'Date', 'customer', 'AmountPaid', 'PaymentMethod']}
+      keys={['paymentId', 'date', 'customer', 'amountPaid', 'paymentMethod']}
       content={paymentsArray}
       active={false}
     />
@@ -68,11 +68,11 @@ function DetailsProductPayments({ type, stats, isAdminPage }) {
       <ModalTable
         headers={['ID', 'Data', 'Uczestnik', 'Zadatek', 'Metoda płatności', '']}
         keys={[
-          'PaymentID',
-          'Date',
+          'paymentId',
+          'date',
           'customer',
-          'AmountPaid',
-          'PaymentMethod',
+          'amountPaid',
+          'paymentMethod',
           '',
         ]}
         content={cancelledPaymentsArr}

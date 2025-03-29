@@ -10,23 +10,23 @@ function DetailsReview({ reviewData }) {
               Data zgłoszenia:
             </p>
             <p className='user-container__section-record-content'>
-              {formatIsoDateTime(reviewData.SubmissionDate)}
+              {formatIsoDateTime(reviewData.submissionDate)}
             </p>
           </li>
           <li className='user-container__section-record modal-checklist__li'>
             <p className='user-container__section-record-label'>Opóźnienie:</p>
             <p className='user-container__section-record-content'>
-              {reviewData.Delay}
+              {reviewData.delay}
             </p>
           </li>
           <li className='user-container__section-record modal-checklist__li'>
             <p className='user-container__section-record-label'>Ocena:</p>
-            <p className='user-container__section-record-content'>{`${reviewData.Rating}`}</p>
+            <p className='user-container__section-record-content'>{`${reviewData.rating}`}</p>
           </li>
           <li className='user-container__section-record modal-checklist__li'>
             <p className='user-container__section-record-label'>Treść:</p>
             <p className='user-container__section-record-content'>
-              {reviewData.Text}
+              {reviewData.text}
             </p>
           </li>
         </ul>

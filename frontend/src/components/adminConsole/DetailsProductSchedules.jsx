@@ -27,7 +27,7 @@ function DetailsProductSchedules({ scheduleRecords, placement, status }) {
       mutateOnDelete(
         status,
         formDataObj,
-        `/api/admin-console/delete-schedule/${formDataObj.deleteScheduleID}`
+        `/api/admin-console/delete-schedule/${formDataObj.deletescheduleId}`
       ),
 
     onSuccess: res => {
@@ -89,10 +89,10 @@ function DetailsProductSchedules({ scheduleRecords, placement, status }) {
       return {
         id: schedule.scheduleId,
         product: schedule.Product.name,
-        date: schedule.Date,
-        day: getWeekDay(schedule.Date),
-        time: schedule.StartTime,
-        location: schedule.Location,
+        date: schedule.date,
+        day: getWeekDay(schedule.date),
+        time: schedule.startTime,
+        location: schedule.location,
         price: schedule.Product.price,
       };
     });
@@ -100,14 +100,14 @@ function DetailsProductSchedules({ scheduleRecords, placement, status }) {
     processedScheduleRecordsArr = scheduleRecords.map(schedule => {
       return {
         id: schedule.scheduleId,
-        date: schedule.Date,
-        day: getWeekDay(schedule.Date),
-        time: schedule.StartTime,
-        location: schedule.Location,
-        attendance: `${schedule.participants}/${schedule.capacity} (${schedule.Attendance}%)`,
-        attendanceCount: schedule.Attendance,
+        date: schedule.date,
+        day: getWeekDay(schedule.date),
+        time: schedule.startTime,
+        location: schedule.location,
+        attendance: `${schedule.participants}/${schedule.capacity} (${schedule.attendance}%)`,
+        attendanceCount: schedule.attendance,
         isActionDisabled:
-          schedule.participants > 0 || new Date(schedule.Date) < new Date(),
+          schedule.participants > 0 || new Date(schedule.date) < new Date(),
       };
     });
 

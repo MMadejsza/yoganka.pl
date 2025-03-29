@@ -36,7 +36,7 @@ function AccountDashboard({ data, queryStatus }) {
 
   if (data.customer) {
     const customer = data.customer;
-    name = `${customer.FirstName} ${customer.LastName}`;
+    name = `${customer.firstName} ${customer.lastName}`;
     customerStats = calculateStats(data.customer);
     const headers = [
       'ID',

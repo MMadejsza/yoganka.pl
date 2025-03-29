@@ -49,7 +49,7 @@ export const postLogin = (req, res, next) => {
         throw new Error('Użytkownik nie istnieje.');
       }
 
-      if (user.EmailVerified === false) {
+      if (user.emailVerified === false) {
         errCode = 403;
         console.log('\n⛔ Konto nieaktywne – brak potwierdzenia maila');
         throw new Error(
@@ -57,7 +57,7 @@ export const postLogin = (req, res, next) => {
         );
       }
 
-      user.update({ LastLoginDate: date });
+      user.update({ lastLoginDate: date });
       return user;
     })
     .then(fetchedUser => {
@@ -67,13 +67,13 @@ export const postLogin = (req, res, next) => {
       successLog(person, controllerName, 'fetched');
       // regardless match or mismatch catch takes only if something is wrong with bcrypt itself. otherwise it goes to the next block with promise as boolean
       return bcrypt
-        .compare(password, fetchedUser.PasswordHash)
+        .compare(password, fetchedUser.passwordHash)
         .then(doMatch => {
           if (doMatch) {
             successLog(person, controllerName, 'pass match as well');
             req.session.isLoggedIn = true;
             req.session.user = fetchedUser;
-            req.session.role = fetchedUser.Role.toUpperCase();
+            req.session.role = fetchedUser.role.toUpperCase();
             req.session.save();
             return res.status(200).json({
               type: 'login',
@@ -128,10 +128,10 @@ export const getEmailToken = (req, res, next) => {
 
   models.VerificationToken.findOne({
     where: {
-      Token: token,
-      Type: 'email',
-      ExpirationDate: { [Op.gt]: new Date() }, // Validation if still active
-      Used: false,
+      token: token,
+      type: 'email',
+      expirationDate: { [Op.gt]: new Date() }, // Validation if still active
+      used: false,
     },
     include: [
       {
@@ -149,8 +149,8 @@ export const getEmailToken = (req, res, next) => {
 
       // To change the status of the linked account
       const user = validTokenRecord.User;
-      user.EmailVerified = true;
-      validTokenRecord.Used = true;
+      user.emailVerified = true;
+      validTokenRecord.used = true;
 
       return user.save();
     })
@@ -196,12 +196,12 @@ export const postSignup = (req, res, next) => {
 
           // create inactive account first
           return models.User.create({
-            RegistrationDate: date,
-            PasswordHash: passwordHashed,
-            LastLoginDate: date,
-            Email: email,
-            Role: 'user',
-            ProfilePictureSrcSetJSON: null,
+            registrationDate: date,
+            passwordHash: passwordHashed,
+            lastLoginDate: date,
+            email: email,
+            role: 'user',
+            profilePictureSrcSetJson: null,
           });
         })
         .then(newUser => {
@@ -213,10 +213,10 @@ export const postSignup = (req, res, next) => {
 
           // Insert token into db
           return models.VerificationToken.create({
-            UserID: newUser.UserID,
-            Type: 'email',
-            Token: emailVerificationToken,
-            ExpirationDate: new Date(tokenExpiration),
+            userId: newUser.userId,
+            type: 'email',
+            token: emailVerificationToken,
+            expirationDate: new Date(tokenExpiration),
           }).then(() => ({ newUser, emailVerificationToken }));
         })
         .then(({ newUser, emailVerificationToken }) => {
@@ -262,10 +262,10 @@ export const getPasswordToken = (req, res, next) => {
 
   models.VerificationToken.findOne({
     where: {
-      Token: token,
-      Type: 'password',
-      ExpirationDate: { [Op.gt]: new Date() }, // Validation
-      Used: false,
+      token: token,
+      type: 'password',
+      expirationDate: { [Op.gt]: new Date() }, // Validation
+      used: false,
     },
     include: [
       {
@@ -282,7 +282,7 @@ export const getPasswordToken = (req, res, next) => {
       }
       return res.status(200).json({
         confirmation: 1,
-        userID: validTokenRecord.UserID,
+        userId: validTokenRecord.userId,
         message: 'Link jest prawidłowy.',
       });
     })
@@ -309,10 +309,10 @@ export const postResetPassword = (req, res, next) => {
         }
 
         return models.VerificationToken.create({
-          UserID: user.UserID,
-          Type: 'password',
-          Token: token,
-          ExpirationDate: new Date(Date.now() + 3600000), // 1 hour
+          userId: user.userId,
+          type: 'password',
+          token: token,
+          expirationDate: new Date(Date.now() + 3600000), // 1 hour
         }).then(() => user);
       })
       .then(user => {
@@ -342,7 +342,7 @@ export const putEditPassword = (req, res, next) => {
   const controllerName = 'putEditPassword';
   callLog(req, person, controllerName);
   const token = req.params.token;
-  const { password, confirmedPassword, userID } = req.body;
+  const { password, confirmedPassword, userId } = req.body;
   // console.log(req.body);
 
   if (password !== confirmedPassword) {
@@ -353,15 +353,15 @@ export const putEditPassword = (req, res, next) => {
   // Find te token for this user
   models.VerificationToken.findOne({
     where: {
-      Token: token,
-      Type: 'password',
-      ExpirationDate: { [Op.gt]: new Date() }, // Validation if token is up to date
+      token: token,
+      type: 'password',
+      expirationDate: { [Op.gt]: new Date() }, // Validation if token is up to date
     },
     include: [
       {
         model: models.User,
         required: true,
-        where: { UserID: userID }, // dodatkowy warunek dla pewności
+        where: { userId: userId }, // dodatkowy warunek dla pewności
       },
     ],
   })
@@ -373,7 +373,7 @@ export const putEditPassword = (req, res, next) => {
       return bcrypt.hash(password, 12).then(hashedPassword => {
         if (!hashedPassword)
           throw Error('Błąd szyfrowania hasła - prośba odrzucona.');
-        user.PasswordHash = hashedPassword;
+        user.passwordHash = hashedPassword;
         // save user but remain the token in the db for eventual abuse logging later on
         return user.save();
       });

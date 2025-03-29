@@ -208,8 +208,8 @@ function NewProductForm() {
         embedded={true}
         formType={formType}
         type='date'
-        id='StartDate'
-        name='StartDate'
+        id='startDate'
+        name='startDate'
         label='Data rozpoczęcia: *'
         value={StartDateValue}
         onFocus={handleStartDateFocus}

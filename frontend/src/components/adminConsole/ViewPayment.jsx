@@ -25,10 +25,10 @@ function ViewPayment({ data, isUserAccountPage }) {
   return (
     <>
       <h1 className='user-container__user-title modal__title'>{`Płatność (ID: ${
-        payment.PaymentID
-      }${payment.DidAction == 'Admin' ? '- Manual by Admin' : ''})`}</h1>
+        payment.paymentId
+      }${payment.performedBy == 'Admin' ? '- Manual by Admin' : ''})`}</h1>
       {!isUserAccountPage && (
-        <h2 className='user-container__user-title modal__title'>{` ${customer.FirstName} ${customer.LastName}`}</h2>
+        <h2 className='user-container__user-title modal__title'>{` ${customer.firstName} ${customer.lastName}`}</h2>
       )}
 
       {/*//@ Customer main details */}

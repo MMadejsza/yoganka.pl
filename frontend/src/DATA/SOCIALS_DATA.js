@@ -23,7 +23,7 @@ export const SOCIALS_DATA = [
     },
   },
   {
-    name: 'Phone',
+    name: 'phone',
     link: 'tel:+48792891607',
     title: 'Zadzwoń',
     iconClass: 'fa-solid fa-phone',
@@ -34,7 +34,7 @@ export const SOCIALS_DATA = [
     },
   },
   {
-    name: 'Email',
+    name: 'email',
     link: 'mailto:kontakt@yoganka.pl?&body=Hej! Piszę do Ciebie z yoganka.pl',
     title: 'Wyślij maila',
     iconClass: 'fa-solid fa-envelope',

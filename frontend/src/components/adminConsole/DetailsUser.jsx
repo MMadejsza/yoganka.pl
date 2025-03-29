@@ -7,7 +7,7 @@ function DetailsUser({ userData, customerView, isUserAccountPage }) {
   const params = useParams();
   const title = isUserAccountPage
     ? `Dane konta:`
-    : `Konto (ID ${userData.UserID}):`;
+    : `Konto (ID ${userData.userId}):`;
 
   return (
     <>
@@ -19,13 +19,13 @@ function DetailsUser({ userData, customerView, isUserAccountPage }) {
         <li className='user-container__section-record modal-checklist__li'>
           <p className='user-container__section-record-label'>Utworzono:</p>
           <p className='user-container__section-record-content'>
-            {formatIsoDateTime(userData.RegistrationDate)}
+            {formatIsoDateTime(userData.registrationDate)}
           </p>
         </li>
         <li className='user-container__section-record modal-checklist__li'>
           <p className='user-container__section-record-label'>Email:</p>
           <p className='user-container__section-record-content'>
-            {userData.Email}
+            {userData.email}
           </p>
         </li>
 

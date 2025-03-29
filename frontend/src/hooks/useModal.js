@@ -5,7 +5,7 @@ export function useModal(initialOpen = false) {
   const [isVisible, setIsVisible] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
 
-  // Delay visibility for animation
+  // delay visibility for animation
   useEffect(() => {
     if (isOpen) {
       const timer = setTimeout(() => setIsVisible(true), 5);

@@ -15,7 +15,7 @@ function DetailsProduct({ data, placement, userAccessed }) {
   // );
   const isProductView = placement == 'productView';
   const product = data;
-  const totalSeconds = durationToSeconds(product.Duration);
+  const totalSeconds = durationToSeconds(product.duration);
   const splitDuration = secondsToDuration(totalSeconds);
   const formattedDuration = `${splitDuration.days != '00' ? splitDuration.days + ' dni' : ''} ${
     splitDuration.hours != '00' ? splitDuration.hours + ' godzin' : ''
@@ -35,13 +35,13 @@ function DetailsProduct({ data, placement, userAccessed }) {
     <ul className='user-container__details-list modal-checklist__list'>
       <li className='user-container__section-record modal-checklist__li'>
         <p className='user-container__section-record-label'>Typ:</p>
-        <p className='user-container__section-record-content'>{product.Type}</p>
+        <p className='user-container__section-record-content'>{product.type}</p>
       </li>
       {placement == 'scheduleView' && !userAccessed && (
         <li className='user-container__section-record modal-checklist__li'>
           <p className='user-container__section-record-label'>Nazwa:</p>
           <p className='user-container__section-record-content'>
-            {product.Name}
+            {product.name}
           </p>
         </li>
       )}
@@ -49,18 +49,18 @@ function DetailsProduct({ data, placement, userAccessed }) {
         <>
           <li className='user-container__section-record modal-checklist__li'>
             <p className='user-container__section-record-label'>
-              {product.Type == 'Camp' || product.Type == 'Event'
+              {product.type == 'Camp' || product.type == 'Event'
                 ? 'Data:'
                 : 'Wdrożono:'}
             </p>
             <p className='user-container__section-record-content'>
-              {`${product.StartDate} (${getWeekDay(product.StartDate)})`}
+              {`${product.startDate} (${getWeekDay(product.startDate)})`}
             </p>
           </li>
           <li className='user-container__section-record modal-checklist__li'>
             <p className='user-container__section-record-label'>Lokacja:</p>
             <p className='user-container__section-record-content'>
-              {product.Location}
+              {product.location}
             </p>
           </li>
 
@@ -77,7 +77,7 @@ function DetailsProduct({ data, placement, userAccessed }) {
       <li className='user-container__section-record modal-checklist__li'>
         <p className='user-container__section-record-label'>Zadatek:</p>
         <p className='user-container__section-record-content'>
-          {product.Price}zł
+          {product.price}zł
         </p>
       </li>
     </ul>

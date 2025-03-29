@@ -24,14 +24,14 @@ function ViewProduct({ data, isAdminPanel }) {
     cache: 'no-store',
   });
   const { product } = data;
-  const type = product.Type;
+  const type = product.type;
   const prodStats = calculateProductStats(product, product.ScheduleRecords);
 
   return (
     <>
-      <h1 className='user-container__user-title modal__title'>{`${product.Name} (ID:${product.ProductID})`}</h1>
+      <h1 className='user-container__user-title modal__title'>{`${product.name} (ID:${product.productId})`}</h1>
       <h3 className='user-container__user-status modal__title'>
-        {product.Status}
+        {product.status}
       </h3>
 
       {/*//@ Product main details */}

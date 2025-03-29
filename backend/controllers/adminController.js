@@ -44,8 +44,8 @@ export const getAllUsers = (req, res, next) => {
     .findAll({
       include: [
         {
-          model: models.UserPrefSettings,
-          attributes: ['UserPrefID'],
+          model: models.UserPrefSetting,
+          attributes: ['userPrefId'],
         },
       ],
     })
@@ -75,9 +75,9 @@ export const getAllUsers = (req, res, next) => {
             newRecord[newKey] = formatIsoDateTime(record[key]);
           } else if (key == 'UserPrefSetting') {
             if (record[key]) {
-              newRecord[newKey] = `Tak (ID: ${record[key]['UserPrefID']})`;
+              newRecord[newKey] = `Tak (ID: ${record[key]['userPrefId']})`;
             } else newRecord[newKey] = 'Nie';
-          } else if (key == 'LastLoginDate' || key == 'RegistrationDate') {
+          } else if (key == 'lastLoginDate' || key == 'registrationDate') {
             newRecord[newKey] = record[key];
           } else {
             newRecord[newKey] = record[key]; // Assignment
@@ -98,7 +98,7 @@ export const getAllUsers = (req, res, next) => {
         isLoggedIn: req.session.isLoggedIn,
         totalHeaders, // To render
         content: formattedRecords.sort((a, b) =>
-          a.Email.localeCompare(b.Email)
+          a.email.localeCompare(b.email)
         ), // With new names
       });
     })
@@ -108,7 +108,7 @@ export const getUserByID = (req, res, next) => {
   const controllerName = 'getUserByID';
   callLog(req, person, controllerName);
 
-  const PK = req.params.id || req.user.UserID;
+  const PK = req.params.id || req.user.userId;
   models.User.findByPk(PK, {
     include: [
       {
@@ -116,7 +116,7 @@ export const getUserByID = (req, res, next) => {
         required: false, // May not exist
       },
       {
-        model: models.UserPrefSettings, // User settings if exist
+        model: models.UserPrefSetting, // User settings if exist
         required: false,
       },
     ],
@@ -138,7 +138,7 @@ export const getUserSettings = (req, res, next) => {
   const controllerName = 'getUserSettings';
   callLog(req, person, controllerName);
 
-  models.UserPrefSettings.findByPk(req.params.id)
+  models.UserPrefSetting.findByPk(req.params.id)
     .then(preferences => {
       if (!preferences) {
         successLog(person, controllerName, 'fetched default');
@@ -172,12 +172,12 @@ export const postCreateUser = (req, res, next) => {
         .hash(password, 12)
         .then(passwordHashed => {
           return models.User.create({
-            RegistrationDate: date,
-            PasswordHash: passwordHashed,
-            LastLoginDate: date,
-            Email: email,
-            Role: 'user',
-            ProfilePictureSrcSetJSON: null,
+            registrationDate: date,
+            passwordHash: passwordHashed,
+            lastLoginDate: date,
+            email: email,
+            role: 'user',
+            profilePictureSrcSetJson: null,
           });
         })
         .then(newUser => {
@@ -207,31 +207,36 @@ export const putEditUserSettings = (req, res, next) => {
   const controllerName = 'putEditUserSettings';
   callLog(req, person, controllerName);
 
-  const userID = req.params.id;
   const { handedness, font, notifications, animation, theme } = req.body;
+  const userId = req.params.id;
   console.log(`❗❗❗`, req.body);
+  console.log(`❗❗❗`, req.params.id);
+
+  if (!userId) {
+    throw new Error('Brak identyfikatora użytkownika');
+  }
 
   // if preferences don't exist - create new ones:
-  models.UserPrefSettings.findOrCreate({
-    where: { UserID: userID },
+  models.UserPrefSetting.findOrCreate({
+    where: { userId: userId },
     defaults: {
-      UserID: userID,
-      Handedness: !!handedness || false,
-      FontSize: parseInt(font) || 14,
-      Notifications: !!notifications || false,
-      Animation: !!animation || false,
-      Theme: !!theme || false,
+      userId: userId,
+      handedness: !!handedness || false,
+      fontSize: parseInt(font) || 14,
+      notifications: !!notifications || false,
+      animation: !!animation || false,
+      theme: !!theme || false,
     },
   })
     .then(([preferences, created]) => {
       if (!created) {
         // Nothing changed
         if (
-          preferences.Handedness == !!handedness &&
-          preferences.FontSize == parseInt(font) &&
-          preferences.Notifications == !!notifications &&
-          preferences.Animation == !!animation &&
-          preferences.Theme == !!theme
+          preferences.handedness == !!handedness &&
+          preferences.fontSize == parseInt(font) &&
+          preferences.notifications == !!notifications &&
+          preferences.animation == !!animation &&
+          preferences.theme == !!theme
         ) {
           // Nothing changed
           console.log(
@@ -241,11 +246,11 @@ export const putEditUserSettings = (req, res, next) => {
           return null;
         } else {
           // Update
-          preferences.Handedness = !!handedness;
-          preferences.FontSize = parseInt(font);
-          preferences.Notifications = !!notifications;
-          preferences.Animation = !!animation;
-          preferences.Theme = !!theme;
+          preferences.handedness = !!handedness;
+          preferences.fontSize = parseInt(font);
+          preferences.notifications = !!notifications;
+          preferences.animation = !!animation;
+          preferences.theme = !!theme;
 
           return preferences.save().then(() => {
             successLog(person, controllerName, 'updated');
@@ -288,12 +293,12 @@ export const deleteUser = (req, res, next) => {
       }
 
       // Assign for notification email
-      userEmail = user.Email;
+      userEmail = user.email;
 
       // Finally delete
       return models.User.destroy({
         where: {
-          UserID: id,
+          userId: id,
         },
       });
     })
@@ -328,19 +333,19 @@ export const getAllCustomers = (req, res, next) => {
   const columnMap = columnMaps[model.name] || {};
   const keysForHeaders = Object.values(columnMap);
   const includeAttributes = [
-    //  FirstName + LastName => Name
+    //  firstName + lastName => name
     [
-      Sequelize.literal("CONCAT(CustomerID, '-', UserID)"),
+      Sequelize.literal("CONCAT(customer_id, '-', user_id)"),
       'ID klienta-użytkownika',
     ],
-    [Sequelize.literal("CONCAT(FirstName, ' ', LastName)"), 'Imię Nazwisko'],
+    [Sequelize.literal("CONCAT(first_name, ' ', last_name)"), 'Imię Nazwisko'],
   ];
 
   model
     .findAll({
       attributes: {
         include: includeAttributes, // Adding joint columns
-        exclude: ['UserID'], // Deleting substituted ones
+        exclude: ['userId'], // Deleting substituted ones
       },
     })
     .then(records => {
@@ -372,7 +377,7 @@ export const getAllCustomers = (req, res, next) => {
         isLoggedIn: req.session.isLoggedIn,
         totalHeaders, // To render
         content: formattedRecords.sort((a, b) =>
-          a.LastName.localeCompare(b.LastName)
+          a.lastName.localeCompare(b.lastName)
         ), // With new names
       });
     })
@@ -391,10 +396,10 @@ export const getCustomerByID = (req, res, next) => {
         required: false, // May not exist
         include: [
           {
-            model: models.UserPrefSettings, // Customer phone numbers
+            model: models.UserPrefSetting, // Customer phone numbers
             required: false,
             attributes: {
-              exclude: ['UserID'], // deleting
+              exclude: ['userId'], // deleting
             },
           },
         ],
@@ -407,12 +412,12 @@ export const getCustomerByID = (req, res, next) => {
             model: models.Invoice, // eventual invoices
             required: false,
             attributes: {
-              exclude: ['PaymentID'], // deleting
+              exclude: ['paymentId'], // deleting
             },
           },
         ],
         attributes: {
-          exclude: ['product_id', 'CustomerID'], // deleting
+          exclude: ['productId', 'customerId'], // deleting
         },
       },
       {
@@ -431,24 +436,24 @@ export const getCustomerByID = (req, res, next) => {
               {
                 model: models.Feedback, // harmonogram -> opinie
                 required: false,
-                where: { CustomerID: req.user.Customer.CustomerID }, // but only for particular customer
+                where: { customerId: req.user.Customer.customerId }, // but only for particular customer
                 attributes: {
-                  exclude: ['CustomerID', 'scheduleId'], // deleting
+                  exclude: ['customerId', 'scheduleId'], // deleting
                 },
               },
             ],
             attributes: {
-              exclude: ['product_id'], // deleting
+              exclude: ['productId'], // deleting
             },
           },
         ],
         attributes: {
-          exclude: ['CustomerID', 'scheduleId'], // deleting
+          exclude: ['customerId', 'scheduleId'], // deleting
         },
       },
     ],
     attributes: {
-      exclude: ['UserID'], // deleting
+      exclude: ['userId'], // deleting
     },
   })
     .then(customer => {
@@ -491,11 +496,11 @@ export const postCreateCustomer = (req, res, next) => {
   console.log(`req.body`, req.body);
 
   const {
-    userID,
+    userId,
     customerType,
     firstName,
     lastName,
-    DoB,
+    dob,
     phone,
     cMethod,
     loyalty,
@@ -503,28 +508,28 @@ export const postCreateCustomer = (req, res, next) => {
   } = req.body;
   let customerEmail;
 
-  if (firstName || firstName.trim()) {
-    console.log('\n❌❌❌ fName field empty');
+  if (!firstName || !firstName.trim()) {
+    console.log('\n❌❌❌ firstName field empty');
     throw new Error('Imię nie może być puste.');
   }
-  if (lastName || lastName.trim()) {
-    console.log('\n❌❌❌ lname field empty');
+  if (!lastName || !lastName.trim()) {
+    console.log('\n❌❌❌ lastName field empty');
     throw new Error('Nazwisko nie może być puste.');
   }
-  if (DoB || DoB.trim()) {
+  if (!dob || !dob.trim()) {
     console.log('\n❌❌❌ dob field empty');
     throw new Error('Data urodzenia nie może być pusta.');
   }
-  if (phone || phone.trim()) {
+  if (!phone || !phone.trim()) {
     console.log('\n❌❌❌ phone field empty');
     throw new Error('Numer telefonu nie może być pusty.');
   }
-  if (!isAdult(DoB)) {
+  if (!isAdult(dob)) {
     console.log('\n❌❌❌ Customer below 18');
     throw new Error('Uczestnik musi być pełnoletni.');
   }
 
-  models.Customer.findOne({ where: { UserID: userID } })
+  models.Customer.findOne({ where: { userId: userId } })
     .then(customer => {
       if (customer) {
         errCode = 409;
@@ -532,8 +537,8 @@ export const postCreateCustomer = (req, res, next) => {
       }
 
       // Getting user for email purposes
-      return models.User.findByPk(userID, {
-        attributes: ['UserID', 'Email'],
+      return models.User.findByPk(userId, {
+        attributes: ['userId', 'email'],
       });
     })
     .then(user => {
@@ -543,22 +548,22 @@ export const postCreateCustomer = (req, res, next) => {
       }
 
       // Assign email
-      customerEmail = user.Email;
+      customerEmail = user.email;
 
       // Create user
       return models.Customer.create({
-        CustomerType: customerType || 'Indywidualny',
-        UserID: userID,
-        FirstName: firstName,
-        LastName: lastName,
-        DoB: DoB,
-        Phone: phone,
-        PreferredContactMethod: cMethod || '=',
-        ReferralSource: 'Admin insert',
-        Loyalty: loyalty || 5,
-        Notes: notes,
+        customerType: customerType || 'Indywidualny',
+        userId: userId,
+        firstName: firstName,
+        lastName: lastName,
+        dob: dob,
+        phone: phone,
+        preferredContactMethod: cMethod || '=',
+        referralSource: 'Admin insert',
+        loyalty: loyalty || 5,
+        notes: notes,
       }).then(newCustomer => {
-        return user.update({ Role: 'customer' }).then(() => newCustomer);
+        return user.update({ role: 'customer' }).then(() => newCustomer);
       });
     })
     .then(newCustomer => {
@@ -610,12 +615,12 @@ export const putEditCustomerDetails = (req, res, next) => {
       return customer;
     })
     .then(foundCustomer => {
-      const { Phone, PreferredContactMethod, Loyalty, Notes } = foundCustomer;
+      const { phone, preferredContactMethod, loyalty, notes } = foundCustomer;
       if (
-        Phone == newPhone &&
-        PreferredContactMethod == newContactMethod &&
-        Loyalty == newLoyalty &&
-        Notes == newNotes
+        phone == newPhone &&
+        preferredContactMethod == newContactMethod &&
+        loyalty == newLoyalty &&
+        notes == newNotes
       ) {
         // Nothing changed
         console.log('\n❓❓❓ Admin Customer no change');
@@ -628,12 +633,12 @@ export const putEditCustomerDetails = (req, res, next) => {
       if (!fetchedCustomer) return;
       models.Customer.update(
         {
-          Phone: newPhone,
-          PreferredContactMethod: newContactMethod,
-          Loyalty: newLoyalty,
-          Notes: newNotes,
+          phone: newPhone,
+          preferredContactMethod: newContactMethod,
+          loyalty: newLoyalty,
+          notes: newNotes,
         },
-        { where: { CustomerID: customerId } }
+        { where: { customerId: customerId } }
       )
         .then(customerResult => {
           return { customerResult };
@@ -661,11 +666,11 @@ export const deleteCustomer = (req, res, next) => {
   let userEmail;
 
   models.Customer.findOne({
-    where: { CustomerID: id },
+    where: { customerId: id },
     include: [
       {
         model: models.User,
-        attributes: ['Email'],
+        attributes: ['email'],
       },
     ],
   })
@@ -675,11 +680,11 @@ export const deleteCustomer = (req, res, next) => {
         throw new Error('Nie znaleziono profilu uczestnika.');
       }
 
-      userEmail = customer.User?.Email;
+      userEmail = customer.User?.email;
       return customer.destroy();
     })
     .then(() => {
-      // Email notification
+      // email notification
       if (userEmail) {
         sendCustomerDeletedMail({ to: userEmail });
       }
@@ -715,16 +720,14 @@ export const getAllSchedules = (req, res, next) => {
         {
           model: models.Payment,
           required: false,
-          attributes: ['PaymentID'], //booking Id is enough
+          attributes: ['paymentId'], //booking Id is enough
           through: {
-            attributes: ['Attendance', 'CustomerID'], // dołącz dodatkowe atrybuty
+            attributes: ['attendance', 'customerId'], // dołącz dodatkowe atrybuty
           },
-
-          // where: isUser && isCustomer ? {CustomerID: req.user.Customer.CustomerID} : undefined, // Filter
         },
       ],
       attributes: {
-        exclude: ['product_id'], // Deleting substituted ones
+        exclude: ['productId'], // Deleting substituted ones
       },
     })
     .then(records => {
@@ -743,31 +746,23 @@ export const getAllSchedules = (req, res, next) => {
         // 🔄 Iterate after each column in user record
         for (const key in jsonRecord) {
           const newKey = columnMap[key] || key; // New or original name if not specified
-          // const attributeType = attributes[key]?.type.constructor.key?.toUpperCase();
-          // if (
-          // 	attributeType === 'DATE' ||
-          // 	attributeType === 'DATEONLY' ||
-          // 	attributeType === 'DATETIME'
-          // ) {
-          // 	newRecord[newKey] = jsonRecord[key];
-          // } else
           if (key === 'Product' && jsonRecord[key]) {
             newRecord['Typ'] = jsonRecord[key].type; //  flatten object
             newRecord['Nazwa'] = jsonRecord[key].name;
           } else if (key === 'Payments') {
             newRecord.wasUserReserved = jsonRecord.Payments.some(
               booking =>
-                booking.Booking.CustomerID === req.user?.Customer?.CustomerID
+                booking.Booking.customerId === req.user?.Customer?.customerId
             );
             newRecord.isUserGoing = jsonRecord.Payments.some(booking => {
               const isBooked = booking.Booking;
-              const customerID = booking.Booking.CustomerID;
-              const loggedInID = req.user?.Customer?.CustomerID;
+              const customerId = booking.Booking.customerId;
+              const loggedInID = req.user?.Customer?.customerId;
               const isGoing =
-                booking.Booking.Attendance === 1 ||
-                booking.Booking.Attendance === true;
+                booking.Booking.attendance === 1 ||
+                booking.Booking.attendance === true;
 
-              return isBooked && customerID == loggedInID && isGoing;
+              return isBooked && customerId == loggedInID && isGoing;
             });
           } else {
             newRecord[newKey] = jsonRecord[key]; // Assignment
@@ -777,10 +772,10 @@ export const getAllSchedules = (req, res, next) => {
         const activePayments = jsonRecord.Payments.filter(
           booking =>
             booking.Booking &&
-            (booking.Booking.Attendance === 1 ||
-              booking.Booking.Attendance === true)
+            (booking.Booking.attendance === 1 ||
+              booking.Booking.attendance === true)
         );
-        newRecord['Dzień'] = getWeekDay(jsonRecord['Date']);
+        newRecord['Dzień'] = getWeekDay(jsonRecord['date']);
         newRecord['Zadatek'] = jsonRecord.Product.price;
         newRecord[
           'Miejsca'
@@ -821,11 +816,11 @@ export const getScheduleByID = (req, res, next) => {
         include: [
           {
             model: models.Customer,
-            attributes: { exclude: ['UserID'] },
+            attributes: { exclude: ['userId'] },
           },
           {
             model: models.Payment,
-            // attributes: {exclude: ['UserID']},
+            // attributes: {exclude: ['userId']},
           },
         ],
       },
@@ -835,10 +830,10 @@ export const getScheduleByID = (req, res, next) => {
         include: [
           {
             model: models.Customer,
-            attributes: { exclude: ['UserID'] },
+            attributes: { exclude: ['userId'] },
           },
         ],
-        attributes: { exclude: ['CustomerID'] },
+        attributes: { exclude: ['customerId'] },
       },
     ],
   })
@@ -851,23 +846,23 @@ export const getScheduleByID = (req, res, next) => {
       let schedule = scheduleData.toJSON();
 
       let isUserGoing = false;
-      schedule.Attendance = 0;
+      schedule.attendance = 0;
 
       if (schedule.Bookings && schedule.Bookings.length > 0) {
         let wasUserReserved;
         const beingAttendedSchedules = schedule.Bookings.filter(
-          bs => bs.Attendance == 1 || bs.Attendance == true
+          bs => bs.attendance == 1 || bs.attendance == true
         );
         if (req.user && req.user.Customer) {
           wasUserReserved = schedule.Bookings.some(
-            bs => bs.CustomerID === req.user?.Customer.CustomerID
+            bs => bs.customerId === req.user?.Customer.customerId
           );
           isUserGoing = beingAttendedSchedules.some(
-            bs => bs.CustomerID === req.user.Customer.CustomerID
+            bs => bs.customerId === req.user.Customer.customerId
           );
           schedule.attendanceCount = beingAttendedSchedules.length;
         }
-        schedule.Attendance = beingAttendedSchedules.length;
+        schedule.attendance = beingAttendedSchedules.length;
         schedule.isUserGoing = isUserGoing;
         schedule.wasUserReserved = wasUserReserved;
         schedule.full = beingAttendedSchedules.length >= schedule.capacity;
@@ -894,14 +889,14 @@ export const getProductSchedules = (req, res, next) => {
   console.log(`\n➡️➡️➡️ admin called`, controllerName);
 
   const productID = req.params.pId;
-  const customerID = req.params.cId;
+  const customerId = req.params.cId;
 
   // find all schedule for chosen Product
   models.ScheduleRecord.findAll({ where: { productId: productID } })
     .then(foundSchedules => {
       //find all bookings for given customer
       return models.Booking.findAll({
-        where: { CustomerID: customerID },
+        where: { customerId: customerId },
       }).then(bookedByCustomerSchedules => {
         // filter bookings which have not been booked yet by him
         const filteredSchedules = foundSchedules.filter(foundSchedule => {
@@ -1173,7 +1168,10 @@ export const putEditMarkAbsent = (req, res, next) => {
 
   // Find schedule
   models.Booking.findOne({
-    where: { CustomerID: attendanceCustomerID, PaymentID: attendancePaymentID },
+    where: {
+      customerId: attendanceCustomerID,
+      paymentId: attendancePaymentID,
+    },
     include: [
       {
         model: models.ScheduleRecord,
@@ -1191,7 +1189,7 @@ export const putEditMarkAbsent = (req, res, next) => {
 
       // Find the customer for email address
       return models.Customer.findByPk(attendanceCustomerID, {
-        include: [{ model: models.User, attributes: ['Email'] }],
+        include: [{ model: models.User, attributes: ['email'] }],
       });
     })
     .then(customer => {
@@ -1200,18 +1198,18 @@ export const putEditMarkAbsent = (req, res, next) => {
         throw new Error('Nie znaleziono użytkownika przypisanego do klienta.');
       }
       // Assign for email data
-      customerEmail = customer.User.Email;
+      customerEmail = customer.User.email;
 
       // Finally update attendance
       return models.Booking.update(
         {
-          Attendance: 0,
-          DidAction: person,
+          attendance: 0,
+          performedBy: person,
         },
         {
           where: {
-            CustomerID: attendanceCustomerID,
-            PaymentID: attendancePaymentID,
+            customerId: attendanceCustomerID,
+            paymentId: attendancePaymentID,
           },
         }
       );
@@ -1250,8 +1248,8 @@ export const putEditMarkPresent = (req, res, next) => {
   // Find schedule
   models.Booking.findOne({
     where: {
-      CustomerID: cancelledAttendanceCustomerID,
-      PaymentID: cancelledAttendancePaymentID,
+      customerId: cancelledAttendanceCustomerID,
+      paymentId: cancelledAttendancePaymentID,
     },
     include: [
       {
@@ -1271,7 +1269,7 @@ export const putEditMarkPresent = (req, res, next) => {
 
       // Find the customer for email address
       return models.Customer.findByPk(cancelledAttendanceCustomerID, {
-        include: [{ model: models.User, attributes: ['Email'] }],
+        include: [{ model: models.User, attributes: ['email'] }],
       });
     })
     .then(customer => {
@@ -1281,18 +1279,18 @@ export const putEditMarkPresent = (req, res, next) => {
       }
 
       // Assign for email data
-      customerEmail = customer.User.Email;
+      customerEmail = customer.User.email;
 
       // Finally update attendance
       return models.Booking.update(
         {
-          Attendance: 1,
-          DidAction: person,
+          attendance: 1,
+          performedBy: person,
         },
         {
           where: {
-            CustomerID: cancelledAttendanceCustomerID,
-            PaymentID: cancelledAttendancePaymentID,
+            customerId: cancelledAttendanceCustomerID,
+            paymentId: cancelledAttendancePaymentID,
           },
         }
       );
@@ -1329,7 +1327,10 @@ export const deleteAttendanceRecord = (req, res, next) => {
 
   // Find booking to get info for email as well
   models.Booking.findOne({
-    where: { CustomerID: attendanceCustomerID, PaymentID: attendancePaymentID },
+    where: {
+      customerId: attendanceCustomerID,
+      paymentId: attendancePaymentID,
+    },
     include: [
       {
         model: models.ScheduleRecord,
@@ -1347,7 +1348,7 @@ export const deleteAttendanceRecord = (req, res, next) => {
         include: [
           {
             model: models.User,
-            attributes: ['Email'],
+            attributes: ['email'],
           },
         ],
       },
@@ -1361,7 +1362,7 @@ export const deleteAttendanceRecord = (req, res, next) => {
       }
 
       const { ScheduleRecord, Customer } = foundRecord;
-      const to = Customer.User.Email;
+      const to = Customer.User.email;
 
       // Send confirmation
       if (to) {
@@ -1415,7 +1416,7 @@ export const getAllParticipantsFeedback = (req, res, next) => {
           model: models.Customer,
           attributes: [
             [
-              Sequelize.literal("CONCAT(FirstName, ' ', LastName)"),
+              Sequelize.literal("CONCAT(first_name, ' ', last_name)"),
               'Imię Nazwisko',
             ],
           ],
@@ -1428,7 +1429,7 @@ export const getAllParticipantsFeedback = (req, res, next) => {
               attributes: ['name'],
             },
           ],
-          attributes: ['scheduleId', 'Date', 'startTime'],
+          attributes: ['scheduleId', 'date', 'startTime'],
         },
       ],
       attributes: {
@@ -1459,18 +1460,18 @@ export const getAllParticipantsFeedback = (req, res, next) => {
             newRecord[newKey] = formatIsoDateTime(jsonRecord[key]);
           } else if (key == 'Customer') {
             const customer = jsonRecord[key]['Imię Nazwisko'];
-            const customerID = jsonRecord.CustomerID;
-            newRecord[newKey] = `${customer} (${customerID})`;
+            const customerId = jsonRecord.customerId;
+            newRecord[newKey] = `${customer} (${customerId})`;
           } else if (key == 'ScheduleRecord') {
             const dataKey = columnMap['Data'] || 'Data';
             const startTimeKey = columnMap['Godzina'] || 'Godzina';
             const nameKey = columnMap['Nazwa'] || 'Nazwa';
 
-            newRecord[dataKey] = formatIsoDateTime(jsonRecord[key]['Date']);
+            newRecord[dataKey] = formatIsoDateTime(jsonRecord[key]['date']);
             newRecord[startTimeKey] = jsonRecord[key]['startTime'];
             newRecord[
               nameKey
-            ] = `${jsonRecord[key].Product?.Name} (${jsonRecord[key].scheduleId})`;
+            ] = `${jsonRecord[key].Product?.name} (${jsonRecord[key].scheduleId})`;
           } else {
             newRecord[newKey] = jsonRecord[key]; // Assignment
           }
@@ -1507,7 +1508,7 @@ export const getAllParticipantsFeedbackByID = (req, res, next) => {
       },
       {
         model: models.ScheduleRecord,
-        attributes: { exclude: ['product_id'] },
+        attributes: { exclude: ['productId'] },
         include: [
           {
             model: models.Product,
@@ -1516,25 +1517,25 @@ export const getAllParticipantsFeedbackByID = (req, res, next) => {
         ],
       },
     ],
-    attributes: { exclude: ['CustomerID', 'scheduleId'] },
+    attributes: { exclude: ['customerId', 'scheduleId'] },
   })
     .then(review => {
       if (!review) {
         errCode = 404;
         throw new Error('Nie znaleziono opinii.');
       }
-      const customerId = review.Customer.CustomerID;
+      const customerId = review.Customer.customerId;
 
       return models.Feedback.findAll({
         where: {
-          CustomerID: customerId,
+          customerId: customerId,
           // op from sequelize means not equal
-          FeedbackID: { [Op.ne]: PK },
+          feedbackId: { [Op.ne]: PK },
         },
         include: [
           {
             model: models.ScheduleRecord,
-            attributes: { exclude: ['product_id'] },
+            attributes: { exclude: ['productId'] },
             include: [
               {
                 model: models.Product,
@@ -1543,7 +1544,7 @@ export const getAllParticipantsFeedbackByID = (req, res, next) => {
             ],
           },
         ],
-        attributes: { exclude: ['CustomerID', 'scheduleId'] },
+        attributes: { exclude: ['customerId', 'scheduleId'] },
       }).then(otherReviews => {
         successLog(person, controllerName);
         return res.status(200).json({
@@ -1567,7 +1568,7 @@ export const deleteFeedback = (req, res, next) => {
   const id = req.params.id;
   models.Feedback.destroy({
     where: {
-      FeedbackID: id,
+      feedbackId: id,
     },
   })
     .then(deletedCount => {
@@ -1627,7 +1628,7 @@ export const getProductByID = (req, res, next) => {
             include: [
               {
                 model: models.Customer,
-                attributes: { exclude: ['UserID'] },
+                attributes: { exclude: ['userId'] },
               },
             ],
           },
@@ -1637,14 +1638,14 @@ export const getProductByID = (req, res, next) => {
             include: [
               {
                 model: models.Customer,
-                attributes: { exclude: ['UserID'] },
+                attributes: { exclude: ['userId'] },
               },
             ],
-            attributes: { exclude: ['CustomerID'] },
+            attributes: { exclude: ['customerId'] },
           },
         ],
         attributes: {
-          exclude: ['product_id'],
+          exclude: ['productId'],
         },
       },
     ],
@@ -1669,25 +1670,24 @@ export const postCreateProduct = async (req, res, next) => {
   const controllerName = 'postCreateProduct';
   callLog(req, person, controllerName);
 
-  const { name, productType, StartDate, duration, location, price, status } =
+  const { name, productType, startDate, duration, location, price, status } =
     req.body;
 
-  let productPromise;
   models.Product.findOne({ where: { name: name } })
     .then(product => {
       if (product) {
         errCode = 409;
         throw new Error('Produkt już istnieje.');
       }
-      return (productPromise = models.Product.create({
+      return models.Product.create({
         name: name,
         type: productType,
         location: location,
         duration: duration,
         price: price,
-        startDate: StartDate,
+        startDate: startDate,
         status: status || 'Aktywny',
-      }));
+      });
     })
     .then(newProduct => {
       successLog(person, controllerName);
@@ -1835,7 +1835,7 @@ export const getAllPayments = (req, res, next) => {
           model: models.Customer,
           attributes: [
             [
-              Sequelize.literal("CONCAT(FirstName, ' ', LastName)"),
+              Sequelize.literal("CONCAT(first_name, ' ', last_name)"),
               'Imię Nazwisko',
             ],
           ],
@@ -1853,7 +1853,7 @@ export const getAllPayments = (req, res, next) => {
         },
       ],
       attributes: {
-        exclude: ['Product', 'scheduleId'],
+        exclude: ['product', 'scheduleId'],
       },
     })
     .then(records => {
@@ -1875,11 +1875,11 @@ export const getAllPayments = (req, res, next) => {
             newRecord[newKey] = jsonRecord[key];
           } else if (key === 'Customer') {
             const customer = jsonRecord[key]['Imię Nazwisko'];
-            const customerID = jsonRecord.CustomerID;
-            newRecord[newKey] = `${customer} (${customerID})`;
+            const customerId = jsonRecord.customerId;
+            newRecord[newKey] = `${customer} (${customerId})`;
           } else if (key === 'ScheduleRecords') {
             const products = jsonRecord[key]
-              .map(sr => `${sr.Product?.name} (${sr.Bookings?.scheduleId})`)
+              .map(sr => `${sr.Product?.name} (${sr.Booking?.scheduleId})`)
               .filter(Boolean);
             newRecord['Terminy'] = jsonRecord[key];
             newRecord['Produkty'] =
@@ -1919,7 +1919,7 @@ export const getPaymentByID = (req, res, next) => {
     through: { attributes: [] }, // omit data from mid table
     required: false,
     attributes: {
-      exclude: ['Product', 'CustomerID'],
+      exclude: ['product', 'customerId'],
     },
     include: [
       {
@@ -1928,7 +1928,7 @@ export const getPaymentByID = (req, res, next) => {
       },
       {
         model: models.ScheduleRecord,
-        attributes: { exclude: ['UserID'] },
+        attributes: { exclude: ['userId'] },
         through: { attributes: [] }, // omit data from mid table
         include: [
           {
@@ -1960,7 +1960,7 @@ export const postCreatePayment = (req, res, next) => {
   callLog(req, person, controllerName);
 
   const {
-    customerID,
+    customerId,
     productID,
     productName,
     productPrice,
@@ -1970,8 +1970,8 @@ export const postCreatePayment = (req, res, next) => {
   } = req.body;
 
   errCode = 400;
-  if (!customerID) {
-    console.log('\n❌❌❌ customerID empty.');
+  if (!customerId) {
+    console.log('\n❌❌❌ customerId empty.');
     throw new Error('Pole uczestnika nie może być puste.');
   }
   if (!productID || !productID.trim()) {
@@ -2016,7 +2016,7 @@ export const postCreatePayment = (req, res, next) => {
         // }
         // Count the current amount of reservations
         return models.Booking.count({
-          where: { scheduleId: scheduleID, Attendance: 1 },
+          where: { scheduleId: scheduleID, attendance: 1 },
           transaction: t,
           lock: t.LOCK.UPDATE, //@
         }).then(currentAttendance => {
@@ -2031,7 +2031,7 @@ export const postCreatePayment = (req, res, next) => {
           // IF still enough spaces - check if booked in the past
           return models.Payment.findOne({
             where: {
-              CustomerID: customerID,
+              customerId: customerId,
             },
             include: [
               {
@@ -2039,12 +2039,12 @@ export const postCreatePayment = (req, res, next) => {
                 where: { scheduleId: scheduleID },
                 through: {
                   attributes: [
-                    'Attendance',
-                    'CustomerID',
-                    'PaymentID',
+                    'attendance',
+                    'customerId',
+                    'paymentId',
                     'scheduleId',
                   ],
-                  where: { CustomerID: customerID },
+                  where: { customerId: customerId },
                 },
                 required: true,
               },
@@ -2073,21 +2073,21 @@ export const postCreatePayment = (req, res, next) => {
               ? 'BLIK (M)'
               : 'Przelew (M)';
 
-          models.Customer.findByPk(customerID, {
-            include: [{ model: models.User, attributes: ['Email'] }],
+          models.Customer.findByPk(customerId, {
+            include: [{ model: models.User, attributes: ['email'] }],
             required: true,
-          }).then(customer => (customerEmail = customer.User.Email));
+          }).then(customer => (customerEmail = customer.User.email));
 
           return models.Payment.create(
             {
-              CustomerID: customerID,
-              Date: new Date(),
-              Product: productName,
-              Status: statusDeduced,
-              AmountPaid: amountPaid,
-              AmountDue: amountDueCalculated,
-              PaymentMethod: paymentMethodDeduced,
-              PaymentStatus: 'Completed',
+              customerId: customerId,
+              date: new Date(),
+              product: productName,
+              status: statusDeduced,
+              amountPaid: amountPaid,
+              amountDue: amountDueCalculated,
+              paymentMethod: paymentMethodDeduced,
+              paymentStatus: 'Completed',
             },
             { transaction: t }
           ).then(booking => {
@@ -2104,7 +2104,7 @@ export const postCreatePayment = (req, res, next) => {
             // After creating the reservation, we connected addScheduleRecord which was generated by Sequelize for many-to-many relationship between reservation and ScheduleRecord. The method adds entry to intermediate table (bookingss) and connects created reservation with schedule feeder (ScheduleRecord).
             return booking
               .addScheduleRecord(scheduleID, {
-                through: { CustomerID: customerID, DidAction: person },
+                through: { customerId: customerId, performedBy: person },
                 transaction: t,
                 individualHooks: true,
               })
@@ -2134,11 +2134,11 @@ export const deletePayment = (req, res, next) => {
 
   // First - find the targeted booking with attached customer and user for email
   return models.Payment.findOne({
-    where: { PaymentID: id },
+    where: { paymentId: id },
     include: [
       {
         model: models.Customer,
-        include: [{ model: models.User, attributes: ['Email'] }],
+        include: [{ model: models.User, attributes: ['email'] }],
       },
     ],
   })
@@ -2149,19 +2149,19 @@ export const deletePayment = (req, res, next) => {
       }
 
       // Assign email
-      const customerEmail = booking.Customer?.User?.Email;
+      const customerEmail = booking.Customer?.User?.email;
 
       // Send email before deletion
       if (customerEmail) {
         sendReservationCancelledMail({
           to: customerEmail,
-          bookingID: booking.PaymentID,
+          bookingID: booking.paymentId,
         });
       }
 
       // Now delete
       return models.Payment.destroy({
-        where: { PaymentID: id },
+        where: { paymentId: id },
       });
     })
     .then(deletedCount => {
@@ -2203,7 +2203,7 @@ export const getAllInvoices = (req, res, next) => {
               model: models.Customer, // from Payment
               attributes: [
                 [
-                  Sequelize.literal("CONCAT(FirstName, ' ', LastName)"),
+                  Sequelize.literal("CONCAT(first_name, ' ', last_name)"),
                   'Imię Nazwisko',
                 ],
               ],
@@ -2213,7 +2213,7 @@ export const getAllInvoices = (req, res, next) => {
       ],
       attributes: {
         include: includeAttributes, // Adding joint columns
-        exclude: ['Product'], // Deleting substituted ones
+        exclude: ['product'], // Deleting substituted ones
       },
     })
     .then(records => {
@@ -2238,7 +2238,7 @@ export const getAllInvoices = (req, res, next) => {
           ) {
             newRecord[newKey] = formatIsoDateTime(jsonRecord[key]);
           } else if (key === 'Payment' && jsonRecord[key]) {
-            //# Name
+            //# name
             newRecord[newKey] = jsonRecord[key].Customer?.['Imię Nazwisko'];
           } else {
             newRecord[newKey] = jsonRecord[key];

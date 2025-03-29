@@ -102,7 +102,7 @@ function DetailsTableAttendance({ type, stats, isAdminPage }) {
   const table = (
     <ModalTable
       headers={['ID Ucz.', 'Data zapisania', , 'Uczestnik', '']}
-      keys={['customerID', 'timestamp', , 'customer', '']}
+      keys={['customerId', 'timestamp', , 'customer', '']}
       content={paymentsArray}
       active={false}
       isAdminPage={isAdminPage}

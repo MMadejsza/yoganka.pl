@@ -1,8 +1,8 @@
 import { DataTypes } from 'sequelize';
 import sequelizeDb from '../utils/db.js';
 
-const UserPrefSettings = sequelizeDb.define(
-  'UserPrefSettings',
+const UserPrefSetting = sequelizeDb.define(
+  'UserPrefSetting',
   {
     userPrefId: {
       type: DataTypes.INTEGER(11),
@@ -51,4 +51,4 @@ const UserPrefSettings = sequelizeDb.define(
   }
 );
 
-export default UserPrefSettings;
+export default UserPrefSetting;

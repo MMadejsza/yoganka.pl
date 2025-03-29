@@ -17,14 +17,14 @@ function DetailsPayment({ paymentData }) {
             Data płatności:
           </p>
           <p className='user-container__section-record-content'>
-            {`${formatIsoDateTime(payment.Date)}`}
+            {`${formatIsoDateTime(payment.date)}`}
           </p>
         </li>
         <li className='user-container__section-record modal-checklist__li'>
           <p className='user-container__section-record-label'>Kwota:</p>
           <p className='user-container__section-record-content'>
             {' '}
-            {`${payment.AmountPaid}zł`}
+            {`${payment.amountPaid}zł`}
           </p>
         </li>
         <li className='user-container__section-record modal-checklist__li'>
@@ -32,22 +32,22 @@ function DetailsPayment({ paymentData }) {
             Metoda Płatności:
           </p>
           <p className='user-container__section-record-content'>
-            {payment.PaymentMethod}
+            {payment.paymentMethod}
           </p>
         </li>
         <li className='user-container__section-record modal-checklist__li'>
           <p className='user-container__section-record-label'>Opłacono:</p>
           <p className='user-container__section-record-content'>
-            {payment.Status}
+            {payment.status}
           </p>
         </li>
-        {payment.AmountDue && payment.AmountDue != '0.00' && (
+        {payment.amountDue && payment.amountDue != '0.00' && (
           <li className='user-container__section-record modal-checklist__li'>
             <p className='user-container__section-record-label'>
               Pozostało do zapłaty:
             </p>
             <p className='user-container__section-record-content'>
-              {`${payment.AmountDue}zł`}
+              {`${payment.amountDue}zł`}
             </p>
           </li>
         )}

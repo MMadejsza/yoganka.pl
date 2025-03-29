@@ -34,7 +34,7 @@ export const getAccount = (req, res, next) => {
       user,
     });
   } else {
-    let PK = req.user.Customer.CustomerID;
+    let PK = req.user.Customer.customerId;
     return models.Customer.findByPk(PK, {
       include: [
         {
@@ -42,10 +42,10 @@ export const getAccount = (req, res, next) => {
           required: false, // May not exist
           include: [
             {
-              model: models.UserPrefSettings, // Customer phone numbers
+              model: models.UserPrefSetting, // Customer phone numbers
               required: false,
               attributes: {
-                exclude: ['UserID'], // deleting
+                exclude: ['userId'], // deleting
               },
             },
           ],
@@ -58,13 +58,13 @@ export const getAccount = (req, res, next) => {
               model: models.Invoice, // eventual invoices
               required: false,
               attributes: {
-                exclude: ['PaymentID'], // deleting
+                exclude: ['paymentId'], // deleting
               },
             },
           ],
-          where: { CustomerID: req.user.Customer.CustomerID },
+          where: { customerId: req.user.Customer.customerId },
           attributes: {
-            exclude: ['ProductID', 'CustomerID'], // deleting
+            exclude: ['productId', 'customerId'], // deleting
           },
         },
         {
@@ -83,24 +83,24 @@ export const getAccount = (req, res, next) => {
                 {
                   model: models.Feedback, // harmonogram -> opinie
                   required: false,
-                  where: { CustomerID: req.user.Customer.CustomerID }, // but only for particular customer
+                  where: { customerId: req.user.Customer.customerId }, // but only for particular customer
                   attributes: {
-                    exclude: ['CustomerID', 'ScheduleID'], // deleting
+                    exclude: ['customerId', 'scheduleId'], // deleting
                   },
                 },
               ],
               attributes: {
-                exclude: ['ProductID'], // deleting
+                exclude: ['productId'], // deleting
               },
             },
           ],
           attributes: {
-            exclude: ['CustomerID', 'ScheduleID'], // deleting
+            exclude: ['customerId', 'scheduleId'], // deleting
           },
         },
       ],
       attributes: {
-        exclude: ['UserID'], // deleting
+        exclude: ['userId'], // deleting
       },
     })
       .then(customer => {
@@ -121,9 +121,9 @@ export const getAccount = (req, res, next) => {
 export const getSettings = (req, res, next) => {
   const controllerName = 'getSettings';
   callLog(req, person, controllerName);
-  const PK = req.user.UserPrefSetting?.UserPrefID;
+  const PK = req.user.UserPrefSetting?.userPrefId;
 
-  models.UserPrefSettings.findByPk(PK)
+  models.UserPrefSetting.findByPk(PK)
     .then(preferences => {
       if (!preferences) {
         errCode = 404;
@@ -149,32 +149,32 @@ export const putEditSettings = (req, res, next) => {
   const controllerName = 'putEditSettings';
   callLog(req, person, controllerName);
 
-  const userID = req.user.UserID;
+  const userId = req.user.userId;
 
   const { handedness, font, notifications, animation, theme } = req.body;
   // console.log(`❗❗❗`, req.body);
 
   // if preferences don't exist - create new ones:
-  models.UserPrefSettings.findOrCreate({
-    where: { UserID: userID },
+  models.UserPrefSetting.findOrCreate({
+    where: { userId: userId },
     defaults: {
-      UserID: userID,
-      Handedness: !!handedness || false,
-      FontSize: parseInt(font) || 14,
-      Notifications: !!notifications || false,
-      Animation: !!animation || false,
-      Theme: !!theme || false,
+      userId: userId,
+      handedness: !!handedness || false,
+      fontSize: parseInt(font) || 14,
+      notifications: !!notifications || false,
+      animation: !!animation || false,
+      theme: !!theme || false,
     },
   })
     .then(([preferences, created]) => {
       if (!created) {
         // Nothing changed
         if (
-          preferences.Handedness == !!handedness &&
-          preferences.FontSize == parseInt(font) &&
-          preferences.Notifications == !!notifications &&
-          preferences.Animation == !!animation &&
-          preferences.Theme == !!theme
+          preferences.handedness == !!handedness &&
+          preferences.fontSize == parseInt(font) &&
+          preferences.notifications == !!notifications &&
+          preferences.animation == !!animation &&
+          preferences.theme == !!theme
         ) {
           // Nothing changed
           console.log('\n❓❓❓ User putEditSettings no change');
@@ -182,11 +182,11 @@ export const putEditSettings = (req, res, next) => {
           return null;
         } else {
           // Update
-          preferences.Handedness = !!handedness;
-          preferences.FontSize = parseInt(font);
-          preferences.Notifications = !!notifications;
-          preferences.Animation = !!animation;
-          preferences.Theme = !!theme;
+          preferences.handedness = !!handedness;
+          preferences.fontSize = parseInt(font);
+          preferences.notifications = !!notifications;
+          preferences.animation = !!animation;
+          preferences.theme = !!theme;
           return preferences.save().then(() => {
             successLog(person, controllerName, 'updated');
             return {
@@ -236,23 +236,23 @@ export const getAllSchedules = (req, res, next) => {
         {
           model: models.Payment,
           required: false,
-          attributes: ['PaymentID'], //payment Id is enough
+          attributes: ['paymentId'], //payment Id is enough
           through: {
-            attributes: ['Attendance', 'CustomerID'], // dołącz dodatkowe atrybuty
+            attributes: ['attendance', 'customerId'], // dołącz dodatkowe atrybuty
           },
 
-          // where: isUser && isCustomer ? {CustomerID: req.user.Customer.CustomerID} : undefined, // Filter
+          // where: isUser && isCustomer ? {customerId: req.user.Customer.customerId} : undefined, // Filter
         },
       ],
       attributes: {
-        exclude: ['ProductID'], // Deleting substituted ones
+        exclude: ['productId'], // Deleting substituted ones
       },
       where: Sequelize.where(
         fn(
           'CONCAT',
           col('ScheduleRecord.date'),
           'T',
-          col('ScheduleRecord.startTime'),
+          col('ScheduleRecord.start_time'),
           ':00'
         ),
         { [Op.gte]: now.toISOString() }
@@ -283,22 +283,22 @@ export const getAllSchedules = (req, res, next) => {
           ) {
             newRecord[newKey] = formatIsoDateTime(jsonRecord[key], true);
           } else if (key === 'Product' && jsonRecord[key]) {
-            newRecord['Typ'] = jsonRecord[key].Type; //  flatten object
-            newRecord['Nazwa'] = jsonRecord[key].Name;
+            newRecord['Typ'] = jsonRecord[key].type; //  flatten object
+            newRecord['Nazwa'] = jsonRecord[key].name;
           } else if (key === 'Payments') {
             newRecord.wasUserReserved = jsonRecord.Payments.some(
               payment =>
-                payment.Booking.CustomerID === req.user?.Customer?.CustomerID
+                payment.Booking.customerId === req.user?.Customer?.customerId
             );
             newRecord.isUserGoing = jsonRecord.Payments.some(payment => {
               const isBooked = payment.Booking;
-              const customerID = payment.Booking.CustomerID;
-              const loggedInID = req.user?.Customer?.CustomerID;
+              const customerId = payment.Booking.customerId;
+              const loggedInID = req.user?.Customer?.customerId;
               const isGoing =
                 payment.Booking.attendance === 1 ||
                 payment.Booking.attendance === true;
 
-              return isBooked && customerID == loggedInID && isGoing;
+              return isBooked && customerId == loggedInID && isGoing;
             });
           } else {
             newRecord[newKey] = jsonRecord[key]; // Assignment
@@ -311,7 +311,7 @@ export const getAllSchedules = (req, res, next) => {
             (payment.Booking.attendance === 1 ||
               payment.Booking.attendance === true)
         );
-        newRecord['Dzień'] = getWeekDay(jsonRecord['Date']);
+        newRecord['Dzień'] = getWeekDay(jsonRecord['date']);
         newRecord['Zadatek'] = jsonRecord.Product.price;
         newRecord[
           'Miejsca'
@@ -382,10 +382,10 @@ export const getScheduleByID = (req, res, next) => {
         );
         if (isUser && isCustomer) {
           wasUserReserved = schedule.Bookings.some(
-            booking => booking.CustomerID === req.user?.Customer.CustomerID
+            booking => booking.customerId === req.user?.Customer.customerId
           );
           isUserGoing = beingAttendedSchedules.some(
-            booking => booking.CustomerID === req.user.Customer.CustomerID
+            booking => booking.customerId === req.user.Customer.customerId
           );
           schedule.Bookings = beingAttendedSchedules.length;
         }

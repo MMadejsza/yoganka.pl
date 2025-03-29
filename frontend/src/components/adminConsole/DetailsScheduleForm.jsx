@@ -23,12 +23,12 @@ function DetailsScheduleForm({ scheduleData }) {
       mutateOnEdit(
         status,
         formDataObj,
-        `/api/admin-console/edit-schedule-data/${scheduleData.ScheduleID}`
+        `/api/admin-console/edit-schedule-data/${scheduleData.scheduleId}`
       ),
     onSuccess: res => {
       queryClient.invalidateQueries([
         'query',
-        `/admin-console/show-all-schedules/${scheduleData.ScheduleID}`,
+        `/admin-console/show-all-schedules/${scheduleData.scheduleId}`,
       ]);
       queryClient.invalidateQueries([
         'query',
@@ -44,10 +44,10 @@ function DetailsScheduleForm({ scheduleData }) {
     },
   });
   // Fallback to feed custom hooks when data isn't available
-  const capacityDefault = scheduleData?.Capacity || 'Class';
-  const dateDefault = scheduleData?.Date || formatIsoDateTime(new Date());
-  const startTimeDefault = scheduleData?.StartTime || '';
-  const locationDefault = scheduleData?.Location || ' ';
+  const capacityDefault = scheduleData?.capacity || 10;
+  const dateDefault = scheduleData?.date || formatIsoDateTime(new Date());
+  const startTimeDefault = scheduleData?.startTime || '';
+  const locationDefault = scheduleData?.location || ' ';
 
   // using custom hook with extracting and reassigning its 'return' for particular inputs and assign validation methods from imported utils. Every inout has its won state now
   const {

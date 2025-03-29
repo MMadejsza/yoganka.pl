@@ -10,21 +10,21 @@ function DetailsUserSettings({
   let handedness, fontSize, notifications, animation, theme;
   const hasPrefs = !!settingsData;
 
-  handedness = hasPrefs ? (settingsData.Handedness == 1 ? 'On' : 'Off') : 'Off';
-  fontSize = settingsData?.FontSize || '12';
+  handedness = hasPrefs ? (settingsData.handedness == 1 ? 'On' : 'Off') : 'Off';
+  fontSize = settingsData?.fontSize || '12';
   notifications = hasPrefs
-    ? settingsData.Notifications == 1
+    ? settingsData.notifications == 1
       ? 'On'
       : 'Off'
     : 'Off';
-  animation = hasPrefs ? (settingsData.Animation == 1 ? 'On' : 'Off') : 'Off';
-  theme = hasPrefs ? (settingsData.Theme == 1 ? 'On' : 'Off') : 'Off';
+  animation = hasPrefs ? (settingsData.animation == 1 ? 'On' : 'Off') : 'Off';
+  theme = hasPrefs ? (settingsData.theme == 1 ? 'On' : 'Off') : 'Off';
 
   const title = isUserAccountPage
     ? `Preferencje:`
     : `Ustawienia strony  ${
-        settingsData?.UserID
-          ? '(ID ' + settingsData?.UserPrefID + '):'
+        settingsData?.userId
+          ? '(ID ' + settingsData?.userPrefId + '):'
           : '(Domyślne)'
       }`;
 
