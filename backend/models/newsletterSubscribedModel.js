@@ -4,29 +4,31 @@ import sequelizeDb from '../utils/db.js';
 export const SubscribedNewsletter = sequelizeDb.define(
   'SubscribedNewsletter',
   {
-    NewsletterID: {
+    newsletterId: {
       type: DataTypes.INTEGER(11),
       primaryKey: true,
-
       allowNull: false,
+      field: 'newsletter_id',
     },
-    UserID: {
+    userId: {
       type: DataTypes.INTEGER(11),
       primaryKey: true,
-
       allowNull: false,
+      field: 'user_id',
     },
-    SubscriptionDate: {
+    subscriptionDate: {
       type: DataTypes.DATE,
       allowNull: false,
+      field: 'subscription_date',
     },
-    SubscriptionStatus: {
+    subscriptionStatus: {
       type: DataTypes.STRING,
       allowNull: false,
+      field: 'subscription_status',
     },
   },
   {
-    tableName: 'subscribed_newsletter',
+    tableName: 'subscribed_newsletters',
     timestamps: false,
   }
 );

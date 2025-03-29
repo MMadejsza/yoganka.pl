@@ -4,30 +4,36 @@ import sequelizeDb from '../utils/db.js';
 const Newsletter = sequelizeDb.define(
   'Newsletter',
   {
-    NewsletterID: {
+    newsletterId: {
       type: DataTypes.INTEGER(11),
       primaryKey: true,
       autoIncrement: true,
+      field: 'newsletter_id',
     },
-    Status: {
+    status: {
       type: DataTypes.STRING(50),
       allowNull: false,
+      field: 'status',
     },
-    CreationDate: {
+    creationDate: {
       type: DataTypes.DATE,
       allowNull: false,
+      field: 'creation_date',
     },
-    SendDate: {
+    sendDate: {
       type: DataTypes.DATE,
       allowNull: true,
+      field: 'send_date',
     },
-    Title: {
+    title: {
       type: DataTypes.STRING(255),
       allowNull: false,
+      field: 'title',
     },
-    Content: {
+    content: {
       type: DataTypes.TEXT,
       allowNull: false,
+      field: 'content',
     },
   },
   {
@@ -35,4 +41,5 @@ const Newsletter = sequelizeDb.define(
     timestamps: false,
   }
 );
+
 export default Newsletter;

@@ -2,63 +2,61 @@ import { DataTypes } from 'sequelize';
 import sequelizeDb from '../utils/db.js';
 
 /** @type {import('sequelize').Model} */
-
 const Booking = sequelizeDb.define(
   'Booking',
   {
-    ScheduleID: {
+    scheduleId: {
       type: DataTypes.INTEGER,
       primaryKey: true,
+      field: 'schedule_id',
       references: {
-        model: 'ScheduleRecord', // The name of the target table
-        key: 'ScheduleID', // The name of the column in the target table
+        model: 'schedule_records',
+        key: 'schedule_id',
       },
     },
-    PaymentID: {
+    paymentId: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-
+      field: 'payment_id',
       references: {
-        model: 'Payment', // The name of the target table
-        key: 'PaymentID', // The name of the column in the target table
+        model: 'payments',
+        key: 'payment_id',
       },
     },
-    CustomerID: {
+    customerId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      field: 'customer_id',
     },
-    Attendance: {
+    attendance: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: true,
+      field: 'attendance',
     },
-    TimeStamp: {
+    timestamp: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: DataTypes.NOW,
+      defaultValue: sequelizeDb.literal('CURRENT_TIMESTAMP'),
+      field: 'timestamp',
     },
-    DidAction: {
+    performedBy: {
       type: DataTypes.STRING(10),
       allowNull: false,
       defaultValue: 'Customer',
+      field: 'performed_by',
     },
   },
   {
-    tableName: 'bookings', // exact mysql table name
-    timestamps: true,
-    updatedAt: 'TimeStamp', //mapping to TimeStamp
-    createdAt: false,
+    tableName: 'bookings',
+    timestamps: false,
     indexes: [
       {
         unique: true,
-        fields: ['CustomerID', 'ScheduleID'], //unique key for combination of  CustomerID i ScheduleID
+        fields: ['customer_id', 'schedule_id'],
       },
     ],
   }
 );
-Booking.beforeCreate(instance => {
-  if (!instance.TimeStamp) {
-    instance.TimeStamp = new Date();
-  }
-});
+
 export default Booking;

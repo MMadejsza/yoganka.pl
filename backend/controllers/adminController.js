@@ -412,7 +412,7 @@ export const getCustomerByID = (req, res, next) => {
           },
         ],
         attributes: {
-          exclude: ['ProductID', 'CustomerID'], // deleting
+          exclude: ['product_id', 'CustomerID'], // deleting
         },
       },
       {
@@ -433,17 +433,17 @@ export const getCustomerByID = (req, res, next) => {
                 required: false,
                 where: { CustomerID: req.user.Customer.CustomerID }, // but only for particular customer
                 attributes: {
-                  exclude: ['CustomerID', 'ScheduleID'], // deleting
+                  exclude: ['CustomerID', 'scheduleId'], // deleting
                 },
               },
             ],
             attributes: {
-              exclude: ['ProductID'], // deleting
+              exclude: ['product_id'], // deleting
             },
           },
         ],
         attributes: {
-          exclude: ['CustomerID', 'ScheduleID'], // deleting
+          exclude: ['CustomerID', 'scheduleId'], // deleting
         },
       },
     ],
@@ -710,7 +710,7 @@ export const getAllSchedules = (req, res, next) => {
       include: [
         {
           model: models.Product,
-          attributes: ['Type', 'Name', 'Price'],
+          attributes: ['type', 'name', 'price'],
         },
         {
           model: models.Payment,
@@ -724,7 +724,7 @@ export const getAllSchedules = (req, res, next) => {
         },
       ],
       attributes: {
-        exclude: ['ProductID'], // Deleting substituted ones
+        exclude: ['product_id'], // Deleting substituted ones
       },
     })
     .then(records => {
@@ -752,8 +752,8 @@ export const getAllSchedules = (req, res, next) => {
           // 	newRecord[newKey] = jsonRecord[key];
           // } else
           if (key === 'Product' && jsonRecord[key]) {
-            newRecord['Typ'] = jsonRecord[key].Type; //  flatten object
-            newRecord['Nazwa'] = jsonRecord[key].Name;
+            newRecord['Typ'] = jsonRecord[key].type; //  flatten object
+            newRecord['Nazwa'] = jsonRecord[key].name;
           } else if (key === 'Payments') {
             newRecord.wasUserReserved = jsonRecord.Payments.some(
               booking =>
@@ -781,11 +781,11 @@ export const getAllSchedules = (req, res, next) => {
               booking.Booking.Attendance === true)
         );
         newRecord['Dzień'] = getWeekDay(jsonRecord['Date']);
-        newRecord['Zadatek'] = jsonRecord.Product.Price;
+        newRecord['Zadatek'] = jsonRecord.Product.price;
         newRecord[
           'Miejsca'
-        ] = `${activePayments.length}/${jsonRecord.Capacity}`;
-        newRecord.full = activePayments.length >= jsonRecord.Capacity;
+        ] = `${activePayments.length}/${jsonRecord.capacity}`;
+        newRecord.full = activePayments.length >= jsonRecord.capacity;
         return newRecord; // Return new record object
       });
 
@@ -870,11 +870,11 @@ export const getScheduleByID = (req, res, next) => {
         schedule.Attendance = beingAttendedSchedules.length;
         schedule.isUserGoing = isUserGoing;
         schedule.wasUserReserved = wasUserReserved;
-        schedule.full = beingAttendedSchedules.length >= schedule.Capacity;
+        schedule.full = beingAttendedSchedules.length >= schedule.capacity;
       }
 
       const scheduleDateTime = new Date(
-        `${schedule.Date}T${schedule.StartTime}:00`
+        `${schedule.date}T${schedule.startTime}:00`
       );
       const now = new Date();
       schedule.isCompleted = scheduleDateTime <= now;
@@ -897,7 +897,7 @@ export const getProductSchedules = (req, res, next) => {
   const customerID = req.params.cId;
 
   // find all schedule for chosen Product
-  models.ScheduleRecord.findAll({ where: { ProductID: productID } })
+  models.ScheduleRecord.findAll({ where: { productId: productID } })
     .then(foundSchedules => {
       //find all bookings for given customer
       return models.Booking.findAll({
@@ -906,7 +906,7 @@ export const getProductSchedules = (req, res, next) => {
         // filter bookings which have not been booked yet by him
         const filteredSchedules = foundSchedules.filter(foundSchedule => {
           return !bookedByCustomerSchedules.some(
-            bs => bs.ScheduleID == foundSchedule.ScheduleID
+            bs => bs.scheduleId == foundSchedule.scheduleId
           );
         });
         return filteredSchedules;
@@ -966,11 +966,11 @@ export const postCreateScheduleRecord = (req, res, next) => {
     // create schedule within passed transaction
     return models.ScheduleRecord.create(
       {
-        ProductID: productID,
-        Date: currentDate,
-        StartTime: startTime,
-        Location: location,
-        Capacity: capacity,
+        productId: productID,
+        date: currentDate,
+        startTime: startTime,
+        location: location,
+        capacity: capacity,
       },
       { transaction }
     ).then(record => {
@@ -1044,23 +1044,23 @@ export const putEditSchedule = async (req, res, next) => {
     })
     .then(foundSchedule => {
       const {
-        Capacity,
-        Date: scheduleDate,
-        Location,
-        StartTime,
+        capacity,
+        date: scheduleDate,
+        location,
+        startTime,
       } = foundSchedule;
       if (
-        new Date(`${foundSchedule.Date}T${foundSchedule.StartTime}:00`) <
+        new Date(`${foundSchedule.date}T${foundSchedule.startTime}:00`) <
         new Date()
       ) {
         errCode = 400;
         console.log('\n❓❓❓ Admin schedule is past - not to edit');
         throw new Error('Nie można edytować minionego terminu.');
       } else if (
-        Capacity == newCapacity &&
+        capacity == newCapacity &&
         scheduleDate === newStartDate &&
-        Location === newLocation &&
-        StartTime === newStartTime
+        location === newLocation &&
+        startTime === newStartTime
       ) {
         // Nothing changed
         console.log('\n❓❓❓ Admin schedule no change');
@@ -1073,12 +1073,12 @@ export const putEditSchedule = async (req, res, next) => {
       if (!fetchedSchedule) return;
       models.ScheduleRecord.update(
         {
-          Capacity: newCapacity,
-          Date: newStartDate,
-          StartTime: newStartTime,
-          Location: newLocation,
+          capacity: newCapacity,
+          date: newStartDate,
+          startTime: newStartTime,
+          location: newLocation,
         },
-        { where: { ScheduleID: scheduleId } }
+        { where: { scheduleId: scheduleId } }
       )
         .then(scheduleResult => {
           return { scheduleResult };
@@ -1106,7 +1106,7 @@ export const deleteSchedule = (req, res, next) => {
 
   models.ScheduleRecord.findOne({
     where: {
-      ScheduleID: id,
+      scheduleId: id,
     },
   })
     .then(foundSchedule => {
@@ -1117,7 +1117,7 @@ export const deleteSchedule = (req, res, next) => {
         );
         throw new Error('Nie znaleziono terminu do usunięcia.');
       } else if (
-        new Date(`${foundSchedule.Date}T${foundSchedule.StartTime}:00`) <
+        new Date(`${foundSchedule.date}T${foundSchedule.startTime}:00`) <
         new Date()
       ) {
         errCode = 400;
@@ -1130,7 +1130,7 @@ export const deleteSchedule = (req, res, next) => {
       }
 
       return models.Booking.findOne({
-        where: { ScheduleID: id },
+        where: { scheduleId: id },
       }).then(foundRecord => {
         if (foundRecord) {
           errCode = 409;
@@ -1222,9 +1222,9 @@ export const putEditMarkAbsent = (req, res, next) => {
         sendAttendanceMarkedAbsentMail({
           to: customerEmail,
           productName: product,
-          date: currentScheduleRecord.Date,
-          startTime: currentScheduleRecord.StartTime,
-          location: currentScheduleRecord.Location,
+          date: currentScheduleRecord.date,
+          startTime: currentScheduleRecord.startTime,
+          location: currentScheduleRecord.location,
         });
       }
 
@@ -1303,9 +1303,9 @@ export const putEditMarkPresent = (req, res, next) => {
         sendAttendanceReturningMail({
           to: customerEmail,
           productName: currentScheduleRecord?.ProductName || '',
-          date: currentScheduleRecord.Date,
-          startTime: currentScheduleRecord.StartTime,
-          location: currentScheduleRecord.Location,
+          date: currentScheduleRecord.date,
+          startTime: currentScheduleRecord.startTime,
+          location: currentScheduleRecord.location,
         });
       }
 
@@ -1334,6 +1334,12 @@ export const deleteAttendanceRecord = (req, res, next) => {
       {
         model: models.ScheduleRecord,
         required: true,
+        include: [
+          {
+            model: models.Product,
+            required: true,
+          },
+        ],
       },
       {
         model: models.Customer,
@@ -1361,10 +1367,10 @@ export const deleteAttendanceRecord = (req, res, next) => {
       if (to) {
         sendAttendanceRecordDeletedMail({
           to,
-          productName: ScheduleRecord?.ProductName || 'Zajęcia',
-          date: ScheduleRecord.Date,
-          startTime: ScheduleRecord.StartTime,
-          location: ScheduleRecord.Location,
+          productName: ScheduleRecord?.Product?.ProductName || 'Zajęcia',
+          date: ScheduleRecord.date,
+          startTime: ScheduleRecord.startTime,
+          location: ScheduleRecord.location,
           isAdmin: true,
         });
       }
@@ -1419,15 +1425,15 @@ export const getAllParticipantsFeedback = (req, res, next) => {
           include: [
             {
               model: models.Product, // Product through ScheduleRecord
-              attributes: ['Name'],
+              attributes: ['name'],
             },
           ],
-          attributes: ['ScheduleID', 'Date', 'StartTime'],
+          attributes: ['scheduleId', 'Date', 'startTime'],
         },
       ],
       attributes: {
         include: includeAttributes, // Adding joint columns
-        exclude: ['Product'], // Deleting substituted ones
+        exclude: ['product'], // Deleting substituted ones
       },
     })
     .then(records => {
@@ -1461,10 +1467,10 @@ export const getAllParticipantsFeedback = (req, res, next) => {
             const nameKey = columnMap['Nazwa'] || 'Nazwa';
 
             newRecord[dataKey] = formatIsoDateTime(jsonRecord[key]['Date']);
-            newRecord[startTimeKey] = jsonRecord[key]['StartTime'];
+            newRecord[startTimeKey] = jsonRecord[key]['startTime'];
             newRecord[
               nameKey
-            ] = `${jsonRecord[key].Product?.Name} (${jsonRecord[key].ScheduleID})`;
+            ] = `${jsonRecord[key].Product?.Name} (${jsonRecord[key].scheduleId})`;
           } else {
             newRecord[newKey] = jsonRecord[key]; // Assignment
           }
@@ -1501,7 +1507,7 @@ export const getAllParticipantsFeedbackByID = (req, res, next) => {
       },
       {
         model: models.ScheduleRecord,
-        attributes: { exclude: ['ProductID'] },
+        attributes: { exclude: ['product_id'] },
         include: [
           {
             model: models.Product,
@@ -1510,7 +1516,7 @@ export const getAllParticipantsFeedbackByID = (req, res, next) => {
         ],
       },
     ],
-    attributes: { exclude: ['CustomerID', 'ScheduleID'] },
+    attributes: { exclude: ['CustomerID', 'scheduleId'] },
   })
     .then(review => {
       if (!review) {
@@ -1528,7 +1534,7 @@ export const getAllParticipantsFeedbackByID = (req, res, next) => {
         include: [
           {
             model: models.ScheduleRecord,
-            attributes: { exclude: ['ProductID'] },
+            attributes: { exclude: ['product_id'] },
             include: [
               {
                 model: models.Product,
@@ -1537,7 +1543,7 @@ export const getAllParticipantsFeedbackByID = (req, res, next) => {
             ],
           },
         ],
-        attributes: { exclude: ['CustomerID', 'ScheduleID'] },
+        attributes: { exclude: ['CustomerID', 'scheduleId'] },
       }).then(otherReviews => {
         successLog(person, controllerName);
         return res.status(200).json({
@@ -1616,7 +1622,7 @@ export const getProductByID = (req, res, next) => {
             through: {}, // omit data from mid table
             required: false,
             attributes: {
-              exclude: ['Product'],
+              exclude: ['product'],
             },
             include: [
               {
@@ -1638,7 +1644,7 @@ export const getProductByID = (req, res, next) => {
           },
         ],
         attributes: {
-          exclude: ['ProductID'],
+          exclude: ['product_id'],
         },
       },
     ],
@@ -1667,20 +1673,20 @@ export const postCreateProduct = async (req, res, next) => {
     req.body;
 
   let productPromise;
-  models.Product.findOne({ where: { Name: name } })
+  models.Product.findOne({ where: { name: name } })
     .then(product => {
       if (product) {
         errCode = 409;
         throw new Error('Produkt już istnieje.');
       }
       return (productPromise = models.Product.create({
-        Name: name,
-        Type: productType,
-        Location: location,
-        Duration: duration,
-        Price: price,
-        StartDate: StartDate,
-        Status: status || 'Aktywny',
+        name: name,
+        type: productType,
+        location: location,
+        duration: duration,
+        price: price,
+        startDate: StartDate,
+        status: status || 'Aktywny',
       }));
     })
     .then(newProduct => {
@@ -1737,15 +1743,15 @@ export const putEditProduct = async (req, res, next) => {
       return product;
     })
     .then(foundProduct => {
-      const { Type, StartDate, Location, Duration, Price, Status } =
+      const { type, startDate, location, duration, price, status } =
         foundProduct;
       if (
-        Type === newType &&
-        StartDate === newStartDate &&
-        Location === newLocation &&
-        Duration === newDuration &&
-        Price === newPrice &&
-        Status === newStatus
+        type === newType &&
+        startDate === newStartDate &&
+        location === newLocation &&
+        duration === newDuration &&
+        price === newPrice &&
+        status === newStatus
       ) {
         // Nothing changed
         console.log('\n❓❓❓ Admin Product no change');
@@ -1761,14 +1767,14 @@ export const putEditProduct = async (req, res, next) => {
       if (!fetchedProduct) return;
       models.Product.update(
         {
-          Type: newType,
-          StartDate: newStartDate,
-          Location: newLocation,
-          Duration: newDuration,
-          Price: newPrice,
-          Status: newStatus,
+          type: newType,
+          startDate: newStartDate,
+          location: newLocation,
+          duration: newDuration,
+          price: newPrice,
+          status: newStatus,
         },
-        { where: { ProductID: productId } }
+        { where: { productId: productId } }
       )
         .then(productResult => {
           return { productResult };
@@ -1795,7 +1801,7 @@ export const deleteProduct = (req, res, next) => {
   const id = req.params.id;
   models.Product.destroy({
     where: {
-      ProductID: id,
+      productId: id,
     },
   })
     .then(deletedCount => {
@@ -1840,14 +1846,14 @@ export const getAllPayments = (req, res, next) => {
           include: [
             {
               model: models.Product,
-              attributes: ['Name'],
+              attributes: ['name'],
             },
           ],
-          attributes: ['ScheduleID'],
+          attributes: ['scheduleId'],
         },
       ],
       attributes: {
-        exclude: ['Product', 'ScheduleID'],
+        exclude: ['Product', 'scheduleId'],
       },
     })
     .then(records => {
@@ -1873,7 +1879,7 @@ export const getAllPayments = (req, res, next) => {
             newRecord[newKey] = `${customer} (${customerID})`;
           } else if (key === 'ScheduleRecords') {
             const products = jsonRecord[key]
-              .map(sr => `${sr.Product?.Name} (${sr.Bookings?.ScheduleID})`)
+              .map(sr => `${sr.Product?.name} (${sr.Bookings?.scheduleId})`)
               .filter(Boolean);
             newRecord['Terminy'] = jsonRecord[key];
             newRecord['Produkty'] =
@@ -1989,7 +1995,7 @@ export const postCreatePayment = (req, res, next) => {
   db.transaction(t => {
     // Fetch schedule and lock it for other paralele transactions
     return models.ScheduleRecord.findOne({
-      where: { ScheduleID: scheduleID }, //from mutation
+      where: { scheduleId: scheduleID }, //from mutation
       transaction: t,
       lock: t.LOCK.UPDATE, //@
     })
@@ -2002,7 +2008,7 @@ export const postCreatePayment = (req, res, next) => {
         currentScheduleRecord = scheduleRecord;
         // @ admin IS able to fill the past schedule but not change it:
         // const scheduleDateTime = new Date(
-        // 	`${scheduleRecord.Date}T${scheduleRecord.StartTime}:00`,
+        // 	`${scheduleRecord.date}T${scheduleRecord.startTime}:00`,
         // );
         // if (scheduleDateTime < new Date()) {
         // 	errCode = 401;
@@ -2010,13 +2016,13 @@ export const postCreatePayment = (req, res, next) => {
         // }
         // Count the current amount of reservations
         return models.Booking.count({
-          where: { ScheduleID: scheduleID, Attendance: 1 },
+          where: { scheduleId: scheduleID, Attendance: 1 },
           transaction: t,
           lock: t.LOCK.UPDATE, //@
         }).then(currentAttendance => {
           // console.log('currentAttendance', currentAttendance);
 
-          if (currentAttendance >= scheduleRecord.Capacity) {
+          if (currentAttendance >= scheduleRecord.capacity) {
             // If limit is reached
             errCode = 409;
             throw new Error('Brak wolnych miejsc na ten termin.');
@@ -2030,13 +2036,13 @@ export const postCreatePayment = (req, res, next) => {
             include: [
               {
                 model: models.ScheduleRecord,
-                where: { ScheduleID: scheduleID },
+                where: { scheduleId: scheduleID },
                 through: {
                   attributes: [
                     'Attendance',
                     'CustomerID',
                     'PaymentID',
-                    'ScheduleID',
+                    'scheduleId',
                   ],
                   where: { CustomerID: customerID },
                 },
@@ -2089,9 +2095,9 @@ export const postCreatePayment = (req, res, next) => {
               sendReservationFreshMail({
                 to: customerEmail,
                 productName: productName,
-                date: currentScheduleRecord.Date,
-                startTime: currentScheduleRecord.StartTime,
-                location: currentScheduleRecord.Location,
+                date: currentScheduleRecord.date,
+                startTime: currentScheduleRecord.startTime,
+                location: currentScheduleRecord.location,
               });
             }
 

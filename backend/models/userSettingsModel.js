@@ -4,38 +4,45 @@ import sequelizeDb from '../utils/db.js';
 const UserPrefSettings = sequelizeDb.define(
   'UserPrefSettings',
   {
-    UserPrefID: {
+    userPrefId: {
       type: DataTypes.INTEGER(11),
       primaryKey: true,
       autoIncrement: true,
+      field: 'user_pref_id',
     },
-    UserID: {
+    userId: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
+      field: 'user_id',
       references: {
-        model: 'users', // table name
-        key: 'UserID',
+        model: 'users', // tabel
+        key: 'user_id', // in db
       },
     },
-    Handedness: {
+    handedness: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
+      field: 'handedness',
     },
-    FontSize: {
+    fontSize: {
       type: DataTypes.INTEGER,
       allowNull: true,
+      field: 'font_size',
     },
-    Theme: {
+    theme: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
+      field: 'theme',
     },
-    Notifications: {
+    notifications: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
+      field: 'notifications',
     },
-    Animation: {
+    animation: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
+      field: 'animation',
     },
   },
   {

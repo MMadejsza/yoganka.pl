@@ -4,55 +4,66 @@ import sequelizeDb from '../utils/db.js';
 const Customer = sequelizeDb.define(
   'Customer',
   {
-    CustomerID: {
+    customerId: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
+      field: 'customer_id',
     },
-    UserID: {
+    userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      field: 'user_id',
       references: {
-        model: 'users', // The name of the target table
-        key: 'UserID', // The name of the column in the target table
+        model: 'users',
+        key: 'user_id',
       },
     },
-    CustomerType: {
+    customerType: {
       type: DataTypes.STRING(50),
       allowNull: false,
+      field: 'customer_type',
     },
-    FirstName: {
+    firstName: {
       type: DataTypes.STRING(100),
       allowNull: false,
+      field: 'first_name',
     },
-    LastName: {
+    lastName: {
       type: DataTypes.STRING(100),
       allowNull: false,
+      field: 'last_name',
     },
-    DoB: {
-      type: DataTypes.DATEONLY, // YYYY-MM-DD
+    dob: {
+      type: DataTypes.DATEONLY,
       allowNull: false,
+      field: 'dob',
     },
-    Phone: {
+    phone: {
       type: DataTypes.STRING(16),
       allowNull: false,
+      field: 'phone',
     },
-    PreferredContactMethod: {
+    preferredContactMethod: {
       type: DataTypes.STRING(50),
       allowNull: true,
+      field: 'preferred_contact_method',
     },
-    Loyalty: {
+    loyalty: {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0,
+      field: 'loyalty',
     },
-    ReferralSource: {
+    referralSource: {
       type: DataTypes.STRING(255),
       allowNull: true,
+      field: 'referral_source',
     },
-    Notes: {
+    notes: {
       type: DataTypes.TEXT,
       allowNull: true,
+      field: 'notes',
     },
   },
   {
@@ -60,4 +71,5 @@ const Customer = sequelizeDb.define(
     timestamps: false,
   }
 );
+
 export default Customer;

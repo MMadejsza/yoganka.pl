@@ -138,14 +138,14 @@ export const calculateStats = customer => {
   for (let booking of attendedSchedules) {
     // console.group(`schedule: ${schedule}`);
     const { ScheduleRecord: schedule } = booking;
-    const scheduleID = schedule.ScheduleID;
-    const scheduleDate = schedule.Date;
-    const scheduleStartTime = schedule.StartTime;
-    const scheduleLocation = schedule.Location;
+    const scheduleID = schedule.scheduleId;
+    const scheduleDate = schedule.date;
+    const scheduleStartTime = schedule.startTime;
+    const scheduleLocation = schedule.location;
 
-    const productType = schedule.Product.Type;
-    const productName = schedule.Product.Name;
-    const productDuration = schedule.Product.Duration;
+    const productType = schedule.Product.type;
+    const productName = schedule.Product.name;
+    const productDuration = schedule.Product.duration;
 
     scheduleRecords.push({
       id: scheduleID,
@@ -185,7 +185,7 @@ export const calculateStats = customer => {
       const feedback = schedule.Feedbacks[0];
       reviews.push({
         id: feedback.FeedbackID,
-        product: schedule.Product.Name,
+        product: schedule.Product.name,
         schedule: `
 				(ID: ${scheduleID})
 				${scheduleDate}

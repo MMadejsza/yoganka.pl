@@ -4,34 +4,40 @@ import sequelizeDb from '../utils/db.js';
 const Invoice = sequelizeDb.define(
   'Invoice',
   {
-    InvoiceID: {
+    invoiceId: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
+      field: 'invoice_id',
     },
-    PaymentID: {
+    paymentId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      field: 'payment_id',
       references: {
-        model: 'payments', // The name of the target table
-        key: 'PaymentID', // The name of the column in the target table
+        model: 'payments',
+        key: 'payment_id',
       },
     },
-    InvoiceDate: {
+    invoiceDate: {
       type: DataTypes.DATEONLY,
       allowNull: false,
+      field: 'invoice_date',
     },
-    DueDate: {
+    dueDate: {
       type: DataTypes.DATEONLY,
       allowNull: false,
+      field: 'due_date',
     },
-    TotalAmount: {
+    totalAmount: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
+      field: 'total_amount',
     },
-    PaymentStatus: {
+    paymentStatus: {
       type: DataTypes.STRING(50),
       allowNull: false,
+      field: 'payment_status',
     },
   },
   {
@@ -39,4 +45,5 @@ const Invoice = sequelizeDb.define(
     timestamps: false,
   }
 );
+
 export default Invoice;

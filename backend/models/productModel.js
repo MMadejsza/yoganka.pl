@@ -5,39 +5,46 @@ import sequelizeDb from '../utils/db.js';
 const Product = sequelizeDb.define(
   'Product',
   {
-    ProductID: {
+    productId: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
+      field: 'product_id',
     },
-    Name: {
+    name: {
       type: DataTypes.STRING(255),
       allowNull: false,
-      unique: 'unique_name_index',
+      field: 'name',
     },
-    Type: {
+    type: {
       type: DataTypes.STRING(50),
       allowNull: false,
+      field: 'type',
     },
-    Location: {
+    location: {
       type: DataTypes.STRING(255),
       allowNull: true,
+      field: 'location',
     },
-    Duration: {
+    duration: {
       type: DataTypes.TIME, //  HH:MM:SS
       allowNull: false,
+      field: 'duration',
     },
-    Price: {
+    price: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
+      field: 'price',
     },
-    StartDate: {
+    startDate: {
       type: DataTypes.DATEONLY, //  YYYY-MM-DD
       allowNull: false,
+      field: 'start_date',
     },
-    Status: {
+    status: {
       type: DataTypes.STRING(50),
       allowNull: true,
+      field: 'status',
     },
   },
   {
@@ -45,4 +52,5 @@ const Product = sequelizeDb.define(
     timestamps: false, // turn off `createdAt` and `updatedAt`
   }
 );
+
 export default Product;

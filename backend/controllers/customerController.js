@@ -212,7 +212,7 @@ export const postCreateBookSchedule = (req, res, next) => {
         currentCustomer = customer;
         // Fetch schedule and lock it for other paralele transactions
         return models.ScheduleRecord.findOne({
-          where: { ScheduleID: req.body.schedule }, //from mutation
+          where: { scheduleId: req.body.schedule }, //from mutation
           transaction: t,
           lock: t.LOCK.UPDATE, //@
         });
@@ -225,7 +225,7 @@ export const postCreateBookSchedule = (req, res, next) => {
         currentScheduleRecord = scheduleRecord;
         successLog(person, controllerName, 'schedule found');
         const scheduleDateTime = new Date(
-          `${scheduleRecord.Date}T${scheduleRecord.StartTime}:00`
+          `${scheduleRecord.date}T${scheduleRecord.startTime}:00`
         );
         if (scheduleDateTime < new Date()) {
           errCode = 401;
@@ -234,13 +234,13 @@ export const postCreateBookSchedule = (req, res, next) => {
         // console.log('scheduleRecord', scheduleRecord);
         // Count the current amount of reservations
         return models.Booking.count({
-          where: { ScheduleID: req.body.schedule, Attendance: 1 },
+          where: { scheduleId: req.body.schedule, Attendance: 1 },
           transaction: t,
           lock: t.LOCK.UPDATE, //@
         }).then(currentAttendance => {
           successLog(person, controllerName, 'got attendance');
 
-          if (currentAttendance >= scheduleRecord.Capacity) {
+          if (currentAttendance >= scheduleRecord.capacity) {
             // If limit is reached
             errCode = 409;
             throw new Error('Brak wolnych miejsc na ten termin.');
@@ -254,13 +254,13 @@ export const postCreateBookSchedule = (req, res, next) => {
             include: [
               {
                 model: models.ScheduleRecord,
-                where: { ScheduleID: req.body.schedule },
+                where: { scheduleId: req.body.schedule },
                 through: {
                   attributes: [
                     'Attendance',
                     'CustomerID',
                     'PaymentID',
-                    'ScheduleID',
+                    'scheduleId',
                   ],
                   where: { CustomerID: currentCustomer.CustomerID },
                 },
@@ -280,9 +280,9 @@ export const postCreateBookSchedule = (req, res, next) => {
             sendAttendanceReturningMail({
               to: req.user.Email,
               productName: req.body.product,
-              date: currentScheduleRecord.Date,
-              startTime: currentScheduleRecord.StartTime,
-              location: currentScheduleRecord.Location,
+              date: currentScheduleRecord.date,
+              startTime: currentScheduleRecord.startTime,
+              location: currentScheduleRecord.location,
             });
           }
 
@@ -313,9 +313,9 @@ export const postCreateBookSchedule = (req, res, next) => {
               sendReservationFreshMail({
                 to: req.user.Email,
                 productName: req.body.product,
-                date: currentScheduleRecord.Date,
-                startTime: currentScheduleRecord.StartTime,
-                location: currentScheduleRecord.Location,
+                date: currentScheduleRecord.date,
+                startTime: currentScheduleRecord.startTime,
+                location: currentScheduleRecord.location,
               });
             }
 
@@ -332,9 +332,9 @@ export const postCreateBookSchedule = (req, res, next) => {
                   sendAttendanceFirstBookingForScheduleMail({
                     to: req.user.Email,
                     productName: currentScheduleRecord?.ProductName || '',
-                    date: currentScheduleRecord.Date,
-                    startTime: currentScheduleRecord.StartTime,
-                    location: currentScheduleRecord.Location,
+                    date: currentScheduleRecord.date,
+                    startTime: currentScheduleRecord.startTime,
+                    location: currentScheduleRecord.location,
                   });
                 }
 
@@ -367,11 +367,10 @@ export const putEditMarkAbsent = (req, res, next) => {
   console.log('putEditMarkAbsent', req.body);
 
   models.ScheduleRecord.findOne({
-    where: { ScheduleID: scheduleID },
+    where: { scheduleId: scheduleID },
     include: [
       {
         model: models.Product,
-
         required: true,
       },
     ],
@@ -383,7 +382,7 @@ export const putEditMarkAbsent = (req, res, next) => {
       }
       currentScheduleRecord = scheduleRecord;
       const scheduleDateTime = new Date(
-        `${scheduleRecord.Date}T${scheduleRecord.StartTime}:00`
+        `${scheduleRecord.date}T${scheduleRecord.startTime}:00`
       );
 
       if (scheduleDateTime < new Date()) {
@@ -394,7 +393,7 @@ export const putEditMarkAbsent = (req, res, next) => {
         { Attendance: false },
         {
           where: {
-            ScheduleID: scheduleID,
+            scheduleId: scheduleID,
             CustomerID: req.user.Customer.CustomerID,
           },
         }
@@ -403,10 +402,10 @@ export const putEditMarkAbsent = (req, res, next) => {
           if (req.user.Email) {
             sendAttendanceMarkedAbsentMail({
               to: req.user.Email,
-              productName: currentScheduleRecord.Product.Name,
-              date: currentScheduleRecord.Date,
-              startTime: currentScheduleRecord.StartTime,
-              location: currentScheduleRecord.Location,
+              productName: currentScheduleRecord.Product.name,
+              date: currentScheduleRecord.date,
+              startTime: currentScheduleRecord.startTime,
+              location: currentScheduleRecord.location,
             });
           }
 

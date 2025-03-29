@@ -87,19 +87,19 @@ function DetailsProductSchedules({ scheduleRecords, placement, status }) {
     keys = ['id', 'product', 'date', 'day', 'time', 'location', 'price'];
     processedScheduleRecordsArr = scheduleRecords.map(schedule => {
       return {
-        id: schedule.ScheduleID,
-        product: schedule.Product.Name,
+        id: schedule.scheduleId,
+        product: schedule.Product.name,
         date: schedule.Date,
         day: getWeekDay(schedule.Date),
         time: schedule.StartTime,
         location: schedule.Location,
-        price: schedule.Product.Price,
+        price: schedule.Product.price,
       };
     });
   } else {
     processedScheduleRecordsArr = scheduleRecords.map(schedule => {
       return {
-        id: schedule.ScheduleID,
+        id: schedule.scheduleId,
         date: schedule.Date,
         day: getWeekDay(schedule.Date),
         time: schedule.StartTime,

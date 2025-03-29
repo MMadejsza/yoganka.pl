@@ -1,49 +1,56 @@
 import { DataTypes } from 'sequelize';
 import sequelizeDb from '../utils/db.js';
 
-export const Feedback = sequelizeDb.define(
+const Feedback = sequelizeDb.define(
   'Feedback',
   {
-    FeedbackID: {
+    feedbackId: {
       type: DataTypes.INTEGER(11),
       primaryKey: true,
       autoIncrement: true,
+      field: 'feedback_id',
     },
-    CustomerID: {
+    customerId: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
+      field: 'customer_id',
       references: {
         model: 'customers',
-        key: 'CustomerID',
+        key: 'customer_id',
       },
     },
-    ScheduleID: {
+    scheduleId: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
+      field: 'schedule_id',
       references: {
         model: 'schedule_records',
-        key: 'ScheduleID',
+        key: 'schedule_id',
       },
     },
-    SubmissionDate: {
+    submissionDate: {
       type: DataTypes.DATEONLY,
       allowNull: false,
+      field: 'submission_date',
     },
-    Rating: {
+    rating: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
+      field: 'rating',
     },
-    Text: {
+    text: {
       type: DataTypes.TEXT,
       allowNull: true,
+      field: 'text',
     },
-    Delay: {
+    delay: {
       type: DataTypes.STRING(5),
       allowNull: true,
+      field: 'delay',
     },
   },
   {
-    tableName: 'participant_feedback',
+    tableName: 'participant_feedbacks',
     timestamps: false,
   }
 );

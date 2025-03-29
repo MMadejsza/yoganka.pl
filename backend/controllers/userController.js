@@ -231,7 +231,7 @@ export const getAllSchedules = (req, res, next) => {
       include: [
         {
           model: models.Product,
-          attributes: ['Type', 'Name', 'Price'],
+          attributes: ['type', 'name', 'price'],
         },
         {
           model: models.Payment,
@@ -250,9 +250,9 @@ export const getAllSchedules = (req, res, next) => {
       where: Sequelize.where(
         fn(
           'CONCAT',
-          col('ScheduleRecord.Date'),
+          col('ScheduleRecord.date'),
           'T',
-          col('ScheduleRecord.StartTime'),
+          col('ScheduleRecord.startTime'),
           ':00'
         ),
         { [Op.gte]: now.toISOString() }
@@ -295,8 +295,8 @@ export const getAllSchedules = (req, res, next) => {
               const customerID = payment.Booking.CustomerID;
               const loggedInID = req.user?.Customer?.CustomerID;
               const isGoing =
-                payment.Booking.Attendance === 1 ||
-                payment.Booking.Attendance === true;
+                payment.Booking.attendance === 1 ||
+                payment.Booking.attendance === true;
 
               return isBooked && customerID == loggedInID && isGoing;
             });
@@ -308,15 +308,15 @@ export const getAllSchedules = (req, res, next) => {
         const activePayments = jsonRecord.Payments.filter(
           payment =>
             payment.Booking &&
-            (payment.Booking.Attendance === 1 ||
-              payment.Booking.Attendance === true)
+            (payment.Booking.attendance === 1 ||
+              payment.Booking.attendance === true)
         );
         newRecord['Dzień'] = getWeekDay(jsonRecord['Date']);
-        newRecord['Zadatek'] = jsonRecord.Product.Price;
+        newRecord['Zadatek'] = jsonRecord.Product.price;
         newRecord[
           'Miejsca'
-        ] = `${activePayments.length}/${jsonRecord.Capacity}`;
-        newRecord.full = activePayments.length >= jsonRecord.Capacity;
+        ] = `${activePayments.length}/${jsonRecord.capacity}`;
+        newRecord.full = activePayments.length >= jsonRecord.capacity;
         return newRecord; // Return new record object
       });
 
@@ -372,13 +372,13 @@ export const getScheduleByID = (req, res, next) => {
       // Convert to JSON
       const schedule = scheduleData.toJSON();
       let isUserGoing = false;
-      schedule.Attendance = 0;
+      schedule.attendance = 0;
       schedule.full = false;
       // We substitute payments content for security
       if (schedule.Bookings && schedule.Bookings?.length > 0) {
         let wasUserReserved;
         const beingAttendedSchedules = schedule.Bookings.filter(
-          schedule => schedule.Attendance == 1 || schedule.Attendance == true
+          schedule => schedule.attendance == 1 || schedule.attendance == true
         );
         if (isUser && isCustomer) {
           wasUserReserved = schedule.Bookings.some(
@@ -389,10 +389,10 @@ export const getScheduleByID = (req, res, next) => {
           );
           schedule.Bookings = beingAttendedSchedules.length;
         }
-        schedule.Attendance = beingAttendedSchedules.length;
+        schedule.attendance = beingAttendedSchedules.length;
         schedule.isUserGoing = isUserGoing;
         schedule.wasUserReserved = wasUserReserved;
-        schedule.full = beingAttendedSchedules.length >= schedule.Capacity;
+        schedule.full = beingAttendedSchedules.length >= schedule.capacity;
       }
 
       successLog(person, controllerName);

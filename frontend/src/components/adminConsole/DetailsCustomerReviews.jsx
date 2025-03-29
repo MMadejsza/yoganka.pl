@@ -26,10 +26,10 @@ function DetailsCustomerReviews({ reviews, placement }) {
       return {
         id: feedback.FeedbackID,
         date: feedback.SubmissionDate,
-        product: feedback.ScheduleRecord.Product.Name,
-        schedule: `(ID: ${feedback.ScheduleRecord.ScheduleID}) ${
-          feedback.ScheduleRecord.Date
-        }\n${getWeekDay(feedback.ScheduleRecord.Date)}${feedback.ScheduleRecord.StartTime}`,
+        product: feedback.ScheduleRecord.Product.name,
+        schedule: `(ID: ${feedback.ScheduleRecord.scheduleId}) ${
+          feedback.ScheduleRecord.date
+        }\n${getWeekDay(feedback.ScheduleRecord.date)}${feedback.ScheduleRecord.startTime}`,
         rating: feedback.Rating,
         review: feedback.Text,
         delay: feedback.Delay,

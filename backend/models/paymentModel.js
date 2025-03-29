@@ -5,51 +5,61 @@ import sequelizeDb from '../utils/db.js';
 const Payment = sequelizeDb.define(
   'Payment',
   {
-    PaymentID: {
+    paymentId: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
+      field: 'payment_id',
     },
-    CustomerID: {
+    customerId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      field: 'customer_id',
       references: {
-        model: 'customers', // The name of the target table
-        key: 'CustomerID', // The name of the column in the target table
+        model: 'customers',
+        key: 'customer_id',
       },
     },
-    Date: {
+    date: {
       type: DataTypes.DATEONLY, // YYYY-MM-DD
       allowNull: false,
+      field: 'date',
     },
-    Product: {
+    product: {
       type: DataTypes.STRING(255),
       allowNull: false,
+      field: 'product',
     },
-    Status: {
+    status: {
       type: DataTypes.STRING(50),
       allowNull: false,
+      field: 'status',
     },
-    AmountPaid: {
+    amountPaid: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
+      field: 'amount_paid',
     },
-    AmountDue: {
+    amountDue: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
+      field: 'amount_due',
     },
-    PaymentMethod: {
+    paymentMethod: {
       type: DataTypes.STRING(50),
       allowNull: false,
+      field: 'payment_method',
     },
-    PaymentStatus: {
+    paymentStatus: {
       type: DataTypes.STRING(50),
       allowNull: false,
+      field: 'payment_status',
     },
-    DidAction: {
+    performedBy: {
       type: DataTypes.STRING(10),
       allowNull: false,
       defaultValue: 'Customer',
+      field: 'performed_by',
     },
   },
   {
@@ -57,4 +67,5 @@ const Payment = sequelizeDb.define(
     timestamps: false,
   }
 );
+
 export default Payment;
