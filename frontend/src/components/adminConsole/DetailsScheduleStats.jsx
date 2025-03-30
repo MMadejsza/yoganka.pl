@@ -25,7 +25,7 @@ function DetailsScheduleStats({ data, scheduleStats }) {
             Liczba Uczestników:
           </p>
           <p className='user-container__section-record-content'>
-            {scheduleStats.totalParticipantsAmount}
+            {scheduleStats.attendedBookingsCount}
           </p>
         </li>
         <li className='user-container__section-record modal-checklist__li'>

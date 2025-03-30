@@ -14,29 +14,24 @@ import DetailsTableAttendance from './DetailsTableAttendance.jsx';
 import FeedbackBox from './FeedbackBox.jsx';
 import ViewScheduleNewCustomerForm from './ViewScheduleNewCustomerForm.jsx';
 
-function ViewSchedule({
-  data,
-  paymentOps,
-  onClose,
-  isModalOpen,
-  isAdminPanel,
-}) {
+function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
   // console.clear();
   console.log(
     `📝
 	    Schedule object from backend:`,
     data
   );
+  const location = useLocation();
+  const navigate = useNavigate();
+  const userAccountPage = location.pathname.includes('konto');
   const { schedule } = data;
-  const { scheduleId: scheduleID } = schedule;
+  const { scheduleId } = schedule;
   const { Product: product } = schedule;
 
-  const location = useLocation();
-  const userAccountPage = location.pathname.includes('konto');
-  const navigate = useNavigate();
   const { data: status } = useAuthStatus();
   console.log(`status`, status);
-  const { feedback, updateFeedback, resetFeedback } = useFeedback({
+
+  const { feedback, updateFeedback } = useFeedback({
     getRedirectTarget: result => (result.confirmation === 1 ? '/konto' : null),
     onClose: onClose,
   });
@@ -46,7 +41,7 @@ function ViewSchedule({
       mutateOnEdit(
         status,
         formDataObj,
-        `/api/customer/edit-mark-absent/${scheduleID}`
+        `/api/customer/edit-mark-absent/${scheduleId}`
       ),
 
     onSuccess: res => {

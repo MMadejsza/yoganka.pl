@@ -804,13 +804,19 @@ export const getScheduleByID = (req, res, next) => {
           {
             model: models.Payment,
             required: false,
-            attributes: ['paymentId'],
+            // attributes: ['paymentId'],
           },
           // For bookings paid with a pass
           {
             model: models.CustomerPass,
             required: false,
-            attributes: ['customerPassId'],
+            include: [
+              {
+                model: models.PassDefinition,
+                attributes: { exclude: ['userId'] },
+              },
+            ],
+            // attributes: ['customerPassId'],
           },
         ],
       },

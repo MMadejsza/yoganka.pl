@@ -205,15 +205,16 @@ export const calculateScheduleStats = (product, schedule) => {
   // Inicjalizacja zmiennych statystycznych
   const attendedBookings = schedule.attendedRecords;
   const totalPayments = [];
+  const totalPasses = [];
   const reviews = [];
   const participantAges = [];
-  let totalRevenue = 0;
-  let totalTimeInSeconds = 0;
-  let totalPaymentsAmount = 0;
-  let attendedBookingsAmount = attendedBookings.length;
-  let totalReviews = 0;
-  let sumFeedbackRating = 0;
-  let feedbackCount = 0;
+  let totalRevenue = 0,
+    totalTimeInSeconds = 0,
+    totalPaymentsAmount = 0,
+    sumFeedbackRating = 0;
+  let attendedBookingsCount = attendedBookings?.length;
+  let totalBookingsAmount = schedule.Bookings?.length;
+  let feedbackCount = schedule.Feedbacks?.length || 0;
 
   const now = new Date();
 
@@ -221,47 +222,51 @@ export const calculateScheduleStats = (product, schedule) => {
 
   schedule.Bookings.forEach(bs => {
     // Tworzymy obiekt Date z daty i godziny terminu
-    const scheduleDateTime = new Date(`${bs.date}T${bs.startTime}:00`);
     // Uważamy termin za "odbyte", jeśli jego data już minęła
-    bs.Payment.customer = `${bs.Customer.firstName} ${bs.Customer.lastName} (${bs.Customer.customerId})`;
-    bs.Payment.attendance = bs.attendance;
-    totalPayments.push(bs.Payment);
+    const scheduleDateTime = new Date(`${bs.date}T${bs.startTime}:00`);
+    // if paid by direct payment
+    if (!!bs.Payment) {
+      bs.Payment.customer = `${bs.Customer.firstName} ${bs.Customer.lastName} (${bs.Customer.customerId})`;
+      // bs.Payment.attendance = bs.attendance;
+      totalPayments.push(bs.Payment);
+    }
+    if (!!bs.CustomerPass) {
+      bs.CustomerPass.customer = `${bs.Customer.firstName} ${bs.Customer.lastName} (${bs.Customer.customerId})`;
+      // bs.Payment.attendance = bs.attendance;
+      totalPasses.push(bs.CustomerPass);
+    }
     if (scheduleDateTime > now) return;
     totalPaymentsAmount++;
     // Sumujemy czas trwania zajęć tylko wtedy, gdy są potwierdzeni uczestnicy
-    if (attendedBookingsAmount > 0) {
+    if (attendedBookingsCount > 0) {
       totalTimeInSeconds += durationToSeconds(product.duration);
     }
     // Liczymy przychód na podstawie wszystkich rezerwacji, niezależnie od tego, czy użytkownik przyszedł
-    totalRevenue += parseFloat(bs.Payment.amountPaid);
+    totalRevenue += parseFloat(bs.Payment?.amountPaid || 0);
   });
 
   // Przetwarzamy dane z potwierdzonych uczestnictw (Bookings)
   attendedBookings.forEach(attendedBooking => {
     participantAges.push(calculateAge(attendedBooking.Customer.dob));
-    const isoTimeStamp = new Date(attendedBooking.timestamp).toISOString();
+    // const isoTimeStamp = new Date(attendedBooking.timestamp).toISOString();
     attendedBooking.paymentMethod = attendedBooking.Payment
       ? attendedBooking.Payment.paymentMethod
-      : attendedBooking.CustomerPass.PassType.name;
+      : attendedBooking.CustomerPass.PassDefinition?.name;
     attendedBooking.value = attendedBooking.Payment?.amountPaid || '-';
     attendedBooking.date = formatIsoDateTime(attendedBooking.timestamp);
-    attendedBooking.timestamp = `${formatIsoDateTime(isoTimeStamp)}`;
+    attendedBooking.customerName = `${attendedBooking.Customer.firstName} ${attendedBooking.Customer.lastName}`;
+    // attendedBooking.timestamp = `${formatIsoDateTime(isoTimeStamp)}`;
   });
 
   // Przetwarzamy opinie – logika pozostaje bez zmian
   if (schedule.Feedbacks && schedule.Feedbacks.length > 0) {
-    totalReviews += schedule.Feedbacks.length;
+    // totalReviews += schedule.Feedbacks.length;
     schedule.Feedbacks.forEach(feedback => {
       sumFeedbackRating += feedback.rating;
-      feedbackCount++;
-      reviews.push({
-        id: feedback.feedbackId,
-        date: formatIsoDateTime(feedback.submissionDate),
-        customer: `${feedback.Customer.firstName} ${feedback.Customer.lastName}`,
-        rating: feedback.rating,
-        review: feedback.text,
-        delay: feedback.delay,
-      });
+      feedback.submissionDate = formatIsoDateTime(feedback.submissionDate);
+      feedback.customer = `${feedback.Customer.firstName} ${feedback.Customer.lastName}`;
+
+      reviews.push(feedback);
     });
   }
 
@@ -284,24 +289,25 @@ export const calculateScheduleStats = (product, schedule) => {
       : 'Brak danych';
 
   // Uśredniamy na podstawie liczby minionych terminów (nawet pustych)
-
   console.log(
-    `➡️ stats avgAttendancePercentage = ${attendedBookingsAmount}/${product.TotalSpaces}`
+    `➡️ stats avgAttendancePercentage = ${attendedBookingsCount}/${schedule.capacity}`
   );
   const avgAttendancePercentage =
-    attendedBookingsAmount > 0
-      ? Math.round((attendedBookingsAmount / schedule.capacity) * 100)
+    attendedBookingsCount > 0
+      ? Math.round((attendedBookingsCount / schedule.capacity) * 100)
       : 0;
   const avgReviewersPercentage =
-    attendedBookingsAmount > 0
-      ? Math.round((totalReviews / attendedBookingsAmount) * 100)
+    attendedBookingsCount > 0
+      ? Math.round((feedbackCount / attendedBookingsCount) * 100)
       : 0;
 
   const stats = {
-    totalPayments: totalPayments,
-    totalPaymentsAmount: totalPaymentsAmount,
-    attendedPayments: attendedBookings,
-    totalParticipantsAmount: attendedBookingsAmount,
+    totalBookingsAmount,
+    totalPasses,
+    totalPayments,
+    totalPaymentsAmount,
+    attendedBookings,
+    attendedBookingsCount,
     medianParticipantsAge: medianAge,
     avgAttendancePercentage: `${avgAttendancePercentage}%`,
     reviews: reviews,
