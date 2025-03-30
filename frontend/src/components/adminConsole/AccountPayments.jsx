@@ -52,7 +52,14 @@ function AccountPayments({ data }) {
         'Metoda płatności',
         'Status płatności',
       ]}
-      keys={['id', 'date', 'classes', 'totalValue', 'method', 'status']}
+      keys={[
+        'paymentId',
+        'date',
+        'product',
+        'amountPaid',
+        'paymentMethod',
+        'paymentStatus',
+      ]}
       content={content}
       active={true}
       onOpen={handleOpenModal}

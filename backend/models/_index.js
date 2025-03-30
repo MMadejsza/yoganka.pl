@@ -130,10 +130,10 @@ Booking.belongsTo(CustomerPass, {
 
 // Additional many-to-many association using Booking as join table for ScheduleRecord ⇄ Payment
 // (This is redundant if using Booking as the join for direct Payment association)
-ScheduleRecord.belongsToMany(Payment, {
-  through: Booking,
-  foreignKey: 'schedule_id',
-});
+// ScheduleRecord.belongsToMany(Payment, {
+//   through: Booking,
+//   foreignKey: 'schedule_id',
+// });
 
 // ! NEWSLETTER ASSOCIATIONS _________________________________________________
 // Newsletter (M) ->| ⇄ (M) User

@@ -49,7 +49,15 @@ function AccountSchedulesHistory({ data }) {
     content.length > 0 ? (
       <ModalTable
         headers={headers}
-        keys={['id', 'date', 'day', 'time', 'type', 'name', 'location']}
+        keys={[
+          'scheduleId',
+          'date',
+          'day',
+          'startTime',
+          'productType',
+          'productName',
+          'location',
+        ]}
         content={content}
         active={false}
         // classModifier={classModifier}

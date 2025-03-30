@@ -5,22 +5,19 @@ import sequelizeDb from '../utils/db.js';
 const Booking = sequelizeDb.define(
   'Booking',
   {
-    scheduleId: {
+    bookingId: {
       type: DataTypes.INTEGER,
       primaryKey: true,
+      autoIncrement: true,
+      field: 'booking_id',
+    },
+    scheduleId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
       field: 'schedule_id',
       references: {
         model: 'schedule_records',
         key: 'schedule_id',
-      },
-    },
-    paymentId: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      field: 'payment_id',
-      references: {
-        model: 'payments',
-        key: 'payment_id',
       },
     },
     customerId: {
@@ -28,6 +25,25 @@ const Booking = sequelizeDb.define(
       allowNull: false,
       field: 'customer_id',
     },
+    paymentId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      field: 'payment_id',
+      references: {
+        model: 'payments',
+        key: 'payment_id',
+      },
+    },
+    customerPassId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      field: 'customer_pass_id',
+      references: {
+        model: 'customer_passes',
+        key: 'customer_pass_id',
+      },
+    },
+
     attendance: {
       type: DataTypes.BOOLEAN,
       allowNull: false,

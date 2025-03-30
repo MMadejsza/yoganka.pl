@@ -42,7 +42,14 @@ function ViewCustomerTotalPayments({ data }) {
   table = (
     <ModalTable
       headers={['ID', 'Data', 'Zajęcia', 'Kwota całkowita', 'Metoda', 'Status']}
-      keys={['id', 'date', 'classes', 'totalValue', 'method', 'status']}
+      keys={[
+        'paymentId',
+        'date',
+        'product',
+        'amountPaid',
+        'paymentMethod',
+        'paymentStatus',
+      ]}
       content={content}
       active={false}
       onOpen={handleOpenModal}

@@ -12,7 +12,7 @@ export const calculateProductStats = (product, schedules) => {
   console.log(`❗❗❗ calculateProductStats product`, product);
   console.log(`❗❗❗ calculateProductStats schedules`, schedules);
   console.log(`schedules: `, schedules);
-  const attendedPayments = [];
+  const attendedBookings = [];
   const scheduleRecords = [];
   const payments = [];
   const attendances = [];
@@ -76,7 +76,7 @@ export const calculateProductStats = (product, schedules) => {
           const isoTimeStamp = new Date(
             payment.Booking.timestamp
           ).toISOString();
-          attendedPayments.push({
+          attendedBookings.push({
             id: payment.paymentId,
             date: formatIsoDateTime(payment.date),
             customerId: payment.Customer.customerId,
@@ -177,7 +177,7 @@ export const calculateProductStats = (product, schedules) => {
 
   const stats = {
     scheduleRecords: scheduleRecords,
-    attendedPayments: attendedPayments,
+    attendedPayments: attendedBookings,
     totalPayments: payments,
     reviews: reviews,
     totalSchedulesAmount: totalSchedules,
@@ -203,14 +203,14 @@ export const calculateScheduleStats = (product, schedule) => {
   console.log(`❗❗❗ calculateScheduleStats schedule`, schedule);
 
   // Inicjalizacja zmiennych statystycznych
-  const attendedPayments = [];
+  const attendedBookings = schedule.attendedRecords;
   const totalPayments = [];
   const reviews = [];
   const participantAges = [];
   let totalRevenue = 0;
   let totalTimeInSeconds = 0;
   let totalPaymentsAmount = 0;
-  let attendedPaymentsAmount = 0;
+  let attendedBookingsAmount = attendedBookings.length;
   let totalReviews = 0;
   let sumFeedbackRating = 0;
   let feedbackCount = 0;
@@ -218,11 +218,6 @@ export const calculateScheduleStats = (product, schedule) => {
   const now = new Date();
 
   // Używamy Bookings (z atrybutem attendance) do określenia faktycznego uczestnictwa
-  const attendedRecords = schedule
-    ? schedule.Bookings?.filter(
-        abs => abs.attendance === true || abs.attendance === 1
-      )
-    : [];
 
   schedule.Bookings.forEach(bs => {
     // Tworzymy obiekt Date z daty i godziny terminu
@@ -234,7 +229,7 @@ export const calculateScheduleStats = (product, schedule) => {
     if (scheduleDateTime > now) return;
     totalPaymentsAmount++;
     // Sumujemy czas trwania zajęć tylko wtedy, gdy są potwierdzeni uczestnicy
-    if (attendedRecords.length > 0) {
+    if (attendedBookingsAmount > 0) {
       totalTimeInSeconds += durationToSeconds(product.duration);
     }
     // Liczymy przychód na podstawie wszystkich rezerwacji, niezależnie od tego, czy użytkownik przyszedł
@@ -242,21 +237,15 @@ export const calculateScheduleStats = (product, schedule) => {
   });
 
   // Przetwarzamy dane z potwierdzonych uczestnictw (Bookings)
-  attendedRecords.forEach(record => {
-    attendedPaymentsAmount++;
-    participantAges.push(calculateAge(record.Customer.dob));
-    const isoTimeStamp = new Date(record.timestamp).toISOString();
-    attendedPayments.push({
-      id: record.paymentId, // Zakładamy, że rekord Bookings zawiera odniesienie do paymentId
-      date:
-        formatIsoDateTime(record.Payment.date) || formatIsoDateTime(bs.date), //! Jeśli dostępna, inaczej używamy daty terminu
-      customer: `${record.Customer.firstName} ${record.Customer.lastName}`,
-      timestamp: `${formatIsoDateTime(isoTimeStamp)}`,
-
-      customerId: record.Customer.customerId,
-      value: record.Payment.amountPaid, // Informacja z Bookings – dla odniesienia (nie wpływa na revenue)
-      method: record.Payment.paymentMethod,
-    });
+  attendedBookings.forEach(attendedBooking => {
+    participantAges.push(calculateAge(attendedBooking.Customer.dob));
+    const isoTimeStamp = new Date(attendedBooking.timestamp).toISOString();
+    attendedBooking.paymentMethod = attendedBooking.Payment
+      ? attendedBooking.Payment.paymentMethod
+      : attendedBooking.CustomerPass.PassType.name;
+    attendedBooking.value = attendedBooking.Payment?.amountPaid || '-';
+    attendedBooking.date = formatIsoDateTime(attendedBooking.timestamp);
+    attendedBooking.timestamp = `${formatIsoDateTime(isoTimeStamp)}`;
   });
 
   // Przetwarzamy opinie – logika pozostaje bez zmian
@@ -297,22 +286,22 @@ export const calculateScheduleStats = (product, schedule) => {
   // Uśredniamy na podstawie liczby minionych terminów (nawet pustych)
 
   console.log(
-    `➡️ stats avgAttendancePercentage = ${attendedPaymentsAmount}/${product.TotalSpaces}`
+    `➡️ stats avgAttendancePercentage = ${attendedBookingsAmount}/${product.TotalSpaces}`
   );
   const avgAttendancePercentage =
-    attendedPaymentsAmount > 0
-      ? Math.round((attendedPaymentsAmount / schedule.capacity) * 100)
+    attendedBookingsAmount > 0
+      ? Math.round((attendedBookingsAmount / schedule.capacity) * 100)
       : 0;
   const avgReviewersPercentage =
-    attendedPaymentsAmount > 0
-      ? Math.round((totalReviews / attendedPaymentsAmount) * 100)
+    attendedBookingsAmount > 0
+      ? Math.round((totalReviews / attendedBookingsAmount) * 100)
       : 0;
 
   const stats = {
     totalPayments: totalPayments,
     totalPaymentsAmount: totalPaymentsAmount,
-    attendedPayments: attendedPayments,
-    totalParticipantsAmount: attendedPaymentsAmount,
+    attendedPayments: attendedBookings,
+    totalParticipantsAmount: attendedBookingsAmount,
     medianParticipantsAge: medianAge,
     avgAttendancePercentage: `${avgAttendancePercentage}%`,
     reviews: reviews,

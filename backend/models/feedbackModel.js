@@ -38,10 +38,10 @@ const Feedback = sequelizeDb.define(
       allowNull: false,
       field: 'rating',
     },
-    text: {
+    content: {
       type: DataTypes.TEXT,
       allowNull: true,
-      field: 'text',
+      field: 'content',
     },
     delay: {
       type: DataTypes.STRING(5),

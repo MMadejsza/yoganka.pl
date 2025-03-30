@@ -18,7 +18,14 @@ function DetailsProductReviews({ stats }) {
             'Komentarz',
             'Opóźnienie',
           ]}
-          keys={['id', 'date', 'customer', 'rating', 'review', 'delay']}
+          keys={[
+            'feedbackId',
+            'submissionDate',
+            'customer',
+            'rating',
+            'content',
+            'delay',
+          ]}
           content={feedbackArray}
           active={false}
         />

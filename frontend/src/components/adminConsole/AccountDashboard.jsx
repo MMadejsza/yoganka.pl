@@ -73,7 +73,15 @@ function AccountDashboard({ data, queryStatus }) {
       contentUpcoming && contentUpcoming.length > 0 ? (
         <ModalTable
           headers={headers}
-          keys={['id', 'date', 'day', 'time', 'type', 'name', 'location']}
+          keys={[
+            'scheduleId',
+            'date',
+            'day',
+            'startTime',
+            'productType',
+            'productName',
+            'location',
+          ]}
           content={contentUpcoming}
           active={true}
           onOpen={handleOpenScheduleModal}

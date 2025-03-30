@@ -9,7 +9,15 @@ function DetailsCustomerSchedules({ customerStats, classModifier, altTitle }) {
       {/*REKORDY data godzina miejsce typ productNazwa  */}
       <ModalTable
         headers={['ID', 'Data', 'Dzień', 'Godzina', 'Lokacja', 'Typ', 'Nazwa']}
-        keys={['id', 'date', 'day', 'time', 'location', 'type', 'name']}
+        keys={[
+          'scheduleId',
+          'date',
+          'day',
+          'startTime',
+          'location',
+          'productType',
+          'productName',
+        ]}
         content={customerStats.records}
         active={false}
         classModifier={classModifier}

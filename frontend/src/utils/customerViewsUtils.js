@@ -81,7 +81,6 @@ export const calculateStats = customer => {
   // console.log(`calculateStats passed customer`, customer);
   const today = new Date().toISOString().split('T')[0];
   const scheduleRecords = [];
-  // const scheduleRecords = [];
   const totalPayments = [];
   const invoices = [];
   const reviews = [];
@@ -101,110 +100,78 @@ export const calculateStats = customer => {
     totalRevenue += parseFloat(payment.amountPaid);
     // console.log(`totalRevenue: ${totalRevenue}`);
 
-    totalPayments.push({
-      id: payment.paymentId,
-      date: formatIsoDateTime(payment.date),
-      classes: payment.product,
-      totalValue: payment.amountPaid,
-      method: payment.paymentMethod,
-      status: payment.paymentStatus,
-    });
+    payment.date = formatIsoDateTime(payment.date);
+    totalPayments.push(payment);
 
     const invoice = payment.Invoice;
-    if (invoice) {
-      const invoiceID = invoice.invoiceId;
-      const invoiceBID = payment.paymentId;
-      const invoiceDate = invoice.invoiceDate;
-      const invoiceDue = invoice.dueDate;
-      const invoiceTotalValue = invoice.totalAmount;
-      const invoiceStatus = invoice.paymentStatus;
-
-      invoices.push({
-        id: invoiceID,
-        bId: invoiceBID,
-        date: formatIsoDateTime(invoiceDate),
-        due: invoiceDue,
-        totalValue: invoiceTotalValue,
-        status: invoiceStatus,
-      });
+    if (!!invoice) {
+      invoice.invoiceDate = formatIsoDateTime(invoice.invoiceDate);
+      invoices.push(invoice);
     }
 
     // console.groupEnd();
   }
 
-  const attendedSchedules = customer.Bookings?.filter(
-    schedule => schedule.attendance == 1 || schedule.attendance == true
+  const attendedBookings = customer.Bookings?.filter(
+    booking => booking.attendance == 1 || booking.attendance == true
   );
-  for (let booking of attendedSchedules) {
+  for (let booking of attendedBookings) {
     // console.group(`schedule: ${schedule}`);
     const { ScheduleRecord: schedule } = booking;
-    const scheduleID = schedule.scheduleId;
-    const scheduleDate = schedule.date;
-    const scheduleStartTime = schedule.startTime;
-    const scheduleLocation = schedule.location;
+    schedule.productType = schedule.Product.type;
+    schedule.productName = schedule.Product.name;
+    schedule.productDuration = schedule.Product.duration;
+    schedule.day = getWeekDay(schedule.date);
+    schedule.isUserGoing = true;
 
-    const productType = schedule.Product.type;
-    const productName = schedule.Product.name;
-    const productDuration = schedule.Product.duration;
+    scheduleRecords.push(schedule);
 
-    scheduleRecords.push({
-      id: scheduleID,
-      date: scheduleDate,
-      day: getWeekDay(scheduleDate),
-      time: scheduleStartTime,
-      location: scheduleLocation,
-      type: productType,
-      name: productName,
-      isUserGoing: true,
-    });
-
+    const productType = schedule.productType.toUpperCase();
     // console.log(`scheduleDate >= today ${scheduleDate} ${today}`);
-    if (scheduleDate <= today) {
+    if (schedule.date <= today) {
       totalSchedulesAmount += 1;
-      // console.log(`totalSchedulesAmount: ${totalSchedulesAmount}`);
-      // if (productType === 'Class') {
-      // 	totalClassesAmount += 1;
-      // 	// console.log(`totalClassesAmount: ${totalClassesAmount}`);
-      // } else
-      if (productType === 'Online' || productType === 'Class') {
+      if (productType === 'ONLINE' || productType === 'CLASS') {
         totalOnlineAmount += 1;
         // console.log(`totalOnlineAmount: ${totalOnlineAmount}`);
-      } else if (productType === 'Event') {
+      } else if (productType === 'EVENT') {
         totalEventsAmount += 1;
         // console.log(`totalEventsAmount: ${totalEventsAmount}`);
-      } else if (productType === 'Camp') {
+      } else if (productType === 'CAMP') {
         totalCampsAmount += 1;
         // console.log(`totalCampsAmount: ${totalCampsAmount}`);
       }
-      totalTimeInSeconds += durationToSeconds(productDuration);
+      totalTimeInSeconds += durationToSeconds(schedule.productDuration);
       // console.log(`totalTimeInSeconds: ${totalTimeInSeconds}`);
       // console.groupEnd();
     }
 
     if (schedule.Feedbacks && schedule.Feedbacks.length > 0) {
+      // Customer can review the schedule only once
       const feedback = schedule.Feedbacks[0];
-      reviews.push({
-        id: feedback.feedbackId,
-        product: schedule.Product.name,
-        schedule: `
-				(ID: ${scheduleID})
-				${scheduleDate}
-				${getWeekDay(scheduleDate)}
-				${scheduleStartTime}
-				`,
-        date: formatIsoDateTime(feedback.submissionDate),
-        rating: feedback.rating,
-        review: feedback.text,
-        delay: feedback.delay,
-      });
+      feedback.product = `${schedule.Product.name}`;
+      feedback.schedule = `(ID: ${schedule.scheduleId})
+                            ${schedule.scheduleDate}
+                            ${getWeekDay(schedule.scheduleDate)}
+                            ${schedule.startTime}`;
+      feedback.submissionDate = formatIsoDateTime(feedback.submissionDate);
+      reviews.push(feedback);
     }
   }
 
   const splitDuration = secondsToDuration(totalTimeInSeconds, 'hours');
   const stats = {
     records: scheduleRecords,
+    recordsKeys: [
+      '',
+      'scheduleId',
+      'date',
+      'day',
+      'startTime',
+      'productType',
+      'productName',
+      'location',
+    ],
     payments: totalPayments,
-    recordsKeys: ['', 'id', 'date', 'day', 'time', 'type', 'name', 'location'],
     reviews: reviews,
     invoices: invoices,
     revenue: `${Math.round(totalRevenue * 100) / 100}zł`,

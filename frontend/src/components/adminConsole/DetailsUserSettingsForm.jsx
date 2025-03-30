@@ -20,7 +20,7 @@ function DetailsUserSettingsForm({
   const queryKey = customerAccessed
     ? ['formFilling', 'userSettings']
     : adminAccessed
-      ? ['formFilling', 'userSettings', settingsData?.userPrefId || '']
+      ? ['formFilling', 'userSettings', settingsData?.userPrefId || params.id]
       : null;
 
   const dynamicFetchAddress = customerAccessed
@@ -41,7 +41,7 @@ function DetailsUserSettingsForm({
   const dynamicMutationAddress = customerAccessed
     ? '/api/edit-user-settings'
     : adminAccessed
-      ? `/api/admin-console/edit-user-settings/${settingsData?.userPrefId}`
+      ? `/api/admin-console/edit-user-settings/${params.id}`
       : null;
   console.log('dynamicMutationAddress', dynamicMutationAddress);
 

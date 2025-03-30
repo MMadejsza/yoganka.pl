@@ -11,13 +11,20 @@ function DetailsCustomerInvoices({ invoicesArray, noInvoices }) {
         <ModalTable
           headers={[
             'ID',
-            'ID Rezerwacji',
+            'ID Płatności',
             'Wystawiona',
             'Termin płatności',
             'Kwota całkowita',
             'Status',
           ]}
-          keys={['id', 'bId', 'date', 'due', 'totalValue', 'status']}
+          keys={[
+            'invoiceId',
+            'paymentId',
+            'invoiceDate',
+            'dueDate',
+            'totalAmount',
+            'paymentStatus',
+          ]}
           content={invoicesArray}
           active={false}
         />

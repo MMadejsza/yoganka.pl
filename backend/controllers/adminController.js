@@ -411,9 +411,6 @@ export const getCustomerByID = (req, res, next) => {
           {
             model: models.Invoice, // eventual invoices
             required: false,
-            attributes: {
-              exclude: ['paymentId'], // deleting
-            },
           },
         ],
         attributes: {
@@ -434,9 +431,9 @@ export const getCustomerByID = (req, res, next) => {
                 required: false,
               },
               {
-                model: models.Feedback, // harmonogram -> opinie
+                model: models.Feedback,
                 required: false,
-                where: { customerId: req.user.Customer.customerId }, // but only for particular customer
+                where: { customerId: PK }, // but only for particular customer
                 attributes: {
                   exclude: ['customerId', 'scheduleId'], // deleting
                 },
@@ -708,8 +705,6 @@ export const getAllSchedules = (req, res, next) => {
   const columnMap = columnMaps[model.name] || {};
   const keysForHeaders = Object.values(columnMap);
 
-  // If logged In and is Customer - we want to check his booked schedules to flag them later
-  const now = new Date();
   model
     .findAll({
       include: [
@@ -718,12 +713,7 @@ export const getAllSchedules = (req, res, next) => {
           attributes: ['type', 'name', 'price'],
         },
         {
-          model: models.Payment,
-          required: false,
-          attributes: ['paymentId'], //booking Id is enough
-          through: {
-            attributes: ['attendance', 'customerId'], // dołącz dodatkowe atrybuty
-          },
+          model: models.Booking,
         },
       ],
       attributes: {
@@ -744,43 +734,35 @@ export const getAllSchedules = (req, res, next) => {
         // console.log('jsonRecord', jsonRecord);
 
         // 🔄 Iterate after each column in user record
+        console.log(jsonRecord);
+        const attendanceRecords = [];
         for (const key in jsonRecord) {
           const newKey = columnMap[key] || key; // New or original name if not specified
           if (key === 'Product' && jsonRecord[key]) {
             newRecord['Typ'] = jsonRecord[key].type; //  flatten object
             newRecord['Nazwa'] = jsonRecord[key].name;
-          } else if (key === 'Payments') {
-            newRecord.wasUserReserved = jsonRecord.Payments.some(
-              booking =>
-                booking.Booking.customerId === req.user?.Customer?.customerId
-            );
-            newRecord.isUserGoing = jsonRecord.Payments.some(booking => {
-              const isBooked = booking.Booking;
-              const customerId = booking.Booking.customerId;
+          } else if (key === 'Bookings') {
+            newRecord.wasUserReserved =
+              record.Bookings && record.Bookings.length > 0;
+            newRecord.isUserGoing = jsonRecord.Bookings.some(booking => {
+              const isGoing = booking.attendance;
+              if (isGoing) attendanceRecords.push(booking);
+              const customerId = booking.customerId;
               const loggedInID = req.user?.Customer?.customerId;
-              const isGoing =
-                booking.Booking.attendance === 1 ||
-                booking.Booking.attendance === true;
 
-              return isBooked && customerId == loggedInID && isGoing;
+              return customerId == loggedInID && isGoing;
             });
           } else {
             newRecord[newKey] = jsonRecord[key]; // Assignment
           }
         }
-        // console.log(jsonRecord);
-        const activePayments = jsonRecord.Payments.filter(
-          booking =>
-            booking.Booking &&
-            (booking.Booking.attendance === 1 ||
-              booking.Booking.attendance === true)
-        );
+
         newRecord['Dzień'] = getWeekDay(jsonRecord['date']);
         newRecord['Zadatek'] = jsonRecord.Product.price;
         newRecord[
           'Miejsca'
-        ] = `${activePayments.length}/${jsonRecord.capacity}`;
-        newRecord.full = activePayments.length >= jsonRecord.capacity;
+        ] = `${attendanceRecords.length}/${jsonRecord.capacity}`;
+        newRecord.full = attendanceRecords.length >= jsonRecord.capacity;
         return newRecord; // Return new record object
       });
 
@@ -818,9 +800,17 @@ export const getScheduleByID = (req, res, next) => {
             model: models.Customer,
             attributes: { exclude: ['userId'] },
           },
+          // For direct payment bookings
           {
             model: models.Payment,
-            // attributes: {exclude: ['userId']},
+            required: false,
+            attributes: ['paymentId'],
+          },
+          // For bookings paid with a pass
+          {
+            model: models.CustomerPass,
+            required: false,
+            attributes: ['customerPassId'],
           },
         ],
       },
@@ -842,30 +832,18 @@ export const getScheduleByID = (req, res, next) => {
         errCode = 404;
         throw new Error('Nie znaleziono terminu.');
       }
-
+      console.log(scheduleData);
       let schedule = scheduleData.toJSON();
 
-      let isUserGoing = false;
       schedule.attendance = 0;
-
+      let attendedRecords = [];
       if (schedule.Bookings && schedule.Bookings.length > 0) {
-        let wasUserReserved;
-        const beingAttendedSchedules = schedule.Bookings.filter(
+        attendedRecords = schedule.Bookings.filter(
           bs => bs.attendance == 1 || bs.attendance == true
         );
-        if (req.user && req.user.Customer) {
-          wasUserReserved = schedule.Bookings.some(
-            bs => bs.customerId === req.user?.Customer.customerId
-          );
-          isUserGoing = beingAttendedSchedules.some(
-            bs => bs.customerId === req.user.Customer.customerId
-          );
-          schedule.attendanceCount = beingAttendedSchedules.length;
-        }
-        schedule.attendance = beingAttendedSchedules.length;
-        schedule.isUserGoing = isUserGoing;
-        schedule.wasUserReserved = wasUserReserved;
-        schedule.full = beingAttendedSchedules.length >= schedule.capacity;
+
+        schedule.attendance = attendedRecords.length;
+        schedule.full = attendedRecords.length >= schedule.capacity;
       }
 
       const scheduleDateTime = new Date(
@@ -873,7 +851,7 @@ export const getScheduleByID = (req, res, next) => {
       );
       const now = new Date();
       schedule.isCompleted = scheduleDateTime <= now;
-
+      schedule.attendedRecords = attendedRecords;
       successLog(person, controllerName);
       return res.status(200).json({
         confirmation: 1,
