@@ -3,7 +3,10 @@ import { addDays, addMonths, addYears } from 'date-fns';
 import { Op, Sequelize } from 'sequelize';
 import * as models from '../models/_index.js';
 import columnMaps from '../utils/columnsMapping.js';
-import { tableDataFlatQuery } from '../utils/controllersUtils.js';
+import {
+  isPassValidForSchedule,
+  tableDataFlatQuery,
+} from '../utils/controllersUtils.js';
 import { formatIsoDateTime, getWeekDay, isAdult } from '../utils/dateUtils.js';
 import db from '../utils/db.js';
 import {
@@ -1795,6 +1798,155 @@ export const deleteProduct = (req, res, next) => {
 
 //! BOOKINGS_____________________________________________
 //@ GET
+export const adminCreateBooking = (req, res, next) => {
+  const controllerName = 'adminCreateBooking';
+  callLog(req, person, controllerName);
+
+  // Expected body fields: customerId, scheduleId, bookingType ("direct" or "pass"),
+  // and optionally: passDefinitionId, product, status, amountPaid, amountDue, paymentMethod, paymentStatus.
+  const {
+    customerId,
+    scheduleId,
+    bookingType,
+    passDefinitionId,
+    product,
+    status,
+    amountPaid,
+    amountDue,
+    paymentMethod,
+    paymentStatus,
+  } = req.body;
+  if (!customerId || !scheduleId || !bookingType) {
+    errCode = 400;
+    return next(new Error('Brakuje pól: customerId, scheduleId, bookingType'));
+  }
+
+  let currentCustomer, currentScheduleRecord;
+
+  // Load customer with passes
+  models.Customer.findByPk(customerId, {
+    include: [
+      {
+        model: models.CustomerPass,
+        include: [models.PassDefinition],
+      },
+    ],
+  })
+    .then(customer => {
+      if (!customer) throw new Error('Nie znaleziono profilu uczestnika');
+      currentCustomer = customer;
+
+      return models.ScheduleRecord.findOne({
+        where: { scheduleId },
+        include: [{ model: models.Product }],
+      });
+    })
+    .then(scheduleRecord => {
+      if (!scheduleRecord) throw new Error('Nie znaleziono terminu');
+      currentScheduleRecord = scheduleRecord;
+
+      return models.Booking.count({
+        where: { scheduleId, attendance: true },
+      });
+    })
+    .then(count => {
+      if (count >= currentScheduleRecord.capacity) {
+        errCode = 409;
+        throw new Error('Brak wolnych miejsc w tym terminie');
+      }
+
+      // Check if booking already exists (by customer & schedule)
+      return models.Booking.findOne({
+        where: {
+          customerId: currentCustomer.customerId,
+          scheduleId,
+        },
+      });
+    })
+    .then(existingBooking => {
+      if (existingBooking) {
+        if (req.user.email) {
+          sendAttendanceReturningMail({
+            to: req.user.email,
+            productName: product || currentScheduleRecord.Product.name,
+            date: currentScheduleRecord.date,
+            startTime: currentScheduleRecord.startTime,
+            location: currentScheduleRecord.location,
+          });
+        }
+
+        // If booking exists, update attendance flag.
+        return existingBooking.update({ attendance: true });
+      } else {
+        // Create new booking based on bookingType
+        if (bookingType === 'pass') {
+          let validPass = null;
+
+          if (!passDefinitionId) {
+            throw new Error('Brak id karnetu do użycia w celu identyfikacji.');
+          }
+
+          // Check if customer already has a valid pass for this schedule.
+          if (
+            currentCustomer.CustomerPasses &&
+            currentCustomer.CustomerPasses.length > 0
+          ) {
+            validPass = currentCustomer.CustomerPasses.find(pass =>
+              isPassValidForSchedule(pass, currentScheduleRecord)
+            );
+          }
+
+          if (validPass) {
+            return models.Booking.create({
+              customerId: currentCustomer.customerId,
+              scheduleId: currentScheduleRecord.scheduleId,
+              customerPassId: validPass.customerPassId,
+              attendance: true,
+            });
+          } else {
+            throw new Error('Karnet nie jest ważny na ten termin.');
+          }
+        } else if (bookingType === 'direct') {
+          // Create payment first, then booking.
+          return models.Payment.create({
+            customerId: currentCustomer.customerId,
+            date: new Date(),
+            product: product || currentScheduleRecord.Product.name,
+            status: status || 'pending',
+            amountPaid: amountPaid || currentScheduleRecord.Product.price,
+            amountDue: amountDue || 0,
+            paymentMethod: paymentMethod || 'admin',
+            paymentStatus: paymentStatus || 'completed',
+          }).then(payment => {
+            return models.Booking.create({
+              customerId: currentCustomer.customerId,
+              scheduleId,
+              paymentId: payment.paymentId,
+              attendance: true,
+            }).then(booking => {
+              return { payment, booking };
+            });
+          });
+        } else {
+          throw new Error(
+            'Typ rezerwacji nieprawidłowy - dozwolona jest z karnetem lub płatnością bezpośrednią'
+          );
+        }
+      }
+    })
+    .then(result => {
+      successLog(person, controllerName);
+      res.status(201).json({
+        confirmation: 1,
+        message: 'Rezerwacja stworzona pomyślnie.',
+        result,
+      });
+    })
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
+};
+
+//! PAYMENTS_____________________________________________
+//@ GET
 export const getAllPayments = (req, res, next) => {
   const controllerName = 'getAllPayments';
   callLog(req, person, controllerName);
@@ -1931,6 +2083,7 @@ export const getPaymentByID = (req, res, next) => {
     .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 //@ POST
+
 export const postCreatePayment = (req, res, next) => {
   const controllerName = 'postCreatePayment';
   callLog(req, person, controllerName);
