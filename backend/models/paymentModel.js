@@ -21,7 +21,7 @@ const Payment = sequelizeDb.define(
       },
     },
     date: {
-      type: DataTypes.DATEONLY, // YYYY-MM-DD
+      type: DataTypes.DATE,
       allowNull: false,
       field: 'date',
     },

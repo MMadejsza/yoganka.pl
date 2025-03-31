@@ -276,19 +276,17 @@ export const postCreateBookSchedule = (req, res, next) => {
       })
       .then(existingBooking => {
         if (existingBooking) {
-          // console.log('existingPayment', existingPayment);
-
           if (req.user.email) {
             sendAttendanceReturningMail({
               to: req.user.email,
-              productName: req.body.product,
+              productName: currentScheduleRecord.Product.name,
               date: currentScheduleRecord.date,
               startTime: currentScheduleRecord.startTime,
               location: currentScheduleRecord.location,
             });
           }
 
-          //! assuming single schedule/payment
+          //! assuming single schedule chosen
           return existingBooking
             .update({ attendance: true }, { transaction: t })
             .then(() => existingBooking);
@@ -348,7 +346,7 @@ export const postCreateBookSchedule = (req, res, next) => {
               {
                 customerId: currentCustomer.customerId,
                 date: new Date(),
-                product: req.body.product,
+                product: `${currentScheduleRecord.Product.name} (sId: ${currentScheduleRecord.scheduleId})`,
                 status: req.body.status,
                 amountPaid: currentScheduleRecord.Product.price,
                 amountDue: req.body.amountDue,

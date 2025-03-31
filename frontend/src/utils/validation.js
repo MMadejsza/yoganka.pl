@@ -166,9 +166,23 @@ export const notesValidations = [
     message: 'Generalna walidacja',
   },
 ];
+//! AMOUNT PAID RULESET
+export const amountPaidValidations = [
+  {
+    rule: value => !isNaN(value) && Number(value) >= 0,
+    message:
+      'Kwota musi być liczbą (całkowitą lub zmiennoprzecinkową) i nie może być mniejsza niż 0.',
+  },
+];
+//! PAYMENT METHOD RULESET
+export const paymentMethodValidations = [
+  {
+    rule: value => [1, 2, 3].includes(Number(value)),
+    message: 'Metoda płatności musi mieć wartość 1, 2 lub 3.',
+  },
+];
 
 //! HELPER FUNCTIONS
-
 export const containsProfanity = value => {
   const lowerValue = value.toLowerCase();
   return profanityList.some(word => lowerValue.includes(word));

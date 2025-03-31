@@ -189,7 +189,7 @@ function NewPaymentForm() {
     const formDataObj = Object.fromEntries(fd.entries());
 
     const selectedProduct = productsOptionsList.find(
-      product => product.ID.toString() === formDataObj.productID
+      product => product.ID.toString() === formDataObj.productId
     );
     if (selectedProduct) {
       formDataObj.productName = `(ID: ${selectedProduct.ID}) ${selectedProduct.Nazwa}`;
@@ -253,8 +253,8 @@ function NewPaymentForm() {
           label: `(ID: ${productObj.ID}) ${productObj.Nazwa}`,
           value: productObj.ID,
         }))}
-        id='productID'
-        name='productID'
+        id='productId'
+        name='productId'
         label='Zajęcia:*'
         value={productValue}
         onFocus={handleProductFocus}
@@ -285,8 +285,8 @@ function NewPaymentForm() {
                 },
               ]
         }
-        id='scheduleID'
-        name='scheduleID'
+        id='scheduleId'
+        name='scheduleId'
         label='Termin:*'
         value={scheduleValue}
         onFocus={handleScheduleFocus}

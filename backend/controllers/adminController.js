@@ -15,23 +15,7 @@ import {
   errorCode,
   successLog,
 } from '../utils/loggingUtils.js';
-import {
-  sendAttendanceMarkedAbsentMail,
-  sendAttendanceRecordDeletedMail,
-  sendAttendanceReturningMail,
-} from '../utils/mails/templates/adminOnlyActions/attendanceEmails.js';
-import {
-  sendAccountCreatedMail,
-  sendCustomerCreatedMail,
-} from '../utils/mails/templates/adminOnlyActions/creationEmails.js';
-import {
-  sendCustomerDeletedMail,
-  sendUserAccountDeletedMail,
-} from '../utils/mails/templates/adminOnlyActions/deletionEmails.js';
-import {
-  sendReservationCancelledMail,
-  sendReservationFreshMail,
-} from '../utils/mails/templates/adminOnlyActions/reservationEmails.js';
+import * as adminEmails from '../utils/mails/templates/adminOnlyActions/_adminEmails.js';
 
 let errCode = errorCode;
 const person = 'Admin';
@@ -186,7 +170,7 @@ export const postCreateUser = (req, res, next) => {
         .then(newUser => {
           // Notification email
           if (email) {
-            sendAccountCreatedMail({ to: email });
+            adminEmails.sendAccountCreatedMail({ to: email });
           }
 
           successLog(person, controllerName);
@@ -313,7 +297,7 @@ export const deleteUser = (req, res, next) => {
 
       // Send notification
       if (userEmail) {
-        sendUserAccountDeletedMail({ to: userEmail });
+        adminEmails.sendUserAccountDeletedMail({ to: userEmail });
       }
 
       successLog(person, controllerName);
@@ -569,7 +553,7 @@ export const postCreateCustomer = (req, res, next) => {
     .then(newCustomer => {
       // Notification email
       if (customerEmail) {
-        sendCustomerCreatedMail({
+        adminEmails.sendCustomerCreatedMail({
           to: customerEmail,
           firstName,
         });
@@ -686,7 +670,7 @@ export const deleteCustomer = (req, res, next) => {
     .then(() => {
       // email notification
       if (userEmail) {
-        sendCustomerDeletedMail({ to: userEmail });
+        adminEmails.sendCustomerDeletedMail({ to: userEmail });
       }
 
       successLog(person, controllerName);
@@ -867,11 +851,11 @@ export const getProductSchedules = (req, res, next) => {
   const controllerName = 'getProductSchedulesByID';
   console.log(`\n➡️➡️➡️ admin called`, controllerName);
 
-  const productID = req.params.pId;
+  const productId = req.params.pId;
   const customerId = req.params.cId;
 
   // find all schedule for chosen Product
-  models.ScheduleRecord.findAll({ where: { productId: productID } })
+  models.ScheduleRecord.findAll({ where: { productId: productId } })
     .then(foundSchedules => {
       //find all bookings for given customer
       return models.Booking.findAll({
@@ -902,7 +886,7 @@ export const postCreateScheduleRecord = (req, res, next) => {
   const controllerName = 'postCreateScheduleRecord';
   callLog(req, person, controllerName);
   const {
-    productID,
+    productId,
     date,
     capacity,
     location,
@@ -940,7 +924,7 @@ export const postCreateScheduleRecord = (req, res, next) => {
     // create schedule within passed transaction
     return models.ScheduleRecord.create(
       {
-        productId: productID,
+        productId: productId,
         date: currentDate,
         startTime: startTime,
         location: location,
@@ -1196,7 +1180,7 @@ export const putEditMarkAbsent = (req, res, next) => {
     .then(() => {
       // Send confirmation email
       if (customerEmail) {
-        sendAttendanceMarkedAbsentMail({
+        adminEmails.sendAttendanceMarkedAbsentMail({
           to: customerEmail,
           productName: product,
           date: currentScheduleRecord.date,
@@ -1277,7 +1261,7 @@ export const putEditMarkPresent = (req, res, next) => {
     .then(updatedRecord => {
       // Send confirmation email
       if (customerEmail) {
-        sendAttendanceReturningMail({
+        adminEmails.sendAttendanceReturningMail({
           to: customerEmail,
           productName: currentScheduleRecord?.ProductName || '',
           date: currentScheduleRecord.date,
@@ -1345,7 +1329,7 @@ export const deleteAttendanceRecord = (req, res, next) => {
 
       // Send confirmation
       if (to) {
-        sendAttendanceRecordDeletedMail({
+        adminEmails.sendAttendanceRecordDeletedMail({
           to,
           productName: ScheduleRecord?.Product?.ProductName || 'Zajęcia',
           date: ScheduleRecord.date,
@@ -1797,142 +1781,190 @@ export const deleteProduct = (req, res, next) => {
 };
 
 //! BOOKINGS_____________________________________________
-//@ GET
-export const adminCreateBooking = (req, res, next) => {
+//@ POST
+export const postCreateBooking = (req, res, next) => {
   const controllerName = 'adminCreateBooking';
   callLog(req, person, controllerName);
 
-  // Expected body fields: customerId, scheduleId, bookingType ("direct" or "pass"),
-  // and optionally: passDefinitionId, product, status, amountPaid, amountDue, paymentMethod, paymentStatus.
   const {
     customerId,
     scheduleId,
-    bookingType,
     passDefinitionId,
-    product,
-    status,
+    bookingType,
     amountPaid,
-    amountDue,
     paymentMethod,
-    paymentStatus,
   } = req.body;
+
+  if (!isNaN(amountPaid) && Number(amountPaid) >= 0) {
+    console.log('\n❌❌❌ amountPaid wrong');
+    throw new Error('amountPaid wrong');
+  }
+  if ([1, 2, 3].includes(Number(paymentMethod))) {
+    console.log('\n❌❌❌ paymentMethod wrong');
+    throw new Error('paymentMethod wrong');
+  }
   if (!customerId || !scheduleId || !bookingType) {
     errCode = 400;
     return next(new Error('Brakuje pól: customerId, scheduleId, bookingType'));
   }
 
   let currentCustomer, currentScheduleRecord;
-
+  const paymentMethodDeduced =
+    paymentMethod == 1
+      ? 'Gotówka (M)'
+      : paymentMethod == 2
+      ? 'BLIK (M)'
+      : 'Przelew (M)';
   // Load customer with passes
-  models.Customer.findByPk(customerId, {
-    include: [
-      {
-        model: models.CustomerPass,
-        include: [models.PassDefinition],
-      },
-    ],
-  })
-    .then(customer => {
-      if (!customer) throw new Error('Nie znaleziono profilu uczestnika');
-      currentCustomer = customer;
 
-      return models.ScheduleRecord.findOne({
-        where: { scheduleId },
-        include: [{ model: models.Product }],
-      });
-    })
-    .then(scheduleRecord => {
-      if (!scheduleRecord) throw new Error('Nie znaleziono terminu');
-      currentScheduleRecord = scheduleRecord;
+  return db
+    .transaction(t => {
+      return models.Customer.findByPk(customerId, {
+        include: [
+          {
+            model: models.CustomerPass,
+            include: [models.PassDefinition],
+          },
+        ],
+        transaction: t,
+      })
+        .then(customer => {
+          if (!customer) throw new Error('Nie znaleziono profilu uczestnika');
+          currentCustomer = customer;
 
-      return models.Booking.count({
-        where: { scheduleId, attendance: true },
-      });
-    })
-    .then(count => {
-      if (count >= currentScheduleRecord.capacity) {
-        errCode = 409;
-        throw new Error('Brak wolnych miejsc w tym terminie');
-      }
-
-      // Check if booking already exists (by customer & schedule)
-      return models.Booking.findOne({
-        where: {
-          customerId: currentCustomer.customerId,
-          scheduleId,
-        },
-      });
-    })
-    .then(existingBooking => {
-      if (existingBooking) {
-        if (req.user.email) {
-          sendAttendanceReturningMail({
-            to: req.user.email,
-            productName: product || currentScheduleRecord.Product.name,
-            date: currentScheduleRecord.date,
-            startTime: currentScheduleRecord.startTime,
-            location: currentScheduleRecord.location,
+          return models.ScheduleRecord.findOne({
+            where: { scheduleId },
+            include: [{ model: models.Product }],
+            transaction: t,
+            lock: t.LOCK.UPDATE,
           });
-        }
+        })
+        .then(scheduleRecord => {
+          if (!scheduleRecord) throw new Error('Nie znaleziono terminu');
+          currentScheduleRecord = scheduleRecord;
 
-        // If booking exists, update attendance flag.
-        return existingBooking.update({ attendance: true });
-      } else {
-        // Create new booking based on bookingType
-        if (bookingType === 'pass') {
-          let validPass = null;
-
-          if (!passDefinitionId) {
-            throw new Error('Brak id karnetu do użycia w celu identyfikacji.');
+          return models.Booking.count({
+            where: { scheduleId, attendance: true },
+            transaction: t,
+          });
+        })
+        .then(count => {
+          if (count >= currentScheduleRecord.capacity) {
+            errCode = 409;
+            throw new Error('Brak wolnych miejsc w tym terminie');
           }
 
-          // Check if customer already has a valid pass for this schedule.
-          if (
-            currentCustomer.CustomerPasses &&
-            currentCustomer.CustomerPasses.length > 0
-          ) {
-            validPass = currentCustomer.CustomerPasses.find(pass =>
-              isPassValidForSchedule(pass, currentScheduleRecord)
-            );
-          }
-
-          if (validPass) {
-            return models.Booking.create({
-              customerId: currentCustomer.customerId,
-              scheduleId: currentScheduleRecord.scheduleId,
-              customerPassId: validPass.customerPassId,
-              attendance: true,
-            });
-          } else {
-            throw new Error('Karnet nie jest ważny na ten termin.');
-          }
-        } else if (bookingType === 'direct') {
-          // Create payment first, then booking.
-          return models.Payment.create({
-            customerId: currentCustomer.customerId,
-            date: new Date(),
-            product: product || currentScheduleRecord.Product.name,
-            status: status || 'pending',
-            amountPaid: amountPaid || currentScheduleRecord.Product.price,
-            amountDue: amountDue || 0,
-            paymentMethod: paymentMethod || 'admin',
-            paymentStatus: paymentStatus || 'completed',
-          }).then(payment => {
-            return models.Booking.create({
+          // Check if booking already exists (by customer & schedule)
+          return models.Booking.findOne({
+            where: {
               customerId: currentCustomer.customerId,
               scheduleId,
-              paymentId: payment.paymentId,
-              attendance: true,
-            }).then(booking => {
-              return { payment, booking };
-            });
+            },
+            transaction: t,
+            lock: t.LOCK.UPDATE,
           });
-        } else {
-          throw new Error(
-            'Typ rezerwacji nieprawidłowy - dozwolona jest z karnetem lub płatnością bezpośrednią'
-          );
-        }
-      }
+        })
+        .then(existingBooking => {
+          if (existingBooking) {
+            if (req.user.email) {
+              adminEmails.sendAttendanceReturningMail({
+                to: req.user.email,
+                productName: currentScheduleRecord.Product.name,
+                date: currentScheduleRecord.date,
+                startTime: currentScheduleRecord.startTime,
+                location: currentScheduleRecord.location,
+              });
+            }
+
+            // If booking exists, update attendance flag.
+            return existingBooking.update(
+              { attendance: true },
+              {
+                transaction: t,
+              }
+            );
+          } else {
+            // Create new booking based on bookingType
+            if (bookingType === 'pass') {
+              let validPass = null;
+
+              if (!passDefinitionId) {
+                throw new Error(
+                  'Brak id karnetu do użycia w celu identyfikacji.'
+                );
+              }
+
+              // Check if customer already has a valid pass for this schedule.
+              if (
+                currentCustomer.CustomerPasses &&
+                currentCustomer.CustomerPasses.length > 0
+              ) {
+                validPass = currentCustomer.CustomerPasses.find(pass =>
+                  isPassValidForSchedule(pass, currentScheduleRecord)
+                );
+              }
+
+              if (validPass) {
+                return models.Booking.create(
+                  {
+                    customerId: currentCustomer.customerId,
+                    scheduleId: currentScheduleRecord.scheduleId,
+                    customerPassId: validPass.customerPassId,
+                    attendance: true,
+                  },
+                  {
+                    transaction: t,
+                  }
+                );
+              } else {
+                throw new Error('Karnet nie jest ważny na ten termin.');
+              }
+            } else if (bookingType === 'direct') {
+              if (validPass.PassDefinition.price < amountPaid)
+                throw new Error('Kwota nie może być większa niż żądana cena.');
+              const amountDueCalculated =
+                parseFloat(validPass.PassDefinition.price) -
+                parseFloat(amountPaid);
+              const statusDeduced =
+                amountDueCalculated <= 0 ? 'w pełni' : 'Częściowo';
+
+              // Create payment first, then booking.
+              return models.Payment.create(
+                {
+                  customerId: currentCustomer.customerId,
+                  date: new Date(),
+                  product: `${currentScheduleRecord.Product.name} (sId: ${currentScheduleRecord.scheduleId})`,
+                  status: statusDeduced,
+                  amountPaid: amountPaid,
+                  amountDue: amountDueCalculated,
+                  paymentMethod: paymentMethodDeduced,
+                  paymentStatus: 'Completed',
+                },
+                {
+                  transaction: t,
+                }
+              ).then(payment => {
+                return models.Booking.create(
+                  {
+                    customerId: currentCustomer.customerId,
+                    scheduleId,
+                    paymentId: payment.paymentId,
+                    attendance: true,
+                  },
+                  {
+                    transaction: t,
+                  }
+                ).then(booking => {
+                  return { payment, booking };
+                });
+              });
+            } else {
+              throw new Error(
+                'Typ rezerwacji nieprawidłowy - dozwolona jest z karnetem lub płatnością bezpośrednią'
+              );
+            }
+          }
+        });
     })
     .then(result => {
       successLog(person, controllerName);
@@ -2083,33 +2115,31 @@ export const getPaymentByID = (req, res, next) => {
     .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 //@ POST
-
 export const postCreatePayment = (req, res, next) => {
   const controllerName = 'postCreatePayment';
   callLog(req, person, controllerName);
 
   const {
     customerId,
-    productID,
-    productName,
-    productPrice,
-    scheduleID,
+    scheduleId,
+    passDefinitionId,
+    passStartDate,
     amountPaid,
     paymentMethod,
   } = req.body;
 
   errCode = 400;
+  if (!isNaN(amountPaid) && Number(amountPaid) >= 0) {
+    console.log('\n❌❌❌ amountPaid wrong');
+    throw new Error('amountPaid wrong');
+  }
+  if ([1, 2, 3].includes(Number(paymentMethod))) {
+    console.log('\n❌❌❌ paymentMethod wrong');
+    throw new Error('paymentMethod wrong');
+  }
   if (!customerId) {
     console.log('\n❌❌❌ customerId empty.');
     throw new Error('Pole uczestnika nie może być puste.');
-  }
-  if (!productID || !productID.trim()) {
-    console.log('\n❌❌❌ productID empty');
-    throw new Error('Pole zajęć nie może być puste.');
-  }
-  if (!scheduleID || !scheduleID.trim()) {
-    console.log('\n❌❌❌ scheduleID empty');
-    throw new Error('Pole terminu nie może być puste.');
   }
   if (!amountPaid || !amountPaid.trim()) {
     console.log('\n❌❌❌ amountPaid empty');
@@ -2119,128 +2149,241 @@ export const postCreatePayment = (req, res, next) => {
     console.log('\n❌❌❌ paymentMethod empty');
     throw new Error('Pole metody płatności nie może być puste.');
   }
-  let currentScheduleRecord, customerEmail;
-  let isNewCustomer = false;
-  db.transaction(t => {
-    // Fetch schedule and lock it for other paralele transactions
-    return models.ScheduleRecord.findOne({
-      where: { scheduleId: scheduleID }, //from mutation
-      transaction: t,
-      lock: t.LOCK.UPDATE, //@
-    })
 
-      .then(scheduleRecord => {
-        if (!scheduleRecord) {
-          errCode = 404;
-          throw new Error('Nie znaleziono terminu');
-        }
-        currentScheduleRecord = scheduleRecord;
-        // Count the current amount of reservations
-        return models.Booking.count({
-          where: { scheduleId: scheduleID, attendance: 1 },
-          transaction: t,
-          lock: t.LOCK.UPDATE, //@
-        }).then(currentAttendance => {
-          // console.log('currentAttendance', currentAttendance);
+  let currentCustomer, currentPassDefinition, customerEmail;
 
-          if (currentAttendance >= scheduleRecord.capacity) {
-            // If limit is reached
-            errCode = 409;
-            throw new Error('Brak wolnych miejsc na ten termin.');
-          }
+  const paymentMethodDeduced =
+    paymentMethod == 1
+      ? 'Gotówka (M)'
+      : paymentMethod == 2
+      ? 'BLIK (M)'
+      : 'Przelew (M)';
 
-          // IF still enough spaces - check if booked in the past
-          return models.Payment.findOne({
+  return db
+    .transaction(t => {
+      return models.Customer.findByPk(customerId, {
+        include: [
+          {
+            model: models.CustomerPass,
+            include: [models.PassDefinition],
+          },
+          {
+            model: models.User,
+          },
+        ],
+        transaction: t,
+      }).then(customer => {
+        if (!customer) throw new Error('Nie znaleziono klienta');
+        successLog(person, controllerName, 'customer found');
+        currentCustomer = customer;
+        customerEmail = customer.User?.email;
+
+        // If passDefinitionId is provided, then the payment should be for a pass.
+        if (passDefinitionId) {
+          // Check if customer already has that pass
+          return models.CustomerPass.findOne({
             where: {
-              customerId: customerId,
+              customerId: customer.customerId,
+              passDefId: passDefinitionId,
+              status: 'active',
+              validUntil: { [Op.gt]: passStartDate },
             },
-            include: [
-              {
-                model: models.ScheduleRecord,
-                where: { scheduleId: scheduleID },
-                through: {
-                  attributes: [
-                    'attendance',
-                    'customerId',
-                    'paymentId',
-                    'scheduleId',
-                  ],
-                  where: { customerId: customerId },
-                },
-                required: true,
-              },
-            ],
             transaction: t,
             lock: t.LOCK.UPDATE,
-          });
-        });
-      })
-      .then(existingPayment => {
-        if (existingPayment) {
-          //! assuming single schedule/booking
-          throw new Error(
-            'Uczestnik już rezerwował ten termin. Można mu ewentualnie poprawić obecność w zakładce wspomnianego terminu w "Grafik" w panelu admina.'
-          );
-        } else {
-          // booking doesn't exist - create new one
-          const amountDueCalculated =
-            parseFloat(productPrice) - parseFloat(amountPaid);
-          const statusDeduced =
-            amountDueCalculated <= 0 ? 'w pełni' : 'Częściowo';
-          const paymentMethodDeduced =
-            paymentMethod == 1
-              ? 'Gotówka (M)'
-              : paymentMethod == 2
-              ? 'BLIK (M)'
-              : 'Przelew (M)';
+          })
+            .then(existingPass => {
+              if (existingPass) {
+                throw new Error(
+                  'Nie można zapłacić 2x za ten sam karnet, który jest nadal aktywny. Wybierz datę startową nowego karnetu, po zakończeniu poprzedniego.'
+                );
+              }
+              successLog(person, controllerName, 'customerPass NOT found');
 
-          models.Customer.findByPk(customerId, {
-            include: [{ model: models.User, attributes: ['email'] }],
-            required: true,
-          }).then(customer => (customerEmail = customer.User.email));
-
-          return models.Payment.create(
-            {
-              customerId: customerId,
-              date: new Date(),
-              product: productName,
-              status: statusDeduced,
-              amountPaid: amountPaid,
-              amountDue: amountDueCalculated,
-              paymentMethod: paymentMethodDeduced,
-              paymentStatus: 'Completed',
-            },
-            { transaction: t }
-          ).then(booking => {
-            if (customerEmail) {
-              sendReservationFreshMail({
-                to: customerEmail,
-                productName: productName,
-                date: currentScheduleRecord.date,
-                startTime: currentScheduleRecord.startTime,
-                location: currentScheduleRecord.location,
-              });
-            }
-
-            // After creating the reservation, we connected addScheduleRecord which was generated by Sequelize for many-to-many relationship between reservation and ScheduleRecord. The method adds entry to intermediate table (bookingss) and connects created reservation with schedule feeder (ScheduleRecord).
-            return booking
-              .addScheduleRecord(scheduleID, {
-                through: { customerId: customerId, performedBy: person },
+              // Fetch definition
+              return models.PassDefinition.findByPk(passDefinitionId, {
                 transaction: t,
-                individualHooks: true,
+              });
+            })
+            .then(definition => {
+              if (definition)
+                successLog(person, controllerName, 'passDefinition found');
+
+              currentPassDefinition = definition;
+              if (currentPassDefinition.price < amountPaid)
+                throw new Error('Kwota nie może być większa niż żądana cena.');
+
+              const amountDueCalculated =
+                parseFloat(definition.price) - parseFloat(amountPaid);
+              const statusDeduced =
+                amountDueCalculated <= 0 ? 'w pełni' : 'Częściowo';
+
+              // Create Payment for the pass purchase.
+              return models.Payment.create(
+                {
+                  customerId: currentCustomer.customerId,
+                  date: new Date(),
+                  product: `${definition.name} (dId: ${definition.passDefId})`,
+                  status: statusDeduced,
+                  amountPaid,
+                  amountDue: amountDueCalculated,
+                  paymentMethod: paymentMethodDeduced,
+                  paymentStatus: 'Completed',
+                },
+                { transaction: t }
+              );
+            })
+            .then(payment => {
+              if (payment)
+                successLog(person, controllerName, 'payment created');
+
+              const purchaseDate = new Date(),
+                validityDays = currentPassDefinition.defaultValidityDays;
+              let calcExpiryDate;
+
+              if (validityDays < 30) {
+                // if less then month
+                calcExpiryDate = addDays(purchaseDate, validityDays);
+              } else if (validityDays % 30 == 0) {
+                // if a couple of months where month = 30
+                calcExpiryDate = addMonths(purchaseDate, validityDays / 30);
+              } else if (validityDays == 365) {
+                // if 1 year - no more expected
+                calcExpiryDate = addYears(purchaseDate, 1);
+              }
+
+              return models.CustomerPass.create(
+                {
+                  customerId: currentCustomer.customerId,
+                  paymentId: payment.paymentId,
+                  passDefId: currentPassDefinition.passDefId,
+                  purchaseDate,
+                  validFrom: passStartDate,
+                  validUntil: calcExpiryDate,
+                  usesLeft: currentPassDefinition.usesTotal,
+                  status: 'active',
+                },
+                {
+                  transaction: t,
+                }
+              ).then(customerPass => {
+                if (customerPass)
+                  successLog(person, controllerName, 'customerPass created');
+
+                if (customerEmail) {
+                  adminEmails.sendPassFreshMail({
+                    to: customerEmail,
+                    productName: currentPassDefinition.name,
+                    productPrice: currentPassDefinition.price,
+                    purchaseDate: customerPass.purchaseDate,
+                    validFrom: customerPass.validFrom,
+                    validUntil: customerPass.validUntil,
+                    allowedProductTypes:
+                      currentPassDefinition.allowedProductTypes,
+                    usesTotal: currentPassDefinition.usesTotal,
+                    description: currentPassDefinition.description,
+                  });
+                }
+                return { payment, customerPass };
+              });
+            });
+        } else {
+          // Check if this booking wasn't paid already
+          return (
+            models.Booking.findOne({
+              where: {
+                customerId: currentCustomer.customerId,
+                scheduleId: scheduleId,
+              },
+              transaction: t,
+              lock: t.LOCK.UPDATE,
+            })
+              .then(existingBooking => {
+                if (existingBooking) {
+                  throw new Error('Rezerwacja dla tego terminu już istnieje.');
+                }
+                successLog(person, controllerName, 'existingBooking NOT found');
+
+                return models.ScheduleRecord.findOne({
+                  where: { scheduleId },
+                  include: [{ model: models.Product }],
+                  transaction: t,
+                  lock: t.LOCK.UPDATE,
+                });
               })
-              .then(() => booking);
-          });
+              // If fresh booking request
+              .then(scheduleRecord => {
+                if (!scheduleRecord) {
+                  errCode = 404;
+                  throw new Error('Nie znaleziono terminu');
+                }
+                successLog(person, controllerName, 'scheduleRecord found');
+
+                const amountDueCalculated =
+                  parseFloat(scheduleRecord.Product.price) -
+                  parseFloat(amountPaid);
+                const statusDeduced =
+                  amountDueCalculated <= 0 ? 'w pełni' : 'Częściowo';
+
+                if (scheduleRecord.Product.price < amountPaid)
+                  throw new Error(
+                    'Kwota nie może być większa niż żądana cena.'
+                  );
+                // No pass purchase: create a direct payment and booking.
+                return models.Payment.create(
+                  {
+                    customerId: currentCustomer.customerId,
+                    date: new Date(),
+                    product: `${scheduleRecord.Product.name} (sId: ${scheduleRecord.scheduleId})`,
+                    status: statusDeduced,
+                    amountPaid: amountPaid,
+                    amountDue: amountDueCalculated,
+                    paymentMethod: paymentMethodDeduced,
+                    paymentStatus: 'Completed',
+                  },
+                  {
+                    transaction: t,
+                  }
+                ).then(payment => {
+                  if (payment)
+                    successLog(person, controllerName, 'Payment created');
+
+                  return models.Booking.create(
+                    {
+                      customerId: currentCustomer.customerId,
+                      scheduleId: scheduleRecord.scheduleId,
+                      paymentId: payment.paymentId,
+                      attendance: true,
+                    },
+                    {
+                      transaction: t,
+                    }
+                  ).then(booking => {
+                    if (booking)
+                      successLog(person, controllerName, 'Booking created');
+                    if (customerEmail) {
+                      adminEmails.sendReservationFreshMail({
+                        to: customerEmail,
+                        productName: scheduleRecord.Product.name,
+                        date: scheduleRecord.date,
+                        startTime: scheduleRecord.startTime,
+                        location: scheduleRecord.location,
+                      });
+                    }
+                    return { payment, booking };
+                  });
+                });
+              })
+          );
         }
       });
-  })
-    .then(booking => {
+    })
+    .then(result => {
       successLog(person, controllerName);
       res.status(201).json({
-        isNewCustomer,
+        isNewCustomer: false,
         confirmation: 1,
-        message: 'Płatność utworzona pomyślnie.',
-        booking,
+        message: 'Płatność zarejestrowana pomyślnie.',
+        result,
       });
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));
@@ -2274,7 +2417,7 @@ export const deletePayment = (req, res, next) => {
 
       // Send email before deletion
       if (customerEmail) {
-        sendReservationCancelledMail({
+        adminEmails.sendReservationCancelledMail({
           to: customerEmail,
           bookingID: booking.paymentId,
         });

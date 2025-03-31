@@ -136,7 +136,7 @@ function NewProductScheduleForm() {
     const fd = new FormData(e.target);
     const formDataObj = Object.fromEntries(fd.entries());
     if (location.pathname.includes('show-all-products')) {
-      formDataObj.productID = params.id;
+      formDataObj.productId = params.id;
     }
     console.log('sent data:', formDataObj);
     createSchedule(formDataObj);

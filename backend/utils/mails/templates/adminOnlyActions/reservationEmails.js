@@ -1,11 +1,18 @@
 import 'dotenv/config';
 import { mainTransporter } from '../../transporter.js';
-import { sendReservationFreshMail as baseReservationFreshMail } from '../customerActions/reservationEmails.js';
+import {
+  sendPassFreshMail as basePassFreshMail,
+  sendReservationFreshMail as baseReservationFreshMail,
+} from '../customerActions/reservationEmails.js';
 
 //! OVERWRITTEN CUSTOMER_____________________________________________
 export const sendReservationFreshMail = configObject => {
   configObject.isAdmin = true;
   baseReservationFreshMail(configObject);
+};
+export const sendPassFreshMail = configObject => {
+  configObject.isAdmin = true;
+  basePassFreshMail(configObject);
 };
 
 //! ADMIN ONLY_____________________________________________
