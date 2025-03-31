@@ -87,11 +87,11 @@ function NewPaymentForm() {
   );
   console.log('customersOptionsList: ', customersOptionsList);
   const productsOptionsList = productsList?.content?.sort((a, b) =>
-    b.Rodzaj.localeCompare(a.Rodzaj)
+    b.type.localeCompare(a.type)
   );
   console.log('productOptionsList: ', productsOptionsList);
   const schedulesOptionsList = schedulesList?.content?.sort(
-    (a, b) => new Date(b.Data) - new Date(a.Data)
+    (a, b) => new Date(b.date) - new Date(a.date)
   );
   console.log('schedulesOptionsList: ', schedulesOptionsList);
 
@@ -189,11 +189,11 @@ function NewPaymentForm() {
     const formDataObj = Object.fromEntries(fd.entries());
 
     const selectedProduct = productsOptionsList.find(
-      product => product.ID.toString() === formDataObj.productId
+      product => product.productId.toString() === formDataObj.productId
     );
     if (selectedProduct) {
-      formDataObj.productName = `(ID: ${selectedProduct.ID}) ${selectedProduct.Nazwa}`;
-      formDataObj.productPrice = selectedProduct.Zadatek;
+      formDataObj.productName = `(ID: ${selectedProduct.productId}) ${selectedProduct.name}`;
+      formDataObj.productPrice = selectedProduct.price;
     }
 
     console.log('sent data:', formDataObj);
@@ -228,9 +228,9 @@ function NewPaymentForm() {
         formType={formType}
         type='select'
         options={customersOptionsList.map(customerObj => ({
-          key: customerObj.ID,
-          label: `(ID: ${customerObj.ID}) ${customerObj['Imię Nazwisko']}`,
-          value: customerObj.ID,
+          key: customerObj.customerId,
+          label: `(ID: ${customerObj.customerId}) ${customerObj.fullName}`,
+          value: customerObj.customerId,
         }))}
         id='customer'
         name='customerId'
@@ -249,9 +249,9 @@ function NewPaymentForm() {
         formType={formType}
         type='select'
         options={productsOptionsList.map(productObj => ({
-          key: productObj.ID,
-          label: `(ID: ${productObj.ID}) ${productObj.Nazwa}`,
-          value: productObj.ID,
+          key: productObj.productId,
+          label: `(ID: ${productObj.productId}) ${productObj.name}`,
+          value: productObj.productId,
         }))}
         id='productId'
         name='productId'

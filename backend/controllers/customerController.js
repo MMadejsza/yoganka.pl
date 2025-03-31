@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import * as models from '../models/_index.js';
 import { isPassValidForSchedule } from '../utils/controllersUtils.js';
-import { isAdult } from '../utils/dateUtils.js';
+import { isAdult } from '../utils/dateTimeUtils.js';
 import db from '../utils/db.js';
 import {
   callLog,
@@ -9,13 +9,7 @@ import {
   errorCode,
   successLog,
 } from '../utils/loggingUtils.js';
-import {
-  sendAttendanceFirstBookingForScheduleMail,
-  sendAttendanceMarkedAbsentMail,
-  sendAttendanceReturningMail,
-} from '../utils/mails/templates/customerActions/attendanceEmails.js';
-import { sendCustomerCreatedMail } from '../utils/mails/templates/customerActions/creationEmails.js';
-import { sendReservationFreshMail } from '../utils/mails/templates/customerActions/reservationEmails.js';
+import * as adminEmails from '../utils/mails/templates/customerActions/_customerEmails.js';
 
 let errCode = errorCode;
 const person = 'Customer';
@@ -182,7 +176,7 @@ export const postCreateBookSchedule = (req, res, next) => {
     }).then(newCustomer => {
       // Notification email
       if (req.user.email) {
-        sendCustomerCreatedMail({
+        adminEmails.sendCustomerCreatedMail({
           to: req.user.email,
           firstName: cDetails.fname,
         });
@@ -275,7 +269,7 @@ export const postCreateBookSchedule = (req, res, next) => {
       .then(existingBooking => {
         if (existingBooking) {
           if (req.user.email) {
-            sendAttendanceReturningMail({
+            adminEmails.sendAttendanceReturningMail({
               to: req.user.email,
               productName: currentScheduleRecord.Product.name,
               date: currentScheduleRecord.date,
@@ -315,7 +309,7 @@ export const postCreateBookSchedule = (req, res, next) => {
               { transaction: t }
             ).then(booking => {
               if (req.user.email) {
-                sendAttendanceFirstBookingForScheduleMail({
+                adminEmails.sendAttendanceFirstBookingForScheduleMail({
                   to: req.user.email,
                   productName: currentScheduleRecord?.ProductName || '',
                   date: currentScheduleRecord.date,
@@ -354,7 +348,7 @@ export const postCreateBookSchedule = (req, res, next) => {
               { transaction: t }
             ).then(payment => {
               if (req.user.email) {
-                sendReservationFreshMail({
+                adminEmails.sendReservationFreshMail({
                   to: req.user.email,
                   productName: req.body.product,
                   date: currentScheduleRecord.date,
@@ -375,7 +369,7 @@ export const postCreateBookSchedule = (req, res, next) => {
                 { transaction: t }
               ).then(booking => {
                 if (req.user.email) {
-                  sendAttendanceFirstBookingForScheduleMail({
+                  adminEmails.sendAttendanceFirstBookingForScheduleMail({
                     to: req.user.email,
                     productName: currentScheduleRecord?.ProductName || '',
                     date: currentScheduleRecord.date,
@@ -448,7 +442,7 @@ export const putEditMarkAbsent = (req, res, next) => {
       ).then(([updatedCount]) => {
         if (updatedCount > 0) {
           if (req.user.email) {
-            sendAttendanceMarkedAbsentMail({
+            adminEmails.sendAttendanceMarkedAbsentMail({
               to: req.user.email,
               productName: currentScheduleRecord.Product.name,
               date: currentScheduleRecord.date,

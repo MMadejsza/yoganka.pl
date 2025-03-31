@@ -75,7 +75,7 @@ function AdminPage() {
   const [isModalOpen, setIsModalOpen] = useState(modalMatch);
 
   const handleOpenModal = row => {
-    const recordId = row.ID;
+    const recordId = row.rowId;
     setIsModalOpen(true);
     navigate(`${location.pathname}/${recordId}`, {
       state: { background: location },
@@ -87,26 +87,102 @@ function AdminPage() {
     navigate(location.state?.background?.pathname || '/', { replace: true });
   };
 
+  let headers;
   const pickModifier = path => {
     let modifier;
     switch (true) {
       case path.includes('show-all-users'):
         modifier = 'user';
+        headers = [
+          'Id',
+          'Email',
+          'Ostatni login',
+          'Zarejestrowano',
+          'Uprawnienia',
+          'Preferencje',
+        ];
         return modifier;
       case path.includes('show-all-customers'):
         modifier = 'customer';
+        headers = [
+          'Id',
+          'Konto',
+          'Imię Nazwisko',
+          'Urodzona',
+          'Typ',
+          'Kontakt',
+          'Źródło polecenia	',
+          'Lojalność',
+          'Uwagi',
+        ];
         return modifier;
       case path.includes('show-all-products'):
         modifier = 'product';
+        headers = [
+          'Id',
+          'Rodzaj',
+          'Nazwa',
+          'Miejsce',
+          'Czas trwania',
+          'Zadatek',
+          'Data rozpoczęcia',
+          'Status',
+        ];
         return modifier;
       case path.includes('show-all-schedules'):
         modifier = 'schedule';
+        headers = [
+          'Id',
+          'Obecność',
+          'Data',
+          'Dzień',
+          'Godzina',
+          'Miejsce',
+          'Typ',
+          'Zajęcia',
+          'Zadatek',
+        ];
         return modifier;
       case path.includes('show-all-payments'):
         modifier = 'payment';
+        headers = [
+          'Id',
+          'Data',
+          'Uczestnik',
+          'Produkty',
+          'Status',
+          'Metoda',
+          'Kwota',
+          'Wykonał',
+        ];
         return modifier;
       case path.includes('show-all-participants-feedback'):
         modifier = 'feedback';
+        headers = [
+          'Id',
+          'Wystawiono',
+          'Opóźnienie',
+          'Zajęcia',
+          'Ocena',
+          'Treść',
+          'Uczestnik',
+        ];
+        return modifier;
+      case path.includes('show-all-invoices'):
+        modifier = 'invoice';
+        headers = [
+          'Id',
+          'Płatność',
+          'Wystawiono',
+          'Uczestnik',
+          'Termin płatności',
+          'Status',
+          'Kwota',
+        ];
+        return modifier;
+      case path.includes('show-all-newsletters'):
+        modifier = 'newsletter';
+        headers = ['Id', 'Status', 'Utworzono', 'Wysłano', 'Tytuł', 'Treść'];
         return modifier;
 
       default:
@@ -154,7 +230,7 @@ function AdminPage() {
     console.log(data);
     table = (
       <ModalTable
-        headers={data.totalHeaders}
+        headers={headers}
         keys={data.totalKeys || data.totalHeaders}
         content={data.content}
         active={!isInactiveTable}

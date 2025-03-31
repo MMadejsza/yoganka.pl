@@ -1,4 +1,5 @@
 import { useLocation } from 'react-router-dom';
+import { getWeekDay } from '../../utils/dateTime.js';
 import DetailsCustomer from './DetailsCustomer.jsx';
 import DetailsPayment from './DetailsPayment.jsx';
 import DetailsProductSchedules from './DetailsProductSchedules.jsx';
@@ -20,7 +21,15 @@ function ViewPayment({ data, isUserAccountPage }) {
   );
   const { payment } = data;
   const { Customer: customer } = payment;
-  const schedules = payment.Bookings.map(booking => booking.ScheduleRecord);
+  const schedules = payment.Bookings.map(booking => {
+    return {
+      ...booking.ScheduleRecord,
+      productName: booking.ScheduleRecord.Product.name,
+      productPrice: booking.ScheduleRecord.Product.price,
+      day: getWeekDay(booking.ScheduleRecord.date),
+      location: booking.ScheduleRecord.location,
+    };
+  });
   console.log(`ViewPayment schedules`, schedules);
   return (
     <>

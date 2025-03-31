@@ -1,19 +1,10 @@
 import ModalTable from './ModalTable';
 
 function DetailsCustomerReviews({ reviews, placement }) {
-  const feedbackArray = reviews;
+  const feedbackArray = reviews.content;
   console.log(`DetailsCustomerReviews feedbackArray `, feedbackArray);
   console.log(`DetailsCustomerReviews placement `, placement);
-
-  let keys = [
-    'feedbackId',
-    'submissionDate',
-    'product',
-    'schedule',
-    'rating',
-    'content',
-    'delay',
-  ];
+  console.log(`DetailsCustomerReviews reviews `, reviews);
 
   return (
     <>
@@ -34,7 +25,7 @@ function DetailsCustomerReviews({ reviews, placement }) {
             'Komentarz',
             'Opóźnienie',
           ]}
-          keys={keys}
+          keys={reviews.keys}
           content={feedbackArray}
           active={false}
         />

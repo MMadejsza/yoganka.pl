@@ -83,7 +83,7 @@ export const calculateStats = customer => {
   const scheduleRecords = [];
   const totalPayments = [];
   const invoices = [];
-  const reviews = [];
+  const reviews = { keys: undefined, content: [] };
   let totalRevenue = 0;
   let totalTimeInSeconds = 0;
   let totalCampsAmount = 0;
@@ -98,7 +98,7 @@ export const calculateStats = customer => {
   // console.log(customer.Payments);
   for (let payment of customer.Payments) {
     totalRevenue += parseFloat(payment.amountPaid);
-    console.log(`calculateStats payment.date`, payment.date);
+
     totalPayments.push({
       ...payment,
       date: formatIsoDateTime(payment.date),
@@ -108,8 +108,6 @@ export const calculateStats = customer => {
       invoice.invoiceDate = formatIsoDateTime(invoice.invoiceDate);
       invoices.push(invoice);
     }
-
-    // console.groupEnd();
   }
 
   const attendedBookings = customer.Bookings?.filter(
@@ -148,13 +146,25 @@ export const calculateStats = customer => {
     if (schedule.Feedbacks && schedule.Feedbacks.length > 0) {
       // Customer can review the schedule only once
       const feedback = schedule.Feedbacks[0];
-      feedback.product = `${schedule.Product.name}`;
-      feedback.schedule = `(ID: ${schedule.scheduleId})
-                            ${schedule.scheduleDate}
-                            ${getWeekDay(schedule.scheduleDate)}
-                            ${schedule.startTime}`;
-      feedback.submissionDate = formatIsoDateTime(feedback.submissionDate);
-      reviews.push(feedback);
+
+      reviews.keys = [
+        'feedbackId',
+        'submissionDate',
+        'product',
+        'schedule',
+        'rating',
+        'content',
+        'delay',
+      ];
+      reviews.content.push({
+        ...feedback,
+        product: `${schedule.Product.name}`,
+        schedule: `
+        (ID: ${schedule.scheduleId})
+        ${schedule.date} ${getWeekDay(schedule.date)}
+        ${schedule.startTime}`,
+        submissionDate: formatIsoDateTime(feedback.submissionDate),
+      });
     }
   }
 

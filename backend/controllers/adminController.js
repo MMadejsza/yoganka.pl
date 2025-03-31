@@ -1,13 +1,13 @@
 import bcrypt from 'bcryptjs';
 import { addDays, addMonths, addYears } from 'date-fns';
-import { Op, Sequelize } from 'sequelize';
+import { Op } from 'sequelize';
 import * as models from '../models/_index.js';
-import columnMaps from '../utils/columnsMapping.js';
+import { isPassValidForSchedule } from '../utils/controllersUtils.js';
 import {
-  isPassValidForSchedule,
-  tableDataFlatQuery,
-} from '../utils/controllersUtils.js';
-import { formatIsoDateTime, getWeekDay, isAdult } from '../utils/dateUtils.js';
+  formatIsoDateTime,
+  getWeekDay,
+  isAdult,
+} from '../utils/dateTimeUtils.js';
 import db from '../utils/db.js';
 import {
   callLog,
@@ -41,41 +41,31 @@ export const getAllUsers = (req, res, next) => {
         errCode = 404;
         throw new Error('Nie znaleziono użytkowników.');
       }
-      // fetching map for User table or empty object
-      const columnMap = columnMaps[model.name] || {};
-      const keysForHeaders = Object.values(columnMap);
-      // Convert for records for different names
+
+      // Convert for records
       const formattedRecords = records.map(record => {
-        const newRecord = {}; // Container for formatted data
-        const attributes = model.getAttributes();
+        const user = record.toJSON();
 
-        // 🔄 Iterate after each column in user record
-        for (const key in record.toJSON()) {
-          const newKey = columnMap[key] || key; // New or original name if not specified
-          const attributeType =
-            attributes[key]?.type.constructor.key?.toUpperCase();
-          if (
-            attributeType === 'DATE' ||
-            attributeType === 'DATEONLY' ||
-            attributeType === 'DATETIME'
-          ) {
-            newRecord[newKey] = formatIsoDateTime(record[key]);
-          } else if (key == 'UserPrefSetting') {
-            if (record[key]) {
-              newRecord[newKey] = `Tak (ID: ${record[key]['userPrefId']})`;
-            } else newRecord[newKey] = 'Nie';
-          } else if (key == 'lastLoginDate' || key == 'registrationDate') {
-            newRecord[newKey] = record[key];
-          } else {
-            newRecord[newKey] = record[key]; // Assignment
-          }
-        }
-
-        return newRecord; // Return new record object
+        return {
+          ...user,
+          rowId: user.userId,
+          registrationDate: formatIsoDateTime(user.registrationDate),
+          prefSettings: user.UserPrefSetting
+            ? `Tak (ID: ${user.UserPrefSetting.userPrefId})`
+            : 'Nie',
+          lastLoginDate: formatIsoDateTime(user.lastLoginDate),
+        };
       });
 
       // New headers (keys from columnMap)
-      const totalHeaders = keysForHeaders;
+      const totalKeys = [
+        'userId',
+        'email',
+        'lastLoginDate',
+        'registrationDate',
+        'role',
+        'prefSettings',
+      ];
 
       // ✅ Return response to frontend
       successLog(person, controllerName);
@@ -83,7 +73,7 @@ export const getAllUsers = (req, res, next) => {
         confirmation: 1,
         message: 'Konta pobrane pomyślnie.',
         isLoggedIn: req.session.isLoggedIn,
-        totalHeaders, // To render
+        totalKeys,
         content: formattedRecords.sort((a, b) =>
           a.email.localeCompare(b.email)
         ), // With new names
@@ -314,55 +304,43 @@ export const deleteUser = (req, res, next) => {
 export const getAllCustomers = (req, res, next) => {
   const controllerName = 'getAllCustomers';
   callLog(req, person, controllerName);
-  const model = models.Customer;
 
-  // We create dynamic joint columns based on the map
-  const columnMap = columnMaps[model.name] || {};
-  const keysForHeaders = Object.values(columnMap);
-  const includeAttributes = [
-    //  firstName + lastName => name
-    [
-      Sequelize.literal("CONCAT(customer_id, '-', user_id)"),
-      'ID klienta-użytkownika',
-    ],
-    [Sequelize.literal("CONCAT(first_name, ' ', last_name)"), 'Imię Nazwisko'],
-  ];
-
-  model
-    .findAll({
-      attributes: {
-        include: includeAttributes, // Adding joint columns
-        exclude: ['userId'], // Deleting substituted ones
-      },
-    })
+  models.Customer.findAll()
     .then(records => {
       if (!records) {
         errCode = 404;
         throw new Error('Nie znaleziono użytkowników.');
       }
-      // Convert for records for different names
+
       const formattedRecords = records.map(record => {
-        const newRecord = {}; // Container for formatted data
+        const customer = record.toJSON();
 
-        const jsonRecord = record.toJSON();
-
-        // 🔄 Iterate after each column in user record
-        for (const key in jsonRecord) {
-          const newKey = columnMap[key] || key; // New or original name if not specified
-          newRecord[newKey] = jsonRecord[key]; // Assignment
-        }
-
-        return newRecord; // Return new record object
+        return {
+          ...customer,
+          rowId: customer.customerId,
+          userId: customer.userId,
+          fullName: `${customer.firstName} ${customer.lastName}`,
+        };
       });
 
-      // New headers (keys from columnMap)
-      const totalHeaders = keysForHeaders;
+      const totalKeys = [
+        'customerId',
+        'userId',
+        'fullName',
+        'dob',
+        'customerType',
+        'preferredContactMethod',
+        'referralSource',
+        'loyalty',
+        'notes',
+      ];
+
       // ✅ Return response to frontend
       successLog(person, controllerName);
       res.json({
         confirmation: 1,
         isLoggedIn: req.session.isLoggedIn,
-        totalHeaders, // To render
+        totalKeys,
         content: formattedRecords.sort((a, b) =>
           a.lastName.localeCompare(b.lastName)
         ), // With new names
@@ -716,6 +694,7 @@ export const getAllSchedules = (req, res, next) => {
         );
         schedule.attendance = `${activeBookings?.length}/${schedule.capacity}`;
         schedule.day = getWeekDay(schedule.date);
+        schedule.rowId = schedule.scheduleId;
 
         schedule.productType = schedule.Product.type;
         schedule.productName = schedule.Product.name;
@@ -723,18 +702,6 @@ export const getAllSchedules = (req, res, next) => {
         return schedule;
       });
 
-      // New headers (keys from columnMap)
-      const totalHeaders = [
-        'Id',
-        'Obecność',
-        'Data',
-        'Dzień',
-        'Godzina',
-        'Miejsce',
-        'Typ',
-        'Zajęcia',
-        'Zadatek',
-      ];
       const totalKeys = [
         'scheduleId',
         'attendance',
@@ -751,10 +718,9 @@ export const getAllSchedules = (req, res, next) => {
       res.json({
         confirmation: 1,
         message: 'Terminy pobrane pomyślnie.',
-        totalHeaders, // To render
         totalKeys, // to map to the rows attributes
         content: formattedRecords.sort(
-          (a, b) => new Date(b.Data) - new Date(a.Data)
+          (a, b) => new Date(b.date) - new Date(a.date)
         ), // With new names
       });
     })
@@ -1365,86 +1331,54 @@ export const getAllParticipantsFeedback = (req, res, next) => {
   const controllerName = 'getAllParticipantsFeedback';
   callLog(req, person, controllerName);
 
-  const model = models.Feedback;
-
-  // We create dynamic joint columns based on the map
-  const columnMap = columnMaps[model.name] || {};
-
-  const includeAttributes = [];
-
-  model
-    .findAll({
-      include: [
-        {
-          model: models.Customer,
-          attributes: [
-            [
-              Sequelize.literal("CONCAT(first_name, ' ', last_name)"),
-              'Imię Nazwisko',
-            ],
-          ],
-        },
-        {
-          model: models.ScheduleRecord, //  ScheduleRecord
-          include: [
-            {
-              model: models.Product, // Product through ScheduleRecord
-              attributes: ['name'],
-            },
-          ],
-          attributes: ['scheduleId', 'date', 'startTime'],
-        },
-      ],
-      attributes: {
-        include: includeAttributes, // Adding joint columns
-        exclude: ['product'], // Deleting substituted ones
+  models.Feedback.findAll({
+    include: [
+      {
+        model: models.Customer,
       },
-    })
+      {
+        model: models.ScheduleRecord, //  ScheduleRecord
+        include: [
+          {
+            model: models.Product, // Product through ScheduleRecord
+            attributes: ['name'],
+          },
+        ],
+      },
+    ],
+    attributes: {
+      exclude: ['product'], // Deleting substituted ones
+    },
+  })
     .then(records => {
       if (!records) {
         errCode = 404;
         throw new Error('Nie znaleziono opinii.');
       }
-      // Convert for records for different names
-      const formattedRecords = records.map(record => {
-        const newRecord = {}; // Container for formatted data
-        const attributes = model.getAttributes();
-        const jsonRecord = record.toJSON();
-        // 🔄 Iterate after each column in user record
-        for (const key in jsonRecord) {
-          const newKey = columnMap[key] || key; // New or original name if not specified
-          const attributeType =
-            attributes[key]?.type.constructor.key?.toUpperCase();
-          if (
-            attributeType === 'DATE' ||
-            attributeType === 'DATEONLY' ||
-            attributeType === 'DATETIME'
-          ) {
-            newRecord[newKey] = formatIsoDateTime(jsonRecord[key]);
-          } else if (key == 'Customer') {
-            const customer = jsonRecord[key]['Imię Nazwisko'];
-            const customerId = jsonRecord.customerId;
-            newRecord[newKey] = `${customer} (${customerId})`;
-          } else if (key == 'ScheduleRecord') {
-            const dataKey = columnMap['Data'] || 'Data';
-            const startTimeKey = columnMap['Godzina'] || 'Godzina';
-            const nameKey = columnMap['Nazwa'] || 'Nazwa';
 
-            newRecord[dataKey] = formatIsoDateTime(jsonRecord[key]['date']);
-            newRecord[startTimeKey] = jsonRecord[key]['startTime'];
-            newRecord[
-              nameKey
-            ] = `${jsonRecord[key].Product?.name} (${jsonRecord[key].scheduleId})`;
-          } else {
-            newRecord[newKey] = jsonRecord[key]; // Assignment
-          }
-        }
-        return newRecord; // Return new record object
+      const formattedRecords = records.map(record => {
+        const feedback = record.toJSON();
+
+        return {
+          ...feedback,
+          rowid: feedback.feedbackId,
+          submissionDate: formatIsoDateTime(feedback.submissionDate),
+          customerName: `${feedback.Customer.firstName} ${feedback.Customer.lastName} (${feedback.Customer.customerId})`,
+          schedule: `
+          ${feedback.ScheduleRecord.Product.name}
+          ${feedback.ScheduleRecord.date} | ${feedback.ScheduleRecord.startTime}`,
+        };
       });
 
-      const keysForHeaders = Object.values(columnMap);
-      // New headers (keys from columnMap)
-      const totalHeaders = keysForHeaders;
+      const totalKeys = [
+        'feedbackId',
+        'submissionDate',
+        'delay',
+        'schedule',
+        'rating',
+        'content',
+        'customerName',
+      ];
 
       // ✅ Return response to frontend
       successLog(person, controllerName);
@@ -1452,8 +1386,7 @@ export const getAllParticipantsFeedback = (req, res, next) => {
         confirmation: 1,
         message: 'Opinie pobrane pomyślnie',
         isLoggedIn: req.session.isLoggedIn,
-        records: records,
-        totalHeaders, // To render
+        totalKeys,
         content: formattedRecords, // With new names
       });
     })
@@ -1553,10 +1486,45 @@ export const getAllNewsletters = (req, res, next) => {
   const controllerName = 'getAllNewsletters';
   callLog(req, person, controllerName);
 
-  tableDataFlatQuery(req, res, models.Newsletter);
+  models.Newsletter.findAll()
+    .then(records => {
+      if (!records) {
+        errCode = 404;
+        throw new Error('Nie znaleziono rekordów.');
+      }
+
+      const formattedRecords = records.map(record => {
+        const newsletter = record.toJSON();
+
+        return {
+          ...newsletter,
+          rowId: newsletter.newsletterId,
+          creationDate: formatIsoDateTime(newsletter.creationDate),
+          sendDate: formatIsoDateTime(newsletter.sendDate),
+        };
+      });
+
+      const totalKeys = [
+        'newsletterId',
+        'status',
+        'creationDate',
+        'sendDate',
+        'title',
+        'content',
+      ];
+
+      successLog(person, controllerName);
+      return res.json({
+        totalKeys,
+        confirmation: 1,
+        message: 'Pobrano pomyślnie',
+        content: formattedRecords, //.sort((a, b) => new Date(b.Data) - new Date(a.Data)),
+      });
+    })
+    .catch(err => catchErr(person, err, controllerName));
 };
 export const getAllSubscribedNewsletters = (req, res, next) => {
-  tableDataFlatQuery(req, res, models.SubscribedNewsletter);
+  //
 };
 //@ POST
 //@ PUT
@@ -1567,7 +1535,45 @@ export const getAllSubscribedNewsletters = (req, res, next) => {
 export const getAllProducts = (req, res, next) => {
   const controllerName = 'getAllProducts';
   callLog(req, person, controllerName);
-  tableDataFlatQuery(req, res, models.Product);
+
+  models.Product.findAll()
+    .then(records => {
+      if (!records) {
+        errCode = 404;
+        throw new Error('Nie znaleziono rekordów.');
+      }
+
+      // Convert for records for different names
+      const formattedRecords = records.map(record => {
+        const product = record.toJSON();
+
+        return {
+          ...product,
+          rowId: product.productId,
+          startDate: formatIsoDateTime(product.startDate),
+        };
+      });
+
+      const totalKeys = [
+        'productId',
+        'type',
+        'name',
+        'location',
+        'duration',
+        'price',
+        'startDate',
+        'status',
+      ];
+
+      successLog(person, controllerName);
+      return res.json({
+        totalKeys,
+        confirmation: 1,
+        message: 'Pobrano pomyślnie',
+        content: formattedRecords, //.sort((a, b) => new Date(b.Data) - new Date(a.Data)),
+      });
+    })
+    .catch(err => catchErr(person, err, controllerName));
 };
 export const getProductByID = (req, res, next) => {
   const controllerName = 'getProductByID';
@@ -1982,89 +1988,90 @@ export const postCreateBooking = (req, res, next) => {
 export const getAllPayments = (req, res, next) => {
   const controllerName = 'getAllPayments';
   callLog(req, person, controllerName);
-  const model = models.Payment;
 
-  // We create dynamic joint columns based on the map
-  const columnMap = columnMaps[model.name] || {};
-  const keysForHeaders = Object.values(columnMap);
-
-  model
-    .findAll({
-      include: [
-        {
-          model: models.Customer,
-          attributes: [
-            [
-              Sequelize.literal("CONCAT(first_name, ' ', last_name)"),
-              'Imię Nazwisko',
-            ],
-          ],
-        },
-        {
-          model: models.ScheduleRecord,
-          through: { model: models.Booking }, // M:N relation
-          include: [
-            {
-              model: models.Product,
-              attributes: ['name'],
-            },
-          ],
-          attributes: ['scheduleId'],
-        },
-      ],
-      attributes: {
-        exclude: ['product', 'scheduleId'],
+  models.Payment.findAll({
+    include: [
+      {
+        model: models.Customer,
+        include: [
+          {
+            model: models.User,
+          },
+        ],
       },
-    })
+      {
+        model: models.Booking,
+        include: [
+          {
+            model: models.ScheduleRecord,
+            include: [
+              {
+                model: models.Product,
+                attributes: ['name'],
+              },
+            ],
+            attributes: ['scheduleId'],
+          },
+        ],
+      },
+      {
+        model: models.CustomerPass,
+        include: [
+          {
+            model: models.PassDefinition,
+          },
+        ],
+      },
+    ],
+  })
     .then(records => {
       if (!records) {
         errCode = 404;
         throw new Error('Nie znaleziono płatności.');
       }
       const formattedRecords = records.map(record => {
-        const attributes = model.getAttributes();
-        const newRecord = {};
-        const jsonRecord = record.toJSON();
+        const payment = record.toJSON();
 
-        // Konwersja pól na poprawne nazwy
-        for (const key in jsonRecord) {
-          const attributeType =
-            attributes[key]?.type.constructor.key?.toUpperCase();
-          const newKey = columnMap[key] || key;
-          if (['DATE', 'DATEONLY', 'DATETIME'].includes(attributeType)) {
-            newRecord[newKey] = jsonRecord[key];
-          } else if (key === 'Customer') {
-            const customer = jsonRecord[key]['Imię Nazwisko'];
-            const customerId = jsonRecord.customerId;
-            newRecord[newKey] = `${customer} (${customerId})`;
-          } else if (key === 'ScheduleRecords') {
-            const products = jsonRecord[key]
-              .map(sr => `${sr.Product?.name} (${sr.Booking?.scheduleId})`)
-              .filter(Boolean);
-            newRecord['Terminy'] = jsonRecord[key];
-            newRecord['Produkty'] =
-              products.length > 0 ? products.join(', ') : 'Brak danych';
-          } else {
-            newRecord[newKey] = jsonRecord[key];
-          }
-        }
+        const products = [];
+        const schedules = payment.Bookings.map(b => b.ScheduleRecord);
+        products.push(...schedules);
+        products.push(...payment.CustomerPasses);
 
-        return newRecord;
+        return {
+          ...payment,
+          rowId: payment.paymentId,
+          date: formatIsoDateTime(payment.date),
+          customerName: `${payment.Customer.firstName} ${payment.Customer.firstName} (${payment.Customer.customerId})`,
+          product: products
+            .map(
+              pr =>
+                `${pr.Product?.name || pr.CustomerPass?.PassDefinition.name} (${
+                  pr.scheduleId || pr.customerPassId
+                })`
+            )
+            .join(', '),
+        };
       });
 
-      const totalHeaders = keysForHeaders;
-      req.session.isLoggedIn = true;
-      req.session.save();
+      const totalKeys = [
+        'paymentId',
+        'date',
+        'customerName',
+        'product',
+        'status',
+        'paymentMethod',
+        'amountPaid',
+        'performedBy',
+      ];
+
       successLog(person, controllerName);
       res.json({
         confirmation: 1,
         message: 'Płatności pobrane pomyślnie.',
         isLoggedIn: req.session.isLoggedIn,
-        totalHeaders,
-        records: records,
+        totalKeys,
         content: formattedRecords.sort(
-          (a, b) =>
-            new Date(b['Data Rezerwacji']) - new Date(a['Data Rezerwacji'])
+          (a, b) => new Date(b.date) - new Date(a.date)
         ),
       });
     })
@@ -2449,80 +2456,55 @@ export const getAllInvoices = (req, res, next) => {
   const controllerName = 'getAllInvoices';
   callLog(req, person, controllerName);
 
-  const model = models.Invoice;
-
-  // We create dynamic joint columns based on the map
-  const columnMap = columnMaps[model.name] || {};
-  const keysForHeaders = Object.values(columnMap);
-
-  const includeAttributes = [];
-
-  model
-    .findAll({
-      include: [
-        {
-          model: models.Payment,
-          include: [
-            {
-              model: models.Customer, // from Payment
-              attributes: [
-                [
-                  Sequelize.literal("CONCAT(first_name, ' ', last_name)"),
-                  'Imię Nazwisko',
-                ],
-              ],
-            },
-          ],
-        },
-      ],
-      attributes: {
-        include: includeAttributes, // Adding joint columns
-        exclude: ['product'], // Deleting substituted ones
+  models.Invoice.findAll({
+    include: [
+      {
+        model: models.Payment,
+        include: [
+          {
+            model: models.Customer, // from Payment
+          },
+        ],
       },
-    })
+    ],
+    attributes: {
+      exclude: ['product'], // Deleting substituted ones
+    },
+  })
     .then(records => {
       if (!records) {
         errCode = 404;
         throw new Error('Nie znaleziono faktur.');
       }
-      // Convert for records for different names
+      // Convert for records
       const formattedRecords = records.map(record => {
-        const newRecord = {}; // Container for formatted data
-        const attributes = model.getAttributes();
-        const jsonRecord = record.toJSON();
-        // 🔄 Iterate after each column in user record
-        for (const key in jsonRecord) {
-          const newKey = columnMap[key] || key; // New or original name if not specified
-          const attributeType =
-            attributes[key]?.type.constructor.key.toUpperCase(); // check type
-          if (
-            attributeType === 'DATE' ||
-            attributeType === 'DATEONLY' ||
-            attributeType === 'DATETIME'
-          ) {
-            newRecord[newKey] = formatIsoDateTime(jsonRecord[key]);
-          } else if (key === 'Payment' && jsonRecord[key]) {
-            //# name
-            newRecord[newKey] = jsonRecord[key].Customer?.['Imię Nazwisko'];
-          } else {
-            newRecord[newKey] = jsonRecord[key];
-          }
-        }
+        const invoice = record.toJSON();
 
-        return newRecord; // Return new record object
+        return {
+          ...invoice,
+          rowid: invoice.invoiceId,
+          invoiceDate: formatIsoDateTime(invoice.invoiceDate),
+          customerName: `${invoice.Payment.Customer.firstName} ${invoice.Payment.Customer.lastName}`,
+        };
       });
 
-      // New headers (keys from columnMap)
-      const totalHeaders = keysForHeaders;
-      req.session.isLoggedIn = true;
-      req.session.save();
+      const totalKeys = [
+        'invoiceId',
+        'paymentId',
+        'invoiceDate',
+        'customerName',
+        'dueDate',
+        'paymentStatus',
+        'totalAmount',
+      ];
+
       // ✅ Return response to frontend
       successLog(person, controllerName);
       res.json({
         confirmation: 1,
         message: 'Faktury pobrane pomyślnie.',
         isLoggedIn: req.session.isLoggedIn,
-        totalHeaders, // To render
+        totalKeys, // To render
         content: formattedRecords, // With new names
       });
     })

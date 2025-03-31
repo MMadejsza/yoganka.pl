@@ -1,6 +1,6 @@
 import { Op, Sequelize, col, fn } from 'sequelize';
 import * as models from '../models/_index.js';
-import { getWeekDay } from '../utils/dateUtils.js';
+import { getWeekDay } from '../utils/dateTimeUtils.js';
 import {
   callLog,
   catchErr,

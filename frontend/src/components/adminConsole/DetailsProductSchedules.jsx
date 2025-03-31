@@ -71,7 +71,15 @@ function DetailsProductSchedules({ scheduleRecords, placement, status }) {
 
   let processedScheduleRecordsArr = scheduleRecords;
   let headers = ['ID', 'Dzień', 'Data', 'Godzina', 'Lokacja', 'Frekwencja', ''];
-  let keys = ['id', 'day', 'date', 'time', 'location', 'attendance', ''];
+  let keys = [
+    'scheduleId',
+    'day',
+    'date',
+    'startTime',
+    'location',
+    'attendance',
+    '',
+  ];
   let form;
 
   if (isInPaymentView) {
@@ -84,26 +92,20 @@ function DetailsProductSchedules({ scheduleRecords, placement, status }) {
       'Lokacja',
       'Zadatek',
     ];
-    keys = ['id', 'product', 'date', 'day', 'time', 'location', 'price'];
-    processedScheduleRecordsArr = scheduleRecords.map(schedule => {
-      return {
-        id: schedule.scheduleId,
-        product: schedule.Product.name,
-        date: schedule.date,
-        day: getWeekDay(schedule.date),
-        time: schedule.startTime,
-        location: schedule.location,
-        price: schedule.Product.price,
-      };
-    });
+    keys = [
+      'scheduleId',
+      'productName',
+      'date',
+      'day',
+      'startTime',
+      'location',
+      'productPrice',
+    ];
   } else {
     processedScheduleRecordsArr = scheduleRecords.map(schedule => {
       return {
-        id: schedule.scheduleId,
-        date: schedule.date,
+        ...schedule,
         day: getWeekDay(schedule.date),
-        time: schedule.startTime,
-        location: schedule.location,
         attendance: `${schedule.participants}/${schedule.capacity} (${schedule.attendance}%)`,
         attendanceCount: schedule.attendance,
         isActionDisabled:

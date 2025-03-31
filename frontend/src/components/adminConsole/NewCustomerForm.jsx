@@ -24,7 +24,7 @@ function NewCustomerForm({ onClose }) {
   });
 
   const usersOptionsList = usersList?.content?.sort(
-    (a, b) => new Date(b.Zarejestrowany) - new Date(a.Zarejestrowany)
+    (a, b) => new Date(b.registrationDate) - new Date(a.registrationDate)
   );
   console.log('usersOptionsList: ', usersOptionsList);
 
@@ -211,8 +211,8 @@ function NewCustomerForm({ onClose }) {
         formType={formType}
         type='select'
         options={usersOptionsList.map(userObj => ({
-          label: `(ID: ${userObj.ID}) ${userObj.email}`,
-          value: userObj.ID,
+          label: `(ID: ${userObj.userId}) ${userObj.email}`,
+          value: userObj.userId,
         }))}
         id='user'
         name='userId'
