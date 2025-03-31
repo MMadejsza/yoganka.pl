@@ -52,10 +52,10 @@ function SchedulePage() {
     search: location.search,
     hash: location.hash,
   };
-  const handleOpenModal = row => {
-    const recordId = row.ID;
+  const handleOpenModal = schedule => {
+    const id = schedule.scheduleId;
     setIsModalOpen(true);
-    navigate(`${location.pathname}/${recordId}`, { state: { background } });
+    navigate(`${location.pathname}/${id}`, { state: { background } });
   };
 
   const handleCloseModal = () => {

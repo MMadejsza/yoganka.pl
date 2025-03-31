@@ -19,6 +19,39 @@ import { sendReservationFreshMail } from '../utils/mails/templates/customerActio
 let errCode = errorCode;
 const person = 'Customer';
 
+// util pass validation
+const isPassValidForSchedule = (pass, schedule) => {
+  // 1. Is active?
+  if (pass.status !== 'active') return false;
+
+  // 2. Is defined?
+  if (!pass.PassDefinition) return false;
+  const passDef = pass.PassDefinition;
+
+  // 3. Is matching requested schedule?
+  if (!schedule.Product || !schedule.Product.type) return false;
+  if (!passDef.allowedProductTypes) return false;
+  const allowedTypes = passDef.allowedProductTypes.split(','); // ["class","online"]
+  if (!allowedTypes.includes(schedule.Product.type)) return false;
+
+  // 4. Is expired?
+  const now = new Date();
+  if (pass.validUntil && now > pass.validUntil) {
+    return false;
+  }
+
+  // 5. Is started?
+  if (pass.validFrom && now < pass.validFrom) {
+    return false;
+  }
+
+  // 6. Is count type
+  if (passDef.passType === 'count' && pass.usesLeft <= 0) return false;
+
+  // All good - valid
+  return pass;
+};
+
 //! CUSTOMERS_____________________________________________
 //@ GET
 export const getCustomerDetails = (req, res, next) => {
@@ -132,9 +165,12 @@ export const postCreateBookSchedule = (req, res, next) => {
   const controllerName = 'postCreateBookSchedule';
   callLog(req, person, controllerName);
   console.log(`req.body`, req.body);
+  console.log(`req.user`, req.user);
   // @ Fetching USER
-  let customerPromise, currentCustomer, currentScheduleRecord;
-  let isNewCustomer = false;
+  let customerPromise,
+    currentCustomer,
+    currentScheduleRecord,
+    isNewCustomer = false;
   // If it's not a Customer yet
   if (!req.user.Customer) {
     const cDetails = req.body.customerDetails;
@@ -191,13 +227,22 @@ export const postCreateBookSchedule = (req, res, next) => {
 
       isNewCustomer = true;
       successLog(person, controllerName, 'customer created');
+
       return models.User.update(
         { role: 'CUSTOMER' },
         { where: { userId: req.user.userId } }
       ).then(() => newCustomer);
     });
   } else {
-    customerPromise = Promise.resolve(req.user.Customer);
+    // Fetching from the database again ensures you get a full Sequelize instance with all methods - this is essential for using instance methods like .save()
+    customerPromise = models.Customer.findByPk(req.user.Customer.customerId, {
+      include: [
+        {
+          model: models.CustomerPass,
+          include: [models.PassDefinition],
+        },
+      ],
+    });
   }
 
   if (!req.body.schedule) {
@@ -213,6 +258,11 @@ export const postCreateBookSchedule = (req, res, next) => {
         // Fetch schedule and lock it for other paralele transactions
         return models.ScheduleRecord.findOne({
           where: { scheduleId: req.body.schedule }, //from mutation
+          include: [
+            {
+              model: models.Product,
+            },
+          ],
           transaction: t,
           lock: t.LOCK.UPDATE, //@
         });
@@ -231,7 +281,6 @@ export const postCreateBookSchedule = (req, res, next) => {
           errCode = 401;
           throw new Error('Nie można rezerwować terminu, który już minął.');
         }
-        // console.log('scheduleRecord', scheduleRecord);
         // Count the current amount of reservations
         return models.Booking.count({
           where: { scheduleId: req.body.schedule, attendance: 1 },
@@ -246,34 +295,19 @@ export const postCreateBookSchedule = (req, res, next) => {
             throw new Error('Brak wolnych miejsc na ten termin.');
           }
 
-          // IF still enough spaces - check if booked in the past
-          return models.Payment.findOne({
+          // If still enough spaces - check if booked in the past
+          return models.Booking.findOne({
             where: {
               customerId: currentCustomer.customerId,
+              scheduleId: req.body.schedule,
             },
-            include: [
-              {
-                model: models.ScheduleRecord,
-                where: { scheduleId: req.body.schedule },
-                through: {
-                  attributes: [
-                    'attendance',
-                    'customerId',
-                    'paymentId',
-                    'scheduleId',
-                  ],
-                  where: { customerId: currentCustomer.customerId },
-                },
-                required: true,
-              },
-            ],
             transaction: t,
             lock: t.LOCK.UPDATE,
           });
         });
       })
-      .then(existingPayment => {
-        if (existingPayment) {
+      .then(existingBooking => {
+        if (existingBooking) {
           // console.log('existingPayment', existingPayment);
 
           if (req.user.email) {
@@ -287,47 +321,95 @@ export const postCreateBookSchedule = (req, res, next) => {
           }
 
           //! assuming single schedule/payment
-          return existingPayment.ScheduleRecords[0].Booking.update(
-            { attendance: true },
-            { transaction: t }
-          ).then(() => existingPayment);
+          return existingBooking
+            .update({ attendance: true }, { transaction: t })
+            .then(() => existingBooking);
         } else {
-          // payment doesn't exist - create new one
-          return models.Payment.create(
-            {
-              customerId: currentCustomer.customerId,
-              date: new Date(),
-              product: req.body.product,
-              status: req.body.status,
-              amountPaid: req.body.amountPaid,
-              amountDue: req.body.amountDue,
-              paymentMethod: req.body.paymentMethod,
-              paymentStatus: req.body.paymentStatus,
-            },
-            { transaction: t }
-          ).then(payment => {
-            // After creating the reservation, we connected addScheduleRecord which was generated by Sequelize for many-to-many relationship between reservation and ScheduleRecord. The method adds entry to intermediate table (bookingss) and connects created reservation with schedule feeder (ScheduleRecord).
+          // Booking doesn't exist -we need to create one but first we have to check again if customer has already the pass for this particular type of schedule or he will have to issue single payment
+          let validPass = null;
 
-            // Reservation with payment fro ex. membership confirmation
-            if (req.user.email) {
-              sendReservationFreshMail({
-                to: req.user.email,
-                productName: req.body.product,
-                date: currentScheduleRecord.date,
-                startTime: currentScheduleRecord.startTime,
-                location: currentScheduleRecord.location,
-              });
-            }
+          // Fetch passes from middleware
+          if (
+            currentCustomer.CustomerPasses &&
+            currentCustomer.CustomerPasses.length > 0
+          ) {
+            // Apply validation from prepared util
+            validPass = currentCustomer.CustomerPasses.find(pass =>
+              isPassValidForSchedule(pass, currentScheduleRecord)
+            );
+          }
 
-            successLog(person, controllerName, 'payment created');
-            return payment
-              .addScheduleRecord(req.body.schedule, {
-                through: { customerId: currentCustomer.customerId },
-                transaction: t,
-                individualHooks: true,
-              })
-              .then(() => {
-                // reserving the schedule confirmation
+          if (validPass) {
+            // Just create the booking
+            return models.Booking.create(
+              {
+                customerId: currentCustomer.customerId,
+                scheduleId: currentScheduleRecord.scheduleId,
+                customerPassId: validPass.customerPassId,
+                attendance: true,
+              },
+              { transaction: t }
+            ).then(booking => {
+              if (req.user.email) {
+                sendAttendanceFirstBookingForScheduleMail({
+                  to: req.user.email,
+                  productName: currentScheduleRecord?.ProductName || '',
+                  date: currentScheduleRecord.date,
+                  startTime: currentScheduleRecord.startTime,
+                  location: currentScheduleRecord.location,
+                  payment: `Karnet ${validPass.PassDefinition.name}`,
+                });
+              }
+              successLog(person, controllerName, 'booking created with pass');
+
+              // If pass was of typ count
+              if (validPass?.PassDefinition.passType === 'count') {
+                return models.CustomerPass.update(
+                  { usesLeft: validPass.usesLeft - 1 },
+                  {
+                    where: { customerPassId: validPass.customerPassId },
+                    transaction: t,
+                  }
+                ).then(() => booking);
+              }
+              return booking;
+            });
+          } else {
+            // No pass - payment first
+            return models.Payment.create(
+              {
+                customerId: currentCustomer.customerId,
+                date: new Date(),
+                product: req.body.product,
+                status: req.body.status,
+                amountPaid: currentScheduleRecord.Product.price,
+                amountDue: req.body.amountDue,
+                paymentMethod: req.body.paymentMethod,
+                paymentStatus: req.body.paymentStatus,
+              },
+              { transaction: t }
+            ).then(payment => {
+              if (req.user.email) {
+                sendReservationFreshMail({
+                  to: req.user.email,
+                  productName: req.body.product,
+                  date: currentScheduleRecord.date,
+                  startTime: currentScheduleRecord.startTime,
+                  location: currentScheduleRecord.location,
+                });
+              }
+              successLog(person, controllerName, 'payment created');
+
+              // Than the booking
+              return models.Booking.create(
+                {
+                  customerId: currentCustomer.customerId,
+                  scheduleId: req.body.schedule,
+                  paymentId: payment.paymentId,
+                  attendance: true,
+                },
+                { transaction: t }
+              ).then(booking => {
                 if (req.user.email) {
                   sendAttendanceFirstBookingForScheduleMail({
                     to: req.user.email,
@@ -337,21 +419,23 @@ export const postCreateBookSchedule = (req, res, next) => {
                     location: currentScheduleRecord.location,
                   });
                 }
-
                 successLog(person, controllerName, 'attendance marked');
                 return payment;
               });
-          });
+            });
+          }
         }
       });
   })
-    .then(payment => {
+    .then(paymentOrBooking => {
+      // result is booking if was existing booking OR new booking if paid with pass OR payment obj if single payment was issued
+
       successLog(person, controllerName);
       res.status(201).json({
         isNewCustomer,
         confirmation: 1,
         message: 'Miejsce zaklepane - do zobaczenia ;)',
-        payment,
+        paymentOrBooking,
       });
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));

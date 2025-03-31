@@ -11,16 +11,17 @@ function ModalTable({
   adminActions,
 }) {
   const today = new Date();
+  const isLoggedIn =
+      status?.isLoggedIn != undefined ? status.isLoggedIn : 'N/A',
+    isCustomer = status?.role === 'CUSTOMER',
+    isAdmin = status?.role === 'ADMIN';
   console.log('ModalTable content', content);
   console.log('ModalTable status', status);
 
-  const symbol = (row, isArchived, symbol) => {
+  const customerViewSymbol = (row, isArchived, symbol) => {
     if (isAdminPage && adminActions) {
       return symbol;
-    } else if (
-      status?.isLoggedIn &&
-      (status?.role === 'CUSTOMER' || status?.role === 'ADMIN')
-    ) {
+    } else if (isLoggedIn && (isCustomer || isAdmin)) {
       if (row.isUserGoing) return 'check';
       else if (row.full || isArchived) return 'block';
       else if (row.wasUserReserved) return 'cycle';
@@ -31,13 +32,9 @@ function ModalTable({
 
   const onRowBtnClick = (row, archived, method, e) => {
     const isUserGoing = row.isUserGoing != undefined ? row.isUserGoing : false;
-    const isLoggedIn =
-      status?.isLoggedIn != undefined ? status.isLoggedIn : 'N/A';
     const isArchived = archived != undefined ? archived : 'N/A';
     const isAuthorized =
-      status?.role != undefined
-        ? status?.role === 'CUSTOMER' || status?.role === 'ADMIN'
-        : 'N/A';
+      status?.role != undefined ? isCustomer || isAdmin : 'N/A';
 
     console.log('onRowBtnClick:', {
       isUserGoing: isUserGoing,
@@ -51,10 +48,10 @@ function ModalTable({
       e.stopPropagation();
       method({
         customerDetails: '',
-        schedule: row['ID'],
-        product: row['Nazwa'],
+        schedule: row.scheduleId,
+        product: row.productName,
         status: 'Paid',
-        amountPaid: row['Zadatek'],
+        amountPaid: row.price,
         amountDue: 0,
         paymentMethod: 'Credit Card',
         paymentStatus: 'Completed',
@@ -62,7 +59,7 @@ function ModalTable({
         attendancePaymentID: row.id,
         cancelledAttendanceCustomerID: row.customerId,
         cancelledAttendancePaymentID: row.paymentId,
-        deletescheduleId: row.id,
+        deleteScheduleId: row.id,
         isDisabled: row.isActionDisabled,
       });
     }
@@ -86,14 +83,11 @@ function ModalTable({
         {content.map((row, rowIndex) => {
           const isArchived =
             new Date(
-              `${row.Data?.split('.').reverse().join('-')}T${
-                row.Godzina ?? '00:00:00'
+              `${row.date?.split('.').reverse().join('-')}T${
+                row.startTime ?? '00:00:00'
               }`
             ) < today;
-          // console.log(
-          // 	`${row.Data?.split('.').reverse().join('-')}T${row.Godzina ?? '00:00:00'}`,
-          // );
-          // console.log(`isArchived`, isArchived);
+
           return (
             <tr
               className={`data-table__cells ${active ? 'active' : ''}  ${
@@ -134,7 +128,7 @@ function ModalTable({
                               onRowBtnClick(row, isArchived, action.method, e)
                             }
                           >
-                            {symbol(row, isArchived, action.symbol)}
+                            {customerViewSymbol(row, isArchived, action.symbol)}
                           </span>
                         </button>
                       ))}

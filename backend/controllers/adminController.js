@@ -1982,14 +1982,6 @@ export const postCreatePayment = (req, res, next) => {
           throw new Error('Nie znaleziono terminu');
         }
         currentScheduleRecord = scheduleRecord;
-        // @ admin IS able to fill the past schedule but not change it:
-        // const scheduleDateTime = new Date(
-        // 	`${scheduleRecord.date}T${scheduleRecord.startTime}:00`,
-        // );
-        // if (scheduleDateTime < new Date()) {
-        // 	errCode = 401;
-        // 	throw new Error('Nie można rezerwować terminu, który już minął.');
-        // }
         // Count the current amount of reservations
         return models.Booking.count({
           where: { scheduleId: scheduleID, attendance: 1 },

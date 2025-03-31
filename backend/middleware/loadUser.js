@@ -10,6 +10,18 @@ export const loadUserFromSession = (req, res, next) => {
       {
         model: models.Customer, // Add Customer
         required: false, // May not exist
+        include: [
+          {
+            model: models.CustomerPass, // Add his passes
+            required: false, // May not exist
+            include: [
+              {
+                model: models.PassDefinition, // Their definitions
+                required: false, // May not exist
+              },
+            ],
+          },
+        ],
       },
       {
         model: models.UserPrefSetting, // User settings if exist

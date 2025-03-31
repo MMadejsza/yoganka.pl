@@ -13,8 +13,8 @@ export const getWeekDay = dateStr => {
 };
 
 export const formatIsoDateTime = (dateInput, isSchedule) => {
-  console.log(`formatIsoDateTime front utils dateInput`, dateInput);
-  console.log(`formatIsoDateTime front utils isSchedule`, isSchedule);
+  // console.log(`formatIsoDateTime front utils dateInput`, dateInput);
+  // console.log(`formatIsoDateTime front utils isSchedule`, isSchedule);
   const isoString =
     typeof dateInput === 'string'
       ? dateInput
