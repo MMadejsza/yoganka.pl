@@ -5,6 +5,7 @@ import ModalTable from '../components/adminConsole/ModalTable';
 import ViewFrame from '../components/adminConsole/ViewFrame.jsx';
 import Section from '../components/Section.jsx';
 import { useAuthStatus } from '../hooks/useAuthStatus.js';
+import { formatIsoDateTime } from '../utils/dateTime.js';
 import { fetchData, mutateOnCreate, queryClient } from '../utils/http.js';
 
 function SchedulePage() {
@@ -72,25 +73,29 @@ function SchedulePage() {
     }
   }
 
-  let table;
+  let table, viewFrame;
 
   if (data) {
     // console.clear();
     console.log(`✅ Data: `);
     console.log(data);
 
-    let content = data.content.sort((a, b) => {
-      const dateA = new Date(a.Data.split('.').reverse().join('-'));
-      const dateB = new Date(b.Data.split('.').reverse().join('-'));
+    let contentSorted = data.content.sort((a, b) => {
+      const dateA = new Date(a.date.split('.').reverse().join('-'));
+      const dateB = new Date(b.date.split('.').reverse().join('-'));
       return dateA - dateB;
     });
-    const headers = data.totalHeaders; //.slice(1);
+
+    // format date
+    contentSorted.forEach(schedule => {
+      schedule.date = formatIsoDateTime(schedule.date, true);
+    });
 
     table = (
       <ModalTable
-        headers={headers}
-        keys={headers}
-        content={content}
+        headers={data.totalHeaders}
+        keys={data.totalKeys}
+        content={contentSorted}
         active={true}
         status={status}
         onOpen={handleOpenModal}
@@ -99,7 +104,7 @@ function SchedulePage() {
       />
     );
   }
-  let viewFrame;
+
   if (data && status) {
     viewFrame = (
       <ViewFrame

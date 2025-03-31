@@ -1,7 +1,6 @@
 import { Op, Sequelize, col, fn } from 'sequelize';
 import * as models from '../models/_index.js';
-import columnMaps from '../utils/columnsMapping.js';
-import { formatIsoDateTime, getWeekDay } from '../utils/dateUtils.js';
+import { getWeekDay } from '../utils/dateUtils.js';
 import {
   callLog,
   catchErr,
@@ -220,104 +219,64 @@ export const getAllSchedules = (req, res, next) => {
   const controllerName = 'getAllSchedules';
   callLog(req, person, controllerName);
 
-  const model = models.ScheduleRecord;
-
-  // We create dynamic joint columns based on the map
-  const columnMap = columnMaps[model.name] || {};
   // If logged In and is Customer - we want to check his booked schedules to flag them later
   const now = new Date();
-  model
-    .findAll({
-      include: [
-        {
-          model: models.Product,
-          attributes: ['type', 'name', 'price'],
-        },
-        {
-          model: models.Payment,
-          required: false,
-          attributes: ['paymentId'], //payment Id is enough
-          through: {
-            attributes: ['attendance', 'customerId'], // dołącz dodatkowe atrybuty
-          },
-
-          // where: isUser && isCustomer ? {customerId: req.user.Customer.customerId} : undefined, // Filter
-        },
-      ],
-      attributes: {
-        exclude: ['productId'], // Deleting substituted ones
+  models.ScheduleRecord.findAll({
+    include: [
+      {
+        model: models.Product,
+        attributes: ['type', 'name', 'price'],
       },
-      where: Sequelize.where(
-        fn(
-          'CONCAT',
-          col('ScheduleRecord.date'),
-          'T',
-          col('ScheduleRecord.start_time'),
-          ':00'
-        ),
-        { [Op.gte]: now.toISOString() }
+      {
+        model: models.Booking,
+        required: false,
+      },
+    ],
+    attributes: {
+      exclude: ['productId'], // Deleting substituted ones
+    },
+    where: Sequelize.where(
+      fn(
+        'CONCAT',
+        col('ScheduleRecord.date'),
+        'T',
+        col('ScheduleRecord.start_time'),
+        ':00'
       ),
-    })
+      { [Op.gte]: now.toISOString() }
+    ),
+  })
     .then(records => {
       if (!records) {
         errCode = 404;
         throw new Error('Nie znaleziono terminów.');
       }
       // Convert for records for different names
-      const formattedRecords = records.map(record => {
-        const newRecord = {}; // Container for formatted data
+      const formattedRecords = records.map(s => {
+        // Transform to pure js object - not sequelize instance - to get all known features
+        const schedule = s.get({ plain: true });
 
-        const attributes = model.getAttributes();
-        const jsonRecord = record.toJSON();
-        // console.log('jsonRecord', jsonRecord);
-
-        // 🔄 Iterate after each column in user record
-        for (const key in jsonRecord) {
-          const newKey = columnMap[key] || key; // New or original name if not specified
-          const attributeType =
-            attributes[key]?.type.constructor.key?.toUpperCase();
-          if (
-            attributeType === 'DATE' ||
-            attributeType === 'DATEONLY' ||
-            attributeType === 'DATETIME'
-          ) {
-            newRecord[newKey] = formatIsoDateTime(jsonRecord[key], true);
-          } else if (key === 'Product' && jsonRecord[key]) {
-            newRecord['Typ'] = jsonRecord[key].type; //  flatten object
-            newRecord['Nazwa'] = jsonRecord[key].name;
-          } else if (key === 'Payments') {
-            newRecord.wasUserReserved = jsonRecord.Payments.some(
-              payment =>
-                payment.Booking.customerId === req.user?.Customer?.customerId
-            );
-            newRecord.isUserGoing = jsonRecord.Payments.some(payment => {
-              const isBooked = payment.Booking;
-              const customerId = payment.Booking.customerId;
-              const loggedInID = req.user?.Customer?.customerId;
-              const isGoing =
-                payment.Booking.attendance === 1 ||
-                payment.Booking.attendance === true;
-
-              return isBooked && customerId == loggedInID && isGoing;
-            });
-          } else {
-            newRecord[newKey] = jsonRecord[key]; // Assignment
-          }
-        }
-        // console.log(jsonRecord);
-        const activePayments = jsonRecord.Payments.filter(
-          payment =>
-            payment.Booking &&
-            (payment.Booking.attendance === 1 ||
-              payment.Booking.attendance === true)
+        const activeBookings = schedule.Bookings?.filter(
+          booking => booking.attendance === 1 || booking.attendance === true
         );
-        newRecord['Dzień'] = getWeekDay(jsonRecord['date']);
-        newRecord['Zadatek'] = jsonRecord.Product.price;
-        newRecord[
-          'Miejsca'
-        ] = `${activePayments.length}/${jsonRecord.capacity}`;
-        newRecord.full = activePayments.length >= jsonRecord.capacity;
-        return newRecord; // Return new record object
+
+        schedule.day = getWeekDay(schedule.date);
+        schedule.productType = schedule.Product.type;
+        schedule.productName = schedule.Product.name;
+        schedule.productPrice = schedule.Product.price;
+        schedule.wasUserReserved =
+          schedule.Bookings?.some(
+            booking => booking.customerId === req.user?.Customer?.customerId
+          ) || false;
+        schedule.isUserGoing = activeBookings.some(booking => {
+          const customerId = booking.customerId;
+          const loggedInID = req.user?.Customer?.customerId;
+
+          return customerId == loggedInID;
+        });
+        schedule.attendance = `${activeBookings?.length}/${schedule.capacity}`;
+        schedule.full = activeBookings?.length >= schedule.capacity;
+        return schedule; // Return new record object
       });
 
       // New headers (keys from columnMap)
@@ -331,6 +290,16 @@ export const getAllSchedules = (req, res, next) => {
         'Nazwa',
         'Lokalizacja',
       ];
+      const totalKeys = [
+        '',
+        'attendance',
+        'date',
+        'day',
+        'startTime',
+        'productType',
+        'productName',
+        'location',
+      ];
 
       // ✅ Return response to frontend
       successLog(person, controllerName);
@@ -338,6 +307,7 @@ export const getAllSchedules = (req, res, next) => {
         confirmation: 1,
         message: 'Terminy pobrane pomyślnie.',
         totalHeaders, // To render
+        totalKeys, // to map to the rows attributes
         content: formattedRecords, // With new names
       });
     })
