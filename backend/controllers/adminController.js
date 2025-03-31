@@ -699,81 +699,73 @@ export const deleteCustomer = (req, res, next) => {
 export const getAllSchedules = (req, res, next) => {
   const controllerName = 'getAllSchedules';
   callLog(req, person, controllerName);
-  const model = models.ScheduleRecord;
 
-  // We create dynamic joint columns based on the map
-  const columnMap = columnMaps[model.name] || {};
-  const keysForHeaders = Object.values(columnMap);
-
-  model
-    .findAll({
-      include: [
-        {
-          model: models.Product,
-          attributes: ['type', 'name', 'price'],
-        },
-        {
-          model: models.Booking,
-        },
-      ],
-      attributes: {
-        exclude: ['productId'], // Deleting substituted ones
+  models.ScheduleRecord.findAll({
+    include: [
+      {
+        model: models.Product,
+        attributes: ['type', 'name', 'price'],
       },
-    })
+      {
+        model: models.Booking,
+      },
+    ],
+    attributes: {
+      exclude: ['productId'], // Deleting substituted ones
+    },
+  })
     .then(records => {
       if (!records) {
         errCode = 404;
         throw new Error('Nie znaleziono terminów.');
       }
       // Convert for records for different names
-      const formattedRecords = records.map(record => {
-        const newRecord = {}; // Container for formatted data
+      const formattedRecords = records.map(s => {
+        // Transform to pure js object - not sequelize instance - to get all known features
+        const schedule = s.get({ plain: true });
 
-        // const attributes = model.getAttributes();
-        const jsonRecord = record.toJSON();
-        // console.log('jsonRecord', jsonRecord);
+        const activeBookings = schedule.Bookings?.filter(
+          booking => booking.attendance === 1 || booking.attendance === true
+        );
+        schedule.attendance = `${activeBookings?.length}/${schedule.capacity}`;
+        schedule.day = getWeekDay(schedule.date);
 
-        // 🔄 Iterate after each column in user record
-        console.log(jsonRecord);
-        const attendanceRecords = [];
-        for (const key in jsonRecord) {
-          const newKey = columnMap[key] || key; // New or original name if not specified
-          if (key === 'Product' && jsonRecord[key]) {
-            newRecord['Typ'] = jsonRecord[key].type; //  flatten object
-            newRecord['Nazwa'] = jsonRecord[key].name;
-          } else if (key === 'Bookings') {
-            newRecord.wasUserReserved =
-              record.Bookings && record.Bookings.length > 0;
-            newRecord.isUserGoing = jsonRecord.Bookings.some(booking => {
-              const isGoing = booking.attendance;
-              if (isGoing) attendanceRecords.push(booking);
-              const customerId = booking.customerId;
-              const loggedInID = req.user?.Customer?.customerId;
-
-              return customerId == loggedInID && isGoing;
-            });
-          } else {
-            newRecord[newKey] = jsonRecord[key]; // Assignment
-          }
-        }
-
-        newRecord['Dzień'] = getWeekDay(jsonRecord['date']);
-        newRecord['Zadatek'] = jsonRecord.Product.price;
-        newRecord[
-          'Miejsca'
-        ] = `${attendanceRecords.length}/${jsonRecord.capacity}`;
-        newRecord.full = attendanceRecords.length >= jsonRecord.capacity;
-        return newRecord; // Return new record object
+        schedule.productType = schedule.Product.type;
+        schedule.productName = schedule.Product.name;
+        schedule.productPrice = schedule.Product.price;
+        return schedule;
       });
 
       // New headers (keys from columnMap)
-      const totalHeaders = keysForHeaders;
+      const totalHeaders = [
+        'Id',
+        'Obecność',
+        'Data',
+        'Dzień',
+        'Godzina',
+        'Miejsce',
+        'Typ',
+        'Zajęcia',
+        'Zadatek',
+      ];
+      const totalKeys = [
+        'scheduleId',
+        'attendance',
+        'date',
+        'day',
+        'startTime',
+        'location',
+        'productType',
+        'productName',
+        'productPrice',
+      ];
       // ✅ Return response to frontend
       successLog(person, controllerName);
       res.json({
         confirmation: 1,
         message: 'Terminy pobrane pomyślnie.',
         totalHeaders, // To render
+        totalKeys, // to map to the rows attributes
         content: formattedRecords.sort(
           (a, b) => new Date(b.Data) - new Date(a.Data)
         ), // With new names

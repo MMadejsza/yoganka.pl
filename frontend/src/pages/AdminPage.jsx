@@ -155,7 +155,7 @@ function AdminPage() {
     table = (
       <ModalTable
         headers={data.totalHeaders}
-        keys={data.totalHeaders}
+        keys={data.totalKeys || data.totalHeaders}
         content={data.content}
         active={!isInactiveTable}
         onOpen={handleOpenModal}
