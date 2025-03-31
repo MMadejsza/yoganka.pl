@@ -88,24 +88,22 @@ export const getPaymentByID = (req, res, next) => {
 
   models.Payment.findOne({
     where: { paymentId: PK, customerId: customerId },
-    through: { attributes: [] }, // omit data from mid table
     required: false,
-    attributes: {
-      exclude: ['customerId'],
-    },
     include: [
       {
         model: models.Customer,
-        attributes: { exclude: [] },
       },
       {
-        model: models.ScheduleRecord,
-        attributes: { exclude: ['userId'] },
-        through: { attributes: [] }, // omit data from mid table
+        model: models.Booking,
         include: [
           {
-            model: models.Product,
-            attributes: { exclude: [] },
+            model: models.ScheduleRecord,
+            attributes: { exclude: ['userId'] },
+            include: [
+              {
+                model: models.Product,
+              },
+            ],
           },
         ],
       },

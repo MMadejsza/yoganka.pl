@@ -98,11 +98,11 @@ export const calculateStats = customer => {
   // console.log(customer.Payments);
   for (let payment of customer.Payments) {
     totalRevenue += parseFloat(payment.amountPaid);
-    // console.log(`totalRevenue: ${totalRevenue}`);
-
-    payment.date = formatIsoDateTime(payment.date);
-    totalPayments.push(payment);
-
+    console.log(`calculateStats payment.date`, payment.date);
+    totalPayments.push({
+      ...payment,
+      date: formatIsoDateTime(payment.date),
+    });
     const invoice = payment.Invoice;
     if (!!invoice) {
       invoice.invoiceDate = formatIsoDateTime(invoice.invoiceDate);

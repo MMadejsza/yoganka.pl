@@ -9,8 +9,8 @@ function AccountDashboard({ data, queryStatus }) {
   const today = new Date().toISOString().split('T')[0];
   const navigate = useNavigate();
   const location = useLocation(); // fetch current path
-  const matchPłatności = useMatch('/konto/rezerwacje/:id');
-  const [isModalOpen, setIsModalOpen] = useState(matchPłatności);
+  const matchPayments = useMatch('/konto/rezerwacje/:id');
+  const [isModalOpen, setIsModalOpen] = useState(matchPayments);
 
   const background = {
     pathname: location.pathname,
@@ -20,7 +20,7 @@ function AccountDashboard({ data, queryStatus }) {
 
   const handleOpenScheduleModal = row => {
     setIsModalOpen(true);
-    navigate(`grafik/${row.id}`, { state: { background } });
+    navigate(`grafik/${row.scheduleId}`, { state: { background } });
   };
 
   const handleCloseModal = () => {
@@ -39,7 +39,7 @@ function AccountDashboard({ data, queryStatus }) {
     name = `${customer.firstName} ${customer.lastName}`;
     customerStats = calculateStats(data.customer);
     const headers = [
-      'ID',
+      'Id',
       'Data',
       'Dzień',
       'Godzina',

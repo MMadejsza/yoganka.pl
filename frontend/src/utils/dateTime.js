@@ -37,6 +37,7 @@ export const formatIsoDateTime = (dateInput, isSchedule) => {
     formattedTime = date.toLocaleString('pl-PL', {
       hour: '2-digit',
       minute: '2-digit',
+      second: '2-digit',
       hour12: false,
     });
   } else formattedTime = '';

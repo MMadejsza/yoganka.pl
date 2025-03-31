@@ -20,8 +20,8 @@ function ViewPayment({ data, isUserAccountPage }) {
   );
   const { payment } = data;
   const { Customer: customer } = payment;
-  const { ScheduleRecords: schedules } = payment;
-
+  const schedules = payment.Bookings.map(booking => booking.ScheduleRecord);
+  console.log(`ViewPayment schedules`, schedules);
   return (
     <>
       <h1 className='user-container__user-title modal__title'>{`Płatność (ID: ${

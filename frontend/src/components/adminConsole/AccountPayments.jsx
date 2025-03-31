@@ -21,7 +21,7 @@ function AccountPayments({ data }) {
     hash: location.hash,
   };
   const handleOpenModal = row => {
-    const recordId = row.id;
+    const recordId = row.paymentId;
     setIsModalOpen(true);
     navigate(`${location.pathname}/${recordId}`, { state: { background } });
   };

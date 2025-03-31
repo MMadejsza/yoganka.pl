@@ -29,7 +29,7 @@ function DetailsUser({ userData, customerView, isUserAccountPage }) {
           </p>
         </li>
 
-        {!customerView && !userData.Customer && (
+        {!isUserAccountPage && !customerView && !userData.Customer && (
           <li className='user-container__section-record modal-checklist__li'>
             <p className='user-container__section-record-label'>Aktywność:</p>
             <p className='user-container__section-record-content'>

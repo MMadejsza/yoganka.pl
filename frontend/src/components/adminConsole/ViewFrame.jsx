@@ -36,7 +36,7 @@ function ViewFrame({
 
   console.log('ViewFrame callPath: ', callPath);
   console.log('ViewFrame isCustomerQuery: ', isCustomerQuery);
-
+  console.log('ViewFrame: modifier =', modifier);
   console.log('✅ role', role);
 
   // const [editingState, setEditingState] = useState(false);
@@ -63,6 +63,8 @@ function ViewFrame({
   const { data: status } = useAuthStatus();
 
   const resolveModifier = () => {
+    console.log('resolveModifier data:', data);
+    console.log('resolveModifier modifier:', modifier);
     let controller = {};
     switch (modifier) {
       case 'user':

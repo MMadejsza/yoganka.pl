@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { fetchItem } from '../utils/http.js';
 
@@ -13,19 +13,20 @@ import Section from '../components/Section.jsx';
 function AccountPage() {
   // console.log(`✅ AccountPAge: `);
   const location = useLocation();
-  const accountTab = location.pathname.split('/').pop();
+  const accountTab = location.pathname; //.split('/').pop();
   console.log(accountTab);
   const [isChosenContent, setIsChosenContent] = useState(accountTab);
 
-  // useEffect(() => {
-  // 	setIsChosenContent(accountTab);
-  // }, [accountTab]);
+  useEffect(() => {
+    setIsChosenContent(accountTab);
+  }, [accountTab]);
 
   const { data, isError, error } = useQuery({
     queryKey: ['account'],
     queryFn: ({ signal }) => fetchItem('/show-account', { signal }),
-    staleTime: 0,
-    refetchOnMount: true,
+    staleTime: 300000,
+    refetchOnMount: false,
+    keepPreviousData: true, // when changing state
   });
 
   let userTabs, name, content, customer;
@@ -42,14 +43,14 @@ function AccountPage() {
 
     userTabs = <UserTabs onClick={setIsChosenContent} person={data} />;
 
-    switch (isChosenContent) {
-      case 'zajecia':
+    switch (true) {
+      case isChosenContent.includes('zajecia'):
         content = <AccountSchedulesHistory data={customer} />;
         break;
-      case 'rezerwacje':
+      case isChosenContent.includes('rezerwacje'):
         content = <AccountPayments data={customer} />;
         break;
-      case 'ustawienia':
+      case isChosenContent.includes('ustawienia'):
         content = (
           <AccountSettings
             data={data}
