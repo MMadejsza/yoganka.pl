@@ -106,7 +106,7 @@ export const statsCalculatorForCustomer = customer => {
   const stats = {
     records: scheduleRecords,
     recordsKeys: [
-      '',
+      // '',
       'scheduleId',
       'date',
       'day',

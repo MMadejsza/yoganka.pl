@@ -6,7 +6,7 @@ import ModalTable from './ModalTable';
 import ViewFrame from './ViewFrame.jsx';
 
 function AccountDashboard({ data, queryStatus }) {
-  const today = new Date().toISOString().split('T')[0];
+  const today = new Date();
   const navigate = useNavigate();
   const location = useLocation(); // fetch current path
   const matchPayments = useMatch('/konto/rezerwacje/:id');
@@ -48,7 +48,10 @@ function AccountDashboard({ data, queryStatus }) {
       'Miejsce',
     ];
     const content = customerStats.records;
-    const contentUpcoming = content.filter(schedule => schedule.date >= today);
+    const contentUpcoming = content.filter(
+      schedule =>
+        new Date(`${schedule.date}T${schedule.startTime}:00.000Z`) >= today
+    );
 
     // console.log(`✅ contentUpcoming: `, contentUpcoming);
     // console.log(`✅ content: `, content);

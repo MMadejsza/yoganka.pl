@@ -1447,7 +1447,7 @@ export const amountPaidValidations = [
 //@ PAYMENT METHOD RULESET
 export const paymentMethodValidations = [
   {
-    rule: value => value.trim() !== '',
+    rule: value => value.toString().trim() !== '',
     message: 'Pole nie może być puste',
   },
   {
@@ -1459,11 +1459,11 @@ export const paymentMethodValidations = [
 export const locationValidations = [
   {
     rule: value => value.trim() !== '',
-    message: 'Pole nie może być puste',
+    message: 'Pole nie może być puste - widoczne dla klienta.',
   },
   {
     rule: value => value.length <= 25,
-    message: 'Max 25 znaków',
+    message: 'Max 25 znaków - krótkie, rozpoznawcze bez szczegółów.',
   },
 ];
 //@ PRODUCT NAME RULESET

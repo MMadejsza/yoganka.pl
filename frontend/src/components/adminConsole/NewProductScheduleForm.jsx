@@ -91,7 +91,7 @@ function NewProductScheduleForm() {
     isFocused: locationIsFocused,
     validationResults: locationValidationResults,
     hasError: locationHasError,
-  } = useInput('', val.locationValidations);
+  } = useInput('');
   const {
     value: capacityValue,
     handleChange: handleCapacityChange,
@@ -244,7 +244,7 @@ function NewProductScheduleForm() {
           id='location'
           name='location'
           label=''
-          placeholder='Lokacja'
+          placeholder='(Widoczna!)'
           value={locationValue}
           onFocus={handleLocationFocus}
           onBlur={handleLocationBlur}

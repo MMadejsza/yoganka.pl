@@ -319,14 +319,14 @@ export const getAllCustomers = (req, res, next) => {
           ...customer,
           rowId: customer.customerId,
           userId: customer.userId,
-          fullName: `${customer.firstName} ${customer.lastName}`,
+          customerFullName: `${customer.firstName} ${customer.lastName}`,
         };
       });
 
       const totalKeys = [
         'customerId',
         'userId',
-        'fullName',
+        'customerFullName',
         'dob',
         'customerType',
         'preferredContactMethod',

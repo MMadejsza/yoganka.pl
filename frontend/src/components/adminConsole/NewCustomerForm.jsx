@@ -145,7 +145,7 @@ function NewCustomerForm({ onClose }) {
     isFocused: notesIsFocused,
     validationResults: notesValidationResults,
     hasError: notesHasError,
-  } = useInput('', val.notesValidations);
+  } = useInput('');
 
   // Reset all te inputs
   const handleReset = () => {

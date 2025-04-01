@@ -1,6 +1,12 @@
 import ModalTable from './ModalTable';
 
 function DetailsCustomerSchedules({ customerStats, classModifier, altTitle }) {
+  // PAST and ATTENDED schedules only (stats give only attended)
+  const contentPast = customerStats.records.filter(
+    schedule =>
+      new Date(`${schedule.date}T${schedule.startTime}:00.000Z`) <= new Date()
+  );
+
   return (
     <>
       <h2 className='user-container__section-title modal__title--day'>
@@ -18,9 +24,10 @@ function DetailsCustomerSchedules({ customerStats, classModifier, altTitle }) {
           'productType',
           'productName',
         ]}
-        content={customerStats.records}
+        content={contentPast}
         active={false}
         classModifier={classModifier}
+        notToArchive={true}
       />
     </>
   );

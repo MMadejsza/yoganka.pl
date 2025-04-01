@@ -83,7 +83,7 @@ function NewPaymentForm() {
   });
 
   const customersOptionsList = customersList?.content?.sort((a, b) =>
-    a['Imię Nazwisko'].localeCompare(b['Imię Nazwisko'])
+    a.customerFullName.localeCompare(b.customerFullName)
   );
   console.log('customersOptionsList: ', customersOptionsList);
   const productsOptionsList = productsList?.content?.sort((a, b) =>
@@ -149,7 +149,7 @@ function NewPaymentForm() {
     isFocused: paymentMethodIsFocused,
     validationResults: paymentMethodValidationResults,
     hasError: paymentMethodHasError,
-  } = useInput(1, val.paymentMethodValidations);
+  } = useInput(1);
 
   // Reset all te inputs
   const handleReset = () => {
@@ -204,24 +204,26 @@ function NewPaymentForm() {
   // Dynamically set descriptive names when switching from login in to registration
   const formLabels = {
     formType: 'login',
-    title: 'Tworzenie nowej transakcji',
+    title: 'Rejestracja manualnej płatności',
+    subTitle: `Płatność bezpośrednio za zajęcia automatycznie tworzy i przypisuje rezerwację`,
+    note: `Pola mogą wymagać przeklinania w celu odświeżenia.`,
     actionTitle: 'Zatwierdź',
   };
 
   // Extract values only
-  const { formType, title, actionTitle } = formLabels;
+  const { formType, title, note, subTitle, actionTitle } = formLabels;
 
-  const isSubmitDisabled =
-    !scheduleValue ||
-    scheduleValue === '' ||
-    scheduleValue === false ||
-    areErrors;
+  let isSubmitDisabled = !!areErrors;
   const form = productsList && customersList && (
     <form
       onSubmit={handleSubmit}
       className={`user-container__details-list modal-checklist__list`}
     >
       <h1 className='form__title'>{title}</h1>
+      <h3 className='user-container__user-status modal__title'>{subTitle}</h3>
+      <h3 className='user-container__user-status modal__title dimmed'>
+        {note}
+      </h3>
       {/* names are for FormData and id for labels */}
       <InputLogin
         embedded={true}
@@ -229,7 +231,7 @@ function NewPaymentForm() {
         type='select'
         options={customersOptionsList.map(customerObj => ({
           key: customerObj.customerId,
-          label: `(ID: ${customerObj.customerId}) ${customerObj.fullName}`,
+          label: `(ID: ${customerObj.customerId}) ${customerObj.customerFullName}`,
           value: customerObj.customerId,
         }))}
         id='customer'

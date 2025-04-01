@@ -9,6 +9,7 @@ function ModalTable({
   status,
   isAdminPage,
   adminActions,
+  notToArchive = false,
 }) {
   const today = new Date();
   const isLoggedIn =
@@ -99,7 +100,7 @@ function ModalTable({
                     : ''
                   : ''
               } ${
-                !isAdminPage
+                !isAdminPage && !notToArchive
                   ? isArchived && !isAdminPage
                     ? 'archived'
                     : ''

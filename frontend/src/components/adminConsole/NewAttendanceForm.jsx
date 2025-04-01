@@ -4,7 +4,6 @@ import { useAuthStatus } from '../../hooks/useAuthStatus.js';
 import { useFeedback } from '../../hooks/useFeedback.js';
 import { useInput } from '../../hooks/useInput.js';
 import { fetchData, queryClient } from '../../utils/http.js';
-import * as val from '../../utils/validation.js';
 import InputLogin from '../login/InputLogin.jsx';
 import FeedbackBox from './FeedbackBox.jsx';
 
@@ -86,7 +85,7 @@ function NewAttendanceForm() {
     isFocused: paymentMethodIsFocused,
     validationResults: paymentMethodValidationResults,
     hasError: paymentMethodHasError,
-  } = useInput(1, val.paymentMethodValidations);
+  } = useInput(1);
 
   // Reset all te inputs
   const handleReset = () => {

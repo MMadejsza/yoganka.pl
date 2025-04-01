@@ -1,8 +1,10 @@
+import { useLocation } from 'react-router-dom';
 import { statsCalculatorForCustomer } from '../../utils/statistics/statsCalculatorForCustomer.js';
 import DetailsCustomerStats from './DetailsCustomerStats.jsx';
 import ModalTable from './ModalTable';
 
 function AccountSchedulesHistory({ data }) {
+  const location = useLocation();
   // console.clear();
   console.log(
     `📝 
@@ -22,7 +24,9 @@ function AccountSchedulesHistory({ data }) {
   const customerStats = statsCalculatorForCustomer(data);
   const content = customerStats.records
     .filter(record => {
-      const scheduleDateTime = new Date(`${record.date}T${record.time}:00`);
+      const scheduleDateTime = new Date(
+        `${record.date}T${record.startTime}:00.000Z`
+      );
       return scheduleDateTime < new Date();
     })
     .sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -49,17 +53,10 @@ function AccountSchedulesHistory({ data }) {
     content.length > 0 ? (
       <ModalTable
         headers={headers}
-        keys={[
-          'scheduleId',
-          'date',
-          'day',
-          'startTime',
-          'productType',
-          'productName',
-          'location',
-        ]}
+        keys={customerStats.recordsKeys}
         content={content}
         active={false}
+        notToArchive={location.pathname.includes(`konto/zajecia`)}
         // classModifier={classModifier}
       />
     ) : (

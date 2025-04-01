@@ -4,6 +4,7 @@ import { useFeedback } from '../../hooks/useFeedback.js';
 import { useInput } from '../../hooks/useInput.js';
 import { formatIsoDateTime } from '../../utils/dateTime.js';
 import { mutateOnEdit, queryClient } from '../../utils/http.js';
+import * as val from '../../utils/validation.js';
 import InputLogin from '../login/InputLogin.jsx';
 import FeedbackBox from './FeedbackBox.jsx';
 
@@ -87,7 +88,7 @@ function DetailsProductForm({ productData }) {
     isFocused: locationIsFocused,
     validationResults: locationValidationResults,
     hasError: locationHasError,
-  } = useInput(locationDefault);
+  } = useInput(locationDefault, val.locationValidations);
 
   const {
     value: durationValue,
@@ -99,7 +100,7 @@ function DetailsProductForm({ productData }) {
     isFocused: durationIsFocused,
     validationResults: durationValidationResults,
     hasError: durationHasError,
-  } = useInput(durationDefault);
+  } = useInput(durationDefault, val.productDurationValidations);
 
   const {
     value: priceValue,
@@ -111,7 +112,7 @@ function DetailsProductForm({ productData }) {
     isFocused: priceIsFocused,
     validationResults: priceValidationResults,
     hasError: priceHasError,
-  } = useInput(priceDefault);
+  } = useInput(priceDefault, val.priceValidations);
 
   const {
     value: statusValue,
@@ -187,7 +188,13 @@ function DetailsProductForm({ productData }) {
       <InputLogin
         embedded={true}
         formType={formType}
-        type='text'
+        type='select'
+        options={[
+          { label: 'Online', value: 'Online' },
+          { label: 'Stacjonarne', value: 'Class' },
+          { label: 'Wydarzenie', value: 'Event' },
+          { label: 'Wyjazd', value: 'Camp' },
+        ]}
         id='type'
         name='type'
         label='Typ:'

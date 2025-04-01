@@ -4,6 +4,7 @@ import { useFeedback } from '../../hooks/useFeedback.js';
 import { useInput } from '../../hooks/useInput.js';
 import { formatIsoDateTime } from '../../utils/dateTime.js';
 import { mutateOnEdit, queryClient } from '../../utils/http.js';
+import * as val from '../../utils/validation.js';
 import InputLogin from '../login/InputLogin.jsx';
 import FeedbackBox from './FeedbackBox.jsx';
 
@@ -84,7 +85,7 @@ function DetailsScheduleForm({ scheduleData }) {
     isFocused: locationIsFocused,
     validationResults: locationValidationResults,
     hasError: locationHasError,
-  } = useInput(locationDefault);
+  } = useInput(locationDefault, val.locationValidations);
 
   const {
     value: startTimeValue,
