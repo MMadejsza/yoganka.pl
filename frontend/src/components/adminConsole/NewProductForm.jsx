@@ -40,7 +40,7 @@ function NewProductForm() {
     isFocused: nameIsFocused,
     validationResults: nameValidationResults,
     hasError: nameHasError,
-  } = useInput('');
+  } = useInput('', val.productNameValidations);
   const {
     value: productTypeValue,
     handleChange: handleProductTypeChange,
@@ -73,7 +73,7 @@ function NewProductForm() {
     isFocused: durationIsFocused,
     validationResults: durationValidationResults,
     hasError: durationHasError,
-  } = useInput(1, val.durationValidations);
+  } = useInput(1, val.productDurationValidations);
   const {
     value: StartDateValue,
     handleChange: handleStartDateChange,

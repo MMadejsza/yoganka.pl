@@ -1,4 +1,4 @@
-import { calculateStats } from '../../utils/customerViewsUtils.js';
+import { statsCalculatorForCustomer } from '../../utils/statistics/statsCalculatorForCustomer.js';
 import DetailsCustomerStats from './DetailsCustomerStats.jsx';
 import ModalTable from './ModalTable';
 
@@ -19,7 +19,7 @@ function AccountSchedulesHistory({ data }) {
     'Zajęcia',
     'Miejsce',
   ];
-  const customerStats = calculateStats(data);
+  const customerStats = statsCalculatorForCustomer(data);
   const content = customerStats.records
     .filter(record => {
       const scheduleDateTime = new Date(`${record.date}T${record.time}:00`);

@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStatus } from '../../hooks/useAuthStatus.js';
 import { useFeedback } from '../../hooks/useFeedback.js';
 import { mutateOnEdit, queryClient } from '../../utils/http.js';
-import { calculateScheduleStats } from '../../utils/productViewsUtils.js';
+import { statsCalculatorForSchedule } from '../../utils/statistics/statsCalculatorForSchedule.js';
 import DetailsProduct from './DetailsProduct.jsx';
 import DetailsProductPayments from './DetailsProductPayments.jsx';
 import DetailsProductReviews from './DetailsProductReviews.jsx';
@@ -65,7 +65,7 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
   const userAccessed = status.role != 'ADMIN';
   let scheduleStats = null;
   if (!userAccessed && isAdminPanel)
-    scheduleStats = calculateScheduleStats(product, schedule);
+    scheduleStats = statsCalculatorForSchedule(product, schedule);
 
   const handleCancellation = () => {
     cancel();

@@ -1,9 +1,9 @@
 import { useState } from 'react';
+import { getWeekDay } from '../../utils/dateTime.js';
 import {
   durationToSeconds,
   secondsToDuration,
-} from '../../utils/customerViewsUtils.js';
-import { getWeekDay } from '../../utils/dateTime.js';
+} from '../../utils/statistics/statsUtils.js';
 import DetailsScheduleForm from './DetailsScheduleForm.jsx';
 
 function DetailsSchedule({ data, placement, isAdminPanel }) {

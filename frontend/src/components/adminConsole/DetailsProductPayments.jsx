@@ -44,7 +44,13 @@ function DetailsProductPayments({ type, stats, isAdminPage }) {
   const table = (
     <ModalTable
       headers={['ID', 'Data', 'Uczestnik', 'Zadatek', 'Metoda płatności']}
-      keys={['paymentId', 'date', 'customer', 'amountPaid', 'paymentMethod']}
+      keys={[
+        'paymentId',
+        'date',
+        'customerFullName',
+        'amountPaid',
+        'paymentMethod',
+      ]}
       content={paymentsArray}
       active={false}
     />
@@ -70,7 +76,7 @@ function DetailsProductPayments({ type, stats, isAdminPage }) {
         keys={[
           'paymentId',
           'date',
-          'customer',
+          'customerFullName',
           'amountPaid',
           'paymentMethod',
           '',
@@ -85,7 +91,9 @@ function DetailsProductPayments({ type, stats, isAdminPage }) {
   );
 
   const title =
-    type === 'Camp' || type === 'Event' ? 'Płatności' : 'Wszystkie płatności';
+    type === 'Camp' || type === 'Event'
+      ? 'Płatności bezpośrednie'
+      : 'Wszystkie płatności bezpośrednie';
   return (
     <>
       <h2 className='user-container__section-title modal__title--day'>

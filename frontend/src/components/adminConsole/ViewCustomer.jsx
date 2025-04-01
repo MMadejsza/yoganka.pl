@@ -1,4 +1,5 @@
 import { useLocation } from 'react-router-dom';
+import { statsCalculatorForCustomer } from '../../utils/statistics/statsCalculatorForCustomer.js';
 import DetailsCustomer from './DetailsCustomer.jsx';
 import DetailsCustomerInvoices from './DetailsCustomerInvoices.jsx';
 import DetailsCustomerReviews from './DetailsCustomerReviews.jsx';
@@ -7,8 +8,6 @@ import DetailsCustomerStats from './DetailsCustomerStats.jsx';
 import DetailsUser from './DetailsUser.jsx';
 import DetailsUserSettings from './DetailsUserSettings.jsx';
 import ViewCustomerTotalPayments from './ViewCustomerTotalPayments.jsx';
-
-import { calculateStats } from '../../utils/customerViewsUtils.js';
 
 function ViewCustomer({ data }) {
   const location = useLocation();
@@ -29,7 +28,7 @@ function ViewCustomer({ data }) {
     ? `${customer.firstName} ${customer.lastName}`
     : user.Login;
 
-  const customerStats = calculateStats(customer);
+  const customerStats = statsCalculatorForCustomer(customer);
   const noInvoices = customerStats.invoices.length > 0 ? false : true;
 
   return (

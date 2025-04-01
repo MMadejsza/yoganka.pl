@@ -1,187 +1,3 @@
-//! FIRST NAME RULESET
-export const firstNameValidations = [
-  {
-    rule: value => value.trim() !== '',
-    message: 'Imię nie może być puste',
-  },
-  {
-    //  A-Z, polish and ukrainian symbols
-    rule: value =>
-      /^[A-Za-zÀ-ÿĄąĆćĘęŁłŃńÓóŚśŹźŻżА-Яа-яЁёІіЇїЄє\s'-]+$/.test(value),
-    message: 'Imię może zawierać tylko litery, spacje, apostrofy i myślniki',
-  },
-  {
-    rule: value => !containsProfanity(value),
-    message: 'Generalna walidacja',
-  },
-  {
-    rule: value => value.trim().length >= 2,
-    message:
-      '*podanie inicjałów może skutkować późniejszym usunięciem zgłoszenia',
-  },
-];
-//! LAST NAME RULESET
-export const lastNameValidations = [
-  {
-    rule: value => value.trim() !== '',
-    message: 'Nazwisko nie może być puste',
-  },
-  {
-    rule: value =>
-      /^[A-Za-zÀ-ÿĄąĆćĘęŁłŃńÓóŚśŹźŻżА-Яа-яЁёІіЇїЄє\s'-]+$/.test(value),
-    message:
-      'Nazwisko może zawierać tylko litery, spacje, apostrofy i myślniki',
-  },
-  {
-    rule: value => !containsProfanity(value),
-    message: 'Generalna walidacja',
-  },
-  {
-    rule: value => value.trim().length >= 2,
-    message:
-      '*podanie inicjałów może skutkować późniejszym usunięciem zgłoszenia',
-  },
-];
-
-//! DOB RULESET
-export const dobValidations = [
-  {
-    rule: value => value.trim() !== '',
-    message: 'Data urodzenia nie może być pusta',
-  },
-  {
-    // Checks if date is valid
-    rule: value => {
-      const date = new Date(value);
-      return !isNaN(date.getTime());
-    },
-    message: 'Podaj prawidłową datę',
-  },
-  {
-    // Can't be future
-    rule: value => {
-      const date = new Date(value);
-      return date < new Date();
-    },
-    message: 'Data urodzenia nie może być w przyszłości',
-  },
-  {
-    // Can't be future
-    rule: value => {
-      const birthDate = new Date(value);
-      const today = new Date();
-      let age = today.getFullYear() - birthDate.getFullYear();
-      const m = today.getMonth() - birthDate.getMonth();
-
-      // If birthday this year hasn't passed -> age --1
-      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
-      }
-
-      return age >= 18;
-    },
-    message: 'Pełnoletność',
-  },
-];
-
-//! PHONE RULESET
-export const phoneValidations = [
-  {
-    rule: value => /^[+\d\s()-]+$/.test(value),
-    message: 'Tylko cyfry, spacje, -, (), +',
-  },
-  {
-    // force to start from "+"
-    // and check if 1-3 digits
-    rule: value => {
-      const trimmed = value.trim();
-      const match = trimmed.match(/^\+(\d{1,3})/);
-      return match !== null;
-    },
-    message: 'Numer kierunkowy (np. +48)',
-  },
-  {
-    // must be 8-15 digits
-    rule: value => {
-      const digits = value.replace(/\D/g, '');
-      return digits.length >= 8 && digits.length <= 15;
-    },
-    message: '8 do 15 cyfr',
-  },
-];
-//! EMAIL RULESET
-export const emailValidations = [
-  {
-    // if empty
-    rule: value => value.trim() !== '',
-    message: 'Nie może być pusty',
-  },
-  {
-    // if no @
-    rule: value => value.includes('@'),
-    message: 'Zawiera "@"',
-  },
-  {
-    // if doesn't follow simple format name@domain.com
-    rule: value => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
-    message: 'W formacie jan@domena.com',
-  },
-];
-//! PASSWORD RULESET
-export const passwordValidations = [
-  {
-    // if shorter than 8
-    rule: value => hasMinLength(value, 8),
-    message: 'Przynajmniej 8 znaków',
-  },
-  {
-    // if at least 1x capital letter
-    rule: value => /[A-Z]/.test(value),
-    message: 'Przynajmniej jedna wielka litera',
-  },
-  {
-    // if at least 1x special character (^ negation -> of a-z, A-Z and umbers what defines character)
-    rule: value => /[^a-zA-Z0-9]/.test(value),
-    message: 'Przynajmniej jeden znak specjalny',
-  },
-];
-//! CONFIRM PASSWORD RULESET
-//  must be function to be able to pass other input value (1st password)
-export const getConfirmedPasswordValidations = passwordValue => [
-  {
-    // if not equal
-    rule: value => equalsToOtherValue(value, passwordValue),
-    message: 'Musi być identyczne',
-  },
-];
-//! NOTES RULESET
-export const notesValidations = [
-  {
-    // length
-    rule: value => value.length <= 150,
-    message: 'Max 150 znaków',
-  },
-  {
-    rule: value => !containsProfanity(value),
-    message: 'Generalna walidacja',
-  },
-];
-//! AMOUNT PAID RULESET
-export const amountPaidValidations = [
-  {
-    rule: value => !isNaN(value) && Number(value) >= 0,
-    message:
-      'Kwota musi być liczbą (całkowitą lub zmiennoprzecinkową) i nie może być mniejsza niż 0.',
-  },
-];
-//! PAYMENT METHOD RULESET
-export const paymentMethodValidations = [
-  {
-    rule: value => [1, 2, 3].includes(Number(value)),
-    message: 'Metoda płatności musi mieć wartość 1, 2 lub 3.',
-  },
-];
-
 //! HELPER FUNCTIONS
 export const containsProfanity = value => {
   const lowerValue = value.toLowerCase();
@@ -1448,4 +1264,261 @@ export const profanityList = [
   'виблядьовому',
   'виблядьовій',
   'виблядці',
+];
+
+//@ FIRST NAME RULESET
+export const firstNameValidations = [
+  {
+    rule: value => value.trim() !== '',
+    message: 'Imię nie może być puste',
+  },
+  {
+    //  A-Z, polish and ukrainian symbols
+    rule: value =>
+      /^[A-Za-zÀ-ÿĄąĆćĘęŁłŃńÓóŚśŹźŻżА-Яа-яЁёІіЇїЄє\s'-]+$/.test(value),
+    message: 'Imię może zawierać tylko litery, spacje, apostrofy i myślniki',
+  },
+  {
+    rule: value => !containsProfanity(value),
+    message: 'Generalna walidacja',
+  },
+  {
+    rule: value => value.trim().length >= 2,
+    message:
+      '*podanie inicjałów może skutkować późniejszym usunięciem zgłoszenia',
+  },
+];
+//@ LAST NAME RULESET
+export const lastNameValidations = [
+  {
+    rule: value => value.trim() !== '',
+    message: 'Nazwisko nie może być puste',
+  },
+  {
+    rule: value =>
+      /^[A-Za-zÀ-ÿĄąĆćĘęŁłŃńÓóŚśŹźŻżА-Яа-яЁёІіЇїЄє\s'-]+$/.test(value),
+    message:
+      'Nazwisko może zawierać tylko litery, spacje, apostrofy i myślniki',
+  },
+  {
+    rule: value => !containsProfanity(value),
+    message: 'Generalna walidacja',
+  },
+  {
+    rule: value => value.trim().length >= 2,
+    message:
+      '*podanie inicjałów może skutkować późniejszym usunięciem zgłoszenia',
+  },
+];
+//@ DOB RULESET
+export const dobValidations = [
+  {
+    rule: value => value.trim() !== '',
+    message: 'Data urodzenia nie może być pusta',
+  },
+  {
+    // Checks if date is valid
+    rule: value => {
+      const date = new Date(value);
+      return !isNaN(date.getTime());
+    },
+    message: 'Podaj prawidłową datę',
+  },
+  {
+    // Can't be future
+    rule: value => {
+      const date = new Date(value);
+      return date < new Date();
+    },
+    message: 'Data urodzenia nie może być w przyszłości',
+  },
+  {
+    // Can't be future
+    rule: value => {
+      const birthDate = new Date(value);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const m = today.getMonth() - birthDate.getMonth();
+
+      // If birthday this year hasn't passed -> age --1
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+
+      return age >= 18;
+    },
+    message: 'Pełnoletność',
+  },
+];
+//@ PHONE RULESET
+export const phoneValidations = [
+  {
+    rule: value => /^[+\d\s()-]+$/.test(value),
+    message: 'Tylko cyfry, spacje, -, (), +',
+  },
+  {
+    // force to start from "+"
+    // and check if 1-3 digits
+    rule: value => {
+      const trimmed = value.trim();
+      const match = trimmed.match(/^\+(\d{1,3})/);
+      return match !== null;
+    },
+    message: 'Numer kierunkowy (np. +48)',
+  },
+  {
+    // must be 8-15 digits
+    rule: value => {
+      const digits = value.replace(/\D/g, '');
+      return digits.length >= 8 && digits.length <= 15;
+    },
+    message: '8 do 15 cyfr',
+  },
+];
+//@ EMAIL RULESET
+export const emailValidations = [
+  {
+    // if empty
+    rule: value => value.trim() !== '',
+    message: 'Nie może być pusty',
+  },
+  {
+    // if no @
+    rule: value => value.includes('@'),
+    message: 'Zawiera "@"',
+  },
+  {
+    // if doesn't follow simple format name@domain.com
+    rule: value => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
+    message: 'W formacie jan@domena.com',
+  },
+];
+//@ PASSWORD RULESET
+export const passwordValidations = [
+  {
+    // if shorter than 8
+    rule: value => hasMinLength(value, 8),
+    message: 'Przynajmniej 8 znaków',
+  },
+  {
+    // if at least 1x capital letter
+    rule: value => /[A-Z]/.test(value),
+    message: 'Przynajmniej jedna wielka litera',
+  },
+  {
+    // if at least 1x special character (^ negation -> of a-z, A-Z and umbers what defines character)
+    rule: value => /[^a-zA-Z0-9]/.test(value),
+    message: 'Przynajmniej jeden znak specjalny',
+  },
+];
+//@ CONFIRM PASSWORD RULESET
+//  must be function to be able to pass other input value (1st password)
+export const getConfirmedPasswordValidations = passwordValue => [
+  {
+    // if not equal
+    rule: value => equalsToOtherValue(value, passwordValue),
+    message: 'Musi być identyczne',
+  },
+];
+//@ NOTES RULESET
+export const notesValidations = [
+  {
+    // length
+    rule: value => value.length <= 150,
+    message: 'Max 150 znaków',
+  },
+  {
+    rule: value => !containsProfanity(value),
+    message: 'Generalna walidacja',
+  },
+];
+//@ AMOUNT PAID RULESET
+export const amountPaidValidations = [
+  {
+    rule: value => value.trim() !== '',
+    message: 'Pole nie może być puste',
+  },
+  {
+    rule: value => !isNaN(value) && Number(value) >= 0,
+    message:
+      'Kwota musi być liczbą (całkowitą lub zmiennoprzecinkową) i nie może być mniejsza niż 0.',
+  },
+];
+//@ PAYMENT METHOD RULESET
+export const paymentMethodValidations = [
+  {
+    rule: value => value.trim() !== '',
+    message: 'Pole nie może być puste',
+  },
+  {
+    rule: value => [1, 2, 3].includes(Number(value)),
+    message: 'Metoda płatności musi mieć wartość 1, 2 lub 3.',
+  },
+];
+//@ LOCATION RULESET
+export const locationValidations = [
+  {
+    rule: value => value.trim() !== '',
+    message: 'Pole nie może być puste',
+  },
+  {
+    rule: value => value.length <= 25,
+    message: 'Max 25 znaków',
+  },
+];
+//@ PRODUCT NAME RULESET
+export const productNameValidations = [
+  {
+    rule: value => value.trim() !== '',
+    message: 'Pole nie może być puste',
+  },
+  {
+    rule: value => value.length <= 25,
+    message: 'Max 25 znaków',
+  },
+];
+//@ PRODUCT DURATION RULESET
+export const productDurationValidations = [
+  {
+    rule: value => value.toString().trim() !== '',
+    message: 'Pole nie może być puste',
+  },
+  {
+    rule: value => !isNaN(value) && Number(value) >= 0,
+    message:
+      'Czas w godzinach musi być liczbą (całkowitą lub zmiennoprzecinkową) i nie może być mniejsza niż 0.',
+  },
+  {
+    rule: value => Number(value) % 0.25 == 0,
+    message: 'Min skok co 15 minut czyli 0.25 godziny.',
+  },
+];
+//@ PRICE RULESET
+export const priceValidations = [
+  {
+    rule: value => value.toString().trim() !== '',
+    message: 'Pole nie może być puste',
+  },
+  {
+    rule: value => {
+      const trimmed = value.toString().trim();
+      if (/\s/.test(trimmed)) return false; // żadnych spacji!
+      const num = Number(trimmed);
+      return !isNaN(num);
+    },
+    message: 'Cena musi być poprawną liczbą i nie może zawierać spacji.',
+  },
+  {
+    rule: value => {
+      const num = Number(value);
+      if (isNaN(num)) return false;
+      const decimalPart = value.toString().split('.')[1];
+      return !decimalPart || decimalPart.length <= 2;
+    },
+    message: 'Cena może mieć maksymalnie 2 miejsca po przecinku.',
+  },
+  {
+    rule: value => Number(value) >= 0,
+    message: 'Cena nie może być mniejsza niż 0.',
+  },
 ];

@@ -1,14 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchStatus } from '../../utils/http.js';
-import { calculateProductStats } from '../../utils/productViewsUtils.js';
+import { statsCalculatorForProduct } from '../../utils/statistics/statsCalculatorForProduct.js';
 import DetailsProduct from './DetailsProduct.jsx';
 import DetailsProductPayments from './DetailsProductPayments.jsx';
 import DetailsProductReviews from './DetailsProductReviews.jsx';
 import DetailsProductSchedules from './DetailsProductSchedules.jsx';
 import DetailsProductStats from './DetailsProductStats.jsx';
 import DetailsTableAttendance from './DetailsTableAttendance.jsx';
-
-// import {calculateStats} from '../../utils/productViewsUtils.js';
 
 function ViewProduct({ data, isAdminPanel }) {
   console.clear();
@@ -25,7 +23,7 @@ function ViewProduct({ data, isAdminPanel }) {
   });
   const { product } = data;
   const type = product.type;
-  const prodStats = calculateProductStats(product, product.ScheduleRecords);
+  const prodStats = statsCalculatorForProduct(product, product.ScheduleRecords);
 
   return (
     <>
@@ -42,7 +40,7 @@ function ViewProduct({ data, isAdminPanel }) {
       {/*//@ Product business details */}
       <div className='user-container__main-details modal-checklist'>
         <DetailsProductStats data={product} prodStats={prodStats} />
-        {/* //! Jélsi jeden schedule i camp/event to wywietl jego ustawienia eby zmieni np. liczbe miejsc*/}
+        {/* //! Jeśli jeden schedule i camp/event to wyświetl jego ustawienia eby zmieni np. liczbe miejsc*/}
       </div>
 
       {/*//@ Schedules if not event/camp*/}

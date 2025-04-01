@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import DetailsProductForm from './DetailsProductForm.jsx';
 
+import { getWeekDay } from '../../utils/dateTime.js';
 import {
   durationToSeconds,
   secondsToDuration,
-} from '../../utils/customerViewsUtils.js';
-import { getWeekDay } from '../../utils/dateTime.js';
+} from '../../utils/statistics/statsUtils.js';
 
 function DetailsProduct({ data, placement, userAccessed }) {
   // console.log(

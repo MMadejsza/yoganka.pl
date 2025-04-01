@@ -46,7 +46,7 @@ function NewCustomerForm({ onClose }) {
     },
   });
 
-  // using custom hook with extracting and reassigning its 'return' for particular inputs and assign validation methods from imported utils. Every inout has its won state now
+  // using custom hook with extracting and reassigning its 'return' for particular inputs and assign validation methods from imported utils. Every inout has its own state now
   const {
     value: userValue,
     handleChange: handleUserChange,

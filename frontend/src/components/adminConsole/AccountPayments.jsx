@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { calculateStats } from '../../utils/customerViewsUtils.js';
+import { statsCalculatorForCustomer } from '../../utils/statistics/statsCalculatorForCustomer.js';
 import ModalTable from './ModalTable.jsx';
 import ViewFrame from './ViewFrame.jsx';
 
@@ -30,7 +30,7 @@ function AccountPayments({ data }) {
     navigate(-1);
   };
 
-  const customerStats = calculateStats(data);
+  const customerStats = statsCalculatorForCustomer(data);
   const content = customerStats.payments.sort(
     (a, b) => new Date(b.date) - new Date(a.date)
   );

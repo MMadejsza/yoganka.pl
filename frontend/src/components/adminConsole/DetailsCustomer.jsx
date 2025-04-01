@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { calculateAge } from '../../utils/customerViewsUtils.js';
+import { calculateAge } from '../../utils/statistics/statsUtils.js';
 import DetailsCustomerForm from './DetailsCustomerForm.jsx';
 
 function DetailsCustomer({

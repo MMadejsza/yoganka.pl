@@ -4,7 +4,7 @@ import DetailsCustomer from './DetailsCustomer.jsx';
 import DetailsPayment from './DetailsPayment.jsx';
 import DetailsProductSchedules from './DetailsProductSchedules.jsx';
 
-// import {calculateStats} from '../../utils/productViewsUtils.js';
+// import {statsCalculatorForCustomer} from '../../utils/productViewsUtils.js';
 
 function ViewPayment({ data, isUserAccountPage }) {
   const location = useLocation();

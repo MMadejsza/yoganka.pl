@@ -1363,7 +1363,7 @@ export const getAllParticipantsFeedback = (req, res, next) => {
           ...feedback,
           rowid: feedback.feedbackId,
           submissionDate: formatIsoDateTime(feedback.submissionDate),
-          customerName: `${feedback.Customer.firstName} ${feedback.Customer.lastName} (${feedback.Customer.customerId})`,
+          customerFullName: `${feedback.Customer.firstName} ${feedback.Customer.lastName} (${feedback.Customer.customerId})`,
           schedule: `
           ${feedback.ScheduleRecord.Product.name}
           ${feedback.ScheduleRecord.date} | ${feedback.ScheduleRecord.startTime}`,
@@ -1377,7 +1377,7 @@ export const getAllParticipantsFeedback = (req, res, next) => {
         'schedule',
         'rating',
         'content',
-        'customerName',
+        'customerFullName',
       ];
 
       // ✅ Return response to frontend
@@ -1587,19 +1587,33 @@ export const getProductByID = (req, res, next) => {
         required: false,
         include: [
           {
-            model: models.Payment, // Payment which has relation through Bookings
-            as: 'Payments',
-            through: {}, // omit data from mid table
+            model: models.Booking,
             required: false,
-            attributes: {
-              exclude: ['product'],
-            },
             include: [
               {
                 model: models.Customer,
                 attributes: { exclude: ['userId'] },
               },
+              {
+                model: models.Payment,
+                required: false,
+                attributes: {
+                  exclude: ['product'],
+                },
+                include: [
+                  {
+                    model: models.Customer,
+                    attributes: { exclude: ['userId'] },
+                  },
+                ],
+              },
+              {
+                model: models.CustomerPass,
+                required: false,
+                include: [{ model: models.PassDefinition }],
+              },
             ],
+            attributes: { exclude: ['customerId'] },
           },
           {
             model: models.Feedback,
@@ -2041,7 +2055,7 @@ export const getAllPayments = (req, res, next) => {
           ...payment,
           rowId: payment.paymentId,
           date: formatIsoDateTime(payment.date),
-          customerName: `${payment.Customer.firstName} ${payment.Customer.firstName} (${payment.Customer.customerId})`,
+          customerFullName: `${payment.Customer.firstName} ${payment.Customer.firstName} (${payment.Customer.customerId})`,
           product: products
             .map(
               pr =>
@@ -2056,7 +2070,7 @@ export const getAllPayments = (req, res, next) => {
       const totalKeys = [
         'paymentId',
         'date',
-        'customerName',
+        'customerFullName',
         'product',
         'status',
         'paymentMethod',
@@ -2083,26 +2097,24 @@ export const getPaymentByID = (req, res, next) => {
 
   const PK = req.params.id;
   models.Payment.findByPk(PK, {
-    through: { attributes: [] }, // omit data from mid table
     required: false,
-    attributes: {
-      exclude: ['product', 'customerId'],
-    },
     include: [
+      { model: models.Customer },
       {
-        model: models.Customer,
-        attributes: { exclude: [] },
-      },
-      {
-        model: models.ScheduleRecord,
-        attributes: { exclude: ['userId'] },
-        through: { attributes: [] }, // omit data from mid table
+        model: models.Booking,
         include: [
           {
-            model: models.Product,
-            attributes: { exclude: [] },
+            model: models.ScheduleRecord,
+            attributes: { exclude: ['userId'] },
+            include: [{ model: models.Product }],
           },
         ],
+        required: false,
+      },
+      {
+        model: models.CustomerPass,
+        include: [{ model: models.PassDefinition }],
+        required: false,
       },
     ],
   })
@@ -2484,7 +2496,7 @@ export const getAllInvoices = (req, res, next) => {
           ...invoice,
           rowid: invoice.invoiceId,
           invoiceDate: formatIsoDateTime(invoice.invoiceDate),
-          customerName: `${invoice.Payment.Customer.firstName} ${invoice.Payment.Customer.lastName}`,
+          customerFullName: `${invoice.Payment.Customer.firstName} ${invoice.Payment.Customer.lastName}`,
         };
       });
 
@@ -2492,7 +2504,7 @@ export const getAllInvoices = (req, res, next) => {
         'invoiceId',
         'paymentId',
         'invoiceDate',
-        'customerName',
+        'customerFullName',
         'dueDate',
         'paymentStatus',
         'totalAmount',

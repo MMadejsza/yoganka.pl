@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useLocation, useMatch, useNavigate } from 'react-router-dom';
-import { calculateStats } from '../../utils/customerViewsUtils.js';
+import { statsCalculatorForCustomer } from '../../utils/statistics/statsCalculatorForCustomer.js';
 import DetailsCustomerStats from './DetailsCustomerStats.jsx';
 import ModalTable from './ModalTable';
 import ViewFrame from './ViewFrame.jsx';
@@ -37,7 +37,7 @@ function AccountDashboard({ data, queryStatus }) {
   if (data.customer) {
     const customer = data.customer;
     name = `${customer.firstName} ${customer.lastName}`;
-    customerStats = calculateStats(data.customer);
+    customerStats = statsCalculatorForCustomer(data.customer);
     const headers = [
       'Id',
       'Data',

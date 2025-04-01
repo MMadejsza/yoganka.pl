@@ -21,7 +21,7 @@ function DetailsProductReviews({ stats }) {
           keys={[
             'feedbackId',
             'submissionDate',
-            'customer',
+            'customerFullName',
             'rating',
             'content',
             'delay',
