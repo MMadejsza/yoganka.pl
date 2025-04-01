@@ -51,7 +51,7 @@ router.put('/edit-schedule-data/:id', adminC.putEditSchedule);
 //! DELETE_________________________________________________
 router.delete('/delete-user/:id', adminC.deleteUser);
 router.delete('/delete-customer/:id', adminC.deleteCustomer);
-router.delete('/delete-attendance-record', adminC.deleteAttendanceRecord);
+router.delete('/delete-booking-record', adminC.deleteBookingRecord);
 router.delete('/delete-product/:id', adminC.deleteProduct);
 router.delete('/delete-schedule/:id', adminC.deleteSchedule);
 router.delete('/delete-payment/:id', adminC.deletePayment);

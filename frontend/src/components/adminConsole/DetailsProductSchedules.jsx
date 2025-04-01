@@ -14,7 +14,7 @@ function DetailsProductSchedules({ scheduleRecords, placement, status }) {
   const isInPaymentView = placement == 'payment';
   const [isFormVisible, setIsFormVisible] = useState();
   const [deleteWarningTriggered, setDeleteWarningTriggered] = useState(false);
-  const { feedback, updateFeedback } = useFeedback();
+  const { feedback, updateFeedback, resetFeedback } = useFeedback();
 
   const {
     mutate: deleteScheduleRecord,
@@ -27,7 +27,7 @@ function DetailsProductSchedules({ scheduleRecords, placement, status }) {
       mutateOnDelete(
         status,
         formDataObj,
-        `/api/admin-console/delete-schedule/${formDataObj.deletescheduleId}`
+        `/api/admin-console/delete-schedule/${formDataObj.rowId}`
       ),
 
     onSuccess: res => {
@@ -45,7 +45,7 @@ function DetailsProductSchedules({ scheduleRecords, placement, status }) {
   const handleDelete = params => {
     console.log(params);
     reset();
-    if (!deleteWarningTriggered && !params.isDisabled) {
+    if (!deleteWarningTriggered && !params.isActionDisabled) {
       updateFeedback({
         confirmation: 0,
         message: '',
@@ -57,6 +57,8 @@ function DetailsProductSchedules({ scheduleRecords, placement, status }) {
       });
       setDeleteWarningTriggered(true);
     } else {
+      resetFeedback();
+      reset();
       deleteScheduleRecord(params);
     }
   };
@@ -70,7 +72,7 @@ function DetailsProductSchedules({ scheduleRecords, placement, status }) {
   );
 
   let processedScheduleRecordsArr = scheduleRecords;
-  let headers = ['ID', 'Dzień', 'Data', 'Godzina', 'Lokacja', 'Frekwencja', ''];
+  let headers = ['Id', 'Dzień', 'Data', 'Godzina', 'Lokacja', 'Frekwencja', ''];
   let keys = [
     'scheduleId',
     'day',
@@ -84,8 +86,8 @@ function DetailsProductSchedules({ scheduleRecords, placement, status }) {
 
   if (isInPaymentView) {
     headers = [
-      'ID',
-      'Produkt',
+      'Id',
+      'Produkt (Id terminu)',
       'Data',
       'Dzień',
       'Godzina',
@@ -134,7 +136,7 @@ function DetailsProductSchedules({ scheduleRecords, placement, status }) {
           </button>
         )}
       </h2>
-      {feedback.status != undefined && (
+      {(feedback.status != undefined || deleteWarningTriggered) && (
         <FeedbackBox
           warnings={feedback.warnings}
           status={feedback.status}

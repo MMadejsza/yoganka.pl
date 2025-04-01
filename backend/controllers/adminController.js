@@ -783,15 +783,19 @@ export const getScheduleByID = (req, res, next) => {
         errCode = 404;
         throw new Error('Nie znaleziono terminu.');
       }
-      console.log(scheduleData);
+      // console.log(scheduleData);
       let schedule = scheduleData.toJSON();
 
       schedule.attendance = 0;
       let attendedRecords = [];
+      let cancelledRecords = [];
       if (schedule.Bookings && schedule.Bookings.length > 0) {
-        attendedRecords = schedule.Bookings.filter(
-          bs => bs.attendance == 1 || bs.attendance == true
-        );
+        schedule.Bookings.forEach(b => {
+          if (b.attendance == 1 || b.attendance == true)
+            attendedRecords.push({ ...b, rowId: b.bookingId });
+          if (b.attendance == 0 || b.attendance == false)
+            cancelledRecords.push({ ...b, rowId: b.bookingId });
+        });
 
         schedule.attendance = attendedRecords.length;
         schedule.full = attendedRecords.length >= schedule.capacity;
@@ -803,12 +807,39 @@ export const getScheduleByID = (req, res, next) => {
       const now = new Date();
       schedule.isCompleted = scheduleDateTime <= now;
       schedule.attendedRecords = attendedRecords;
-      successLog(person, controllerName);
-      return res.status(200).json({
-        confirmation: 1,
-        message: 'Termin pobrany pomyślnie',
-        schedule,
-        user: req.user,
+      schedule.cancelledRecords = cancelledRecords;
+
+      // Find all schedule payment regardless relation to booking because they are non refundable
+      return models.Payment.findAll({
+        where: {
+          product: {
+            [Op.like]: `%sId: ${schedule.scheduleId}%`, // % any amount of characters
+          },
+        },
+        include: [
+          {
+            model: models.Customer,
+            attributes: { exclude: ['userId'] },
+          },
+        ],
+      }).then(paymentsList => {
+        schedule.payments = paymentsList.map(payment => {
+          const p = payment.toJSON();
+          console.log(`❗❗❗p.date`, p.date);
+          return {
+            ...p,
+            rowId: p.paymentId,
+            date: formatIsoDateTime(p.date),
+            customerFullName: `${p.Customer.firstName} ${p.Customer.lastName} (${p.Customer.customerId})`,
+          };
+        });
+        successLog(person, controllerName);
+        return res.status(200).json({
+          confirmation: 1,
+          message: 'Termin pobrany pomyślnie',
+          schedule,
+          user: req.user,
+        });
       });
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));
@@ -1092,19 +1123,35 @@ export const putEditMarkAbsent = (req, res, next) => {
   const controllerName = 'putEditMarkAbsent';
   callLog(req, person, controllerName);
 
-  const { attendanceCustomerID, attendancePaymentID, product } = req.body;
+  const { rowId, customerId } = req.body;
   let currentScheduleRecord, customerEmail;
 
   // Find schedule
   models.Booking.findOne({
     where: {
-      customerId: attendanceCustomerID,
-      paymentId: attendancePaymentID,
+      customerId: customerId,
+      bookingId: rowId,
     },
     include: [
       {
         model: models.ScheduleRecord,
+        include: [
+          {
+            model: models.Product,
+            required: true,
+          },
+        ],
         required: true,
+      },
+      {
+        model: models.Customer,
+        required: true,
+        include: [
+          {
+            model: models.User,
+            attributes: ['email'],
+          },
+        ],
       },
     ],
   })
@@ -1115,19 +1162,8 @@ export const putEditMarkAbsent = (req, res, next) => {
       }
       // Assign for email data
       currentScheduleRecord = foundRecord.ScheduleRecord;
-
-      // Find the customer for email address
-      return models.Customer.findByPk(attendanceCustomerID, {
-        include: [{ model: models.User, attributes: ['email'] }],
-      });
-    })
-    .then(customer => {
-      if (!customer || !customer.User) {
-        errCode = 404;
-        throw new Error('Nie znaleziono użytkownika przypisanego do klienta.');
-      }
       // Assign for email data
-      customerEmail = customer.User.email;
+      customerEmail = foundRecord.Customer.User.email;
 
       // Finally update attendance
       return models.Booking.update(
@@ -1137,8 +1173,8 @@ export const putEditMarkAbsent = (req, res, next) => {
         },
         {
           where: {
-            customerId: attendanceCustomerID,
-            paymentId: attendancePaymentID,
+            customerId: foundRecord.Customer.customerId,
+            bookingId: foundRecord.bookingId,
           },
         }
       );
@@ -1148,7 +1184,7 @@ export const putEditMarkAbsent = (req, res, next) => {
       if (customerEmail) {
         adminEmails.sendAttendanceMarkedAbsentMail({
           to: customerEmail,
-          productName: product,
+          productName: currentScheduleRecord.Product.name || '',
           date: currentScheduleRecord.date,
           startTime: currentScheduleRecord.startTime,
           location: currentScheduleRecord.location,
@@ -1169,107 +1205,26 @@ export const putEditMarkPresent = (req, res, next) => {
   const controllerName = 'putEditMarkPresent';
   callLog(req, person, controllerName);
 
-  const { cancelledAttendanceCustomerID, cancelledAttendancePaymentID } =
-    req.body;
+  const { customerId, rowId } = req.body;
 
   let currentScheduleRecord, customerEmail;
 
   // Find schedule
   models.Booking.findOne({
     where: {
-      customerId: cancelledAttendanceCustomerID,
-      paymentId: cancelledAttendancePaymentID,
+      customerId: customerId,
+      bookingId: rowId,
     },
     include: [
       {
         model: models.ScheduleRecord,
-        required: true,
-      },
-    ],
-  })
-    .then(foundRecord => {
-      if (!foundRecord) {
-        errCode = 404;
-        throw new Error('Nie znaleziono rekordu obecności w dzienniku.');
-      }
-
-      // Assign for email data
-      currentScheduleRecord = foundRecord.ScheduleRecord;
-
-      // Find the customer for email address
-      return models.Customer.findByPk(cancelledAttendanceCustomerID, {
-        include: [{ model: models.User, attributes: ['email'] }],
-      });
-    })
-    .then(customer => {
-      if (!customer || !customer.User) {
-        errCode = 404;
-        throw new Error('Nie znaleziono użytkownika przypisanego do klienta.');
-      }
-
-      // Assign for email data
-      customerEmail = customer.User.email;
-
-      // Finally update attendance
-      return models.Booking.update(
-        {
-          attendance: 1,
-          performedBy: person,
-        },
-        {
-          where: {
-            customerId: cancelledAttendanceCustomerID,
-            paymentId: cancelledAttendancePaymentID,
-          },
-        }
-      );
-    })
-    .then(updatedRecord => {
-      // Send confirmation email
-      if (customerEmail) {
-        adminEmails.sendAttendanceReturningMail({
-          to: customerEmail,
-          productName: currentScheduleRecord?.ProductName || '',
-          date: currentScheduleRecord.date,
-          startTime: currentScheduleRecord.startTime,
-          location: currentScheduleRecord.location,
-        });
-      }
-
-      successLog(person, controllerName);
-      const status = updatedRecord ? true : false;
-      // Send confirmation to frontend
-      return res.status(200).json({
-        confirmation: status,
-        message: 'Uczestnik oznaczony jako obecny.',
-        affectedRows: status ? 1 : 0,
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
-};
-//@ DELETE
-export const deleteAttendanceRecord = (req, res, next) => {
-  const controllerName = 'deleteAttendanceRecord';
-  callLog(req, person, controllerName);
-
-  const { attendanceCustomerID, attendancePaymentID } = req.body;
-
-  // Find booking to get info for email as well
-  models.Booking.findOne({
-    where: {
-      customerId: attendanceCustomerID,
-      paymentId: attendancePaymentID,
-    },
-    include: [
-      {
-        model: models.ScheduleRecord,
-        required: true,
         include: [
           {
             model: models.Product,
             required: true,
           },
         ],
+        required: true,
       },
       {
         model: models.Customer,
@@ -1285,41 +1240,48 @@ export const deleteAttendanceRecord = (req, res, next) => {
   })
     .then(foundRecord => {
       if (!foundRecord) {
-        // No attendance found
         errCode = 404;
         throw new Error('Nie znaleziono rekordu obecności w dzienniku.');
       }
 
-      const { ScheduleRecord, Customer } = foundRecord;
-      const to = Customer.User.email;
+      // Assign for email data
+      currentScheduleRecord = foundRecord.ScheduleRecord;
+      // Assign for email data
+      customerEmail = foundRecord.Customer.User.email;
 
-      // Send confirmation
-      if (to) {
-        adminEmails.sendAttendanceRecordDeletedMail({
-          to,
-          productName: ScheduleRecord?.Product?.ProductName || 'Zajęcia',
-          date: ScheduleRecord.date,
-          startTime: ScheduleRecord.startTime,
-          location: ScheduleRecord.location,
-          isAdmin: true,
+      // Finally update attendance
+      return models.Booking.update(
+        {
+          attendance: 1,
+          performedBy: person,
+        },
+        {
+          where: {
+            customerId: foundRecord.Customer.customerId,
+            bookingId: foundRecord.bookingId,
+          },
+        }
+      );
+    })
+    .then(updatedRecord => {
+      // Send confirmation email
+      if (customerEmail) {
+        adminEmails.sendAttendanceReturningMail({
+          to: customerEmail,
+          productName: currentScheduleRecord?.Product.name || '',
+          date: currentScheduleRecord.date,
+          startTime: currentScheduleRecord.startTime,
+          location: currentScheduleRecord.location,
         });
       }
 
-      // Return deleted number
-      return foundRecord.destroy();
-    })
-    .then(deleted => {
-      if (!deleted) {
-        errCode = 404;
-        throw new Error('Nie usunięto rekordu.');
-      }
-
-      // Confirmation for frontend
       successLog(person, controllerName);
+      const status = updatedRecord ? true : false;
+      // Send confirmation to frontend
       return res.status(200).json({
-        confirmation: 1,
-        message:
-          'Rekord obecności usunięty. Rekord płatności pozostał nieruszony.',
+        confirmation: status,
+        message: 'Uczestnik oznaczony jako obecny.',
+        affectedRows: status ? 1 : 0,
       });
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));
@@ -1996,7 +1958,84 @@ export const postCreateBooking = (req, res, next) => {
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
+//@ DELETE
+export const deleteBookingRecord = (req, res, next) => {
+  const controllerName = 'deleteBookingRecord';
+  callLog(req, person, controllerName);
 
+  const { customerId, rowId } = req.body;
+  let currentScheduleRecord, customerEmail;
+
+  // Find booking to get info for email as well
+  models.Booking.findOne({
+    where: {
+      customerId: customerId,
+      bookingId: rowId,
+    },
+    include: [
+      {
+        model: models.ScheduleRecord,
+        required: true,
+        include: [
+          {
+            model: models.Product,
+            required: true,
+          },
+        ],
+      },
+      {
+        model: models.Customer,
+        required: true,
+        include: [
+          {
+            model: models.User,
+            attributes: ['email'],
+          },
+        ],
+      },
+    ],
+  })
+    .then(foundRecord => {
+      if (!foundRecord) {
+        // No attendance found
+        errCode = 404;
+        throw new Error('Nie znaleziono rekordu obecności w dzienniku.');
+      }
+
+      currentScheduleRecord = foundRecord.ScheduleRecord;
+      customerEmail = foundRecord.Customer.User.email;
+
+      // Return deleted number
+      return foundRecord.destroy();
+    })
+    .then(deleted => {
+      if (!deleted) {
+        errCode = 404;
+        throw new Error('Nie usunięto rekordu.');
+      }
+
+      // Send confirmation
+      if (customerEmail) {
+        adminEmails.sendAttendanceRecordDeletedMail({
+          to: customerEmail,
+          productName: currentScheduleRecord?.Product?.ProductName || 'Zajęcia',
+          date: currentScheduleRecord.date,
+          startTime: currentScheduleRecord.startTime,
+          location: currentScheduleRecord.location,
+          isAdmin: true,
+        });
+      }
+
+      // Confirmation for frontend
+      successLog(person, controllerName);
+      return res.status(200).json({
+        confirmation: 1,
+        message:
+          'Rekord obecności usunięty. Rekord płatności pozostał nieruszony.',
+      });
+    })
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
+};
 //! PAYMENTS_____________________________________________
 //@ GET
 export const getAllPayments = (req, res, next) => {

@@ -10,7 +10,8 @@ import NewAttendanceForm from './NewAttendanceForm';
 
 function DetailsTableAttendance({ stats, isAdminPage }) {
   // console.log('\n✅✅✅DetailsTableAttendance:');
-  let bookingsArray = stats.attendedBookings;
+  let attendedBookingsArray = stats.attendedBookings;
+  let cancelledBookingsArray = stats.cancelledBookings;
   let params = useParams();
   const [isFormVisible, setIsFormVisible] = useState();
 
@@ -28,7 +29,6 @@ function DetailsTableAttendance({ stats, isAdminPage }) {
     error: markAbsentError,
   } = useMutation({
     mutationFn: formDataObj => {
-      resetFeedback();
       setDeleteWarningTriggered(false);
       return mutateOnEdit(
         status,
@@ -51,18 +51,49 @@ function DetailsTableAttendance({ stats, isAdminPage }) {
   });
 
   const {
-    mutate: deleteAttendanceRecord,
-    isPending: deleteAttendanceRecordIsPending,
-    isError: deleteAttendanceRecordIsError,
-    error: deleteAttendanceRecordError,
+    mutate: markPresent,
+    isPending: markPresentIsPending,
+    isError: markPresentIsError,
+    error: markPresentError,
+  } = useMutation({
+    mutationFn: formDataObj => {
+      setDeleteWarningTriggered(false);
+      return mutateOnEdit(
+        status,
+        formDataObj,
+        `/api/admin-console/edit-mark-present`
+      );
+    },
+
+    onSuccess: res => {
+      queryClient.invalidateQueries([
+        `/admin-console/show-all-schedules/${params.id}`,
+      ]);
+      console.log('res', res);
+
+      // updating feedback
+      updateFeedback(res);
+    },
+    onError: err => {
+      // updating feedback
+      updateFeedback(err);
+    },
+  });
+
+  const {
+    mutate: deleteBookingRecord,
+    isPending: deleteBookingRecordIsPending,
+    isError: deleteBookingRecordIsError,
+    error: deleteBookingRecordError,
     reset,
   } = useMutation({
     mutationFn: formDataObj => {
+      resetFeedback();
       setDeleteWarningTriggered(false);
       return mutateOnDelete(
         status,
         formDataObj,
-        `/api/admin-console/delete-attendance-record`
+        `/api/admin-console/delete-booking-record`
       );
     },
 
@@ -95,45 +126,86 @@ function DetailsTableAttendance({ stats, isAdminPage }) {
     } else {
       resetFeedback();
       reset();
-      deleteAttendanceRecord(params);
+      deleteBookingRecord(params);
     }
   };
 
   const table = (
-    <ModalTable
-      headers={['ID Ucz.', 'Data zapisania', 'Uczestnik', '']}
-      keys={['customerId', 'timestamp', 'customerFullName', '']}
-      content={bookingsArray}
-      active={false}
-      isAdminPage={isAdminPage}
-      adminActions={true}
-      onQuickAction={[
-        { extraClass: 'dimmed', symbol: 'delete', method: handleDelete },
-        { symbol: 'person_remove', method: markAbsent },
-      ]}
-    />
+    <>
+      <h2 className='user-container__section-title modal__title--day admin-action'>
+        {`Potwierdzone rezerwacje (${attendedBookingsArray.length})`}
+      </h2>
+      <ModalTable
+        headers={['Id', 'Metoda płatności', 'Data zapisania', 'Uczestnik', '']}
+        keys={[
+          'bookingId',
+          'paymentMethod',
+          'timestamp',
+          'customerFullName',
+          '',
+        ]}
+        content={attendedBookingsArray}
+        active={false}
+        isAdminPage={isAdminPage}
+        adminActions={true}
+        onQuickAction={[{ symbol: 'person_remove', method: markAbsent }]}
+      />
+    </>
+  );
+  const cancelledTable = cancelledBookingsArray?.length > 0 && (
+    <>
+      <h2 className='user-container__section-title modal__title--day admin-action'>
+        {`Anulowane rezerwacje (${cancelledBookingsArray.length}):`}
+      </h2>
+      <ModalTable
+        headers={['Id', 'Metoda płatności', 'Data zapisania', 'Uczestnik', '']}
+        keys={[
+          'bookingId',
+          'paymentMethod',
+          'timestamp',
+          'customerFullName',
+          '',
+        ]}
+        content={cancelledBookingsArray}
+        active={false}
+        isAdminPage={isAdminPage}
+        adminActions={true}
+        onQuickAction={[
+          { extraClass: 'dimmed', symbol: 'delete', method: handleDelete },
+          { symbol: 'restore', method: markPresent },
+        ]}
+      />
+    </>
   );
 
   const form = <NewAttendanceForm />;
 
   return (
     <>
-      <h2 className='user-container__section-title modal__title--day admin-action'>
-        {`Obecność (${bookingsArray.length})`}
-      </h2>
       {(feedback.status != undefined || deleteWarningTriggered) && (
         <FeedbackBox
           warnings={feedback.warnings}
           status={feedback.status}
           successMsg={feedback.message}
-          isPending={deleteAttendanceRecordIsPending || markAbsentIsPending}
-          isError={deleteAttendanceRecordIsError || markAbsentIsError}
-          error={deleteAttendanceRecordError || markAbsentError}
+          isPending={
+            deleteBookingRecordIsPending ||
+            markAbsentIsPending ||
+            markPresentIsPending
+          }
+          isError={
+            deleteBookingRecordIsError ||
+            markAbsentIsError ||
+            markPresentIsError
+          }
+          error={
+            deleteBookingRecordError || markAbsentError || markPresentError
+          }
           size='small'
         />
       )}
       {isFormVisible && form}
       {table}
+      {cancelledTable}
     </>
   );
 }

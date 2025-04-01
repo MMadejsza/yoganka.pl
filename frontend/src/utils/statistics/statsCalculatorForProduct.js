@@ -93,6 +93,7 @@ export const statsCalculatorForProduct = (product, schedules) => {
             ...booking.Payment,
             rowId: booking.Payment.paymentId,
             customerFullName: formattedCustomer,
+            date: formatIsoDateTime(booking.Payment.date),
           });
         }
         directPaymentCount++;
@@ -225,6 +226,14 @@ export const statsCalculatorForProduct = (product, schedules) => {
     attendedPayments: attendedBookings,
     totalPayments: payments,
     reviews: reviews,
+    reviewsKeys: [
+      'feedbackId',
+      'submissionDate',
+      'customerFullName',
+      'rating',
+      'content',
+      'delay',
+    ],
     totalSchedulesAmount: totalSchedules,
     totalTime: formattedDuration,
     revenue: `${Math.round(totalRevenue * 100) / 100}zł`,

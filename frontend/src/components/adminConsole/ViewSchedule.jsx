@@ -127,10 +127,10 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
         {shouldDisableBookBtn
           ? 'block'
           : schedule.wasUserReserved
-            ? 'cycle'
+            ? 'restore'
             : newCustomerDetails.isFirstTimeBuyer
               ? 'edit'
-              : 'shopping_bag_speed'}
+              : 'shopping_bag'}
       </span>
       {shouldDisableBookBtn
         ? isFillingTheForm

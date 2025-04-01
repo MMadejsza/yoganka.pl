@@ -5,7 +5,7 @@ function DetailsProductReviews({ stats }) {
 
   return (
     <>
-      <h2 className='user-container__section-title modal__title--day'>
+      <h2 className='user-container__section-title modal__title--day admin-action'>
         {`Opinie (${feedbackArray.length}):`}
       </h2>
       {feedbackArray.length > 0 ? (
@@ -18,14 +18,7 @@ function DetailsProductReviews({ stats }) {
             'Komentarz',
             'Opóźnienie',
           ]}
-          keys={[
-            'feedbackId',
-            'submissionDate',
-            'customerFullName',
-            'rating',
-            'content',
-            'delay',
-          ]}
+          keys={stats.reviewsKeys}
           content={feedbackArray}
           active={false}
         />

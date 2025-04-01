@@ -146,12 +146,16 @@ function ViewFrame({
           />
         );
         controller.recordEditor = '';
-        controller.deleteBtnTitle = 'Rezerwację';
+        controller.deleteBtnTitle = 'Płatność';
         controller.deleteQuery = `delete-payment/${data.payment.paymentId}`;
         controller.redirectTo = '/admin-console/show-all-payments';
         controller.warnings = [
           'Wszystkich powiązanych faktur',
-          'Wszystkich powiązanych z rezerwacją obecności, a więc wpłynie na statystyki zajęć i użytkowników',
+          'Wszystkich powiązanych z płatnością rezerwacji',
+          'Wszystkich powiązanych z płatnością karnetów',
+          '  ❗ Wszystkich powiązanych z tymi karnetami rezerwacji, a więc wpłynie na statystyki zajęć i użytkowników',
+          '  ❗❗A więc wpłynie na statystyki zajęć i użytkowników',
+          '🗒️ Nie ma potrzeby tego robić jesli nie jest to płatność omyłkowa',
         ];
         return controller;
 
@@ -240,6 +244,7 @@ function ViewFrame({
   });
 
   const handleDelete = () => {
+    reset();
     if (!deleteWarningTriggered) {
       // 1st click
       updateFeedback({
@@ -277,21 +282,21 @@ function ViewFrame({
   return (
     <ModalFrame visited={visited} onClose={onClose}>
       <div className='user-container modal__summary'>
-        {!deleteWarningTriggered ? (
-          dataDisplay
-        ) : (
-          <FeedbackBox
-            warnings={feedback.warnings}
-            status={feedback.status}
-            successMsg={feedback.message}
-            isPending={isDeletePending}
-            isError={isDeleteError}
-            error={deleteError ? { message: deleteError.message } : null}
-            redirectTarget={redirectToPage}
-            onClose={onClose}
-            size='small'
-          />
-        )}
+        {!deleteWarningTriggered
+          ? dataDisplay
+          : (feedback.status != undefined || deleteWarningTriggered) && (
+              <FeedbackBox
+                warnings={feedback.warnings}
+                status={feedback.status}
+                successMsg={feedback.message}
+                isPending={isDeletePending}
+                isError={isDeleteError}
+                error={deleteError ? { message: deleteError.message } : null}
+                redirectTarget={redirectToPage}
+                onClose={onClose}
+                size='small'
+              />
+            )}
         <div className='user-container__actions-block'>
           {isAdminPanel && (
             <>

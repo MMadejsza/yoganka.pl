@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { useAuthStatus } from '../../hooks/useAuthStatus.js';
 import { useFeedback } from '../../hooks/useFeedback.js';
 import { mutateOnEdit, queryClient } from '../../utils/http.js';
-import FeedbackBox from './FeedbackBox.jsx';
 import ModalTable from './ModalTable.jsx';
 
 function DetailsProductPayments({ type, stats, isAdminPage }) {
@@ -12,8 +11,7 @@ function DetailsProductPayments({ type, stats, isAdminPage }) {
 
   let params = useParams();
   const { feedback, updateFeedback, resetFeedback } = useFeedback();
-  let paymentsArray = stats.totalPayments || stats.payments;
-  let cancelledPaymentsArr = paymentsArray.filter(b => b.attendance == false);
+  let paymentsArray = stats.totalPayments;
 
   const { data: status } = useAuthStatus();
 
@@ -55,52 +53,17 @@ function DetailsProductPayments({ type, stats, isAdminPage }) {
       active={false}
     />
   );
-  const cancelledTable = cancelledPaymentsArr?.length > 0 && (
-    <>
-      <h2 className='user-container__section-title modal__title--day'>
-        {`Płatności anulowanych obecności (${cancelledPaymentsArr.length}):`}
-      </h2>
-      {feedback.status !== undefined && (
-        <FeedbackBox
-          status={feedback.status}
-          isPending={markPresentIsPending}
-          isError={markPresentIsError}
-          error={markPresentError}
-          successMsg={feedback.message}
-          warnings={feedback.warnings}
-          size='small'
-        />
-      )}
-      <ModalTable
-        headers={['ID', 'Data', 'Uczestnik', 'Zadatek', 'Metoda płatności', '']}
-        keys={[
-          'paymentId',
-          'date',
-          'customerFullName',
-          'amountPaid',
-          'paymentMethod',
-          '',
-        ]}
-        content={cancelledPaymentsArr}
-        active={false}
-        isAdminPage={isAdminPage}
-        adminActions={true}
-        onQuickAction={[{ symbol: 'restore', method: markPresent }]}
-      />
-    </>
-  );
 
   const title =
     type === 'Camp' || type === 'Event'
       ? 'Płatności bezpośrednie'
-      : 'Wszystkie płatności bezpośrednie';
+      : 'Wszystkie płatności bezpośrednie - bezzwrotne';
   return (
     <>
-      <h2 className='user-container__section-title modal__title--day'>
+      <h2 className='user-container__section-title modal__title--day admin-action'>
         {`${title} (${paymentsArray.length}):`}
       </h2>
       {table}
-      {cancelledTable}
     </>
   );
 }

@@ -25,7 +25,7 @@ function ModalTable({
     } else if (isLoggedIn && (isCustomer || isAdmin)) {
       if (row.isUserGoing) return 'check';
       else if (row.full || isArchived) return 'block';
-      else if (row.wasUserReserved) return 'cycle';
+      else if (row.wasUserReserved) return 'restore';
       else return 'shopping_bag_speed';
     }
     return 'lock_person';
@@ -56,12 +56,9 @@ function ModalTable({
         amountDue: 0,
         paymentMethod: 'Credit Card',
         paymentStatus: 'Completed',
-        attendanceCustomerID: row.customerId,
-        attendancePaymentID: row.id,
-        cancelledAttendanceCustomerID: row.customerId,
-        cancelledAttendancePaymentID: row.paymentId,
-        deleteScheduleId: row.id,
-        isDisabled: row.isActionDisabled,
+        customerId: row.customerId,
+        rowId: row.rowId,
+        isActionDisabled: row.isActionDisabled,
       });
     }
     return null;

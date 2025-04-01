@@ -24,7 +24,7 @@ function ViewPayment({ data, isUserAccountPage }) {
   const schedules = payment.Bookings.map(booking => {
     return {
       ...booking.ScheduleRecord,
-      productName: booking.ScheduleRecord.Product.name,
+      productName: `${booking.ScheduleRecord.Product.name} (sId: ${booking.ScheduleRecord.scheduleId})`,
       productPrice: booking.ScheduleRecord.Product.price,
       day: getWeekDay(booking.ScheduleRecord.date),
       location: booking.ScheduleRecord.location,
