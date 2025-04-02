@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import ModalFrame from './WrapperModal.jsx';
-import NewCustomerForm from './views/forms/NewCustomerForm.jsx';
-import NewPaymentForm from './views/forms/NewPaymentForm.jsx';
-import NewProductForm from './views/forms/NewProductForm.jsx';
-import NewUserForm from './views/forms/NewUserForm.jsx';
+import NewCustomerForm from './views/add-forms/NewCustomerForm.jsx';
+import NewPaymentForm from './views/add-forms/NewPaymentForm.jsx';
+import NewProductForm from './views/add-forms/NewProductForm.jsx';
+import NewUserForm from './views/add-forms/NewUserForm.jsx';
 
 function SideNav({ menuSet, side, type, onclose }) {
   const navigate = useNavigate();

@@ -6,7 +6,7 @@ import {
 } from '../../../../utils/statistics/statsUtils.js';
 import GenericList from '../../../common/GenericList.jsx';
 import ToggleEditButton from '../../../common/ToggleEditButton.jsx';
-import DetailsFormProduct from './forms/DetailsFormProduct.jsx';
+import DetailsFormProduct from './edit-forms/DetailsFormProduct.jsx';
 
 function DetailsListProduct({ data, placement, userAccessed }) {
   // console.log(

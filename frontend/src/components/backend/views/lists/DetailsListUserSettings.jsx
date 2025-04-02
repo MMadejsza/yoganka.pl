@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import GenericList from '../../../common/GenericList.jsx';
 import ToggleEditButton from '../../../common/ToggleEditButton.jsx';
-import DetailsFormUserSettings from './forms/DetailsFormUserSettings.jsx';
+import DetailsFormUserSettings from './edit-forms/DetailsFormUserSettings.jsx';
 
 function DetailsListUserSettings({
   settingsData,

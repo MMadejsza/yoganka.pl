@@ -6,7 +6,7 @@ import { getWeekDay } from '../../../../utils/dateTime.js';
 import { mutateOnDelete, queryClient } from '../../../../utils/http.js';
 import FeedbackBox from '../../FeedbackBox.jsx';
 import ModalTable from '../../ModalTable.jsx';
-import NewProductScheduleForm from './forms//NewProductScheduleForm.jsx';
+import NewProductScheduleForm from './add-forms/NewProductScheduleForm.jsx';
 
 function DetailsProductSchedules({ scheduleRecords, placement, status }) {
   console.log('DetailsProductSchedules scheduleRecords', scheduleRecords);

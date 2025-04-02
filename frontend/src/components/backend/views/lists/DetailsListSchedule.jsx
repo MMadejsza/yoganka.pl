@@ -6,7 +6,7 @@ import {
 } from '../../../../utils/statistics/statsUtils.js';
 import GenericList from '../../../common/GenericList.jsx';
 import ToggleEditButton from '../../../common/ToggleEditButton.jsx';
-import DetailsFormSchedule from './forms/DetailsFormSchedule.jsx';
+import DetailsFormSchedule from './edit-forms/DetailsFormSchedule.jsx';
 
 function DetailsListSchedule({ data, placement, isAdminPanel }) {
   console.log(
