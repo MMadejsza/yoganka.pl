@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import FloatingPopUps from '../components/FloatingPopUps.jsx';
-import Footer from '../components/Footer.jsx';
-import Burger from '../components/nav/Burger.jsx';
-import Nav from '../components/nav/Nav.jsx';
+import FloatingPopUps from '../components/frontend/FloatingPopUps.jsx';
+import Footer from '../components/frontend/Footer.jsx';
+import Burger from '../components/frontend/navigation/Burger.jsx';
+import Nav from '../components/frontend/navigation/Nav.jsx';
 
 function RootPage() {
   const [isNavOpen, setIsNavOpen] = useState(false);

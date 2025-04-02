@@ -1,4 +1,4 @@
-import PhotoSlide from '../components/glide/PhotoSlide.jsx';
+import PhotoSlide from '../components/frontend/glide/slides/PhotoSlide.jsx';
 
 export const smoothScrollInto = (e, navigate, location) => {
   // console.log(location);

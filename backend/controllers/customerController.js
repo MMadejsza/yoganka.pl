@@ -8,7 +8,7 @@ import {
   catchErr,
   errorCode,
   successLog,
-} from '../utils/loggingUtils.js';
+} from '../utils/debuggingUtils.js';
 import * as adminEmails from '../utils/mails/templates/customerActions/_customerEmails.js';
 
 let errCode = errorCode;

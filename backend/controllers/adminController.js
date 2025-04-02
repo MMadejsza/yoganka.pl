@@ -14,7 +14,7 @@ import {
   catchErr,
   errorCode,
   successLog,
-} from '../utils/loggingUtils.js';
+} from '../utils/debuggingUtils.js';
 import * as adminEmails from '../utils/mails/templates/adminOnlyActions/_adminEmails.js';
 
 let errCode = errorCode;

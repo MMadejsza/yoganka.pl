@@ -6,7 +6,7 @@ import {
   catchErr,
   errorCode,
   successLog,
-} from '../utils/loggingUtils.js';
+} from '../utils/debuggingUtils.js';
 let errCode = errorCode;
 const person = 'User';
 
