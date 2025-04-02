@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { calculateAge } from '../../../../utils/statistics/statsUtils.js';
+import GenericList from '../../../common/GenericList.jsx';
+import ToggleEditButton from '../../../common/ToggleEditButton.jsx';
 import DetailsCustomerForm from './forms/DetailsCustomerForm.jsx';
 
 function DetailsCustomer({
@@ -10,17 +12,36 @@ function DetailsCustomer({
   isPaymentView,
 }) {
   console.log('customerData', customerData);
+
+  const [isEditing, setIsEditing] = useState(false);
+  const handleStartEditing = () => setIsEditing(true);
+  const handleCloseEditing = () => setIsEditing(false);
+
   const title = isUserAccountPage
     ? `Dane kontaktowe:`
     : `Uczestnik (ID ${customerData.customerId}):`;
 
-  const [isEditing, setIsEditing] = useState(false);
-  const handleStartEditing = () => {
-    setIsEditing(true);
-  };
-  const handleCloseEditing = () => {
-    setIsEditing(false);
-  };
+  const details = [{ label: 'Numer telefonu:', content: customerData.phone }];
+  if (!isUserAccountPage) {
+    details.push(
+      { label: 'Typ:', content: customerData.customerType },
+      {
+        label: 'Wiek:',
+        content: `${calculateAge(customerData.dob)} | (${customerData.dob})`,
+      },
+      { label: 'Z polecenia:', content: customerData.referralSource }
+    );
+  }
+  details.push({
+    label: 'Kontaktuj się przez:',
+    content: customerData.preferredContactMethod,
+  });
+  if (!isUserAccountPage) {
+    details.push(
+      { label: 'Notatki:', content: customerData.notes },
+      { label: 'Lojalność:', content: customerData.loyalty }
+    );
+  }
 
   let content = isEditing ? (
     <DetailsCustomerForm
@@ -29,93 +50,19 @@ function DetailsCustomer({
       adminAccessed={adminAccessed}
     />
   ) : (
-    <ul className='user-container__details-list modal-checklist__list'>
-      <li className='user-container__section-record modal-checklist__li'>
-        <p className='user-container__section-record-label'>Numer telefonu:</p>
-        <p className='user-container__section-record-content'>
-          {customerData.phone}
-        </p>
-      </li>
-
-      {!isUserAccountPage && (
-        <>
-          <li className='user-container__section-record modal-checklist__li'>
-            <p className='user-container__section-record-label'>Typ:</p>
-            <p className='user-container__section-record-content'>{`${customerData.customerType}`}</p>
-          </li>
-          <li className='user-container__section-record modal-checklist__li'>
-            <p className='user-container__section-record-label'>Wiek:</p>
-            <p className='user-container__section-record-content'>{`${calculateAge(
-              customerData.dob
-            )}   |  (${customerData.dob})`}</p>
-          </li>
-          <li className='user-container__section-record modal-checklist__li'>
-            <p className='user-container__section-record-label'>Z polecenia:</p>
-            <p className='user-container__section-record-content'>
-              {customerData.referralSource}
-            </p>
-          </li>
-        </>
-      )}
-      <li className='user-container__section-record modal-checklist__li'>
-        <p className='user-container__section-record-label'>
-          Kontaktuj się przez:
-        </p>
-        <p className='user-container__section-record-content'>
-          {customerData.preferredContactMethod}
-        </p>
-      </li>
-      {!isUserAccountPage && (
-        <>
-          <li className='user-container__section-record modal-checklist__li'>
-            <p className='user-container__section-record-label'>Notatki:</p>
-            <p className='user-container__section-record-content'>
-              {customerData.notes}
-            </p>
-          </li>
-          <li className='user-container__section-record modal-checklist__li'>
-            <p className='user-container__section-record-label'>Lojalność:</p>
-            <p className='user-container__section-record-content'>
-              {customerData.loyalty}
-            </p>
-          </li>{' '}
-        </>
-      )}
-    </ul>
+    <GenericList title={title} details={details} />
   );
   return (
     <>
       <div className='user-container__main-details modal-checklist'>
-        <h2 className='user-container__section-title modal__title--day'>
-          {title}
-        </h2>
         {content}
 
         {!isPaymentView && (
-          <div className='user-container__action'>
-            <button
-              className='modal__btn'
-              onClick={
-                isEditing == false ? handleStartEditing : handleCloseEditing
-              }
-            >
-              {isEditing == false ? (
-                <>
-                  <span className='material-symbols-rounded nav__icon'>
-                    edit
-                  </span>{' '}
-                  Edytuj
-                </>
-              ) : (
-                <>
-                  <span className='material-symbols-rounded nav__icon'>
-                    undo
-                  </span>{' '}
-                  Wróć
-                </>
-              )}
-            </button>
-          </div>
+          <ToggleEditButton
+            isEditing={isEditing}
+            onStartEditing={handleStartEditing}
+            onCloseEditing={handleCloseEditing}
+          />
         )}
       </div>
     </>

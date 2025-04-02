@@ -1,45 +1,26 @@
-import { useParams } from 'react-router-dom';
 import { formatIsoDateTime } from '../../../../utils/dateTime.js';
+import GenericList from '../../../common/GenericList.jsx';
 
-//! Add authorisation that you can reset only your password
 function DetailsUser({ userData, customerView, isUserAccountPage }) {
   // console.log(isUserAccountPage);
-  const params = useParams();
+
   const title = isUserAccountPage
     ? `Dane konta:`
     : `Konto (ID ${userData.userId}):`;
 
-  return (
-    <>
-      <h2 className='user-container__section-title modal__title--day'>
-        {title}
-      </h2>
+  const details = [
+    {
+      label: 'Utworzono:',
+      content: formatIsoDateTime(userData.registrationDate),
+    },
+    { label: 'Email:', content: userData.email },
+  ];
 
-      <ul className='user-container__details-list modal-checklist__list'>
-        <li className='user-container__section-record modal-checklist__li'>
-          <p className='user-container__section-record-label'>Utworzono:</p>
-          <p className='user-container__section-record-content'>
-            {formatIsoDateTime(userData.registrationDate)}
-          </p>
-        </li>
-        <li className='user-container__section-record modal-checklist__li'>
-          <p className='user-container__section-record-label'>Email:</p>
-          <p className='user-container__section-record-content'>
-            {userData.email}
-          </p>
-        </li>
+  if (!isUserAccountPage && !customerView && !userData.Customer) {
+    details.push({ label: 'Aktywność:', content: 'Brak zakupów' });
+  }
 
-        {!isUserAccountPage && !customerView && !userData.Customer && (
-          <li className='user-container__section-record modal-checklist__li'>
-            <p className='user-container__section-record-label'>Aktywność:</p>
-            <p className='user-container__section-record-content'>
-              Brak zakupów
-            </p>
-          </li>
-        )}
-      </ul>
-    </>
-  );
+  return <GenericList title={title} details={details} />;
 }
 
 export default DetailsUser;

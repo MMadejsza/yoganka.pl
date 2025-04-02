@@ -8,9 +8,9 @@ import {
   mutateOnEdit,
   queryClient,
 } from '../../../../../utils/http.js';
+import WrapperForm from '../../../../common/WrapperForm.jsx';
 import FeedbackBox from '../../../FeedbackBox.jsx';
 import InputLogin from '../../../InputLogin.jsx';
-
 function DetailsUserSettingsForm({
   settingsData,
   customerAccessed,
@@ -196,11 +196,13 @@ function DetailsUserSettingsForm({
   const { formType, title, actionTitle } = formLabels;
 
   const form = (
-    <form
+    <WrapperForm
+      title={title}
       onSubmit={handleSubmit}
-      className={`user-container__details-list modal-checklist__list`}
+      onReset={handleReset}
+      submitLabel={actionTitle}
+      resetLabel='Resetuj'
     >
-      <h1 className='form__title'>{title}</h1>
       {/* names are for FormData and id for labels */}
       <InputLogin
         embedded={true}
@@ -284,23 +286,7 @@ function DetailsUserSettingsForm({
         didEdit={themeDidEdit}
         isFocused={themeIsFocused}
       />
-
-      <button
-        type='reset'
-        onClick={handleReset}
-        className='form-switch-btn modal__btn  modal__btn--secondary modal__btn--small'
-      >
-        <span className='material-symbols-rounded nav__icon'>restart_alt</span>
-        Resetuj
-      </button>
-      <button
-        type='submit'
-        className={`form-action-btn modal__btn modal__btn--small`}
-      >
-        <span className='material-symbols-rounded nav__icon'>check</span>{' '}
-        {actionTitle}
-      </button>
-    </form>
+    </WrapperForm>
   );
 
   return (

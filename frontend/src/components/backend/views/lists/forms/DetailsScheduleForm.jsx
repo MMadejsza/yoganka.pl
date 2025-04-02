@@ -5,6 +5,7 @@ import { useInput } from '../../../../../hooks/useInput.js';
 import { formatIsoDateTime } from '../../../../../utils/dateTime.js';
 import { mutateOnEdit, queryClient } from '../../../../../utils/http.js';
 import * as val from '../../../../../utils/validation.js';
+import WrapperForm from '../../../../common/WrapperForm.jsx';
 import FeedbackBox from '../../../FeedbackBox.jsx';
 import InputLogin from '../../../InputLogin.jsx';
 
@@ -148,11 +149,13 @@ function DetailsScheduleForm({ scheduleData }) {
   const { formType, title, actionTitle } = formLabels;
 
   const form = (
-    <form
+    <WrapperForm
+      title={title}
       onSubmit={handleSubmit}
-      className={`user-container__details-list modal-checklist__list form`}
+      onReset={handleReset}
+      submitLabel={actionTitle}
+      resetLabel='Resetuj'
     >
-      <h1 className='form__title'>{title}</h1>
       {/* names are for FormData and id for labels */}
       <InputLogin
         embedded={true}
@@ -219,23 +222,7 @@ function DetailsScheduleForm({ scheduleData }) {
         didEdit={locationDidEdit}
         isFocused={locationIsFocused}
       />
-
-      <button
-        type='reset'
-        onClick={handleReset}
-        className='form-switch-btn modal__btn  modal__btn--secondary modal__btn--small'
-      >
-        <span className='material-symbols-rounded nav__icon'>restart_alt</span>{' '}
-        Resetuj
-      </button>
-      <button
-        type='submit'
-        className={`form-action-btn modal__btn modal__btn--small`}
-      >
-        <span className='material-symbols-rounded nav__icon'>check</span>{' '}
-        {actionTitle}
-      </button>
-    </form>
+    </WrapperForm>
   );
   return (
     <>

@@ -1,4 +1,5 @@
 import { formatIsoDateTime } from '../../../../utils/dateTime.js';
+import GenericList from '../../../common/GenericList.jsx';
 
 function DetailsPayment({ paymentData }) {
   const payment = paymentData;
@@ -8,52 +9,21 @@ function DetailsPayment({ paymentData }) {
     paymentData
   );
 
-  return (
-    <>
-      <h2 className='user-container__section-title modal__title--day'>{`Szczegóły:`}</h2>
-      <ul className='user-container__details-list modal-checklist__list'>
-        <li className='user-container__section-record modal-checklist__li'>
-          <p className='user-container__section-record-label'>
-            Data płatności:
-          </p>
-          <p className='user-container__section-record-content'>
-            {`${formatIsoDateTime(payment.date)}`}
-          </p>
-        </li>
-        <li className='user-container__section-record modal-checklist__li'>
-          <p className='user-container__section-record-label'>Kwota:</p>
-          <p className='user-container__section-record-content'>
-            {' '}
-            {`${payment.amountPaid}zł`}
-          </p>
-        </li>
-        <li className='user-container__section-record modal-checklist__li'>
-          <p className='user-container__section-record-label'>
-            Metoda Płatności:
-          </p>
-          <p className='user-container__section-record-content'>
-            {payment.paymentMethod}
-          </p>
-        </li>
-        <li className='user-container__section-record modal-checklist__li'>
-          <p className='user-container__section-record-label'>Opłacono:</p>
-          <p className='user-container__section-record-content'>
-            {payment.status}
-          </p>
-        </li>
-        {payment.amountDue && payment.amountDue != '0.00' && (
-          <li className='user-container__section-record modal-checklist__li'>
-            <p className='user-container__section-record-label'>
-              Pozostało do zapłaty:
-            </p>
-            <p className='user-container__section-record-content'>
-              {`${payment.amountDue}zł`}
-            </p>
-          </li>
-        )}
-      </ul>
-    </>
-  );
+  const details = [
+    { label: 'Data płatności:', content: formatIsoDateTime(payment.date) },
+    { label: 'Kwota:', content: `${payment.amountPaid} zł` },
+    { label: 'Metoda płatności:', content: payment.paymentMethod },
+    { label: 'Opłacono:', content: payment.status },
+  ];
+
+  if (payment.amountDue && payment.amountDue !== '0.00') {
+    details.push({
+      label: 'Pozostało do zapłaty:',
+      content: `${payment.amountDue} zł`,
+    });
+  }
+
+  return <GenericList title='Szczegóły:' details={details} />;
 }
 
 export default DetailsPayment;

@@ -1,38 +1,18 @@
 import { formatIsoDateTime } from '../../../../utils/dateTime.js';
+import GenericList from '../../../common/GenericList.jsx';
 
 function DetailsReview({ reviewData }) {
-  return (
-    <>
-      <div className='user-container__main-details modal-checklist'>
-        <ul className='user-container__details-list modal-checklist__list'>
-          <li className='user-container__section-record modal-checklist__li'>
-            <p className='user-container__section-record-label'>
-              Data zgłoszenia:
-            </p>
-            <p className='user-container__section-record-content'>
-              {formatIsoDateTime(reviewData.submissionDate)}
-            </p>
-          </li>
-          <li className='user-container__section-record modal-checklist__li'>
-            <p className='user-container__section-record-label'>Opóźnienie:</p>
-            <p className='user-container__section-record-content'>
-              {reviewData.delay}
-            </p>
-          </li>
-          <li className='user-container__section-record modal-checklist__li'>
-            <p className='user-container__section-record-label'>Ocena:</p>
-            <p className='user-container__section-record-content'>{`${reviewData.rating}`}</p>
-          </li>
-          <li className='user-container__section-record modal-checklist__li'>
-            <p className='user-container__section-record-label'>Treść:</p>
-            <p className='user-container__section-record-content'>
-              {reviewData.text}
-            </p>
-          </li>
-        </ul>
-      </div>
-    </>
-  );
+  const details = [
+    {
+      label: 'Data zgłoszenia:',
+      content: formatIsoDateTime(reviewData.submissionDate),
+    },
+    { label: 'Opóźnienie:', content: reviewData.delay },
+    { label: 'Ocena:', content: reviewData.rating },
+    { label: 'Treść:', content: reviewData.text },
+  ];
+
+  return <GenericList title='Szczegóły opinii:' details={details} />;
 }
 
 export default DetailsReview;
