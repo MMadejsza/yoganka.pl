@@ -3,7 +3,7 @@ import { useLocation, useMatch, useNavigate } from 'react-router-dom';
 import { statsCalculatorForCustomer } from '../../../utils/statistics/statsCalculatorForCustomer.js';
 import ModalTable from '../ModalTable.jsx';
 import ViewFrame from '../ViewsController.jsx';
-import DetailsCustomerStats from './lists/DetailsCustomerStats.jsx';
+import DetailsListCustomerStats from './lists/DetailsListCustomerStats.jsx';
 
 function AccountDashboard({ data, queryStatus }) {
   const today = new Date();
@@ -60,7 +60,7 @@ function AccountDashboard({ data, queryStatus }) {
 
     statsBlock = (
       <div className='user-container schedules'>
-        <DetailsCustomerStats
+        <DetailsListCustomerStats
           customerStats={customerStats}
           altTitle={''}
           userAccountPage={true}

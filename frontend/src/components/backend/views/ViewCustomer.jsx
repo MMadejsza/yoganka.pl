@@ -1,9 +1,9 @@
 import { useLocation } from 'react-router-dom';
 import { statsCalculatorForCustomer } from '../../../utils/statistics/statsCalculatorForCustomer.js';
-import DetailsCustomer from './lists/DetailsCustomer.jsx';
-import DetailsCustomerStats from './lists/DetailsCustomerStats.jsx';
-import DetailsUser from './lists/DetailsUser.jsx';
-import DetailsUserSettings from './lists/DetailsUserSettings.jsx';
+import DetailsListCustomer from './lists/DetailsListCustomer.jsx';
+import DetailsListCustomerStats from './lists/DetailsListCustomerStats.jsx';
+import DetailsListUser from './lists/DetailsListUser.jsx';
+import DetailsListUserSettings from './lists/DetailsListUserSettings.jsx';
 import DetailsCustomerInvoices from './tables/ViewCustomerInvoices.jsx';
 import DetailsCustomerReviews from './tables/ViewCustomerReviews.jsx';
 import DetailsCustomerSchedules from './tables/ViewCustomerSchedules.jsx';
@@ -37,7 +37,7 @@ function ViewCustomer({ data }) {
 
       {/*//@ Personal-customer details */}
       <div className='user-container__main-details modal-checklist'>
-        <DetailsCustomer
+        <DetailsListCustomer
           customerData={customer}
           customerAccessed={customerAccessed}
           adminAccessed={adminAccessed}
@@ -46,10 +46,10 @@ function ViewCustomer({ data }) {
 
       {/*//@ Personal-user details */}
       <div className='user-container__side-details modal-checklist'>
-        <DetailsUser userData={user} customerView={true} />
+        <DetailsListUser userData={user} customerView={true} />
 
         {user.UserPrefSetting && (
-          <DetailsUserSettings
+          <DetailsListUserSettings
             settingsData={user.UserPrefSetting}
             customerAccessed={customerAccessed}
             adminAccessed={adminAccessed}
@@ -59,7 +59,7 @@ function ViewCustomer({ data }) {
 
       {/*//@ Stats */}
       <div className='user-container__main-details user-container__side-details--schedules schedules modal-checklist'>
-        <DetailsCustomerStats customerStats={customerStats} />
+        <DetailsListCustomerStats customerStats={customerStats} />
       </div>
 
       {/*//@ Schedules */}

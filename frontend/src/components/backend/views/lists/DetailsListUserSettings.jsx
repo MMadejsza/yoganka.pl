@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import GenericList from '../../../common/GenericList.jsx';
 import ToggleEditButton from '../../../common/ToggleEditButton.jsx';
-import DetailsUserSettingsForm from './forms/DetailsUserSettingsForm.jsx';
+import DetailsFormUserSettings from './forms/DetailsFormUserSettings.jsx';
 
-function DetailsUserSettings({
+function DetailsListUserSettings({
   settingsData,
   isUserAccountPage,
   customerAccessed,
@@ -45,7 +45,7 @@ function DetailsUserSettings({
   const handleCloseEditing = () => setIsEditing(false);
 
   const content = isEditing ? (
-    <DetailsUserSettingsForm
+    <DetailsFormUserSettings
       settingsData={settingsData}
       customerAccessed={customerAccessed}
       adminAccessed={adminAccessed}
@@ -66,4 +66,4 @@ function DetailsUserSettings({
   );
 }
 
-export default DetailsUserSettings;
+export default DetailsListUserSettings;

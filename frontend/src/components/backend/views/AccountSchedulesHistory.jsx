@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import { statsCalculatorForCustomer } from '../../../utils/statistics/statsCalculatorForCustomer.js';
 import ModalTable from '../ModalTable.jsx';
-import DetailsCustomerStats from './lists/DetailsCustomerStats.jsx';
+import DetailsListCustomerStats from './lists/DetailsListCustomerStats.jsx';
 
 function AccountSchedulesHistory({ data }) {
   const location = useLocation();
@@ -37,7 +37,7 @@ function AccountSchedulesHistory({ data }) {
   let stats, table, tableTitle;
   stats = (
     <div className='user-container schedules'>
-      <DetailsCustomerStats
+      <DetailsListCustomerStats
         customerStats={customerStats}
         altTitle={''}
         userAccountPage={true}

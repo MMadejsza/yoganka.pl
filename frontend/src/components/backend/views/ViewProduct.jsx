@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchStatus } from '../../../utils/http.js';
 import { statsCalculatorForProduct } from '../../../utils/statistics/statsCalculatorForProduct.js';
-import DetailsProduct from './lists/DetailsProduct.jsx';
-import DetailsProductStats from './lists/DetailsProductStats.jsx';
+import DetailsListProduct from './lists/DetailsListProduct.jsx';
+import DetailsListProductStats from './lists/DetailsListProductStats.jsx';
 import DetailsProductPayments from './tables/ViewProductPayments.jsx';
 import DetailsProductReviews from './tables/ViewProductReviews.jsx';
 import DetailsProductSchedules from './tables/ViewProductSchedules.jsx';
@@ -34,12 +34,12 @@ function ViewProduct({ data, isAdminPanel }) {
 
       {/*//@ Product main details */}
       <div className='user-container__main-details modal-checklist'>
-        <DetailsProduct data={product} placement={'productView'} />
+        <DetailsListProduct data={product} placement={'productView'} />
       </div>
 
       {/*//@ Product business details */}
       <div className='user-container__main-details modal-checklist'>
-        <DetailsProductStats data={product} prodStats={prodStats} />
+        <DetailsListProductStats data={product} prodStats={prodStats} />
         {/* //! Jeśli jeden schedule i camp/event to wyświetl jego ustawienia eby zmieni np. liczbe miejsc*/}
       </div>
 

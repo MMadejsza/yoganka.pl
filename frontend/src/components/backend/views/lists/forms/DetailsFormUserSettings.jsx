@@ -11,7 +11,7 @@ import {
 import WrapperForm from '../../../../common/WrapperForm.jsx';
 import FeedbackBox from '../../../FeedbackBox.jsx';
 import InputLogin from '../../../InputLogin.jsx';
-function DetailsUserSettingsForm({
+function DetailsFormUserSettings({
   settingsData,
   customerAccessed,
   adminAccessed,
@@ -307,4 +307,4 @@ function DetailsUserSettingsForm({
   );
 }
 
-export default DetailsUserSettingsForm;
+export default DetailsFormUserSettings;

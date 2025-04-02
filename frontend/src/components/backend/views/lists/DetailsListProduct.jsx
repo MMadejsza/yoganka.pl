@@ -6,9 +6,9 @@ import {
 } from '../../../../utils/statistics/statsUtils.js';
 import GenericList from '../../../common/GenericList.jsx';
 import ToggleEditButton from '../../../common/ToggleEditButton.jsx';
-import DetailsProductForm from '../lists/forms/DetailsProductForm.jsx';
+import DetailsFormProduct from './forms/DetailsFormProduct.jsx';
 
-function DetailsProduct({ data, placement, userAccessed }) {
+function DetailsListProduct({ data, placement, userAccessed }) {
   // console.log(
   // 	`📝
   //     product object from backend:`,
@@ -45,7 +45,7 @@ function DetailsProduct({ data, placement, userAccessed }) {
   details.push({ label: 'Zadatek:', content: `${product.price} zł` });
 
   let content = isEditing ? (
-    <DetailsProductForm productData={data} />
+    <DetailsFormProduct productData={data} />
   ) : (
     <GenericList title={`Szczegóły zajęć:`} details={details} />
   );
@@ -63,4 +63,4 @@ function DetailsProduct({ data, placement, userAccessed }) {
   );
 }
 
-export default DetailsProduct;
+export default DetailsListProduct;

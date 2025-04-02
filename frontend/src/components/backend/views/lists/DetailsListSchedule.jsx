@@ -6,9 +6,9 @@ import {
 } from '../../../../utils/statistics/statsUtils.js';
 import GenericList from '../../../common/GenericList.jsx';
 import ToggleEditButton from '../../../common/ToggleEditButton.jsx';
-import DetailsScheduleForm from './forms/DetailsScheduleForm.jsx';
+import DetailsFormSchedule from './forms/DetailsFormSchedule.jsx';
 
-function DetailsSchedule({ data, placement, isAdminPanel }) {
+function DetailsListSchedule({ data, placement, isAdminPanel }) {
   console.log(
     `📝
 	    Schedule object from backend:`,
@@ -52,7 +52,7 @@ function DetailsSchedule({ data, placement, isAdminPanel }) {
   ];
 
   let content = isEditing ? (
-    <DetailsScheduleForm scheduleData={data} />
+    <DetailsFormSchedule scheduleData={data} />
   ) : (
     <GenericList title={`Szczegóły terminu:`} details={details} />
   );
@@ -71,4 +71,4 @@ function DetailsSchedule({ data, placement, isAdminPanel }) {
   );
 }
 
-export default DetailsSchedule;
+export default DetailsListSchedule;

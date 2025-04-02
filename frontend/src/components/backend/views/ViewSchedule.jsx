@@ -7,9 +7,9 @@ import { mutateOnEdit, queryClient } from '../../../utils/http.js';
 import { statsCalculatorForSchedule } from '../../../utils/statistics/statsCalculatorForSchedule.js';
 import FeedbackBox from '../FeedbackBox.jsx';
 import ViewScheduleNewCustomerForm from './forms/ViewScheduleNewCustomerForm.jsx';
-import DetailsProduct from './lists/DetailsProduct.jsx';
-import DetailsSchedule from './lists/DetailsSchedule.jsx';
-import DetailsScheduleStats from './lists/DetailsScheduleStats.jsx';
+import DetailsListProduct from './lists/DetailsListProduct.jsx';
+import DetailsListSchedule from './lists/DetailsListSchedule.jsx';
+import DetailsListScheduleStats from './lists/DetailsListScheduleStats.jsx';
 import DetailsProductPayments from './tables/ViewProductPayments.jsx';
 import DetailsProductReviews from './tables/ViewProductReviews.jsx';
 import DetailsTableAttendance from './tables/ViewTableAttendance.jsx';
@@ -187,7 +187,7 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
       {!isFillingTheForm ? (
         <>
           <div className='user-container__main-details modal-checklist'>
-            <DetailsSchedule
+            <DetailsListSchedule
               data={schedule}
               placement={'scheduleView'}
               isAdminPanel={isAdminPanel}
@@ -195,7 +195,7 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
           </div>
           {/*//@ Product main details */}
           <div className='user-container__side-details modal-checklist'>
-            <DetailsProduct
+            <DetailsListProduct
               data={product}
               placement={'scheduleView'}
               userAccessed={userAccessed}
@@ -210,7 +210,7 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
       {!userAccessed && isAdminPanel && (
         <>
           <div className='user-container__main-details modal-checklist'>
-            <DetailsScheduleStats
+            <DetailsListScheduleStats
               data={product}
               scheduleStats={scheduleStats}
             />

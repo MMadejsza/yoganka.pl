@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { calculateAge } from '../../../../utils/statistics/statsUtils.js';
 import GenericList from '../../../common/GenericList.jsx';
 import ToggleEditButton from '../../../common/ToggleEditButton.jsx';
-import DetailsCustomerForm from './forms/DetailsCustomerForm.jsx';
+import DetailsFormCustomer from './forms/DetailsFormCustomer.jsx';
 
-function DetailsCustomer({
+function DetailsListCustomer({
   customerData,
   isUserAccountPage,
   customerAccessed,
@@ -44,7 +44,7 @@ function DetailsCustomer({
   }
 
   let content = isEditing ? (
-    <DetailsCustomerForm
+    <DetailsFormCustomer
       customerData={customerData}
       customerAccessed={customerAccessed}
       adminAccessed={adminAccessed}
@@ -69,4 +69,4 @@ function DetailsCustomer({
   );
 }
 
-export default DetailsCustomer;
+export default DetailsListCustomer;

@@ -1,5 +1,5 @@
 import { statsCalculatorForCustomer } from '../../../../utils/statistics/statsCalculatorForCustomer.js';
-import DetailsCustomerStats from '../../lists/DetailsCustomerStats.jsx';
+import DetailsListCustomerStats from '../../lists/DetailsListCustomerStats.jsx';
 import ModalTable from '../../ModalTable.jsx';
 
 function ViewCustomerTotalSchedules({ data }) {
@@ -31,7 +31,7 @@ function ViewCustomerTotalSchedules({ data }) {
   let table;
   stats = (
     <div className='user-container schedules'>
-      <DetailsCustomerStats
+      <DetailsListCustomerStats
         customerStats={customerStats}
         altTitle={'W liczbach:'}
         userAccountPage={true}

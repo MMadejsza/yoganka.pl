@@ -1,5 +1,9 @@
 import GenericList from '../../../common/GenericList.jsx';
-function DetailsCustomerStats({ customerStats, altTitle, userAccountPage }) {
+function DetailsListCustomerStats({
+  customerStats,
+  altTitle,
+  userAccountPage,
+}) {
   const campsNumber = customerStats.schedulesAmount.breakdown.camps;
   const eventsNumber = customerStats.schedulesAmount.breakdown.events;
   const classesNumber = customerStats.schedulesAmount.breakdown.classes;
@@ -28,4 +32,4 @@ function DetailsCustomerStats({ customerStats, altTitle, userAccountPage }) {
   return <GenericList title={title} details={details} />;
 }
 
-export default DetailsCustomerStats;
+export default DetailsListCustomerStats;

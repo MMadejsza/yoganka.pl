@@ -1,7 +1,7 @@
 import { formatIsoDateTime } from '../../../../utils/dateTime.js';
 import GenericList from '../../../common/GenericList.jsx';
 
-function DetailsUser({ userData, customerView, isUserAccountPage }) {
+function DetailsListUser({ userData, customerView, isUserAccountPage }) {
   // console.log(isUserAccountPage);
 
   const title = isUserAccountPage
@@ -23,4 +23,4 @@ function DetailsUser({ userData, customerView, isUserAccountPage }) {
   return <GenericList title={title} details={details} />;
 }
 
-export default DetailsUser;
+export default DetailsListUser;

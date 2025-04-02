@@ -1,7 +1,7 @@
-import DetailsCustomer from './lists/DetailsCustomer.jsx';
-import DetailsProduct from './lists/DetailsProduct.jsx';
-import DetailsReview from './lists/DetailsReview.jsx';
-import DetailsSchedule from './lists/DetailsSchedule.jsx';
+import DetailsListCustomer from './lists/DetailsListCustomer.jsx';
+import DetailsListProduct from './lists/DetailsListProduct.jsx';
+import DetailsListReview from './lists/DetailsListReview.jsx';
+import DetailsListSchedule from './lists/DetailsListSchedule.jsx';
 import DetailsCustomerReviews from './tables/ViewCustomerReviews.jsx';
 
 function ViewFeedback({ data }) {
@@ -26,21 +26,21 @@ function ViewFeedback({ data }) {
 
       {/*//@ Review main details */}
       <div className='user-container__main-details modal-checklist'>
-        <DetailsReview reviewData={review} />
+        <DetailsListReview reviewData={review} />
       </div>
 
       {/*//@ Product details */}
       <div className='user-container__main-details modal-checklist'>
-        <DetailsProduct data={product} placement={'reviews'} />
+        <DetailsListProduct data={product} placement={'reviews'} />
         {/*//@ Schedule details */}
         {type !== 'Camp' && type !== 'Event' && (
-          <DetailsSchedule data={schedule} />
+          <DetailsListSchedule data={schedule} />
         )}
       </div>
 
       {/*//@ Customer details */}
       <div className='user-container__main-details   modal-checklist'>
-        <DetailsCustomer customerData={customer} />
+        <DetailsListCustomer customerData={customer} />
       </div>
 
       {/*//@ Another customers.feedbacks */}

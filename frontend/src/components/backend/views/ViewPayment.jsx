@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import { getWeekDay } from '../../../utils/dateTime.js';
-import DetailsCustomer from './lists/DetailsCustomer.jsx';
-import DetailsPayment from './lists/DetailsPayment.jsx';
+import DetailsListCustomer from './lists/DetailsListCustomer.jsx';
+import DetailsListPayment from './lists/DetailsListPayment.jsx';
 import DetailsProductSchedules from './tables/ViewProductSchedules.jsx';
 
 // import {statsCalculatorForCustomer} from '../../utils/productViewsUtils.js';
@@ -43,7 +43,7 @@ function ViewPayment({ data, isUserAccountPage }) {
       {/*//@ Customer main details */}
       {!isUserAccountPage && (
         <div className='user-container__main-details modal-checklist'>
-          <DetailsCustomer
+          <DetailsListCustomer
             customerData={customer}
             isUserAccountPage={isUserAccountPage}
             customerAccessed={customerAccessed}
@@ -55,7 +55,7 @@ function ViewPayment({ data, isUserAccountPage }) {
 
       {/*//@ Payment main details */}
       <div className='user-container__main-details modal-checklist modal-checklist--payment'>
-        <DetailsPayment
+        <DetailsListPayment
           paymentData={payment}
           placement={'payment'}
           isUserAccountPage={isUserAccountPage}

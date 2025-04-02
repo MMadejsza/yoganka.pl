@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom';
-import DetailsCustomer from './lists/DetailsCustomer.jsx';
-import DetailsUser from './lists/DetailsUser.jsx';
-import DetailsUserSettings from './lists/DetailsUserSettings.jsx';
+import DetailsListCustomer from './lists/DetailsListCustomer.jsx';
+import DetailsListUser from './lists/DetailsListUser.jsx';
+import DetailsListUserSettings from './lists/DetailsListUserSettings.jsx';
 
 function ViewUser({ data, isUserAccountPage }) {
   const location = useLocation();
@@ -45,14 +45,14 @@ function ViewUser({ data, isUserAccountPage }) {
         </h1>
       )}
       <div className='user-container__main-details modal-checklist'>
-        <DetailsUser
+        <DetailsListUser
           userData={user}
           customerView={false}
           isUserAccountPage={isUserAccountPage}
         />
       </div>
       <div className='user-container__main-details modal-checklist'>
-        <DetailsUserSettings
+        <DetailsListUserSettings
           settingsData={user.UserPrefSetting}
           isUserAccountPage={isUserAccountPage}
           customerAccessed={customerAccessed}
@@ -60,7 +60,7 @@ function ViewUser({ data, isUserAccountPage }) {
         />
       </div>
       {customer && (
-        <DetailsCustomer
+        <DetailsListCustomer
           customerData={customer}
           isUserAccountPage={isUserAccountPage}
           customerAccessed={customerAccessed}

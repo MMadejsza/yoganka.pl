@@ -1,7 +1,7 @@
 import { formatIsoDateTime } from '../../../../utils/dateTime.js';
 import GenericList from '../../../common/GenericList.jsx';
 
-function DetailsReview({ reviewData }) {
+function DetailsListReview({ reviewData }) {
   const details = [
     {
       label: 'Data zgłoszenia:',
@@ -15,4 +15,4 @@ function DetailsReview({ reviewData }) {
   return <GenericList title='Szczegóły opinii:' details={details} />;
 }
 
-export default DetailsReview;
+export default DetailsListReview;

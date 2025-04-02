@@ -1,7 +1,7 @@
 import { formatIsoDateTime } from '../../../../utils/dateTime.js';
 import GenericList from '../../../common/GenericList.jsx';
 
-function DetailsPayment({ paymentData }) {
+function DetailsListPayment({ paymentData }) {
   const payment = paymentData;
   console.log(
     `📝
@@ -26,4 +26,4 @@ function DetailsPayment({ paymentData }) {
   return <GenericList title='Szczegóły:' details={details} />;
 }
 
-export default DetailsPayment;
+export default DetailsListPayment;

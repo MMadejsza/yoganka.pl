@@ -9,7 +9,7 @@ import WrapperForm from '../../../../common/WrapperForm.jsx';
 import FeedbackBox from '../../../FeedbackBox.jsx';
 import InputLogin from '../../../InputLogin.jsx';
 
-function DetailsScheduleForm({ scheduleData }) {
+function DetailsFormSchedule({ scheduleData }) {
   // !dodaj 'zamknij zapisy
   const { feedback, updateFeedback, resetFeedback } = useFeedback();
   const { data: status } = useAuthStatus();
@@ -242,4 +242,4 @@ function DetailsScheduleForm({ scheduleData }) {
   );
 }
 
-export default DetailsScheduleForm;
+export default DetailsFormSchedule;

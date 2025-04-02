@@ -1,10 +1,10 @@
 import GenericList from '../../../common/GenericList.jsx';
 
-function DetailsProductStats({ data, prodStats, placement }) {
+function DetailsListProductStats({ data, prodStats, placement }) {
   // console.clear();
   console.log(
     `📝 
-        data object from DetailsProductStats:`,
+        data object from DetailsListProductStats:`,
     data
   );
   console.log('stats:', prodStats);
@@ -56,4 +56,4 @@ function DetailsProductStats({ data, prodStats, placement }) {
   return <GenericList title={title} details={details} />;
 }
 
-export default DetailsProductStats;
+export default DetailsListProductStats;

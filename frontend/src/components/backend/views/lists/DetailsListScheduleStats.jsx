@@ -1,10 +1,10 @@
 import GenericList from '../../../common/GenericList.jsx';
 
-function DetailsScheduleStats({ data, scheduleStats }) {
+function DetailsListScheduleStats({ data, scheduleStats }) {
   // console.clear();
   console.log(
     `📝 
-        data object from DetailsScheduleStats:`,
+        data object from DetailsListScheduleStats:`,
     data
   );
   console.log('stats:', scheduleStats);
@@ -28,4 +28,4 @@ function DetailsScheduleStats({ data, scheduleStats }) {
   return <GenericList title={title} details={details} />;
 }
 
-export default DetailsScheduleStats;
+export default DetailsListScheduleStats;

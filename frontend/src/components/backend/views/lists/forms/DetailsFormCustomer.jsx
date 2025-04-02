@@ -13,12 +13,12 @@ import WrapperForm from '../../../../common/WrapperForm.jsx';
 import FeedbackBox from '../../../FeedbackBox.jsx';
 import InputLogin from '../../../InputLogin.jsx';
 
-function DetailsCustomerForm({
+function DetailsFormCustomer({
   customerData,
   customerAccessed,
   adminAccessed,
 }) {
-  // console.log('DetailsCustomerForm customerAccessed adminAccessed', customerAccessed, adminAccessed);
+  // console.log('DetailsFormCustomer customerAccessed adminAccessed', customerAccessed, adminAccessed);
   const params = useParams();
   const { feedback, updateFeedback, resetFeedback } = useFeedback();
   const { data: status } = useAuthStatus();
@@ -277,4 +277,4 @@ function DetailsCustomerForm({
   );
 }
 
-export default DetailsCustomerForm;
+export default DetailsFormCustomer;

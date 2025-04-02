@@ -9,7 +9,7 @@ import WrapperForm from '../../../../common/WrapperForm.jsx';
 import FeedbackBox from '../../../FeedbackBox.jsx';
 import InputLogin from '../../../InputLogin.jsx';
 
-function DetailsProductForm({ productData }) {
+function DetailsFormProduct({ productData }) {
   const { data: status } = useAuthStatus();
   const { feedback, updateFeedback, resetFeedback } = useFeedback();
 
@@ -316,4 +316,4 @@ function DetailsProductForm({ productData }) {
   );
 }
 
-export default DetailsProductForm;
+export default DetailsFormProduct;
