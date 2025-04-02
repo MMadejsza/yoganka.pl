@@ -107,7 +107,10 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
     userAccountPage &&
     !shouldShowFeedback;
   const shouldShowBookBtn =
-    !isArchived && !schedule.isUserGoing && !paymentOps?.isError;
+    !isArchived &&
+    !schedule.isUserGoing &&
+    !paymentOps?.isError &&
+    !isFillingTheForm;
   const isFull = schedule.full;
   const shouldDisableBookBtn =
     (isFull && shouldShowBookBtn) || isFillingTheForm;
@@ -134,7 +137,7 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
       </span>
       {shouldDisableBookBtn
         ? isFillingTheForm
-          ? 'Wypełnij formularz'
+          ? 'Wypełnianie formularza'
           : 'Brak Miejsc'
         : schedule.wasUserReserved
           ? 'Wróć na zajęcia'

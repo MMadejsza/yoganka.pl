@@ -181,17 +181,42 @@ export const postCreateBookSchedule = (req, res, next) => {
           firstName: cDetails.fname,
         });
       }
-      req.session.user.Customer = newCustomer;
-      req.session.role = 'CUSTOMER';
-      req.session.save();
-
-      isNewCustomer = true;
-      successLog(person, controllerName, 'customer created');
-
+      // first update db user with new role as the middleware actually always fetch from the db on request
       return models.User.update(
         { role: 'CUSTOMER' },
         { where: { userId: req.user.userId } }
-      ).then(() => newCustomer);
+      )
+        .then(() => {
+          return models.User.findByPk(req.user.userId, {
+            include: [
+              {
+                model: models.Customer,
+                required: false,
+              },
+              {
+                model: models.UserPrefSetting,
+                required: false,
+              },
+            ],
+          });
+        })
+        .then(updatedUser => {
+          req.session.user = updatedUser.toJSON();
+          req.session.role = updatedUser.role.toUpperCase(); // np. "CUSTOMER"
+          req.session.save(err => {
+            if (err) {
+              console.error('Error saving session:', err);
+            }
+          });
+
+          isNewCustomer = true;
+          successLog(
+            person,
+            controllerName,
+            'customer created and session updated'
+          );
+          return newCustomer;
+        });
     });
   } else {
     // Fetching from the database again ensures you get a full Sequelize instance with all methods - this is essential for using instance methods like .save()
@@ -311,7 +336,7 @@ export const postCreateBookSchedule = (req, res, next) => {
               if (req.user.email) {
                 adminEmails.sendAttendanceFirstBookingForScheduleMail({
                   to: req.user.email,
-                  productName: currentScheduleRecord?.ProductName || '',
+                  productName: currentScheduleRecord?.Product.name || '',
                   date: currentScheduleRecord.date,
                   startTime: currentScheduleRecord.startTime,
                   location: currentScheduleRecord.location,
@@ -350,7 +375,7 @@ export const postCreateBookSchedule = (req, res, next) => {
               if (req.user.email) {
                 adminEmails.sendReservationFreshMail({
                   to: req.user.email,
-                  productName: req.body.product,
+                  productName: currentScheduleRecord.Product.name,
                   date: currentScheduleRecord.date,
                   startTime: currentScheduleRecord.startTime,
                   location: currentScheduleRecord.location,
@@ -371,7 +396,7 @@ export const postCreateBookSchedule = (req, res, next) => {
                 if (req.user.email) {
                   adminEmails.sendAttendanceFirstBookingForScheduleMail({
                     to: req.user.email,
-                    productName: currentScheduleRecord?.ProductName || '',
+                    productName: currentScheduleRecord?.Product.name || '',
                     date: currentScheduleRecord.date,
                     startTime: currentScheduleRecord.startTime,
                     location: currentScheduleRecord.location,

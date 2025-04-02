@@ -1115,178 +1115,6 @@ export const deleteSchedule = (req, res, next) => {
     .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 
-//! ATTENDANCE_____________________________________________
-//@ GET
-//@ POST
-//@ PUT
-export const putEditMarkAbsent = (req, res, next) => {
-  const controllerName = 'putEditMarkAbsent';
-  callLog(req, person, controllerName);
-
-  const { rowId, customerId } = req.body;
-  let currentScheduleRecord, customerEmail;
-
-  // Find schedule
-  models.Booking.findOne({
-    where: {
-      customerId: customerId,
-      bookingId: rowId,
-    },
-    include: [
-      {
-        model: models.ScheduleRecord,
-        include: [
-          {
-            model: models.Product,
-            required: true,
-          },
-        ],
-        required: true,
-      },
-      {
-        model: models.Customer,
-        required: true,
-        include: [
-          {
-            model: models.User,
-            attributes: ['email'],
-          },
-        ],
-      },
-    ],
-  })
-    .then(foundRecord => {
-      if (!foundRecord) {
-        errCode = 404;
-        throw new Error('Nie znaleziono rekordu obecności w dzienniku.');
-      }
-      // Assign for email data
-      currentScheduleRecord = foundRecord.ScheduleRecord;
-      // Assign for email data
-      customerEmail = foundRecord.Customer.User.email;
-
-      // Finally update attendance
-      return models.Booking.update(
-        {
-          attendance: 0,
-          performedBy: person,
-        },
-        {
-          where: {
-            customerId: foundRecord.Customer.customerId,
-            bookingId: foundRecord.bookingId,
-          },
-        }
-      );
-    })
-    .then(() => {
-      // Send confirmation email
-      if (customerEmail) {
-        adminEmails.sendAttendanceMarkedAbsentMail({
-          to: customerEmail,
-          productName: currentScheduleRecord.Product.name || '',
-          date: currentScheduleRecord.date,
-          startTime: currentScheduleRecord.startTime,
-          location: currentScheduleRecord.location,
-        });
-      }
-
-      successLog(person, controllerName);
-      // Send confirmation to frontend
-      return res.status(200).json({
-        confirmation: 1,
-        message: 'Uczestnik oznaczony jako nieobecny.',
-        affectedRows: 2,
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
-};
-export const putEditMarkPresent = (req, res, next) => {
-  const controllerName = 'putEditMarkPresent';
-  callLog(req, person, controllerName);
-
-  const { customerId, rowId } = req.body;
-
-  let currentScheduleRecord, customerEmail;
-
-  // Find schedule
-  models.Booking.findOne({
-    where: {
-      customerId: customerId,
-      bookingId: rowId,
-    },
-    include: [
-      {
-        model: models.ScheduleRecord,
-        include: [
-          {
-            model: models.Product,
-            required: true,
-          },
-        ],
-        required: true,
-      },
-      {
-        model: models.Customer,
-        required: true,
-        include: [
-          {
-            model: models.User,
-            attributes: ['email'],
-          },
-        ],
-      },
-    ],
-  })
-    .then(foundRecord => {
-      if (!foundRecord) {
-        errCode = 404;
-        throw new Error('Nie znaleziono rekordu obecności w dzienniku.');
-      }
-
-      // Assign for email data
-      currentScheduleRecord = foundRecord.ScheduleRecord;
-      // Assign for email data
-      customerEmail = foundRecord.Customer.User.email;
-
-      // Finally update attendance
-      return models.Booking.update(
-        {
-          attendance: 1,
-          performedBy: person,
-        },
-        {
-          where: {
-            customerId: foundRecord.Customer.customerId,
-            bookingId: foundRecord.bookingId,
-          },
-        }
-      );
-    })
-    .then(updatedRecord => {
-      // Send confirmation email
-      if (customerEmail) {
-        adminEmails.sendAttendanceReturningMail({
-          to: customerEmail,
-          productName: currentScheduleRecord?.Product.name || '',
-          date: currentScheduleRecord.date,
-          startTime: currentScheduleRecord.startTime,
-          location: currentScheduleRecord.location,
-        });
-      }
-
-      successLog(person, controllerName);
-      const status = updatedRecord ? true : false;
-      // Send confirmation to frontend
-      return res.status(200).json({
-        confirmation: status,
-        message: 'Uczestnik oznaczony jako obecny.',
-        affectedRows: status ? 1 : 0,
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
-};
-
 //! FEEDBACK_____________________________________________
 //@ GET
 export const getAllParticipantsFeedback = (req, res, next) => {
@@ -1776,8 +1604,8 @@ export const postCreateBooking = (req, res, next) => {
     amountPaid,
     paymentMethod,
   } = req.body;
-
-  if (!isNaN(amountPaid) && Number(amountPaid) >= 0) {
+  console.log(req.body);
+  if (isNaN(amountPaid) || Number(amountPaid) < 0) {
     console.log('\n❌❌❌ amountPaid wrong');
     throw new Error('amountPaid wrong');
   }
@@ -2018,7 +1846,7 @@ export const deleteBookingRecord = (req, res, next) => {
       if (customerEmail) {
         adminEmails.sendAttendanceRecordDeletedMail({
           to: customerEmail,
-          productName: currentScheduleRecord?.Product?.ProductName || 'Zajęcia',
+          productName: currentScheduleRecord.Product.name || 'Zajęcia',
           date: currentScheduleRecord.date,
           startTime: currentScheduleRecord.startTime,
           location: currentScheduleRecord.location,
@@ -2036,44 +1864,227 @@ export const deleteBookingRecord = (req, res, next) => {
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
+//! ATTENDANCE_____________________________________________
+//@ GET
+//@ POST
+//@ PUT
+export const putEditMarkAbsent = (req, res, next) => {
+  const controllerName = 'putEditMarkAbsent';
+  callLog(req, person, controllerName);
+
+  const { rowId, customerId } = req.body;
+  let currentScheduleRecord, customerEmail;
+
+  // Find schedule
+  models.Booking.findOne({
+    where: {
+      customerId: customerId,
+      bookingId: rowId,
+    },
+    include: [
+      {
+        model: models.ScheduleRecord,
+        include: [
+          {
+            model: models.Product,
+            required: true,
+          },
+        ],
+        required: true,
+      },
+      {
+        model: models.Customer,
+        required: true,
+        include: [
+          {
+            model: models.User,
+            attributes: ['email'],
+          },
+        ],
+      },
+    ],
+  })
+    .then(foundRecord => {
+      if (!foundRecord) {
+        errCode = 404;
+        throw new Error('Nie znaleziono rekordu obecności w dzienniku.');
+      }
+      // Assign for email data
+      currentScheduleRecord = foundRecord.ScheduleRecord;
+      // Assign for email data
+      customerEmail = foundRecord.Customer.User.email;
+
+      // Finally update attendance
+      return models.Booking.update(
+        {
+          attendance: 0,
+          performedBy: person,
+        },
+        {
+          where: {
+            customerId: foundRecord.Customer.customerId,
+            bookingId: foundRecord.bookingId,
+          },
+        }
+      );
+    })
+    .then(() => {
+      // Send confirmation email
+      if (customerEmail) {
+        adminEmails.sendAttendanceMarkedAbsentMail({
+          to: customerEmail,
+          productName: currentScheduleRecord.Product.name || '',
+          date: currentScheduleRecord.date,
+          startTime: currentScheduleRecord.startTime,
+          location: currentScheduleRecord.location,
+        });
+      }
+
+      successLog(person, controllerName);
+      // Send confirmation to frontend
+      return res.status(200).json({
+        confirmation: 1,
+        message: 'Uczestnik oznaczony jako nieobecny.',
+        affectedRows: 2,
+      });
+    })
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
+};
+export const putEditMarkPresent = (req, res, next) => {
+  const controllerName = 'putEditMarkPresent';
+  callLog(req, person, controllerName);
+
+  const { customerId, rowId } = req.body;
+
+  let currentScheduleRecord, customerEmail;
+
+  // Find schedule
+  models.Booking.findOne({
+    where: {
+      customerId: customerId,
+      bookingId: rowId,
+    },
+    include: [
+      {
+        model: models.ScheduleRecord,
+        include: [
+          {
+            model: models.Product,
+            required: true,
+          },
+        ],
+        required: true,
+      },
+      {
+        model: models.Customer,
+        required: true,
+        include: [
+          {
+            model: models.User,
+            attributes: ['email'],
+          },
+        ],
+      },
+    ],
+  })
+    .then(foundRecord => {
+      if (!foundRecord) {
+        errCode = 404;
+        throw new Error('Nie znaleziono rekordu obecności w dzienniku.');
+      }
+
+      // Assign for email data
+      currentScheduleRecord = foundRecord.ScheduleRecord;
+      // Assign for email data
+      customerEmail = foundRecord.Customer.User.email;
+
+      // Finally update attendance
+      return models.Booking.update(
+        {
+          attendance: 1,
+          performedBy: person,
+        },
+        {
+          where: {
+            customerId: foundRecord.Customer.customerId,
+            bookingId: foundRecord.bookingId,
+          },
+        }
+      );
+    })
+    .then(updatedRecord => {
+      // Send confirmation email
+      if (customerEmail) {
+        adminEmails.sendAttendanceReturningMail({
+          to: customerEmail,
+          productName: currentScheduleRecord?.Product.name || '',
+          date: currentScheduleRecord.date,
+          startTime: currentScheduleRecord.startTime,
+          location: currentScheduleRecord.location,
+        });
+      }
+
+      successLog(person, controllerName);
+      const status = updatedRecord ? true : false;
+      // Send confirmation to frontend
+      return res.status(200).json({
+        confirmation: status,
+        message: 'Uczestnik oznaczony jako obecny.',
+        affectedRows: status ? 1 : 0,
+      });
+    })
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
+};
 //! PAYMENTS_____________________________________________
 //@ GET
 export const getAllPayments = (req, res, next) => {
   const controllerName = 'getAllPayments';
   callLog(req, person, controllerName);
 
-  models.Payment.findAll({
+  // models.Payment.findAll({
+  //   include: [
+  //     {
+  //       model: models.Customer,
+  //       include: [
+  //         {
+  //           model: models.User,
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       model: models.Booking,
+  //       include: [
+  //         {
+  //           model: models.ScheduleRecord,
+  //           include: [
+  //             {
+  //               model: models.Product,
+  //               attributes: ['name'],
+  //             },
+  //           ],
+  //           attributes: ['scheduleId'],
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       model: models.CustomerPass,
+  //       include: [
+  //         {
+  //           model: models.PassDefinition,
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // })
+  // Find all schedule payment regardless relation to booking because they are non refundable
+  return models.Payment.findAll({
     include: [
       {
         model: models.Customer,
-        include: [
-          {
-            model: models.User,
-          },
-        ],
+        attributes: { exclude: ['userId'] },
       },
       {
         model: models.Booking,
-        include: [
-          {
-            model: models.ScheduleRecord,
-            include: [
-              {
-                model: models.Product,
-                attributes: ['name'],
-              },
-            ],
-            attributes: ['scheduleId'],
-          },
-        ],
-      },
-      {
-        model: models.CustomerPass,
-        include: [
-          {
-            model: models.PassDefinition,
-          },
-        ],
       },
     ],
   })
@@ -2084,25 +2095,16 @@ export const getAllPayments = (req, res, next) => {
       }
       const formattedRecords = records.map(record => {
         const payment = record.toJSON();
+        console.log(payment);
 
-        const products = [];
-        const schedules = payment.Bookings.map(b => b.ScheduleRecord);
-        products.push(...schedules);
-        products.push(...payment.CustomerPasses);
+        const schedules = payment.Bookings?.map(b => b.ScheduleRecord);
 
         return {
           ...payment,
           rowId: payment.paymentId,
           date: formatIsoDateTime(payment.date),
           customerFullName: `${payment.Customer.firstName} ${payment.Customer.firstName} (${payment.Customer.customerId})`,
-          product: products
-            .map(
-              pr =>
-                `${pr.Product?.name || pr.CustomerPass?.PassDefinition.name} (${
-                  pr.scheduleId || pr.customerPassId
-                })`
-            )
-            .join(', '),
+          schedules,
         };
       });
 
@@ -2187,11 +2189,11 @@ export const postCreatePayment = (req, res, next) => {
   } = req.body;
 
   errCode = 400;
-  if (!isNaN(amountPaid) && Number(amountPaid) >= 0) {
+  if (isNaN(amountPaid) || Number(amountPaid) < 0) {
     console.log('\n❌❌❌ amountPaid wrong');
     throw new Error('amountPaid wrong');
   }
-  if ([1, 2, 3].includes(Number(paymentMethod))) {
+  if (![1, 2, 3].includes(Number(paymentMethod))) {
     console.log('\n❌❌❌ paymentMethod wrong');
     throw new Error('paymentMethod wrong');
   }

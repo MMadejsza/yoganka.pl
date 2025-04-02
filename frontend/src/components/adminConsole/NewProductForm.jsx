@@ -170,6 +170,7 @@ function NewProductForm() {
         id='name'
         name='name'
         label='Nazwa w systemie: *'
+        placeholder='Etykieta rozpoznawcza - dla uczestników'
         value={nameValue}
         onFocus={handleNameFocus}
         onBlur={handleNameBlur}
@@ -246,7 +247,8 @@ function NewProductForm() {
         type='text'
         id='location'
         name='location'
-        label='Miejsce:'
+        label='Miejsce: *'
+        placeholder='Etykieta rozpoznawcza - dla uczestników'
         value={locationValue}
         autoComplete='off'
         onFocus={handleLocationFocus}
@@ -255,6 +257,7 @@ function NewProductForm() {
         validationResults={locationValidationResults}
         didEdit={locationDidEdit}
         isFocused={locationIsFocused}
+        required
       />
       <InputLogin
         embedded={true}
@@ -263,8 +266,8 @@ function NewProductForm() {
         id='price'
         name='price'
         label='Zadatek: *'
-        placeholder='zł'
         value={priceValue}
+        placeholder='Widoczny dla uczestników'
         required
         onFocus={handlePriceFocus}
         onBlur={handlePriceBlur}

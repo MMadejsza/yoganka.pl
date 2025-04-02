@@ -57,7 +57,7 @@ export const statsCalculatorForProduct = (product, schedules) => {
           ...feedback,
           rowId: feedback.feedbackId,
           submissionDate: formatIsoDateTime(feedback.submissionDate),
-          customerFullName: `${feedback.Customer.firstName} ${feedback.Customer.lastName}`,
+          customerFullName: `${feedback.Customer.firstName} ${feedback.Customer.lastName} (${feedback.Customer.customerId})`,
         });
       });
     }
@@ -228,6 +228,7 @@ export const statsCalculatorForProduct = (product, schedules) => {
     reviews: reviews,
     reviewsKeys: [
       'feedbackId',
+      'scheduleId',
       'submissionDate',
       'customerFullName',
       'rating',

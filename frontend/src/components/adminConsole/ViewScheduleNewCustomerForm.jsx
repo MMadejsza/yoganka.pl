@@ -142,10 +142,18 @@ function ViewScheduleNewCustomerForm({ onSave }) {
   };
   // Extract values only
   const { formType, title, actionTitle } = formLabels;
+  const areErrors = [
+    lastNameHasError,
+    firstNameHasError,
+    DoBHasError,
+    phoneHasError,
+  ].some(error => error);
+  const areEmpty = [firstNameValue, lastNameValue, DoBValue, phoneValue].some(
+    value => value.trim() === ''
+  );
+  const requiredInputsValidated = !areErrors && !areEmpty;
 
-  let content;
-
-  content = (
+  const content = (
     <form
       onSubmit={handleSubmit}
       className={`form user-container__details-list modal-checklist__list new-customer`}
@@ -288,14 +296,17 @@ function ViewScheduleNewCustomerForm({ onSave }) {
         onClick={handleReset}
         className='form-switch-btn modal__btn  modal__btn--secondary modal__btn--small'
       >
+        <span className={`material-symbols-rounded nav__icon`}>undo</span>
         Resetuj
       </button>
-      <button
-        type='submit'
-        className={`form-action-btn modal__btn modal__btn--small`}
-      >
-        {actionTitle}
-      </button>
+      {requiredInputsValidated && (
+        <button type='submit' className={`form-action-btn modal__btn `}>
+          <span className={`material-symbols-rounded nav__icon`}>
+            self_improvement
+          </span>
+          {actionTitle}
+        </button>
+      )}
     </form>
   );
 

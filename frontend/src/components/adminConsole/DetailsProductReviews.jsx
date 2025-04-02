@@ -11,7 +11,8 @@ function DetailsProductReviews({ stats }) {
       {feedbackArray.length > 0 ? (
         <ModalTable
           headers={[
-            'ID',
+            'Id',
+            'Termin (Id)',
             'Data wystawienia',
             'Uczestnik',
             'Ocena',

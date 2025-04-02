@@ -19,7 +19,7 @@ function DetailsCustomerReviews({ reviews, placement }) {
           headers={[
             'ID',
             'Data wystawienia',
-            'Produkt',
+            'Zajęcia',
             'Termin',
             'Ocena',
             'Komentarz',
