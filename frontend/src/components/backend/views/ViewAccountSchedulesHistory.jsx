@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import { statsCalculatorForCustomer } from '../../../utils/statistics/statsCalculatorForCustomer.js';
-import ModalTableContent from '../ModalTableContent.jsx';
+import ModalTable from '../ModalTable.jsx';
 import WrapperModalTable from '../WrapperModalTable.jsx';
 import DetailsListCustomerStats from './lists/DetailsListCustomerStats.jsx';
 
@@ -52,7 +52,7 @@ function ViewAccountSchedulesHistory({ data }) {
       title={'Ukończone zajęcia'}
       noContentMsg={'ukończonych zajęć'}
     >
-      <ModalTableContent
+      <ModalTable
         headers={headers}
         keys={customerStats.recordsKeys}
         content={content}

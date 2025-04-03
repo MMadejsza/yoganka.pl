@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useModal } from '../../hooks/useModal';
 
-function ModalFrame({ visited, onClose, children }) {
+function WrapperModal({ visited, onClose, children }) {
   const { isOpen, isVisible, isClosing, openModal, closeModal } =
     useModal(false);
 
@@ -52,4 +52,4 @@ function ModalFrame({ visited, onClose, children }) {
   );
 }
 
-export default ModalFrame;
+export default WrapperModal;

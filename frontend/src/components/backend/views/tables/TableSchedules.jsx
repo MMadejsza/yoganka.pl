@@ -6,7 +6,7 @@ import { getWeekDay } from '../../../../utils/dateTime.js';
 import { mutateOnDelete, queryClient } from '../../../../utils/http.js';
 import ToggleAddButton from '../../../common/ToggleAddButton.jsx';
 import FeedbackBox from '../../FeedbackBox.jsx';
-import ModalTableContent from '../../ModalTableContent.jsx';
+import ModalTable from '../../ModalTable.jsx';
 import WrapperModalTable from '../../WrapperModalTable.jsx';
 import NewProductScheduleForm from './add-forms/NewProductScheduleForm.jsx';
 
@@ -135,7 +135,7 @@ function TableSchedules({ scheduleRecords, placement, status }) {
         toggleBtn={toggleBtn}
         form={isFormVisible && form}
       >
-        <ModalTableContent
+        <ModalTable
           headers={headers}
           keys={keys}
           content={processedScheduleRecordsArr}

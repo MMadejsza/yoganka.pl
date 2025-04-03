@@ -5,7 +5,7 @@ import { useAuthStatus } from '../../hooks/useAuthStatus.js';
 import { useFeedback } from '../../hooks/useFeedback.js';
 import { fetchItem, mutateOnDelete, queryClient } from '../../utils/http.js';
 import FeedbackBox from './FeedbackBox.jsx';
-import ModalFrame from './WrapperModal.jsx';
+import WrapperModal from './WrapperModal.jsx';
 import ViewCustomer from './views/ViewCustomer.jsx';
 import ViewPayment from './views/ViewPayment.jsx';
 import ViewProduct from './views/ViewProduct.jsx';
@@ -13,7 +13,7 @@ import ViewReview from './views/ViewReview.jsx';
 import ViewSchedule from './views/ViewSchedule.jsx';
 import ViewUser from './views/ViewUser.jsx';
 
-function ViewFrame({
+function ViewsController({
   modifier,
   visited,
   onClose,
@@ -34,9 +34,9 @@ function ViewFrame({
   const minRightsPrefix = role == 'ADMIN' ? '' : '';
   const noFetchPaths = ['statystyki', 'zajecia', 'rezerwacje', 'faktury'];
 
-  console.log('ViewFrame callPath: ', callPath);
-  console.log('ViewFrame isCustomerQuery: ', isCustomerQuery);
-  console.log('ViewFrame: modifier =', modifier);
+  console.log('ViewsController callPath: ', callPath);
+  console.log('ViewsController isCustomerQuery: ', isCustomerQuery);
+  console.log('ViewsController: modifier =', modifier);
   console.log('✅ role', role);
 
   // const [editingState, setEditingState] = useState(false);
@@ -52,7 +52,7 @@ function ViewFrame({
   });
 
   if (data) {
-    console.log('ViewFrame data: ', data);
+    console.log('ViewsController data: ', data);
   }
   const effectiveData = noFetchPaths.some(pathPart =>
     location.pathname.split('/').pop().includes(pathPart)
@@ -193,7 +193,7 @@ function ViewFrame({
     }
   }
 
-  console.log(`ViewFrame customer: `, customer);
+  console.log(`ViewsController customer: `, customer);
   let deleteTitle;
   if (effectiveData) {
     const {
@@ -280,7 +280,7 @@ function ViewFrame({
   };
 
   return (
-    <ModalFrame visited={visited} onClose={onClose}>
+    <WrapperModal visited={visited} onClose={onClose}>
       <div className='user-container modal__summary'>
         {!deleteWarningTriggered
           ? dataDisplay
@@ -307,8 +307,8 @@ function ViewFrame({
           )}
         </div>
       </div>
-    </ModalFrame>
+    </WrapperModal>
   );
 }
 
-export default ViewFrame;
+export default ViewsController;

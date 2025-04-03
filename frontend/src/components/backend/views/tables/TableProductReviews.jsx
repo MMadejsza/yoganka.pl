@@ -1,4 +1,4 @@
-import ModalTableContent from '../../ModalTableContent';
+import ModalTable from '../../ModalTable';
 import WrapperModalTable from '../../WrapperModalTable';
 
 function TableProductReviews({ stats }) {
@@ -18,7 +18,7 @@ function TableProductReviews({ stats }) {
       title={'Opinie'}
       noContentMsg={'opinii'}
     >
-      <ModalTableContent
+      <ModalTable
         headers={headers}
         keys={stats.reviewsKeys}
         content={feedbackArray}

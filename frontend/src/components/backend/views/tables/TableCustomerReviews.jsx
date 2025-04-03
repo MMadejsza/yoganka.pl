@@ -1,4 +1,4 @@
-import ModalTableContent from '../../ModalTableContent';
+import ModalTable from '../../ModalTable';
 import WrapperModalTable from '../../WrapperModalTable';
 
 function TableCustomerReviews({ reviews, placement }) {
@@ -23,7 +23,7 @@ function TableCustomerReviews({ reviews, placement }) {
         title={placement != 'reviews' ? 'Opinie:' : 'Inne opinie:'}
         noContentMsg={'opinii'}
       >
-        <ModalTableContent
+        <ModalTable
           headers={headers}
           keys={reviews.keys}
           content={feedbackArray}

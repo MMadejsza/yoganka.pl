@@ -10,7 +10,7 @@ import {
 } from '../../../../utils/http.js';
 import ToggleAddButton from '../../../common/ToggleAddButton.jsx';
 import FeedbackBox from '../../FeedbackBox.jsx';
-import ModalTableContent from '../../ModalTableContent.jsx';
+import ModalTable from '../../ModalTable.jsx';
 import WrapperModalTable from '../../WrapperModalTable.jsx';
 import NewBookingForm from './add-forms/NewBookingForm.jsx';
 
@@ -149,7 +149,7 @@ function TableAttendance({ stats, isAdminPage }) {
       toggleBtn={toggleBtn}
       form={isFormVisible && form}
     >
-      <ModalTableContent
+      <ModalTable
         headers={['Id', 'Metoda płatności', 'Data zapisania', 'Uczestnik', '']}
         keys={[
           'bookingId',
@@ -174,7 +174,7 @@ function TableAttendance({ stats, isAdminPage }) {
       noContentMsg={'anulowanych rezerwacji'}
       // toggleBtn={toggleBtn}
     >
-      <ModalTableContent
+      <ModalTable
         headers={['Id', 'Metoda płatności', 'Data zapisania', 'Uczestnik', '']}
         keys={[
           'bookingId',

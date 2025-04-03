@@ -1,4 +1,4 @@
-import ModalTableContent from '../../ModalTableContent.jsx';
+import ModalTable from '../../ModalTable.jsx';
 import WrapperModalTable from '../../WrapperModalTable.jsx';
 
 function TableProductPayments({ type, stats, isAdminPage }) {
@@ -25,7 +25,7 @@ function TableProductPayments({ type, stats, isAdminPage }) {
       title={title}
       noContentMsg={'płatności'}
     >
-      <ModalTableContent
+      <ModalTable
         headers={headers}
         keys={keys}
         content={paymentsArray}

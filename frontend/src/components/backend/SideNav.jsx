@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import ModalFrame from './WrapperModal.jsx';
+import WrapperModal from './WrapperModal.jsx';
 import NewCustomerFormForAdmin from './views/add-forms/NewCustomerFormForAdmin.jsx';
 import NewPaymentForm from './views/add-forms/NewPaymentForm.jsx';
 import NewProductForm from './views/add-forms/NewProductForm.jsx';
@@ -89,9 +89,9 @@ function SideNav({ menuSet, side, type, onclose }) {
         </ul>
       </nav>
       {isModalOpen && (
-        <ModalFrame visited={isModalOpen} onClose={handleCloseModal}>
+        <WrapperModal visited={isModalOpen} onClose={handleCloseModal}>
           {pickDestination(location).comp}
-        </ModalFrame>
+        </WrapperModal>
       )}
     </aside>
   );

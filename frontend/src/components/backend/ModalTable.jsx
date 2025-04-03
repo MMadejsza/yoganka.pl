@@ -1,4 +1,4 @@
-function ModalTableContent({
+function ModalTable({
   headers,
   content,
   keys,
@@ -16,8 +16,8 @@ function ModalTableContent({
       status?.isLoggedIn != undefined ? status.isLoggedIn : 'N/A',
     isCustomer = status?.role === 'CUSTOMER',
     isAdmin = status?.role === 'ADMIN';
-  console.log('ModalTableContent content', content);
-  console.log('ModalTableContent status', status);
+  console.log('ModalTable content', content);
+  console.log('ModalTable status', status);
 
   const customerViewSymbol = (row, isArchived, symbol) => {
     if (isAdminPage && adminActions) {
@@ -159,4 +159,4 @@ function ModalTableContent({
   );
 }
 
-export default ModalTableContent;
+export default ModalTable;

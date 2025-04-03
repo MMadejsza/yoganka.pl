@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { statsCalculatorForCustomer } from '../../../utils/statistics/statsCalculatorForCustomer.js';
-import ModalTableContent from '../ModalTableContent.jsx';
-import ViewFrame from '../ViewsController.jsx';
+import ModalTable from '../ModalTable.jsx';
+import ViewsController from '../ViewsController.jsx';
 import WrapperModalTable from '../WrapperModalTable.jsx';
 
 function ViewAccountPayments({ data }) {
@@ -45,7 +45,7 @@ function ViewAccountPayments({ data }) {
       title={'Historia płatności'}
       noContentMsg={'płatności'}
     >
-      <ModalTableContent
+      <ModalTable
         headers={[
           'ID',
           'Data',
@@ -73,7 +73,7 @@ function ViewAccountPayments({ data }) {
     <>
       {table}
       {isModalOpen && (
-        <ViewFrame
+        <ViewsController
           modifier='payment'
           visited={isModalOpen}
           onClose={handleCloseModal}

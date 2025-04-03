@@ -1,4 +1,4 @@
-import ModalTableContent from '../../ModalTableContent';
+import ModalTable from '../../ModalTable';
 import WrapperModalTable from '../../WrapperModalTable';
 
 function TableCustomerInvoices({ invoicesArray, noInvoices }) {
@@ -25,7 +25,7 @@ function TableCustomerInvoices({ invoicesArray, noInvoices }) {
         title={'Faktury:'}
         noContentMsg={'faktur'}
       >
-        <ModalTableContent
+        <ModalTable
           headers={headers}
           keys={keys}
           content={invoicesArray}

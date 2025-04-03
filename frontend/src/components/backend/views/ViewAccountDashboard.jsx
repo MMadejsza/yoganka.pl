@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useLocation, useMatch, useNavigate } from 'react-router-dom';
 import { statsCalculatorForCustomer } from '../../../utils/statistics/statsCalculatorForCustomer.js';
-import ModalTableContent from '../ModalTableContent.jsx';
-import ViewFrame from '../ViewsController.jsx';
+import ModalTable from '../ModalTable.jsx';
+import ViewsController from '../ViewsController.jsx';
 import WrapperModalTable from '../WrapperModalTable.jsx';
 import DetailsListCustomerStats from './lists/DetailsListCustomerStats.jsx';
 
@@ -87,7 +87,7 @@ function ViewAccountDashboard({ data, queryStatus }) {
       title={'Nadchodzące zajęcia'}
       noContentMsg={'nowych rezerwacji'}
     >
-      <ModalTableContent
+      <ModalTable
         headers={headers}
         keys={[
           'scheduleId',
@@ -109,7 +109,7 @@ function ViewAccountDashboard({ data, queryStatus }) {
       {statsBlock}
       {table}
       {isModalOpen && (
-        <ViewFrame
+        <ViewsController
           modifier='schedule'
           visited={isModalOpen}
           onClose={handleCloseModal}

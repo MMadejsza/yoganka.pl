@@ -1,4 +1,4 @@
-import ModalTableContent from '../../ModalTableContent';
+import ModalTable from '../../ModalTable';
 import WrapperModalTable from '../../WrapperModalTable';
 
 function TableCustomerSchedules({ customerStats, classModifier, altTitle }) {
@@ -26,7 +26,7 @@ function TableCustomerSchedules({ customerStats, classModifier, altTitle }) {
         title={'Odbyte zajęcia'}
         noContentMsg={'zajęć'}
       >
-        <ModalTableContent
+        <ModalTable
           headers={headers}
           keys={keys}
           content={contentPast}

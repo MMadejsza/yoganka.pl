@@ -1,6 +1,6 @@
 import { statsCalculatorForCustomer } from '../../../../utils/statistics/statsCalculatorForCustomer.js';
 import DetailsListCustomerStats from '../../lists/DetailsListCustomerStats.jsx';
-import ModalTableContent from '../../ModalTableContent.jsx';
+import ModalTable from '../../ModalTable.jsx';
 import WrapperModalTable from '../../WrapperModalTable.jsx';
 
 function TableCustomerTotalSchedules({ data }) {
@@ -53,7 +53,7 @@ function TableCustomerTotalSchedules({ data }) {
       title={'Historia zajęć'}
       noContentMsg={'zajęć'}
     >
-      <ModalTableContent
+      <ModalTable
         headers={headers}
         keys={keys}
         content={content}

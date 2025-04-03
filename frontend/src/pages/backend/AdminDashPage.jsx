@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useLocation, useMatch, useNavigate } from 'react-router-dom';
-import ModalTableContent from '../../components/backend/ModalTableContent.jsx';
+import ModalTable from '../../components/backend/ModalTable.jsx';
 import SideNav from '../../components/backend/SideNav.jsx';
-import ViewFrame from '../../components/backend/ViewsController.jsx';
+import ViewsController from '../../components/backend/ViewsController.jsx';
 import Section from '../../components/frontend/Section.jsx';
 import { fetchData, fetchStatus } from '../../utils/http.js';
 
@@ -229,7 +229,7 @@ function AdminPage() {
     console.log(`✅ Data: `);
     console.log(data);
     table = (
-      <ModalTableContent
+      <ModalTable
         headers={headers}
         keys={data.totalKeys || data.totalHeaders}
         content={data.content}
@@ -259,7 +259,7 @@ function AdminPage() {
       )}
       {table}
       {isModalOpen && (
-        <ViewFrame
+        <ViewsController
           modifier={pickedModifier}
           visited={isModalOpen}
           onClose={handleCloseModal}

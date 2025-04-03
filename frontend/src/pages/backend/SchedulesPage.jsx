@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useLocation, useMatch, useNavigate } from 'react-router-dom';
-import ModalTableContent from '../../components/backend/ModalTableContent.jsx';
-import ViewFrame from '../../components/backend/ViewsController.jsx';
+import ModalTable from '../../components/backend/ModalTable.jsx';
+import ViewsController from '../../components/backend/ViewsController.jsx';
 import Section from '../../components/frontend/Section.jsx';
 import { useAuthStatus } from '../../hooks/useAuthStatus.js';
 import { formatIsoDateTime } from '../../utils/dateTime.js';
@@ -92,7 +92,7 @@ function SchedulePage() {
     });
 
     table = (
-      <ModalTableContent
+      <ModalTable
         headers={data.totalHeaders}
         keys={data.totalKeys}
         content={contentSorted}
@@ -107,7 +107,7 @@ function SchedulePage() {
 
   if (data && status) {
     viewFrame = (
-      <ViewFrame
+      <ViewsController
         modifier='schedule'
         visited={isModalOpen}
         onClose={handleCloseModal}
