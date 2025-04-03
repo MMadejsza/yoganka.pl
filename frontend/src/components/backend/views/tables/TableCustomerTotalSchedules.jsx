@@ -30,7 +30,7 @@ function TableCustomerTotalSchedules({ data }) {
     'location',
   ];
   const customerStats = statsCalculatorForCustomer(data);
-  const content = customerStats.records.sort(
+  const content = customerStats.attendedSchedules.sort(
     (a, b) => new Date(b.date) - new Date(a.date)
   );
   // console.log(`✅ content: `, content);

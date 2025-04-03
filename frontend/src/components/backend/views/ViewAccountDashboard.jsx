@@ -48,7 +48,7 @@ function ViewAccountDashboard({ data, queryStatus }) {
     name = `${customer.firstName} ${customer.lastName}`;
     customerStats = statsCalculatorForCustomer(data.customer);
 
-    const content = customerStats.records;
+    const content = customerStats.attendedSchedules;
     contentUpcoming = content.filter(
       schedule =>
         new Date(`${schedule.date}T${schedule.startTime}:00.000Z`) >= today

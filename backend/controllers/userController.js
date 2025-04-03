@@ -50,6 +50,17 @@ export const getAccount = (req, res, next) => {
           ],
         },
         {
+          model: models.CustomerPass,
+          required: false,
+          include: [
+            {
+              model: models.PassDefinition,
+              required: true,
+            },
+          ],
+          where: { customerId: req.user.Customer.customerId },
+        },
+        {
           model: models.Payment, // His reservations
           required: false,
           include: [

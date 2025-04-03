@@ -3,7 +3,7 @@ import WrapperModalTable from '../../WrapperModalTable';
 
 function TableCustomerSchedules({ customerStats, classModifier, altTitle }) {
   // PAST and ATTENDED schedules only (stats give only attended)
-  const contentPast = customerStats.records.filter(
+  const contentPast = customerStats.attendedSchedules.filter(
     schedule =>
       new Date(`${schedule.date}T${schedule.startTime}:00.000Z`) <= new Date()
   );

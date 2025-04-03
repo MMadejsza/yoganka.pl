@@ -6,7 +6,7 @@ export const statsCalculatorForCustomer = customer => {
   console.log(`❗❗❗ statsCalculatorForCustomer customer`, customer);
   // console.log(`statsCalculatorForCustomer passed customer`, customer);
   const today = new Date().toISOString().split('T')[0];
-  const scheduleRecords = [];
+  const attendedScheduleRecords = [];
   const totalPayments = [];
   const invoices = [];
   const reviews = { keys: undefined, content: [] };
@@ -47,7 +47,7 @@ export const statsCalculatorForCustomer = customer => {
     // console.group(`schedule: ${schedule}`);
     const { ScheduleRecord: schedule } = booking;
 
-    scheduleRecords.push({
+    attendedScheduleRecords.push({
       ...schedule,
       rowId: schedule.scheduleId,
       productType: schedule.Product.type,
@@ -104,7 +104,8 @@ export const statsCalculatorForCustomer = customer => {
 
   const splitDuration = secondsToDuration(totalTimeInSeconds, 'hours');
   const stats = {
-    records: scheduleRecords,
+    attendedSchedules: attendedScheduleRecords,
+    allBookings: customer.Bookings,
     recordsKeys: [
       // '',
       'scheduleId',

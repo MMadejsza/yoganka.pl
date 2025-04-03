@@ -14,7 +14,7 @@ function ViewAccountSchedulesHistory({ data }) {
   );
 
   const customerStats = statsCalculatorForCustomer(data);
-  const content = customerStats.records
+  const content = customerStats.attendedSchedules
     .filter(record => {
       const scheduleDateTime = new Date(
         `${record.date}T${record.startTime}:00.000Z`
