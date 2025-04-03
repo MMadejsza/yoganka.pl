@@ -3,7 +3,7 @@ import * as val from '../../../../utils/validation.js';
 import WrapperForm from '../../../common/WrapperForm.jsx';
 import InputLogin from '../../InputLogin.jsx';
 
-function ViewScheduleNewCustomerForm({ onSave }) {
+function NewCustomerFormForUser({ onSave }) {
   const minAge = () => {
     const today = new Date();
     const year = today.getFullYear() - 18;
@@ -300,4 +300,4 @@ function ViewScheduleNewCustomerForm({ onSave }) {
   return <>{content}</>;
 }
 
-export default ViewScheduleNewCustomerForm;
+export default NewCustomerFormForUser;

@@ -6,7 +6,7 @@ import ViewFrame from '../ViewsController.jsx';
 import WrapperModalTable from '../WrapperModalTable.jsx';
 import DetailsListCustomerStats from './lists/DetailsListCustomerStats.jsx';
 
-function AccountDashboard({ data, queryStatus }) {
+function ViewAccountDashboard({ data, queryStatus }) {
   const today = new Date();
   const navigate = useNavigate();
   const location = useLocation(); // fetch current path
@@ -33,7 +33,7 @@ function AccountDashboard({ data, queryStatus }) {
   console.log(`✅ Data: `);
   console.log(data);
 
-  let name, customer, customerStats, statsBlock, table, contentUpcoming;
+  let name, customer, customerStats, statsBlock, contentUpcoming;
   const headers = [
     'Id',
     'Data',
@@ -44,7 +44,7 @@ function AccountDashboard({ data, queryStatus }) {
     'Miejsce',
   ];
   if (data.customer) {
-    const customer = data.customer;
+    customer = data.customer;
     name = `${customer.firstName} ${customer.lastName}`;
     customerStats = statsCalculatorForCustomer(data.customer);
 
@@ -81,7 +81,7 @@ function AccountDashboard({ data, queryStatus }) {
       );
     }
   }
-  table = (
+  const table = (
     <WrapperModalTable
       content={contentUpcoming}
       title={'Nadchodzące zajęcia'}
@@ -101,7 +101,6 @@ function AccountDashboard({ data, queryStatus }) {
         content={contentUpcoming}
         active={true}
         onOpen={handleOpenScheduleModal}
-        // classModifier={classModifier}
       />
     </WrapperModalTable>
   );
@@ -122,4 +121,4 @@ function AccountDashboard({ data, queryStatus }) {
   );
 }
 
-export default AccountDashboard;
+export default ViewAccountDashboard;

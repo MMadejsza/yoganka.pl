@@ -1,26 +1,18 @@
 import { useLocation } from 'react-router-dom';
 import { statsCalculatorForCustomer } from '../../../utils/statistics/statsCalculatorForCustomer.js';
 import ModalTableContent from '../ModalTableContent.jsx';
+import WrapperModalTable from '../WrapperModalTable.jsx';
 import DetailsListCustomerStats from './lists/DetailsListCustomerStats.jsx';
 
-function AccountSchedulesHistory({ data }) {
+function ViewAccountSchedulesHistory({ data }) {
   const location = useLocation();
   // console.clear();
   console.log(
     `📝 
-        AccountSchedulesHistory object from backend:`,
+        ViewAccountSchedulesHistory object from backend:`,
     data
   );
 
-  const headers = [
-    'ID',
-    'Data',
-    'Dzień',
-    'Godzina',
-    'Typ',
-    'Zajęcia',
-    'Miejsce',
-  ];
   const customerStats = statsCalculatorForCustomer(data);
   const content = customerStats.records
     .filter(record => {
@@ -34,8 +26,7 @@ function AccountSchedulesHistory({ data }) {
   // console.log(`✅ keys: `, keys);
   // console.log(`✅ customerStats: `, customerStats);
 
-  let stats, table, tableTitle;
-  stats = (
+  const stats = (
     <div className='user-container schedules'>
       <DetailsListCustomerStats
         customerStats={customerStats}
@@ -45,32 +36,38 @@ function AccountSchedulesHistory({ data }) {
     </div>
   );
 
-  tableTitle = (
-    <h2 className='user-container__section-title'>Ukończone zajęcia:</h2>
-  );
+  const headers = [
+    'ID',
+    'Data',
+    'Dzień',
+    'Godzina',
+    'Typ',
+    'Zajęcia',
+    'Miejsce',
+  ];
 
-  table =
-    content.length > 0 ? (
+  const table = (
+    <WrapperModalTable
+      content={content}
+      title={'Ukończone zajęcia'}
+      noContentMsg={'ukończonych zajęć'}
+    >
       <ModalTableContent
         headers={headers}
         keys={customerStats.recordsKeys}
         content={content}
         active={false}
         notToArchive={location.pathname.includes(`konto/zajecia`)}
-        // classModifier={classModifier}
       />
-    ) : (
-      <h2 className='user-container__section-title dimmed'>Brak</h2>
-    );
+    </WrapperModalTable>
+  );
 
   return (
     <>
-      {/* <h1 className='user-container__user-title modal__title'>Historia zajęć</h1> */}
       {stats}
-      {tableTitle}
       {table}
     </>
   );
 }
 
-export default AccountSchedulesHistory;
+export default ViewAccountSchedulesHistory;

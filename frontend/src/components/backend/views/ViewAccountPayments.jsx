@@ -3,12 +3,13 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { statsCalculatorForCustomer } from '../../../utils/statistics/statsCalculatorForCustomer.js';
 import ModalTableContent from '../ModalTableContent.jsx';
 import ViewFrame from '../ViewsController.jsx';
+import WrapperModalTable from '../WrapperModalTable.jsx';
 
-function AccountPayments({ data }) {
+function ViewAccountPayments({ data }) {
   // console.clear();
   console.log(
     `📝 
-        AccountPayments object from backend:`,
+        ViewAccountPayments object from backend:`,
     data
   );
   const navigate = useNavigate();
@@ -38,37 +39,38 @@ function AccountPayments({ data }) {
   // console.log(`✅ keys: `, keys);
   // console.log(`✅ customerStats: `, customerStats);
 
-  let table, tableTitle;
-  tableTitle = (
-    <h2 className='user-container__section-title'>Historia płatności:</h2>
-  );
-  table = (
-    <ModalTableContent
-      headers={[
-        'ID',
-        'Data',
-        'Zajęcia',
-        'Kwota całkowita',
-        'Metoda płatności',
-        'Status płatności',
-      ]}
-      keys={[
-        'paymentId',
-        'date',
-        'product',
-        'amountPaid',
-        'paymentMethod',
-        'paymentStatus',
-      ]}
+  const table = (
+    <WrapperModalTable
       content={content}
-      active={true}
-      onOpen={handleOpenModal}
-    />
+      title={'Historia płatności'}
+      noContentMsg={'płatności'}
+    >
+      <ModalTableContent
+        headers={[
+          'ID',
+          'Data',
+          'Zajęcia',
+          'Kwota całkowita',
+          'Metoda płatności',
+          'Status płatności',
+        ]}
+        keys={[
+          'paymentId',
+          'date',
+          'product',
+          'amountPaid',
+          'paymentMethod',
+          'paymentStatus',
+        ]}
+        content={content}
+        active={true}
+        onOpen={handleOpenModal}
+      />
+    </WrapperModalTable>
   );
 
   return (
     <>
-      {/* {tableTitle} */}
       {table}
       {isModalOpen && (
         <ViewFrame
@@ -82,4 +84,4 @@ function AccountPayments({ data }) {
   );
 }
 
-export default AccountPayments;
+export default ViewAccountPayments;

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import ModalFrame from './WrapperModal.jsx';
-import NewCustomerForm from './views/add-forms/NewCustomerForm.jsx';
+import NewCustomerFormForAdmin from './views/add-forms/NewCustomerFormForAdmin.jsx';
 import NewPaymentForm from './views/add-forms/NewPaymentForm.jsx';
 import NewProductForm from './views/add-forms/NewProductForm.jsx';
 import NewUserForm from './views/add-forms/NewUserForm.jsx';
@@ -23,7 +23,7 @@ function SideNav({ menuSet, side, type, onclose }) {
         break;
       case path.includes('show-all-customers'):
         destination = 'show-all-customers/add-customer';
-        destComponent = <NewCustomerForm />;
+        destComponent = <NewCustomerFormForAdmin />;
         break;
 
       case path.includes('show-all-products'):

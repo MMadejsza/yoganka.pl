@@ -6,7 +6,7 @@ import { useFeedback } from '../../../hooks/useFeedback.js';
 import { mutateOnEdit, queryClient } from '../../../utils/http.js';
 import { statsCalculatorForSchedule } from '../../../utils/statistics/statsCalculatorForSchedule.js';
 import FeedbackBox from '../FeedbackBox.jsx';
-import ViewScheduleNewCustomerForm from './add-forms/ViewScheduleNewCustomerForm.jsx';
+import NewCustomerFormForUser from './add-forms/NewCustomerFormForUser.jsx';
 import DetailsListProduct from './lists/DetailsListProduct.jsx';
 import DetailsListSchedule from './lists/DetailsListSchedule.jsx';
 import DetailsListScheduleStats from './lists/DetailsListScheduleStats.jsx';
@@ -204,7 +204,7 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
           </div>
         </>
       ) : (
-        <ViewScheduleNewCustomerForm onSave={handleFormSave} />
+        <NewCustomerFormForUser onSave={handleFormSave} />
       )}
 
       {/*//@ Product stats */}

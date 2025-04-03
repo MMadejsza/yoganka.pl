@@ -2,10 +2,10 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import UserTabs from '../../components/backend/UserTabs.jsx';
-import AccountDashboard from '../../components/backend/views/AccountDashboard.jsx';
-import AccountPayments from '../../components/backend/views/AccountPayments.jsx';
-import AccountSchedulesHistory from '../../components/backend/views/AccountSchedulesHistory.jsx';
-import AccountSettings from '../../components/backend/views/AccountSettings.jsx';
+import ViewAccountDashboard from '../../components/backend/views/ViewAccountDashboard.jsx';
+import ViewAccountPayments from '../../components/backend/views/ViewAccountPayments.jsx';
+import ViewAccountSchedulesHistory from '../../components/backend/views/ViewAccountSchedulesHistory.jsx';
+import ViewUser from '../../components/backend/views/ViewUser.jsx';
 import Section from '../../components/frontend/Section.jsx';
 import { fetchItem } from '../../utils/http.js';
 
@@ -44,23 +44,18 @@ function AccountPage() {
 
     switch (true) {
       case isChosenContent.includes('zajecia'):
-        content = <AccountSchedulesHistory data={customer} />;
+        content = <ViewAccountSchedulesHistory data={customer} />;
         break;
       case isChosenContent.includes('rezerwacje'):
-        content = <AccountPayments data={customer} />;
+        content = <ViewAccountPayments data={customer} />;
         break;
       case isChosenContent.includes('ustawienia'):
-        content = (
-          <AccountSettings
-            data={data}
-            queryStatus={{ isError: isError, error: error }}
-          />
-        );
+        content = <ViewUser data={data} isUserAccountPage={true} />;
         break;
 
       default:
         content = (
-          <AccountDashboard
+          <ViewAccountDashboard
             data={data}
             queryStatus={{ isError: isError, error: error }}
           />

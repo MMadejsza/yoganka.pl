@@ -12,7 +12,7 @@ import WrapperForm from '../../../common/WrapperForm.jsx';
 import FeedbackBox from '../../FeedbackBox.jsx';
 import InputLogin from '../../InputLogin.jsx';
 
-function NewCustomerForm() {
+function NewCustomerFormForAdmin() {
   const { feedback, updateFeedback, resetFeedback } = useFeedback();
   const { data: status } = useAuthStatus();
 
@@ -399,4 +399,4 @@ function NewCustomerForm() {
   );
 }
 
-export default NewCustomerForm;
+export default NewCustomerFormForAdmin;
