@@ -4,10 +4,10 @@ import DetailsListCustomer from './lists/DetailsListCustomer.jsx';
 import DetailsListCustomerStats from './lists/DetailsListCustomerStats.jsx';
 import DetailsListUser from './lists/DetailsListUser.jsx';
 import DetailsListUserSettings from './lists/DetailsListUserSettings.jsx';
-import DetailsCustomerInvoices from './tables/ViewCustomerInvoices.jsx';
-import DetailsCustomerReviews from './tables/ViewCustomerReviews.jsx';
-import DetailsCustomerSchedules from './tables/ViewCustomerSchedules.jsx';
-import ViewCustomerTotalPayments from './tables/ViewCustomerTotalPayments.jsx';
+import TableCustomerInvoices from './tables/TableCustomerInvoices.jsx';
+import TableCustomerReviews from './tables/TableCustomerReviews.jsx';
+import TableCustomerSchedules from './tables/TableCustomerSchedules.jsx';
+import TableCustomerTotalPayments from './tables/TableCustomerTotalPayments.jsx';
 
 function ViewCustomer({ data }) {
   const location = useLocation();
@@ -64,15 +64,15 @@ function ViewCustomer({ data }) {
 
       {/*//@ Schedules */}
       <div className='user-container__main-details user-container__side-details--schedules schedules modal-checklist'>
-        <DetailsCustomerSchedules customerStats={customerStats} />
+        <TableCustomerSchedules customerStats={customerStats} />
       </div>
       {/*//@ Reviews */}
       <div className='user-container__main-details user-container__side-details--schedules schedules modal-checklist'>
-        <DetailsCustomerReviews reviews={customerStats.reviews} />
+        <TableCustomerReviews reviews={customerStats.reviews} />
       </div>
       {/*//@ Payments */}
       <div className='user-container__main-details user-container__side-details--schedules schedules modal-checklist'>
-        <ViewCustomerTotalPayments data={customer} />
+        <TableCustomerTotalPayments data={customer} />
       </div>
 
       {/*//@ Invoices */}
@@ -81,7 +81,7 @@ function ViewCustomer({ data }) {
           noInvoices ? 'side' : 'main'
         }-details user-container__side-details--schedules schedules modal-checklist`}
       >
-        <DetailsCustomerInvoices
+        <TableCustomerInvoices
           invoicesArray={customerStats.invoices}
           noInvoices={noInvoices}
         />

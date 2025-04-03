@@ -10,9 +10,9 @@ import ViewScheduleNewCustomerForm from './add-forms/ViewScheduleNewCustomerForm
 import DetailsListProduct from './lists/DetailsListProduct.jsx';
 import DetailsListSchedule from './lists/DetailsListSchedule.jsx';
 import DetailsListScheduleStats from './lists/DetailsListScheduleStats.jsx';
-import DetailsProductPayments from './tables/ViewProductPayments.jsx';
-import DetailsProductReviews from './tables/ViewProductReviews.jsx';
-import DetailsTableAttendance from './tables/ViewTableAttendance.jsx';
+import TableAttendance from './tables/TableAttendance.jsx';
+import TableProductPayments from './tables/TableProductPayments.jsx';
+import TableProductReviews from './tables/TableProductReviews.jsx';
 
 function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
   // console.clear();
@@ -110,10 +110,11 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
     !isArchived &&
     !schedule.isUserGoing &&
     !paymentOps?.isError &&
-    !isFillingTheForm;
+    !isFillingTheForm &&
+    !isAdminPanel;
   const isFull = schedule.full;
   const shouldDisableBookBtn =
-    (isFull && shouldShowBookBtn) || isFillingTheForm;
+    (isFull && shouldShowBookBtn && !isAdminPanel) || isFillingTheForm;
 
   const paymentBtn = isLoggedIn ? (
     <button
@@ -219,14 +220,14 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
           {/*//@ all payments if not event/camp? */}
 
           <div className='user-container__main-details  schedules modal-checklist'>
-            <DetailsTableAttendance
+            <TableAttendance
               stats={scheduleStats}
               type={product.type}
               isAdminPage={isAdminPanel}
             />
           </div>
           <div className='user-container__main-details  schedules modal-checklist'>
-            <DetailsProductPayments
+            <TableProductPayments
               stats={scheduleStats}
               type={product.type}
               isAdminPage={isAdminPanel}
@@ -236,7 +237,7 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
           {/*//@ Feedback */}
 
           <div className='user-container__main-details  schedules modal-checklist'>
-            <DetailsProductReviews stats={scheduleStats} />
+            <TableProductReviews stats={scheduleStats} />
           </div>
         </>
       )}

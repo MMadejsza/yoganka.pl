@@ -3,13 +3,13 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { statsCalculatorForCustomer } from '../../../../utils/statistics/statsCalculatorForCustomer.js';
 import ModalTableContent from '../../ModalTableContent.jsx';
 import ViewFrame from '../../ViewsController.jsx';
-import WrapperModalTable from '../../WrapperModalTable';
+import WrapperModalTable from '../../WrapperModalTable.jsx';
 
-function ViewCustomerTotalPayments({ data }) {
+function TableCustomerTotalPayments({ data }) {
   // console.clear();
   console.log(
     `📝 
-        ViewCustomerTotalPayments object from backend:`,
+        TableCustomerTotalPayments object from backend:`,
     data
   );
   const navigate = useNavigate();
@@ -87,4 +87,4 @@ function ViewCustomerTotalPayments({ data }) {
   );
 }
 
-export default ViewCustomerTotalPayments;
+export default TableCustomerTotalPayments;

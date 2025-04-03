@@ -24,8 +24,8 @@ function InputLogin({
   } else if (props.type == 'select') {
     input = (
       <select id={id} name={id} {...props} value={value}>
-        {props.options.map(option => (
-          <option key={option.value} value={option.value}>
+        {props.options.map((option, index) => (
+          <option key={index} value={option.value}>
             {option.label}
           </option>
         ))}

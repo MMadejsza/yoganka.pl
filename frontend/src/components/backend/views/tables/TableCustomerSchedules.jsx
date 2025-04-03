@@ -1,7 +1,7 @@
 import ModalTableContent from '../../ModalTableContent';
 import WrapperModalTable from '../../WrapperModalTable';
 
-function DetailsCustomerSchedules({ customerStats, classModifier, altTitle }) {
+function TableCustomerSchedules({ customerStats, classModifier, altTitle }) {
   // PAST and ATTENDED schedules only (stats give only attended)
   const contentPast = customerStats.records.filter(
     schedule =>
@@ -39,4 +39,4 @@ function DetailsCustomerSchedules({ customerStats, classModifier, altTitle }) {
   );
 }
 
-export default DetailsCustomerSchedules;
+export default TableCustomerSchedules;

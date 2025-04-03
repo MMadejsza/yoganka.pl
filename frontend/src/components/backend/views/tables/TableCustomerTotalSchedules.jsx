@@ -1,9 +1,9 @@
 import { statsCalculatorForCustomer } from '../../../../utils/statistics/statsCalculatorForCustomer.js';
 import DetailsListCustomerStats from '../../lists/DetailsListCustomerStats.jsx';
 import ModalTableContent from '../../ModalTableContent.jsx';
-import WrapperModalTable from '../../WrapperModalTable';
+import WrapperModalTable from '../../WrapperModalTable.jsx';
 
-function ViewCustomerTotalSchedules({ data }) {
+function TableCustomerTotalSchedules({ data }) {
   // console.clear();
   console.log(
     `📝 
@@ -71,4 +71,4 @@ function ViewCustomerTotalSchedules({ data }) {
   );
 }
 
-export default ViewCustomerTotalSchedules;
+export default TableCustomerTotalSchedules;

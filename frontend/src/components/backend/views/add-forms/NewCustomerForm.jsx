@@ -12,7 +12,7 @@ import WrapperForm from '../../../common/WrapperForm.jsx';
 import FeedbackBox from '../../FeedbackBox.jsx';
 import InputLogin from '../../InputLogin.jsx';
 
-function NewCustomerForm({ onClose }) {
+function NewCustomerForm() {
   const { feedback, updateFeedback, resetFeedback } = useFeedback();
   const { data: status } = useAuthStatus();
 

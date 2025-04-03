@@ -1,7 +1,7 @@
 import ModalTableContent from '../../ModalTableContent.jsx';
-import WrapperModalTable from '../../WrapperModalTable';
+import WrapperModalTable from '../../WrapperModalTable.jsx';
 
-function DetailsProductPayments({ type, stats, isAdminPage }) {
+function TableProductPayments({ type, stats, isAdminPage }) {
   console.log('\n✅✅✅DetailsProductPayments:');
   console.log('\nisAdminPage:', isAdminPage);
 
@@ -37,4 +37,4 @@ function DetailsProductPayments({ type, stats, isAdminPage }) {
   return <>{table}</>;
 }
 
-export default DetailsProductPayments;
+export default TableProductPayments;

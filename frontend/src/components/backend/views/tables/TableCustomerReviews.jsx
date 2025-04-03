@@ -1,11 +1,11 @@
 import ModalTableContent from '../../ModalTableContent';
 import WrapperModalTable from '../../WrapperModalTable';
 
-function DetailsCustomerReviews({ reviews, placement }) {
+function TableCustomerReviews({ reviews, placement }) {
   const feedbackArray = reviews.content;
-  console.log(`DetailsCustomerReviews feedbackArray `, feedbackArray);
-  console.log(`DetailsCustomerReviews placement `, placement);
-  console.log(`DetailsCustomerReviews reviews `, reviews);
+  console.log(`TableCustomerReviews feedbackArray `, feedbackArray);
+  console.log(`TableCustomerReviews placement `, placement);
+  console.log(`TableCustomerReviews reviews `, reviews);
 
   const headers = [
     'ID',
@@ -34,4 +34,4 @@ function DetailsCustomerReviews({ reviews, placement }) {
   );
 }
 
-export default DetailsCustomerReviews;
+export default TableCustomerReviews;

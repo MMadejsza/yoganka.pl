@@ -8,7 +8,7 @@ import WrapperForm from '../../../../common/WrapperForm.jsx';
 import FeedbackBox from '../../../FeedbackBox.jsx';
 import InputLogin from '../../../InputLogin.jsx';
 
-function NewAttendanceForm() {
+function NewBookingForm() {
   const params = useParams();
   const { data: status } = useAuthStatus();
   const { feedback, updateFeedback, resetFeedback } = useFeedback();
@@ -194,4 +194,4 @@ function NewAttendanceForm() {
   );
 }
 
-export default NewAttendanceForm;
+export default NewBookingForm;

@@ -1,7 +1,7 @@
 import ModalTableContent from '../../ModalTableContent';
 import WrapperModalTable from '../../WrapperModalTable';
 
-function DetailsProductReviews({ stats }) {
+function TableProductReviews({ stats }) {
   const feedbackArray = stats.reviews;
   const headers = [
     'Id',
@@ -30,4 +30,4 @@ function DetailsProductReviews({ stats }) {
   return table;
 }
 
-export default DetailsProductReviews;
+export default TableProductReviews;

@@ -2,7 +2,7 @@ import DetailsListCustomer from './lists/DetailsListCustomer.jsx';
 import DetailsListProduct from './lists/DetailsListProduct.jsx';
 import DetailsListReview from './lists/DetailsListReview.jsx';
 import DetailsListSchedule from './lists/DetailsListSchedule.jsx';
-import DetailsCustomerReviews from './tables/ViewCustomerReviews.jsx';
+import TableCustomerReviews from './tables/TableCustomerReviews.jsx';
 
 function ViewFeedback({ data }) {
   const { review } = data;
@@ -45,7 +45,7 @@ function ViewFeedback({ data }) {
 
       {/*//@ Another customers.feedbacks */}
       <div className='user-container__main-details  schedules modal-checklist'>
-        <DetailsCustomerReviews reviews={otherReviews} placement='reviews' />
+        <TableCustomerReviews reviews={otherReviews} placement='reviews' />
       </div>
     </>
   );

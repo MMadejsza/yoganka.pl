@@ -2,7 +2,7 @@ import { useLocation } from 'react-router-dom';
 import { getWeekDay } from '../../../utils/dateTime.js';
 import DetailsListCustomer from './lists/DetailsListCustomer.jsx';
 import DetailsListPayment from './lists/DetailsListPayment.jsx';
-import DetailsProductSchedules from './tables/ViewProductSchedules.jsx';
+import TableSchedules from './tables/TableSchedules.jsx';
 
 // import {statsCalculatorForCustomer} from '../../utils/productViewsUtils.js';
 
@@ -64,10 +64,7 @@ function ViewPayment({ data, isUserAccountPage }) {
 
       {/*//@ Schedules included */}
       <div className='user-container__main-details  schedules modal-checklist'>
-        <DetailsProductSchedules
-          scheduleRecords={schedules}
-          placement='payment'
-        />
+        <TableSchedules scheduleRecords={schedules} placement='payment' />
       </div>
     </>
   );

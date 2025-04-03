@@ -7,11 +7,11 @@ import { mutateOnDelete, queryClient } from '../../../../utils/http.js';
 import ToggleAddButton from '../../../common/ToggleAddButton.jsx';
 import FeedbackBox from '../../FeedbackBox.jsx';
 import ModalTableContent from '../../ModalTableContent.jsx';
-import WrapperModalTable from '../../WrapperModalTable';
+import WrapperModalTable from '../../WrapperModalTable.jsx';
 import NewProductScheduleForm from './add-forms/NewProductScheduleForm.jsx';
 
-function DetailsProductSchedules({ scheduleRecords, placement, status }) {
-  console.log('DetailsProductSchedules scheduleRecords', scheduleRecords);
+function TableSchedules({ scheduleRecords, placement, status }) {
+  console.log('TableSchedules scheduleRecords', scheduleRecords);
   let params = useParams();
   const isInPaymentView = placement == 'payment';
   const [deleteWarningTriggered, setDeleteWarningTriggered] = useState(false);
@@ -77,9 +77,7 @@ function DetailsProductSchedules({ scheduleRecords, placement, status }) {
     'attendance',
     '',
   ];
-  const toggleBtn = (
-    <ToggleAddButton isEditing={isFormVisible} onToggle={setIsFormVisible} />
-  );
+  let toggleBtn;
   if (isInPaymentView) {
     headers = [
       'Id',
@@ -100,6 +98,9 @@ function DetailsProductSchedules({ scheduleRecords, placement, status }) {
       'productPrice',
     ];
   } else {
+    toggleBtn = (
+      <ToggleAddButton isEditing={isFormVisible} onToggle={setIsFormVisible} />
+    );
     processedScheduleRecordsArr = scheduleRecords.map(schedule => {
       return {
         ...schedule,
@@ -149,4 +150,4 @@ function DetailsProductSchedules({ scheduleRecords, placement, status }) {
   );
 }
 
-export default DetailsProductSchedules;
+export default TableSchedules;

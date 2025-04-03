@@ -1,7 +1,7 @@
 import ModalTableContent from '../../ModalTableContent';
 import WrapperModalTable from '../../WrapperModalTable';
 
-function DetailsCustomerInvoices({ invoicesArray, noInvoices }) {
+function TableCustomerInvoices({ invoicesArray, noInvoices }) {
   const headers = [
     'ID',
     'ID Płatności',
@@ -36,4 +36,4 @@ function DetailsCustomerInvoices({ invoicesArray, noInvoices }) {
   );
 }
 
-export default DetailsCustomerInvoices;
+export default TableCustomerInvoices;

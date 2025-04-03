@@ -3,10 +3,10 @@ import { fetchStatus } from '../../../utils/http.js';
 import { statsCalculatorForProduct } from '../../../utils/statistics/statsCalculatorForProduct.js';
 import DetailsListProduct from './lists/DetailsListProduct.jsx';
 import DetailsListProductStats from './lists/DetailsListProductStats.jsx';
-import DetailsProductPayments from './tables/ViewProductPayments.jsx';
-import DetailsProductReviews from './tables/ViewProductReviews.jsx';
-import DetailsProductSchedules from './tables/ViewProductSchedules.jsx';
-import DetailsTableAttendance from './tables/ViewTableAttendance.jsx';
+import TableAttendance from './tables/TableAttendance.jsx';
+import TableProductPayments from './tables/TableProductPayments.jsx';
+import TableProductReviews from './tables/TableProductReviews.jsx';
+import TableSchedules from './tables/TableSchedules.jsx';
 
 function ViewProduct({ data, isAdminPanel }) {
   console.clear();
@@ -45,7 +45,7 @@ function ViewProduct({ data, isAdminPanel }) {
 
       {/*//@ Schedules if not event/camp*/}
       <div className='user-container__main-details  schedules modal-checklist'>
-        <DetailsProductSchedules
+        <TableSchedules
           scheduleRecords={prodStats.scheduleRecords}
           status={status}
           isAdminPage={isAdminPanel}
@@ -54,7 +54,7 @@ function ViewProduct({ data, isAdminPanel }) {
 
       {(type == 'CAMP' || type == 'EVENT') && (
         <div className='user-container__main-details  schedules modal-checklist'>
-          <DetailsTableAttendance
+          <TableAttendance
             stats={prodStats}
             type={type}
             isAdminPage={isAdminPanel}
@@ -64,7 +64,7 @@ function ViewProduct({ data, isAdminPanel }) {
 
       {/*//@ All payments */}
       <div className='user-container__main-details  schedules modal-checklist'>
-        <DetailsProductPayments
+        <TableProductPayments
           stats={prodStats}
           type={type}
           isAdminPage={isAdminPanel}
@@ -73,7 +73,7 @@ function ViewProduct({ data, isAdminPanel }) {
 
       {/*//@ Feedback */}
       <div className='user-container__main-details  schedules modal-checklist'>
-        <DetailsProductReviews stats={prodStats} />
+        <TableProductReviews stats={prodStats} />
       </div>
     </>
   );

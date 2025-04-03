@@ -11,10 +11,10 @@ import {
 import ToggleAddButton from '../../../common/ToggleAddButton.jsx';
 import FeedbackBox from '../../FeedbackBox.jsx';
 import ModalTableContent from '../../ModalTableContent.jsx';
-import WrapperModalTable from '../../WrapperModalTable';
-import NewAttendanceForm from './add-forms/NewAttendanceForm.jsx';
+import WrapperModalTable from '../../WrapperModalTable.jsx';
+import NewBookingForm from './add-forms/NewBookingForm.jsx';
 
-function DetailsTableAttendance({ stats, isAdminPage }) {
+function TableAttendance({ stats, isAdminPage }) {
   // console.log('\n✅✅✅DetailsTableAttendance:');
   let attendedBookingsArray = stats.attendedBookings;
   let cancelledBookingsArray = stats.cancelledBookings;
@@ -135,7 +135,7 @@ function DetailsTableAttendance({ stats, isAdminPage }) {
       deleteBookingRecord(params);
     }
   };
-  const form = <NewAttendanceForm />;
+  const form = <NewBookingForm />;
 
   const toggleBtn = (
     <ToggleAddButton isEditing={isFormVisible} onToggle={setIsFormVisible} />
@@ -226,4 +226,4 @@ function DetailsTableAttendance({ stats, isAdminPage }) {
   );
 }
 
-export default DetailsTableAttendance;
+export default TableAttendance;
