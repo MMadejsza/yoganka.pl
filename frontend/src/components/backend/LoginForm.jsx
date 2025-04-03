@@ -20,7 +20,7 @@ import {
   passwordValidations,
 } from '../../utils/validation.js';
 import FeedbackBox from './FeedbackBox.jsx';
-import InputLogin from './InputLogin.jsx';
+import Input from './Input.jsx';
 
 function LoginFrom({ successMsg, errorMsg }) {
   const params = useParams();
@@ -318,7 +318,7 @@ function LoginFrom({ successMsg, errorMsg }) {
           <h1 className='form__title'>{title}</h1>
           {/* names are for FormData and id for labels */}
           {!params.token && (
-            <InputLogin
+            <Input
               formType={formType}
               type='email'
               id='email'
@@ -340,7 +340,7 @@ function LoginFrom({ successMsg, errorMsg }) {
 
           {(!resetPassword || firstTime) && (
             <>
-              <InputLogin
+              <Input
                 formType={formType}
                 type='password'
                 id='password'
@@ -359,7 +359,7 @@ function LoginFrom({ successMsg, errorMsg }) {
               />
 
               {(firstTime || params.token) && (
-                <InputLogin
+                <Input
                   formType={formType}
                   type='password'
                   id='confirmedPassword'

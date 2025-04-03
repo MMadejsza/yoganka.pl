@@ -1,7 +1,7 @@
 import { useInput } from '../../../../hooks/useInput.js';
 import * as val from '../../../../utils/validation.js';
 import WrapperForm from '../../../common/WrapperForm.jsx';
-import InputLogin from '../../InputLogin.jsx';
+import Input from '../../Input.jsx';
 
 function NewCustomerFormForUser({ onSave }) {
   const minAge = () => {
@@ -164,7 +164,7 @@ function NewCustomerFormForUser({ onSave }) {
       resetLabel='Resetuj'
     >
       {/* names are for FormData and id for labels */}
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='text'
@@ -181,7 +181,7 @@ function NewCustomerFormForUser({ onSave }) {
         didEdit={firstNameDidEdit}
         isFocused={firstNameIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='text'
@@ -198,7 +198,7 @@ function NewCustomerFormForUser({ onSave }) {
         didEdit={lastNameDidEdit}
         isFocused={lastNameIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='date'
@@ -216,7 +216,7 @@ function NewCustomerFormForUser({ onSave }) {
         didEdit={DoBDidEdit}
         isFocused={DoBIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='tel'
@@ -233,7 +233,7 @@ function NewCustomerFormForUser({ onSave }) {
         didEdit={phoneDidEdit}
         isFocused={phoneIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='select'
@@ -252,7 +252,7 @@ function NewCustomerFormForUser({ onSave }) {
         didEdit={cMethodDidEdit}
         isFocused={cMethodIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='select'
@@ -278,7 +278,7 @@ function NewCustomerFormForUser({ onSave }) {
       {(referralSourceValue == 'Znajomy' ||
         referralSourceValue == 'Miejscówka' ||
         referralSourceValue == 'Praca') && (
-        <InputLogin
+        <Input
           embedded={true}
           formType={formType}
           type='textarea'

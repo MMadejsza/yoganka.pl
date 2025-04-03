@@ -7,7 +7,7 @@ import { mutateOnEdit, queryClient } from '../../../../../utils/http.js';
 import * as val from '../../../../../utils/validation.js';
 import WrapperForm from '../../../../common/WrapperForm.jsx';
 import FeedbackBox from '../../../FeedbackBox.jsx';
-import InputLogin from '../../../InputLogin.jsx';
+import Input from '../../../Input.jsx';
 
 function DetailsFormSchedule({ scheduleData }) {
   // !dodaj 'zamknij zapisy
@@ -157,7 +157,7 @@ function DetailsFormSchedule({ scheduleData }) {
       resetLabel='Resetuj'
     >
       {/* names are for FormData and id for labels */}
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='number'
@@ -175,7 +175,7 @@ function DetailsFormSchedule({ scheduleData }) {
         didEdit={capacityDidEdit}
         isFocused={capacityIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='date'
@@ -190,7 +190,7 @@ function DetailsFormSchedule({ scheduleData }) {
         didEdit={dateDidEdit}
         isFocused={dateIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='time'
@@ -207,7 +207,7 @@ function DetailsFormSchedule({ scheduleData }) {
         didEdit={startTimeDidEdit}
         isFocused={startTimeIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='text'

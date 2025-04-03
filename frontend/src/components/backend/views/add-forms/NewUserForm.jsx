@@ -10,7 +10,7 @@ import {
 } from '../../../../utils/validation.js';
 import WrapperForm from '../../../common/WrapperForm.jsx';
 import FeedbackBox from '../../FeedbackBox.jsx';
-import InputLogin from '../../InputLogin.jsx';
+import Input from '../../Input.jsx';
 
 function NewUserForm() {
   const { feedback, updateFeedback, resetFeedback } = useFeedback();
@@ -118,7 +118,7 @@ function NewUserForm() {
       resetLabel='Resetuj'
     >
       {/* names are for FormData and id for labels */}
-      <InputLogin
+      <Input
         embedded={false}
         formType={formType}
         type='email'
@@ -135,7 +135,7 @@ function NewUserForm() {
         didEdit={emailDidEdit}
         isFocused={emailIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={false}
         formType={formType}
         type='password'
@@ -153,7 +153,7 @@ function NewUserForm() {
         isFocused={passwordIsFocused}
       />
 
-      <InputLogin
+      <Input
         embedded={false}
         formType={formType}
         type='password'

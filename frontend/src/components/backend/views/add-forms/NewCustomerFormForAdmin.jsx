@@ -10,7 +10,7 @@ import {
 import * as val from '../../../../utils/validation.js';
 import WrapperForm from '../../../common/WrapperForm.jsx';
 import FeedbackBox from '../../FeedbackBox.jsx';
-import InputLogin from '../../InputLogin.jsx';
+import Input from '../../Input.jsx';
 
 function NewCustomerFormForAdmin() {
   const { feedback, updateFeedback, resetFeedback } = useFeedback();
@@ -213,7 +213,7 @@ function NewCustomerFormForAdmin() {
       resetLabel='Resetuj'
     >
       {/* names are for FormData and id for labels */}
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='select'
@@ -233,7 +233,7 @@ function NewCustomerFormForAdmin() {
         required
         isFocused={userIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='select'
@@ -253,7 +253,7 @@ function NewCustomerFormForAdmin() {
         didEdit={customerTypeDidEdit}
         isFocused={customerTypeIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='text'
@@ -270,7 +270,7 @@ function NewCustomerFormForAdmin() {
         didEdit={firstNameDidEdit}
         isFocused={firstNameIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='text'
@@ -287,7 +287,7 @@ function NewCustomerFormForAdmin() {
         didEdit={lastNameDidEdit}
         isFocused={lastNameIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='date'
@@ -304,7 +304,7 @@ function NewCustomerFormForAdmin() {
         didEdit={DoBDidEdit}
         isFocused={DoBIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='tel'
@@ -321,7 +321,7 @@ function NewCustomerFormForAdmin() {
         didEdit={phoneDidEdit}
         isFocused={phoneIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='select'
@@ -340,7 +340,7 @@ function NewCustomerFormForAdmin() {
         didEdit={cMethodDidEdit}
         isFocused={cMethodIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='number'
@@ -357,7 +357,7 @@ function NewCustomerFormForAdmin() {
         didEdit={loyaltyDidEdit}
         isFocused={loyaltyIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='textarea'

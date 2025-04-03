@@ -1,4 +1,4 @@
-function InputLogin({
+function Input({
   formType,
   embedded,
   id,
@@ -102,4 +102,4 @@ function InputLogin({
   );
 }
 
-export default InputLogin;
+export default Input;

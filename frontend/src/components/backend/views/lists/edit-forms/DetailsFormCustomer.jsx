@@ -11,7 +11,7 @@ import {
 import { phoneValidations } from '../../../../../utils/validation.js';
 import WrapperForm from '../../../../common/WrapperForm.jsx';
 import FeedbackBox from '../../../FeedbackBox.jsx';
-import InputLogin from '../../../InputLogin.jsx';
+import Input from '../../../Input.jsx';
 
 function DetailsFormCustomer({
   customerData,
@@ -183,7 +183,7 @@ function DetailsFormCustomer({
       resetLabel='Resetuj'
     >
       {/* names are for FormData and id for labels */}
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='tel'
@@ -200,7 +200,7 @@ function DetailsFormCustomer({
         didEdit={phoneDidEdit}
         isFocused={phoneIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='select'
@@ -221,7 +221,7 @@ function DetailsFormCustomer({
       />
       {adminAccessed && (
         <>
-          <InputLogin
+          <Input
             embedded={true}
             formType={formType}
             type='number'
@@ -238,7 +238,7 @@ function DetailsFormCustomer({
             didEdit={loyaltyDidEdit}
             isFocused={loyaltyIsFocused}
           />
-          <InputLogin
+          <Input
             embedded={true}
             formType={formType}
             type='textarea'

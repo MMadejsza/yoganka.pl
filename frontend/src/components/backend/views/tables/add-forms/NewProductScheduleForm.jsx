@@ -7,7 +7,7 @@ import { mutateOnCreate, queryClient } from '../../../../../utils/http.js';
 import * as val from '../../../../../utils/validation.js';
 import WrapperForm from '../../../../common/WrapperForm.jsx';
 import FeedbackBox from '../../../FeedbackBox.jsx';
-import InputLogin from '../../../InputLogin.jsx';
+import Input from '../../../Input.jsx';
 
 function NewProductScheduleForm() {
   const params = useParams();
@@ -161,7 +161,7 @@ function NewProductScheduleForm() {
       onReset={handleReset}
       isTableRowLike={true}
     >
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='select'
@@ -181,7 +181,7 @@ function NewProductScheduleForm() {
         didEdit={shouldRepeatDidEdit}
         isFocused={shouldRepeatIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='number'
@@ -203,7 +203,7 @@ function NewProductScheduleForm() {
         didEdit={repeatDidEdit}
         isFocused={repeatIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='date'
@@ -220,7 +220,7 @@ function NewProductScheduleForm() {
         didEdit={dateDidEdit}
         isFocused={dateIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='time'
@@ -236,7 +236,7 @@ function NewProductScheduleForm() {
         didEdit={timeDidEdit}
         isFocused={timeIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='text'
@@ -254,7 +254,7 @@ function NewProductScheduleForm() {
         didEdit={locationDidEdit}
         isFocused={locationIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='number'

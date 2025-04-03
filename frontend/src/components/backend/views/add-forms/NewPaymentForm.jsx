@@ -11,7 +11,7 @@ import {
 import * as val from '../../../../utils/validation.js';
 import WrapperForm from '../../../common/WrapperForm.jsx';
 import FeedbackBox from '../../FeedbackBox.jsx';
-import InputLogin from '../../InputLogin.jsx';
+import Input from '../../Input.jsx';
 
 function NewPaymentForm() {
   const { feedback, updateFeedback, resetFeedback } = useFeedback();
@@ -229,7 +229,7 @@ function NewPaymentForm() {
       resetLabel='Resetuj'
     >
       {/* names are for FormData and id for labels */}
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='select'
@@ -250,7 +250,7 @@ function NewPaymentForm() {
         required
         isFocused={customerIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='select'
@@ -271,7 +271,7 @@ function NewPaymentForm() {
         didEdit={productDidEdit}
         isFocused={productIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='select'
@@ -303,7 +303,7 @@ function NewPaymentForm() {
         didEdit={scheduleDidEdit}
         isFocused={scheduleIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='decimal'
@@ -320,7 +320,7 @@ function NewPaymentForm() {
         didEdit={amountPaidDidEdit}
         isFocused={amountPaidIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='select'

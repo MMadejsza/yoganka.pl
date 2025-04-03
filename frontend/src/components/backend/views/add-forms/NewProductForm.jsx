@@ -6,7 +6,7 @@ import { mutateOnCreate, queryClient } from '../../../../utils/http.js';
 import * as val from '../../../../utils/validation.js';
 import WrapperForm from '../../../common/WrapperForm.jsx';
 import FeedbackBox from '../../FeedbackBox.jsx';
-import InputLogin from '../../InputLogin.jsx';
+import Input from '../../Input.jsx';
 
 function NewProductForm() {
   const { feedback, updateFeedback, resetFeedback } = useFeedback();
@@ -165,7 +165,7 @@ function NewProductForm() {
       submitLabel={actionTitle}
       resetLabel='Resetuj'
     >
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='text'
@@ -184,7 +184,7 @@ function NewProductForm() {
         isFocused={nameIsFocused}
       />
 
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='select'
@@ -207,7 +207,7 @@ function NewProductForm() {
         isFocused={productTypeIsFocused}
       />
 
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='date'
@@ -224,7 +224,7 @@ function NewProductForm() {
         didEdit={StartDateDidEdit}
         isFocused={StartDateIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='number'
@@ -243,7 +243,7 @@ function NewProductForm() {
         didEdit={durationDidEdit}
         isFocused={durationIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='text'
@@ -261,7 +261,7 @@ function NewProductForm() {
         isFocused={locationIsFocused}
         required
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='decimal'
@@ -278,7 +278,7 @@ function NewProductForm() {
         didEdit={priceDidEdit}
         isFocused={priceIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='select'

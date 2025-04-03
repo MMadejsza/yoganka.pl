@@ -6,7 +6,7 @@ import { useInput } from '../../../../../hooks/useInput.js';
 import { fetchData, queryClient } from '../../../../../utils/http.js';
 import WrapperForm from '../../../../common/WrapperForm.jsx';
 import FeedbackBox from '../../../FeedbackBox.jsx';
-import InputLogin from '../../../InputLogin.jsx';
+import Input from '../../../Input.jsx';
 
 function NewBookingForm() {
   const params = useParams();
@@ -132,7 +132,7 @@ function NewBookingForm() {
       isTableRowLike={true}
     >
       {/* 'names' are for FormData and 'id's for labels */}
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='select'
@@ -153,7 +153,7 @@ function NewBookingForm() {
         required
         isFocused={customerIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='select'

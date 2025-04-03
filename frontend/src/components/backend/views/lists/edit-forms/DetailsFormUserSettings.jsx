@@ -10,7 +10,7 @@ import {
 } from '../../../../../utils/http.js';
 import WrapperForm from '../../../../common/WrapperForm.jsx';
 import FeedbackBox from '../../../FeedbackBox.jsx';
-import InputLogin from '../../../InputLogin.jsx';
+import Input from '../../../Input.jsx';
 function DetailsFormUserSettings({
   settingsData,
   customerAccessed,
@@ -204,7 +204,7 @@ function DetailsFormUserSettings({
       resetLabel='Resetuj'
     >
       {/* names are for FormData and id for labels */}
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='checkbox'
@@ -221,7 +221,7 @@ function DetailsFormUserSettings({
         didEdit={handednessDidEdit}
         isFocused={handednessIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='number'
@@ -238,7 +238,7 @@ function DetailsFormUserSettings({
         didEdit={fontDidEdit}
         isFocused={fontIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='checkbox'
@@ -254,7 +254,7 @@ function DetailsFormUserSettings({
         didEdit={notificationsDidEdit}
         isFocused={notificationsIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='checkbox'
@@ -270,7 +270,7 @@ function DetailsFormUserSettings({
         didEdit={animationDidEdit}
         isFocused={animationIsFocused}
       />
-      <InputLogin
+      <Input
         embedded={true}
         formType={formType}
         type='checkbox'
