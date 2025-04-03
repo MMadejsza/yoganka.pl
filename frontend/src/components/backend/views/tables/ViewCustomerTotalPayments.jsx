@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { statsCalculatorForCustomer } from '../../../../utils/statistics/statsCalculatorForCustomer.js';
-import ModalTable from '../../ModalTable.jsx';
+import ModalTableContent from '../../ModalTableContent.jsx';
 import ViewFrame from '../../ViewsController.jsx';
+import WrapperModalTable from '../../WrapperModalTable';
 
 function ViewCustomerTotalPayments({ data }) {
   // console.clear();
@@ -38,28 +39,40 @@ function ViewCustomerTotalPayments({ data }) {
   // console.log(`✅ keys: `, keys);
   // console.log(`✅ customerStats: `, customerStats);
 
-  let table;
-  table = (
-    <ModalTable
-      headers={['ID', 'Data', 'Zajęcia', 'Kwota całkowita', 'Metoda', 'Status']}
-      keys={[
-        'paymentId',
-        'date',
-        'product',
-        'amountPaid',
-        'paymentMethod',
-        'paymentStatus',
-      ]}
+  const headers = [
+    'ID',
+    'Data',
+    'Zajęcia',
+    'Kwota całkowita',
+    'Metoda',
+    'Status',
+  ];
+  const keys = [
+    'paymentId',
+    'date',
+    'product',
+    'amountPaid',
+    'paymentMethod',
+    'paymentStatus',
+  ];
+  const table = (
+    <WrapperModalTable
       content={content}
-      active={false}
-      onOpen={handleOpenModal}
-    />
+      title={'Historia płatności '}
+      noContentMsg={'płatności'}
+    >
+      <ModalTableContent
+        headers={headers}
+        keys={keys}
+        content={content}
+        active={false}
+        onOpen={handleOpenModal}
+      />
+    </WrapperModalTable>
   );
 
   return (
     <>
-      <h2 className='user-container__section-title modal__title--day'>{`Historia płatności (${customerStats.payments.length}):`}</h2>
-
       {table}
       {isModalOpen && (
         <ViewFrame

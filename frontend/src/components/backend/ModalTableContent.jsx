@@ -1,4 +1,4 @@
-function ModalTable({
+function ModalTableContent({
   headers,
   content,
   keys,
@@ -16,8 +16,8 @@ function ModalTable({
       status?.isLoggedIn != undefined ? status.isLoggedIn : 'N/A',
     isCustomer = status?.role === 'CUSTOMER',
     isAdmin = status?.role === 'ADMIN';
-  console.log('ModalTable content', content);
-  console.log('ModalTable status', status);
+  console.log('ModalTableContent content', content);
+  console.log('ModalTableContent status', status);
 
   const customerViewSymbol = (row, isArchived, symbol) => {
     if (isAdminPage && adminActions) {
@@ -122,9 +122,10 @@ function ModalTable({
                             className={`material-symbols-rounded nav__icon ${
                               row.isActionDisabled === true ? 'dimmed' : ''
                             } ${action.extraClass ? action.extraClass : ''}`}
-                            onClick={e =>
-                              onRowBtnClick(row, isArchived, action.method, e)
-                            }
+                            onClick={e => {
+                              if (row.isActionDisabled === true) return;
+                              onRowBtnClick(row, isArchived, action.method, e);
+                            }}
                           >
                             {customerViewSymbol(row, isArchived, action.symbol)}
                           </span>
@@ -158,4 +159,4 @@ function ModalTable({
   );
 }
 
-export default ModalTable;
+export default ModalTableContent;

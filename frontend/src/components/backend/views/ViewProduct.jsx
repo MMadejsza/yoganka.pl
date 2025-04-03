@@ -22,7 +22,7 @@ function ViewProduct({ data, isAdminPanel }) {
     cache: 'no-store',
   });
   const { product } = data;
-  const type = product.type;
+  const type = product.type?.toUpperCase();
   const prodStats = statsCalculatorForProduct(product, product.ScheduleRecords);
 
   return (
@@ -52,7 +52,7 @@ function ViewProduct({ data, isAdminPanel }) {
         />
       </div>
 
-      {(type == 'Camp' || type == 'Event') && (
+      {(type == 'CAMP' || type == 'EVENT') && (
         <div className='user-container__main-details  schedules modal-checklist'>
           <DetailsTableAttendance
             stats={prodStats}

@@ -4,17 +4,19 @@ import { useParams } from 'react-router-dom';
 import { useFeedback } from '../../../../hooks/useFeedback.js';
 import { getWeekDay } from '../../../../utils/dateTime.js';
 import { mutateOnDelete, queryClient } from '../../../../utils/http.js';
+import ToggleAddButton from '../../../common/ToggleAddButton.jsx';
 import FeedbackBox from '../../FeedbackBox.jsx';
-import ModalTable from '../../ModalTable.jsx';
+import ModalTableContent from '../../ModalTableContent.jsx';
+import WrapperModalTable from '../../WrapperModalTable';
 import NewProductScheduleForm from './add-forms/NewProductScheduleForm.jsx';
 
 function DetailsProductSchedules({ scheduleRecords, placement, status }) {
   console.log('DetailsProductSchedules scheduleRecords', scheduleRecords);
   let params = useParams();
   const isInPaymentView = placement == 'payment';
-  const [isFormVisible, setIsFormVisible] = useState();
   const [deleteWarningTriggered, setDeleteWarningTriggered] = useState(false);
   const { feedback, updateFeedback, resetFeedback } = useFeedback();
+  const [isFormVisible, setIsFormVisible] = useState();
 
   const {
     mutate: deleteScheduleRecord,
@@ -63,14 +65,7 @@ function DetailsProductSchedules({ scheduleRecords, placement, status }) {
     }
   };
 
-  const notPublished = (
-    <>
-      <div style={{ fontWeight: 'bold', fontSize: '2rem' }}>
-        Nie opublikowano
-      </div>
-    </>
-  );
-
+  let form;
   let processedScheduleRecordsArr = scheduleRecords;
   let headers = ['Id', 'Dzień', 'Data', 'Godzina', 'Lokacja', 'Frekwencja', ''];
   let keys = [
@@ -82,8 +77,9 @@ function DetailsProductSchedules({ scheduleRecords, placement, status }) {
     'attendance',
     '',
   ];
-  let form;
-
+  const toggleBtn = (
+    <ToggleAddButton isEditing={isFormVisible} onToggle={setIsFormVisible} />
+  );
   if (isInPaymentView) {
     headers = [
       'Id',
@@ -120,22 +116,6 @@ function DetailsProductSchedules({ scheduleRecords, placement, status }) {
 
   return (
     <>
-      <h2 className='user-container__section-title modal__title--day admin-action '>
-        Terminy
-        {!isInPaymentView && (
-          <button
-            onClick={e => {
-              e.preventDefault;
-              setIsFormVisible(!isFormVisible);
-            }}
-            className={`form-action-btn table-form-btn table-form-btn--submit`}
-          >
-            <span className='material-symbols-rounded nav__icon nav__icon--side account'>
-              {!isFormVisible ? 'add_circle' : 'undo'}
-            </span>
-          </button>
-        )}
-      </h2>
       {(feedback.status != undefined || deleteWarningTriggered) && (
         <FeedbackBox
           warnings={feedback.warnings}
@@ -147,9 +127,14 @@ function DetailsProductSchedules({ scheduleRecords, placement, status }) {
           size='small'
         />
       )}
-      {isFormVisible && form}
-      {scheduleRecords.length > 0 ? (
-        <ModalTable
+      <WrapperModalTable
+        content={processedScheduleRecordsArr}
+        title={'Terminy'}
+        noContentMsg={'terminów'}
+        toggleBtn={toggleBtn}
+        form={isFormVisible && form}
+      >
+        <ModalTableContent
           headers={headers}
           keys={keys}
           content={processedScheduleRecordsArr}
@@ -159,9 +144,7 @@ function DetailsProductSchedules({ scheduleRecords, placement, status }) {
           adminActions={true}
           onQuickAction={[{ symbol: 'delete', method: handleDelete }]}
         />
-      ) : (
-        notPublished
-      )}
+      </WrapperModalTable>
     </>
   );
 }

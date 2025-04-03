@@ -1,33 +1,33 @@
-import ModalTable from '../../ModalTable';
+import ModalTableContent from '../../ModalTableContent';
+import WrapperModalTable from '../../WrapperModalTable';
 
 function DetailsProductReviews({ stats }) {
   const feedbackArray = stats.reviews;
-
-  return (
-    <>
-      <h2 className='user-container__section-title modal__title--day admin-action'>
-        {`Opinie (${feedbackArray.length}):`}
-      </h2>
-      {feedbackArray.length > 0 ? (
-        <ModalTable
-          headers={[
-            'Id',
-            'Termin (Id)',
-            'Data wystawienia',
-            'Uczestnik',
-            'Ocena',
-            'Komentarz',
-            'Opóźnienie',
-          ]}
-          keys={stats.reviewsKeys}
-          content={feedbackArray}
-          active={false}
-        />
-      ) : (
-        <h3 className='user-container__user-status modal__title'>Brak</h3>
-      )}
-    </>
+  const headers = [
+    'Id',
+    'Termin (Id)',
+    'Data wystawienia',
+    'Uczestnik',
+    'Ocena',
+    'Komentarz',
+    'Opóźnienie',
+  ];
+  const table = (
+    <WrapperModalTable
+      content={feedbackArray}
+      title={'Opinie'}
+      noContentMsg={'opinii'}
+    >
+      <ModalTableContent
+        headers={headers}
+        keys={stats.reviewsKeys}
+        content={feedbackArray}
+        active={false}
+      />
+    </WrapperModalTable>
   );
+
+  return table;
 }
 
 export default DetailsProductReviews;

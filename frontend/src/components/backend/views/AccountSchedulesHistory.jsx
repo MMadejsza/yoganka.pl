@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import { statsCalculatorForCustomer } from '../../../utils/statistics/statsCalculatorForCustomer.js';
-import ModalTable from '../ModalTable.jsx';
+import ModalTableContent from '../ModalTableContent.jsx';
 import DetailsListCustomerStats from './lists/DetailsListCustomerStats.jsx';
 
 function AccountSchedulesHistory({ data }) {
@@ -51,7 +51,7 @@ function AccountSchedulesHistory({ data }) {
 
   table =
     content.length > 0 ? (
-      <ModalTable
+      <ModalTableContent
         headers={headers}
         keys={customerStats.recordsKeys}
         content={content}

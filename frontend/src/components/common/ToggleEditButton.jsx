@@ -1,6 +1,11 @@
 // ToggleEditButton.jsx
 
-function ToggleEditButton({ isEditing, onStartEditing, onCloseEditing }) {
+function ToggleEditButton({
+  isEditing,
+  onStartEditing,
+  onCloseEditing,
+  isJustSymbol,
+}) {
   return (
     <div className='user-container__action'>
       <button
@@ -10,12 +15,12 @@ function ToggleEditButton({ isEditing, onStartEditing, onCloseEditing }) {
         {isEditing ? (
           <>
             <span className='material-symbols-rounded nav__icon'>undo</span>{' '}
-            Wróć
+            {!isJustSymbol && 'Wróć'}
           </>
         ) : (
           <>
             <span className='material-symbols-rounded nav__icon'>edit</span>{' '}
-            Edytuj
+            {!isJustSymbol && 'Edytuj'}
           </>
         )}
       </button>

@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useLocation, useMatch, useNavigate } from 'react-router-dom';
 import { statsCalculatorForCustomer } from '../../../utils/statistics/statsCalculatorForCustomer.js';
-import ModalTable from '../ModalTable.jsx';
+import ModalTableContent from '../ModalTableContent.jsx';
 import ViewFrame from '../ViewsController.jsx';
+import WrapperModalTable from '../WrapperModalTable.jsx';
 import DetailsListCustomerStats from './lists/DetailsListCustomerStats.jsx';
 
 function AccountDashboard({ data, queryStatus }) {
@@ -32,23 +33,23 @@ function AccountDashboard({ data, queryStatus }) {
   console.log(`✅ Data: `);
   console.log(data);
 
-  let name, customer, stats, customerStats, statsBlock, tableTitle, table;
-
+  let name, customer, customerStats, statsBlock, table, contentUpcoming;
+  const headers = [
+    'Id',
+    'Data',
+    'Dzień',
+    'Godzina',
+    'Typ',
+    'Zajęcia',
+    'Miejsce',
+  ];
   if (data.customer) {
     const customer = data.customer;
     name = `${customer.firstName} ${customer.lastName}`;
     customerStats = statsCalculatorForCustomer(data.customer);
-    const headers = [
-      'Id',
-      'Data',
-      'Dzień',
-      'Godzina',
-      'Typ',
-      'Zajęcia',
-      'Miejsce',
-    ];
+
     const content = customerStats.records;
-    const contentUpcoming = content.filter(
+    contentUpcoming = content.filter(
       schedule =>
         new Date(`${schedule.date}T${schedule.startTime}:00.000Z`) >= today
     );
@@ -67,48 +68,7 @@ function AccountDashboard({ data, queryStatus }) {
         />
       </div>
     );
-
-    tableTitle = (
-      <h2 className='user-container__section-title'>{`Nadchodzące zajęcia (${contentUpcoming.length})`}</h2>
-    );
-
-    table =
-      contentUpcoming && contentUpcoming.length > 0 ? (
-        <ModalTable
-          headers={headers}
-          keys={[
-            'scheduleId',
-            'date',
-            'day',
-            'startTime',
-            'productType',
-            'productName',
-            'location',
-          ]}
-          content={contentUpcoming}
-          active={true}
-          onOpen={handleOpenScheduleModal}
-          // classModifier={classModifier}
-        />
-      ) : (
-        <div
-          className='dimmed'
-          style={{ fontSize: '2rem', marginBottom: '3re m' }}
-        >
-          Brak nowych rezerwacji
-        </div>
-      );
-  } else {
-    stats = (
-      <h2 className='user-container__section-title dimmed'>
-        Brak statystyk do wyświetlenia
-      </h2>
-    );
-    table = (
-      <h2 className='user-container__section-title dimmed'>Brak rezerwacji</h2>
-    );
   }
-
   if (queryStatus.isError) {
     console.log(queryStatus.error.code);
     if (error.code == 401) {
@@ -121,10 +81,33 @@ function AccountDashboard({ data, queryStatus }) {
       );
     }
   }
+  table = (
+    <WrapperModalTable
+      content={contentUpcoming}
+      title={'Nadchodzące zajęcia'}
+      noContentMsg={'nowych rezerwacji'}
+    >
+      <ModalTableContent
+        headers={headers}
+        keys={[
+          'scheduleId',
+          'date',
+          'day',
+          'startTime',
+          'productType',
+          'productName',
+          'location',
+        ]}
+        content={contentUpcoming}
+        active={true}
+        onOpen={handleOpenScheduleModal}
+        // classModifier={classModifier}
+      />
+    </WrapperModalTable>
+  );
   return (
     <>
       {statsBlock}
-      {tableTitle}
       {table}
       {isModalOpen && (
         <ViewFrame

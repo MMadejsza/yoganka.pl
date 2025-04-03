@@ -1,6 +1,7 @@
 import { statsCalculatorForCustomer } from '../../../../utils/statistics/statsCalculatorForCustomer.js';
 import DetailsListCustomerStats from '../../lists/DetailsListCustomerStats.jsx';
-import ModalTable from '../../ModalTable.jsx';
+import ModalTableContent from '../../ModalTableContent.jsx';
+import WrapperModalTable from '../../WrapperModalTable';
 
 function ViewCustomerTotalSchedules({ data }) {
   // console.clear();
@@ -19,6 +20,15 @@ function ViewCustomerTotalSchedules({ data }) {
     'Zajęcia',
     'Miejsce',
   ];
+  const keys = [
+    'scheduleId',
+    'date',
+    'day',
+    'startTime',
+    'productType',
+    'productName',
+    'location',
+  ];
   const customerStats = statsCalculatorForCustomer(data);
   const content = customerStats.records.sort(
     (a, b) => new Date(b.date) - new Date(a.date)
@@ -27,9 +37,7 @@ function ViewCustomerTotalSchedules({ data }) {
   // console.log(`✅ keys: `, keys);
   // console.log(`✅ customerStats: `, customerStats);
 
-  let stats;
-  let table;
-  stats = (
+  const stats = (
     <div className='user-container schedules'>
       <DetailsListCustomerStats
         customerStats={customerStats}
@@ -39,29 +47,24 @@ function ViewCustomerTotalSchedules({ data }) {
     </div>
   );
 
-  table = (
-    <ModalTable
-      headers={headers}
-      keys={[
-        'scheduleId',
-        'date',
-        'day',
-        'startTime',
-        'productType',
-        'productName',
-        'location',
-      ]}
+  const table = (
+    <WrapperModalTable
       content={content}
-      active={false}
-      // classModifier={classModifier}
-    />
+      title={'Historia zajęć'}
+      noContentMsg={'zajęć'}
+    >
+      <ModalTableContent
+        headers={headers}
+        keys={keys}
+        content={content}
+        active={false}
+        // classModifier={classModifier}
+      />{' '}
+    </WrapperModalTable>
   );
 
   return (
     <>
-      <h2 className='user-container__section-title modal__title--day'>
-        Historia zajęć
-      </h2>
       {stats}
       {table}
     </>

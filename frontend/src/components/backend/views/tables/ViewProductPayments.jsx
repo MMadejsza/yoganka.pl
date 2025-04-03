@@ -1,38 +1,40 @@
-import ModalTable from '../../ModalTable.jsx';
+import ModalTableContent from '../../ModalTableContent.jsx';
+import WrapperModalTable from '../../WrapperModalTable';
 
 function DetailsProductPayments({ type, stats, isAdminPage }) {
   console.log('\n✅✅✅DetailsProductPayments:');
   console.log('\nisAdminPage:', isAdminPage);
 
-  let paymentsArray = stats.totalPayments;
-
-  const table = (
-    <ModalTable
-      headers={['ID', 'Data', 'Uczestnik', 'Zadatek', 'Metoda płatności']}
-      keys={[
-        'paymentId',
-        'date',
-        'customerFullName',
-        'amountPaid',
-        'paymentMethod',
-      ]}
-      content={paymentsArray}
-      active={false}
-    />
-  );
-
+  const paymentsArray = stats.totalPayments;
   const title =
     type === 'Camp' || type === 'Event'
       ? 'Płatności bezpośrednie'
       : 'Wszystkie płatności bezpośrednie - bezzwrotne';
-  return (
-    <>
-      <h2 className='user-container__section-title modal__title--day admin-action'>
-        {`${title} (${paymentsArray.length}):`}
-      </h2>
-      {table}
-    </>
+  const headers = ['ID', 'Data', 'Uczestnik', 'Zadatek', 'Metoda płatności'];
+  const keys = [
+    'paymentId',
+    'date',
+    'customerFullName',
+    'amountPaid',
+    'paymentMethod',
+  ];
+
+  const table = (
+    <WrapperModalTable
+      content={paymentsArray}
+      title={title}
+      noContentMsg={'płatności'}
+    >
+      <ModalTableContent
+        headers={headers}
+        keys={keys}
+        content={paymentsArray}
+        active={false}
+      />
+    </WrapperModalTable>
   );
+
+  return <>{table}</>;
 }
 
 export default DetailsProductPayments;

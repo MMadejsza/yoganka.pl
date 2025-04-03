@@ -1,11 +1,12 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
-import { useAuthStatus } from '../../hooks/useAuthStatus.js';
-import { useFeedback } from '../../hooks/useFeedback.js';
-import { useInput } from '../../hooks/useInput.js';
-import { fetchData, queryClient } from '../../utils/http.js';
-import FeedbackBox from './FeedbackBox.jsx';
-import InputLogin from './InputLogin.jsx';
+import { useAuthStatus } from '../../../../../hooks/useAuthStatus.js';
+import { useFeedback } from '../../../../../hooks/useFeedback.js';
+import { useInput } from '../../../../../hooks/useInput.js';
+import { fetchData, queryClient } from '../../../../../utils/http.js';
+import WrapperForm from '../../../../common/WrapperForm.jsx';
+import FeedbackBox from '../../../FeedbackBox.jsx';
+import InputLogin from '../../../InputLogin.jsx';
 
 function NewAttendanceForm() {
   const params = useParams();
@@ -37,7 +38,7 @@ function NewAttendanceForm() {
   } = useInput(1);
 
   const customersOptionsList = customersList?.content?.sort((a, b) =>
-    a['Imię Nazwisko'].localeCompare(b['Imię Nazwisko'])
+    a.customerFullName.localeCompare(b.customerFullName)
   );
   console.log('customersOptionsList: ', customersOptionsList);
 
@@ -118,98 +119,77 @@ function NewAttendanceForm() {
   const formLabels = {
     formType: 'login',
     title: '',
-    actionTitle: '',
   };
 
   // Extract values only
-  const { formType, title, actionTitle } = formLabels;
-  const isSubmitDisabled = areErrors;
+  const { formType, title } = formLabels;
 
   const form = customersList && (
-    <form onSubmit={handleSubmit} className={`table-form`}>
-      <h1 className='form__title'>{title}</h1>
-      {/* names are for FormData and id for labels */}
-      <div className='table-form__content'>
-        <InputLogin
-          embedded={true}
-          formType={formType}
-          type='select'
-          options={customersOptionsList.map(customerObj => ({
-            key: customerObj.ID,
-            label: `(ID: ${customerObj.ID}) ${customerObj['Imię Nazwisko']}`,
-            value: customerObj.ID,
-          }))}
-          id='customer'
-          name='customerId'
-          label='Uczestnik:*'
-          value={customerValue}
-          onFocus={handleCustomerFocus}
-          onBlur={handleCustomerBlur}
-          onChange={handleCustomerChange}
-          validationResults={customerValidationResults}
-          didEdit={customerDidEdit}
-          required
-          isFocused={customerIsFocused}
-        />
-        <InputLogin
-          embedded={true}
-          formType={formType}
-          type='select'
-          options={[
-            { label: 'Membership (future)', value: 1 },
-            { label: 'Balance (future)', value: 2 },
-          ]}
-          id='paymentMethod'
-          name='paymentMethod'
-          label='Metoda płatności:*'
-          value={paymentMethodValue}
-          onFocus={handlePaymentMethodFocus}
-          onBlur={handlePaymentMethodBlur}
-          onChange={handlePaymentMethodChange}
-          required
-          validationResults={paymentMethodValidationResults}
-          didEdit={paymentMethodDidEdit}
-          isFocused={paymentMethodIsFocused}
-        />
-        <div className='action-btns'>
-          <button
-            type='reset'
-            onClick={handleReset}
-            className='form-switch-btn modal__btn--secondary  table-form-btn'
-          >
-            <span className='material-symbols-rounded nav__icon'>
-              restart_alt
-            </span>
-          </button>
-          <button
-            type='submit'
-            className={`form-action-btn table-form-btn table-form-btn--submit`}
-          >
-            <span className='material-symbols-rounded nav__icon'>
-              check
-            </span>{' '}
-          </button>
-        </div>
-      </div>
-    </form>
+    <WrapperForm
+      title={title}
+      onSubmit={handleSubmit}
+      onReset={handleReset}
+      isTableRowLike={true}
+    >
+      {/* 'names' are for FormData and 'id's for labels */}
+      <InputLogin
+        embedded={true}
+        formType={formType}
+        type='select'
+        options={customersOptionsList.map(customerObj => ({
+          key: customerObj.ID,
+          label: `(ID: ${customerObj.ID}) ${customerObj['Imię Nazwisko']}`,
+          value: customerObj.ID,
+        }))}
+        id='customer'
+        name='customerId'
+        label='Uczestnik:*'
+        value={customerValue}
+        onFocus={handleCustomerFocus}
+        onBlur={handleCustomerBlur}
+        onChange={handleCustomerChange}
+        validationResults={customerValidationResults}
+        didEdit={customerDidEdit}
+        required
+        isFocused={customerIsFocused}
+      />
+      <InputLogin
+        embedded={true}
+        formType={formType}
+        type='select'
+        options={[
+          { label: 'Membership (future)', value: 1 },
+          { label: 'Balance (future)', value: 2 },
+        ]}
+        id='paymentMethod'
+        name='paymentMethod'
+        label='Metoda płatności:*'
+        value={paymentMethodValue}
+        onFocus={handlePaymentMethodFocus}
+        onBlur={handlePaymentMethodBlur}
+        onChange={handlePaymentMethodChange}
+        required
+        validationResults={paymentMethodValidationResults}
+        didEdit={paymentMethodDidEdit}
+        isFocused={paymentMethodIsFocused}
+      />
+    </WrapperForm>
   );
 
   return (
     <>
-      <div className='user-container modal__summary'>
-        {form}
-        {feedback.status !== undefined && (
-          <FeedbackBox
-            status={feedback.status}
-            successMsg={feedback.message}
-            warnings={feedback.warnings}
-            isPending
-            isError
-            error
-            size='small'
-          />
-        )}
-      </div>
+      {feedback.status !== undefined && (
+        <FeedbackBox
+          status={feedback.status}
+          successMsg={feedback.message}
+          warnings={feedback.warnings}
+          isPending
+          isError
+          error
+          size='small'
+        />
+      )}
+      {form}
     </>
   );
 }

@@ -1,4 +1,5 @@
-import ModalTable from '../../ModalTable';
+import ModalTableContent from '../../ModalTableContent';
+import WrapperModalTable from '../../WrapperModalTable';
 
 function DetailsCustomerReviews({ reviews, placement }) {
   const feedbackArray = reviews.content;
@@ -6,32 +7,29 @@ function DetailsCustomerReviews({ reviews, placement }) {
   console.log(`DetailsCustomerReviews placement `, placement);
   console.log(`DetailsCustomerReviews reviews `, reviews);
 
+  const headers = [
+    'ID',
+    'Data wystawienia',
+    'Zajęcia',
+    'Termin',
+    'Ocena',
+    'Komentarz',
+    'Opóźnienie',
+  ];
   return (
     <>
-      <h2 className='user-container__section-title modal__title--day'>
-        {`${placement != 'reviews' ? 'Opinie:' : 'Inne opinie:'} (${
-          feedbackArray.length
-        }):`}
-      </h2>
-
-      {feedbackArray.length > 0 ? (
-        <ModalTable
-          headers={[
-            'ID',
-            'Data wystawienia',
-            'Zajęcia',
-            'Termin',
-            'Ocena',
-            'Komentarz',
-            'Opóźnienie',
-          ]}
+      <WrapperModalTable
+        content={feedbackArray}
+        title={placement != 'reviews' ? 'Opinie:' : 'Inne opinie:'}
+        noContentMsg={'opinii'}
+      >
+        <ModalTableContent
+          headers={headers}
           keys={reviews.keys}
           content={feedbackArray}
           active={false}
         />
-      ) : (
-        <h3 className='user-container__user-status modal__title'>Brak</h3>
-      )}
+      </WrapperModalTable>
     </>
   );
 }

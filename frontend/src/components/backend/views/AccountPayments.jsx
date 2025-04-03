@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { statsCalculatorForCustomer } from '../../../utils/statistics/statsCalculatorForCustomer.js';
-import ModalTable from '../ModalTable.jsx';
+import ModalTableContent from '../ModalTableContent.jsx';
 import ViewFrame from '../ViewsController.jsx';
 
 function AccountPayments({ data }) {
@@ -43,7 +43,7 @@ function AccountPayments({ data }) {
     <h2 className='user-container__section-title'>Historia płatności:</h2>
   );
   table = (
-    <ModalTable
+    <ModalTableContent
       headers={[
         'ID',
         'Data',

@@ -8,9 +8,11 @@ import {
   mutateOnEdit,
   queryClient,
 } from '../../../../utils/http.js';
+import ToggleAddButton from '../../../common/ToggleAddButton.jsx';
 import FeedbackBox from '../../FeedbackBox.jsx';
-import ModalTable from '../../ModalTable.jsx';
-import NewAttendanceForm from '../../NewAttendanceForm.jsx';
+import ModalTableContent from '../../ModalTableContent.jsx';
+import WrapperModalTable from '../../WrapperModalTable';
+import NewAttendanceForm from './add-forms/NewAttendanceForm.jsx';
 
 function DetailsTableAttendance({ stats, isAdminPage }) {
   // console.log('\n✅✅✅DetailsTableAttendance:');
@@ -133,13 +135,21 @@ function DetailsTableAttendance({ stats, isAdminPage }) {
       deleteBookingRecord(params);
     }
   };
+  const form = <NewAttendanceForm />;
+
+  const toggleBtn = (
+    <ToggleAddButton isEditing={isFormVisible} onToggle={setIsFormVisible} />
+  );
 
   const table = (
-    <>
-      <h2 className='user-container__section-title modal__title--day admin-action'>
-        {`Potwierdzone rezerwacje (${attendedBookingsArray.length})`}
-      </h2>
-      <ModalTable
+    <WrapperModalTable
+      content={attendedBookingsArray}
+      title={'Potwierdzone rezerwacje'}
+      noContentMsg={'aktywnych rezerwacji'}
+      toggleBtn={toggleBtn}
+      form={isFormVisible && form}
+    >
+      <ModalTableContent
         headers={['Id', 'Metoda płatności', 'Data zapisania', 'Uczestnik', '']}
         keys={[
           'bookingId',
@@ -154,14 +164,17 @@ function DetailsTableAttendance({ stats, isAdminPage }) {
         adminActions={true}
         onQuickAction={[{ symbol: 'person_remove', method: markAbsent }]}
       />
-    </>
+    </WrapperModalTable>
   );
-  const cancelledTable = cancelledBookingsArray?.length > 0 && (
-    <>
-      <h2 className='user-container__section-title modal__title--day admin-action'>
-        {`Anulowane rezerwacje (${cancelledBookingsArray.length}):`}
-      </h2>
-      <ModalTable
+
+  const cancelledTable = (
+    <WrapperModalTable
+      content={cancelledBookingsArray}
+      title={'Anulowane rezerwacje'}
+      noContentMsg={'anulowanych rezerwacji'}
+      // toggleBtn={toggleBtn}
+    >
+      <ModalTableContent
         headers={['Id', 'Metoda płatności', 'Data zapisania', 'Uczestnik', '']}
         keys={[
           'bookingId',
@@ -179,10 +192,8 @@ function DetailsTableAttendance({ stats, isAdminPage }) {
           { symbol: 'restore', method: markPresent },
         ]}
       />
-    </>
+    </WrapperModalTable>
   );
-
-  const form = <NewAttendanceForm />;
 
   return (
     <>
@@ -207,8 +218,9 @@ function DetailsTableAttendance({ stats, isAdminPage }) {
           size='small'
         />
       )}
-      {isFormVisible && form}
+
       {table}
+
       {cancelledTable}
     </>
   );
