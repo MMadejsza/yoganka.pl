@@ -1,6 +1,8 @@
 import { useInput } from '../../../../hooks/useInput.js';
 import * as val from '../../../../utils/validation.js';
+import WrapperForm from '../../../common/WrapperForm.jsx';
 import InputLogin from '../../InputLogin.jsx';
+
 function ViewScheduleNewCustomerForm({ onSave }) {
   const minAge = () => {
     const today = new Date();
@@ -154,11 +156,13 @@ function ViewScheduleNewCustomerForm({ onSave }) {
   const requiredInputsValidated = !areErrors && !areEmpty;
 
   const content = (
-    <form
+    <WrapperForm
+      title={title}
       onSubmit={handleSubmit}
-      className={`form user-container__details-list modal-checklist__list new-customer`}
+      onReset={handleReset}
+      submitLabel={actionTitle}
+      resetLabel='Resetuj'
     >
-      <h1 className='form__title'>{title}</h1>
       {/* names are for FormData and id for labels */}
       <InputLogin
         embedded={true}
@@ -290,24 +294,7 @@ function ViewScheduleNewCustomerForm({ onSave }) {
           isFocused={notesIsFocused}
         />
       )}
-
-      <button
-        type='reset'
-        onClick={handleReset}
-        className='form-switch-btn modal__btn  modal__btn--secondary modal__btn--small'
-      >
-        <span className={`material-symbols-rounded nav__icon`}>undo</span>
-        Resetuj
-      </button>
-      {requiredInputsValidated && (
-        <button type='submit' className={`form-action-btn modal__btn `}>
-          <span className={`material-symbols-rounded nav__icon`}>
-            self_improvement
-          </span>
-          {actionTitle}
-        </button>
-      )}
-    </form>
+    </WrapperForm>
   );
 
   return <>{content}</>;

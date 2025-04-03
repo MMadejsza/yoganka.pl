@@ -9,6 +9,7 @@ import {
   queryClient,
 } from '../../../../utils/http.js';
 import * as val from '../../../../utils/validation.js';
+import WrapperForm from '../../../common/WrapperForm.jsx';
 import FeedbackBox from '../../FeedbackBox.jsx';
 import InputLogin from '../../InputLogin.jsx';
 
@@ -218,15 +219,15 @@ function NewPaymentForm() {
 
   let isSubmitDisabled = !!areErrors;
   const form = productsList && customersList && (
-    <form
+    <WrapperForm
+      title={title}
+      subTitle={subTitle}
+      note={note}
       onSubmit={handleSubmit}
-      className={`user-container__details-list modal-checklist__list`}
+      onReset={handleReset}
+      submitLabel={actionTitle}
+      resetLabel='Resetuj'
     >
-      <h1 className='form__title'>{title}</h1>
-      <h3 className='user-container__user-status modal__title'>{subTitle}</h3>
-      <h3 className='user-container__user-status modal__title dimmed'>
-        {note}
-      </h3>
       {/* names are for FormData and id for labels */}
       <InputLogin
         embedded={true}
@@ -340,24 +341,7 @@ function NewPaymentForm() {
         didEdit={paymentMethodDidEdit}
         isFocused={paymentMethodIsFocused}
       />
-      <button
-        type='reset'
-        onClick={handleReset}
-        className='form-switch-btn modal__btn  modal__btn--secondary modal__btn--small'
-      >
-        <span className='material-symbols-rounded nav__icon'>restart_alt</span>
-        Resetuj
-      </button>
-      <button
-        type='submit'
-        className={`form-action-btn modal__btn modal__btn--small ${
-          isSubmitDisabled ? 'dimmed' : ''
-        }`}
-      >
-        <span className='material-symbols-rounded nav__icon'>check</span>{' '}
-        {actionTitle}
-      </button>
-    </form>
+    </WrapperForm>
   );
 
   return (

@@ -176,10 +176,10 @@ function DetailsFormCustomer({
 
   const form = (
     <WrapperForm
-      title=''
+      title={title}
       onSubmit={handleSubmit}
       onReset={handleReset}
-      submitLabel='Zatwierdź'
+      submitLabel={actionTitle}
       resetLabel='Resetuj'
     >
       {/* names are for FormData and id for labels */}

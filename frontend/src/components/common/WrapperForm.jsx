@@ -11,37 +11,51 @@
 */
 function WrapperForm({
   title,
+  subTitle,
+  note,
   onSubmit,
   onReset,
   children,
-  submitLabel = 'Submit',
-  resetLabel = 'Reset',
+  submitLabel,
+  resetLabel,
+  isTableRowLike,
   extraButtons,
 }) {
+  const mainClass = isTableRowLike
+    ? `table-form`
+    : 'generic-form user-container__details-list modal-checklist__list';
+  const fieldsClass = isTableRowLike
+    ? 'table-form__content'
+    : 'generic-form__fields';
+  const btnsClass = isTableRowLike ? 'action-btns' : 'generic-form__actions';
+  const resetClass = isTableRowLike
+    ? 'form-switch-btn modal__btn--secondary  table-form-btn'
+    : 'form-switch-btn modal__btn--secondary modal__btn modal__btn--small';
+  const submitClass = isTableRowLike
+    ? `form-action-btn table-form-btn table-form-btn--submit`
+    : 'form-action-btn modal__btn modal__btn--small';
   return (
-    <form
-      onSubmit={onSubmit}
-      className='generic-form user-container__details-list modal-checklist__list'
-    >
+    <form onSubmit={onSubmit} className={mainClass}>
       {title && <h1 className='form__title'>{title}</h1>}
-      {/* <div className='generic-form__fields'>{children}</div> //! CHILDREN */}
-      {children}
-      <div className='generic-form__actions'>
-        <button
-          type='reset'
-          onClick={onReset}
-          className='form-switch-btn modal__btn modal__btn--secondary modal__btn--small'
-        >
+      {subTitle && (
+        <h3 className='user-container__user-status modal__title'>{subTitle}</h3>
+      )}
+      {note && (
+        <h3 className='user-container__user-status modal__title dimmed'>
+          {note}
+        </h3>
+      )}
+      <div className={fieldsClass}>{children}</div> {/*//! CHILDREN*/}
+      {/* {children} */}
+      <div className={btnsClass}>
+        <button type='reset' onClick={onReset} className={resetClass}>
           <span className='material-symbols-rounded nav__icon'>
             restart_alt
-          </span>{' '}
+          </span>
           {resetLabel}
         </button>
-        <button
-          type='submit'
-          className='form-action-btn modal__btn modal__btn--small'
-        >
-          <span className='material-symbols-rounded nav__icon'>check</span>{' '}
+        <button type='submit' className={submitClass}>
+          <span className='material-symbols-rounded nav__icon'>check</span>
           {submitLabel}
         </button>
         {extraButtons} {/*//! EXTRA NOT STANDARD BTNS*/}

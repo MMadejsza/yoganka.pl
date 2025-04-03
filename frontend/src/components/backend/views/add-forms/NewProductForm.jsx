@@ -4,6 +4,7 @@ import { useFeedback } from '../../../../hooks/useFeedback.js';
 import { useInput } from '../../../../hooks/useInput.js';
 import { mutateOnCreate, queryClient } from '../../../../utils/http.js';
 import * as val from '../../../../utils/validation.js';
+import WrapperForm from '../../../common/WrapperForm.jsx';
 import FeedbackBox from '../../FeedbackBox.jsx';
 import InputLogin from '../../InputLogin.jsx';
 
@@ -157,12 +158,13 @@ function NewProductForm() {
   const { formType, title, actionTitle } = formLabels;
 
   const form = (
-    <form
+    <WrapperForm
+      title={title}
       onSubmit={handleSubmit}
-      className={`user-container__details-list modal-checklist__list`}
+      onReset={handleReset}
+      submitLabel={actionTitle}
+      resetLabel='Resetuj'
     >
-      <h1 className='form__title'>{title}</h1>
-
       <InputLogin
         embedded={true}
         formType={formType}
@@ -297,22 +299,7 @@ function NewProductForm() {
         didEdit={statusDidEdit}
         isFocused={statusIsFocused}
       />
-      <button
-        type='reset'
-        onClick={handleReset}
-        className='form-switch-btn modal__btn  modal__btn--secondary modal__btn--small'
-      >
-        <span className='material-symbols-rounded nav__icon'>restart_alt</span>
-        Resetuj
-      </button>
-      <button
-        type='submit'
-        className={`form-action-btn modal__btn modal__btn--small`}
-      >
-        <span className='material-symbols-rounded nav__icon'>check</span>{' '}
-        {actionTitle}
-      </button>
-    </form>
+    </WrapperForm>
   );
 
   return (

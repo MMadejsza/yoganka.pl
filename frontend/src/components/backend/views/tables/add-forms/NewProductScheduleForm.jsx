@@ -5,6 +5,7 @@ import { useFeedback } from '../../../../../hooks/useFeedback.js';
 import { useInput } from '../../../../../hooks/useInput.js';
 import { mutateOnCreate, queryClient } from '../../../../../utils/http.js';
 import * as val from '../../../../../utils/validation.js';
+import WrapperForm from '../../../../common/WrapperForm.jsx';
 import FeedbackBox from '../../../FeedbackBox.jsx';
 import InputLogin from '../../../InputLogin.jsx';
 
@@ -154,145 +155,125 @@ function NewProductScheduleForm() {
   const { formType, title, actionTitle } = formLabels;
 
   const form = (
-    <form onSubmit={handleSubmit} className={`table-form`}>
-      <h1 className='form__title'>{title}</h1>
-
-      <div className='table-form__content'>
-        <InputLogin
-          embedded={true}
-          formType={formType}
-          type='select'
-          id='shouldRepeat'
-          name='shouldRepeat'
-          options={[
-            { label: '1x', value: 1 },
-            { label: 'Co tydzień', value: 7 },
-            { label: 'Co miesiąc', value: 30 },
-            { label: 'Co rok', value: 365 },
-          ]}
-          value={shouldRepeatValue}
-          onFocus={handleShouldRepeatFocus}
-          onBlur={handleShouldRepeatBlur}
-          onChange={handleShouldRepeatChange}
-          validationResults={shouldRepeatValidationResults}
-          didEdit={shouldRepeatDidEdit}
-          isFocused={shouldRepeatIsFocused}
-        />
-        <InputLogin
-          embedded={true}
-          formType={formType}
-          type='number'
-          id='repeatCount'
-          name='repeatCount'
-          step='1'
-          min='2'
-          max={
-            shouldRepeatValue == 7
-              ? '52'
-              : shouldRepeatValue == 30
-                ? '12'
-                : null
-          }
-          label=''
-          disabled={shouldRepeatValue == 1}
-          placeholder='x razy'
-          value={repeatValue}
-          onFocus={handleRepeatFocus}
-          onBlur={handleRepeatBlur}
-          onChange={handleRepeatChange}
-          validationResults={repeatValidationResults}
-          didEdit={repeatDidEdit}
-          isFocused={repeatIsFocused}
-        />
-        <InputLogin
-          embedded={true}
-          formType={formType}
-          type='date'
-          id='date'
-          name='date'
-          label=''
-          value={dateValue}
-          onFocus={handleDateFocus}
-          onBlur={handleDateBlur}
-          onChange={handleDateChange}
-          autoComplete='off'
-          required
-          validationResults={dateValidationResults}
-          didEdit={dateDidEdit}
-          isFocused={dateIsFocused}
-        />
-        <InputLogin
-          embedded={true}
-          formType={formType}
-          type='time'
-          id='startTime'
-          name='startTime'
-          label=''
-          value={timeValue}
-          required
-          onFocus={handleTimeFocus}
-          onBlur={handleTimeBlur}
-          onChange={handleTimeChange}
-          validationResults={timeValidationResults}
-          didEdit={timeDidEdit}
-          isFocused={timeIsFocused}
-        />
-        <InputLogin
-          embedded={true}
-          formType={formType}
-          type='text'
-          id='location'
-          name='location'
-          label=''
-          placeholder='(Widoczna!)'
-          value={locationValue}
-          onFocus={handleLocationFocus}
-          onBlur={handleLocationBlur}
-          onChange={handleLocationChange}
-          autoComplete='off'
-          required
-          validationResults={locationValidationResults}
-          didEdit={locationDidEdit}
-          isFocused={locationIsFocused}
-        />
-        <InputLogin
-          embedded={true}
-          formType={formType}
-          type='number'
-          id='capacity'
-          name='capacity'
-          step='1'
-          min='0'
-          label=''
-          placeholder='Ilość miejsc'
-          required
-          value={capacityValue}
-          onFocus={handleCapacityFocus}
-          onBlur={handleCapacityBlur}
-          onChange={handleCapacityChange}
-          validationResults={capacityValidationResults}
-          didEdit={capacityDidEdit}
-          isFocused={capacityIsFocused}
-        />
-        <div className='action-btns'>
-          <button
-            type='reset'
-            onClick={handleReset}
-            className='form-switch-btn modal__btn--secondary  table-form-btn'
-          >
-            <span className='material-symbols-rounded nav__icon'>
-              restart_alt
-            </span>
-          </button>
-          <button
-            type='submit'
-            className={`form-action-btn table-form-btn table-form-btn--submit`}
-          >
-            <span className='material-symbols-rounded nav__icon'>check</span>
-          </button>
-        </div>
-      </div>
-    </form>
+    <WrapperForm
+      title={title}
+      onSubmit={handleSubmit}
+      onReset={handleReset}
+      isTableRowLike={true}
+    >
+      <InputLogin
+        embedded={true}
+        formType={formType}
+        type='select'
+        id='shouldRepeat'
+        name='shouldRepeat'
+        options={[
+          { label: '1x', value: 1 },
+          { label: 'Co tydzień', value: 7 },
+          { label: 'Co miesiąc', value: 30 },
+          { label: 'Co rok', value: 365 },
+        ]}
+        value={shouldRepeatValue}
+        onFocus={handleShouldRepeatFocus}
+        onBlur={handleShouldRepeatBlur}
+        onChange={handleShouldRepeatChange}
+        validationResults={shouldRepeatValidationResults}
+        didEdit={shouldRepeatDidEdit}
+        isFocused={shouldRepeatIsFocused}
+      />
+      <InputLogin
+        embedded={true}
+        formType={formType}
+        type='number'
+        id='repeatCount'
+        name='repeatCount'
+        step='1'
+        min='2'
+        max={
+          shouldRepeatValue == 7 ? '52' : shouldRepeatValue == 30 ? '12' : null
+        }
+        label=''
+        disabled={shouldRepeatValue == 1}
+        placeholder='x razy'
+        value={repeatValue}
+        onFocus={handleRepeatFocus}
+        onBlur={handleRepeatBlur}
+        onChange={handleRepeatChange}
+        validationResults={repeatValidationResults}
+        didEdit={repeatDidEdit}
+        isFocused={repeatIsFocused}
+      />
+      <InputLogin
+        embedded={true}
+        formType={formType}
+        type='date'
+        id='date'
+        name='date'
+        label=''
+        value={dateValue}
+        onFocus={handleDateFocus}
+        onBlur={handleDateBlur}
+        onChange={handleDateChange}
+        autoComplete='off'
+        required
+        validationResults={dateValidationResults}
+        didEdit={dateDidEdit}
+        isFocused={dateIsFocused}
+      />
+      <InputLogin
+        embedded={true}
+        formType={formType}
+        type='time'
+        id='startTime'
+        name='startTime'
+        label=''
+        value={timeValue}
+        required
+        onFocus={handleTimeFocus}
+        onBlur={handleTimeBlur}
+        onChange={handleTimeChange}
+        validationResults={timeValidationResults}
+        didEdit={timeDidEdit}
+        isFocused={timeIsFocused}
+      />
+      <InputLogin
+        embedded={true}
+        formType={formType}
+        type='text'
+        id='location'
+        name='location'
+        label=''
+        placeholder='(Widoczna!)'
+        value={locationValue}
+        onFocus={handleLocationFocus}
+        onBlur={handleLocationBlur}
+        onChange={handleLocationChange}
+        autoComplete='off'
+        required
+        validationResults={locationValidationResults}
+        didEdit={locationDidEdit}
+        isFocused={locationIsFocused}
+      />
+      <InputLogin
+        embedded={true}
+        formType={formType}
+        type='number'
+        id='capacity'
+        name='capacity'
+        step='1'
+        min='0'
+        label=''
+        placeholder='Ilość miejsc'
+        required
+        value={capacityValue}
+        onFocus={handleCapacityFocus}
+        onBlur={handleCapacityBlur}
+        onChange={handleCapacityChange}
+        validationResults={capacityValidationResults}
+        didEdit={capacityDidEdit}
+        isFocused={capacityIsFocused}
+      />
+    </WrapperForm>
   );
 
   return (
