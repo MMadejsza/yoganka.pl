@@ -1,31 +1,31 @@
 import {
   sendAttendanceMarkedAbsentMail,
-  sendAttendanceRecordDeletedMail,
   sendAttendanceReturningMail,
+  sendBookingDeletedMail,
 } from './attendanceEmails.js';
 import {
-  sendAccountCreatedMail,
   sendCustomerCreatedMail,
+  sendUserAccountCreatedMail,
 } from './creationEmails.js';
 import {
   sendCustomerDeletedMail,
   sendUserAccountDeletedMail,
 } from './deletionEmails.js';
 import {
-  sendPassFreshMail,
-  sendReservationCancelledMail,
-  sendReservationFreshMail,
+  sendNewPassPurchasedMail,
+  sendNewReservationMail,
+  sendPaymentCancelledMail,
 } from './reservationEmails.js';
 
 export {
-  sendAccountCreatedMail,
   sendAttendanceMarkedAbsentMail,
-  sendAttendanceRecordDeletedMail,
   sendAttendanceReturningMail,
+  sendBookingDeletedMail,
   sendCustomerCreatedMail,
   sendCustomerDeletedMail,
-  sendPassFreshMail,
-  sendReservationCancelledMail,
-  sendReservationFreshMail,
+  sendNewPassPurchasedMail,
+  sendNewReservationMail,
+  sendPaymentCancelledMail,
+  sendUserAccountCreatedMail,
   sendUserAccountDeletedMail,
 };

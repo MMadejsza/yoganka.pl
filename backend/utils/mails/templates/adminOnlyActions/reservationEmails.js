@@ -1,22 +1,22 @@
 import 'dotenv/config';
 import { mainTransporter } from '../../transporter.js';
 import {
-  sendPassFreshMail as basePassFreshMail,
-  sendReservationFreshMail as baseReservationFreshMail,
+  sendNewPassPurchasedMail as basePassFreshMail,
+  sendNewReservationMail as baseReservationFreshMail,
 } from '../customerActions/reservationEmails.js';
 
 //! OVERWRITTEN CUSTOMER_____________________________________________
-export const sendReservationFreshMail = configObject => {
+export const sendNewReservationMail = configObject => {
   configObject.isAdmin = true;
   baseReservationFreshMail(configObject);
 };
-export const sendPassFreshMail = configObject => {
+export const sendNewPassPurchasedMail = configObject => {
   configObject.isAdmin = true;
   basePassFreshMail(configObject);
 };
 
 //! ADMIN ONLY_____________________________________________
-export const sendReservationCancelledMail = ({ to, paymentId }) => {
+export const sendPaymentCancelledMail = ({ to, paymentId }) => {
   const subject = `❗️ Płatność anulowana • nr ${paymentId} (anulowane przez administratora)`;
   const html = `
     <main>

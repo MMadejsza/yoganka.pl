@@ -1,19 +1,19 @@
 import {
   sendAttendanceMarkedAbsentMail,
   sendAttendanceReturningMail,
-  sendPaymentSuccessful,
+  sendPaymentSuccessfulMail,
 } from './attendanceEmails.js';
 import { sendCustomerCreatedMail } from './creationEmails.js';
 import {
-  sendPassFreshMail,
-  sendReservationFreshMail,
+  sendNewPassPurchasedMail,
+  sendNewReservationMail,
 } from './reservationEmails.js';
 
 export {
   sendAttendanceMarkedAbsentMail,
   sendAttendanceReturningMail,
   sendCustomerCreatedMail,
-  sendPassFreshMail,
-  sendPaymentSuccessful,
-  sendReservationFreshMail,
+  sendNewPassPurchasedMail,
+  sendNewReservationMail,
+  sendPaymentSuccessfulMail,
 };

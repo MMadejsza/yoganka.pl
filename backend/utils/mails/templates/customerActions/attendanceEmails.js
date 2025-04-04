@@ -85,7 +85,7 @@ export const sendAttendanceMarkedAbsentMail = ({
     });
 };
 
-export const sendPaymentSuccessful = ({
+export const sendPaymentSuccessfulMail = ({
   to,
   amountPaid,
   productName,

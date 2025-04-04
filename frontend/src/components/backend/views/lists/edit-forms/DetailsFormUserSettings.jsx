@@ -210,7 +210,7 @@ function DetailsFormUserSettings({
         type='checkbox'
         id='handedness'
         name='handedness'
-        label='Pozycja menu:'
+        label='Menu po lewej:'
         value={handednessValue}
         checked={handednessValue}
         onFocus={handleHandednessFocus}
@@ -265,7 +265,7 @@ function DetailsFormUserSettings({
         type='checkbox'
         id='animation'
         name='animation'
-        label='Animacje'
+        label='Animacje:'
         value={animationsValue}
         checked={animationsValue}
         onFocus={handleAnimationFocus}
@@ -281,7 +281,7 @@ function DetailsFormUserSettings({
         type='checkbox'
         id='theme'
         name='theme'
-        label='Motyw:'
+        label='Ciemny motyw:'
         value={themeValue}
         checked={themeValue}
         onFocus={handleThemeFocus}

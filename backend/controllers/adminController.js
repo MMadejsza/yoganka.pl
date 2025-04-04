@@ -160,7 +160,7 @@ export const postCreateUser = (req, res, next) => {
         .then(newUser => {
           // Notification email
           if (email) {
-            adminEmails.sendAccountCreatedMail({ to: email });
+            adminEmails.sendUserAccountCreatedMail({ to: email });
           }
 
           successLog(person, controllerName);
@@ -1847,7 +1847,7 @@ export const deleteBookingRecord = (req, res, next) => {
 
       // Send confirmation
       if (customerEmail && wantsNotifications) {
-        adminEmails.sendAttendanceRecordDeletedMail({
+        adminEmails.sendBookingDeletedMail({
           to: customerEmail,
           productName: currentScheduleRecord.Product.name || 'Zajęcia',
           date: currentScheduleRecord.date,
@@ -2338,7 +2338,7 @@ export const postCreatePayment = (req, res, next) => {
                   successLog(person, controllerName, 'customerPass created');
 
                 if (customerEmail) {
-                  adminEmails.sendPassFreshMail({
+                  adminEmails.sendNewPassPurchasedMail({
                     to: customerEmail,
                     productName: currentPassDefinition.name,
                     productPrice: currentPassDefinition.price,
@@ -2429,7 +2429,7 @@ export const postCreatePayment = (req, res, next) => {
                     if (booking)
                       successLog(person, controllerName, 'Booking created');
                     if (customerEmail && wantsNotifications) {
-                      adminEmails.sendReservationFreshMail({
+                      adminEmails.sendNewReservationMail({
                         to: customerEmail,
                         productName: scheduleRecord.Product.name,
                         date: scheduleRecord.date,
@@ -2485,7 +2485,7 @@ export const deletePayment = (req, res, next) => {
 
       // Send email before deletion
       if (customerEmail) {
-        adminEmails.sendReservationCancelledMail({
+        adminEmails.sendPaymentCancelledMail({
           to: customerEmail,
           paymentId: payment.paymentId,
         });

@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { mainTransporter } from '../../transporter.js';
 
-export const sendAccountCreatedMail = ({ to }) => {
+export const sendUserAccountCreatedMail = ({ to }) => {
   const subject = `🎉 Konto utworzone pomyślnie • Yoganka`;
 
   const html = `

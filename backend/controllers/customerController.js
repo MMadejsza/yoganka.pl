@@ -336,7 +336,7 @@ export const postCreateBookSchedule = (req, res, next) => {
               { transaction: t }
             ).then(booking => {
               if (userEmail && wantsNotifications) {
-                customerEmails.sendReservationFreshMail({
+                customerEmails.sendNewReservationMail({
                   to: userEmail,
                   productName: currentScheduleRecord?.Product.name || '',
                   date: currentScheduleRecord.date,
@@ -375,7 +375,7 @@ export const postCreateBookSchedule = (req, res, next) => {
               { transaction: t }
             ).then(payment => {
               if (userEmail) {
-                customerEmails.sendPaymentSuccessful({
+                customerEmails.sendPaymentSuccessfulMail({
                   to: userEmail,
                   amountPaid: payment.amountPaid,
                   productName: currentScheduleRecord?.Product.name || '',
@@ -397,7 +397,7 @@ export const postCreateBookSchedule = (req, res, next) => {
                 { transaction: t }
               ).then(booking => {
                 if (userEmail && wantsNotifications) {
-                  customerEmails.sendReservationFreshMail({
+                  customerEmails.sendNewReservationMail({
                     to: userEmail,
                     productName: currentScheduleRecord.Product.name,
                     date: currentScheduleRecord.date,

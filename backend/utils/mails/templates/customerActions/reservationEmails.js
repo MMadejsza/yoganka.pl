@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { mainTransporter } from '../../transporter.js';
 
-export const sendReservationFreshMail = ({
+export const sendNewReservationMail = ({
   to,
   productName,
   date,
@@ -41,7 +41,7 @@ export const sendReservationFreshMail = ({
     });
 };
 
-export const sendPassFreshMail = ({
+export const sendNewPassPurchasedMail = ({
   to,
   productName,
   productPrice,
@@ -54,7 +54,7 @@ export const sendPassFreshMail = ({
   isAdmin,
 }) => {
   const subject = `🌸 Nowy karnet • ${productName} ${
-    isAdmin ? '(dodane przez administratora)' : ''
+    isAdmin ? '(dodany przez administratora)' : ''
   }`;
 
   const formatDate = dateStr =>
