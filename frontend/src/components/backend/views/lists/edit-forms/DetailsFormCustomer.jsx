@@ -14,6 +14,7 @@ import FeedbackBox from '../../../FeedbackBox.jsx';
 import Input from '../../../Input.jsx';
 
 function DetailsFormCustomer({
+  title,
   customerData,
   customerAccessed,
   adminAccessed,
@@ -167,15 +168,15 @@ function DetailsFormCustomer({
   // Dynamically set descriptive names when switching from login in to registration
   const formLabels = {
     formType: 'settings',
-    title: '',
+    formTitle: title,
     actionTitle: 'Zatwierdź',
   };
   // Extract values only
-  const { formType, title, actionTitle } = formLabels;
+  const { formType, formTitle, actionTitle } = formLabels;
 
   const form = (
     <WrapperForm
-      title={title}
+      title={formTitle}
       onSubmit={handleSubmit}
       onReset={handleReset}
       submitLabel={actionTitle}

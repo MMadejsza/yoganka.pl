@@ -196,7 +196,7 @@ function NewPaymentForm() {
       product => product.productId.toString() === formDataObj.productId
     );
     if (selectedProduct) {
-      formDataObj.productName = `(ID: ${selectedProduct.productId}) ${selectedProduct.name}`;
+      formDataObj.productName = `(Id: ${selectedProduct.productId}) ${selectedProduct.name}`;
       formDataObj.productPrice = selectedProduct.price;
     }
 
@@ -235,7 +235,7 @@ function NewPaymentForm() {
         type='select'
         options={customersOptionsList.map(customerObj => ({
           key: customerObj.customerId,
-          label: `(ID: ${customerObj.customerId}) ${customerObj.customerFullName}`,
+          label: `(Id: ${customerObj.customerId}) ${customerObj.customerFullName}`,
           value: customerObj.customerId,
         }))}
         id='customer'
@@ -256,7 +256,7 @@ function NewPaymentForm() {
         type='select'
         options={productsOptionsList.map(productObj => ({
           key: productObj.productId,
-          label: `(ID: ${productObj.productId}) ${productObj.name}`,
+          label: `(Id: ${productObj.productId}) ${productObj.name}`,
           value: productObj.productId,
         }))}
         id='productId'
@@ -279,7 +279,7 @@ function NewPaymentForm() {
           schedulesOptionsList?.length > 0
             ? schedulesOptionsList.map(scheduleObj => ({
                 key: scheduleObj.scheduleId,
-                label: `(ID: ${scheduleObj.scheduleId}) ${getWeekDay(
+                label: `(Id: ${scheduleObj.scheduleId}) ${getWeekDay(
                   scheduleObj.date
                 )} ${scheduleObj.date} ${scheduleObj.startTime}`,
                 value: scheduleObj.scheduleId,

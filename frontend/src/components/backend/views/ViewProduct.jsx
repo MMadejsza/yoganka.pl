@@ -27,7 +27,7 @@ function ViewProduct({ data, isAdminPanel }) {
 
   return (
     <>
-      <h1 className='user-container__user-title modal__title'>{`${product.name} (ID:${product.productId})`}</h1>
+      <h1 className='user-container__user-title modal__title'>{`${product.name} (Id:${product.productId})`}</h1>
       <h3 className='user-container__user-status modal__title'>
         {product.status}
       </h3>

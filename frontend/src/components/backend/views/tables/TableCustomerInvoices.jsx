@@ -3,8 +3,8 @@ import WrapperModalTable from '../../WrapperModalTable';
 
 function TableCustomerInvoices({ invoicesArray, noInvoices }) {
   const headers = [
-    'ID',
-    'ID Płatności',
+    'Id',
+    'Id Płatności',
     'Wystawiona',
     'Termin płatności',
     'Kwota całkowita',

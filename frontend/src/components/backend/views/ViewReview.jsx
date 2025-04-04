@@ -21,7 +21,7 @@ function ViewFeedback({ data }) {
 
   return (
     <>
-      <h1 className='user-container__user-title modal__title'>{`Opinia (ID:${review.feedbackId})`}</h1>
+      <h1 className='user-container__user-title modal__title'>{`Opinia (Id:${review.feedbackId})`}</h1>
       <h3 className='user-container__user-status modal__title'>{` ${customer.firstName} ${customer.lastName} ->> ${product.name}`}</h3>
 
       {/*//@ Review main details */}

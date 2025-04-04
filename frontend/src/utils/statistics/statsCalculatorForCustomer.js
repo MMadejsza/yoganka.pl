@@ -94,7 +94,7 @@ export const statsCalculatorForCustomer = customer => {
         rowId: feedback.feedbackId,
         product: `${schedule.Product.name}`,
         schedule: `
-        (ID: ${schedule.scheduleId})
+        (Id: ${schedule.scheduleId})
         ${schedule.date} ${getWeekDay(schedule.date)}
         ${schedule.startTime}`,
         submissionDate: formatIsoDateTime(feedback.submissionDate),

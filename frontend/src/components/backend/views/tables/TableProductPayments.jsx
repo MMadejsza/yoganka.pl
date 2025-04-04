@@ -10,7 +10,7 @@ function TableProductPayments({ type, stats, isAdminPage }) {
     type === 'Camp' || type === 'Event'
       ? 'Płatności bezpośrednie'
       : 'Wszystkie płatności bezpośrednie - bezzwrotne';
-  const headers = ['ID', 'Data', 'Uczestnik', 'Zadatek', 'Metoda płatności'];
+  const headers = ['Id', 'Data', 'Uczestnik', 'Zadatek', 'Metoda płatności'];
   const keys = [
     'paymentId',
     'date',

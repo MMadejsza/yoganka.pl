@@ -51,7 +51,7 @@ export const getAllUsers = (req, res, next) => {
           rowId: user.userId,
           registrationDate: formatIsoDateTime(user.registrationDate),
           prefSettings: user.UserPrefSetting
-            ? `Tak (ID: ${user.UserPrefSetting.userPrefId})`
+            ? `Tak (Id: ${user.UserPrefSetting.userPrefId})`
             : 'Nie',
           lastLoginDate: formatIsoDateTime(user.lastLoginDate),
         };

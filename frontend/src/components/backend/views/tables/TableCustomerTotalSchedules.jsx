@@ -12,7 +12,7 @@ function TableCustomerTotalSchedules({ data }) {
   );
 
   const headers = [
-    'ID',
+    'Id',
     'Data',
     'Dzień',
     'Godzina',

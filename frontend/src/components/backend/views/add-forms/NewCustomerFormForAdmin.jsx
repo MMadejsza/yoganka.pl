@@ -218,7 +218,7 @@ function NewCustomerFormForAdmin() {
         formType={formType}
         type='select'
         options={usersOptionsList.map(userObj => ({
-          label: `(ID: ${userObj.userId}) ${userObj.email}`,
+          label: `(Id: ${userObj.userId}) ${userObj.email}`,
           value: userObj.userId,
         }))}
         id='user'

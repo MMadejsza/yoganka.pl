@@ -19,7 +19,7 @@ function DetailsListCustomer({
 
   const title = isUserAccountPage
     ? `Dane kontaktowe:`
-    : `Uczestnik (ID ${customerData.customerId}):`;
+    : `Uczestnik (Id ${customerData.customerId}):`;
 
   const details = [{ label: 'Numer telefonu:', content: customerData.phone }];
   if (!isUserAccountPage) {
@@ -45,6 +45,7 @@ function DetailsListCustomer({
 
   let content = isEditing ? (
     <DetailsFormCustomer
+      title={title}
       customerData={customerData}
       customerAccessed={customerAccessed}
       adminAccessed={adminAccessed}

@@ -47,7 +47,7 @@ function ViewAccountPayments({ data }) {
     >
       <ModalTable
         headers={[
-          'ID',
+          'Id',
           'Data',
           'Zajęcia',
           'Kwota całkowita',

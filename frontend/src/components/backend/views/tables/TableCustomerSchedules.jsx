@@ -8,7 +8,7 @@ function TableCustomerSchedules({ customerStats, classModifier, altTitle }) {
       new Date(`${schedule.date}T${schedule.startTime}:00.000Z`) <= new Date()
   );
 
-  const headers = ['ID', 'Data', 'Dzień', 'Godzina', 'Lokacja', 'Typ', 'Nazwa'];
+  const headers = ['Id', 'Data', 'Dzień', 'Godzina', 'Lokacja', 'Typ', 'Nazwa'];
   const keys = [
     'scheduleId',
     'date',

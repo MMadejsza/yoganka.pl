@@ -6,7 +6,7 @@ function DetailsListUser({ userData, customerView, isUserAccountPage }) {
 
   const title = isUserAccountPage
     ? `Dane konta:`
-    : `Konto (ID ${userData.userId}):`;
+    : `Konto (Id ${userData.userId}):`;
 
   const details = [
     {

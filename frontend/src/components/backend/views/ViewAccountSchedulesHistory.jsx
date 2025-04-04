@@ -37,7 +37,7 @@ function ViewAccountSchedulesHistory({ data }) {
   );
 
   const headers = [
-    'ID',
+    'Id',
     'Data',
     'Dzień',
     'Godzina',

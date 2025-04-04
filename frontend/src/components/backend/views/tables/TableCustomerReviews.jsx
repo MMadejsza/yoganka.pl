@@ -8,7 +8,7 @@ function TableCustomerReviews({ reviews, placement }) {
   console.log(`TableCustomerReviews reviews `, reviews);
 
   const headers = [
-    'ID',
+    'Id',
     'Data wystawienia',
     'Zajęcia',
     'Termin',

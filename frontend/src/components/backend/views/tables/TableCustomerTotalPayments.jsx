@@ -40,7 +40,7 @@ function TableCustomerTotalPayments({ data }) {
   // console.log(`✅ customerStats: `, customerStats);
 
   const headers = [
-    'ID',
+    'Id',
     'Data',
     'Zajęcia',
     'Kwota całkowita',

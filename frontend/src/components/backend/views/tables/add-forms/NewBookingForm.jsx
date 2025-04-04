@@ -137,9 +137,9 @@ function NewBookingForm() {
         formType={formType}
         type='select'
         options={customersOptionsList.map(customerObj => ({
-          key: customerObj.ID,
-          label: `(ID: ${customerObj.ID}) ${customerObj['Imię Nazwisko']}`,
-          value: customerObj.ID,
+          key: customerObj.Id,
+          label: `(Id: ${customerObj.Id}) ${customerObj['Imię Nazwisko']}`,
+          value: customerObj.Id,
         }))}
         id='customer'
         name='customerId'

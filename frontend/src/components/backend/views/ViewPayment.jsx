@@ -31,7 +31,7 @@ function ViewPayment({ data, isUserAccountPage }) {
   console.log(`ViewPayment schedules`, schedules);
   return (
     <>
-      <h1 className='user-container__user-title modal__title'>{`Płatność (ID: ${
+      <h1 className='user-container__user-title modal__title'>{`Płatność (Id: ${
         payment.paymentId
       }${payment.performedBy == 'Admin' ? '- Manual by Admin' : ''})`}</h1>
       {!isUserAccountPage && (
