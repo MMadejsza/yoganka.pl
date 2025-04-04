@@ -1,15 +1,14 @@
 @use 'sass:map';
 @use 'sass:color';
 @use 'sass:math';
-@use '_global_variables-templates' as var;
-@use '_global_mixins-keyframes' as mixin;
+@use './utils/' as *;
 
 .camps-intro {
   position: relative;
   grid-area: header;
   // min-height: 1150px;
 
-  @include mixin.flex(column, space-between);
+  @include flex(column, space-between);
   flex-wrap: wrap;
   gap: 55vh;
 
@@ -29,8 +28,8 @@
     width: 100%;
     margin-top: 7rem;
     padding: 1rem;
-    text-shadow: map.get(var.$shadows, active-text-icons-shadow);
-    background-color: rgba(map.get(var.$colors, base), 0.75);
+    text-shadow: map.get($shadows, active-text-icons-shadow);
+    background-color: rgba(map.get($colors, base), 0.75);
   }
   &__welcome-desc {
     margin-bottom: 8rem;
@@ -40,8 +39,8 @@
     max-width: 100vw;
     white-space: pre-line;
     font-size: 1.7rem;
-    background-color: rgba(map.get(var.$colors, base), 1);
-    box-shadow: map.get(var.$shadows, transitive-box-shadow);
+    background-color: rgba(map.get($colors, base), 1);
+    box-shadow: map.get($shadows, transitive-box-shadow);
   }
   .about__bio--description {
     text-align: center;
@@ -57,15 +56,15 @@
   $opacity-delay-end: $opacity-timing * 0;
 
   grid-area: about;
-  background-color: map.get(var.$colors, nav);
-  box-shadow: map.get(var.$shadows, transitive-box-shadow-nav);
+  background-color: map.get($colors, nav);
+  box-shadow: map.get($shadows, transitive-box-shadow-nav);
   z-index: 2;
 
   &__header {
     margin-bottom: 3rem;
   }
   &__bullets-container {
-    @include mixin.flex(row, center);
+    @include flex(row, center);
     flex-wrap: wrap;
     gap: 2rem;
     cursor: pointer;
@@ -74,7 +73,7 @@
     flex-basis: 90%;
     position: relative;
     z-index: 1;
-    border-radius: map.get(var.$sizes, border-radius);
+    border-radius: map.get($sizes, border-radius);
     &:hover,
     &:focus {
       span.click-suggestion {
@@ -84,7 +83,7 @@
   }
   &__bullet-container:hover &__bullet,
   &__bullet-container:focus &__bullet {
-    box-shadow: map.get(var.$shadows, tile-shadow-reverse);
+    box-shadow: map.get($shadows, tile-shadow-reverse);
     transform: scale($target-scale) rotateX($target-rotation);
   }
 
@@ -102,9 +101,9 @@
       ' s  s'
       ' h  h';
     padding: $padding;
-    background-color: map.get(var.$colors, base);
-    border-radius: map.get(var.$sizes, border-radius);
-    box-shadow: map.get(var.$shadows, tile-shadow);
+    background-color: map.get($colors, base);
+    border-radius: map.get($sizes, border-radius);
+    box-shadow: map.get($shadows, tile-shadow);
     transition:
       transform $rotation-timing ease-in-out,
       box-shadow $rotation-timing ease-in-out,
@@ -171,8 +170,8 @@
 
   &__symbol-container {
     grid-area: s;
-    color: map.get(var.$colors, tile-title);
-    text-shadow: map.get(var.$shadows, active-text-icons-shadow);
+    color: map.get($colors, tile-title);
+    text-shadow: map.get($shadows, active-text-icons-shadow);
     border-radius: 50%;
     display: grid;
     opacity: 1;
@@ -188,17 +187,17 @@
 .camps-benefits + section.offer {
   margin-top: 6rem;
   grid-gap: 0rem;
-  @include mixin.flex(row, center, center);
+  @include flex(row, center, center);
   flex-wrap: wrap;
 
-  background-color: map.get(var.$colors, base);
-  box-shadow: map.get(var.$shadows, transitive-box-shadow);
+  background-color: map.get($colors, base);
+  box-shadow: map.get($shadows, transitive-box-shadow);
 
   #wyjazdy {
     // grid-column: 1/-1;
   }
   .offer-type {
-    @include mixin.flex(row, center);
+    @include flex(row, center);
     flex-wrap: wrap;
   }
   .offer-type__header {
@@ -230,7 +229,7 @@
     justify-content: flex-start;
   }
   &__name {
-    text-shadow: map.get(var.$shadows, active-text-icons-shadow);
+    text-shadow: map.get($shadows, active-text-icons-shadow);
     font-size: 2.2rem;
   }
   &__productName {
@@ -334,7 +333,7 @@
   }
   .camps-benefits {
     &__bullets-container {
-      @include mixin.flex(row);
+      @include flex(row);
 
       gap: 4rem;
     }
@@ -394,7 +393,7 @@
   .camps-intro {
     grid-column: 1 / -1;
     margin-top: 7rem;
-    @include mixin.flex(row, center);
+    @include flex(row, center);
     flex-wrap: wrap;
     background-size: 1000px;
     background-position: 50% 25%;
@@ -434,7 +433,7 @@
   .galery__container {
     position: relative;
     margin-top: 5rem;
-    @include mixin.flex(row, space-evenly, space-evenly);
+    @include flex(row, space-evenly, space-evenly);
     flex-wrap: wrap;
     gap: 2rem;
     overflow: visible;

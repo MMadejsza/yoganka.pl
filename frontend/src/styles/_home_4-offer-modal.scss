@@ -1,10 +1,9 @@
 @use 'sass:map';
 @use 'sass:color';
-@use '_global_variables-templates' as var;
-@use '_global_mixins-keyframes' as mixin;
+@use './utils/' as *;
 
 %action-btn {
-  @include mixin.flex(row, center, center);
+  @include flex(row, center, center);
   font-family: 'EB Garamond', serif;
   flex-wrap: wrap;
   gap: 1rem;
@@ -17,14 +16,14 @@
   font-weight: bold;
   text-transform: uppercase;
   text-decoration: none;
-  color: map.get(var.$colors, accent-text);
+  color: map.get($colors, accent-text);
 
   cursor: pointer;
-  background-color: map.get(var.$colors, accent-bcg);
-  border-radius: map.get(var.$sizes, border-radius);
-  box-shadow: map.get(var.$shadows, active-text-icons-shadow);
+  background-color: map.get($colors, accent-bcg);
+  border-radius: map.get($sizes, border-radius);
+  box-shadow: map.get($shadows, active-text-icons-shadow);
   overflow: hidden;
-  transition: map.get(var.$behavior, base-transition);
+  transition: map.get($behavior, base-transition);
 }
 
 .past {
@@ -38,7 +37,7 @@
     z-index: 1;
 
     background-color: rgba(
-      color.adjust(map.get(var.$colors, tile), $lightness: -13%),
+      color.adjust(map.get($colors, tile), $lightness: -13%),
       0.5
     );
     // to let interact with the element (not pseudo one)
@@ -64,7 +63,7 @@
     position: relative;
   }
   .offer-type {
-    @include mixin.flex(row, center);
+    @include flex(row, center);
     flex-wrap: wrap;
     gap: 2.5rem 1.5rem;
 
@@ -75,7 +74,7 @@
       font-size: 3rem;
       line-height: 6rem;
       text-transform: uppercase;
-      color: map.get(var.$colors, tile-title);
+      color: map.get($colors, tile-title);
     }
 
     &--events {
@@ -148,13 +147,13 @@
   padding: 1.5rem 1rem;
   z-index: 9;
 
-  background-color: rgba(map.get(var.$colors, tile), 0.95);
+  background-color: rgba(map.get($colors, tile), 0.95);
   border: none;
-  border-radius: map.get(var.$sizes, border-radius);
-  box-shadow: map.get(var.$shadows, active-text-icons-shadow);
+  border-radius: map.get($sizes, border-radius);
+  box-shadow: map.get($shadows, active-text-icons-shadow);
   opacity: 0;
 
-  transition: map.get(var.$behavior, base-transition);
+  transition: map.get($behavior, base-transition);
   &::backdrop {
     backdrop-filter: blur(10px);
   }
@@ -164,14 +163,14 @@
     min-height: max-content;
     max-height: 92vh;
     transform: translate(-50%, -50%) scale(1);
-    transition: map.get(var.$behavior, base-transition);
+    transition: map.get($behavior, base-transition);
   }
   &.fade-out {
     opacity: 0;
     width: 0vw;
     max-height: 0vh;
     transform: translate(-50%, -50%) scale(0.95);
-    transition: map.get(var.$behavior, base-transition);
+    transition: map.get($behavior, base-transition);
   }
   // full name for specificity required by i in font awesome
   .modal__icon {
@@ -183,7 +182,7 @@
     font-size: $size;
     line-height: $size;
     text-align: center;
-    color: map.get(var.$colors, accent-bcg);
+    color: map.get($colors, accent-bcg);
   }
 
   &__x-btn {
@@ -196,12 +195,12 @@
 
   &__close-btn {
     font-size: 48px;
-    text-shadow: map.get(var.$shadows, active-text-icons-shadow);
+    text-shadow: map.get($shadows, active-text-icons-shadow);
 
     &:hover {
       transform: scale(1.05) translateY(0.5rem);
-      color: map.get(var.$colors, accent-bcg);
-      text-shadow: var.$active-box-shadow;
+      color: map.get($colors, accent-bcg);
+      text-shadow: $active-box-shadow;
     }
   }
 
@@ -212,7 +211,7 @@
     grid-gap: 2.5rem;
     justify-items: center;
 
-    border-radius: map.get(var.$sizes, border-radius);
+    border-radius: map.get($sizes, border-radius);
 
     &--offer {
       max-height: 89dvh;
@@ -233,21 +232,21 @@
 
   & .glide {
     &::before {
-      @include mixin.slider-shade-wing('left', map.get(var.$colors, tile));
+      @include slider-shade-wing('left', map.get($colors, tile));
     }
     &::after {
-      @include mixin.slider-shade-wing('right', map.get(var.$colors, tile));
+      @include slider-shade-wing('right', map.get($colors, tile));
     }
   }
 
   &__header {
     padding: 0 1rem;
 
-    @include mixin.flex(column, center, $gap: 1rem);
+    @include flex(column, center, $gap: 1rem);
   }
 
   &__list {
-    @include mixin.flex(column, space-evenly, start);
+    @include flex(column, space-evenly, start);
     flex-wrap: wrap;
 
     font-size: 2rem;
@@ -260,7 +259,7 @@
   }
 
   &__li {
-    @include mixin.flex($gap: 2rem);
+    @include flex($gap: 2rem);
     white-space: pre-line;
 
     &--at-glance {
@@ -299,7 +298,7 @@
     padding-bottom: 0;
     width: 100%;
 
-    @include mixin.flex($justify: center, $gap: 1rem);
+    @include flex($justify: center, $gap: 1rem);
     flex-flow: row wrap;
   }
 
@@ -324,9 +323,9 @@
       height: 2.5rem;
       line-height: 2.5rem;
       font-size: 1.2rem;
-      color: map.get(var.$colors, tile-text-muted);
+      color: map.get($colors, tile-text-muted);
       background-color: transparent;
-      border: 1px solid map.get(var.$colors, accent-bcg);
+      border: 1px solid map.get($colors, accent-bcg);
       opacity: 0.6;
     }
 
@@ -346,7 +345,7 @@
   }
   &__summary {
     grid-column: 1 /-1;
-    @include mixin.flex(row, center, flex-start, 2rem);
+    @include flex(row, center, flex-start, 2rem);
     flex-wrap: wrap;
   }
 }

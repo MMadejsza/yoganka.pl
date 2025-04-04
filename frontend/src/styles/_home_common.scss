@@ -1,7 +1,6 @@
 @use 'sass:map';
 @use 'sass:color';
-@use '_global_variables-templates' as var;
-@use '_global_mixins-keyframes' as mixin;
+@use './utils/' as *;
 
 //! COMMON BLOCKS
 * {
@@ -13,16 +12,16 @@
 
 html {
   --scale: 1; // Initial scale to be changed by user
-  --section-padding-y: #{map.get(var.$sizes, section-padding-y)};
+  --section-padding-y: #{map.get($sizes, section-padding-y)};
 
   scroll-behavior: smooth;
   font-family: 'EB Garamond', serif;
   font-weight: 400;
   font-size: calc(var(--scale) * 8.5px);
   text-align: center;
-  color: map.get(var.$colors, base-text);
+  color: map.get($colors, base-text);
 
-  background-color: map.get(var.$colors, base);
+  background-color: map.get($colors, base);
 }
 body {
   margin: 0 auto;
@@ -64,7 +63,7 @@ img {
 a {
   color: inherit;
   cursor: pointer;
-  transition: map.get(var.$behavior, base-transition);
+  transition: map.get($behavior, base-transition);
 }
 i {
   --fa-animation-iteration-count: 2;
@@ -86,7 +85,7 @@ button {
   font-size: 4rem;
   line-height: 6rem;
   text-transform: uppercase;
-  color: map.get(var.$colors, tile-title);
+  color: map.get($colors, tile-title);
 }
 
 span.click-suggestion {
@@ -95,8 +94,8 @@ span.click-suggestion {
   transform: translateX(-50%);
   bottom: 1%;
   z-index: 2;
-  color: rgba(map.get(var.$colors, tile-title), 0.25);
-  transition: map.get(var.$behavior, base-transition);
+  color: rgba(map.get($colors, tile-title), 0.25);
+  transition: map.get($behavior, base-transition);
 }
 .stopScroll {
   overflow: hidden;
@@ -108,13 +107,13 @@ span.click-suggestion {
 .modal__modal-body > section:not(:first-of-type),
 footer {
   padding: 0 var(--section-padding-y) 2rem;
-  box-shadow: map.get(var.$shadows, section-shadow);
+  box-shadow: map.get($shadows, section-shadow);
 }
 * input {
   outline: none;
   border: none;
   cursor: auto;
-  background-color: map.get(var.$colors, base);
+  background-color: map.get($colors, base);
 }
 // page
 .error {
@@ -132,9 +131,9 @@ footer {
   padding: 1.5rem;
   text-align: center;
   font-size: 2rem;
-  border-radius: map.get(var.$sizes, border-radius);
-  box-shadow: map.get(var.$shadows, box-shadow);
-  @include mixin.flex(row, center, center);
+  border-radius: map.get($sizes, border-radius);
+  box-shadow: map.get($shadows, box-shadow);
+  @include flex(row, center, center);
   flex-wrap: wrap;
   gap: 1.5rem;
 
@@ -147,8 +146,8 @@ footer {
     background-color: rgba(76, 175, 80, 0.25);
   }
   &--neutral {
-    color: map.get(var.$colors, tile-title);
-    background-color: rgba(map.get(var.$colors, nav), 0.2);
+    color: map.get($colors, tile-title);
+    background-color: rgba(map.get($colors, nav), 0.2);
   }
   &--small {
     margin-top: 1.5rem;

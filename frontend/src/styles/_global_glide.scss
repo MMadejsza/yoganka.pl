@@ -1,6 +1,5 @@
 @use 'sass:map';
-@use '_global_variables-templates' as var;
-@use '_global_mixins-keyframes' as mixin;
+@use './utils/' as *;
 
 // Import of style moved to index.js due to troubles with proper vite bundling
 
@@ -20,11 +19,11 @@
 
   &::before {
     @extend %slider-shade-overlay;
-    @include mixin.slider-shade-wing('left', map.get(var.$colors, base));
+    @include slider-shade-wing('left', map.get($colors, base));
   }
   &::after {
     @extend %slider-shade-overlay;
-    @include mixin.slider-shade-wing('right', map.get(var.$colors, base));
+    @include slider-shade-wing('right', map.get($colors, base));
   }
   &-container {
     grid-column: 1 / -1;
@@ -37,7 +36,7 @@
     min-height: 33vh;
   }
   &--comp .glide__track {
-    border-radius: map.get(var.$sizes, border-radius);
+    border-radius: map.get($sizes, border-radius);
   }
 
   &__track {
@@ -52,28 +51,28 @@
     justify-content: space-around;
   }
   &__slide {
-    border-radius: map.get(var.$sizes, border-radius);
+    border-radius: map.get($sizes, border-radius);
     display: flex;
     justify-content: center;
   }
   &__bullets {
     width: max-content;
     max-width: 95%;
-    @include mixin.flex(row, center);
+    @include flex(row, center);
     flex-wrap: wrap;
     gap: 1rem 0;
     bottom: 0;
     padding: 0.5rem;
     border-radius: 50px;
-    background-color: rgba(map.get(var.$colors, nav), 0.7);
+    background-color: rgba(map.get($colors, nav), 0.7);
   }
   &__bullet {
     width: 1rem;
     height: 1rem;
-    background-color: map.get(var.$colors, base);
+    background-color: map.get($colors, base);
 
     &--active {
-      background-color: map.get(var.$colors, accent-bcg);
+      background-color: map.get($colors, accent-bcg);
     }
   }
   &__arrow {
@@ -82,8 +81,8 @@
     z-index: 5;
 
     font-size: 3rem;
-    color: map.get(var.$colors, accent-bcg);
-    border-radius: map.get(var.$sizes, border-radius);
+    color: map.get($colors, accent-bcg);
+    border-radius: map.get($sizes, border-radius);
 
     &--left {
       left: 1rem;

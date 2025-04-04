@@ -1,20 +1,19 @@
 @use 'sass:map';
-@use '_global_variables-templates' as var;
-@use '_global_mixins-keyframes' as mixin;
+@use './utils/' as *;
 
 //! FOOTER
 .footer {
   grid-area: footer;
   padding: 0rem 1rem 2rem 1rem;
   font-size: 1.7rem;
-  color: map.get(var.$colors, tile-text-muted);
+  color: map.get($colors, tile-text-muted);
 
-  background-color: rgba(map.get(var.$colors, nav), 0.8);
-  box-shadow: map.get(var.$shadows, tile-shadow);
-  border-top-left-radius: map.get(var.$sizes, border-radius);
-  border-top-right-radius: map.get(var.$sizes, border-radius);
+  background-color: rgba(map.get($colors, nav), 0.8);
+  box-shadow: map.get($shadows, tile-shadow);
+  border-top-left-radius: map.get($sizes, border-radius);
+  border-top-right-radius: map.get($sizes, border-radius);
 
-  @include mixin.flex(column, space-evenly, center, 1rem);
+  @include flex(column, space-evenly, center, 1rem);
 
   &__logo {
     width: 45vw;
@@ -31,14 +30,14 @@
   // no & for specificity
   .footer__social-link {
     position: relative;
-    color: map.get(var.$colors, accent-bcg);
+    color: map.get($colors, accent-bcg);
   }
   &__social-icon {
     font-size: 3.5rem;
   }
 
   &__company-details {
-    @include mixin.flex(column, space-evenly, $gap: 1rem);
+    @include flex(column, space-evenly, $gap: 1rem);
 
     & a {
       font-size: 2.2rem;
@@ -47,7 +46,7 @@
   }
 
   &__socials {
-    @include mixin.flex(row, center, center, 3rem);
+    @include flex(row, center, center, 3rem);
   }
 
   &__qr {
@@ -56,12 +55,12 @@
     top: 25px;
     right: 0;
     opacity: 0;
-    transition: map.get(var.$behavior, base-transition);
+    transition: map.get($behavior, base-transition);
   }
 
   &__qr-image {
-    transition: map.get(var.$behavior, base-transition);
-    border-radius: map.get(var.$sizes, border-radius);
+    transition: map.get($behavior, base-transition);
+    border-radius: map.get($sizes, border-radius);
   }
 
   &__legal {
@@ -69,6 +68,6 @@
   }
 
   &__credit-link {
-    color: map.get(var.$colors, tile-text-muted);
+    color: map.get($colors, tile-text-muted);
   }
 }

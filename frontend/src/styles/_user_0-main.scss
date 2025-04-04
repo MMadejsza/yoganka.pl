@@ -1,8 +1,7 @@
 @use 'sass:map';
 @use 'sass:color';
 @use 'sass:math';
-@use '_global_variables-templates' as var;
-@use '_global_mixins-keyframes' as mixin;
+@use './utils/' as *;
 
 @media (min-width: 1025px) or (min-width: 1400px) {
   .dimmed {
@@ -14,19 +13,19 @@
       text-shadow: none;
     }
     &:not(.form-action-btn) {
-      color: rgba(map.get(var.$colors, accent-bcg), 0.5);
+      color: rgba(map.get($colors, accent-bcg), 0.5);
     }
   }
   .userTabs {
     margin: 4rem 0;
-    @include mixin.flex(row, center);
+    @include flex(row, center);
     flex-wrap: wrap;
     gap: 3rem;
     &__item {
       padding: 0.2rem 3rem;
-      border-radius: map.get(var.$sizes, border-radius);
-      background-color: rgba(map.get(var.$colors, nav), 0.3);
-      box-shadow: map.get(var.$shadows, tile-shadow);
+      border-radius: map.get($sizes, border-radius);
+      background-color: rgba(map.get($colors, nav), 0.3);
+      box-shadow: map.get($shadows, tile-shadow);
     }
     &__link {
       line-height: 3.5rem;
@@ -47,7 +46,7 @@
   .user-container__section-record {
     width: 100%;
 
-    @include mixin.flex(row, space-between, center);
+    @include flex(row, space-between, center);
     flex-wrap: wrap;
     // &-label.password {
     // 	flex-basis: 100%;
@@ -89,10 +88,10 @@
     line-height: 3rem;
     height: 3rem;
     font-family: inherit;
-    border-radius: map.get(var.$sizes, border-radius);
-    background-color: rgba(map.get(var.$colors, base), 1);
+    border-radius: map.get($sizes, border-radius);
+    background-color: rgba(map.get($colors, base), 1);
     border: none;
     outline: none;
-    transition: map.get(var.$behavior, base-transition);
+    transition: map.get($behavior, base-transition);
   }
 }

@@ -1,8 +1,8 @@
 @use 'sass:map';
 @use 'sass:color';
 @use 'sass:math';
-@use '_global_variables-templates' as var;
-@use '_global_mixins-keyframes' as mixin;
+@use './utils/' as *;
+
 .wrapper.b2b {
   grid-template-areas:
     'header header header header header'
@@ -46,7 +46,7 @@
       margin-bottom: 2rem;
     }
     .modal-checklist {
-      @include mixin.flex(column, center, center);
+      @include flex(column, center, center);
     }
     .modal-checklist__list {
       width: 95%;
@@ -56,7 +56,7 @@
     .modal-checklist__li {
       font-size: 2.5rem;
       font-weight: 500;
-      color: map.get(var.$colors, tile-title);
+      color: map.get($colors, tile-title);
     }
     .modal-checklist__icon {
       color: #1c7993;
@@ -75,7 +75,7 @@
       font-size: 2.2rem;
       text-align: center;
 
-      @include mixin.flex(row, center, center);
+      @include flex(row, center, center);
       flex-wrap: wrap;
       gap: 0 2rem;
     }

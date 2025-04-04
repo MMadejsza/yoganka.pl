@@ -1,10 +1,9 @@
 @use 'sass:map';
 @use 'sass:color';
-@use '_global_variables-templates' as var;
-@use '_global_mixins-keyframes' as mixin;
+@use './utils/' as *;
 
 %action-btn {
-  @include mixin.flex(row, center, center);
+  @include flex(row, center, center);
   flex-wrap: wrap;
   gap: 1rem;
   width: 95%;
@@ -16,18 +15,18 @@
   font-weight: bold;
   text-transform: uppercase;
   text-decoration: none;
-  color: map.get(var.$colors, accent-text);
+  color: map.get($colors, accent-text);
 
   cursor: pointer;
-  background-color: map.get(var.$colors, accent-bcg);
-  border-radius: map.get(var.$sizes, border-radius);
-  box-shadow: map.get(var.$shadows, active-text-icons-shadow);
+  background-color: map.get($colors, accent-bcg);
+  border-radius: map.get($sizes, border-radius);
+  box-shadow: map.get($shadows, active-text-icons-shadow);
   overflow: hidden;
-  transition: map.get(var.$behavior, base-transition);
+  transition: map.get($behavior, base-transition);
 }
 
 .clickable {
-  box-shadow: map.get(var.$shadows, tile-shadow);
+  box-shadow: map.get($shadows, tile-shadow);
   position: relative;
 
   &:not(.offer-type__more.clickable):after {
@@ -41,11 +40,11 @@
 
     font-size: 1rem;
     letter-spacing: 1px;
-    color: map.get(var.$colors, tile-text-muted);
+    color: map.get($colors, tile-text-muted);
     background: linear-gradient(
       to bottom,
       transparent,
-      color.scale(map.get(var.$colors, tile), $lightness: -13%)
+      color.scale(map.get($colors, tile), $lightness: -13%)
     );
 
     display: flex;
@@ -68,14 +67,14 @@
   gap: 2rem;
 
   padding: 2.5rem 1rem;
-  background-color: map.get(var.$colors, tile);
-  border-radius: map.get(var.$sizes, border-radius);
-  box-shadow: map.get(var.$shadows, box-shadow);
+  background-color: map.get($colors, tile);
+  border-radius: map.get($sizes, border-radius);
+  box-shadow: map.get($shadows, box-shadow);
   overflow: hidden;
-  transition: map.get(var.$behavior, base-transition);
+  transition: map.get($behavior, base-transition);
 
   &.clickable {
-    box-shadow: map.get(var.$shadows, tile-shadow);
+    box-shadow: map.get($shadows, tile-shadow);
   }
 
   &--classes {
@@ -89,7 +88,7 @@
     max-width: 80%;
     aspect-ratio: 1/1;
     margin-bottom: 1.5rem;
-    border-radius: map.get(var.$sizes, border-radius);
+    border-radius: map.get($sizes, border-radius);
 
     &--event-modal {
       max-width: 50%;
@@ -111,24 +110,24 @@
     font-weight: 500;
     white-space: pre-line;
     letter-spacing: 1px;
-    color: map.get(var.$colors, tile-title);
+    color: map.get($colors, tile-title);
   }
 
   &__date {
-    color: map.get(var.$colors, tile-text);
+    color: map.get($colors, tile-text);
   }
 
   &__location {
     font-size: 1.9rem;
     font-weight: 400;
     white-space: pre-line;
-    color: map.get(var.$colors, tile-text-muted);
+    color: map.get($colors, tile-text-muted);
   }
 
   &__desc {
     font-size: 1.9rem;
     white-space: pre-line;
-    color: map.get(var.$colors, tile-text-muted);
+    color: map.get($colors, tile-text-muted);
   }
 
   &__btn {

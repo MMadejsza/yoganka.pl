@@ -1,8 +1,7 @@
 @use 'sass:map';
 @use 'sass:color';
 @use 'sass:math';
-@use '_global_variables-templates' as var;
-@use '_global_mixins-keyframes' as mixin;
+@use './utils/' as *;
 
 .loginBox {
   grid-column: 1/-1;
@@ -14,15 +13,15 @@
   margin: 8rem 0;
 
   padding: 2%;
-  border-radius: map.get(var.$sizes, border-radius);
-  background-color: rgba(map.get(var.$colors, nav), 0.5);
-  box-shadow: map.get(var.$shadows, tile-shadow);
-  @include mixin.flex(column, space-evenly, center);
+  border-radius: map.get($sizes, border-radius);
+  background-color: rgba(map.get($colors, nav), 0.5);
+  box-shadow: map.get($shadows, tile-shadow);
+  @include flex(column, space-evenly, center);
   gap: 2.5rem;
 
   form {
     width: 100%;
-    @include mixin.flex(column, space-evenly, center);
+    @include flex(column, space-evenly, center);
     gap: 1.5rem;
   }
 
@@ -31,7 +30,7 @@
       align-self: center;
       line-height: 3rem;
       font-size: 1.8rem;
-      @include mixin.flex(row, space-evenly, center);
+      @include flex(row, space-evenly, center);
 
       // & > * {
       // 	display: block;
@@ -52,9 +51,9 @@
 h1,
 h2,
 h3 {
-  color: map.get(var.$colors, tile-title);
+  color: map.get($colors, tile-title);
   font-size: 2.5rem;
-  transition: map.get(var.$behavior, base-transition);
+  transition: map.get($behavior, base-transition);
 
   &.form__title {
     margin-bottom: 2rem;
@@ -63,7 +62,7 @@ h3 {
 
 .input-pair {
   width: 70%;
-  @include mixin.flex(column, space-evenly, flex-start);
+  @include flex(column, space-evenly, flex-start);
   gap: 0.5rem;
 
   label {
@@ -71,7 +70,7 @@ h3 {
   }
 
   &--checkbox {
-    @include mixin.flex(row, center, center);
+    @include flex(row, center, center);
     gap: 2rem;
 
     line-height: 4rem;
@@ -83,15 +82,15 @@ input {
   padding-left: 1.5rem;
   line-height: 3rem;
   font-family: inherit;
-  border-radius: map.get(var.$sizes, border-radius);
-  background-color: rgba(map.get(var.$colors, base), 1);
+  border-radius: map.get($sizes, border-radius);
+  background-color: rgba(map.get($colors, base), 1);
   border: none;
   outline: none;
-  transition: map.get(var.$behavior, base-transition);
+  transition: map.get($behavior, base-transition);
 
   &:hover:not([disabled]),
   &:focus:not([type='checkbox']) {
-    box-shadow: map.get(var.$shadows, active-box-shadow);
+    box-shadow: map.get($shadows, active-box-shadow);
   }
 
   &[disabled] {
@@ -104,9 +103,9 @@ input {
     padding: 0.1rem;
 
     font-size: 2rem;
-    border-radius: map.get(var.$sizes, border-radius);
+    border-radius: map.get($sizes, border-radius);
 
-    @include mixin.flex(row, center, center);
+    @include flex(row, center, center);
   }
   &.settings-form__font-input {
     width: min-content;
@@ -124,7 +123,7 @@ input {
   line-height: 150%;
   font-size: 1.5rem;
   text-align: left;
-  @include mixin.flex(column);
+  @include flex(column);
   opacity: 0.6;
 
   span {
@@ -135,7 +134,7 @@ input {
   }
 
   &__msg {
-    @include mixin.flex(row, flex-start, center);
+    @include flex(row, flex-start, center);
     gap: 1rem;
 
     &.msg-error {
@@ -150,7 +149,7 @@ section.login,
 section.register {
   width: 100%;
   height: 40%;
-  @include mixin.flex(row, space-evenly, center);
+  @include flex(row, space-evenly, center);
   flex-wrap: wrap;
   gap: 2.5rem;
 }

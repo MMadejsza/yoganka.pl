@@ -1,6 +1,5 @@
 @use 'sass:map';
-@use '_global_variables-templates' as var;
-@use '_global_mixins-keyframes' as mixin;
+@use './utils/' as *;
 
 //! PARTNERS
 .partners {
@@ -8,15 +7,15 @@
   overflow: hidden;
 
   &__gallery {
-    background-color: map.get(var.$colors, tile);
+    background-color: map.get($colors, tile);
 
-    @include mixin.flex($justify: space-around, $align: center, $gap: 2rem);
+    @include flex($justify: space-around, $align: center, $gap: 2rem);
 
-    @include mixin.animation(15s, slide, infinite, linear);
+    @include animation(15s, slide, infinite, linear);
   }
 
   &__gallery-slide {
-    @include mixin.flex($align: center);
+    @include flex($align: center);
     position: relative;
     font-size: 0;
 
@@ -26,12 +25,12 @@
 
     &::before {
       @extend %slider-shade-overlay;
-      @include mixin.slider-shade-wing('left', map.get(var.$colors, base));
+      @include slider-shade-wing('left', map.get($colors, base));
     }
 
     &::after {
       @extend %slider-shade-overlay;
-      @include mixin.slider-shade-wing('right', map.get(var.$colors, base));
+      @include slider-shade-wing('right', map.get($colors, base));
     }
   }
 
@@ -41,9 +40,9 @@
     max-height: 225px;
     padding: 0;
 
-    border-radius: map.get(var.$sizes, border-radius);
+    border-radius: map.get($sizes, border-radius);
 
-    @include mixin.flex($justify: center, $align: center);
+    @include flex($justify: center, $align: center);
 
     &:last-child {
       margin-right: 2.5rem;
@@ -56,7 +55,7 @@
     object-fit: contain;
 
     filter: grayscale(1);
-    transition: map.get(var.$behavior, base-transition);
+    transition: map.get($behavior, base-transition);
   }
   .glide__bullets {
     bottom: 20%;

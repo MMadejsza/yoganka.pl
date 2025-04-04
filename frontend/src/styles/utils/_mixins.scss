@@ -1,0 +1,135 @@
+@use 'sass:map';
+@use '_variables' as *;
+
+@keyframes slide {
+  from {
+    transform: translate(0);
+  }
+
+  to {
+    transform: translate(-100%);
+  }
+}
+@keyframes benefit {
+  0% {
+    transform: scale(1) rotateX(0deg);
+  }
+  25% {
+    transform: scale(1.1) rotateX(0deg);
+  }
+
+  50% {
+    transform: scale(1.1) rotateX(180deg);
+  }
+  // 55% {
+  // 	transform: scale(1.1) rotateX(180deg);
+  // }
+
+  75% {
+    transform: scale(1) rotateX(180deg);
+  }
+
+  100% {
+    transform: scale(1) rotateX(180deg);
+  }
+}
+
+@keyframes highlights {
+  0% {
+    box-shadow: map.get($shadows, tile-shadow);
+  }
+
+  50% {
+    box-shadow:
+      map.get($colors, accent-bcg) -30px 0px 40px,
+      rgba(0, 0, 0, 0.22) 0px 15px 12px,
+      rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+      rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
+      rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+  }
+  55% {
+    box-shadow:
+      map.get($colors, accent-bcg) -30px 0px 40px,
+      rgba(0, 0, 0, 0.22) 0px 15px 12px,
+      rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+      rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
+      rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+  }
+
+  100% {
+    box-shadow: map.get($shadows, tile-shadow);
+  }
+}
+
+@mixin font(
+  $name,
+  $format: 'truetype',
+  $size: null,
+  $weight: null,
+  $style: null
+) {
+  $path: '';
+
+  @if $name == 'bh' {
+    $path: url('/fonts/Beauty-Swing.otf');
+  } @else if $name == 'by Yoganka' {
+    $path: url('/fonts/PrimaSansBT-Roman.otf');
+  } @else if $name == 'yoganka2' {
+    $path: url('/fonts/BLUDHAVEN.ttf');
+  }
+
+  @if $path == '' {
+    @warn "Font name unknown: #{$name}. No path.";
+  } @else {
+    @font-face {
+      font-family:
+        #{$name},
+        serif;
+      src: url(#{$path}) format('#{$format}');
+    }
+
+    @if $size {
+      font-size: $size;
+    }
+    @if $weight {
+      font-weight: $weight;
+    }
+    @if $style {
+      font-style: $style;
+    }
+  }
+}
+
+@mixin slider-shade-wing($direction, $color) {
+  @if $direction == 'left' {
+    left: calc(var(--section-padding-y) * -1);
+  } @else if $direction == 'right' {
+    right: calc(var(--section-padding-y) * -1);
+  }
+  background: linear-gradient(to #{$direction}, transparent, $color);
+}
+
+@mixin animation($duration, $keyframe, $looping: infinite, $behavior: linear) {
+  animation: $duration $keyframe $looping $behavior;
+}
+
+@mixin flex($direction: null, $justify: null, $align: null, $gap: null) {
+  display: flex;
+  @if $direction {
+    flex-direction: $direction;
+  }
+  @if $justify {
+    justify-content: $justify;
+  }
+  @if $align {
+    align-items: $align;
+  }
+  @if $gap {
+    gap: $gap;
+  }
+}
+
+@mixin offset-burger($offset) {
+  top: $offset * var(--bar-width);
+  right: $offset * var(--bar-width);
+}

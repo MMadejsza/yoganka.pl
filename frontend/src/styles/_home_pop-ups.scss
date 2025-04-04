@@ -1,16 +1,15 @@
 @use 'sass:map';
 @use 'sass:color';
-@use '_global_variables-templates' as var;
-@use '_global_mixins-keyframes' as mixin;
+@use './utils/' as *;
 
 .pop-ups {
   position: fixed;
   bottom: 1.5rem;
   right: 1rem;
   z-index: 10;
-  @include mixin.flex(column, center, center, 1.5rem);
+  @include flex(column, center, center, 1.5rem);
 
-  transition: map.get(var.$behavior, base-transition);
+  transition: map.get($behavior, base-transition);
 
   &__single {
     position: relative;
@@ -23,16 +22,16 @@
     padding: 0;
 
     text-decoration: none;
-    color: map.get(var.$colors, accent-text);
+    color: map.get($colors, accent-text);
 
     border-radius: 50%;
-    background-color: rgba(map.get(var.$colors, accent-bcg), 0.7);
-    box-shadow: map.get(var.$shadows, active-text-icons-shadow);
-    transition: map.get(var.$behavior, base-transition);
+    background-color: rgba(map.get($colors, accent-bcg), 0.7);
+    box-shadow: map.get($shadows, active-text-icons-shadow);
+    transition: map.get($behavior, base-transition);
 
     &:hover {
       transform: translateY(-25%) scale(1.15);
-      box-shadow: map.get(var.$shadows, active-box-shadow);
+      box-shadow: map.get($shadows, active-box-shadow);
     }
 
     &--cookies:focus .pop-ups__icon,
@@ -43,7 +42,7 @@
     &--cookies:focus .pop-ups__body,
     &--cookies:active .pop-ups__body {
       right: 0%;
-      background-color: rgba(map.get(var.$colors, accent-bcg), 0.95);
+      background-color: rgba(map.get($colors, accent-bcg), 0.95);
       opacity: 1;
     }
   }
@@ -54,7 +53,7 @@
   }
 
   &__body {
-    @include mixin.flex(row, center, center, 2rem);
+    @include flex(row, center, center, 2rem);
     position: absolute;
     top: 0;
     right: -100vw;
@@ -64,8 +63,8 @@
     font-size: 1.5rem;
 
     border-radius: 50px;
-    box-shadow: map.get(var.$shadows, active-box-shadow);
-    transition: map.get(var.$behavior, base-transition);
+    box-shadow: map.get($shadows, active-box-shadow);
+    transition: map.get($behavior, base-transition);
     opacity: 0;
   }
 
@@ -74,6 +73,6 @@
     font-size: 3rem;
     line-height: 7rem;
     margin-right: 2rem;
-    color: map.get(var.$colors, accent-text);
+    color: map.get($colors, accent-text);
   }
 }

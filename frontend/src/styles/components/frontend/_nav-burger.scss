@@ -1,0 +1,88 @@
+@use '../../utils' as *;
+@use 'sass:map';
+
+.burger {
+  $bar-height: 0.4rem;
+  $bar-width: 3.5rem;
+  $bars-space: 2.5 * $bar-height;
+  $burger-offset: 0.7;
+  $burger-height: 3 * $bar-height + 2 * $bars-space;
+
+  top: $burger-offset * $bar-width;
+  right: $burger-offset * $bar-width;
+  left: auto;
+  width: $bar-width;
+  height: $burger-height;
+  position: fixed;
+  z-index: 7;
+  cursor: pointer;
+
+  transition: map.get($behavior, base-transition);
+  @include flex(column, space-between);
+
+  &.burger--left {
+    left: $burger-offset * $bar-width;
+    right: auto;
+  }
+
+  &__bar {
+    width: $bar-width;
+    height: $bar-height;
+    background-color: map.get($colors, accent-bcg);
+    transition: map.get($behavior, base-transition);
+    border-radius: $bar-height * 0.5;
+
+    //Initial state
+    &--top,
+    &--bottom {
+      transform-origin: center;
+    }
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    border-radius: 7%;
+    width: 250%;
+    height: 140%;
+    z-index: -1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-32%, -50%);
+    box-shadow: rgba(0, 0, 0, 0.8) 0px 0px 5px -2.5px;
+    transition: map.get($behavior, base-transition);
+  }
+  &.burger--left::after {
+    transform: translate(-64%, -50%);
+  }
+
+  // Active state
+  &.active {
+    .burger__bar--top {
+      transform: translateY($burger-height * 0.5 - $bar-height * 0.5)
+        rotate(45deg);
+    }
+
+    .burger__bar--middle {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+
+    .burger__bar--bottom {
+      transform: translateY(-$burger-height * 0.5 + $bar-height * 0.5)
+        rotate(-45deg);
+    }
+
+    &:not(.burger--left) + .nav {
+      right: 0;
+    }
+  }
+
+  &.burger--left.active + .nav.nav--left {
+    left: 0;
+  }
+
+  &.active::after {
+    opacity: 0;
+  }
+}

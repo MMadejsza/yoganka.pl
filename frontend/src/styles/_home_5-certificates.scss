@@ -1,6 +1,5 @@
 @use 'sass:map';
-@use '_global_variables-templates' as var;
-@use '_global_mixins-keyframes' as mixin;
+@use './utils/' as *;
 
 //! CERTIFICATES
 .certificates {
@@ -9,7 +8,7 @@
   overflow: hidden;
 
   & .glide__slides {
-    background-color: rgba(map.get(var.$colors, nav), 0.55);
+    background-color: rgba(map.get($colors, nav), 0.55);
   }
 
   &__tile {
@@ -19,11 +18,11 @@
     margin: 1.5rem 0;
     padding: 1.5rem 1rem;
 
-    background-color: map.get(var.$colors, tile);
-    border-radius: map.get(var.$sizes, border-radius);
+    background-color: map.get($colors, tile);
+    border-radius: map.get($sizes, border-radius);
     overflow: hidden;
 
-    @include mixin.flex(column, center, center);
+    @include flex(column, center, center);
   }
   &__name,
   &__school,

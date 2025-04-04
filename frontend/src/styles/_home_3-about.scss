@@ -1,6 +1,6 @@
 @use 'sass:map';
-@use '_global_variables-templates' as var;
-@use '_global_mixins-keyframes' as mixin;
+@use './utils/' as *;
+
 //! ABOUT
 .about {
   grid-area: about;
@@ -26,8 +26,8 @@
     max-width: 70%;
 
     background-color: transparent;
-    border-radius: map.get(var.$sizes, border-radius);
-    box-shadow: map.get(var.$shadows, box-shadow);
+    border-radius: map.get($sizes, border-radius);
+    box-shadow: map.get($shadows, box-shadow);
     overflow: hidden;
   }
 
@@ -44,12 +44,12 @@
     height: 12%;
     padding: 0 0.5rem;
 
-    background-color: map.get(var.$colors, base);
-    border-top-left-radius: map.get(var.$sizes, border-radius);
-    border-bottom-right-radius: map.get(var.$sizes, border-radius);
+    background-color: map.get($colors, base);
+    border-top-left-radius: map.get($sizes, border-radius);
+    border-bottom-right-radius: map.get($sizes, border-radius);
     overflow: hidden;
 
-    @include mixin.flex($justify: right, $gap: 1rem);
+    @include flex($justify: right, $gap: 1rem);
   }
 
   &__certificates {
@@ -74,7 +74,7 @@
     grid-area: content;
     padding: 1rem;
 
-    @include mixin.flex(column, center, center, 1.5rem);
+    @include flex(column, center, center, 1.5rem);
   }
 
   &__bio--heading {
@@ -88,7 +88,7 @@
     align-self: flex-end;
     margin-right: 1rem;
 
-    font-family: map.get(var.$typo, signature);
+    font-family: map.get($typo, signature);
     font-size: 3rem;
   }
 }

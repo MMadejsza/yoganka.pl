@@ -1,6 +1,5 @@
 @use 'sass:map';
-@use '_global_variables-templates' as var;
-@use '_global_mixins-keyframes' as mixin;
+@use './utils/' as *;
 
 //! MEDIA
 @media (min-width: 360px) {
@@ -162,11 +161,11 @@
     }
 
     &__item {
-      transition: map.get(var.$behavior, base-transition);
+      transition: map.get($behavior, base-transition);
 
       %hover {
-        color: map.get(var.$colors, accent-bcg);
-        text-shadow: map.get(var.$shadows, active-text-icons-shadow);
+        color: map.get($colors, accent-bcg);
+        text-shadow: map.get($shadows, active-text-icons-shadow);
       }
       &:hover {
         transform: scale(1.05) translateY(0.5rem);
@@ -213,7 +212,7 @@
   }
   .clickable:hover {
     cursor: pointer;
-    box-shadow: map.get(var.$shadows, tile-shadow);
+    box-shadow: map.get($shadows, tile-shadow);
     transform: translateY(-5%) scale(1.05);
   }
   .tile {
@@ -264,7 +263,7 @@
 
     &__btn:hover:not(.disabled) {
       transform: scale(1.05) translateY(0.5rem);
-      box-shadow: var.$active-box-shadow;
+      box-shadow: $active-box-shadow;
     }
 
     &__modal-body {
@@ -367,7 +366,7 @@
   .partners__link:hover {
     cursor: pointer;
     transform: translateY(-18%) scale(1.1);
-    box-shadow: map.get(var.$shadows, tile-shadow);
+    box-shadow: map.get($shadows, tile-shadow);
   }
   .footer {
     flex-flow: row wrap;
@@ -378,7 +377,7 @@
     &__company-details a:hover {
       font-size: 2.2rem;
       transform: scale(1.05) translateY(0.5rem);
-      text-shadow: map.get(var.$shadows, active-text-icons-shadow);
+      text-shadow: map.get($shadows, active-text-icons-shadow);
     }
     &__legal,
     &__credit {
@@ -396,7 +395,7 @@
       &:hover {
         transform: scale(1.05) translateY(0.5rem);
 
-        text-shadow: map.get(var.$shadows, active-text-icons-shadow);
+        text-shadow: map.get($shadows, active-text-icons-shadow);
       }
 
       &:hover .footer__qr {
@@ -405,11 +404,11 @@
         top: -185px;
 
         opacity: 1;
-        transition: map.get(var.$behavior, base-transition);
+        transition: map.get($behavior, base-transition);
       }
 
       &:hover .footer__qr-image {
-        box-shadow: var.$active-box-shadow;
+        box-shadow: $active-box-shadow;
       }
     }
   }
@@ -545,20 +544,20 @@
     padding: 0.5rem;
 
     border-radius: 0;
-    border-bottom-left-radius: map.get(var.$sizes, border-radius);
-    border-bottom-right-radius: map.get(var.$sizes, border-radius);
+    border-bottom-left-radius: map.get($sizes, border-radius);
+    border-bottom-right-radius: map.get($sizes, border-radius);
 
     &.nav--left {
       left: 0;
       right: 0;
       border-radius: 0;
-      border-bottom-left-radius: map.get(var.$sizes, border-radius);
-      border-bottom-right-radius: map.get(var.$sizes, border-radius);
+      border-bottom-left-radius: map.get($sizes, border-radius);
+      border-bottom-right-radius: map.get($sizes, border-radius);
     }
 
     & .main-nav-container {
       order: 2;
-      @include mixin.flex(row, center, center);
+      @include flex(row, center, center);
       gap: 2.5rem;
     }
     &__logo-container {
@@ -598,19 +597,19 @@
       width: max-content;
       font-size: 1.5rem;
       line-height: 6rem;
-      color: map.get(var.$colors, tile-title);
-      transition: map.get(var.$behavior, base-transition);
+      color: map.get($colors, tile-title);
+      transition: map.get($behavior, base-transition);
 
       &.active:first-child .nav__logo {
-        box-shadow: map.get(var.$shadows, active-logo-shadow);
-        transition: map.get(var.$behavior, base-transition);
+        box-shadow: map.get($shadows, active-logo-shadow);
+        transition: map.get($behavior, base-transition);
       }
 
       .nav__icon {
-        color: map.get(var.$colors, tile-title);
+        color: map.get($colors, tile-title);
         &--side {
           font-size: 2.5rem;
-          color: rgba(map.get(var.$colors, tile-text-muted), 0.5);
+          color: rgba(map.get($colors, tile-text-muted), 0.5);
         }
         &.account {
           font-size: 3.1rem;
@@ -624,7 +623,7 @@
   }
   .logo-writing__container {
     flex-basis: 100%;
-    @include mixin.flex(row, center);
+    @include flex(row, center);
   }
   .logo-writing__logo-file {
     position: static;
@@ -634,7 +633,7 @@
   .motto {
     font-size: 1.6rem;
     font-weight: lighter;
-    color: map.get(var.$colors, tile-title);
+    color: map.get($colors, tile-title);
 
     box-shadow: none;
     background-color: transparent;
@@ -644,7 +643,7 @@
     margin-bottom: 3rem;
     max-width: 1000px;
 
-    @include mixin.flex(row, space-around, center);
+    @include flex(row, space-around, center);
     flex-wrap: wrap;
     &__header {
       display: none;
@@ -711,7 +710,7 @@
     padding: 0 2rem 3rem;
     font-size: 1.9rem;
 
-    @include mixin.flex($justify: space-evenly, $align: center);
+    @include flex($justify: space-evenly, $align: center);
     row-gap: 1rem;
 
     &__logo-container {
@@ -725,7 +724,7 @@
     }
     &__company-details a {
       font-size: 2.2rem;
-      color: map.get(var.$colors, tile-title);
+      color: map.get($colors, tile-title);
     }
     &__legal {
       grid-area: legal;

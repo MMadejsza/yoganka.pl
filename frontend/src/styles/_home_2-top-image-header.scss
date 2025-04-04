@@ -1,5 +1,5 @@
 @use 'sass:map';
-@use '_global_variables-templates' as var;
+@use './utils/' as *;
 
 .top-image-header {
   grid-area: header;
@@ -27,7 +27,7 @@
     '. . . . .'
     '. . . . .'
     'motto motto motto motto motto';
-  transition: map.get(var.$behavior, base-transition);
+  transition: map.get($behavior, base-transition);
 
   @supports (-webkit-touch-callout: none) and (not (hover: hover)) {
     //for ios
@@ -56,9 +56,9 @@
   text-transform: uppercase;
 
   line-height: 8rem;
-  color: map.get(var.$colors, tile-title);
+  color: map.get($colors, tile-title);
 
-  background-color: map.get(var.$colors, base);
-  box-shadow: map.get(var.$shadows, transitive-box-shadow);
+  background-color: map.get($colors, base);
+  box-shadow: map.get($shadows, transitive-box-shadow);
   overflow: visible;
 }

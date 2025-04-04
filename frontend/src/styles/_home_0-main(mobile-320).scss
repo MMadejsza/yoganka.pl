@@ -5,6 +5,9 @@
 @forward '_home_common';
 @forward '_home_tile';
 @forward '_home_1-nav-burger';
+@forward './components/frontend/nav.scss';
+@forward './components/frontend/nav-burger.scss';
+@forward '_home_1-nav-burger';
 @forward '_home_2-top-image-header';
 @forward '_home_3-about';
 @forward '_home_4-offer-modal';

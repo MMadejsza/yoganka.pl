@@ -1,97 +1,11 @@
 @use 'sass:map';
 @use 'sass:math';
-@use '_global_variables-templates' as var;
-@use '_global_mixins-keyframes' as mixin;
+@use './utils/' as *;
+
 html {
   --bar-width: 3.5rem;
 }
 //! NAV
-
-.burger {
-  $bar-height: 0.4rem;
-  $bar-width: 3.5rem;
-  $bars-space: 2.5 * $bar-height;
-  $burger-offset: 0.7;
-  $burger-height: 3 * $bar-height + 2 * $bars-space;
-
-  top: $burger-offset * $bar-width;
-  right: $burger-offset * $bar-width;
-  left: auto;
-  width: $bar-width;
-  height: $burger-height;
-  position: fixed;
-  z-index: 7;
-  cursor: pointer;
-
-  transition: map.get(var.$behavior, base-transition);
-  @include mixin.flex(column, space-between);
-
-  &.burger--left {
-    left: $burger-offset * $bar-width;
-    right: auto;
-  }
-
-  &__bar {
-    width: $bar-width;
-    height: $bar-height;
-    background-color: map.get(var.$colors, accent-bcg);
-    transition: map.get(var.$behavior, base-transition);
-    border-radius: $bar-height * 0.5;
-
-    //Initial state
-    &--top,
-    &--bottom {
-      transform-origin: center;
-    }
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    border-radius: 7%;
-    width: 250%;
-    height: 140%;
-    z-index: -1;
-    top: 50%;
-    left: 50%;
-    transform: translate(-32%, -50%);
-    box-shadow: rgba(0, 0, 0, 0.8) 0px 0px 5px -2.5px;
-    transition: map.get(var.$behavior, base-transition);
-  }
-  &.burger--left::after {
-    transform: translate(-64%, -50%);
-  }
-
-  // Active state
-  &.active {
-    .burger__bar--top {
-      transform: translateY($burger-height * 0.5 - $bar-height * 0.5)
-        rotate(45deg);
-    }
-
-    .burger__bar--middle {
-      transform: translateX(-100%);
-      opacity: 0;
-    }
-
-    .burger__bar--bottom {
-      transform: translateY(-$burger-height * 0.5 + $bar-height * 0.5)
-        rotate(-45deg);
-    }
-
-    &:not(.burger--left) + .nav {
-      right: 0;
-    }
-  }
-
-  &.burger--left.active + .nav.nav--left {
-    left: 0;
-  }
-
-  &.active::after {
-    opacity: 0;
-  }
-}
 
 .nav {
   $width: 210px;
@@ -106,34 +20,34 @@ html {
   text-transform: uppercase;
   letter-spacing: 1px;
 
-  border-top-left-radius: map.get(var.$sizes, border-radius);
-  border-bottom-left-radius: map.get(var.$sizes, border-radius);
-  box-shadow: map.get(var.$shadows, tile-shadow);
-  background-color: map.get(var.$colors, nav);
-  transition: map.get(var.$behavior, base-transition);
+  border-top-left-radius: map.get($sizes, border-radius);
+  border-bottom-left-radius: map.get($sizes, border-radius);
+  box-shadow: map.get($shadows, tile-shadow);
+  background-color: map.get($colors, nav);
+  transition: map.get($behavior, base-transition);
 
-  @include mixin.flex(column, space-between, center);
+  @include flex(column, space-between, center);
 
   &.nav--left {
     right: auto;
     left: calc($width * -1 - 25px);
-    border-top-right-radius: map.get(var.$sizes, border-radius);
-    border-bottom-right-radius: map.get(var.$sizes, border-radius);
+    border-top-right-radius: map.get($sizes, border-radius);
+    border-bottom-right-radius: map.get($sizes, border-radius);
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
   }
 
   & .main-nav-container {
-    @include mixin.flex(column, center, center);
+    @include flex(column, center, center);
   }
   &__list {
-    @include mixin.flex(column);
+    @include flex(column);
     margin-top: 1rem;
     list-style: none;
 
     &--side {
       margin-bottom: 2rem;
-      @include mixin.flex(row);
+      @include flex(row);
     }
   }
 
@@ -151,7 +65,7 @@ html {
       }
     }
     &:hover {
-      text-shadow: map.get(var.$shadows, active-text-icons-shadow);
+      text-shadow: map.get($shadows, active-text-icons-shadow);
       cursor: pointer;
     }
   }
@@ -165,7 +79,7 @@ html {
     line-height: 6rem;
     font-size: 2.2rem;
     text-decoration: none;
-    color: map.get(var.$colors, tile-text-muted);
+    color: map.get($colors, tile-text-muted);
 
     &--side {
       margin: 0;
@@ -174,13 +88,13 @@ html {
 
     .nav__icon {
       min-width: 28.5px;
-      left: map.get(var.$sizes, icon-position);
+      left: map.get($sizes, icon-position);
       margin-right: 1rem;
 
-      color: map.get(var.$colors, accent-bcg);
+      color: map.get($colors, accent-bcg);
       font-size: 3.5rem;
 
-      transition: map.get(var.$behavior, base-transition);
+      transition: map.get($behavior, base-transition);
       &::before {
         margin: 0;
         padding: 0;
@@ -189,18 +103,18 @@ html {
         font-size: 4.5rem;
       }
       &--side {
-        color: map.get(var.$colors, tile-text-muted);
+        color: map.get($colors, tile-text-muted);
       }
     }
 
     &.active:first-child .nav__logo {
-      box-shadow: map.get(var.$shadows, active-logo-shadow);
-      transition: map.get(var.$behavior, base-transition);
+      box-shadow: map.get($shadows, active-logo-shadow);
+      transition: map.get($behavior, base-transition);
     }
     &.active,
     &.active .nav__icon {
-      color: map.get(var.$colors, accent-bcg);
-      text-shadow: map.get(var.$shadows, active-text-icons-shadow);
+      color: map.get($colors, accent-bcg);
+      text-shadow: map.get($shadows, active-text-icons-shadow);
     }
   }
 
