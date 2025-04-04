@@ -36,8 +36,8 @@ function DetailsListUserSettings({
     { label: 'Menu po lewej:', content: handedness },
     { label: 'Rozmiar czcionki:', content: fontSize },
     { label: 'Powiadomienia:', content: notifications },
-    { label: 'Animacje:', content: animation },
-    { label: 'Ciemny motyw:', content: theme },
+    { label: 'Animacje:', content: animation, status: 0 },
+    { label: 'Ciemny motyw:', content: theme, status: 0 },
   ];
 
   const [isEditing, setIsEditing] = useState(false);

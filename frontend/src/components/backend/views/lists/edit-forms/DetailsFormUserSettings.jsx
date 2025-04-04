@@ -259,7 +259,7 @@ function DetailsFormUserSettings({
         didEdit={notificationsDidEdit}
         isFocused={notificationsIsFocused}
       />
-      <Input
+      {/* <Input
         embedded={true}
         formType={formType}
         type='checkbox'
@@ -274,7 +274,7 @@ function DetailsFormUserSettings({
         validationResults={animationValidationResults}
         didEdit={animationDidEdit}
         isFocused={animationIsFocused}
-      />
+      /> */}
       <Input
         embedded={true}
         formType={formType}

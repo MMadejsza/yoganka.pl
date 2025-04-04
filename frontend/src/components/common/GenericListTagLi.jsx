@@ -1,6 +1,8 @@
 function GenericListTagLi({ objectPair }) {
   return (
-    <li className='generic-details__item user-container__section-record modal-checklist__li'>
+    <li
+      className={`generic-details__item user-container__section-record modal-checklist__li ${objectPair.status === 0 ? 'dimmed' : ''}`}
+    >
       {objectPair.symbol && (
         <span className='material-symbols-rounded nav__icon'>
           {objectPair.symbol}
