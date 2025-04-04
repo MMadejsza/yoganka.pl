@@ -26,6 +26,9 @@ export const loadUserFromSession = (req, res, next) => {
       {
         model: models.UserPrefSetting, // User settings if exist
         required: false,
+        attributes: {
+          exclude: ['userId', 'user_id'], // deleting
+        },
       },
     ],
   })

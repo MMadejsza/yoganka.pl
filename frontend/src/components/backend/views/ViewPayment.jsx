@@ -4,8 +4,6 @@ import DetailsListCustomer from './lists/DetailsListCustomer.jsx';
 import DetailsListPayment from './lists/DetailsListPayment.jsx';
 import TableSchedules from './tables/TableSchedules.jsx';
 
-// import {statsCalculatorForCustomer} from '../../utils/productViewsUtils.js';
-
 function ViewPayment({ data, isUserAccountPage }) {
   const location = useLocation();
   const customerAccessed = location.pathname.includes('ustawienia');

@@ -170,7 +170,7 @@ export const putEditSettings = (req, res, next) => {
     defaults: {
       userId: userId,
       handedness: !!handedness || false,
-      fontSize: parseInt(font) || 14,
+      fontSize: font || 'M',
       notifications: !!notifications || false,
       animation: !!animation || false,
       theme: !!theme || false,
@@ -181,7 +181,7 @@ export const putEditSettings = (req, res, next) => {
         // Nothing changed
         if (
           preferences.handedness == !!handedness &&
-          preferences.fontSize == parseInt(font) &&
+          preferences.fontSize == font &&
           preferences.notifications == !!notifications &&
           preferences.animation == !!animation &&
           preferences.theme == !!theme
@@ -193,7 +193,7 @@ export const putEditSettings = (req, res, next) => {
         } else {
           // Update
           preferences.handedness = !!handedness;
-          preferences.fontSize = parseInt(font);
+          preferences.fontSize = font;
           preferences.notifications = !!notifications;
           preferences.animation = !!animation;
           preferences.theme = !!theme;

@@ -65,8 +65,7 @@ function DetailsFormCustomer({
     mutationFn: formDataObj =>
       mutateOnEdit(status, formDataObj, dynamicMutationAddress),
     onSuccess: res => {
-      if (customerAccessed)
-        queryClient.invalidateQueries(['query', '/show-account']);
+      if (customerAccessed) queryClient.invalidateQueries(queryKey);
       else
         queryClient.invalidateQueries([
           'query',

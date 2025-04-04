@@ -65,7 +65,7 @@ function DetailsFormUserSettings({
           `/admin-console/show-all-users/${params.id}`,
         ]);
       } else {
-        queryClient.invalidateQueries(['query', '/show-account']);
+        queryClient.invalidateQueries(queryKey);
       }
 
       // updating feedback
@@ -81,7 +81,7 @@ function DetailsFormUserSettings({
   // Fallback to feed custom hooks when data isn't available
   const preferences = data?.preferences || {
     handedness: false,
-    fontSize: 14,
+    fontSize: 'M',
     notifications: false,
     animation: false,
     theme: false,
@@ -224,12 +224,17 @@ function DetailsFormUserSettings({
       <Input
         embedded={true}
         formType={formType}
-        type='number'
+        type='select'
+        options={[
+          { label: 'XS', value: 'XS' },
+          { label: 'S', value: 'S' },
+          { label: 'M', value: 'M' },
+          { label: 'L', value: 'L' },
+          { label: 'XL', value: 'XL' },
+        ]}
         id='font'
         name='font'
         label='Rozmiar czcionki:'
-        min='10'
-        max='16'
         value={fontValue}
         onFocus={handleFontFocus}
         onBlur={handleFontBlur}

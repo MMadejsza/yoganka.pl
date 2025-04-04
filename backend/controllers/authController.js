@@ -20,19 +20,162 @@ const person = 'User';
 //@ GET
 export const getStatus = (req, res, next) => {
   const controllerName = 'getStatus';
-  callLog(req, person, controllerName);
-  successLog(person, controllerName);
-  console.log({
-    isLoggedIn: res.locals.isLoggedIn || false,
-    role: res.locals.role,
-    token: res.locals.csrfToken,
-  });
-  return res.status(200).json({
-    isLoggedIn: res.locals.isLoggedIn || false,
-    role: res.locals.role,
-    token: res.locals.csrfToken,
-  });
+  callLog(req, 'User', controllerName);
+
+  const isLoggedIn = res.locals.isLoggedIn || false;
+  const role = res.locals.role;
+  const token = res.locals.csrfToken;
+
+  // If user is logged in, fetch full user with preferences + passes
+  if (isLoggedIn && req.user?.userId) {
+    models.User.findByPk(req.user.userId, {
+      include: [
+        {
+          model: models.UserPrefSetting,
+          required: false,
+          attributes: {
+            exclude: ['userId', 'user_id'], // deleting
+          },
+        },
+        {
+          model: models.Customer,
+          required: false,
+          include: [
+            {
+              model: models.CustomerPass,
+              required: false,
+              include: [
+                {
+                  model: models.PassDefinition,
+                  required: false,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    })
+      .then(user => {
+        if (!user) {
+          console.warn('⚠️ No user found in getStatus.');
+          return res.status(200).json({
+            isLoggedIn: false,
+            role,
+            token,
+            user: null,
+          });
+        }
+
+        // Prepare safe user object for frontend - as much as they only need and nothing more
+        const safeUser = {
+          userId: user.userId,
+          role: user.role,
+          emailVerified: user.emailVerified,
+          UserPrefSetting: user.UserPrefSetting || null,
+          Customer: user.Customer
+            ? {
+                customerId: user.Customer.customerId,
+                firstName: user.Customer.firstName,
+                lastName: user.Customer.lastName,
+                customerFullName: `${user.Customer.firstName} ${user.Customer.lastName} (Id: ${user.Customer.customerId})`,
+                dob: user.Customer.dob,
+                phone: user.Customer.phone,
+
+                // Add passes summary for frontend use
+                CustomerPasses:
+                  user.Customer.CustomerPasses?.map(pass => ({
+                    customerPassId: pass.customerPassId,
+                    purchaseDate: pass.purchaseDate,
+                    validFrom: pass.validFrom,
+                    validUntil: pass.validUntil,
+                    usesLeft: pass.usesLeft,
+                    status: pass.status,
+                    PassDefinition: {
+                      name: pass.PassDefinition.name,
+                      passType: pass.PassDefinition.passType,
+                      usesTotal: pass.PassDefinition.usesTotal,
+                      defaultValidityDays:
+                        pass.PassDefinition.defaultValidityDays,
+                      allowedProductTypes:
+                        pass.PassDefinition.allowedProductTypes,
+                      price: pass.PassDefinition.price,
+                    },
+                  })) || [],
+              }
+            : null,
+        };
+
+        successLog('User', controllerName);
+        return res.status(200).json({
+          isLoggedIn,
+          role,
+          token,
+          user: safeUser, // RETURN full safeUser
+        });
+      })
+      .catch(err => {
+        console.error('❌ Error in getStatus:', err);
+        return res.status(500).json({
+          confirmation: 0,
+          message: 'Internal error loading user status.',
+        });
+      });
+  } else {
+    // Not logged in – return basic info
+    successLog(person, controllerName, 'unauthenticated');
+    return res.status(200).json({
+      isLoggedIn,
+      role,
+      token,
+      user: null,
+    });
+  }
 };
+// export const getStatus = (req, res, next) => {
+//   const controllerName = 'getStatus';
+//   callLog(req, person, controllerName);
+//   console.log({
+//     isLoggedIn: res.locals.isLoggedIn || false,
+//     role: res.locals.role,
+//     token: res.locals.csrfToken,
+//   });
+
+//    // Load fresh user from DB to get updated preferences and passes
+//    let safeUser = null;
+//    if (isLoggedIn && req.user?.userId) {
+//      try {
+//        const user = await models.User.findByPk(req.user.userId, {
+//          include: [
+//            {
+//              model: models.UserPrefSetting,
+//              required: false,
+//            },
+//            {
+//              model: models.Customer,
+//              required: false,
+//              include: [
+//                {
+//                  model: models.CustomerPass,
+//                  required: false,
+//                  include: [
+//                    {
+//                      model: models.PassDefinition,
+//                      required: false,
+//                    },
+//                  ],
+//                },
+//              ],
+//            },
+//          ],
+//        });
+
+//   successLog(person, controllerName);
+//   return res.status(200).json({
+//     isLoggedIn: res.locals.isLoggedIn || false,
+//     role: res.locals.role,
+//     token: res.locals.csrfToken,
+//   });
+// };
 //! LOG IN / OUT_______________________________________________
 //@ POST
 export const postLogin = (req, res, next) => {

@@ -25,7 +25,7 @@ const UserPrefSetting = sequelizeDb.define(
       field: 'handedness',
     },
     fontSize: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(2),
       allowNull: true,
       field: 'font_size',
     },

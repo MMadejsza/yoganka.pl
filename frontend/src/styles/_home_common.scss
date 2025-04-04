@@ -10,12 +10,15 @@
   box-sizing: border-box;
   list-style: none;
 }
+
 html {
+  --scale: 1; // Initial scale to be changed by user
   --section-padding-y: #{map.get(var.$sizes, section-padding-y)};
+
   scroll-behavior: smooth;
   font-family: 'EB Garamond', serif;
   font-weight: 400;
-  font-size: 8.5px;
+  font-size: calc(var(--scale) * 8.5px);
   text-align: center;
   color: map.get(var.$colors, base-text);
 
