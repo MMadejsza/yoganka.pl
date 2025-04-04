@@ -1,0 +1,321 @@
+@use 'sass:map';
+@use 'sass:math';
+@use '../../utils/' as *;
+
+.nav {
+  $width: 210px;
+  position: fixed;
+  top: 0;
+  right: calc($width * -1 - 25px);
+  left: auto;
+  width: $width;
+  height: 100%;
+  z-index: 6;
+
+  text-transform: uppercase;
+  letter-spacing: 1px;
+
+  border-top-left-radius: map.get($sizes, border-radius);
+  border-bottom-left-radius: map.get($sizes, border-radius);
+  box-shadow: map.get($shadows, tile-shadow);
+  background-color: map.get($colors, nav);
+  transition: map.get($behavior, base-transition);
+
+  @include flex(column, space-between, center);
+
+  &.nav--left {
+    right: auto;
+    left: calc($width * -1 - 25px);
+    border-top-right-radius: map.get($sizes, border-radius);
+    border-bottom-right-radius: map.get($sizes, border-radius);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  & .main-nav-container {
+    @include flex(column, center, center);
+  }
+
+  &__list {
+    @include flex(column);
+    margin-top: 1rem;
+    list-style: none;
+
+    &--side {
+      align-self: flex-start;
+      margin: 0 2rem;
+      margin-bottom: 0.8rem;
+      @include flex(row);
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+  }
+
+  &__item {
+    position: relative;
+    min-width: 50px;
+    overflow: hidden;
+    text-align: left;
+
+    &--side {
+      display: grid;
+
+      * {
+        place-self: center;
+      }
+    }
+
+    &:hover {
+      text-shadow: map.get($shadows, active-text-icons-shadow);
+      cursor: pointer;
+    }
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    margin: 0 2rem;
+    cursor: pointer;
+
+    line-height: 6rem;
+    font-size: 2.2rem;
+    text-decoration: none;
+    color: map.get($colors, tile-text-muted);
+
+    &--side {
+      margin: 0;
+      line-height: 150%;
+    }
+
+    .nav__icon {
+      min-width: 28.5px;
+      left: map.get($sizes, icon-position);
+      margin-right: 1rem;
+
+      color: map.get($colors, accent-bcg);
+      font-size: 3.5rem;
+
+      transition: map.get($behavior, base-transition);
+
+      &::before {
+        margin: 0;
+        padding: 0;
+      }
+      //   &.account {
+      //     font-size: 4.5rem;
+      //   }
+      &--side {
+        color: map.get($colors, tile-text-muted);
+
+        &:nth-child(2) {
+          color: red;
+        }
+      }
+    }
+
+    i.nav__icon {
+      font-size: 3rem;
+    }
+
+    &.active:first-child .nav__logo {
+      box-shadow: map.get($shadows, active-logo-shadow);
+      transition: map.get($behavior, base-transition);
+    }
+
+    &.active,
+    &.active .nav__icon {
+      color: map.get($colors, accent-bcg);
+      text-shadow: map.get($shadows, active-text-icons-shadow);
+    }
+  }
+
+  &__logo-container {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__logo {
+    display: block;
+    min-width: 145px;
+    width: 25vw;
+    margin-top: 1.5rem;
+    padding: 1rem;
+  }
+
+  button {
+    font-family: 'EB Garamond', serif;
+  }
+}
+.nav.highlighted {
+  animation: 3s highlights ease-in-out;
+}
+
+@include respond-to(mobile-xs) {
+  .nav {
+    &__list {
+      &--side {
+        gap: 1rem;
+      }
+    }
+  }
+}
+@include respond-to(mobile-s) {
+  .nav {
+    $width: 300px;
+    right: calc($width * -1 - 25px);
+    width: $width;
+
+    &.nav--left {
+      right: auto;
+      left: calc($width * -1 - 25px);
+    }
+  }
+}
+
+@include respond-to(mobile-m) {
+  .nav {
+    $width: 350px;
+    right: calc($width * -1 - 25px);
+    width: $width;
+
+    &.nav--left {
+      right: auto;
+      left: calc($width * -1 - 25px);
+    }
+
+    &__item {
+      transition: map.get($behavior, base-transition);
+
+      %hover {
+        color: map.get($colors, accent-bcg);
+        text-shadow: map.get($shadows, active-text-icons-shadow);
+      }
+      &:hover {
+        transform: scale(1.05) translateY(0.5rem);
+      }
+
+      &:hover .nav__link {
+        @extend %hover;
+        span {
+          @extend %hover;
+        }
+      }
+    }
+    &__list {
+      &--side {
+        gap: 2.5rem;
+      }
+    }
+    .nav__icon {
+      &.account {
+        font-size: 4.5rem;
+      }
+    }
+  }
+}
+
+@include respond-to(mobile-l) {
+  .nav {
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: auto;
+    padding: 0.5rem;
+
+    border-radius: 0;
+    border-bottom-left-radius: map.get($sizes, border-radius);
+    border-bottom-right-radius: map.get($sizes, border-radius);
+
+    &.nav--left {
+      left: 0;
+      right: 0;
+      border-radius: 0;
+      border-bottom-left-radius: map.get($sizes, border-radius);
+      border-bottom-right-radius: map.get($sizes, border-radius);
+    }
+
+    & .main-nav-container {
+      order: 2;
+      @include flex(row, center, center);
+      gap: 2.5rem;
+    }
+    &__logo-container {
+      height: 6rem;
+    }
+
+    &__logo {
+      margin-top: 0;
+      padding: 0.5rem 0;
+      min-width: auto; //reset
+      max-height: 100%;
+      max-width: 100%;
+      width: auto; //reset
+      object-fit: contain;
+    }
+
+    .nav__icon {
+      display: inline-flex;
+      justify-content: center;
+      width: min-content;
+    }
+    &__list {
+      width: max-content;
+      margin: 0;
+      flex-direction: row;
+      gap: 2rem;
+
+      &--side {
+        align-self: flex-end;
+        margin-right: 2rem;
+        gap: 0rem;
+      }
+    }
+
+    &__link {
+      margin: 0;
+      width: max-content;
+      font-size: 1.5rem;
+      line-height: 6rem;
+      color: map.get($colors, tile-title);
+      transition: map.get($behavior, base-transition);
+
+      &.active:first-child .nav__logo {
+        box-shadow: map.get($shadows, active-logo-shadow);
+        transition: map.get($behavior, base-transition);
+      }
+
+      .nav__icon {
+        color: map.get($colors, tile-title);
+        &--side {
+          font-size: 2.5rem;
+          color: rgba(map.get($colors, tile-text-muted), 0.5);
+        }
+        &.account {
+          font-size: 3.1rem;
+        }
+      }
+      &--side {
+        font-size: 1.5rem;
+        line-height: 150%;
+      }
+    }
+  }
+}
+
+@include respond-to(desktop-xs) {
+  .nav__link {
+    font-size: 2rem;
+    &--side {
+      font-size: 1.5rem;
+    }
+  }
+}
+@include respond-to(desktop-m) {
+  .main-nav-container {
+    .nav__list {
+      margin-left: 5.5rem;
+      gap: 5.5rem;
+    }
+  }
+}

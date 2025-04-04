@@ -7,13 +7,7 @@
     --section-padding-y: 2rem;
     font-size: calc(var(--scale) * 9px);
   }
-  .nav {
-    &__list {
-      &--side {
-        gap: 1rem;
-      }
-    }
-  }
+
   .motto {
     letter-spacing: 0px;
   }
@@ -46,16 +40,6 @@
     font-size: calc(var(--scale) * 12px);
   }
 
-  .nav {
-    $width: 300px;
-    right: calc($width * -1 - 25px);
-    width: $width;
-
-    &.nav--left {
-      right: auto;
-      left: calc($width * -1 - 25px);
-    }
-  }
   .top-image-header {
     background-image: url(/imgs/header/768_header_portrait.jpg);
   }
@@ -80,14 +64,7 @@
   footer {
     padding: 0 2rem 2rem;
   }
-  .burger.active {
-    .burger__bar--top {
-      transform: translateY(33px / 2) rotate(45deg);
-    }
-    .burger__bar--bottom {
-      transform: translateY(-36px / 2) rotate(-45deg);
-    }
-  }
+
   .about__certificates {
     min-width: 65%;
   }
@@ -138,56 +115,6 @@
   // tablet, landscape iPad, lo-res laptops ands desktops
   .glide-slides {
     min-height: 30vh;
-  }
-  .burger {
-    $burger-offset: 1;
-    $bar-width: 3.5rem;
-    top: $burger-offset * $bar-width;
-    right: $burger-offset * $bar-width;
-
-    &.burger--left {
-      left: $burger-offset * $bar-width;
-      right: auto;
-    }
-  }
-  .nav {
-    $width: 350px;
-    right: calc($width * -1 - 25px);
-    width: $width;
-
-    &.nav--left {
-      right: auto;
-      left: calc($width * -1 - 25px);
-    }
-
-    &__item {
-      transition: map.get($behavior, base-transition);
-
-      %hover {
-        color: map.get($colors, accent-bcg);
-        text-shadow: map.get($shadows, active-text-icons-shadow);
-      }
-      &:hover {
-        transform: scale(1.05) translateY(0.5rem);
-      }
-
-      &:hover .nav__link {
-        @extend %hover;
-        span {
-          @extend %hover;
-        }
-      }
-    }
-    &__list {
-      &--side {
-        gap: 2.5rem;
-      }
-    }
-    .nav__icon {
-      &.account {
-        font-size: 4.5rem;
-      }
-    }
   }
   .top-image-header {
     background-image: url(/imgs/header/1024_header_portrait.jpg);
@@ -429,40 +356,6 @@
 }
 
 @media (min-width: 960px) {
-  .burger {
-    $bar-height: 0.6rem;
-    $bar-width: 5rem;
-    $bars-space: 2.5 * $bar-height;
-    $burger-offset: 0.7;
-    $burger-height: 3 * $bar-height + 2 * $bars-space;
-
-    top: $burger-offset * $bar-width;
-    right: $burger-offset * $bar-width;
-    width: $bar-width;
-    height: $burger-height;
-
-    &.burger--left {
-      left: $burger-offset * $bar-width;
-      right: auto;
-    }
-
-    &__bar {
-      width: $bar-width;
-      height: $bar-height;
-      border-radius: $bar-height * 0.5;
-    }
-
-    &.active {
-      .burger__bar--top {
-        transform: translateY($burger-height * 0.5 - $bar-height * 0.5)
-          rotate(45deg);
-      }
-      .burger__bar--bottom {
-        transform: translateY(-$burger-height * 0.5 + $bar-height * 0.5)
-          rotate(-45deg);
-      }
-    }
-  }
   .modal {
     &__modal-body {
       grid-template-columns: repeat(6, minmax(125px, 1fr));
@@ -532,95 +425,7 @@
       'space space space space space'
       'footer footer footer footer footer';
   }
-  .burger {
-    display: none;
-  }
-  .nav {
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: auto;
-    padding: 0.5rem;
 
-    border-radius: 0;
-    border-bottom-left-radius: map.get($sizes, border-radius);
-    border-bottom-right-radius: map.get($sizes, border-radius);
-
-    &.nav--left {
-      left: 0;
-      right: 0;
-      border-radius: 0;
-      border-bottom-left-radius: map.get($sizes, border-radius);
-      border-bottom-right-radius: map.get($sizes, border-radius);
-    }
-
-    & .main-nav-container {
-      order: 2;
-      @include flex(row, center, center);
-      gap: 2.5rem;
-    }
-    &__logo-container {
-      height: 6rem;
-    }
-
-    &__logo {
-      margin-top: 0;
-      padding: 0.5rem 0;
-      min-width: auto; //reset
-      max-height: 100%;
-      max-width: 100%;
-      width: auto; //reset
-      object-fit: contain;
-    }
-
-    .nav__icon {
-      display: inline-flex;
-      justify-content: center;
-      width: min-content;
-    }
-    &__list {
-      width: max-content;
-      margin: 0;
-      flex-direction: row;
-      gap: 2rem;
-
-      &--side {
-        align-self: flex-end;
-        margin-right: 2rem;
-        gap: 0rem;
-      }
-    }
-
-    &__link {
-      margin: 0;
-      width: max-content;
-      font-size: 1.5rem;
-      line-height: 6rem;
-      color: map.get($colors, tile-title);
-      transition: map.get($behavior, base-transition);
-
-      &.active:first-child .nav__logo {
-        box-shadow: map.get($shadows, active-logo-shadow);
-        transition: map.get($behavior, base-transition);
-      }
-
-      .nav__icon {
-        color: map.get($colors, tile-title);
-        &--side {
-          font-size: 2.5rem;
-          color: rgba(map.get($colors, tile-text-muted), 0.5);
-        }
-        &.account {
-          font-size: 3.1rem;
-        }
-      }
-      &--side {
-        font-size: 1.5rem;
-        line-height: 150%;
-      }
-    }
-  }
   .logo-writing__container {
     flex-basis: 100%;
     @include flex(row, center);
@@ -742,14 +547,7 @@
     }
   }
 }
-@media (min-width: 1080px) {
-  .nav__link {
-    font-size: 2rem;
-    &--side {
-      font-size: 1.5rem;
-    }
-  }
-}
+
 @media (min-width: 1280px) {
   // hi-res laptops and desktops
   // about is absolute at this stage
@@ -801,14 +599,7 @@
     }
   }
 }
-@media (min-width: 1400px) {
-  .main-nav-container {
-    .nav__list {
-      margin-left: 5.5rem;
-      gap: 5.5rem;
-    }
-  }
-}
+
 @media (min-width: 1920px) {
   // big landscape tablets, laptops, and desktops
   html {
