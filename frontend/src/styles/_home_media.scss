@@ -51,6 +51,11 @@
     $width: 300px;
     right: calc($width * -1 - 25px);
     width: $width;
+
+    &.nav--left {
+      right: auto;
+      left: calc($width * -1 - 25px);
+    }
   }
   .top-image-header {
     background-image: url(/imgs/header/768_header_portrait.jpg);
@@ -140,11 +145,22 @@
     $bar-width: 3.5rem;
     top: $burger-offset * $bar-width;
     right: $burger-offset * $bar-width;
+
+    &.burger--left {
+      left: $burger-offset * $bar-width;
+      right: auto;
+    }
   }
   .nav {
     $width: 350px;
     right: calc($width * -1 - 25px);
     width: $width;
+
+    &.nav--left {
+      right: auto;
+      left: calc($width * -1 - 25px);
+    }
+
     &__item {
       transition: map.get(var.$behavior, base-transition);
 
@@ -426,6 +442,11 @@
     width: $bar-width;
     height: $burger-height;
 
+    &.burger--left {
+      left: $burger-offset * $bar-width;
+      right: auto;
+    }
+
     &__bar {
       width: $bar-width;
       height: $bar-height;
@@ -518,6 +539,7 @@
   .nav {
     top: 0;
     left: 0;
+    right: 0;
     width: 100%;
     height: auto;
     padding: 0.5rem;
@@ -525,6 +547,14 @@
     border-radius: 0;
     border-bottom-left-radius: map.get(var.$sizes, border-radius);
     border-bottom-right-radius: map.get(var.$sizes, border-radius);
+
+    &.nav--left {
+      left: 0;
+      right: 0;
+      border-radius: 0;
+      border-bottom-left-radius: map.get(var.$sizes, border-radius);
+      border-bottom-right-radius: map.get(var.$sizes, border-radius);
+    }
 
     & .main-nav-container {
       order: 2;

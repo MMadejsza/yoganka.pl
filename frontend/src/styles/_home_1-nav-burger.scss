@@ -16,6 +16,7 @@ html {
 
   top: $burger-offset * $bar-width;
   right: $burger-offset * $bar-width;
+  left: auto;
   width: $bar-width;
   height: $burger-height;
   position: fixed;
@@ -24,6 +25,11 @@ html {
 
   transition: map.get(var.$behavior, base-transition);
   @include mixin.flex(column, space-between);
+
+  &.burger--left {
+    left: $burger-offset * $bar-width;
+    right: auto;
+  }
 
   &__bar {
     width: $bar-width;
@@ -52,6 +58,9 @@ html {
     box-shadow: rgba(0, 0, 0, 0.8) 0px 0px 5px -2.5px;
     transition: map.get(var.$behavior, base-transition);
   }
+  &.burger--left::after {
+    transform: translate(-64%, -50%);
+  }
 
   // Active state
   &.active {
@@ -70,20 +79,26 @@ html {
         rotate(-45deg);
     }
 
-    & + .nav {
+    &:not(.burger--left) + .nav {
       right: 0;
     }
+  }
+
+  &.burger--left.active + .nav.nav--left {
+    left: 0;
   }
 
   &.active::after {
     opacity: 0;
   }
 }
+
 .nav {
   $width: 210px;
   position: fixed;
   top: 0;
   right: calc($width * -1 - 25px);
+  left: auto;
   width: $width;
   height: 100%;
   z-index: 6;
@@ -98,6 +113,16 @@ html {
   transition: map.get(var.$behavior, base-transition);
 
   @include mixin.flex(column, space-between, center);
+
+  &.nav--left {
+    right: auto;
+    left: calc($width * -1 - 25px);
+    border-top-right-radius: map.get(var.$sizes, border-radius);
+    border-bottom-right-radius: map.get(var.$sizes, border-radius);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
   & .main-nav-container {
     @include mixin.flex(column, center, center);
   }
@@ -190,6 +215,7 @@ html {
     margin-top: 3rem;
     padding: 1rem;
   }
+
   button {
     font-family: 'EB Garamond', serif;
   }

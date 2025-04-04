@@ -215,7 +215,7 @@ function DetailsFormUserSettings({
         checked={handednessValue}
         onFocus={handleHandednessFocus}
         onBlur={handleHandednessBlur}
-        onChange={handleHandednessChange}
+        onChange={e => handleHandednessChange(e, 'menuPosition')}
         autoComplete='handedness'
         validationResults={handednessValidationResults}
         didEdit={handednessDidEdit}
@@ -275,7 +275,7 @@ function DetailsFormUserSettings({
         didEdit={animationDidEdit}
         isFocused={animationIsFocused}
       /> */}
-      <Input
+      {/* <Input
         embedded={true}
         formType={formType}
         type='checkbox'
@@ -290,7 +290,7 @@ function DetailsFormUserSettings({
         validationResults={themeValidationResults}
         didEdit={themeDidEdit}
         isFocused={themeIsFocused}
-      />
+      /> */}
     </WrapperForm>
   );
 

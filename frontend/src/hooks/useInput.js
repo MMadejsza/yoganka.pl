@@ -15,6 +15,7 @@ export function useInput(defaultValue, validations) {
 
   const handleChange = (e, settings) => {
     // IF defaultValue is boolean (checkbox), we use e.target.checked
+    console.log('handleChange for', settings, 'value:', e.target.checked);
     if (typeof defaultValue === 'boolean') {
       setEnteredValue(e.target.checked);
     } else {

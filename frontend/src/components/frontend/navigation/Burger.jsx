@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-function Burger({ isNavOpen: isOpen, setIsNavOpen: setIsOpen }) {
+function Burger({ side, isNavOpen: isOpen, setIsNavOpen: setIsOpen }) {
   let openCount = useRef(0);
   // const [isOpen, setIsOpen] = useState(false);
   const [startX, setStartX] = useState(null);
@@ -66,7 +66,11 @@ function Burger({ isNavOpen: isOpen, setIsNavOpen: setIsOpen }) {
   }, [startX]);
 
   return (
-    <div className={`burger ${isActive}`} id='burger' onClick={handleClick}>
+    <div
+      className={`burger ${isActive} ${side ? 'burger--left' : ''}`}
+      id='burger'
+      onClick={handleClick}
+    >
       <div className='burger__bar burger__bar--top'></div>
       <div className='burger__bar burger__bar--middle'></div>
       <div className='burger__bar burger__bar--bottom'></div>

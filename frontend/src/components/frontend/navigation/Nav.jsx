@@ -1,9 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { useAuthStatus } from '../../../hooks/useAuthStatus.js';
 import { mutateOnLoginOrSignup, queryClient } from '../../../utils/http.js';
-import { applyFontSize } from '../../../utils/userSettingsUtils.js';
 import { smoothScrollInto } from '../../../utils/utils.jsx';
 import Logo from '../../frontend/Logo.jsx';
 
@@ -87,11 +85,9 @@ const menuSideSet = [
   },
 ];
 
-function Nav({ setIsNavOpen }) {
+function Nav({ side, status, setIsNavOpen }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const statusFetched = useRef(false);
-  const { data: status } = useAuthStatus();
 
   console.log('nav data', status);
   const logoutMutation = useMutation({
@@ -129,12 +125,6 @@ function Nav({ setIsNavOpen }) {
     // Remove on umount
     return () => mediaQuery.removeEventListener('change', handleMediaChange);
   }, []);
-
-  // Apply user settings
-  useEffect(() => {
-    const prefSettings = status?.user?.UserPrefSetting;
-    applyFontSize(prefSettings?.fontSize);
-  }, [status?.user?.UserPrefSetting?.fontSize]);
 
   const handleLogout = () => {
     logoutMutation.mutate();
@@ -212,7 +202,7 @@ function Nav({ setIsNavOpen }) {
   };
 
   return (
-    <nav className='nav'>
+    <nav className={`nav ${side ? 'nav--left' : ''}`}>
       <div className='main-nav-container'>
         <NavLink
           to={'/'}

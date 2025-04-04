@@ -15,7 +15,7 @@ function DetailsListUserSettings({
       ? 'On'
       : 'Off'
     : 'Off';
-  const fontSize = settingsData?.fontSize || '12';
+  const fontSize = settingsData?.fontSize || 'M';
   const notifications = hasPrefs
     ? settingsData.notifications == 1
       ? 'On'
