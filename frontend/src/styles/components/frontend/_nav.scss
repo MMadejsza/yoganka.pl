@@ -45,7 +45,7 @@
       align-self: flex-start;
       margin: 0 2rem;
       margin-bottom: 0.8rem;
-      @include flex(row);
+      @include flex(row, center);
       flex-wrap: wrap;
       gap: 1.5rem;
     }
@@ -85,6 +85,7 @@
     &--side {
       margin: 0;
       line-height: 150%;
+      font-size: 2rem;
     }
 
     .nav__icon {
@@ -105,16 +106,14 @@
       //     font-size: 4.5rem;
       //   }
       &--side {
+        font-size: 3rem;
         color: map.get($colors, tile-text-muted);
-
-        &:nth-child(2) {
-          color: red;
-        }
+        opacity: 0.8;
       }
     }
 
     i.nav__icon {
-      font-size: 3rem;
+      font-size: 2.6rem;
     }
 
     &.active:first-child .nav__logo {
@@ -154,7 +153,25 @@
   .nav {
     &__list {
       &--side {
-        gap: 1rem;
+        gap: 1.8rem 1rem;
+        margin-bottom: 2rem;
+      }
+    }
+    &__link {
+      &--side {
+        font-size: 2.2rem;
+      }
+
+      .nav__icon {
+        font-size: 3.5rem;
+
+        &--side {
+          font-size: 3.5rem;
+        }
+      }
+
+      i.nav__icon {
+        font-size: 3rem;
       }
     }
   }
@@ -203,12 +220,19 @@
     }
     &__list {
       &--side {
-        gap: 2.5rem;
+        gap: 2.5rem 1.8rem;
       }
     }
-    .nav__icon {
-      &.account {
-        font-size: 4.5rem;
+
+    &__link {
+      &--side {
+        font-size: 2.5rem;
+      }
+
+      .nav__icon {
+        &--side {
+          font-size: 3.8rem;
+        }
       }
     }
   }
