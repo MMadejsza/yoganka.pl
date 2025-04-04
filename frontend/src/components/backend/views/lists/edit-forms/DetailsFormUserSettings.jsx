@@ -238,7 +238,7 @@ function DetailsFormUserSettings({
         value={fontValue}
         onFocus={handleFontFocus}
         onBlur={handleFontBlur}
-        onChange={handleFontChange}
+        onChange={e => handleFontChange(e, 'font')}
         validationResults={fontValidationResults}
         didEdit={fontDidEdit}
         isFocused={fontIsFocused}

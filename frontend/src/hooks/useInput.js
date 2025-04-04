@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { applyFontSize } from '../utils/userSettingsUtils';
 
 export function useInput(defaultValue, validations) {
   const [enteredValue, setEnteredValue] = useState(
@@ -12,13 +13,17 @@ export function useInput(defaultValue, validations) {
     setEnteredValue(defaultValue !== undefined ? defaultValue : '');
   }, [defaultValue]);
 
-  const handleChange = e => {
+  const handleChange = (e, settings) => {
     // IF defaultValue is boolean (checkbox), we use e.target.checked
     if (typeof defaultValue === 'boolean') {
       setEnteredValue(e.target.checked);
     } else {
       setEnteredValue(e.target.value);
     } // update on keystroke
+
+    if (settings === 'font') {
+      applyFontSize(e.target.value.toLowerCase());
+    }
   };
 
   const handleReset = () => {

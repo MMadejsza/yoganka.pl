@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStatus } from '../../../hooks/useAuthStatus.js';
 import { mutateOnLoginOrSignup, queryClient } from '../../../utils/http.js';
+import { applyFontSize } from '../../../utils/userSettingsUtils.js';
 import { smoothScrollInto } from '../../../utils/utils.jsx';
 import Logo from '../../frontend/Logo.jsx';
 
@@ -131,25 +132,8 @@ function Nav({ setIsNavOpen }) {
 
   // Apply user settings
   useEffect(() => {
-    const prefs = status?.user?.UserPrefSetting;
-    if (!prefs?.fontSize) return;
-
-    const fontSizePref = prefs.fontSize?.toLowerCase?.() || 'm';
-
-    const scaleMap = {
-      xs: 0.8,
-      s: 0.9,
-      m: 1,
-      l: 1.1,
-      xl: 1.2,
-    };
-
-    const scale = scaleMap[fontSizePref] ?? 1;
-
-    if (typeof scale === 'number') {
-      document.documentElement.style.setProperty('--scale', scale.toString());
-    }
-    queryClient.invalidateQueries(['authStatus']);
+    const prefSettings = status?.user?.UserPrefSetting;
+    applyFontSize(prefSettings?.fontSize);
   }, [status?.user?.UserPrefSetting?.fontSize]);
 
   const handleLogout = () => {
