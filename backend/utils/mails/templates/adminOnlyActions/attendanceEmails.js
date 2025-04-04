@@ -1,13 +1,13 @@
 import 'dotenv/config';
 import { mainTransporter } from '../../transporter.js';
 import {
-  sendAttendanceFirstBookingForScheduleMail as baseAttendanceFirstBookingForScheduleMail,
+  sendPaymentSuccessful as baseAttendanceFirstBookingForScheduleMail,
   sendAttendanceReturningMail as baseAttendanceReturningMail,
   sendAttendanceMarkedAbsentMail as baseMarkedAbsentMail,
 } from '../customerActions/attendanceEmails.js';
 
 //! OVERWRITTEN CUSTOMER_____________________________________________
-export const sendAttendanceFirstBookingForScheduleMail = configObject => {
+export const sendPaymentSuccessful = configObject => {
   configObject.isAdmin = true;
   baseAttendanceFirstBookingForScheduleMail(configObject);
 };

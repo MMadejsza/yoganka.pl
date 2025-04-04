@@ -9,7 +9,7 @@ import {
   errorCode,
   successLog,
 } from '../utils/debuggingUtils.js';
-import * as adminEmails from '../utils/mails/templates/customerActions/_customerEmails.js';
+import * as customerEmails from '../utils/mails/templates/customerActions/_customerEmails.js';
 
 let errCode = errorCode;
 const person = 'Customer';
@@ -130,6 +130,8 @@ export const postCreateBookSchedule = (req, res, next) => {
   let customerPromise,
     currentCustomer,
     currentScheduleRecord,
+    userEmail = req.user.email,
+    wantsNotifications = req.user.UserPrefSetting.notifications === true,
     isNewCustomer = false;
   // If it's not a Customer yet
   if (!req.user.Customer) {
@@ -175,9 +177,9 @@ export const postCreateBookSchedule = (req, res, next) => {
       notes: cDetails.notes,
     }).then(newCustomer => {
       // Notification email
-      if (req.user.email) {
-        adminEmails.sendCustomerCreatedMail({
-          to: req.user.email,
+      if (userEmail && wantsNotifications) {
+        customerEmails.sendCustomerCreatedMail({
+          to: userEmail,
           firstName: cDetails.fname,
         });
       }
@@ -293,9 +295,9 @@ export const postCreateBookSchedule = (req, res, next) => {
       })
       .then(existingBooking => {
         if (existingBooking) {
-          if (req.user.email) {
-            adminEmails.sendAttendanceReturningMail({
-              to: req.user.email,
+          if (userEmail && wantsNotifications) {
+            customerEmails.sendAttendanceReturningMail({
+              to: userEmail,
               productName: currentScheduleRecord.Product.name,
               date: currentScheduleRecord.date,
               startTime: currentScheduleRecord.startTime,
@@ -333,9 +335,9 @@ export const postCreateBookSchedule = (req, res, next) => {
               },
               { transaction: t }
             ).then(booking => {
-              if (req.user.email) {
-                adminEmails.sendAttendanceFirstBookingForScheduleMail({
-                  to: req.user.email,
+              if (userEmail && wantsNotifications) {
+                customerEmails.sendReservationFreshMail({
+                  to: userEmail,
                   productName: currentScheduleRecord?.Product.name || '',
                   date: currentScheduleRecord.date,
                   startTime: currentScheduleRecord.startTime,
@@ -372,10 +374,11 @@ export const postCreateBookSchedule = (req, res, next) => {
               },
               { transaction: t }
             ).then(payment => {
-              if (req.user.email) {
-                adminEmails.sendReservationFreshMail({
-                  to: req.user.email,
-                  productName: currentScheduleRecord.Product.name,
+              if (userEmail) {
+                customerEmails.sendPaymentSuccessful({
+                  to: userEmail,
+                  amountPaid: payment.amountPaid,
+                  productName: currentScheduleRecord?.Product.name || '',
                   date: currentScheduleRecord.date,
                   startTime: currentScheduleRecord.startTime,
                   location: currentScheduleRecord.location,
@@ -393,10 +396,10 @@ export const postCreateBookSchedule = (req, res, next) => {
                 },
                 { transaction: t }
               ).then(booking => {
-                if (req.user.email) {
-                  adminEmails.sendAttendanceFirstBookingForScheduleMail({
-                    to: req.user.email,
-                    productName: currentScheduleRecord?.Product.name || '',
+                if (userEmail && wantsNotifications) {
+                  customerEmails.sendReservationFreshMail({
+                    to: userEmail,
+                    productName: currentScheduleRecord.Product.name,
                     date: currentScheduleRecord.date,
                     startTime: currentScheduleRecord.startTime,
                     location: currentScheduleRecord.location,
@@ -431,6 +434,8 @@ export const putEditMarkAbsent = (req, res, next) => {
   callLog(req, person, controllerName);
   const scheduleID = req.params.scheduleID;
   let currentScheduleRecord;
+  const customerEmail = req.user.email;
+  const wantsNotifications = req.user.UserPrefSetting?.notifications === true;
   console.log('putEditMarkAbsent', req.body);
 
   models.ScheduleRecord.findOne({
@@ -466,9 +471,9 @@ export const putEditMarkAbsent = (req, res, next) => {
         }
       ).then(([updatedCount]) => {
         if (updatedCount > 0) {
-          if (req.user.email) {
-            adminEmails.sendAttendanceMarkedAbsentMail({
-              to: req.user.email,
+          if (customerEmail && wantsNotifications) {
+            customerEmails.sendAttendanceMarkedAbsentMail({
+              to: customerEmail,
               productName: currentScheduleRecord.Product.name,
               date: currentScheduleRecord.date,
               startTime: currentScheduleRecord.startTime,

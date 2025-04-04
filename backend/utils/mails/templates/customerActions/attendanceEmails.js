@@ -85,8 +85,9 @@ export const sendAttendanceMarkedAbsentMail = ({
     });
 };
 
-export const sendAttendanceFirstBookingForScheduleMail = ({
+export const sendPaymentSuccessful = ({
   to,
+  amountPaid,
   productName,
   date,
   startTime,
@@ -107,6 +108,7 @@ export const sendAttendanceFirstBookingForScheduleMail = ({
           <strong>${productName}</strong><br>
           📅 ${date} o ${startTime}<br>
           📍 ${location}
+          💲 ${amountPaid} (Zapłacono)
         </p>  
   
         <p style="margin-top: 2rem;">Z pozdrowieniami,<br><strong>Zespół Yoganki 💜</strong></p>

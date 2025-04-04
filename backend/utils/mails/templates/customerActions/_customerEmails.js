@@ -1,7 +1,7 @@
 import {
-  sendAttendanceFirstBookingForScheduleMail,
   sendAttendanceMarkedAbsentMail,
   sendAttendanceReturningMail,
+  sendPaymentSuccessful,
 } from './attendanceEmails.js';
 import { sendCustomerCreatedMail } from './creationEmails.js';
 import {
@@ -10,10 +10,10 @@ import {
 } from './reservationEmails.js';
 
 export {
-  sendAttendanceFirstBookingForScheduleMail,
   sendAttendanceMarkedAbsentMail,
   sendAttendanceReturningMail,
   sendCustomerCreatedMail,
   sendPassFreshMail,
+  sendPaymentSuccessful,
   sendReservationFreshMail,
 };

@@ -16,14 +16,14 @@ export const sendPassFreshMail = configObject => {
 };
 
 //! ADMIN ONLY_____________________________________________
-export const sendReservationCancelledMail = ({ to, bookingID }) => {
-  const subject = `❗️ Płatność anulowana • nr ${bookingID} (anulowane przez administratora)`;
+export const sendReservationCancelledMail = ({ to, paymentId }) => {
+  const subject = `❗️ Płatność anulowana • nr ${paymentId} (anulowane przez administratora)`;
   const html = `
     <main>
-      <h1>Twoja rezerwacja została anulowana ❌</h1>
+      <h1>Twoja płatność została anulowana ❌</h1>
 
       <p>
-        Niestety, Twoja rezerwacja o numerze <strong>${bookingID}</strong> została usunięta przez administratora systemu.
+        Niestety, Twoja płatność o numerze <strong>${paymentId}</strong> została usunięta przez administratora systemu.
       </p>
 
       <p>

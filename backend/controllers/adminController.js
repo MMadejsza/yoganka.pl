@@ -1617,6 +1617,7 @@ export const postCreateBooking = (req, res, next) => {
     errCode = 400;
     return next(new Error('Brakuje pól: customerId, scheduleId, bookingType'));
   }
+  const wantsNotifications = req.user?.UserPrefSetting?.notifications === true;
 
   let currentCustomer, currentScheduleRecord;
   const paymentMethodDeduced =
@@ -1676,7 +1677,7 @@ export const postCreateBooking = (req, res, next) => {
         })
         .then(existingBooking => {
           if (existingBooking) {
-            if (req.user.email) {
+            if (req.user.email && wantsNotifications) {
               adminEmails.sendAttendanceReturningMail({
                 to: req.user.email,
                 productName: currentScheduleRecord.Product.name,
@@ -1792,7 +1793,7 @@ export const deleteBookingRecord = (req, res, next) => {
   callLog(req, person, controllerName);
 
   const { customerId, rowId } = req.body;
-  let currentScheduleRecord, customerEmail;
+  let currentScheduleRecord, customerEmail, wantsNotifications;
 
   // Find booking to get info for email as well
   models.Booking.findOne({
@@ -1832,6 +1833,8 @@ export const deleteBookingRecord = (req, res, next) => {
 
       currentScheduleRecord = foundRecord.ScheduleRecord;
       customerEmail = foundRecord.Customer.User.email;
+      wantsNotifications =
+        foundRecord.Customer.User.UserPrefSetting?.notifications === true;
 
       // Return deleted number
       return foundRecord.destroy();
@@ -1843,7 +1846,7 @@ export const deleteBookingRecord = (req, res, next) => {
       }
 
       // Send confirmation
-      if (customerEmail) {
+      if (customerEmail && wantsNotifications) {
         adminEmails.sendAttendanceRecordDeletedMail({
           to: customerEmail,
           productName: currentScheduleRecord.Product.name || 'Zajęcia',
@@ -1873,7 +1876,7 @@ export const putEditMarkAbsent = (req, res, next) => {
   callLog(req, person, controllerName);
 
   const { rowId, customerId } = req.body;
-  let currentScheduleRecord, customerEmail;
+  let currentScheduleRecord, customerEmail, wantsNotifications;
 
   // Find schedule
   models.Booking.findOne({
@@ -1913,7 +1916,8 @@ export const putEditMarkAbsent = (req, res, next) => {
       currentScheduleRecord = foundRecord.ScheduleRecord;
       // Assign for email data
       customerEmail = foundRecord.Customer.User.email;
-
+      wantsNotifications =
+        foundRecord.Customer.User.UserPrefSetting?.notifications === true;
       // Finally update attendance
       return models.Booking.update(
         {
@@ -1930,7 +1934,7 @@ export const putEditMarkAbsent = (req, res, next) => {
     })
     .then(() => {
       // Send confirmation email
-      if (customerEmail) {
+      if (customerEmail && wantsNotifications) {
         adminEmails.sendAttendanceMarkedAbsentMail({
           to: customerEmail,
           productName: currentScheduleRecord.Product.name || '',
@@ -1956,7 +1960,7 @@ export const putEditMarkPresent = (req, res, next) => {
 
   const { customerId, rowId } = req.body;
 
-  let currentScheduleRecord, customerEmail;
+  let currentScheduleRecord, customerEmail, wantsNotifications;
 
   // Find schedule
   models.Booking.findOne({
@@ -1997,7 +2001,8 @@ export const putEditMarkPresent = (req, res, next) => {
       currentScheduleRecord = foundRecord.ScheduleRecord;
       // Assign for email data
       customerEmail = foundRecord.Customer.User.email;
-
+      wantsNotifications =
+        foundRecord.Customer.User.UserPrefSetting?.notifications === true;
       // Finally update attendance
       return models.Booking.update(
         {
@@ -2014,7 +2019,7 @@ export const putEditMarkPresent = (req, res, next) => {
     })
     .then(updatedRecord => {
       // Send confirmation email
-      if (customerEmail) {
+      if (customerEmail && wantsNotifications) {
         adminEmails.sendAttendanceReturningMail({
           to: customerEmail,
           productName: currentScheduleRecord?.Product.name || '',
@@ -2210,7 +2215,7 @@ export const postCreatePayment = (req, res, next) => {
     throw new Error('Pole metody płatności nie może być puste.');
   }
 
-  let currentCustomer, currentPassDefinition, customerEmail;
+  let currentCustomer, currentPassDefinition, customerEmail, wantsNotifications;
 
   const paymentMethodDeduced =
     paymentMethod == 1
@@ -2237,6 +2242,8 @@ export const postCreatePayment = (req, res, next) => {
         successLog(person, controllerName, 'customer found');
         currentCustomer = customer;
         customerEmail = customer.User?.email;
+        wantsNotifications =
+          foundRecord.Customer.User.UserPrefSetting?.notifications === true;
 
         // If passDefinitionId is provided, then the payment should be for a pass.
         if (passDefinitionId) {
@@ -2295,6 +2302,7 @@ export const postCreatePayment = (req, res, next) => {
             .then(payment => {
               if (payment)
                 successLog(person, controllerName, 'payment created');
+              // ! MAIL WITH PAYMENT CONFIRMATION
 
               const purchaseDate = new Date(),
                 validityDays = currentPassDefinition.defaultValidityDays;
@@ -2406,7 +2414,7 @@ export const postCreatePayment = (req, res, next) => {
                 ).then(payment => {
                   if (payment)
                     successLog(person, controllerName, 'Payment created');
-
+                  // ! MAIL WITH PAYMENT CONFIRMATION
                   return models.Booking.create(
                     {
                       customerId: currentCustomer.customerId,
@@ -2420,7 +2428,7 @@ export const postCreatePayment = (req, res, next) => {
                   ).then(booking => {
                     if (booking)
                       successLog(person, controllerName, 'Booking created');
-                    if (customerEmail) {
+                    if (customerEmail && wantsNotifications) {
                       adminEmails.sendReservationFreshMail({
                         to: customerEmail,
                         productName: scheduleRecord.Product.name,
@@ -2466,20 +2474,20 @@ export const deletePayment = (req, res, next) => {
       },
     ],
   })
-    .then(booking => {
-      if (!booking) {
+    .then(payment => {
+      if (!payment) {
         errCode = 404;
         throw new Error('\n❌ Nie znaleziono płatności.');
       }
 
       // Assign email
-      const customerEmail = booking.Customer?.User?.email;
+      const customerEmail = payment.Customer?.User?.email;
 
       // Send email before deletion
       if (customerEmail) {
         adminEmails.sendReservationCancelledMail({
           to: customerEmail,
-          bookingID: booking.paymentId,
+          paymentId: payment.paymentId,
         });
       }
 

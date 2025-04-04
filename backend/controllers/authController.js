@@ -131,51 +131,7 @@ export const getStatus = (req, res, next) => {
     });
   }
 };
-// export const getStatus = (req, res, next) => {
-//   const controllerName = 'getStatus';
-//   callLog(req, person, controllerName);
-//   console.log({
-//     isLoggedIn: res.locals.isLoggedIn || false,
-//     role: res.locals.role,
-//     token: res.locals.csrfToken,
-//   });
 
-//    // Load fresh user from DB to get updated preferences and passes
-//    let safeUser = null;
-//    if (isLoggedIn && req.user?.userId) {
-//      try {
-//        const user = await models.User.findByPk(req.user.userId, {
-//          include: [
-//            {
-//              model: models.UserPrefSetting,
-//              required: false,
-//            },
-//            {
-//              model: models.Customer,
-//              required: false,
-//              include: [
-//                {
-//                  model: models.CustomerPass,
-//                  required: false,
-//                  include: [
-//                    {
-//                      model: models.PassDefinition,
-//                      required: false,
-//                    },
-//                  ],
-//                },
-//              ],
-//            },
-//          ],
-//        });
-
-//   successLog(person, controllerName);
-//   return res.status(200).json({
-//     isLoggedIn: res.locals.isLoggedIn || false,
-//     role: res.locals.role,
-//     token: res.locals.csrfToken,
-//   });
-// };
 //! LOG IN / OUT_______________________________________________
 //@ POST
 export const postLogin = (req, res, next) => {
