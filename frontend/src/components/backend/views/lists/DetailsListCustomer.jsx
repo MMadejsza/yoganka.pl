@@ -10,6 +10,7 @@ function DetailsListCustomer({
   customerAccessed,
   adminAccessed,
   isPaymentView,
+  classModifier,
 }) {
   console.log('customerData', customerData);
 
@@ -51,7 +52,11 @@ function DetailsListCustomer({
       adminAccessed={adminAccessed}
     />
   ) : (
-    <GenericList title={title} details={details} classModifier='payment-view' />
+    <GenericList
+      title={title}
+      details={details}
+      classModifier={classModifier}
+    />
   );
   return (
     <>

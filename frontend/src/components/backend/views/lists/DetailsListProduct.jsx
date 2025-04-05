@@ -8,7 +8,7 @@ import GenericList from '../../../common/GenericList.jsx';
 import ToggleEditButton from '../../../common/ToggleEditButton.jsx';
 import DetailsFormProduct from './edit-forms/DetailsFormProduct.jsx';
 
-function DetailsListProduct({ data, placement, userAccessed }) {
+function DetailsListProduct({ data, placement, userAccessed, classModifier }) {
   // console.log(
   // 	`📝
   //     product object from backend:`,
@@ -50,7 +50,7 @@ function DetailsListProduct({ data, placement, userAccessed }) {
     <GenericList
       title={`Szczegóły zajęć:`}
       details={details}
-      classModifier='product-view'
+      classModifier={classModifier}
     />
   );
   return (

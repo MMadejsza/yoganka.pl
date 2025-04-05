@@ -1,6 +1,11 @@
 import GenericList from '../../../common/GenericList.jsx';
 
-function DetailsListProductStats({ data, prodStats, placement }) {
+function DetailsListProductStats({
+  data,
+  prodStats,
+  placement,
+  classModifier,
+}) {
   // console.clear();
   console.log(
     `📝 
@@ -54,7 +59,11 @@ function DetailsListProductStats({ data, prodStats, placement }) {
   ];
 
   return (
-    <GenericList title={title} details={details} classModifier='product-view' />
+    <GenericList
+      title={title}
+      details={details}
+      classModifier={classModifier}
+    />
   );
 }
 

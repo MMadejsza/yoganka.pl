@@ -35,10 +35,18 @@ function ViewProduct({ data, isAdminPanel }) {
       {/*//@ Product main details */}
       <div className='generic-outer-wrapper'>
         <div className='generic-component-wrapper'>
-          <DetailsListProduct data={product} placement={'productView'} />
+          <DetailsListProduct
+            data={product}
+            placement={'productView'}
+            classModifier='product-view'
+          />
         </div>
         {/*//@ Product business details */}
-        <DetailsListProductStats data={product} prodStats={prodStats} />
+        <DetailsListProductStats
+          data={product}
+          prodStats={prodStats}
+          classModifier='product-view'
+        />
         {/* //! Jeśli jeden schedule i camp/event to wyświetl jego ustawienia eby zmieni np. liczbe miejsc*/}
       </div>
 

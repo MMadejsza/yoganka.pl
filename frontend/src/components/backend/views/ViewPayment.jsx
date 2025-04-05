@@ -47,6 +47,7 @@ function ViewPayment({ data, isUserAccountPage }) {
             customerAccessed={customerAccessed}
             adminAccessed={adminAccessed}
             isPaymentView={isPaymentView}
+            classModifier='payment-view'
           />
         )}
 
