@@ -38,44 +38,34 @@ function ViewProduct({ data, isAdminPanel }) {
           <DetailsListProduct data={product} placement={'productView'} />
         </div>
         {/*//@ Product business details */}
-        {/* <div className='user-container__main-details modal-checklist'> */}
         <DetailsListProductStats data={product} prodStats={prodStats} />
         {/* //! Jeśli jeden schedule i camp/event to wyświetl jego ustawienia eby zmieni np. liczbe miejsc*/}
-        {/* </div> */}
       </div>
 
       {/*//@ Schedules if not event/camp*/}
-      {/* <div className='user-container__main-details  schedules modal-checklist'> */}
       <TableSchedules
         scheduleRecords={prodStats.scheduleRecords}
         status={status}
         isAdminPage={isAdminPanel}
       />
-      {/* </div> */}
 
       {(type == 'CAMP' || type == 'EVENT') && (
-        // <div className='user-container__main-details  schedules modal-checklist'>
         <TableAttendance
           stats={prodStats}
           type={type}
           isAdminPage={isAdminPanel}
         />
-        // {/* </div> */}
       )}
 
       {/*//@ All payments */}
-      {/* <div className='user-container__main-details  schedules modal-checklist'> */}
       <TableProductPayments
         stats={prodStats}
         type={type}
         isAdminPage={isAdminPanel}
       />
-      {/* </div> */}
 
       {/*//@ Feedback */}
-      {/* <div className='user-container__main-details  schedules modal-checklist'> */}
       <TableProductReviews stats={prodStats} />
-      {/* </div> */}
     </>
   );
 }

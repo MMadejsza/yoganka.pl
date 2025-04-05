@@ -51,7 +51,7 @@ function DetailsListCustomer({
       adminAccessed={adminAccessed}
     />
   ) : (
-    <GenericList title={title} details={details} />
+    <GenericList title={title} details={details} classModifier='payment-view' />
   );
   return (
     <>

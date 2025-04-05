@@ -23,7 +23,13 @@ function DetailsListPayment({ paymentData }) {
     });
   }
 
-  return <GenericList title='Szczegóły:' details={details} />;
+  return (
+    <GenericList
+      title='Szczegóły:'
+      details={details}
+      classModifier='payment-view'
+    />
+  );
 }
 
 export default DetailsListPayment;

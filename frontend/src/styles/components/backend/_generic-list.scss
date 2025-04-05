@@ -58,7 +58,8 @@ $generic-list-vertical-padding: 2rem;
 
   .modal__btn {
     margin: 0 $generic-list-vertical-padding;
-    // flex-basis: 100%;
+    padding: 0 $generic-list-vertical-padding;
+    flex-basis: auto;
   }
 }
 .generic-component-wrapper {
@@ -99,46 +100,84 @@ $generic-list-vertical-padding: 2rem;
 
   .generic-details {
     padding: $generic-list-vertical-padding 0rem;
+
     &__list {
       align-self: center !important;
       min-width: 300px;
     }
+
+    &__list--customer-account-stats {
+      width: 65%;
+    }
+
     &__label {
       max-width: 70%;
+    }
+
+    &--product-stats {
+      flex-basis: 85%;
+    }
+  }
+}
+
+@include respond-to(mobile-mh) {
+  .generic-details {
+    &__list--customer-account-stats {
+      width: 45%;
     }
   }
 }
 
 @include respond-to(mobile-l) {
-  //   .generic-component-wrapper {
-  //     @include flex(row, center, space-evenly);
-  //     flex-wrap: wrap;
-  //     gap: 1.5rem;
+  .generic-outer-wrapper:has(.generic-details--product-view) {
+    gap: 4rem;
+  }
+  .generic-outer-wrapper
+    > *:not(
+      .generic-details--payment-view,
+      .generic-details--product-view,
+      :has(.generic-details--product-view)
+    ),
+  .generic-outer-wrapper
+    > *:nth-last-child(1):nth-child(odd):not(
+      .generic-details--payment-view,
+      .generic-details--product-view,
+      :has(.generic-details--product-view)
+    ) {
+    flex-basis: 32%;
+    flex-wrap: nowrap;
+  }
 
-  //     > * {
-  //       flex-basis: 100%;
-  //     }
+  .generic-details {
+    &--product-stats {
+      flex-basis: 45%;
+    }
 
-  //     .modal__btn {
-  //       flex-basis: 100%;
-  //     }
-  //   }
+    &__list {
+      width: 40%;
+    }
 
-  //   .generic-details {
-  //     &__list {
-  //       min-width: 300px;
-  //     }
+    &__list--product-stats {
+      width: 100%;
+    }
+  }
+}
 
-  //     &__label {
-  //       max-width: 45%;
-  //     }
+@include respond-to(desktop-xs) {
+  .generic-outer-wrapper {
+    gap: 2rem;
+  }
+  .generic-details {
+    &--product-stats {
+      flex-basis: 45%;
+    }
 
-  //     &__content {
-  //       min-width: 48%;
+    &__list {
+      width: 90%;
+    }
 
-  //       &--settings {
-  //         min-width: 15%;
-  //       }
-  //     }
-  //   }
+    &__list--customer-account-stats {
+      width: 45%;
+    }
+  }
 }

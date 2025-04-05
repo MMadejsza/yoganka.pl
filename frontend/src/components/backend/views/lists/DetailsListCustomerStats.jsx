@@ -29,7 +29,13 @@ function DetailsListCustomerStats({
     });
   }
 
-  return <GenericList title={title} details={details} />;
+  return (
+    <GenericList
+      title={title}
+      details={details}
+      classModifier='customer-account-stats'
+    />
+  );
 }
 
 export default DetailsListCustomerStats;

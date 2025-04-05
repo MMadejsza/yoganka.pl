@@ -53,7 +53,9 @@ function DetailsListProductStats({ data, prodStats, placement }) {
     { label: 'Śr. ocena:', content: prodStats.avgFeedbackScore },
   ];
 
-  return <GenericList title={title} details={details} />;
+  return (
+    <GenericList title={title} details={details} classModifier='product-view' />
+  );
 }
 
 export default DetailsListProductStats;

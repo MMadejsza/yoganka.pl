@@ -42,10 +42,8 @@ function ViewCustomer({ data }) {
           customerAccessed={customerAccessed}
           adminAccessed={adminAccessed}
         />
-        {/* </div> */}
 
         {/*//@ Personal-user details */}
-        {/* <div className='user-container__side-details modal-checklist'> */}
         <DetailsListUser userData={user} customerView={true} />
 
         {user.UserPrefSetting && (
@@ -55,22 +53,18 @@ function ViewCustomer({ data }) {
             adminAccessed={adminAccessed}
           />
         )}
+
         {/*//@ Stats */}
-        {/* <div className='user-container__main-details user-container__side-details--schedules schedules modal-checklist'> */}
         <DetailsListCustomerStats customerStats={customerStats} />
-        {/* </div> */}
       </div>
 
       {/*//@ Schedules */}
-      {/* <div className='user-container__main-details user-container__side-details--schedules schedules modal-checklist'> */}
       <TableCustomerSchedules customerStats={customerStats} />
-      {/* </div> */}
+
       {/*//@ Reviews */}
-      {/* <div className='user-container__main-details user-container__side-details--schedules schedules modal-checklist'> */}
       <TableCustomerReviews reviews={customerStats.reviews} />
-      {/* </div> */}
+
       {/*//@ Payments */}
-      {/* <div className='user-container__main-details user-container__side-details--schedules schedules modal-checklist'> */}
       <TableCustomerTotalPayments data={customer} />
       {/* </div> */}
 

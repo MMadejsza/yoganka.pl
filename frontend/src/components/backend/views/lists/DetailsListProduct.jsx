@@ -47,7 +47,11 @@ function DetailsListProduct({ data, placement, userAccessed }) {
   let content = isEditing ? (
     <DetailsFormProduct productData={data} />
   ) : (
-    <GenericList title={`Szczegóły zajęć:`} details={details} />
+    <GenericList
+      title={`Szczegóły zajęć:`}
+      details={details}
+      classModifier='product-view'
+    />
   );
   return (
     <>
