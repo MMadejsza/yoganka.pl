@@ -109,54 +109,13 @@ footer {
   padding: 0 var(--section-padding-y) 2rem;
   box-shadow: map.get($shadows, section-shadow);
 }
-* input {
-  outline: none;
-  border: none;
-  cursor: auto;
-  background-color: map.get($colors, base);
-}
+
 // page
 .error {
   grid-area: space;
   place-self: center;
   margin: 2rem auto;
   text-align: center;
-}
-// box
-.feedback-box {
-  width: 80%;
-  flex-basis: 80%;
-  min-height: 8vh;
-  margin: 3rem 0;
-  padding: 1.5rem;
-  text-align: center;
-  font-size: 2rem;
-  border-radius: map.get($sizes, border-radius);
-  box-shadow: map.get($shadows, box-shadow);
-  @include flex(row, center, center);
-  flex-wrap: wrap;
-  gap: 1.5rem;
-
-  &--error {
-    color: #c62828;
-    background-color: rgba(244, 67, 54, 0.25);
-  }
-  &--success {
-    color: #2e7d32;
-    background-color: rgba(76, 175, 80, 0.25);
-  }
-  &--neutral {
-    color: map.get($colors, tile-title);
-    background-color: rgba(map.get($colors, nav), 0.2);
-  }
-  &--small {
-    margin-top: 1.5rem;
-    min-height: 3rem;
-  }
-  &__title,
-  &__warning {
-    flex-basis: 100%;
-  }
 }
 
 //! COMMON BLOCKS END

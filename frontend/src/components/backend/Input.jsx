@@ -8,9 +8,16 @@ function Input({
   didEdit,
   validationResults,
   isLogin,
+  classModifier,
+  isNotes,
   ...props
 }) {
   let input;
+  const inputClass = !embedded
+    ? `${formType}-form__${id}-input`
+    : `generic-details__content ${classModifier ? `generic-details__content--${classModifier}` : ''}  ${isNotes ? `generic-details__content--notes` : ''}`;
+  const textAreaClass = `${formType}-form__${id}-textarea`;
+
   if (props.type === 'checkbox') {
     input = (
       <input
@@ -18,12 +25,12 @@ function Input({
         {...props}
         type='checkbox'
         checked={value}
-        className={`${formType}-form__${id}-input`}
+        className={inputClass}
       />
     );
   } else if (props.type == 'select') {
     input = (
-      <select id={id} name={id} {...props} value={value}>
+      <select id={id} name={id} {...props} value={value} className={inputClass}>
         {props.options.map((option, index) => (
           <option key={index} value={option.value}>
             {option.label}
@@ -38,31 +45,24 @@ function Input({
         name={id}
         {...props}
         value={value}
-        className={`${formType}-form__${id}-textarea`}
+        className={textAreaClass}
       ></textarea>
     );
   } else {
-    input = (
-      <input
-        id={id}
-        {...props}
-        value={value}
-        className={`${formType}-form__${id}-input`}
-      />
-    );
+    input = <input id={id} {...props} value={value} className={inputClass} />;
   }
 
   return (
     <div
       className={`${
         embedded
-          ? 'user-container__section-record modal-checklist__li'
+          ? `generic-details__item ${classModifier ? `generic-details__item--${classModifier}` : ''} modal-checklist__li`
           : 'input-pair'
       } ${props.type == 'tel' ? 'phone' : ''}`}
     >
       <label
         htmlFor={id}
-        className={`${embedded ? 'user-container__section-record-label' : ''}`}
+        className={`${embedded ? `generic-details__label ${classModifier ? `generic-details__label--${classModifier}` : ''}` : ''}`}
       >
         {label}
       </label>

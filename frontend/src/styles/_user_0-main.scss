@@ -48,18 +48,4 @@
       background-color: rgba(76, 175, 80, 0.25);
     }
   }
-
-  select {
-    // width: 100%;
-    padding: 0 1.5rem;
-    // text-align: center;
-    line-height: 3rem;
-    height: 3rem;
-    font-family: inherit;
-    border-radius: map.get($sizes, border-radius);
-    background-color: rgba(map.get($colors, base), 1);
-    border: none;
-    outline: none;
-    transition: map.get($behavior, base-transition);
-  }
 }

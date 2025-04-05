@@ -225,7 +225,6 @@ function DetailsFormProduct({ productData }) {
         didEdit={dateDidEdit}
         isFocused={dateIsFocused}
       />
-
       <Input
         embedded={true}
         formType={formType}
@@ -295,12 +294,7 @@ function DetailsFormProduct({ productData }) {
         validationResults={statusValidationResults}
         didEdit={statusDidEdit}
         isFocused={statusIsFocused}
-      />
-    </WrapperForm>
-  );
-  return (
-    <>
-      {form}
+      />{' '}
       {feedback.status !== undefined && (
         <FeedbackBox
           status={feedback.status}
@@ -312,8 +306,9 @@ function DetailsFormProduct({ productData }) {
           size='small'
         />
       )}
-    </>
+    </WrapperForm>
   );
+  return <>{form}</>;
 }
 
 export default DetailsFormProduct;

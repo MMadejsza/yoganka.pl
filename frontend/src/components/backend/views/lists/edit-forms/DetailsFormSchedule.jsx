@@ -221,12 +221,7 @@ function DetailsFormSchedule({ scheduleData }) {
         validationResults={locationValidationResults}
         didEdit={locationDidEdit}
         isFocused={locationIsFocused}
-      />
-    </WrapperForm>
-  );
-  return (
-    <>
-      {form}
+      />{' '}
       {feedback.status !== undefined && (
         <FeedbackBox
           status={feedback.status}
@@ -238,8 +233,9 @@ function DetailsFormSchedule({ scheduleData }) {
           size='small'
         />
       )}
-    </>
+    </WrapperForm>
   );
+  return <>{form}</>;
 }
 
 export default DetailsFormSchedule;

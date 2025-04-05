@@ -324,40 +324,6 @@ body:has(.admin-console) {
     @include flex(column, center, center);
     gap: 1.5rem;
     max-width: 600px;
-
-    &__input-set {
-      width: 100%;
-      @include flex(row, space-between);
-      font-size: 1.8rem;
-      gap: 1.5rem;
-      label {
-        flex-basis: 35%;
-        text-align: right;
-      }
-    }
-    input,
-    .settings-form__notes-textarea {
-      flex-basis: 55%;
-      padding: 0.5rem 1.5rem;
-      font-family: 'EB Garamond', serif;
-      border-radius: map.get($sizes, border-radius);
-    }
-    .settings-form__notes-textarea {
-      flex-basis: 100%;
-      font-family: 'EB Garamond', serif;
-    }
-    button:last-child {
-      margin-top: 1.2rem;
-    }
-
-    &.new-customer {
-      max-width: 50%;
-
-      select {
-        width: 100%;
-        padding-left: 5rem;
-      }
-    }
   }
   .table-form {
     width: 100%;
@@ -369,24 +335,9 @@ body:has(.admin-console) {
       gap: 1.5rem;
       transition: map.get($behavior, base-transition);
 
-      .frequency-inputs {
-        @include flex(row, center, center);
-      }
-      input,
-      select {
-        width: min-content;
-        max-width: 125px;
-        padding: 0 1rem;
-        text-align: center;
-      }
       .modal-checklist__li {
         width: min-content;
         gap: 0;
-        &:nth-child(2) {
-          input {
-            width: 75px;
-          }
-        }
       }
     }
   }

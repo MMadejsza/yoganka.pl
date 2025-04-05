@@ -20,14 +20,15 @@ function WrapperForm({
   resetLabel,
   isTableRowLike,
   extraButtons,
+  classModifier,
 }) {
   const mainClass = isTableRowLike
     ? `table-form`
-    : 'generic-form user-container__details-list modal-checklist__list';
+    : `generic-details ${classModifier ? `generic-details--${classModifier}` : ''}`;
   const fieldsClass = isTableRowLike
     ? 'table-form__content'
-    : 'generic-form__fields';
-  const btnsClass = isTableRowLike ? 'action-btns' : 'generic-form__actions';
+    : `generic-details__list  ${classModifier ? `generic-details__list--${classModifier}` : ''} modal-checklist__list`;
+  const btnsClass = isTableRowLike ? 'action-btns' : 'modal__user-action';
   const resetClass = isTableRowLike
     ? 'form-switch-btn modal__btn--secondary  table-form-btn'
     : 'form-switch-btn modal__btn--secondary modal__btn modal__btn--small';
@@ -36,25 +37,30 @@ function WrapperForm({
     : 'form-action-btn modal__btn modal__btn--small';
   return (
     <>
-      {title && (
-        <h1 className='generic-details__title user-container__section-title modal__title--day'>
-          {title}
-        </h1>
-      )}
       <form onSubmit={onSubmit} className={mainClass}>
+        {title && (
+          <h2
+            className={`generic-details__title ${classModifier ? `generic-details__title--${classModifier}` : ''} modal__title--day`}
+          >
+            {title}
+          </h2>
+        )}
         {subTitle && (
-          <h3 className='user-container__user-status modal__title'>
+          <h3
+            className={`generic-details__subtitle ${classModifier ? `generic-details__subtitle--${classModifier}` : ''} modal__title--day`}
+          >
             {subTitle}
           </h3>
         )}
         {note && (
-          <h3 className='user-container__user-status modal__title dimmed'>
+          <h3
+            className={`generic-details__subtitle ${classModifier ? `generic-details__subtitle--${classModifier}` : ''} modal__title dimmed`}
+          >
             {note}
           </h3>
         )}
         <div className={fieldsClass}>{children}</div> {/*//! CHILDREN*/}
-        {/* {children} */}
-        <div className={btnsClass}>
+        <footer className={btnsClass}>
           <button type='reset' onClick={onReset} className={resetClass}>
             <span className='material-symbols-rounded nav__icon'>
               restart_alt
@@ -66,7 +72,7 @@ function WrapperForm({
             {submitLabel}
           </button>
           {extraButtons} {/*//! EXTRA NOT STANDARD BTNS*/}
-        </div>
+        </footer>
       </form>
     </>
   );

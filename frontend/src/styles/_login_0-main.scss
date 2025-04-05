@@ -60,63 +60,6 @@ h3 {
   }
 }
 
-.input-pair {
-  width: 70%;
-  @include flex(column, space-evenly, flex-start);
-  gap: 0.5rem;
-
-  label {
-    font-size: 1.8rem;
-  }
-
-  &--checkbox {
-    @include flex(row, center, center);
-    gap: 2rem;
-
-    line-height: 4rem;
-  }
-}
-
-input {
-  width: 100%;
-  padding-left: 1.5rem;
-  line-height: 3rem;
-  font-family: inherit;
-  border-radius: map.get($sizes, border-radius);
-  background-color: rgba(map.get($colors, base), 1);
-  border: none;
-  outline: none;
-  transition: map.get($behavior, base-transition);
-
-  &:hover:not([disabled]),
-  &:focus:not([type='checkbox']) {
-    box-shadow: map.get($shadows, active-box-shadow);
-  }
-
-  &[disabled] {
-    opacity: 0;
-  }
-  &[type='checkbox'] {
-    cursor: pointer;
-    width: 2rem;
-    height: 2rem;
-    padding: 0.1rem;
-
-    font-size: 2rem;
-    border-radius: map.get($sizes, border-radius);
-
-    @include flex(row, center, center);
-  }
-  &.settings-form__font-input {
-    width: min-content;
-  }
-  &.settings-form__phone-input {
-    width: min-content;
-    flex-basis: 20%;
-    padding-left: 0.5rem;
-  }
-}
-
 .control-error {
   // width: 50%;
   margin-top: 1.5rem;

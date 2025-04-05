@@ -257,11 +257,7 @@ function DetailsFormCustomer({
           />
         </>
       )}
-    </WrapperForm>
-  );
-  return (
-    <>
-      {form}
+
       {feedback.status !== undefined && (
         <FeedbackBox
           status={feedback.status}
@@ -273,8 +269,9 @@ function DetailsFormCustomer({
           size='small'
         />
       )}
-    </>
+    </WrapperForm>
   );
+  return <>{form}</>;
 }
 
 export default DetailsFormCustomer;

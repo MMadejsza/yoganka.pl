@@ -1,0 +1,95 @@
+@use '../../utils/' as *;
+@use 'sass:map';
+
+* input {
+  outline: none;
+  border: none;
+  cursor: auto;
+  background-color: map.get($colors, base);
+}
+
+.input-pair {
+  width: 70%;
+  @include flex(column, space-evenly, flex-start);
+  gap: 0.5rem;
+
+  label {
+    font-size: 1.8rem;
+  }
+
+  &--checkbox {
+    line-height: 4rem;
+    @include flex(row, center, center);
+    gap: 2rem;
+  }
+}
+
+input,
+select,
+textarea,
+input.generic-details-content,
+select.generic-details-content,
+textarea.generic-details-content {
+  width: 100%;
+  padding: 0.5rem 1.5rem;
+  flex-basis: 100%;
+  font-family: 'EB Garamond', serif;
+  line-height: 3rem;
+  color: map.get($colors, tile-text) !important;
+  border-radius: map.get($sizes, border-radius);
+  background-color: rgba(map.get($colors, base), 1);
+  outline: none;
+
+  border: 1px solid rgba(map.get($colors, accent-bcg), 0.2);
+  box-shadow: map.get($shadows, box-shadow);
+  transition: map.get($behavior, base-transition);
+}
+
+input {
+  &:hover:not([disabled]),
+  &:focus:not([type='checkbox']) {
+    box-shadow: map.get($shadows, active-box-shadow);
+  }
+
+  &[disabled] {
+    opacity: 0;
+  }
+
+  &[type='checkbox'] {
+    cursor: pointer;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0.1rem;
+    font-size: 2.5rem;
+
+    @include flex(row, center, center);
+
+    &.generic-details__content--settings {
+      flex-basis: 20%;
+    }
+  }
+}
+
+select.generic-details__content--settings {
+  flex-basis: 20%;
+}
+
+.table-form {
+  input,
+  select {
+    width: min-content;
+    max-width: 125px;
+    padding: 0 1rem;
+    text-align: center;
+  }
+
+  .modal-checklist__li {
+    width: min-content;
+    gap: 0;
+    &:nth-child(2) {
+      input {
+        width: 75px;
+      }
+    }
+  }
+}

@@ -1,5 +1,4 @@
 @use 'sass:map';
-@use 'sass:color';
 @use '../../utils/' as *;
 
 $generic-list-vertical-padding: 2rem;
@@ -18,17 +17,19 @@ $generic-list-vertical-padding: 2rem;
 
   &__list {
     align-self: center;
-    width: 90%;
+    width: 100%;
     min-width: 200px;
     @include flex(column);
+    align-items: center !important;
     gap: 1rem;
   }
 
   &__item {
     width: 100%;
     @include flex(row, space-between, space-evenly);
+    align-items: center;
     flex-wrap: wrap;
-    gap: 0.5rem 2rem !important;
+    gap: 1rem 2rem !important;
   }
 
   &__label {

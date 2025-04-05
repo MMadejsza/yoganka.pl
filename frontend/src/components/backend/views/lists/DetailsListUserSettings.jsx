@@ -34,8 +34,8 @@ function DetailsListUserSettings({
 
   const details = [
     { label: 'Menu po lewej:', content: handedness },
-    { label: 'Rozmiar czcionki:', content: fontSize },
     { label: 'Powiadomienia:', content: notifications },
+    { label: 'Rozmiar czcionki:', content: fontSize },
     { label: 'Animacje:', content: animation, status: 0 },
     { label: 'Ciemny motyw:', content: theme, status: 0 },
   ];
@@ -50,6 +50,7 @@ function DetailsListUserSettings({
       settingsData={settingsData}
       customerAccessed={customerAccessed}
       adminAccessed={adminAccessed}
+      classModifier='settings'
     />
   ) : (
     <GenericList title={title} details={details} classModifier='settings' />

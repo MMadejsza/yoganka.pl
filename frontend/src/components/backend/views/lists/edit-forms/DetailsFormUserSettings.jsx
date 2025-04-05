@@ -16,6 +16,7 @@ function DetailsFormUserSettings({
   settingsData,
   customerAccessed,
   adminAccessed,
+  classModifier,
 }) {
   const params = useParams();
   const { feedback, updateFeedback, resetFeedback } = useFeedback();
@@ -203,6 +204,7 @@ function DetailsFormUserSettings({
       onReset={handleReset}
       submitLabel={actionTitle}
       resetLabel='Resetuj'
+      classModifier={classModifier}
     >
       {/* names are for FormData and id for labels */}
       <Input
@@ -221,6 +223,24 @@ function DetailsFormUserSettings({
         validationResults={handednessValidationResults}
         didEdit={handednessDidEdit}
         isFocused={handednessIsFocused}
+        classModifier={classModifier}
+      />
+      <Input
+        embedded={true}
+        formType={formType}
+        type='checkbox'
+        id='notifications'
+        name='notifications'
+        label='Powiadomienia:'
+        value={notificationsValue}
+        checked={notificationsValue}
+        onFocus={handleNotificationsFocus}
+        onBlur={handleNotificationsBlur}
+        onChange={handleNotificationsChange}
+        validationResults={notificationsValidationResults}
+        didEdit={notificationsDidEdit}
+        isFocused={notificationsIsFocused}
+        classModifier={classModifier}
       />
       <Input
         embedded={true}
@@ -243,22 +263,7 @@ function DetailsFormUserSettings({
         validationResults={fontValidationResults}
         didEdit={fontDidEdit}
         isFocused={fontIsFocused}
-      />
-      <Input
-        embedded={true}
-        formType={formType}
-        type='checkbox'
-        id='notifications'
-        name='notifications'
-        label='Powiadomienia:'
-        value={notificationsValue}
-        checked={notificationsValue}
-        onFocus={handleNotificationsFocus}
-        onBlur={handleNotificationsBlur}
-        onChange={handleNotificationsChange}
-        validationResults={notificationsValidationResults}
-        didEdit={notificationsDidEdit}
-        isFocused={notificationsIsFocused}
+        classModifier={classModifier}
       />
       {/* <Input
         embedded={true}
@@ -274,7 +279,7 @@ function DetailsFormUserSettings({
         onChange={handleAnimationChange}
         validationResults={animationValidationResults}
         didEdit={animationDidEdit}
-        isFocused={animationIsFocused}
+        isFocused={animationIsFocused}classModifier={classModifier}
       /> */}
       {/* <Input
         embedded={true}
@@ -290,14 +295,8 @@ function DetailsFormUserSettings({
         onChange={handleThemeChange}
         validationResults={themeValidationResults}
         didEdit={themeDidEdit}
-        isFocused={themeIsFocused}
+        isFocused={themeIsFocused}classModifier={classModifier}
       /> */}
-    </WrapperForm>
-  );
-
-  return (
-    <>
-      {form}
       {feedback.status !== undefined && (
         <FeedbackBox
           status={feedback.status}
@@ -309,8 +308,10 @@ function DetailsFormUserSettings({
           size='small'
         />
       )}
-    </>
+    </WrapperForm>
   );
+
+  return <>{form}</>;
 }
 
 export default DetailsFormUserSettings;

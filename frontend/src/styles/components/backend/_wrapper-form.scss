@@ -1,0 +1,18 @@
+@use '../../utils/' as *;
+
+.generic-details {
+  .modal__user-action {
+    margin-top: 1rem;
+    @include flex($justify: center, $gap: 1rem);
+    flex-flow: row wrap;
+    .modal__btn {
+      padding: 0.2rem 2rem;
+
+      &--small,
+      &--secondary {
+        height: auto;
+        line-height: 150%;
+      }
+    }
+  }
+}
