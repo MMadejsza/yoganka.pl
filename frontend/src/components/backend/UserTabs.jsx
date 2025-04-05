@@ -38,26 +38,26 @@ const menuSet = [
 function UserTabs({ onClick, person }) {
   // console.log(`UserTabs person: `, person);
   return (
-    <ul className='userTabs'>
+    <ul className='tabs-list'>
       {menuSet.map((tab, index) => {
         if (!person.customer && tab.limitedTo == 'customer') {
           return;
         }
         return (
-          <li key={index} className='userTabs__item nav__item'>
+          <li key={index} className='tabs-list__item nav__item'>
             <NavLink
               onClick={() => onClick(tab.link.toLowerCase())}
               to={tab.link}
               end={tab.link === '/konto'}
-              className='userTabs__link nav__link'
+              className='tabs-list__link nav__link'
             >
               {tab.symbol ? (
-                <span className='material-symbols-rounded userTabs__icon nav__icon  '>
+                <span className='material-symbols-rounded tabs-list__icon nav__icon  '>
                   {tab.symbol}
                 </span>
               ) : tab.icon ? (
                 <i
-                  className={`${tab.icon} userTabs__icon nav__icon `}
+                  className={`${tab.icon} tabs-list__icon nav__icon `}
                   aria-hidden='true'
                 ></i>
               ) : null}

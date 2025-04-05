@@ -4,7 +4,6 @@ import { statsCalculatorForCustomer } from '../../../utils/statistics/statsCalcu
 import ModalTable from '../ModalTable.jsx';
 import ViewsController from '../ViewsController.jsx';
 import WrapperModalTable from '../WrapperModalTable.jsx';
-import DetailsListCustomerStats from './lists/DetailsListCustomerStats.jsx';
 
 function ViewAccountDashboard({ data, queryStatus }) {
   const today = new Date();
@@ -59,15 +58,15 @@ function ViewAccountDashboard({ data, queryStatus }) {
     // console.log(`✅ keys: `, keys);
     console.log(`✅ customerStats: `, customerStats);
 
-    statsBlock = (
-      <div className='user-container schedules'>
-        <DetailsListCustomerStats
-          customerStats={customerStats}
-          altTitle={''}
-          userAccountPage={true}
-        />
-      </div>
-    );
+    // statsBlock = (
+    //   <div className='user-container schedules'>
+    //     <DetailsListCustomerStats
+    //       customerStats={customerStats}
+    //       altTitle={''}
+    //       userAccountPage={true}
+    //     />
+    //   </div>
+    // );
   }
   if (queryStatus.isError) {
     console.log(queryStatus.error.code);
@@ -84,7 +83,7 @@ function ViewAccountDashboard({ data, queryStatus }) {
   const table = (
     <WrapperModalTable
       content={contentUpcoming}
-      title={'Nadchodzące zajęcia'}
+      title={'Nadchodząca Yoga'}
       noContentMsg={'nowych rezerwacji'}
     >
       <ModalTable
