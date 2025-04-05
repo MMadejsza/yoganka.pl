@@ -185,60 +185,66 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
       )}
 
       {/*//@ Schedule main details */}
-      {!isFillingTheForm ? (
-        <>
-          <div className='user-container__main-details modal-checklist'>
-            <DetailsListSchedule
-              data={schedule}
-              placement={'scheduleView'}
-              isAdminPanel={isAdminPanel}
-            />
-          </div>
-          {/*//@ Product main details */}
-          <div className='user-container__side-details modal-checklist'>
+      <div className='generic-outer-wrapper'>
+        {!isFillingTheForm ? (
+          <>
+            {/* <div className='user-container__main-details modal-checklist'> */}
+            <div className='generic-component-wrapper'>
+              <DetailsListSchedule
+                data={schedule}
+                placement={'scheduleView'}
+                isAdminPanel={isAdminPanel}
+              />
+            </div>
+            {/* </div> */}
+            {/*//@ Product main details */}
+            {/* <div className='user-container__side-details modal-checklist'> */}
             <DetailsListProduct
               data={product}
               placement={'scheduleView'}
               userAccessed={userAccessed}
             />
-          </div>
-        </>
-      ) : (
-        <NewCustomerFormForUser onSave={handleFormSave} />
-      )}
-
-      {/*//@ Product stats */}
-      {!userAccessed && isAdminPanel && (
-        <>
-          <div className='user-container__main-details modal-checklist'>
+            {/* </div> */}
+          </>
+        ) : (
+          <NewCustomerFormForUser onSave={handleFormSave} />
+        )}
+        {/*//@ Product stats */}
+        {!userAccessed && isAdminPanel && (
+          <>
+            {/* <div className='user-container__main-details modal-checklist'> */}
             <DetailsListScheduleStats
               data={product}
               scheduleStats={scheduleStats}
             />
-          </div>
-
+            {/* </div> */}
+          </>
+        )}
+      </div>
+      {!userAccessed && isAdminPanel && (
+        <>
           {/*//@ all payments if not event/camp? */}
 
-          <div className='user-container__main-details  schedules modal-checklist'>
-            <TableAttendance
-              stats={scheduleStats}
-              type={product.type}
-              isAdminPage={isAdminPanel}
-            />
-          </div>
-          <div className='user-container__main-details  schedules modal-checklist'>
-            <TableProductPayments
-              stats={scheduleStats}
-              type={product.type}
-              isAdminPage={isAdminPanel}
-            />
-          </div>
+          {/* <div className='user-container__main-details  schedules modal-checklist'> */}
+          <TableAttendance
+            stats={scheduleStats}
+            type={product.type}
+            isAdminPage={isAdminPanel}
+          />
+          {/* </div> */}
+          {/* <div className='user-container__main-details  schedules modal-checklist'> */}
+          <TableProductPayments
+            stats={scheduleStats}
+            type={product.type}
+            isAdminPage={isAdminPanel}
+          />
+          {/* </div> */}
 
           {/*//@ Feedback */}
 
-          <div className='user-container__main-details  schedules modal-checklist'>
-            <TableProductReviews stats={scheduleStats} />
-          </div>
+          {/* <div className='user-container__main-details  schedules modal-checklist'> */}
+          <TableProductReviews stats={scheduleStats} />
+          {/* </div> */}
         </>
       )}
 

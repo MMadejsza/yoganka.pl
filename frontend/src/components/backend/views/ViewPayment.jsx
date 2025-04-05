@@ -39,8 +39,9 @@ function ViewPayment({ data, isUserAccountPage }) {
       )}
 
       {/*//@ Customer main details */}
-      {!isUserAccountPage && (
-        <div className='user-container__main-details modal-checklist'>
+      <div className='generic-outer-wrapper'>
+        {!isUserAccountPage && (
+          // <div className='user-container__main-details modal-checklist'>
           <DetailsListCustomer
             customerData={customer}
             isUserAccountPage={isUserAccountPage}
@@ -48,22 +49,22 @@ function ViewPayment({ data, isUserAccountPage }) {
             adminAccessed={adminAccessed}
             isPaymentView={isPaymentView}
           />
-        </div>
-      )}
-
-      {/*//@ Payment main details */}
-      <div className='user-container__main-details modal-checklist modal-checklist--payment'>
+          // {/* </div> */}
+        )}
+        {/*//@ Payment main details */}
+        {/* <div className='user-container__main-details modal-checklist modal-checklist--payment'> */}
         <DetailsListPayment
           paymentData={payment}
           placement={'payment'}
           isUserAccountPage={isUserAccountPage}
         />
+        {/* </div> */}
       </div>
 
       {/*//@ Schedules included */}
-      <div className='user-container__main-details  schedules modal-checklist'>
-        <TableSchedules scheduleRecords={schedules} placement='payment' />
-      </div>
+      {/* <div className='user-container__main-details  schedules modal-checklist'> */}
+      <TableSchedules scheduleRecords={schedules} placement='payment' />
+      {/* </div> */}
     </>
   );
 }

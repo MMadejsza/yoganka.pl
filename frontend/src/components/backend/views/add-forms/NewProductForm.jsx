@@ -304,20 +304,20 @@ function NewProductForm() {
 
   return (
     <>
-      <div className='user-container modal__summary'>
-        {form}
-        {feedback.status !== undefined && (
-          <FeedbackBox
-            status={feedback.status}
-            isPending={isCreateProductPending}
-            isError={isCreateProductError}
-            error={createProductError}
-            successMsg={feedback.message}
-            warnings={feedback.warnings}
-            size='small'
-          />
-        )}
-      </div>
+      {/* <div className='user-container modal__summary'> */}
+      {form}
+      {feedback.status !== undefined && (
+        <FeedbackBox
+          status={feedback.status}
+          isPending={isCreateProductPending}
+          isError={isCreateProductError}
+          error={createProductError}
+          successMsg={feedback.message}
+          warnings={feedback.warnings}
+          size='small'
+        />
+      )}
+      {/* </div> */}
     </>
   );
 }

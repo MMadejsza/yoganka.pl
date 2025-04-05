@@ -1,22 +1,27 @@
-function GenericListTagLi({ objectPair }) {
-  return (
+function GenericListTagLi({ objectPair, classModifier, isNotes }) {
+  const { label, content, status = null, symbol = null } = objectPair;
+
+  return content ? (
     <li
-      className={`generic-details__item user-container__section-record modal-checklist__li ${objectPair.status === 0 ? 'dimmed' : ''}`}
+      className={`generic-details__item ${classModifier ? `generic-details__item--${classModifier}` : ''} modal-checklist__li ${status === 0 ? 'dimmed' : ''}`}
     >
-      {objectPair.symbol && (
-        <span className='material-symbols-rounded nav__icon'>
-          {objectPair.symbol}
-        </span>
+      {symbol && (
+        <span className='material-symbols-rounded nav__icon'>{symbol}</span>
       )}
-      {objectPair.label && (
-        <p className='generic-details__label user-container__section-record-label'>
-          {objectPair.label}
+      {label && (
+        <p
+          className={`generic-details__label ${classModifier ? `generic-details__label--${classModifier}` : ''}`}
+        >
+          {label}
         </p>
       )}
-      <p className='generic-details__content user-container__section-record-content'>
+      <p
+        className={`generic-details__content ${classModifier ? `generic-details__content--${classModifier}` : ''}  ${isNotes ? `generic-details__content--notes` : ''} ${objectPair.status === 0 ? 'dimmed' : ''}`}
+      >
         {objectPair.content}
       </p>
     </li>
-  );
+  ) : null;
 }
+
 export default GenericListTagLi;

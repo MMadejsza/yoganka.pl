@@ -21,14 +21,14 @@
   grid-template-rows: auto auto auto auto auto 1fr auto;
 }
 
-@media (min-width: 1025px) or (min-width: 1400px) {
-  body:has(.admin-console) {
-    .modal.visible {
-      width: 98vw;
-      max-width: 1200px;
-    }
+body:has(.admin-console) {
+  .modal.visible {
+    width: 98vw;
+    max-width: 1200px;
+    overflow: auto;
   }
-
+}
+@media (min-width: 1025px) or (min-width: 1400px) {
   .admin-intro {
     margin-top: 11rem;
 
@@ -198,127 +198,127 @@
       white-space: preserve;
     }
   }
-  .user-container {
-    width: 100%;
-    height: auto;
-    max-height: 90vh;
-    padding-bottom: 5rem;
-    overflow-y: auto;
-    @include flex(row, space-evenly, flex-start);
-    align-content: flex-start;
-    flex-wrap: wrap;
-    gap: 1.5rem;
+  // .user-container {
+  //   width: 100%;
+  //   height: auto;
+  //   max-height: 90vh;
+  //   padding-bottom: 5rem;
+  //   overflow-y: auto;
+  //   @include flex(row, space-evenly, flex-start);
+  //   align-content: flex-start;
+  //   flex-wrap: wrap;
+  //   gap: 1.5rem;
 
-    &--account {
-      max-height: none;
-      overflow: visible;
-    }
-    &__actions-block {
-      margin-top: 2rem;
-      flex-basis: 100%;
-      @include flex(row, center, space-evenly);
-      gap: 1.5rem;
-    }
-    &__action {
-      @include flex(row, center);
-      flex-basis: 100%;
-      & .modal__btn {
-        flex-basis: 10%;
-        min-height: 32px;
-        font-size: 1.5rem;
-        height: 1rem;
-        line-height: 1rem;
-      }
-    }
-    &__user-title {
-      flex-basis: 100%;
-      margin: 0;
-      &:nth-last-of-type(1) {
-        margin-bottom: 3rem;
-      }
-    }
-    &__user-status {
-      font-size: 1.5rem;
-      flex-basis: 100%;
-    }
-    .modal-checklist {
-      @include flex(column, flex-start, center);
-      flex-basis: 30%;
-      gap: 0.5rem;
-      &--booking {
-        flex-basis: 40%;
-      }
-      &__li {
-        gap: 1rem;
-        &--phone {
-          flex-wrap: wrap;
-        }
-      }
-    }
-    &__side-details {
-      opacity: 0.5;
-    }
-    .schedules {
-      flex-basis: 100%;
-      gap: 0;
-      &__summary,
-      &__records {
-        width: 100%;
-        margin-top: 3rem;
-        font-size: 1.8rem;
-        @include flex(row, space-evenly);
-        flex-wrap: wrap;
-        &-label {
-          font-weight: bold;
-        }
-      }
-      &__record {
-        flex-basis: 100%;
-        @include flex(row, space-evenly);
-        &:nth-child(odd) {
-          background-color: color.adjust(map.get($colors, nav), $lightness: 8%);
-        }
-        &--header {
-          font-weight: bold;
-        }
-        &-content {
-          width: 20%;
-        }
-      }
-    }
-    &__details-list {
-      @include flex(column, center, center);
-      width: 100%;
-      max-width: 600px;
-      margin-bottom: 1rem;
-      & button:not(.password) {
-        margin-top: 1rem;
-        align-self: center;
-      }
-    }
-    &__section-title {
-      flex-basis: 100%;
-      font-size: 2.2rem;
-      margin-bottom: 2.2rem;
-      color: map.get($colors, tile-title);
-      &.admin-action {
-        @include flex(row, center, center);
-        gap: 1rem;
+  //   &--account {
+  //     max-height: none;
+  //     overflow: visible;
+  //   }
+  //   &__actions-block {
+  //     margin-top: 2rem;
+  //     flex-basis: 100%;
+  //     @include flex(row, center, space-evenly);
+  //     gap: 1.5rem;
+  //   }
+  //   &__action {
+  //     @include flex(row, center);
+  //     flex-basis: 100%;
+  //     & .modal__btn {
+  //       flex-basis: 10%;
+  //       min-height: 32px;
+  //       font-size: 1.5rem;
+  //       height: 1rem;
+  //       line-height: 1rem;
+  //     }
+  //   }
+  //   &__user-title {
+  //     flex-basis: 100%;
+  //     margin: 0;
+  //     &:nth-last-of-type(1) {
+  //       margin-bottom: 3rem;
+  //     }
+  //   }
+  //   &__user-status {
+  //     font-size: 1.5rem;
+  //     flex-basis: 100%;
+  //   }
+  //   .modal-checklist {
+  //     @include flex(column, flex-start, center);
+  //     flex-basis: 30%;
+  //     gap: 0.5rem;
+  //     &--booking {
+  //       flex-basis: 40%;
+  //     }
+  //     &__li {
+  //       gap: 1rem;
+  //       &--phone {
+  //         flex-wrap: wrap;
+  //       }
+  //     }
+  //   }
+  //   &__side-details {
+  //     opacity: 0.5;
+  //   }
+  //   .schedules {
+  //     flex-basis: 100%;
+  //     gap: 0;
+  //     &__summary,
+  //     &__records {
+  //       width: 100%;
+  //       margin-top: 3rem;
+  //       font-size: 1.8rem;
+  //       @include flex(row, space-evenly);
+  //       flex-wrap: wrap;
+  //       &-label {
+  //         font-weight: bold;
+  //       }
+  //     }
+  //     &__record {
+  //       flex-basis: 100%;
+  //       @include flex(row, space-evenly);
+  //       &:nth-child(odd) {
+  //         background-color: color.adjust(map.get($colors, nav), $lightness: 8%);
+  //       }
+  //       &--header {
+  //         font-weight: bold;
+  //       }
+  //       &-content {
+  //         width: 20%;
+  //       }
+  //     }
+  //   }
+  //   &__details-list {
+  //     @include flex(column, center, center);
+  //     width: 100%;
+  //     max-width: 600px;
+  //     margin-bottom: 1rem;
+  //     & button:not(.password) {
+  //       margin-top: 1rem;
+  //       align-self: center;
+  //     }
+  //   }
+  //   &__section-title {
+  //     flex-basis: 100%;
+  //     font-size: 2.2rem;
+  //     margin-bottom: 2.2rem;
+  //     color: map.get($colors, tile-title);
+  //     &.admin-action {
+  //       @include flex(row, center, center);
+  //       gap: 1rem;
 
-        text-decoration: none;
-      }
-    }
-    &__section-record {
-      &-label {
-        font-weight: 600;
-      }
-      &-content {
-        ul {
-          @include flex(column);
-        }
-      }
-    }
-  }
+  //       text-decoration: none;
+  //     }
+  //   }
+  //   &__section-record {
+  //     &-label {
+  //       font-weight: 600;
+  //     }
+  //     &-content {
+  //       ul {
+  //         @include flex(column);
+  //       }
+  //     }
+  //   }
+  // }
 
   .form {
     @include flex(column, center, center);

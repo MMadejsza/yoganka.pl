@@ -25,28 +25,28 @@ function ViewFeedback({ data }) {
       <h3 className='user-container__user-status modal__title'>{` ${customer.firstName} ${customer.lastName} ->> ${product.name}`}</h3>
 
       {/*//@ Review main details */}
-      <div className='user-container__main-details modal-checklist'>
-        <DetailsListReview reviewData={review} />
-      </div>
+      {/* <div className='user-container__main-details modal-checklist'> */}
+      <DetailsListReview reviewData={review} />
+      {/* </div> */}
 
       {/*//@ Product details */}
-      <div className='user-container__main-details modal-checklist'>
-        <DetailsListProduct data={product} placement={'reviews'} />
-        {/*//@ Schedule details */}
-        {type !== 'Camp' && type !== 'Event' && (
-          <DetailsListSchedule data={schedule} />
-        )}
-      </div>
+      {/* <div className='user-container__main-details modal-checklist'> */}
+      <DetailsListProduct data={product} placement={'reviews'} />
+      {/*//@ Schedule details */}
+      {type !== 'Camp' && type !== 'Event' && (
+        <DetailsListSchedule data={schedule} />
+      )}
+      {/* </div> */}
 
       {/*//@ Customer details */}
-      <div className='user-container__main-details   modal-checklist'>
-        <DetailsListCustomer customerData={customer} />
-      </div>
+      {/* <div className='user-container__main-details   modal-checklist'> */}
+      <DetailsListCustomer customerData={customer} />
+      {/* </div> */}
 
       {/*//@ Another customers.feedbacks */}
-      <div className='user-container__main-details  schedules modal-checklist'>
-        <TableCustomerReviews reviews={otherReviews} placement='reviews' />
-      </div>
+      {/* <div className='user-container__main-details  schedules modal-checklist'> */}
+      <TableCustomerReviews reviews={otherReviews} placement='reviews' />
+      {/* </div> */}
     </>
   );
 }

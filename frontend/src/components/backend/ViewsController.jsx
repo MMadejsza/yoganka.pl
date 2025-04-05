@@ -271,7 +271,7 @@ function ViewsController({
     return (
       <button
         onClick={onClick}
-        className={`user-container__action modal__btn modal__btn--small modal__btn--small-${type}`}
+        className={`modal__btn modal__btn--small modal__btn--small-${type}`}
       >
         {<span className='material-symbols-rounded nav__icon'>{symbol}</span>}
         {content}
@@ -281,32 +281,32 @@ function ViewsController({
 
   return (
     <WrapperModal visited={visited} onClose={onClose}>
-      <div className='user-container modal__summary'>
-        {!deleteWarningTriggered
-          ? dataDisplay
-          : (feedback.status != undefined || deleteWarningTriggered) && (
-              <FeedbackBox
-                warnings={feedback.warnings}
-                status={feedback.status}
-                successMsg={feedback.message}
-                isPending={isDeletePending}
-                isError={isDeleteError}
-                error={deleteError ? { message: deleteError.message } : null}
-                redirectTarget={redirectToPage}
-                onClose={onClose}
-                size='small'
-              />
-            )}
-        <div className='user-container__actions-block'>
-          {isAdminPanel && (
-            <>
-              {actionBtn(handleDelete, 'danger', 'delete_forever')}
-              {deleteWarningTriggered &&
-                actionBtn(handleCancelDelete, 'success', 'undo')}
-            </>
+      {/* <div className='user-container modal__summary'> */}
+      {!deleteWarningTriggered
+        ? dataDisplay
+        : (feedback.status != undefined || deleteWarningTriggered) && (
+            <FeedbackBox
+              warnings={feedback.warnings}
+              status={feedback.status}
+              successMsg={feedback.message}
+              isPending={isDeletePending}
+              isError={isDeleteError}
+              error={deleteError ? { message: deleteError.message } : null}
+              redirectTarget={redirectToPage}
+              onClose={onClose}
+              size='small'
+            />
           )}
-        </div>
-      </div>
+      <footer className='modal__user-action'>
+        {isAdminPanel && (
+          <>
+            {actionBtn(handleDelete, 'danger', 'delete_forever')}
+            {deleteWarningTriggered &&
+              actionBtn(handleCancelDelete, 'success', 'undo')}
+          </>
+        )}
+      </footer>
+      {/* </div> */}
     </WrapperModal>
   );
 }

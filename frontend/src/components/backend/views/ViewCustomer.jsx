@@ -36,16 +36,16 @@ function ViewCustomer({ data }) {
       <h1 className='user-container__user-title modal__title'>{name}</h1>
 
       {/*//@ Personal-customer details */}
-      <div className='user-container__main-details modal-checklist'>
+      <div className='generic-outer-wrapper'>
         <DetailsListCustomer
           customerData={customer}
           customerAccessed={customerAccessed}
           adminAccessed={adminAccessed}
         />
-      </div>
+        {/* </div> */}
 
-      {/*//@ Personal-user details */}
-      <div className='user-container__side-details modal-checklist'>
+        {/*//@ Personal-user details */}
+        {/* <div className='user-container__side-details modal-checklist'> */}
         <DetailsListUser userData={user} customerView={true} />
 
         {user.UserPrefSetting && (
@@ -58,22 +58,22 @@ function ViewCustomer({ data }) {
       </div>
 
       {/*//@ Stats */}
-      <div className='user-container__main-details user-container__side-details--schedules schedules modal-checklist'>
-        <DetailsListCustomerStats customerStats={customerStats} />
-      </div>
+      {/* <div className='user-container__main-details user-container__side-details--schedules schedules modal-checklist'> */}
+      <DetailsListCustomerStats customerStats={customerStats} />
+      {/* </div> */}
 
       {/*//@ Schedules */}
-      <div className='user-container__main-details user-container__side-details--schedules schedules modal-checklist'>
-        <TableCustomerSchedules customerStats={customerStats} />
-      </div>
+      {/* <div className='user-container__main-details user-container__side-details--schedules schedules modal-checklist'> */}
+      <TableCustomerSchedules customerStats={customerStats} />
+      {/* </div> */}
       {/*//@ Reviews */}
-      <div className='user-container__main-details user-container__side-details--schedules schedules modal-checklist'>
-        <TableCustomerReviews reviews={customerStats.reviews} />
-      </div>
+      {/* <div className='user-container__main-details user-container__side-details--schedules schedules modal-checklist'> */}
+      <TableCustomerReviews reviews={customerStats.reviews} />
+      {/* </div> */}
       {/*//@ Payments */}
-      <div className='user-container__main-details user-container__side-details--schedules schedules modal-checklist'>
-        <TableCustomerTotalPayments data={customer} />
-      </div>
+      {/* <div className='user-container__main-details user-container__side-details--schedules schedules modal-checklist'> */}
+      <TableCustomerTotalPayments data={customer} />
+      {/* </div> */}
 
       {/*//@ Invoices */}
       <div

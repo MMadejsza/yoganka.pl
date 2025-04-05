@@ -35,38 +35,41 @@ function ViewUser({ data, isUserAccountPage }) {
   return (
     <>
       {!isUserAccountPage && (
-        <h2 className='user-container__user-title modal__title dimmed'>
+        <h2 className='modal__title dimmed'>
           {JSON.parse(user.profilePictureSrcSetJson)?.profile}
         </h2>
       )}
       {!isUserAccountPage && (
-        <h1 className='user-container__user-title modal__title'>
+        <h1 className='modal__title'>
           {name} {isAdmin && '(Admin)'}
         </h1>
       )}
-      <div className='user-container__main-details modal-checklist'>
-        <DetailsListUser
-          userData={user}
-          customerView={false}
-          isUserAccountPage={isUserAccountPage}
-        />
-      </div>
-      <div className='user-container__main-details modal-checklist'>
+      {/* <div className='user-container__main-details modal-checklist'> */}
+
+      {/* </div> */}
+      {/* <div className='user-container__main-details modal-checklist'> */}
+      <div className='generic-outer-wrapper'>
         <DetailsListUserSettings
           settingsData={user.UserPrefSetting}
           isUserAccountPage={isUserAccountPage}
           customerAccessed={customerAccessed}
           adminAccessed={adminAccessed}
         />
-      </div>
-      {customer && (
-        <DetailsListCustomer
-          customerData={customer}
+        {/* </div> */}
+        {customer && (
+          <DetailsListCustomer
+            customerData={customer}
+            isUserAccountPage={isUserAccountPage}
+            customerAccessed={customerAccessed}
+            adminAccessed={adminAccessed}
+          />
+        )}
+        <DetailsListUser
+          userData={user}
+          customerView={false}
           isUserAccountPage={isUserAccountPage}
-          customerAccessed={customerAccessed}
-          adminAccessed={adminAccessed}
         />
-      )}
+      </div>
     </>
   );
 }

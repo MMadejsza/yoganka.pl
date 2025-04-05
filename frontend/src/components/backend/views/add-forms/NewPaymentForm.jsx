@@ -346,20 +346,20 @@ function NewPaymentForm() {
 
   return (
     <>
-      <div className='user-container modal__summary'>
-        {form}
-        {feedback.status !== undefined && (
-          <FeedbackBox
-            status={feedback.status}
-            isPending={isCreatePaymentPending}
-            isError={isCreatePaymentError}
-            error={createPaymentError}
-            successMsg={feedback.message}
-            warnings={feedback.warnings}
-            size='small'
-          />
-        )}
-      </div>
+      {/* <div className='user-container modal__summary'> */}
+      {form}
+      {feedback.status !== undefined && (
+        <FeedbackBox
+          status={feedback.status}
+          isPending={isCreatePaymentPending}
+          isError={isCreatePaymentError}
+          error={createPaymentError}
+          successMsg={feedback.message}
+          warnings={feedback.warnings}
+          size='small'
+        />
+      )}
+      {/* </div> */}
     </>
   );
 }

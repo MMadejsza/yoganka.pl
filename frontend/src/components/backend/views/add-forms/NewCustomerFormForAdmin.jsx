@@ -380,20 +380,20 @@ function NewCustomerFormForAdmin() {
   return (
     <>
       {/* <section className={formType}> */}
-      <div className='user-container modal__summary'>
-        {form}
-        {feedback.status !== undefined && (
-          <FeedbackBox
-            status={feedback.status}
-            isPending={isCreateCustomerPending}
-            isError={isCreateCustomerError}
-            error={createCustomerError}
-            successMsg={feedback.message}
-            warnings={feedback.warnings}
-            size='small'
-          />
-        )}
-      </div>
+      {/* <div className='user-container modal__summary'> */}
+      {form}
+      {feedback.status !== undefined && (
+        <FeedbackBox
+          status={feedback.status}
+          isPending={isCreateCustomerPending}
+          isError={isCreateCustomerError}
+          error={createCustomerError}
+          successMsg={feedback.message}
+          warnings={feedback.warnings}
+          size='small'
+        />
+      )}
+      {/* </div> */}
       {/* </section> */}
     </>
   );

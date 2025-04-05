@@ -52,17 +52,19 @@ function DetailsListUserSettings({
       adminAccessed={adminAccessed}
     />
   ) : (
-    <GenericList title={title} details={details} />
+    <GenericList title={title} details={details} classModifier='settings' />
   );
 
   return (
     <>
-      {content}
-      <ToggleEditButton
-        isEditing={isEditing}
-        onStartEditing={handleStartEditing}
-        onCloseEditing={handleCloseEditing}
-      />
+      <div className='generic-component-wrapper'>
+        {content}
+        <ToggleEditButton
+          isEditing={isEditing}
+          onStartEditing={handleStartEditing}
+          onCloseEditing={handleCloseEditing}
+        />
+      </div>
     </>
   );
 }

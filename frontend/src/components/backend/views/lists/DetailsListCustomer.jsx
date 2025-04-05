@@ -38,8 +38,8 @@ function DetailsListCustomer({
   });
   if (!isUserAccountPage) {
     details.push(
-      { label: 'Notatki:', content: customerData.notes },
-      { label: 'Lojalność:', content: customerData.loyalty }
+      { label: 'Lojalność:', content: customerData.loyalty },
+      { label: 'Notatki:', content: customerData.notes }
     );
   }
 
@@ -55,9 +55,8 @@ function DetailsListCustomer({
   );
   return (
     <>
-      <div className='user-container__main-details modal-checklist'>
+      <div className='generic-component-wrapper'>
         {content}
-
         {!isPaymentView && (
           <ToggleEditButton
             isEditing={isEditing}
