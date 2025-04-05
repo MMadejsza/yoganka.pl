@@ -66,8 +66,8 @@ const menuSideSet = [
   {
     auth: true,
     name: 'Konto',
-    // symbol: 'person',
     symbol: 'account_circle',
+    // symbol: 'person',
     link: '/konto',
   },
   {
@@ -81,7 +81,6 @@ const menuSideSet = [
     name: 'Wyloguj',
     symbol: 'logout',
     link: '/login-pass/logout',
-    // text: 'Wyloguj',
   },
 ];
 
@@ -181,7 +180,10 @@ function Nav({ side, status, setIsNavOpen }) {
     return (
       <li key={li.name} className='nav__item nav__item--side'>
         <Link
-          onClick={() => window.scrollTo(0, 0)}
+          onClick={() => {
+            closeDrawer();
+            window.scrollTo(0, 0);
+          }}
           to={li.link}
           className='nav__link nav__link--side'
         >
