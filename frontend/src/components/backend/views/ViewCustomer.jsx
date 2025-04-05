@@ -55,12 +55,11 @@ function ViewCustomer({ data }) {
             adminAccessed={adminAccessed}
           />
         )}
+        {/*//@ Stats */}
+        {/* <div className='user-container__main-details user-container__side-details--schedules schedules modal-checklist'> */}
+        <DetailsListCustomerStats customerStats={customerStats} />
+        {/* </div> */}
       </div>
-
-      {/*//@ Stats */}
-      {/* <div className='user-container__main-details user-container__side-details--schedules schedules modal-checklist'> */}
-      <DetailsListCustomerStats customerStats={customerStats} />
-      {/* </div> */}
 
       {/*//@ Schedules */}
       {/* <div className='user-container__main-details user-container__side-details--schedules schedules modal-checklist'> */}
