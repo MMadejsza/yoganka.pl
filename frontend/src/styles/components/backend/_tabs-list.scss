@@ -63,6 +63,14 @@
     }
 
     &__link {
+      font-size: 1.8rem;
+    }
+  }
+}
+
+@include respond-to(desktop-xs) {
+  .tabs-list {
+    &__link {
       font-size: 2.2rem;
     }
   }
