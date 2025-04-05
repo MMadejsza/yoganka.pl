@@ -18,6 +18,7 @@ $sizes: (
   border-radius: 25px,
   section-padding-y: 1rem,
 );
+$tile-text-muted-base: #4e453b;
 $colors: (
   base: #fff8f4,
   base-text: #1e1b18,
@@ -26,10 +27,11 @@ $colors: (
   tile-title: #805346,
   // tile-title: #825445,
   tile-text: #1e1b18,
-  tile-text-muted: #4e453b,
+  tile-text-muted: $tile-text-muted-base,
   accent-bcg: #1c7993,
   accent-text: #ffffff,
   nav: #f6e0c8,
+  nav-muted: rgba($tile-text-muted-base, 0.5),
 );
 
 $active-box-shadow: (
