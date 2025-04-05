@@ -39,15 +39,13 @@ function ViewUser({ data, isUserAccountPage }) {
           {JSON.parse(user.profilePictureSrcSetJson)?.profile}
         </h2>
       )}
+
       {!isUserAccountPage && (
         <h1 className='modal__title'>
           {name} {isAdmin && '(Admin)'}
         </h1>
       )}
-      {/* <div className='user-container__main-details modal-checklist'> */}
 
-      {/* </div> */}
-      {/* <div className='user-container__main-details modal-checklist'> */}
       <div className='generic-outer-wrapper'>
         <DetailsListUserSettings
           settingsData={user.UserPrefSetting}
@@ -55,7 +53,7 @@ function ViewUser({ data, isUserAccountPage }) {
           customerAccessed={customerAccessed}
           adminAccessed={adminAccessed}
         />
-        {/* </div> */}
+
         {customer && (
           <DetailsListCustomer
             customerData={customer}
@@ -64,6 +62,7 @@ function ViewUser({ data, isUserAccountPage }) {
             adminAccessed={adminAccessed}
           />
         )}
+
         <DetailsListUser
           userData={user}
           customerView={false}

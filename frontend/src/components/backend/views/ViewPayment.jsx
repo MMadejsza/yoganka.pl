@@ -49,6 +49,7 @@ function ViewPayment({ data, isUserAccountPage }) {
             isPaymentView={isPaymentView}
           />
         )}
+
         {/*//@ Payment main details */}
         <DetailsListPayment
           paymentData={payment}
