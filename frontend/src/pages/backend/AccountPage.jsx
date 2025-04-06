@@ -1,13 +1,48 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import UserTabs from '../../components/backend/UserTabs.jsx';
+import TabsList from '../../components/backend/TabsList.jsx';
 import ViewAccountDashboard from '../../components/backend/views/ViewAccountDashboard.jsx';
 import ViewAccountPayments from '../../components/backend/views/ViewAccountPayments.jsx';
 import ViewAccountSchedulesHistory from '../../components/backend/views/ViewAccountSchedulesHistory.jsx';
 import ViewUser from '../../components/backend/views/ViewUser.jsx';
 import Section from '../../components/frontend/Section.jsx';
 import { fetchItem } from '../../utils/http.js';
+
+const menuSet = [
+  // {
+  // 	name: 'Statystyki',
+  // 	symbol: 'bar_chart',
+  // 	link: 'statystyki',
+  // },
+  {
+    name: 'Konto',
+    symbol: 'home',
+    link: '/konto',
+  },
+  {
+    name: 'Historia zajęć',
+    symbol: 'history',
+    link: 'zajecia',
+    limitedTo: 'customer',
+  },
+  {
+    name: 'Płatności',
+    symbol: 'payments',
+    link: 'rezerwacje',
+    limitedTo: 'customer',
+  },
+  // {
+  // 	name: 'Faktury',
+  // 	symbol: 'receipt_long',
+  // 	link: 'faktury',
+  // },
+  {
+    name: 'Ustawienia',
+    symbol: 'settings',
+    link: 'ustawienia',
+  },
+];
 
 function AccountPage() {
   // console.log(`✅ AccountPAge: `);
@@ -40,7 +75,7 @@ function AccountPage() {
       console.log(name);
     }
 
-    userTabs = <UserTabs onClick={setIsChosenContent} person={data} />;
+    userTabs = <TabsList menuSet={menuSet} onClick={setIsChosenContent} />;
 
     switch (true) {
       case isChosenContent.includes('zajecia'):

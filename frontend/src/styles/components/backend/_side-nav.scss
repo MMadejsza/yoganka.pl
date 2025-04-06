@@ -5,8 +5,9 @@
   display: none;
 }
 
-@include respond-to(mobile-l) {
+@include respond-to(desktop-s) {
   .side-nav {
+    display: block;
     .nav {
       $width: min-content;
       position: fixed;

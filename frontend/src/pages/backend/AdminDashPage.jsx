@@ -3,56 +3,57 @@ import { useState } from 'react';
 import { useLocation, useMatch, useNavigate } from 'react-router-dom';
 import ModalTable from '../../components/backend/ModalTable.jsx';
 import SideNav from '../../components/backend/SideNav.jsx';
+import TabsList from '../../components/backend/TabsList.jsx';
 import ViewsController from '../../components/backend/ViewsController.jsx';
 import Section from '../../components/frontend/Section.jsx';
 import { fetchData, fetchStatus } from '../../utils/http.js';
 
 const sideNavTabs = [
-  { name: 'Użytkownicy', icon: 'group', link: '/admin-console/show-all-users' },
+  { name: 'Konta', symbol: 'group', link: '/admin-console/show-all-users' },
   {
     name: 'Uczestnicy',
-    icon: 'sentiment_satisfied',
+    symbol: 'sentiment_satisfied',
     link: '/admin-console/show-all-customers',
   },
   {
     name: 'Zajęcia',
-    icon: 'inventory',
+    symbol: 'inventory',
     link: '/admin-console/show-all-products',
   },
   {
     name: 'Grafik',
-    icon: 'calendar_month',
+    symbol: 'calendar_month',
     link: '/admin-console/show-all-schedules',
   },
   {
     name: `Płatności`,
-    icon: 'event_available',
+    symbol: 'event_available',
     link: '/admin-console/show-all-payments',
   },
   {
     name: `Faktury`,
-    icon: 'receipt_long',
+    symbol: 'receipt_long',
     link: '/admin-console/show-all-invoices',
   },
   {
     name: `Newsletter'y`,
-    icon: 'contact_mail',
+    symbol: 'contact_mail',
     link: '/admin-console/show-all-newsletters',
   },
   {
     name: `Opinie`,
-    icon: 'reviews',
+    symbol: 'reviews',
     link: '/admin-console/show-all-participants-feedback',
   },
 ];
+
 const sideNavActions = [
   {
     name: 'Dodaj',
-    icon: 'add_circle',
+    symbol: 'add_circle',
     link: 'add-user',
   },
 ];
-
 const noCreateOptionPages = [
   'show-all-schedules',
   'show-all-invoices',
@@ -73,6 +74,12 @@ function AdminPage() {
   );
   const modalMatch = useMatch('/admin-console/show-all-users/:id');
   const [isModalOpen, setIsModalOpen] = useState(modalMatch);
+
+  const handleSwitchContent = link => {
+    navigate(`${location.pathname}/${link}`, {
+      state: { background: location },
+    });
+  };
 
   const handleOpenModal = row => {
     const recordId = row.rowId;
@@ -215,6 +222,13 @@ function AdminPage() {
   }
 
   let table;
+  const adminTabs = (
+    <TabsList
+      menuSet={sideNavTabs}
+      onClick={handleSwitchContent}
+      classModifier='admin'
+    />
+  );
 
   if (isError) {
     if (error.code == 401) {
@@ -247,6 +261,7 @@ function AdminPage() {
         <>
           <Section classy='admin-intro' header={`Admin Panel`}></Section>
           <SideNav menuSet={sideNavTabs} />
+          {adminTabs}
           {shouldAllowCreation && (
             <SideNav
               menuSet={sideNavActions}
