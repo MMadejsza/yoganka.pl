@@ -1,0 +1,80 @@
+@use '../../utils/' as *;
+@use 'sass:map';
+
+.side-nav {
+  display: none;
+}
+
+@include respond-to(mobile-l) {
+  .side-nav {
+    .nav {
+      $width: min-content;
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      right: 50%;
+      left: -187px;
+      width: $width;
+      z-index: 5;
+
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      border-top-right-radius: map.get($sizes, border-radius);
+      border-bottom-right-radius: map.get($sizes, border-radius);
+
+      @include flex(row, $align: center);
+      flex-wrap: wrap;
+      &:hover {
+        left: 0;
+      }
+
+      &.right {
+        right: -105px;
+        left: auto;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-top-left-radius: map.get($sizes, border-radius);
+        border-bottom-left-radius: map.get($sizes, border-radius);
+        &:hover {
+          right: 0;
+        }
+        .nav__link {
+          margin: 0 1rem 0 0;
+        }
+        .nav__list {
+          @include flex(column, $align: flex-start);
+        }
+        .nav__icon {
+          order: -1;
+          margin: 0rem 1.5rem 0 1rem;
+        }
+      }
+
+      &__list {
+        @include flex(column, $align: flex-end);
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-top: 0;
+      }
+
+      &__link {
+        margin: 0 0 0 1rem;
+        line-height: 4.5rem;
+        font-size: 1.8rem;
+        text-align: right;
+
+        .nav__icon {
+          min-width: 33px;
+          margin: 0rem 1rem 0 1.5rem;
+          font-size: 3rem;
+        }
+
+        &.active,
+        &.active .nav__icon {
+          color: map.get($colors, accent-bcg);
+          text-shadow: map.get($shadows, active-text-icons-shadow);
+        }
+      }
+    }
+  }
+}
