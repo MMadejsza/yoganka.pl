@@ -9,7 +9,7 @@ function WrapperModalTable({
   const shouldDisplayContent = !!content && content.length > 0;
   return (
     <>
-      <h2 className='generic-details__title  modal__title--day admin-action'>
+      <h2 className='generic-details__title admin-action modal-table__title'>
         {`${title} ${content && content.length > 0 ? `(${content.length})` : ''}`}
         {toggleBtn}
       </h2>
@@ -17,10 +17,7 @@ function WrapperModalTable({
       {shouldDisplayContent && children}
 
       {!shouldDisplayContent && (
-        <div
-          className='user-container__section-title dimmed'
-          style={{ fontSize: '2rem', marginBottom: '3re m' }}
-        >
+        <div className='modal-table__no-table-note dimmed'>
           Brak {noContentMsg}
         </div>
       )}

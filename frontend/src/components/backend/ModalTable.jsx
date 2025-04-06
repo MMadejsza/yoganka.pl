@@ -66,12 +66,12 @@ function ModalTable({
 
   return (
     <table
-      className={`data-table ${classModifier ? `data-table--${classModifier}` : ''}`}
+      className={`modal-table ${classModifier ? `modal-table--${classModifier}` : ''}`}
     >
-      <thead className='data-table__headers'>
+      <thead className='modal-table__headers'>
         <tr>
           {headers.map((header, index) => (
-            <th className='data-table__single-header' key={index}>
+            <th className='modal-table__single-header' key={index}>
               {header}
             </th>
           ))}
@@ -88,8 +88,8 @@ function ModalTable({
 
           return (
             <tr
-              className={`data-table__cells ${active ? 'active' : ''}  ${
-                classModifier ? `data-table__cells--${classModifier}` : ''
+              className={`modal-table__cells ${active ? 'active' : ''}  ${
+                classModifier ? `modal-table__cells--${classModifier}` : ''
               } ${
                 !isAdminPage
                   ? row.isUserGoing && status?.isLoggedIn
@@ -140,9 +140,9 @@ function ModalTable({
                       if (active) return onOpen(row);
                       return null;
                     }}
-                    className={`data-table__single-cell ${
+                    className={`modal-table__single-cell ${
                       classModifier
-                        ? `data-table__single-cell--${classModifier}`
+                        ? `modal-table__single-cell--${classModifier}`
                         : ''
                     }${key == 'Hasło (Szyfrowane)' ? 'hash' : ''}`}
                     key={keyIndex}

@@ -2,11 +2,16 @@
 @use 'sass:color';
 @use 'sass:map';
 
-.data-table {
+.modal-table {
   width: 100%;
+  margin: 3rem 0rem 5rem;
   border-collapse: separate;
   border-spacing: 0;
   font-size: 1.5rem;
+
+  &__title {
+    margin-bottom: 3rem;
+  }
 
   &__headers {
     margin-bottom: 1rem;
@@ -46,12 +51,12 @@
       box-shadow: map.get($shadows, tile-shadow);
       border-radius: map.get($sizes, border-radius);
 
-      .data-table__single-cell:first-child {
+      .modal-table__single-cell:first-child {
         border-top-left-radius: map.get($sizes, border-radius);
         border-bottom-left-radius: map.get($sizes, border-radius);
       }
 
-      .data-table__single-cell:last-child {
+      .modal-table__single-cell:last-child {
         border-top-right-radius: map.get($sizes, border-radius);
         border-bottom-right-radius: map.get($sizes, border-radius);
       }
@@ -60,12 +65,6 @@
     &:first-child {
       padding-top: 2rem;
     }
-
-    // &:not(.booked) span {
-    // 	cursor: pointer;
-    // 	color: map.get($colors, accent-bcg);
-    // 	text-shadow: map.get($shadows, active-text-icons-shadow);
-    // }
 
     &.booked {
       background-color: color.adjust(green, $lightness: 80%);
@@ -93,11 +92,16 @@
     transition: map.get($behavior, base-transition);
     white-space: preserve;
   }
+
+  &__no-table-note {
+    font-size: 2rem;
+    margin-bottom: 5rem;
+  }
 }
 
 @include respond-to(mobile-l) {
-  .data-table {
-    margin: 3rem 0;
+  .modal-table {
+    margin: 3rem 0.5rem 5rem;
 
     & .hash {
       max-width: 100px;
