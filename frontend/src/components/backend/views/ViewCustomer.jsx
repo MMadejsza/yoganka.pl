@@ -43,9 +43,6 @@ function ViewCustomer({ data }) {
           adminAccessed={adminAccessed}
         />
 
-        {/*//@ Personal-user details */}
-        <DetailsListUser userData={user} customerView={true} />
-
         {user.UserPrefSetting && (
           <DetailsListUserSettings
             settingsData={user.UserPrefSetting}
@@ -53,6 +50,9 @@ function ViewCustomer({ data }) {
             adminAccessed={adminAccessed}
           />
         )}
+
+        {/*//@ Personal-user details */}
+        <DetailsListUser userData={user} customerView={true} />
 
         {/*//@ Stats */}
         <DetailsListCustomerStats customerStats={customerStats} />

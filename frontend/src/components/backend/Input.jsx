@@ -16,6 +16,9 @@ function Input({
   const inputClass = !embedded
     ? `${formType}-form__${id}-input`
     : `generic-details__content ${classModifier ? `generic-details__content--${classModifier}` : ''}  ${isNotes ? `generic-details__content--notes` : ''}`;
+  const selectClass = !embedded
+    ? `${formType}-form__${id}-input`
+    : `generic-details__content ${classModifier ? `generic-details__content--${classModifier}` : ''}  ${isNotes ? `generic-details__content--notes` : ''}`;
   const textAreaClass = `${formType}-form__${id}-textarea`;
 
   if (props.type === 'checkbox') {
@@ -30,7 +33,13 @@ function Input({
     );
   } else if (props.type == 'select') {
     input = (
-      <select id={id} name={id} {...props} value={value} className={inputClass}>
+      <select
+        id={id}
+        name={id}
+        {...props}
+        value={value}
+        className={selectClass}
+      >
         {props.options.map((option, index) => (
           <option key={index} value={option.value}>
             {option.label}

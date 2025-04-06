@@ -92,11 +92,18 @@ $generic-list-vertical-padding: 2rem;
 }
 
 @include respond-to(mobile-m) {
+  .generic-outer-wrapper {
+    padding: 1.5rem;
+  }
   .generic-outer-wrapper > * {
     flex-basis: 48%;
   }
   .generic-outer-wrapper > *:nth-last-child(1):nth-child(odd) {
     flex-basis: 65%;
+  }
+
+  .generic-component-wrapper:has(.generic-details--product-view) {
+    flex-basis: 85%;
   }
 
   .generic-details {
@@ -115,13 +122,16 @@ $generic-list-vertical-padding: 2rem;
       max-width: 70%;
     }
 
-    &--product-stats {
+    &--product-view {
       flex-basis: 85%;
     }
   }
 }
 
 @include respond-to(mobile-mh) {
+  .generic-outer-wrapper > :nth-child(3n + 1):last-child {
+    flex-basis: 100%;
+  }
   .generic-details {
     &__list--customer-account-stats {
       width: 45%;
@@ -133,6 +143,7 @@ $generic-list-vertical-padding: 2rem;
   .generic-outer-wrapper:has(.generic-details--product-view) {
     gap: 4rem;
   }
+
   .generic-outer-wrapper
     > *:not(
       .generic-details--payment-view,
@@ -145,12 +156,16 @@ $generic-list-vertical-padding: 2rem;
       .generic-details--product-view,
       :has(.generic-details--product-view)
     ) {
-    flex-basis: 32%;
+    flex-basis: 31%;
     flex-wrap: nowrap;
   }
 
+  .generic-component-wrapper:has(.generic-details--product-view) {
+    flex-basis: 45%;
+  }
+
   .generic-details {
-    &--product-stats {
+    &--product-view {
       flex-basis: 45%;
     }
 
@@ -158,7 +173,7 @@ $generic-list-vertical-padding: 2rem;
       width: 40%;
     }
 
-    &__list--product-stats {
+    &__list--product-view {
       width: 100%;
     }
   }
@@ -168,8 +183,13 @@ $generic-list-vertical-padding: 2rem;
   .generic-outer-wrapper {
     gap: 2rem;
   }
+
+  .generic-component-wrapper:has(.generic-details--product-view) {
+    flex-basis: 45%;
+  }
+
   .generic-details {
-    &--product-stats {
+    &--product-view {
       flex-basis: 45%;
     }
 
