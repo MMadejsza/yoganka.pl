@@ -4,8 +4,8 @@ import {
   durationToSeconds,
   secondsToDuration,
 } from '../../../../utils/statistics/statsUtils.js';
+import ToggleEditButton from '../../../backend/ToggleEditButton.jsx';
 import GenericList from '../../../common/GenericList.jsx';
-import ToggleEditButton from '../../../common/ToggleEditButton.jsx';
 import DetailsFormProduct from './edit-forms/DetailsFormProduct.jsx';
 
 function DetailsListProduct({ data, placement, userAccessed, classModifier }) {

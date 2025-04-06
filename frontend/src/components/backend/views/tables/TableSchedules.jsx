@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useFeedback } from '../../../../hooks/useFeedback.js';
 import { getWeekDay } from '../../../../utils/dateTime.js';
 import { mutateOnDelete, queryClient } from '../../../../utils/http.js';
-import ToggleAddButton from '../../../common/ToggleAddButton.jsx';
+import ToggleAddButton from '../../../backend/ToggleAddButton.jsx';
 import FeedbackBox from '../../FeedbackBox.jsx';
 import ModalTable from '../../ModalTable.jsx';
 import WrapperModalTable from '../../WrapperModalTable.jsx';

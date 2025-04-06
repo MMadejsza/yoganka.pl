@@ -1,6 +1,6 @@
 import { useInput } from '../../../../hooks/useInput.js';
 import * as val from '../../../../utils/validation.js';
-import WrapperForm from '../../../common/WrapperForm.jsx';
+import WrapperForm from '../../../backend/WrapperForm.jsx';
 import Input from '../../Input.jsx';
 
 function NewCustomerFormForUser({ onSave }) {

@@ -9,7 +9,7 @@ import {
   queryClient,
 } from '../../../../../utils/http.js';
 import { phoneValidations } from '../../../../../utils/validation.js';
-import WrapperForm from '../../../../common/WrapperForm.jsx';
+import WrapperForm from '../../../../backend/WrapperForm.jsx';
 import FeedbackBox from '../../../FeedbackBox.jsx';
 import Input from '../../../Input.jsx';
 

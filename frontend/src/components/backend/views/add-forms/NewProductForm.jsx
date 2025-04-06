@@ -4,7 +4,7 @@ import { useFeedback } from '../../../../hooks/useFeedback.js';
 import { useInput } from '../../../../hooks/useInput.js';
 import { mutateOnCreate, queryClient } from '../../../../utils/http.js';
 import * as val from '../../../../utils/validation.js';
-import WrapperForm from '../../../common/WrapperForm.jsx';
+import WrapperForm from '../../../backend/WrapperForm.jsx';
 import FeedbackBox from '../../FeedbackBox.jsx';
 import Input from '../../Input.jsx';
 

@@ -5,7 +5,7 @@ import { useInput } from '../../../../../hooks/useInput.js';
 import { formatIsoDateTime } from '../../../../../utils/dateTime.js';
 import { mutateOnEdit, queryClient } from '../../../../../utils/http.js';
 import * as val from '../../../../../utils/validation.js';
-import WrapperForm from '../../../../common/WrapperForm.jsx';
+import WrapperForm from '../../../../backend/WrapperForm.jsx';
 import FeedbackBox from '../../../FeedbackBox.jsx';
 import Input from '../../../Input.jsx';
 

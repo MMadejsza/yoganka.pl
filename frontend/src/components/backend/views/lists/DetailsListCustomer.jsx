@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { calculateAge } from '../../../../utils/statistics/statsUtils.js';
+import ToggleEditButton from '../../../backend/ToggleEditButton.jsx';
 import GenericList from '../../../common/GenericList.jsx';
-import ToggleEditButton from '../../../common/ToggleEditButton.jsx';
 import DetailsFormCustomer from './edit-forms/DetailsFormCustomer.jsx';
 
 function DetailsListCustomer({
