@@ -115,89 +115,6 @@ body:has(.admin-console) {
     text-shadow: map.get($shadows, active-text-icons-shadow);
   }
 
-  .data-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    font-size: 1.5rem;
-
-    &__headers {
-      margin-bottom: 1rem;
-      font-size: 1.7rem;
-      border-bottom: 2px solid black;
-      background-color: rgba(map.get($colors, nav), 1);
-      box-shadow: map.get($shadows, box-shadow);
-      border-top-left-radius: map.get($sizes, border-radius);
-      border-top-right-radius: map.get($sizes, border-radius);
-    }
-
-    &__single-header {
-      transition: map.get($behavior, base-transition);
-      padding: 1rem;
-    }
-    &__single-header:first-child {
-      border-top-left-radius: map.get($sizes, border-radius);
-    }
-    &__single-header:last-child {
-      border-top-right-radius: map.get($sizes, border-radius);
-    }
-    &__cells {
-      transition: map.get($behavior, base-transition);
-
-      &:nth-child(2n) {
-        background-color: color.adjust(map.get($colors, nav), $lightness: 15%);
-      }
-      &.active:hover {
-        position: relative;
-        z-index: 3;
-        opacity: 1;
-        transform: scale(1.05) translateY(0.5rem);
-        box-shadow: map.get($shadows, tile-shadow);
-        border-radius: map.get($sizes, border-radius);
-        .data-table__single-cell:first-child {
-          border-top-left-radius: map.get($sizes, border-radius);
-          border-bottom-left-radius: map.get($sizes, border-radius);
-        }
-        .data-table__single-cell:last-child {
-          border-top-right-radius: map.get($sizes, border-radius);
-          border-bottom-right-radius: map.get($sizes, border-radius);
-        }
-      }
-
-      &:first-child {
-        padding-top: 2rem;
-      }
-
-      // &:not(.booked) span {
-      // 	cursor: pointer;
-      // 	color: map.get($colors, accent-bcg);
-      // 	text-shadow: map.get($shadows, active-text-icons-shadow);
-      // }
-
-      &.booked {
-        background-color: color.adjust(green, $lightness: 80%);
-        opacity: 0.6;
-      }
-      &.booked span {
-        color: green;
-      }
-      &.full,
-      &.archived {
-        background-color: map.get($colors, nav);
-        opacity: 0.25;
-        & span {
-          color: inherit;
-        }
-      }
-    }
-
-    &__single-cell {
-      width: min-content;
-      padding: 1rem;
-      transition: map.get($behavior, base-transition);
-      white-space: preserve;
-    }
-  }
   // .user-container {
   //   width: 100%;
   //   height: auto;
@@ -325,28 +242,14 @@ body:has(.admin-console) {
     gap: 1.5rem;
     max-width: 600px;
   }
-  .table-form {
-    width: 100%;
-    &__content {
-      flex-basis: 100%;
-      width: 100%;
-      padding: 0 1rem;
-      @include flex(row, space-between, center);
-      gap: 1.5rem;
-      transition: map.get($behavior, base-transition);
 
-      .modal-checklist__li {
-        width: min-content;
-        gap: 0;
-      }
-    }
-  }
   .action-btns {
     flex-basis: 10%;
     height: 100%;
     @include flex(row, center, center);
     gap: 1rem;
   }
+
   .table-form-btn {
     @include flex(row, center, center);
     cursor: pointer;

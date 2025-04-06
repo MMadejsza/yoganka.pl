@@ -19,12 +19,6 @@
   @include flex(column, space-evenly, center);
   gap: 2.5rem;
 
-  form {
-    width: 100%;
-    @include flex(column, space-evenly, center);
-    gap: 1.5rem;
-  }
-
   .register {
     &__question-block {
       align-self: center;

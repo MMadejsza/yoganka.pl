@@ -123,7 +123,7 @@ function SchedulePage() {
 
   return (
     <div className='admin-console'>
-      <Section classy='admin-intro' header={`Wyjazdy | Wydarzenia | Online`} />
+      <Section classy='admin-intro' header={`Najbliższa Yoga`} />
       {table}
       {isModalOpen && viewFrame}
     </div>
