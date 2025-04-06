@@ -116,7 +116,7 @@ function ModalTable({
                       {onQuickAction?.map((action, index) => (
                         <button
                           key={index}
-                          className={`form-action-btn table-form-btn table-form-btn--submit`}
+                          className={`form-action-btn symbol-only-btn symbol-only-btn--submit`}
                         >
                           <span
                             className={`material-symbols-rounded nav__icon ${

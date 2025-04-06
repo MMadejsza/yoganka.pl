@@ -1,10 +1,18 @@
 @use '../../utils/' as *;
+@use 'sass:map';
+
+.form {
+  @include flex(column, center, center);
+  gap: 1.5rem;
+  max-width: 600px;
+}
 
 .generic-details {
   .modal__user-action {
     margin-top: 1rem;
     @include flex($justify: center, $gap: 1rem);
     flex-flow: row wrap;
+
     .modal__btn {
       padding: 0.2rem 2rem;
 
@@ -14,5 +22,33 @@
         line-height: 150%;
       }
     }
+  }
+}
+
+.action-btns {
+  flex-basis: 10%;
+  height: 100%;
+  @include flex(row, center, center);
+  gap: 1rem;
+}
+
+.symbol-only-btn {
+  @include flex(row, center, center);
+  cursor: pointer;
+  height: 3rem;
+  width: min-content;
+  border: none;
+  transition: map.get($behavior, base-transition);
+
+  &:hover {
+    text-shadow: map.get($shadows, active-text-icons-shadow);
+  }
+
+  &--submit {
+    color: map.get($colors, accent-bcg);
+  }
+
+  & .nav__icon {
+    font-size: 4rem;
   }
 }

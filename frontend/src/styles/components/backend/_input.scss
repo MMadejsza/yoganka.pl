@@ -139,28 +139,6 @@ select.generic-details__content--settings {
   flex-basis: 20%;
 }
 
-// Inputs in table forms
-.table-form {
-  input,
-  select {
-    width: min-content;
-    max-width: 125px;
-    padding: 0 1rem;
-    text-align: center;
-  }
-
-  .modal-checklist__li {
-    width: min-content;
-    gap: 0;
-
-    &:nth-child(2) {
-      input {
-        width: 75px;
-      }
-    }
-  }
-}
-
 // =========================
 // NATIVE INPUT FIXES (DATE/TIME/NUMBER)
 // =========================
@@ -192,4 +170,34 @@ select.generic-details__content--settings {
 
   margin: 0;
   margin-right: auto !important; // Force alignment to the left
+}
+
+@include respond-to(mobile-mh) {
+  .generic-details--table-form {
+    .generic-details__list--table-form {
+      flex-direction: row;
+      justify-content: space-evenly;
+      gap: 1.3rem;
+    }
+
+    .generic-details__item--table-form {
+      //   gap: 0.5rem !important;
+      width: min-content;
+    }
+
+    .generic-details__label--table-form {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    input.generic-details__content--table-form,
+    select.generic-details__content--table-form {
+      padding: 0.2rem 2rem;
+      flex-basis: 20%;
+      line-height: 4rem;
+      height: 4rem;
+      font-size: 1.8rem;
+      //   max-width: 175x;
+    }
+  }
 }

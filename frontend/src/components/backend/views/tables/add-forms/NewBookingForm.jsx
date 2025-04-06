@@ -151,6 +151,7 @@ function NewBookingForm() {
         validationResults={customerValidationResults}
         didEdit={customerDidEdit}
         required
+        classModifier={'table-form'}
         isFocused={customerIsFocused}
       />
       <Input
@@ -171,6 +172,7 @@ function NewBookingForm() {
         required
         validationResults={paymentMethodValidationResults}
         didEdit={paymentMethodDidEdit}
+        classModifier={'table-form'}
         isFocused={paymentMethodIsFocused}
       />
     </WrapperForm>

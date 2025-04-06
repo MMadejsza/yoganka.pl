@@ -19,21 +19,22 @@ function WrapperForm({
   submitLabel,
   resetLabel,
   isTableRowLike,
+  toggleBtn,
   extraButtons,
   classModifier,
 }) {
   const mainClass = isTableRowLike
-    ? `table-form`
+    ? `generic-details generic-details--table-form ${classModifier ? `generic-details--${classModifier}` : ''}`
     : `generic-details ${classModifier ? `generic-details--${classModifier}` : ''}`;
   const fieldsClass = isTableRowLike
-    ? 'table-form__content'
+    ? `generic-details__list generic-details__list--table-form  ${classModifier ? `generic-details__list--${classModifier}` : ''} modal-checklist__list`
     : `generic-details__list  ${classModifier ? `generic-details__list--${classModifier}` : ''} modal-checklist__list`;
   const btnsClass = isTableRowLike ? 'action-btns' : 'modal__user-action';
   const resetClass = isTableRowLike
-    ? 'form-switch-btn modal__btn--secondary  table-form-btn'
+    ? 'form-switch-btn modal__btn--secondary form-switch-btn--table-form symbol-only-btn'
     : 'form-switch-btn modal__btn--secondary modal__btn modal__btn--small';
   const submitClass = isTableRowLike
-    ? `form-action-btn table-form-btn table-form-btn--submit`
+    ? `form-action-btn form-action-btn--table-form  symbol-only-btn symbol-only-btn--submit`
     : 'form-action-btn modal__btn modal__btn--small';
   return (
     <>
@@ -43,6 +44,7 @@ function WrapperForm({
             className={`generic-details__title ${classModifier ? `generic-details__title--${classModifier}` : ''} modal__title--day`}
           >
             {title}
+            {toggleBtn}
           </h2>
         )}
         {subTitle && (

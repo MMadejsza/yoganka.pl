@@ -22,18 +22,22 @@
     transition: map.get($behavior, base-transition);
     padding: 1rem;
   }
+
   &__single-header:first-child {
     border-top-left-radius: map.get($sizes, border-radius);
   }
+
   &__single-header:last-child {
     border-top-right-radius: map.get($sizes, border-radius);
   }
+
   &__cells {
     transition: map.get($behavior, base-transition);
 
     &:nth-child(2n) {
       background-color: color.adjust(map.get($colors, nav), $lightness: 15%);
     }
+
     &.active:hover {
       position: relative;
       z-index: 3;
@@ -41,10 +45,12 @@
       transform: scale(1.05) translateY(0.5rem);
       box-shadow: map.get($shadows, tile-shadow);
       border-radius: map.get($sizes, border-radius);
+
       .data-table__single-cell:first-child {
         border-top-left-radius: map.get($sizes, border-radius);
         border-bottom-left-radius: map.get($sizes, border-radius);
       }
+
       .data-table__single-cell:last-child {
         border-top-right-radius: map.get($sizes, border-radius);
         border-bottom-right-radius: map.get($sizes, border-radius);
@@ -65,13 +71,16 @@
       background-color: color.adjust(green, $lightness: 80%);
       opacity: 0.6;
     }
+
     &.booked span {
       color: green;
     }
+
     &.full,
     &.archived {
       background-color: map.get($colors, nav);
       opacity: 0.25;
+
       & span {
         color: inherit;
       }
@@ -89,6 +98,7 @@
 @include respond-to(mobile-l) {
   .data-table {
     margin: 3rem 0;
+
     & .hash {
       max-width: 100px;
       overflow: hidden;

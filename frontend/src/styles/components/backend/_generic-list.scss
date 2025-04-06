@@ -11,8 +11,9 @@ $generic-list-vertical-padding: 2rem;
   gap: 1.5rem;
 
   &__title {
-    // flex-basis: 100%;
     text-decoration: none;
+
+    @include flex(row, center, center, $gap: 2rem);
   }
 
   &__list {
@@ -129,10 +130,19 @@ $generic-list-vertical-padding: 2rem;
 }
 
 @include respond-to(mobile-mh) {
-  .generic-outer-wrapper > :nth-child(3n + 1):last-child {
+  .generic-outer-wrapper > :nth-child(-n + 1):last-child {
     flex-basis: 100%;
   }
+
+  .generic-component-wrapper:has(.generic-details--product-view) {
+    flex-basis: 45%;
+  }
+
   .generic-details {
+    &--product-view {
+      flex-basis: 45%;
+    }
+
     &__list--customer-account-stats {
       width: 45%;
     }
@@ -160,15 +170,7 @@ $generic-list-vertical-padding: 2rem;
     flex-wrap: nowrap;
   }
 
-  .generic-component-wrapper:has(.generic-details--product-view) {
-    flex-basis: 45%;
-  }
-
   .generic-details {
-    &--product-view {
-      flex-basis: 45%;
-    }
-
     &__list {
       width: 40%;
     }
@@ -184,15 +186,7 @@ $generic-list-vertical-padding: 2rem;
     gap: 2rem;
   }
 
-  .generic-component-wrapper:has(.generic-details--product-view) {
-    flex-basis: 45%;
-  }
-
   .generic-details {
-    &--product-view {
-      flex-basis: 45%;
-    }
-
     &__list {
       width: 90%;
     }

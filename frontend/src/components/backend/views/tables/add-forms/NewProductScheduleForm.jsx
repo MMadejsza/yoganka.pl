@@ -180,6 +180,7 @@ function NewProductScheduleForm() {
         validationResults={shouldRepeatValidationResults}
         didEdit={shouldRepeatDidEdit}
         isFocused={shouldRepeatIsFocused}
+        classModifier={'table-form'}
       />
       <Input
         embedded={true}
@@ -201,6 +202,7 @@ function NewProductScheduleForm() {
         onChange={handleRepeatChange}
         validationResults={repeatValidationResults}
         didEdit={repeatDidEdit}
+        classModifier={'table-form'}
         isFocused={repeatIsFocused}
       />
       <Input
@@ -218,6 +220,7 @@ function NewProductScheduleForm() {
         required
         validationResults={dateValidationResults}
         didEdit={dateDidEdit}
+        classModifier={'table-form'}
         isFocused={dateIsFocused}
       />
       <Input
@@ -234,6 +237,7 @@ function NewProductScheduleForm() {
         onChange={handleTimeChange}
         validationResults={timeValidationResults}
         didEdit={timeDidEdit}
+        classModifier={'table-form'}
         isFocused={timeIsFocused}
       />
       <Input
@@ -252,6 +256,7 @@ function NewProductScheduleForm() {
         required
         validationResults={locationValidationResults}
         didEdit={locationDidEdit}
+        classModifier={'table-form'}
         isFocused={locationIsFocused}
       />
       <Input
@@ -271,6 +276,7 @@ function NewProductScheduleForm() {
         onChange={handleCapacityChange}
         validationResults={capacityValidationResults}
         didEdit={capacityDidEdit}
+        classModifier={'table-form'}
         isFocused={capacityIsFocused}
       />
     </WrapperForm>
