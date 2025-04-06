@@ -175,6 +175,7 @@ select.generic-details__content--settings {
 @include respond-to(mobile-mh) {
   .generic-details--table-form {
     .generic-details__list--table-form {
+      width: 100%;
       flex-direction: row;
       justify-content: space-evenly;
       gap: 1.3rem;
@@ -193,11 +194,29 @@ select.generic-details__content--settings {
     input.generic-details__content--table-form,
     select.generic-details__content--table-form {
       padding: 0.2rem 2rem;
-      flex-basis: 20%;
       line-height: 4rem;
       height: 4rem;
       font-size: 1.8rem;
       //   max-width: 175x;
+    }
+  }
+}
+@include respond-to(desktop-s) {
+  .generic-details--table-form {
+    .generic-details__list--table-form {
+      justify-content: center;
+      gap: 2.5rem;
+    }
+
+    .generic-details__item--table-form {
+      max-width: 200px;
+      flex-basis: 10%;
+    }
+
+    input.generic-details__content--table-form,
+    select.generic-details__content--table-form {
+      padding: 0.2rem 2.2rem;
+      max-width: 200px;
     }
   }
 }

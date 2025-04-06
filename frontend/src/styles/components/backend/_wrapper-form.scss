@@ -49,6 +49,9 @@
   }
 
   & .nav__icon {
+    font-size: 3rem;
+  }
+  .generic-details__title & .nav__icon {
     font-size: 4rem;
   }
 }

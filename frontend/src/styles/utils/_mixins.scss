@@ -1,6 +1,22 @@
 @use 'sass:map';
 @use '_variables' as *;
 
+@mixin flex($direction: null, $justify: null, $align: null, $gap: null) {
+  display: flex;
+  @if $direction {
+    flex-direction: $direction;
+  }
+  @if $justify {
+    justify-content: $justify;
+  }
+  @if $align {
+    align-items: $align;
+  }
+  @if $gap {
+    gap: $gap;
+  }
+}
+
 // sh - small horizontal
 @mixin respond-to($breakpoint) {
   @if $breakpoint == mobile-xs {
@@ -55,6 +71,7 @@
     transform: translate(-100%);
   }
 }
+
 @keyframes benefit {
   0% {
     transform: scale(1) rotateX(0deg);
@@ -156,22 +173,6 @@
 
 @mixin animation($duration, $keyframe, $looping: infinite, $behavior: linear) {
   animation: $duration $keyframe $looping $behavior;
-}
-
-@mixin flex($direction: null, $justify: null, $align: null, $gap: null) {
-  display: flex;
-  @if $direction {
-    flex-direction: $direction;
-  }
-  @if $justify {
-    justify-content: $justify;
-  }
-  @if $align {
-    align-items: $align;
-  }
-  @if $gap {
-    gap: $gap;
-  }
 }
 
 @mixin offset-burger($offset) {
