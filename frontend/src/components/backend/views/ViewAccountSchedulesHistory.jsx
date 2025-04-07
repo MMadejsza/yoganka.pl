@@ -27,13 +27,11 @@ function ViewAccountSchedulesHistory({ data }) {
   // console.log(`✅ customerStats: `, customerStats);
 
   const stats = (
-    //<div className='user-container schedules'>
     <DetailsListCustomerStats
       customerStats={customerStats}
       altTitle={''}
       userAccountPage={true}
     />
-    //</div>
   );
 
   const headers = [

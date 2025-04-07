@@ -281,7 +281,6 @@ function ViewsController({
 
   return (
     <WrapperModal visited={visited} onClose={onClose}>
-      {/* <div className='user-container modal__summary'> */}
       {!deleteWarningTriggered
         ? dataDisplay
         : (feedback.status != undefined || deleteWarningTriggered) && (
@@ -306,7 +305,6 @@ function ViewsController({
           </>
         )}
       </footer>
-      {/* </div> */}
     </WrapperModal>
   );
 }

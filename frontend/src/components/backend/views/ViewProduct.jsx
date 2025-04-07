@@ -27,10 +27,8 @@ function ViewProduct({ data, isAdminPanel }) {
 
   return (
     <>
-      <h1 className='user-container__user-title modal__title'>{`${product.name} (Id:${product.productId})`}</h1>
-      <h3 className='user-container__user-status modal__title'>
-        {product.status}
-      </h3>
+      <h1 className='modal__title modal__title--view'>{`${product.name} (Id:${product.productId})`}</h1>
+      <h3 className='modal__title modal__title--status'>{product.status}</h3>
 
       {/*//@ Product main details */}
       <div className='generic-outer-wrapper'>

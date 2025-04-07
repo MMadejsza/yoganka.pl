@@ -175,12 +175,12 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
     <>
       {userAccessed ? (
         <>
-          <h1 className='user-container__user-title modal__title'>{`${product.name}`}</h1>
+          <h1 className='modal__title modal__title--view'>{`${product.name}`}</h1>
         </>
       ) : (
         <>
-          <h1 className='user-container__user-title modal__title'>{`Termin (Id:${schedule.scheduleId})`}</h1>
-          <h1 className='user-container__user-status modal__title'>{`Dla: "${product.name} (Id:${product.productId})"`}</h1>
+          <h1 className='modal__title modal__title--view'>{`Termin (Id:${schedule.scheduleId})`}</h1>
+          <h1 className='modal__title modal__title--status'>{`Dla: "${product.name} (Id:${product.productId})"`}</h1>
         </>
       )}
 

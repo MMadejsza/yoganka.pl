@@ -103,9 +103,7 @@ function AccountPage() {
     <div className='admin-console'>
       <Section classy='admin-intro' header={name} />
       {userTabs}
-      {/* <div className='user-container user-container--account modal__summary'> */}
       {content}
-      {/* </div> */}
     </div>
   );
 }

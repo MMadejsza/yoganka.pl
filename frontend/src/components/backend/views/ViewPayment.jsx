@@ -31,11 +31,11 @@ function ViewPayment({ data, isUserAccountPage }) {
   console.log(`ViewPayment schedules`, schedules);
   return (
     <>
-      <h1 className='user-container__user-title modal__title'>{`Płatność (Id: ${
+      <h1 className='modal__title'>{`Płatność (Id: ${
         payment.paymentId
       }${payment.performedBy == 'Admin' ? '- Manual by Admin' : ''})`}</h1>
       {!isUserAccountPage && (
-        <h2 className='user-container__user-title modal__title'>{` ${customer.firstName} ${customer.lastName}`}</h2>
+        <h2 className=' modal__title'>{` ${customer.firstName} ${customer.lastName}`}</h2>
       )}
 
       {/*//@ Customer main details */}

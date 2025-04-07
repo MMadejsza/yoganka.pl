@@ -38,13 +38,11 @@ function TableCustomerTotalSchedules({ data }) {
   // console.log(`✅ customerStats: `, customerStats);
 
   const stats = (
-    // <div className='user-container schedules'>
     <DetailsListCustomerStats
       customerStats={customerStats}
       altTitle={'W liczbach:'}
       userAccountPage={true}
     />
-    // </div>
   );
 
   const table = (

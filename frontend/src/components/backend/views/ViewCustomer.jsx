@@ -33,7 +33,7 @@ function ViewCustomer({ data }) {
 
   return (
     <>
-      <h1 className='user-container__user-title modal__title'>{name}</h1>
+      <h1 className='modal__title'>{name}</h1>
 
       {/*//@ Personal-customer details */}
       <div className='generic-outer-wrapper'>
