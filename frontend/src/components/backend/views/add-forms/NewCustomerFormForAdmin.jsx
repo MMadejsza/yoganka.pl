@@ -191,7 +191,7 @@ function NewCustomerFormForAdmin() {
     const formDataObj = Object.fromEntries(fd.entries());
     console.log('sent data:', formDataObj);
     createCustomer(formDataObj);
-    handleReset();
+    if (feedback.confirmation == 1) handleReset();
   };
 
   // Dynamically set descriptive names when switching from login in to registration
@@ -374,14 +374,6 @@ function NewCustomerFormForAdmin() {
         didEdit={notesDidEdit}
         isFocused={notesIsFocused}
       />
-    </WrapperForm>
-  );
-
-  return (
-    <>
-      {/* <section className={formType}> */}
-      {/* <div className='user-container modal__summary'> */}
-      {form}
       {feedback.status !== undefined && (
         <FeedbackBox
           status={feedback.status}
@@ -393,10 +385,10 @@ function NewCustomerFormForAdmin() {
           size='small'
         />
       )}
-      {/* </div> */}
-      {/* </section> */}
-    </>
+    </WrapperForm>
   );
+
+  return <>{form}</>;
 }
 
 export default NewCustomerFormForAdmin;

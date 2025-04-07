@@ -228,7 +228,12 @@ select.generic-details__content--settings {
       //   max-width: 175x;
     }
   }
+
+  .validation-msgs-list {
+    font-size: 1.8rem;
+  }
 }
+
 @include respond-to(desktop-s) {
   .generic-details--table-form {
     .generic-details__list--table-form {

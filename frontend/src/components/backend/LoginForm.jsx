@@ -265,7 +265,7 @@ function LoginFrom({ successMsg, errorMsg }) {
       mutate({ formData: data, modifier: 'login' });
     }
 
-    handleReset();
+    if (feedback.confirmation == 1) handleReset();
   };
 
   // Dynamically set descriptive names when switching from login in to registration or reset password

@@ -183,7 +183,7 @@ function DetailsFormUserSettings({
     const formDataObj = Object.fromEntries(fd.entries());
     console.log('sent data:', formDataObj);
     editUserSettings(formDataObj);
-    handleReset();
+    if (feedback.confirmation == 1) handleReset();
 
     //! assign registration date
   };

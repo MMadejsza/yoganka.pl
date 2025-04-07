@@ -144,7 +144,7 @@ function NewProductForm() {
     const formDataObj = Object.fromEntries(fd.entries());
     console.log('sent data:', formDataObj);
     createProduct(formDataObj);
-    handleReset();
+    if (feedback.confirmation == 1) handleReset();
   };
 
   // Dynamically set descriptive names when switching from login in to registration
@@ -183,7 +183,6 @@ function NewProductForm() {
         didEdit={nameDidEdit}
         isFocused={nameIsFocused}
       />
-
       <Input
         embedded={true}
         formType={formType}
@@ -206,7 +205,6 @@ function NewProductForm() {
         didEdit={productTypeDidEdit}
         isFocused={productTypeIsFocused}
       />
-
       <Input
         embedded={true}
         formType={formType}
@@ -298,14 +296,7 @@ function NewProductForm() {
         validationResults={statusValidationResults}
         didEdit={statusDidEdit}
         isFocused={statusIsFocused}
-      />
-    </WrapperForm>
-  );
-
-  return (
-    <>
-      {/* <div className='user-container modal__summary'> */}
-      {form}
+      />{' '}
       {feedback.status !== undefined && (
         <FeedbackBox
           status={feedback.status}
@@ -317,9 +308,10 @@ function NewProductForm() {
           size='small'
         />
       )}
-      {/* </div> */}
-    </>
+    </WrapperForm>
   );
+
+  return <>{form}</>;
 }
 
 export default NewProductForm;

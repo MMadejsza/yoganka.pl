@@ -202,7 +202,7 @@ function NewPaymentForm() {
 
     console.log('sent data:', formDataObj);
     createPayment(formDataObj);
-    handleReset();
+    if (feedback.confirmation == 1) handleReset();
   };
 
   // Dynamically set descriptive names when switching from login in to registration
@@ -210,14 +210,13 @@ function NewPaymentForm() {
     formType: 'login',
     title: 'Rejestracja manualnej płatności',
     subTitle: `Płatność bezpośrednio za zajęcia automatycznie tworzy i przypisuje rezerwację`,
-    note: `Pola mogą wymagać przeklinania w celu odświeżenia.`,
+    note: `Pola mogą wymagać przeklikania w celu odświeżenia.`,
     actionTitle: 'Zatwierdź',
   };
 
   // Extract values only
   const { formType, title, note, subTitle, actionTitle } = formLabels;
 
-  let isSubmitDisabled = !!areErrors;
   const form = productsList && customersList && (
     <WrapperForm
       title={title}
@@ -341,13 +340,7 @@ function NewPaymentForm() {
         didEdit={paymentMethodDidEdit}
         isFocused={paymentMethodIsFocused}
       />
-    </WrapperForm>
-  );
 
-  return (
-    <>
-      {/* <div className='user-container modal__summary'> */}
-      {form}
       {feedback.status !== undefined && (
         <FeedbackBox
           status={feedback.status}
@@ -359,9 +352,10 @@ function NewPaymentForm() {
           size='small'
         />
       )}
-      {/* </div> */}
-    </>
+    </WrapperForm>
   );
+
+  return <>{form}</>;
 }
 
 export default NewPaymentForm;

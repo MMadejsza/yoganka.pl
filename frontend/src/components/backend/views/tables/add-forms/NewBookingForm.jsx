@@ -112,7 +112,7 @@ function NewBookingForm() {
 
     console.log('sent data:', formDataObj);
     mutate(formDataObj);
-    handleReset();
+    if (feedback.confirmation == 1) handleReset();
   };
 
   // Dynamically set descriptive names when switching from login in to registration

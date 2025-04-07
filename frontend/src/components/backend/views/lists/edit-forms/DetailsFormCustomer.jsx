@@ -162,7 +162,7 @@ function DetailsFormCustomer({
     const formDataObj = Object.fromEntries(fd.entries());
     console.log('sent data:', formDataObj);
     editCustomerDetails(formDataObj);
-    handleReset();
+    if (feedback.confirmation == 1) handleReset();
   };
 
   // Dynamically set descriptive names when switching from login in to registration

@@ -2230,7 +2230,7 @@ export const postCreatePayment = (req, res, next) => {
         currentCustomer = customer;
         customerEmail = customer.User?.email;
         wantsNotifications =
-          foundRecord.Customer.User.UserPrefSetting?.notifications === true;
+          customer.User.UserPrefSetting?.notifications === true;
 
         // If passDefinitionId is provided, then the payment should be for a pass.
         if (passDefinitionId) {

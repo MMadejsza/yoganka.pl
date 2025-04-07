@@ -167,7 +167,7 @@ function DetailsFormProduct({ productData }) {
     console.log('sent data:', JSON.stringify(formDataObj));
 
     editProductData(formDataObj);
-    handleReset();
+    if (feedback.confirmation == 1) handleReset();
   };
 
   // Dynamically set descriptive names when switching from login in to registration

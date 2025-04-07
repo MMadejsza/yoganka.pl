@@ -96,7 +96,7 @@ function NewUserForm() {
     console.log('sent data:', data);
     createUser(data);
 
-    handleReset();
+    if (feedback.confirmation == 1) handleReset();
   };
 
   // Dynamically set descriptive names when switching from login in to registration
@@ -170,27 +170,21 @@ function NewUserForm() {
         didEdit={confirmedPasswordDidEdit}
         isFocused={confirmedPasswordIsFocused}
       />
+      {feedback.status !== undefined && (
+        <FeedbackBox
+          status={feedback.status}
+          isPending={isCreateUserPending}
+          isError={isCreateUserError}
+          error={createUserError}
+          successMsg={feedback.message}
+          warnings={feedback.warnings}
+          size='small'
+        />
+      )}
     </WrapperForm>
   );
 
-  return (
-    <>
-      <section className={formType}>
-        {form}
-        {feedback.status !== undefined && (
-          <FeedbackBox
-            status={feedback.status}
-            isPending={isCreateUserPending}
-            isError={isCreateUserError}
-            error={createUserError}
-            successMsg={feedback.message}
-            warnings={feedback.warnings}
-            size='small'
-          />
-        )}
-      </section>
-    </>
-  );
+  return <>{form}</>;
 }
 
 export default NewUserForm;
