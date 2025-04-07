@@ -233,19 +233,25 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
         </>
       )}
 
-      {shouldShowFeedback ? feedbackBox : shouldShowBookBtn ? paymentBtn : null}
+      <footer className='modal__user-action'>
+        {shouldShowFeedback
+          ? feedbackBox
+          : shouldShowBookBtn
+            ? paymentBtn
+            : null}
 
-      {shouldShowCancelBtn && (
-        <button
-          onClick={handleCancellation}
-          className='book modal__btn modal__btn--cancel'
-        >
-          <span className='material-symbols-rounded nav__icon'>
-            sentiment_dissatisfied
-          </span>
-          Daj znać, że nie przyjdziesz...
-        </button>
-      )}
+        {shouldShowCancelBtn && (
+          <button
+            onClick={handleCancellation}
+            className='book modal__btn modal__btn--cancel'
+          >
+            <span className='material-symbols-rounded nav__icon'>
+              sentiment_dissatisfied
+            </span>
+            Daj znać, że nie przyjdziesz...
+          </button>
+        )}
+      </footer>
     </>
   );
 }
