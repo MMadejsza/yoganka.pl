@@ -22,7 +22,7 @@ function EmailVerifyPage() {
 
   // Msg for the meanwhile before redirection
   return (
-    <main className='loginBox'>
+    <main className='login-box'>
       <section className={'login'}>
         <p className='form__title'>⏳ Weryfikujemy Twój adres e-mail...</p>
       </section>

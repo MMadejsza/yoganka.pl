@@ -19,6 +19,7 @@ import {
   getConfirmedPasswordValidations,
   passwordValidations,
 } from '../../utils/validation.js';
+import WrapperForm from '../backend/WrapperForm.jsx';
 import FeedbackBox from './FeedbackBox.jsx';
 import Input from './Input.jsx';
 
@@ -269,26 +270,23 @@ function LoginFrom({ successMsg, errorMsg }) {
 
   // Dynamically set descriptive names when switching from login in to registration or reset password
   const formLabels = {
-    formType: 'login',
+    formType: 'login-page',
     title: 'Logowanie',
     switchTitle: 'Zarejestruj się',
     resetPassTitle: 'Resetuj hasło',
     actionTitle: 'Zaloguj się',
   };
   if (params.token) {
-    formLabels.formType = 'register';
     formLabels.title = 'Nowe hasło:';
     formLabels.switchTitle = 'Zaloguj się';
     formLabels.resetPassTitle = 'Resetuj hasło';
     formLabels.actionTitle = 'Zatwierdź';
   } else if (resetPassword) {
-    formLabels.formType = 'register';
     formLabels.title = 'Resetowanie hasła:';
     formLabels.switchTitle = 'Zaloguj się';
     formLabels.resetPassTitle = 'Resetuj hasło';
     formLabels.actionTitle = 'Resetuj hasło';
   } else if (firstTime) {
-    formLabels.formType = 'register';
     formLabels.title = 'Rejestracja:';
     formLabels.switchTitle = 'Zaloguj się';
     formLabels.resetPassTitle = 'Resetuj hasło';
@@ -309,124 +307,131 @@ function LoginFrom({ successMsg, errorMsg }) {
 
   console.log('feedback:', feedback);
   console.log('userIsEditing:', userIsEditing);
+
+  const resetPassBtn = !resetPassword && (
+    <button
+      type='button'
+      onClick={switchToResetPassword}
+      className='form-switch-btn modal__btn modal__btn--secondary'
+    >
+      {resetPassTitle}
+    </button>
+  );
+
+  const extraBtns = !params.token && [
+    resetPassBtn,
+
+    <button
+      type='button'
+      className='modal__btn modal__btn--secondary'
+      onClick={switchToSignupOrLogin}
+    >
+      {switchTitle}
+    </button>,
+  ];
+
   if (isPending || isNewPasswordPending) {
     content = 'Wysyłanie...';
   } else
     content = (
-      <section className={formType}>
-        <form onSubmit={handleSubmit} className={`${formType}-form`}>
-          <h1 className='form__title'>{title}</h1>
-          {/* names are for FormData and id for labels */}
-          {!params.token && (
+      // <section className={formType}>
+      <WrapperForm
+        title={title}
+        onSubmit={handleSubmit}
+        onReset={handleReset}
+        submitLabel={actionTitle}
+        resetLabel='Resetuj formularz'
+        classModifier='login-page'
+        extraButtons={extraBtns}
+      >
+        {!params.token && (
+          <Input
+            embedded={true}
+            classModifier={'login-page'}
+            formType={formType}
+            type='email'
+            id='email'
+            name='email'
+            label='Email'
+            value={emailValue}
+            onFocus={handleEmailFocus}
+            onBlur={handleEmailBlur}
+            onChange={handleEmailChange}
+            placeholder={`${firstTime && !resetPassword ? '(Wyślemy link aktywacyjny)' : ''}`}
+            autoComplete='email'
+            required
+            validationResults={emailValidationResults}
+            didEdit={emailDidEdit}
+            isFocused={emailIsFocused}
+            isLogin={!firstTime && !params.token}
+          />
+        )}
+
+        {(!resetPassword || firstTime) && (
+          <>
             <Input
+              classModifier={'login-page'}
+              embedded={true}
               formType={formType}
-              type='email'
-              id='email'
-              name='email'
-              label='Email'
-              value={emailValue}
-              onFocus={handleEmailFocus}
-              onBlur={handleEmailBlur}
-              onChange={handleEmailChange}
-              placeholder={`${firstTime && !resetPassword ? '(Wyślemy link aktywacyjny)' : ''}`}
-              autoComplete='email'
+              type='password'
+              id='password'
+              name='password'
+              label='Hasło'
+              value={passwordValue}
+              onFocus={handlePasswordFocus}
+              onBlur={handlePasswordBlur}
+              onChange={handlePasswordChange}
+              autoComplete='current-password'
               required
-              validationResults={emailValidationResults}
-              didEdit={emailDidEdit}
-              isFocused={emailIsFocused}
+              validationResults={passwordValidationResults}
+              didEdit={passwordDidEdit}
+              isFocused={passwordIsFocused}
               isLogin={!firstTime && !params.token}
             />
-          )}
 
-          {(!resetPassword || firstTime) && (
-            <>
+            {(firstTime || params.token) && (
               <Input
+                classModifier={'login-page'}
+                embedded={true}
                 formType={formType}
                 type='password'
-                id='password'
-                name='password'
-                label='Hasło'
-                value={passwordValue}
-                onFocus={handlePasswordFocus}
-                onBlur={handlePasswordBlur}
-                onChange={handlePasswordChange}
-                autoComplete='current-password'
+                id='confirmedPassword'
+                name='confirmedPassword'
+                label='Powtórz hasło'
+                value={confirmedPasswordValue}
+                onFocus={handleConfirmedPasswordFocus}
+                onBlur={handleConfirmedPasswordBlur}
+                onChange={handleConfirmedPasswordChange}
                 required
-                validationResults={passwordValidationResults}
-                didEdit={passwordDidEdit}
-                isFocused={passwordIsFocused}
+                validationResults={confirmedPasswordValidationResults}
+                didEdit={confirmedPasswordDidEdit}
+                isFocused={confirmedPasswordIsFocused}
                 isLogin={!firstTime && !params.token}
               />
+            )}
+          </>
+        )}
 
-              {(firstTime || params.token) && (
-                <Input
-                  formType={formType}
-                  type='password'
-                  id='confirmedPassword'
-                  name='confirmedPassword'
-                  label='Powtórz hasło'
-                  value={confirmedPasswordValue}
-                  onFocus={handleConfirmedPasswordFocus}
-                  onBlur={handleConfirmedPasswordBlur}
-                  onChange={handleConfirmedPasswordChange}
-                  required
-                  validationResults={confirmedPasswordValidationResults}
-                  didEdit={confirmedPasswordDidEdit}
-                  isFocused={confirmedPasswordIsFocused}
-                  isLogin={!firstTime && !params.token}
-                />
-              )}
-            </>
-          )}
-
-          {!userIsEditing && feedback.status !== undefined && (
-            <FeedbackBox
-              status={feedback.status}
-              isPending={isPending || isNewPasswordPending || isTokenLoading}
-              isError={isError || isNewPasswordError || isTokenError}
-              error={errorMsg || error || newPasswordError || tokenError}
-              successMsg={successMsg || feedback.message}
-              warnings={feedback.warnings}
-              size='small'
-            />
-          )}
-
-          <button
-            type='reset'
-            onClick={handleReset}
-            className='form-switch-btn modal__btn  modal__btn--secondary'
-          >
-            Resetuj formularz
-          </button>
-          {!params.token && (
-            <>
-              {!resetPassword && (
-                <button
-                  type='button'
-                  onClick={switchToResetPassword}
-                  className='form-switch-btn modal__btn modal__btn--secondary'
-                >
-                  {resetPassTitle}
-                </button>
-              )}
-              <button
-                type='button'
-                className='modal__btn modal__btn--secondary'
-                onClick={switchToSignupOrLogin}
-              >
-                {switchTitle}
-              </button>
-            </>
-          )}
-
-          <button type='submit' className={`form-action-btn modal__btn`}>
-            {actionTitle}
-          </button>
-        </form>
-      </section>
+        {!userIsEditing && feedback.status !== undefined && (
+          <FeedbackBox
+            status={feedback.status}
+            isPending={isPending || isNewPasswordPending || isTokenLoading}
+            isError={isError || isNewPasswordError || isTokenError}
+            error={errorMsg || error || newPasswordError || tokenError}
+            successMsg={successMsg || feedback.message}
+            warnings={feedback.warnings}
+            size='small'
+          />
+        )}
+      </WrapperForm>
+      // </section>
     );
 
-  return <>{content}</>;
+  return (
+    <>
+      <main className='login-box'>{content}</main>
+    </>
+  );
 }
 
 export default LoginFrom;

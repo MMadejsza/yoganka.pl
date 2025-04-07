@@ -7,9 +7,7 @@ function LoginPage() {
         <title>Yoganka - Zaloguj się</title>
         <link rel='canonical' href='https://yoganka.pl/zaloguj-sie' />
       </Helmet>
-      <main className='loginBox'>
-        <LoginFrom />
-      </main>
+      <LoginFrom />
     </>
   );
 }

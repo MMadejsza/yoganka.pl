@@ -22,6 +22,22 @@
         line-height: 150%;
       }
     }
+
+    &--login-page {
+      padding: 0;
+      gap: 2rem;
+
+      .modal__btn {
+        height: 4.4rem;
+        width: 100%;
+
+        &--small,
+        &--secondary {
+          height: 3.5rem;
+          min-height: 3rem;
+        }
+      }
+    }
   }
 }
 
@@ -53,5 +69,25 @@
   }
   .generic-details__title & .nav__icon {
     font-size: 4rem;
+  }
+}
+
+@include respond-to(desktop-xs) {
+  .generic-details {
+    .modal__user-action--login-page {
+      .modal__btn {
+        &--small,
+        &--secondary {
+          margin: 0;
+          flex-basis: 100%;
+          font-size: 1.5rem;
+        }
+
+        &[type='submit'] {
+          flex-basis: 100%;
+          font-size: 2rem;
+        }
+      }
+    }
   }
 }

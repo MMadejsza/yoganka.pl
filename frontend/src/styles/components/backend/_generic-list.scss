@@ -12,8 +12,14 @@ $generic-list-vertical-padding: 2rem;
 
   &__title {
     text-decoration: none;
-
     @include flex(row, center, center, $gap: 2rem);
+    color: map.get($colors, tile-title);
+
+    &--login-page {
+      margin-bottom: 2rem;
+      font-size: 2.5rem;
+      transition: map.get($behavior, base-transition);
+    }
   }
 
   &__list {
@@ -84,6 +90,10 @@ $generic-list-vertical-padding: 2rem;
   .generic-details {
     &__list {
       min-width: 300px;
+
+      &--login-page {
+        min-width: auto;
+      }
     }
 
     &__label {

@@ -29,13 +29,17 @@ function WrapperForm({
   const fieldsClass = isTableRowLike
     ? `generic-details__list generic-details__list--table-form  ${classModifier ? `generic-details__list--${classModifier}` : ''} modal-checklist__list`
     : `generic-details__list  ${classModifier ? `generic-details__list--${classModifier}` : ''} modal-checklist__list`;
-  const btnsClass = isTableRowLike ? 'action-btns' : 'modal__user-action';
+  const btnsClass = isTableRowLike
+    ? 'action-btns'
+    : `modal__user-action ${classModifier ? `modal__user-action--${classModifier}` : ''}`;
   const resetClass = isTableRowLike
     ? 'form-switch-btn modal__btn--secondary form-switch-btn--table-form symbol-only-btn'
-    : 'form-switch-btn modal__btn--secondary modal__btn modal__btn--small';
+    : classModifier == 'login-page'
+      ? 'form-switch-btn modal__btn  modal__btn--secondary'
+      : 'form-switch-btn modal__btn--secondary modal__btn modal__btn--small';
   const submitClass = isTableRowLike
     ? `form-action-btn form-action-btn--table-form  symbol-only-btn symbol-only-btn--submit`
-    : 'form-action-btn modal__btn modal__btn--small';
+    : `form-action-btn modal__btn ${classModifier == 'login-page' ? '' : 'modal__btn--small'}`;
   return (
     <>
       <form onSubmit={onSubmit} className={mainClass}>
@@ -63,6 +67,7 @@ function WrapperForm({
         )}
         <div className={fieldsClass}>{children}</div> {/*//! CHILDREN*/}
         <footer className={btnsClass}>
+          {extraButtons} {/*//! EXTRA NOT STANDARD BTNS*/}
           <button type='reset' onClick={onReset} className={resetClass}>
             <span className='material-symbols-rounded nav__icon'>
               restart_alt
@@ -73,7 +78,6 @@ function WrapperForm({
             <span className='material-symbols-rounded nav__icon'>check</span>
             {submitLabel}
           </button>
-          {extraButtons} {/*//! EXTRA NOT STANDARD BTNS*/}
         </footer>
       </form>
     </>

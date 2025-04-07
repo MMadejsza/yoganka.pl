@@ -344,6 +344,7 @@
       opacity: 0.5;
     }
   }
+
   &__summary {
     grid-column: 1 /-1;
     @include flex(row, center, flex-start, 2rem);
