@@ -80,7 +80,7 @@ function Input({
 
       {/* After editing */}
       {!isLogin && validationResults && (isFocused || didEdit) && (
-        <ul className='control-error'>
+        <ul className='validation-msgs-list'>
           {validationResults?.map((result, index) => (
             // List all the rules and messages
             <li
@@ -88,10 +88,10 @@ function Input({
               className={
                 // assign proper class
                 !value
-                  ? 'control-error__msg msg-help'
+                  ? 'validation-msgs-list__msg validation-msgs-list__msg--help'
                   : result.valid
-                    ? 'control-error__msg msg-valid'
-                    : 'control-error__msg msg-error'
+                    ? 'validation-msgs-list__msg validation-msgs-list__msg--valid'
+                    : 'validation-msgs-list__msg validation-msgs-list__msg--error'
               }
             >
               {/* Assign proper symbol */}

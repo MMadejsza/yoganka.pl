@@ -172,6 +172,34 @@ select.generic-details__content--settings {
   margin-right: auto !important; // Force alignment to the left
 }
 
+.validation-msgs-list {
+  margin-top: 1.5rem;
+  line-height: 150%;
+  font-size: 1.5rem;
+  text-align: left;
+  @include flex(column);
+  opacity: 0.6;
+
+  span {
+    &:last-of-type {
+      align-self: flex-start;
+    }
+    font-size: 1.8rem;
+  }
+
+  &__msg {
+    @include flex(row, flex-start, center);
+    gap: 1rem;
+
+    &--error {
+      color: #e25822;
+    }
+    &--valid {
+      color: green;
+    }
+  }
+}
+
 @include respond-to(mobile-mh) {
   .generic-details--table-form {
     .generic-details__list--table-form {

@@ -17,50 +17,9 @@
   @include flex(column, space-evenly, center);
   gap: 2.5rem;
 
-  //   .login-page {
-  //     &__question-block {
-  //       align-self: center;
-  //       line-height: 3rem;
-  //       font-size: 1.8rem;
-  //       @include flex(row, space-evenly, center);
-  //     }
-
-  //     &.active {
-  //       opacity: 1;
-  //     }
-  //   }
-
   button {
     &:nth-of-type(1) {
       margin-top: 2rem;
-    }
-  }
-}
-
-.control-error {
-  margin-top: 1.5rem;
-  line-height: 150%;
-  font-size: 1.5rem;
-  text-align: left;
-  @include flex(column);
-  opacity: 0.6;
-
-  span {
-    &:last-of-type {
-      align-self: flex-start;
-    }
-    font-size: 1.8rem;
-  }
-
-  &__msg {
-    @include flex(row, flex-start, center);
-    gap: 1rem;
-
-    &.msg-error {
-      color: #e25822;
-    }
-    &.msg-valid {
-      color: green;
     }
   }
 }

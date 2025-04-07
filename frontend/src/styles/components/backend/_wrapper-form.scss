@@ -7,40 +7,6 @@
   max-width: 600px;
 }
 
-.generic-details {
-  .modal__user-action {
-    margin-top: 1rem;
-    @include flex($justify: center, $gap: 1rem);
-    flex-flow: row wrap;
-
-    .modal__btn {
-      padding: 0.2rem 2rem;
-
-      &--small,
-      &--secondary {
-        height: auto;
-        line-height: 150%;
-      }
-    }
-
-    &--login-page {
-      padding: 0;
-      gap: 2rem;
-
-      .modal__btn {
-        height: 4.4rem;
-        width: 100%;
-
-        &--small,
-        &--secondary {
-          height: 3.5rem;
-          min-height: 3rem;
-        }
-      }
-    }
-  }
-}
-
 .action-btns {
   flex-basis: 10%;
   height: 100%;
@@ -69,25 +35,5 @@
   }
   .generic-details__title & .nav__icon {
     font-size: 4rem;
-  }
-}
-
-@include respond-to(desktop-xs) {
-  .generic-details {
-    .modal__user-action--login-page {
-      .modal__btn {
-        &--small,
-        &--secondary {
-          margin: 0;
-          flex-basis: 100%;
-          font-size: 1.5rem;
-        }
-
-        &[type='submit'] {
-          flex-basis: 100%;
-          font-size: 2rem;
-        }
-      }
-    }
   }
 }
