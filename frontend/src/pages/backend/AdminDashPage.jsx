@@ -244,6 +244,7 @@ function AdminPage() {
     console.log(data);
     table = (
       <ModalTable
+        classModifier='admin-view'
         headers={headers}
         keys={data.totalKeys || data.totalHeaders}
         content={data.content}

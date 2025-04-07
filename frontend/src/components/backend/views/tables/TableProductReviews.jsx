@@ -19,6 +19,7 @@ function TableProductReviews({ stats }) {
       noContentMsg={'opinii'}
     >
       <ModalTable
+        classModifier={'admin-view'}
         headers={headers}
         keys={stats.reviewsKeys}
         content={feedbackArray}

@@ -1,0 +1,250 @@
+@use '../../utils/' as *;
+@use 'sass:color';
+@use 'sass:map';
+
+.modal-table {
+  display: block; // zmieniamy cały kontekst z tabeli na kontener
+  width: 100%;
+  padding: 1.5rem;
+  margin-bottom: 7rem;
+
+  &__title {
+    margin-top: 5rem;
+    margin-bottom: 3rem;
+  }
+
+  &__headers {
+    display: none; // ukrywamy nagłówki tabeli na mobile
+  }
+
+  & tbody {
+    display: grid;
+    grid-template-columns: 1fr; // każdy wiersz (tr) w osobnym rzędzie
+    gap: 1.5rem;
+  }
+
+  &__cells {
+    display: grid;
+    grid-template-areas:
+      'type . . . . . id'
+      'name name name name name name name'
+      '. . . . . . .'
+      'date date day . time . .'
+      'location location location location location location .';
+    background-color: rgba(map.get($colors, tile), 0.8);
+    border: 1px solid rgba(map.get($colors, nav), 0.3);
+    border-radius: map.get($sizes, border-radius);
+    box-shadow: map.get($shadows, box-shadow);
+    padding: 1.5rem;
+    gap: 1rem;
+    transition: map.get($behavior, base-transition);
+
+    &:nth-child(2n) {
+      background-color: rgba(map.get($colors, nav), 0.5);
+    }
+
+    &.active {
+      cursor: pointer;
+      box-shadow: map.get($shadows, tile-shadow);
+      border: none;
+
+      &:hover {
+        transform: scale(1.05) translateY(0.5rem);
+      }
+    }
+  }
+
+  &__single-cell {
+    @include flex(row, flex-start, center);
+    gap: 1rem;
+    padding: 0.5rem 0;
+    font-size: 1.4rem;
+    border-bottom: 1px solid rgba(map.get($colors, nav), 0.1);
+    word-break: break-word;
+    transition: map.get($behavior, base-transition);
+
+    .nav__icon {
+      color: map.get($colors, accent-bcg);
+      font-size: 2rem;
+
+      &--productType,
+      &--rowId {
+        color: map.get($colors, nav-muted);
+      }
+    }
+
+    $title-size: 1.8rem;
+    $timing-size: 1.6rem;
+    $location-size: 1.3rem;
+    $dimmed-color: map.get($colors, tile-text-muted);
+    $heavy-dimmed-color: map.get($colors, nav-muted);
+
+    &--productType {
+      grid-area: type;
+      padding: 0;
+      margin: 0;
+      font-weight: 500;
+      color: $heavy-dimmed-color;
+    }
+    &--rowId {
+      grid-area: id;
+      padding: 0;
+      margin: 0;
+      color: $heavy-dimmed-color;
+    }
+    &--productName {
+      grid-area: name;
+      font-weight: bold;
+      font-size: $title-size;
+    }
+    &--date {
+      grid-area: date;
+      padding: 0;
+      font-size: $timing-size;
+    }
+    &--day {
+      grid-area: day;
+      padding: 0;
+      font-size: $timing-size;
+    }
+    &--startTime {
+      grid-area: time;
+      padding: 0;
+      font-size: $timing-size;
+    }
+    &--location {
+      grid-area: location;
+      color: map.get($colors, $dimmed-color);
+      font-size: $location-size;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+@include respond-to(mobile-mh) {
+  .modal-table {
+    &--admin-view {
+      display: table;
+      width: 100%;
+      margin: 3rem 0rem 5rem;
+      padding: 0;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 1.5rem;
+      overflow: visible;
+      span {
+        display: none;
+      }
+    }
+
+    &__headers--admin-view {
+      display: table-column-group;
+      margin-bottom: 0.5rem;
+      font-size: 1.7rem;
+      border-bottom: 2px solid black;
+      background-color: rgba(map.get($colors, nav), 1);
+      box-shadow: map.get($shadows, box-shadow);
+      border-top-left-radius: map.get($sizes, border-radius);
+      border-top-right-radius: map.get($sizes, border-radius);
+    }
+
+    &__single-header--admin-view {
+      transition: map.get($behavior, base-transition);
+      padding: 0.5rem;
+
+      &:first-child {
+        border-top-left-radius: map.get($sizes, border-radius);
+      }
+
+      &:last-child {
+        border-top-right-radius: map.get($sizes, border-radius);
+      }
+    }
+
+    & tbody {
+      display: table-row-group;
+    }
+
+    &__cells--admin-view {
+      display: table-row;
+      transition: map.get($behavior, base-transition);
+      border: none;
+
+      &:nth-child(2n) {
+        background-color: color.adjust(map.get($colors, nav), $lightness: 15%);
+      }
+
+      &.active {
+        box-shadow: none;
+
+        &:hover {
+          position: relative;
+          z-index: 3;
+          opacity: 1;
+          box-shadow: map.get($shadows, tile-shadow);
+          border-radius: map.get($sizes, border-radius);
+
+          .modal-table__single-cell:first-child {
+            border-top-left-radius: map.get($sizes, border-radius);
+            border-bottom-left-radius: map.get($sizes, border-radius);
+          }
+
+          .modal-table__single-cell:last-child {
+            border-top-right-radius: map.get($sizes, border-radius);
+            border-bottom-right-radius: map.get($sizes, border-radius);
+          }
+        }
+      }
+
+      &:first-child {
+        padding-top: 2rem;
+      }
+
+      &.booked {
+        background-color: color.adjust(green, $lightness: 80%);
+        opacity: 0.6;
+      }
+
+      &.booked span {
+        color: green;
+      }
+
+      &.full,
+      &.archived {
+        background-color: map.get($colors, nav);
+        opacity: 0.25;
+
+        & span {
+          color: inherit;
+        }
+      }
+    }
+
+    &__single-cell--admin-view {
+      display: table-cell;
+      width: min-content;
+      padding: 1rem;
+      transition: map.get($behavior, base-transition);
+      white-space: preserve;
+    }
+
+    &__no-table-note--admin-view {
+      font-size: 2rem;
+      margin-bottom: 5rem;
+    }
+  }
+}
+
+@include respond-to(mobile-l) {
+  .modal-table {
+    margin: 3rem 0.5rem 5rem;
+
+    & .hash {
+      max-width: 100px;
+      overflow: hidden;
+    }
+  }
+}

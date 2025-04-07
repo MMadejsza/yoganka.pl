@@ -26,6 +26,7 @@ function TableCustomerInvoices({ invoicesArray, noInvoices }) {
         noContentMsg={'faktur'}
       >
         <ModalTable
+          classModifier={'admin-view'}
           headers={headers}
           keys={keys}
           content={invoicesArray}

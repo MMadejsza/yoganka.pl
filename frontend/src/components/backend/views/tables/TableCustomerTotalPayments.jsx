@@ -62,6 +62,7 @@ function TableCustomerTotalPayments({ data }) {
       noContentMsg={'płatności'}
     >
       <ModalTable
+        classModifier={'admin-view'}
         headers={headers}
         keys={keys}
         content={content}

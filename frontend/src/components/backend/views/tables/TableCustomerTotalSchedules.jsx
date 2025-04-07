@@ -54,6 +54,7 @@ function TableCustomerTotalSchedules({ data }) {
       noContentMsg={'zajęć'}
     >
       <ModalTable
+        classModifier={'admin-view'}
         headers={headers}
         keys={keys}
         content={content}

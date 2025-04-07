@@ -24,6 +24,7 @@ function TableCustomerReviews({ reviews, placement }) {
         noContentMsg={'opinii'}
       >
         <ModalTable
+          classModifier={'admin-view'}
           headers={headers}
           keys={reviews.keys}
           content={feedbackArray}

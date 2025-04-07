@@ -136,6 +136,7 @@ function TableSchedules({ scheduleRecords, placement, status }) {
         form={isFormVisible && form}
       >
         <ModalTable
+          classModifier={'admin-view'}
           headers={headers}
           keys={keys}
           content={processedScheduleRecordsArr}

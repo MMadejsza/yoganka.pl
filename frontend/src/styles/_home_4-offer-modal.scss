@@ -295,6 +295,7 @@
   }
 
   &__user-action {
+    margin: 0 auto;
     padding-bottom: 0;
     width: 100%;
 
@@ -314,7 +315,7 @@
         background-color: rgba(yellow, 0.1);
       }
       &-danger {
-        background-color: rgba(red, 0.1);
+        background-color: rgba(color.adjust(red, $lightness: -13%), 0.45);
       }
     }
 

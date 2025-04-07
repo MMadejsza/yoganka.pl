@@ -31,6 +31,28 @@ function ModalTable({
     return 'lock_person';
   };
 
+  const pickCellSymbol = key => {
+    switch (true) {
+      case key.includes('Id'):
+        return 'badge';
+      case key == 'date':
+        return 'event';
+      case key == 'day':
+        return 'calendar_view_day';
+      case key == 'startTime':
+        return 'access_time';
+      case key == 'productType':
+        return 'class';
+      case key == 'productName':
+        return 'self_improvement';
+      case key == 'location':
+        return 'location_on';
+
+      default:
+        break;
+    }
+  };
+
   const onRowBtnClick = (row, archived, method, e) => {
     const isUserGoing = row.isUserGoing != undefined ? row.isUserGoing : false;
     const isArchived = archived != undefined ? archived : 'N/A';
@@ -104,6 +126,10 @@ function ModalTable({
                   : ''
               } ${row.full && !isAdminPage && 'full'}`}
               key={rowIndex}
+              onClick={() => {
+                if (active) return onOpen(row);
+                return null;
+              }}
             >
               {keys.map((key, keyIndex) => {
                 let value = row[key];
@@ -134,19 +160,21 @@ function ModalTable({
                     </div>
                   );
                 }
+                const keyClass = key.includes('Id') ? 'rowId' : key;
                 return (
                   <td
-                    onClick={() => {
-                      if (active) return onOpen(row);
-                      return null;
-                    }}
-                    className={`modal-table__single-cell ${
+                    className={`modal-table__single-cell modal-table__single-cell--${keyClass} ${
                       classModifier
                         ? `modal-table__single-cell--${classModifier}`
                         : ''
                     }${key == 'Hasło (Szyfrowane)' ? 'hash' : ''}`}
                     key={keyIndex}
                   >
+                    <span
+                      className={`material-symbols-rounded nav__icon nav__icon--${keyClass}`}
+                    >
+                      {pickCellSymbol(key)}
+                    </span>
                     {value || '-'}
                   </td>
                 );

@@ -59,7 +59,10 @@ function ViewCustomer({ data }) {
       </div>
 
       {/*//@ Schedules */}
-      <TableCustomerSchedules customerStats={customerStats} />
+      <TableCustomerSchedules
+        customerStats={customerStats}
+        classModifier='admin-view'
+      />
 
       {/*//@ Reviews */}
       <TableCustomerReviews reviews={customerStats.reviews} />

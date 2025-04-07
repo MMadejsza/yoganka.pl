@@ -146,10 +146,11 @@ function TableAttendance({ stats, isAdminPage }) {
       content={attendedBookingsArray}
       title={'Potwierdzone rezerwacje'}
       noContentMsg={'aktywnych rezerwacji'}
-      toggleBtn={toggleBtn}
+      // toggleBtn={toggleBtn}
       form={isFormVisible && form}
     >
       <ModalTable
+        classModifier={'admin-view'}
         headers={['Id', 'Metoda płatności', 'Data zapisania', 'Uczestnik', '']}
         keys={[
           'bookingId',
@@ -175,6 +176,7 @@ function TableAttendance({ stats, isAdminPage }) {
       // toggleBtn={toggleBtn}
     >
       <ModalTable
+        classModifier={'admin-view'}
         headers={['Id', 'Metoda płatności', 'Data zapisania', 'Uczestnik', '']}
         keys={[
           'bookingId',

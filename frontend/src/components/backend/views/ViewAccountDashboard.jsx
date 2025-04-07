@@ -57,17 +57,8 @@ function ViewAccountDashboard({ data, queryStatus }) {
     // console.log(`✅ content: `, content);
     // console.log(`✅ keys: `, keys);
     console.log(`✅ customerStats: `, customerStats);
-
-    // statsBlock = (
-    //   <div className='user-container schedules'>
-    //     <DetailsListCustomerStats
-    //       customerStats={customerStats}
-    //       altTitle={''}
-    //       userAccountPage={true}
-    //     />
-    //   </div>
-    // );
   }
+
   if (queryStatus.isError) {
     console.log(queryStatus.error.code);
     if (error.code == 401) {
@@ -80,6 +71,7 @@ function ViewAccountDashboard({ data, queryStatus }) {
       );
     }
   }
+
   const table = (
     <WrapperModalTable
       content={contentUpcoming}
@@ -100,6 +92,7 @@ function ViewAccountDashboard({ data, queryStatus }) {
         content={contentUpcoming}
         active={true}
         onOpen={handleOpenScheduleModal}
+        classModifier={'user-account'}
       />
     </WrapperModalTable>
   );
