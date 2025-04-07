@@ -16,6 +16,7 @@
   grid-column: 1 / -1;
   padding: 2rem 0 3rem;
   overflow-x: hidden;
+  // height: max-content;
 
   &::before {
     @extend %slider-shade-overlay;

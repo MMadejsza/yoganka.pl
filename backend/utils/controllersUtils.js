@@ -96,3 +96,18 @@ export const areSettingsChanged = (
     });
   }
 };
+
+export const convertDurationToTime = durationInput => {
+  const durationInHours = parseFloat(durationInput);
+  if (isNaN(durationInHours)) {
+    throw new Error('Nieprawidłowa wartość duration.');
+  }
+  const hours = Math.floor(durationInHours);
+  const minutes = Math.floor((durationInHours - hours) * 60);
+  const seconds = Math.floor(((durationInHours - hours) * 60 - minutes) * 60);
+
+  // Format HH:MM:SS (padStart gives 00s)
+  return `${hours.toString().padStart(2, '0')}:${minutes
+    .toString()
+    .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+};

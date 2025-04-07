@@ -126,8 +126,9 @@ export const postCreateBookSchedule = (req, res, next) => {
     currentCustomer,
     currentScheduleRecord,
     userEmail = req.user.email,
-    wantsNotifications =
-      req.user.UserPrefSetting?.notifications === true || true,
+    wantsNotifications = req.user.UserPrefSetting
+      ? req.user.UserPrefSetting.notifications
+      : true,
     isNewCustomer = false;
   // If it's not a Customer yet
   if (!req.user.Customer) {
@@ -431,7 +432,9 @@ export const putEditMarkAbsent = (req, res, next) => {
   const scheduleID = req.params.scheduleID;
   let currentScheduleRecord;
   const customerEmail = req.user.email;
-  const wantsNotifications = req.user.UserPrefSetting?.notifications === true;
+  const wantsNotifications = req.user.UserPrefSetting
+    ? req.user.UserPrefSetting.notifications
+    : true;
   console.log('putEditMarkAbsent', req.body);
 
   models.ScheduleRecord.findOne({

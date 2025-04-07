@@ -111,14 +111,18 @@ function Modal({ tile, singleImg, onClose, today, isVisible, isClosing }) {
     const symbolOrIcon = btn => {
       if (btn.icon && btn.symbol) return;
       if (btn.icon) {
-        <i
-          className={`${btn.icon} nav__icon`}
-          style={{ paddingRight: '1rem' }}
-        ></i>;
+        return (
+          <i
+            className={`${btn.icon} nav__icon`}
+            style={{ paddingRight: '1rem' }}
+          ></i>
+        );
       } else if (btn.symbol) {
-        <span className='material-symbols-rounded nav__icon'>
-          {btn.symbol}
-        </span>;
+        return (
+          <span className='material-symbols-rounded nav__icon'>
+            {btn.symbol}
+          </span>
+        );
       }
     };
 

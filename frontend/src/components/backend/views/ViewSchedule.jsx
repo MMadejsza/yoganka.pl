@@ -144,7 +144,7 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
           ? 'Wróć na zajęcia'
           : newCustomerDetails.isFirstTimeBuyer
             ? 'Uzupełnij dane osobowe'
-            : 'Rezerwuj'}
+            : 'Płacę'}
     </button>
   ) : (
     // dynamic redirection back to schedule when logged in, in Login form useFeedback

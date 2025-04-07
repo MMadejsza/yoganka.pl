@@ -5,6 +5,7 @@ import * as models from '../models/_index.js';
 import {
   areCustomerDetailsChanged,
   areSettingsChanged,
+  convertDurationToTime,
   isPassValidForSchedule,
 } from '../utils/controllersUtils.js';
 import {
@@ -1443,7 +1444,7 @@ export const postCreateProduct = async (req, res, next) => {
         name: name,
         type: productType,
         location: location,
-        duration: duration,
+        duration: convertDurationToTime(duration),
         price: price,
         startDate: startDate,
         status: status || 'Aktywny',
@@ -1604,7 +1605,9 @@ export const postCreateBooking = (req, res, next) => {
     errCode = 400;
     return next(new Error('Brakuje pól: customerId, scheduleId, bookingType'));
   }
-  const wantsNotifications = req.user?.UserPrefSetting?.notifications === true;
+  const wantsNotifications = req.user?.UserPrefSetting
+    ? req.user?.UserPrefSetting?.notifications
+    : true;
 
   let currentCustomer, currentScheduleRecord;
   const paymentMethodDeduced =
@@ -1820,8 +1823,9 @@ export const deleteBookingRecord = (req, res, next) => {
 
       currentScheduleRecord = foundRecord.ScheduleRecord;
       customerEmail = foundRecord.Customer.User.email;
-      wantsNotifications =
-        foundRecord.Customer.User.UserPrefSetting?.notifications === true;
+      wantsNotifications = foundRecord.Customer.User.UserPrefSetting
+        ? foundRecord.Customer.User.UserPrefSetting?.notifications
+        : true;
 
       // Return deleted number
       return foundRecord.destroy();
@@ -1903,8 +1907,9 @@ export const putEditMarkAbsent = (req, res, next) => {
       currentScheduleRecord = foundRecord.ScheduleRecord;
       // Assign for email data
       customerEmail = foundRecord.Customer.User.email;
-      wantsNotifications =
-        foundRecord.Customer.User.UserPrefSetting?.notifications === true;
+      wantsNotifications = foundRecord.Customer.User.UserPrefSetting
+        ? foundRecord.Customer.User.UserPrefSetting?.notifications
+        : true;
       // Finally update attendance
       return models.Booking.update(
         {
@@ -1988,8 +1993,9 @@ export const putEditMarkPresent = (req, res, next) => {
       currentScheduleRecord = foundRecord.ScheduleRecord;
       // Assign for email data
       customerEmail = foundRecord.Customer.User.email;
-      wantsNotifications =
-        foundRecord.Customer.User.UserPrefSetting?.notifications === true;
+      wantsNotifications = foundRecord.Customer.User.UserPrefSetting
+        ? foundRecord.Customer.User.UserPrefSetting.notifications
+        : true;
       // Finally update attendance
       return models.Booking.update(
         {
@@ -2033,41 +2039,6 @@ export const getAllPayments = (req, res, next) => {
   const controllerName = 'getAllPayments';
   callLog(req, person, controllerName);
 
-  // models.Payment.findAll({
-  //   include: [
-  //     {
-  //       model: models.Customer,
-  //       include: [
-  //         {
-  //           model: models.User,
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       model: models.Booking,
-  //       include: [
-  //         {
-  //           model: models.ScheduleRecord,
-  //           include: [
-  //             {
-  //               model: models.Product,
-  //               attributes: ['name'],
-  //             },
-  //           ],
-  //           attributes: ['scheduleId'],
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       model: models.CustomerPass,
-  //       include: [
-  //         {
-  //           model: models.PassDefinition,
-  //         },
-  //       ],
-  //     },
-  //   ],
-  // })
   // Find all schedule payment regardless relation to booking because they are non refundable
   return models.Payment.findAll({
     include: [
@@ -2229,8 +2200,9 @@ export const postCreatePayment = (req, res, next) => {
         successLog(person, controllerName, 'customer found');
         currentCustomer = customer;
         customerEmail = customer.User?.email;
-        wantsNotifications =
-          customer.User.UserPrefSetting?.notifications === true;
+        wantsNotifications = customer.User.UserPrefSetting
+          ? customer.User.UserPrefSetting.notifications
+          : true;
 
         // If passDefinitionId is provided, then the payment should be for a pass.
         if (passDefinitionId) {

@@ -2,9 +2,12 @@
 @use '../../utils/' as *;
 
 $generic-list-vertical-padding: 2rem;
-
+form.generic-details {
+  margin: 0 auto;
+}
 .generic-details {
   width: 85%;
+
   padding: $generic-list-vertical-padding 2rem;
   @include flex(column, flex-start, center);
   //   flex-wrap: wrap;

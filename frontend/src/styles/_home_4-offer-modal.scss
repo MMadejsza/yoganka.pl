@@ -152,8 +152,10 @@
   border-radius: map.get($sizes, border-radius);
   box-shadow: map.get($shadows, active-text-icons-shadow);
   opacity: 0;
-
   transition: map.get($behavior, base-transition);
+
+  // @include flex(column, $align: center);
+
   &::backdrop {
     backdrop-filter: blur(10px);
   }
