@@ -53,7 +53,7 @@ function WrapperForm({
         )}
         {subTitle && (
           <h3
-            className={`generic-details__subtitle ${classModifier ? `generic-details__subtitle--${classModifier}` : ''} modal__title--day`}
+            className={`generic-details__subtitle ${classModifier ? `generic-details__subtitle--${classModifier}` : ''} modal__title--status`}
           >
             {subTitle}
           </h3>

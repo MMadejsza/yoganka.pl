@@ -292,6 +292,16 @@
       font-size: 2.2rem;
       text-decoration: underline;
     }
+
+    &--view {
+      font-size: 3rem;
+      color: map.get($colors, tile-title);
+    }
+
+    &--status {
+      font-size: 2.5rem;
+      color: map.get($colors, tile-title);
+    }
   }
 
   &__user-action {

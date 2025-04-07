@@ -209,7 +209,7 @@ function NewPaymentForm() {
   const formLabels = {
     formType: 'login',
     title: 'Rejestracja manualnej płatności',
-    subTitle: `Płatność bezpośrednio za zajęcia automatycznie tworzy i przypisuje rezerwację`,
+    subTitle: `Płatność bezpośrednio za zajęcia, automatycznie tworzy i przypisuje rezerwację`,
     note: `Pola mogą wymagać przeklikania w celu odświeżenia.`,
     actionTitle: 'Zatwierdź',
   };
@@ -219,7 +219,7 @@ function NewPaymentForm() {
 
   const form = productsList && customersList && (
     <WrapperForm
-      title={title}
+      title={''}
       subTitle={subTitle}
       note={note}
       onSubmit={handleSubmit}
@@ -355,7 +355,12 @@ function NewPaymentForm() {
     </WrapperForm>
   );
 
-  return <>{form}</>;
+  return (
+    <>
+      <h1 className='modal__title modal__title--view'>{title}</h1>
+      {form}
+    </>
+  );
 }
 
 export default NewPaymentForm;

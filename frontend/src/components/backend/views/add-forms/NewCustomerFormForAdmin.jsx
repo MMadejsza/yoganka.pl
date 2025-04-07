@@ -206,7 +206,7 @@ function NewCustomerFormForAdmin() {
 
   const form = usersList && (
     <WrapperForm
-      title={title}
+      title={''}
       onSubmit={handleSubmit}
       onReset={handleReset}
       submitLabel={actionTitle}
@@ -388,7 +388,12 @@ function NewCustomerFormForAdmin() {
     </WrapperForm>
   );
 
-  return <>{form}</>;
+  return (
+    <>
+      <h1 className='modal__title modal__title--view'>{title}</h1>
+      {form}
+    </>
+  );
 }
 
 export default NewCustomerFormForAdmin;

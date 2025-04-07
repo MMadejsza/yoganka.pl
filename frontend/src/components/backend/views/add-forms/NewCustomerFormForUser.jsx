@@ -157,7 +157,7 @@ function NewCustomerFormForUser({ onSave }) {
 
   const content = (
     <WrapperForm
-      title={title}
+      title={''}
       onSubmit={handleSubmit}
       onReset={handleReset}
       submitLabel={actionTitle}
@@ -297,7 +297,12 @@ function NewCustomerFormForUser({ onSave }) {
     </WrapperForm>
   );
 
-  return <>{content}</>;
+  return (
+    <>
+      <h1 className='modal__title modal__title--view'>{title}</h1>
+      {content}
+    </>
+  );
 }
 
 export default NewCustomerFormForUser;
