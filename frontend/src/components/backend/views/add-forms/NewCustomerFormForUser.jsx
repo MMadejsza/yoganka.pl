@@ -162,6 +162,7 @@ function NewCustomerFormForUser({ onSave }) {
       onReset={handleReset}
       submitLabel={actionTitle}
       resetLabel='Resetuj'
+      classModifier={`customer-first-purchase`}
     >
       {/* names are for FormData and id for labels */}
       <Input
@@ -180,6 +181,7 @@ function NewCustomerFormForUser({ onSave }) {
         validationResults={firstNameValidationResults}
         didEdit={firstNameDidEdit}
         isFocused={firstNameIsFocused}
+        classModifier={`customer-first-purchase`}
       />
       <Input
         embedded={true}
@@ -196,6 +198,7 @@ function NewCustomerFormForUser({ onSave }) {
         required
         validationResults={lastNameValidationResults}
         didEdit={lastNameDidEdit}
+        classModifier={`customer-first-purchase`}
         isFocused={lastNameIsFocused}
       />
       <Input
@@ -214,6 +217,7 @@ function NewCustomerFormForUser({ onSave }) {
         required
         validationResults={DoBValidationResults}
         didEdit={DoBDidEdit}
+        classModifier={`customer-first-purchase`}
         isFocused={DoBIsFocused}
       />
       <Input
@@ -231,6 +235,7 @@ function NewCustomerFormForUser({ onSave }) {
         required
         validationResults={phoneValidationResults}
         didEdit={phoneDidEdit}
+        classModifier={`customer-first-purchase`}
         isFocused={phoneIsFocused}
       />
       <Input
@@ -250,6 +255,7 @@ function NewCustomerFormForUser({ onSave }) {
         onChange={handleCMethodChange}
         validationResults={cMethodValidationResults}
         didEdit={cMethodDidEdit}
+        classModifier={`customer-first-purchase`}
         isFocused={cMethodIsFocused}
       />
       <Input
@@ -273,6 +279,7 @@ function NewCustomerFormForUser({ onSave }) {
         onChange={handleReferralSourceChange}
         validationResults={referralSourceValidationResults}
         didEdit={referralSourceDidEdit}
+        classModifier={`customer-first-purchase`}
         isFocused={referralSourceIsFocused}
       />
       {(referralSourceValue == 'Znajomy' ||
@@ -291,6 +298,7 @@ function NewCustomerFormForUser({ onSave }) {
           onChange={handleNotesChange}
           validationResults={notesValidationResults}
           didEdit={notesDidEdit}
+          classModifier={`customer-first-purchase`}
           isFocused={notesIsFocused}
         />
       )}

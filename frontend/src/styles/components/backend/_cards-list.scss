@@ -2,42 +2,31 @@
 @use 'sass:color';
 @use 'sass:map';
 
-.modal-table {
-  display: block; // zmieniamy cały kontekst z tabeli na kontener
+.cards-container {
   width: 100%;
   padding: 1.5rem;
   margin-bottom: 7rem;
 
-  &__title {
-    margin-top: 5rem;
-    margin-bottom: 3rem;
-  }
+  @include flex(column, center);
+  gap: 2rem;
 
-  &__headers {
-    display: none; // ukrywamy nagłówki tabeli na mobile
-  }
-
-  & tbody {
+  .card {
+    padding: 1.5rem;
     display: grid;
-    grid-template-columns: 1fr; // każdy wiersz (tr) w osobnym rzędzie
-    gap: 1.5rem;
-  }
-
-  &__cells {
-    display: grid;
+    grid-template-columns: repeat(auto-fit, 1fr);
     grid-template-areas:
-      'type . . . . . id'
-      'name name name name name name name'
-      '. . . . . . .'
-      'date date day . time . .'
-      'location location location location location location .';
+      'dateTime dateTime modifier . . . . . id'
+      'dateTime dateTime name name name name name name name'
+      'dateTime dateTime desc desc desc desc desc circle circle'
+      'dateTime dateTime desc desc desc desc desc circle circle '
+      'dateTime dateTime footer footer footer footer footer footer footer';
     background-color: rgba(map.get($colors, tile), 0.8);
     border: 1px solid rgba(map.get($colors, nav), 0.3);
     border-radius: map.get($sizes, border-radius);
     box-shadow: map.get($shadows, box-shadow);
-    padding: 1.5rem;
-    gap: 1rem;
     transition: map.get($behavior, base-transition);
+
+    place-self: center;
 
     &:nth-child(2n) {
       background-color: rgba(map.get($colors, nav), 0.5);
@@ -52,16 +41,6 @@
         transform: scale(1.05) translateY(0.5rem);
       }
     }
-  }
-
-  &__single-cell {
-    @include flex(row, flex-start, center);
-    gap: 1rem;
-    padding: 0.5rem 0;
-    font-size: 1.4rem;
-    border-bottom: 1px solid rgba(map.get($colors, nav), 0.1);
-    word-break: break-word;
-    transition: map.get($behavior, base-transition);
 
     .nav__icon {
       color: map.get($colors, accent-bcg);
@@ -79,41 +58,49 @@
     $dimmed-color: map.get($colors, tile-text-muted);
     $heavy-dimmed-color: map.get($colors, nav-muted);
 
-    &--productType {
-      grid-area: type;
+    &__date-time {
+      grid-area: dateTime;
       padding: 0;
       margin: 0;
       font-weight: 500;
       color: $heavy-dimmed-color;
+      place-self: center;
     }
-    &--rowId {
+    &__modifier {
+      grid-area: modifier;
+      padding: 0;
+      margin: 0;
+      font-weight: 500;
+      color: $heavy-dimmed-color;
+      place-self: center;
+    }
+
+    &__id {
       grid-area: id;
       padding: 0;
       margin: 0;
       color: $heavy-dimmed-color;
+      place-self: center;
     }
-    &--productName {
+
+    &__title {
       grid-area: name;
       font-weight: bold;
       font-size: $title-size;
     }
-    &--date {
-      grid-area: date;
+
+    &__status-circle {
+      grid-area: circle;
       padding: 0;
       font-size: $timing-size;
     }
-    &--day {
-      grid-area: day;
+    &__desc {
+      grid-area: desc;
       padding: 0;
       font-size: $timing-size;
     }
-    &--startTime {
-      grid-area: time;
-      padding: 0;
-      font-size: $timing-size;
-    }
-    &--location {
-      grid-area: location;
+    &__footer {
+      grid-area: footer;
       color: map.get($colors, $dimmed-color);
       font-size: $location-size;
     }

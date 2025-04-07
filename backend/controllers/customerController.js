@@ -126,7 +126,8 @@ export const postCreateBookSchedule = (req, res, next) => {
     currentCustomer,
     currentScheduleRecord,
     userEmail = req.user.email,
-    wantsNotifications = req.user.UserPrefSetting.notifications === true,
+    wantsNotifications =
+      req.user.UserPrefSetting?.notifications === true || true,
     isNewCustomer = false;
   // If it's not a Customer yet
   if (!req.user.Customer) {

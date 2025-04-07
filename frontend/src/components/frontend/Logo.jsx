@@ -5,7 +5,7 @@ function Logo({ placement, media, isActive }) {
       : isActive
         ? 'logo_2_active.png'
         : 'logo_2.png';
-  const path = `imgs/logo/${file}`;
+  const path = `/imgs/logo/${file}`;
 
   return (
     <div className={`${placement}__logo-container`}>

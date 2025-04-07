@@ -330,7 +330,7 @@ export const postSignup = (req, res, next) => {
             code: 200,
             confirmation: 1,
             message:
-              '✅ Zarejestrowano pomyślnie. Sprawdź maila, aby aktywować konto.',
+              'Zarejestrowano pomyślnie. Sprawdź maila, aby aktywować konto.',
           });
         });
     })

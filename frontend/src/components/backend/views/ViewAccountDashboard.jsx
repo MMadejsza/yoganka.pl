@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useLocation, useMatch, useNavigate } from 'react-router-dom';
 import { statsCalculatorForCustomer } from '../../../utils/statistics/statsCalculatorForCustomer.js';
+import CardsList from '../../common/CardsList.jsx';
 import ModalTable from '../ModalTable.jsx';
 import ViewsController from '../ViewsController.jsx';
 import WrapperModalTable from '../WrapperModalTable.jsx';
@@ -52,11 +53,6 @@ function ViewAccountDashboard({ data, queryStatus }) {
       schedule =>
         new Date(`${schedule.date}T${schedule.startTime}:00.000Z`) >= today
     );
-
-    // console.log(`✅ contentUpcoming: `, contentUpcoming);
-    // console.log(`✅ content: `, content);
-    // console.log(`✅ keys: `, keys);
-    console.log(`✅ customerStats: `, customerStats);
   }
 
   if (queryStatus.isError) {
@@ -71,6 +67,8 @@ function ViewAccountDashboard({ data, queryStatus }) {
       );
     }
   }
+
+  const cards = <CardsList content={contentUpcoming} />;
 
   const table = (
     <WrapperModalTable
@@ -99,6 +97,7 @@ function ViewAccountDashboard({ data, queryStatus }) {
   return (
     <>
       {statsBlock}
+      {/* {cards} */}
       {table}
       {isModalOpen && (
         <ViewsController

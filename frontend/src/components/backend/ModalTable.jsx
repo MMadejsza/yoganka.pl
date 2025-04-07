@@ -170,11 +170,11 @@ function ModalTable({
                     }${key == 'Hasło (Szyfrowane)' ? 'hash' : ''}`}
                     key={keyIndex}
                   >
-                    <span
+                    {/* <span
                       className={`material-symbols-rounded nav__icon nav__icon--${keyClass}`}
                     >
                       {pickCellSymbol(key)}
-                    </span>
+                    </span> */}
                     {value || '-'}
                   </td>
                 );

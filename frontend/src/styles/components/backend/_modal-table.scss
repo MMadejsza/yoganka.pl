@@ -8,9 +8,10 @@
   border-collapse: separate;
   border-spacing: 0;
   font-size: 1.5rem;
-  span {
-    display: none;
-  }
+
+  // * span{
+  //   display: none;
+  // }
 
   &__title {
     font-size: 2.2rem;
@@ -48,6 +49,7 @@
     }
 
     &.active:hover {
+      cursor: pointer;
       position: relative;
       z-index: 3;
       opacity: 1;

@@ -50,11 +50,11 @@ function LoginFrom({ successMsg, errorMsg }) {
           result.type === 'signup' &&
           (result.code === 303 || result.code === 200)
         ) {
-          setFirstTime(!firstTime);
-          return '/'; // no redirect - the same url
+          setFirstTime(!true);
+          // return '/'; // no redirect - the same url
+          return null;
         }
         if (result.type === 'login') {
-          if (!location.pathname.includes('login/')) return -1;
           return redirectParam ? redirectParam : '/'; // after login go back to given site in param or main page
         }
       }
@@ -200,8 +200,12 @@ function LoginFrom({ successMsg, errorMsg }) {
   // Decide if http request is Get or Post
   const switchToSignupOrLogin = () => {
     resetFeedback();
+    if (resetPassword) {
+      setFirstTime(false);
+    } else {
+      setFirstTime(prev => !prev);
+    }
     setResetPassword(false);
-    setFirstTime(prev => !prev);
   };
 
   const switchToResetPassword = () => {
@@ -264,8 +268,6 @@ function LoginFrom({ successMsg, errorMsg }) {
       // login
       mutate({ formData: data, modifier: 'login' });
     }
-
-    if (feedback.confirmation == 1) handleReset();
   };
 
   // Dynamically set descriptive names when switching from login in to registration or reset password
@@ -310,6 +312,7 @@ function LoginFrom({ successMsg, errorMsg }) {
 
   const resetPassBtn = !resetPassword && (
     <button
+      key={1}
       type='button'
       onClick={switchToResetPassword}
       className='form-switch-btn modal__btn modal__btn--secondary'
@@ -322,6 +325,7 @@ function LoginFrom({ successMsg, errorMsg }) {
     resetPassBtn,
 
     <button
+      key={2}
       type='button'
       className='modal__btn modal__btn--secondary'
       onClick={switchToSignupOrLogin}
@@ -412,7 +416,8 @@ function LoginFrom({ successMsg, errorMsg }) {
           </>
         )}
 
-        {!userIsEditing && feedback.status !== undefined && (
+        {feedback.status !== undefined && (
+          // {!userIsEditing && feedback.status !== undefined && (
           <FeedbackBox
             status={feedback.status}
             isPending={isPending || isNewPasswordPending || isTokenLoading}

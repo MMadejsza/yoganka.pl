@@ -38,6 +38,7 @@ const UserPrefSetting = sequelizeDb.define(
       type: DataTypes.BOOLEAN,
       allowNull: true,
       field: 'notifications',
+      defaultValue: true,
     },
     animation: {
       type: DataTypes.BOOLEAN,

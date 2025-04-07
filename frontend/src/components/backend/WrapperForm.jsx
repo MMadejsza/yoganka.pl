@@ -39,7 +39,13 @@ function WrapperForm({
       : 'form-switch-btn modal__btn--secondary modal__btn modal__btn--small';
   const submitClass = isTableRowLike
     ? `form-action-btn form-action-btn--table-form  symbol-only-btn symbol-only-btn--submit`
-    : `form-action-btn modal__btn ${classModifier == 'login-page' ? '' : 'modal__btn--small'}`;
+    : `form-action-btn modal__btn ${
+        classModifier == 'login-page'
+          ? ''
+          : classModifier != 'customer-first-purchase'
+            ? 'modal__btn--small'
+            : ''
+      }`;
   return (
     <>
       <form onSubmit={onSubmit} className={mainClass}>
