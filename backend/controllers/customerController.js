@@ -1,6 +1,9 @@
 import 'dotenv/config';
 import * as models from '../models/_index.js';
-import { isPassValidForSchedule } from '../utils/controllersUtils.js';
+import {
+  areCustomerDetailsChanged,
+  isPassValidForSchedule,
+} from '../utils/controllersUtils.js';
 import { isAdult } from '../utils/dateTimeUtils.js';
 import db from '../utils/db.js';
 import {
@@ -34,22 +37,14 @@ export const putEditCustomerDetails = (req, res, next) => {
   const customerId = customer.customerId;
   const { phone: newPhone, cMethod: newContactMethod } = req.body;
 
-  if (!newPhone || !newPhone.trim()) {
-    console.log('\n❌❌❌ Error putEditCustomerDetails:', 'No phone');
-    errCode = 400;
-    throw new Error('Numer telefonu nie może być pusty');
-  }
-
-  if (
-    customer.phone === newPhone &&
-    customer.preferredContactMethod === newContactMethod
-  ) {
-    console.log('\n❓❓❓ Customer pudEditCustomer No change');
-    return res.status(200).json({
-      confirmation: 0,
-      message: 'Brak zmian',
-    });
-  }
+  const interrupted = areCustomerDetailsChanged(
+    res,
+    person,
+    customer,
+    newPhone,
+    newContactMethod
+  );
+  if (interrupted) return;
 
   models.Customer.update(
     { phone: newPhone, preferredContactMethod: newContactMethod },

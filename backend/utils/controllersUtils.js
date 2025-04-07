@@ -33,6 +33,34 @@ export const isPassValidForSchedule = (pass, schedule) => {
   return pass;
 };
 
+export const areCustomerDetailsChanged = (
+  res,
+  person,
+  Customer,
+  newPhone,
+  newContactMethod
+) => {
+  if (!newPhone || !newPhone.trim()) {
+    console.log(`\n❌❌❌ ${person} Error putEditCustomerDetails:`, 'No phone');
+    res.status(400).json({ message: 'Numer telefonu nie może być pusty' });
+    return true;
+  }
+
+  if (
+    Customer.phone === newPhone &&
+    Customer.preferredContactMethod === newContactMethod
+  ) {
+    console.log(`\n❓❓❓ ${person} pudEditCustomer No change`);
+    res.status(200).json({
+      confirmation: 0,
+      message: 'Brak zmian',
+    });
+    return true;
+  }
+
+  return false;
+};
+
 export const areSettingsChanged = (
   res,
   person,

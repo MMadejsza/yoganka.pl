@@ -3,6 +3,7 @@ import { addDays, addMonths, addYears } from 'date-fns';
 import { Op } from 'sequelize';
 import * as models from '../models/_index.js';
 import {
+  areCustomerDetailsChanged,
   areSettingsChanged,
   isPassValidForSchedule,
 } from '../utils/controllersUtils.js';
@@ -544,12 +545,6 @@ export const putEditCustomerDetails = (req, res, next) => {
     notes: newNotes,
   } = req.body;
 
-  if (!newPhone || !newPhone.trim()) {
-    errCode = 400;
-    console.log('\n❌❌❌ Error putEditCustomerDetails No phone');
-    throw new Error('Numer telefonu nie może być pusty.');
-  }
-
   models.Customer.findByPk(customerId)
     .then(customer => {
       errCode = 404;
@@ -559,7 +554,17 @@ export const putEditCustomerDetails = (req, res, next) => {
       return customer;
     })
     .then(foundCustomer => {
+      const interrupted = areCustomerDetailsChanged(
+        res,
+        person,
+        foundCustomer,
+        newPhone,
+        newContactMethod
+      );
+      if (interrupted) return;
+
       const { phone, preferredContactMethod, loyalty, notes } = foundCustomer;
+
       if (
         phone == newPhone &&
         preferredContactMethod == newContactMethod &&
