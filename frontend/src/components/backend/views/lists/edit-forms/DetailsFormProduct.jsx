@@ -186,6 +186,7 @@ function DetailsFormProduct({ productData }) {
       onReset={handleReset}
       submitLabel={actionTitle}
       resetLabel='Resetuj'
+      classModifier={'product-view'}
     >
       {/* names are for FormData and id for labels */}
       <Input
