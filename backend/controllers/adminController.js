@@ -2,7 +2,10 @@ import bcrypt from 'bcryptjs';
 import { addDays, addMonths, addYears } from 'date-fns';
 import { Op } from 'sequelize';
 import * as models from '../models/_index.js';
-import { isPassValidForSchedule } from '../utils/controllersUtils.js';
+import {
+  areSettingsChanged,
+  isPassValidForSchedule,
+} from '../utils/controllersUtils.js';
 import {
   formatIsoDateTime,
   getWeekDay,
@@ -184,7 +187,8 @@ export const putEditUserSettings = (req, res, next) => {
   const controllerName = 'putEditUserSettings';
   callLog(req, person, controllerName);
 
-  const { handedness, font, notifications, animation, theme } = req.body;
+  const givenSettings = req.body;
+  const { handedness, font, notifications, animation, theme } = givenSettings;
   const userId = req.params.id;
   console.log(`❗❗❗`, req.body);
   console.log(`❗❗❗`, req.params.id);
@@ -208,35 +212,13 @@ export const putEditUserSettings = (req, res, next) => {
     .then(([preferences, created]) => {
       if (!created) {
         // Nothing changed
-        if (
-          preferences.handedness == !!handedness &&
-          preferences.fontSize == parseInt(font) &&
-          preferences.notifications == !!notifications &&
-          preferences.animation == !!animation &&
-          preferences.theme == !!theme
-        ) {
-          // Nothing changed
-          console.log(
-            '\n❓❓❓ putEditUserSettings Admin Preferences no change'
-          );
-          res.status(200).json({ confirmation: 0, message: 'Brak zmian' });
-          return null;
-        } else {
-          // Update
-          preferences.handedness = !!handedness;
-          preferences.fontSize = font;
-          preferences.notifications = !!notifications;
-          preferences.animation = !!animation;
-          preferences.theme = !!theme;
-
-          return preferences.save().then(() => {
-            successLog(person, controllerName, 'updated');
-            return {
-              confirmation: 1,
-              message: 'Ustawienia zostały zaktualizowane.',
-            };
-          });
-        }
+        return areSettingsChanged(
+          res,
+          person,
+          controllerName,
+          preferences,
+          givenSettings
+        );
       } else {
         // New preferences created
         successLog(person, controllerName, 'created');

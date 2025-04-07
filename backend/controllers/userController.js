@@ -1,5 +1,6 @@
 import { Op, Sequelize, col, fn } from 'sequelize';
 import * as models from '../models/_index.js';
+import { areSettingsChanged } from '../utils/controllersUtils.js';
 import { getWeekDay } from '../utils/dateTimeUtils.js';
 import {
   callLog,
@@ -160,8 +161,8 @@ export const putEditSettings = (req, res, next) => {
   callLog(req, person, controllerName);
 
   const userId = req.user.userId;
-
-  const { handedness, font, notifications, animation, theme } = req.body;
+  const givenSettings = req.body;
+  const { handedness, font, notifications, animation, theme } = givenSettings;
   // console.log(`❗❗❗`, req.body);
 
   // if preferences don't exist - create new ones:
@@ -179,32 +180,13 @@ export const putEditSettings = (req, res, next) => {
     .then(([preferences, created]) => {
       if (!created) {
         // Nothing changed
-        if (
-          preferences.handedness == !!handedness &&
-          preferences.fontSize == font &&
-          preferences.notifications == !!notifications &&
-          preferences.animation == !!animation &&
-          preferences.theme == !!theme
-        ) {
-          // Nothing changed
-          console.log('\n❓❓❓ User putEditSettings no change');
-          res.status(200).json({ confirmation: 0, message: 'Brak zmian' });
-          return null;
-        } else {
-          // Update
-          preferences.handedness = !!handedness;
-          preferences.fontSize = font;
-          preferences.notifications = !!notifications;
-          preferences.animation = !!animation;
-          preferences.theme = !!theme;
-          return preferences.save().then(() => {
-            successLog(person, controllerName, 'updated');
-            return {
-              confirmation: 1,
-              message: 'Ustawienia zostały zaktualizowane',
-            };
-          });
-        }
+        return areSettingsChanged(
+          res,
+          person,
+          controllerName,
+          preferences,
+          givenSettings
+        );
       } else {
         // New preferences created
         successLog(person, controllerName, 'created');
