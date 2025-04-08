@@ -9,7 +9,7 @@ import WrapperForm from '../../../../backend/WrapperForm.jsx';
 import FeedbackBox from '../../../FeedbackBox.jsx';
 import Input from '../../../Input.jsx';
 
-function NewProductScheduleForm() {
+function NewProductScheduleForm({ defaultDataObj }) {
   const params = useParams();
   const location = useLocation();
 
@@ -70,7 +70,7 @@ function NewProductScheduleForm() {
     isFocused: dateIsFocused,
     validationResults: dateValidationResults,
     hasError: dateHasError,
-  } = useInput('');
+  } = useInput(defaultDataObj?.startDate || '');
   const {
     value: timeValue,
     handleChange: handleTimeChange,
@@ -92,7 +92,7 @@ function NewProductScheduleForm() {
     isFocused: locationIsFocused,
     validationResults: locationValidationResults,
     hasError: locationHasError,
-  } = useInput('');
+  } = useInput(defaultDataObj?.location || '');
   const {
     value: capacityValue,
     handleChange: handleCapacityChange,

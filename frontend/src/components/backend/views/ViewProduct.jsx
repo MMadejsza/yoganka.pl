@@ -50,6 +50,7 @@ function ViewProduct({ data, isAdminPanel }) {
 
       {/*//@ Schedules if not event/camp*/}
       <TableSchedules
+        data={product}
         scheduleRecords={prodStats.scheduleRecords}
         status={status}
         isAdminPage={isAdminPanel}

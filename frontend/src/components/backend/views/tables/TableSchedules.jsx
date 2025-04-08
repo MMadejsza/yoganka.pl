@@ -10,7 +10,7 @@ import ModalTable from '../../ModalTable.jsx';
 import WrapperModalTable from '../../WrapperModalTable.jsx';
 import NewProductScheduleForm from './add-forms/NewProductScheduleForm.jsx';
 
-function TableSchedules({ scheduleRecords, placement, status }) {
+function TableSchedules({ data, scheduleRecords, placement, status }) {
   console.log('TableSchedules scheduleRecords', scheduleRecords);
   let params = useParams();
   const isInPaymentView = placement == 'payment';
@@ -112,7 +112,7 @@ function TableSchedules({ scheduleRecords, placement, status }) {
       };
     });
 
-    form = <NewProductScheduleForm />;
+    form = <NewProductScheduleForm defaultDataObj={data} />;
   }
 
   return (
