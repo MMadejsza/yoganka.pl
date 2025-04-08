@@ -40,6 +40,10 @@ form.generic-details {
     align-items: center;
     flex-wrap: wrap;
     gap: 1rem 2rem !important;
+
+    &.danger {
+      color: #c62828;
+    }
   }
 
   &__label {
@@ -53,8 +57,11 @@ form.generic-details {
     @include flex(row, flex-end, center);
 
     &--notes {
-      //   flex-basis: 100%;
       justify-content: center;
+    }
+
+    &.danger {
+      color: inherit;
     }
   }
 
@@ -141,7 +148,11 @@ form.generic-details {
   .generic-outer-wrapper {
     padding: 1.5rem;
 
-    & > * {
+    &
+      > *:not(
+        :has(.generic-details--payment-view),
+        .generic-details--payment-view
+      ) {
       flex-basis: 48%;
 
       &:nth-last-child(1):nth-child(odd) {

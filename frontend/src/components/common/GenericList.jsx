@@ -23,6 +23,7 @@ function GenericList({ title, details, classModifier = '' }) {
               index={index}
               objectPair={item}
               classModifier={classModifier}
+              extraClass={item.extraClass ?? ''}
               isNotes={item.label == 'Notatki:'}
             />
           ))}

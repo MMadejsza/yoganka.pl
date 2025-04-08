@@ -14,12 +14,14 @@ function DetailsListPayment({ paymentData }) {
     { label: 'Kwota:', content: `${payment.amountPaid} zł` },
     { label: 'Metoda płatności:', content: payment.paymentMethod },
     { label: 'Opłacono:', content: payment.status },
+    { label: 'Produkty:', content: payment.product },
   ];
 
   if (payment.amountDue && payment.amountDue !== '0.00') {
     details.push({
       label: 'Pozostało do zapłaty:',
       content: `${payment.amountDue} zł`,
+      extraClass: 'danger',
     });
   }
 

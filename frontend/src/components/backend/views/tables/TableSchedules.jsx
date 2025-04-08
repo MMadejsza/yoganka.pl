@@ -131,7 +131,11 @@ function TableSchedules({ data, scheduleRecords, placement, status }) {
       <WrapperModalTable
         content={processedScheduleRecordsArr}
         title={'Terminy'}
-        noContentMsg={'terminów'}
+        noContentMsg={
+          isInPaymentView
+            ? 'żywych terminów w systemie - zostały usunięte'
+            : 'opublikowanych terminów'
+        }
         toggleBtn={toggleBtn}
         form={isFormVisible && form}
       >
