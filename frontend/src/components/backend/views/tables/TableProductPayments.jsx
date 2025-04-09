@@ -1,23 +1,18 @@
 import ModalTable from '../../ModalTable.jsx';
 import WrapperModalTable from '../../WrapperModalTable.jsx';
 
-function TableProductPayments({ type, stats, isAdminPage }) {
+function TableProductPayments({ type, payments, keys, isAdminPage }) {
   console.log('\n✅✅✅DetailsProductPayments:');
   console.log('\nisAdminPage:', isAdminPage);
 
-  const paymentsArray = stats.totalPayments;
+  const paymentsArray = payments;
   const title =
     type === 'Camp' || type === 'Event'
       ? 'Płatności bezpośrednie'
-      : 'Wszystkie płatności bezpośrednie - bezzwrotne';
+      : type === 'passDef'
+        ? 'Płatności'
+        : 'Wszystkie płatności bezpośrednie - bezzwrotne';
   const headers = ['Id', 'Data', 'Uczestnik', 'Zadatek', 'Metoda płatności'];
-  const keys = [
-    'paymentId',
-    'date',
-    'customerFullName',
-    'amountPaid',
-    'paymentMethod',
-  ];
 
   const table = (
     <WrapperModalTable

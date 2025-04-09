@@ -223,7 +223,7 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
             isAdminPage={isAdminPanel}
           />
           <TableProductPayments
-            stats={scheduleStats}
+            payments={scheduleStats.totalPayments}
             type={product.type}
             isAdminPage={isAdminPanel}
           />

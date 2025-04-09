@@ -1,9 +1,7 @@
 import GenericListTagLi from '../../common/GenericListTagLi.jsx';
-import DetailsListCustomer from './lists/DetailsListCustomer.jsx';
-import DetailsListCustomerPass from './lists/DetailsListCustomerPass.jsx';
 import DetailsListPassDefinition from './lists/DetailsListPassDefinition.jsx';
-import DetailsListPayment from './lists/DetailsListPayment.jsx';
-import DetailsListSchedule from './lists/DetailsListSchedule.jsx';
+import TableCustomerPasses from './tables/TableCustomerPasses.jsx';
+import TableProductPayments from './tables/TableProductPayments.jsx';
 
 function ViewPassDefinition({ data }) {
   console.log('ViewPassDefinition data', data);
@@ -12,62 +10,43 @@ function ViewPassDefinition({ data }) {
 
   return (
     <>
-      <h1 className='modal__title modal__title--view'>{`Rezerwacja (Id:${booking.bookingId})`}</h1>
-
-      <h2 className='modal__title modal__title--status'>{`${product.name}`}</h2>
-
+      <h1 className='modal__title modal__title--view'>{`${passDef.name}`}</h1>
+      <h2 className='modal__title modal__title--status'>{`Karnet (Id:${passDef.passDefId})`}</h2>
       <h3 className='modal__title modal__title--status'>
         <GenericListTagLi
           objectPair={{
-            label: 'Obecność: ',
+            label: 'Aktywny: ',
             content: (
               <span
                 className={`material-symbols-rounded nav__icon nav__icon--in-title`}
               >
-                {booking.attendance ? 'check' : 'close'}
+                {passDef.status ? 'check' : 'close'}
               </span>
             ),
           }}
           classModifier={'in-title'}
-          //   extraClass={item.extraClass ?? ''}
         />
       </h3>
 
-      <div className='generic-outer-wrapper'>
-        {/*//@ Schedule details */}
-        <DetailsListSchedule data={schedule} />
-
-        {/*//@ Customer details */}
-        <DetailsListCustomer
-          customerData={customer}
-          isPaymentView={true} //to not show edit btn
-        />
-
-        {/*//@ Payment main details */}
-        {data.booking.Payment && (
-          <DetailsListPayment
-            paymentData={data.booking.Payment}
-            placement={'booking'}
-            isUserAccountPage={false}
-          />
-        )}
-
-        {/*//@ Pass main details */}
-        {data.booking.CustomerPass && (
-          <>
-            <DetailsListPassDefinition
-              passDefinition={data.booking.CustomerPass.PassDefinition}
-              placement={'booking'}
-              isUserAccountPage={false}
-            />
-            <DetailsListCustomerPass
-              customerPass={data.booking.CustomerPass}
-              placement={'booking'}
-              isUserAccountPage={false}
-            />
-          </>
-        )}
+      {/*//@ Pass Definition details */}
+      <div className='generic-component-wrapper'>
+        <DetailsListPassDefinition passDefinition={passDef} />
       </div>
+
+      {/* //@ CustomerPasses table for this definition */}
+      <TableCustomerPasses
+        customerPasses={passDef.customerPasses}
+        keys={passDef.customerPassesKeys}
+        isAdminPage={true}
+      />
+
+      {/*//@ Payments table for this definition */}
+      <TableProductPayments
+        payments={passDef.payments}
+        keys={passDef.paymentsKeys}
+        type={'passDef'}
+        isAdminPage={true}
+      />
     </>
   );
 }

@@ -2260,6 +2260,7 @@ export const getPassByID = (req, res, next) => {
               },
             ],
           },
+          { model: models.Payment },
         ],
       },
     ],
@@ -2272,16 +2273,68 @@ export const getPassByID = (req, res, next) => {
       // console.log(scheduleData);
       let passDef = passData.toJSON();
 
+      const payments = passDef.CustomerPasses.map(customerPass => {
+        const cp = customerPass;
+        const customer = cp.Customer;
+        const payment = cp.Payment;
+        return {
+          ...payment,
+          rowId: payment.paymentId,
+          date: formatIsoDateTime(payment.date),
+          customerFullName: `${customer.firstName} ${customer.lastName} (${customer.customerId})`,
+        };
+      });
+
+      const customerPasses = passDef.CustomerPasses.map(customerPass => {
+        const cp = customerPass;
+        const customer = cp.Customer;
+
+        return {
+          customerPassId: cp.customerPassId,
+          rowId: cp.customerPassId,
+          customerFullName: `${customer.firstName} ${customer.lastName} (${customer.customerId})`,
+          purchaseDate: formatIsoDateTime(cp.purchaseDate),
+          validFrom: formatIsoDateTime(cp.validFrom),
+          validUntil: formatIsoDateTime(cp.validUntil),
+          usesLeft: cp.usesLeft,
+          status:
+            cp.status == 'active' || cp.status == 1
+              ? 'Aktywny'
+              : cp.status == 'suspended' || cp.status == 0
+              ? 'Zawieszony'
+              : 'Wygasły',
+        };
+      });
+
+      passDef = { ...passDef, CustomerPasses: null };
+
       let passDefFormatted = {
         ...passDef,
+        payments,
+        paymentsKeys: [
+          'paymentId',
+          'date',
+          'customerFullName',
+          'amountPaid',
+          'paymentMethod',
+        ],
+        customerPasses,
+        customerPassesKeys: [
+          'customerPassId',
+          'customerFullName',
+          'purchaseDate',
+          'validFrom',
+          'validUntil',
+          'usesLeft',
+          'status',
+        ],
       };
 
       successLog(person, controllerName);
       return res.status(200).json({
         confirmation: 1,
-        message: 'Definicja karnetu pobrany pomyślnie',
+        message: 'Definicja karnetu pobrana pomyślnie',
         passDef: passDefFormatted,
-        user: req.user,
       });
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));

@@ -66,7 +66,7 @@ function ViewProduct({ data, isAdminPanel }) {
 
       {/*//@ All payments */}
       <TableProductPayments
-        stats={prodStats}
+        payments={prodStats.totalPayments}
         type={type}
         isAdminPage={isAdminPanel}
       />
