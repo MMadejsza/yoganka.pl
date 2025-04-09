@@ -53,6 +53,23 @@ function ModalTable({
     }
   };
 
+  const formatValue = (value, keyClass) => {
+    let val = value;
+    if (value != undefined && typeof value == 'boolean') {
+      val = (
+        <span
+          className={`material-symbols-rounded nav__icon nav__icon--${keyClass}`}
+        >
+          {value == true ? 'event_available' : 'event_busy'}
+        </span>
+      );
+    }
+    if (value == undefined) {
+      val = '';
+    }
+    return val;
+  };
+
   const onRowBtnClick = (row, archived, method, e) => {
     const isUserGoing = row.isUserGoing != undefined ? row.isUserGoing : false;
     const isArchived = archived != undefined ? archived : 'N/A';
@@ -175,7 +192,7 @@ function ModalTable({
                     >
                       {pickCellSymbol(key)}
                     </span> */}
-                    {value || '-'}
+                    {formatValue(value, keyClass)}
                   </td>
                 );
               })}

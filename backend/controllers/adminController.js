@@ -1579,6 +1579,85 @@ export const deleteProduct = (req, res, next) => {
 };
 
 //! BOOKINGS_____________________________________________
+//@ GET
+export const getAllBookings = (req, res, next) => {
+  const controllerName = 'getAllBookings';
+  callLog(req, person, controllerName);
+
+  models.Booking.findAll({
+    include: [
+      {
+        model: models.Customer,
+        attributes: { exclude: ['userId'] },
+        include: [{ model: models.User }],
+      },
+      {
+        model: models.ScheduleRecord,
+        include: [{ model: models.Product }],
+        // attributes: { exclude: ['userId'] },
+      },
+      {
+        model: models.Payment,
+        // attributes: { exclude: ['userId'] },
+        required: false,
+      },
+      {
+        model: models.CustomerPass,
+        include: [{ model: models.PassDefinition }],
+        // attributes: { exclude: ['userId'] },
+        required: false,
+      },
+    ],
+  })
+    .then(records => {
+      if (!records) {
+        errCode = 404;
+        throw new Error('Nie znaleziono rekordów.');
+      }
+
+      // Convert for records for different names
+      const formattedRecords = records.map(record => {
+        const booking = record.toJSON();
+        const customerFullName = `${record.Customer.firstName} ${record.Customer.lastName} (${record.Customer.customerId})`;
+        const scheduleDetails = `${record.ScheduleRecord.Product.name} (${record.ScheduleRecord.date} ${record.ScheduleRecord.startTime}, sId: ${record.ScheduleRecord.scheduleId})`;
+        const payment = record.Payment
+          ? `${record.Payment?.paymentMethod} (pId:${record.Payment?.paymentId})`
+          : `${record.CustomerPass?.PassDefinition?.name} (cpId:${record.CustomerPass?.customerPassId})`;
+
+        return {
+          ...booking,
+          rowId: booking.bookingId,
+          customerFullName,
+          scheduleDetails,
+          payment,
+          createdAt: formatIsoDateTime(record.createdAt),
+          timestamp: formatIsoDateTime(record.timestamp),
+        };
+      });
+
+      const totalKeys = [
+        'bookingId',
+        'customerFullName', // full name with id
+        'scheduleDetails', // name, timing, id
+        'payment', // method with id in it if direct or pass name nad its id
+        'attendance',
+        'createdAt', // 'Utworzono'
+        'timestamp', // 'Data Akcji'
+        'performedBy',
+      ];
+
+      successLog(person, controllerName);
+      return res.json({
+        totalKeys,
+        confirmation: 1,
+        message: 'Pobrano pomyślnie',
+        content: formattedRecords.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        ),
+      });
+    })
+    .catch(err => catchErr(person, err, controllerName));
+};
 //@ POST
 export const postCreateBooking = (req, res, next) => {
   const controllerName = 'adminCreateBooking';
@@ -1679,7 +1758,7 @@ export const postCreateBooking = (req, res, next) => {
 
             // If booking exists, update attendance flag.
             return existingBooking.update(
-              { attendance: true },
+              { attendance: false, timestamp: new Date() },
               {
                 transaction: t,
               }
@@ -1712,6 +1791,7 @@ export const postCreateBooking = (req, res, next) => {
                     scheduleId: currentScheduleRecord.scheduleId,
                     customerPassId: validPass.customerPassId,
                     attendance: true,
+                    timestamp: new Date(),
                   },
                   {
                     transaction: t,
@@ -1751,6 +1831,7 @@ export const postCreateBooking = (req, res, next) => {
                     scheduleId,
                     paymentId: payment.paymentId,
                     attendance: true,
+                    timestamp: new Date(),
                   },
                   {
                     transaction: t,
@@ -1914,6 +1995,7 @@ export const putEditMarkAbsent = (req, res, next) => {
       return models.Booking.update(
         {
           attendance: 0,
+          timestamp: new Date(),
           performedBy: person,
         },
         {
@@ -1999,6 +2081,7 @@ export const putEditMarkPresent = (req, res, next) => {
       // Finally update attendance
       return models.Booking.update(
         {
+          timestamp: new Date(),
           attendance: 1,
           performedBy: person,
         },
@@ -2379,6 +2462,7 @@ export const postCreatePayment = (req, res, next) => {
                       customerId: currentCustomer.customerId,
                       scheduleId: scheduleRecord.scheduleId,
                       paymentId: payment.paymentId,
+                      timestamp: new Date(),
                       attendance: true,
                     },
                     {

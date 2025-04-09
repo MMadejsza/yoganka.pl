@@ -32,6 +32,8 @@ router.get('/show-all-products/:id', adminC.getProductByID);
 router.get('/show-all-payments', adminC.getAllPayments);
 router.get('/show-all-payments/:id', adminC.getPaymentByID);
 router.get('/show-all-invoices', adminC.getAllInvoices);
+router.get('/show-all-bookings', adminC.getAllBookings);
+// router.get('/show-all-passes', adminC.getAllPasses);
 
 //! POST - CREATE__________________________________________
 router.post('/create-user', adminC.postCreateUser);

@@ -72,6 +72,14 @@ const router = createBrowserRouter([
             element: <AdminPage modifier='payment' />,
           },
           {
+            path: 'show-all-bookings/:id',
+            element: <AdminPage modifier='booking' />,
+          },
+          {
+            path: 'show-all-passes/:id',
+            element: <AdminPage modifier='pass' />,
+          },
+          {
             path: 'show-all-participants-feedback/:id',
             element: <AdminPage modifier='feedback' />,
           },

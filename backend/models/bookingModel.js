@@ -53,8 +53,12 @@ const Booking = sequelizeDb.define(
     timestamp: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: sequelizeDb.literal('CURRENT_TIMESTAMP'),
       field: 'timestamp',
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      field: 'created_at',
     },
     performedBy: {
       type: DataTypes.STRING(10),
@@ -65,7 +69,8 @@ const Booking = sequelizeDb.define(
   },
   {
     tableName: 'bookings',
-    timestamps: false,
+    timestamps: true, // Sequelize manages created_at
+    updatedAt: false,
     indexes: [
       {
         unique: true,

@@ -304,7 +304,10 @@ export const postCreateBookSchedule = (req, res, next) => {
 
           //! assuming single schedule chosen
           return existingBooking
-            .update({ attendance: true }, { transaction: t })
+            .update(
+              { attendance: true, timestamp: new Date() },
+              { transaction: t }
+            )
             .then(() => existingBooking);
         } else {
           // Booking doesn't exist -we need to create one but first we have to check again if customer has already the pass for this particular type of schedule or he will have to issue single payment
@@ -328,6 +331,7 @@ export const postCreateBookSchedule = (req, res, next) => {
                 customerId: currentCustomer.customerId,
                 scheduleId: currentScheduleRecord.scheduleId,
                 customerPassId: validPass.customerPassId,
+                timestamp: new Date(),
                 attendance: true,
               },
               { transaction: t }
@@ -388,6 +392,7 @@ export const postCreateBookSchedule = (req, res, next) => {
                 {
                   customerId: currentCustomer.customerId,
                   scheduleId: req.body.schedule,
+                  timestamp: new Date(),
                   paymentId: payment.paymentId,
                   attendance: true,
                 },
@@ -461,7 +466,7 @@ export const putEditMarkAbsent = (req, res, next) => {
         throw new Error('Nie można zwolnić miejsca dla minionego terminu.');
       }
       return models.Booking.update(
-        { attendance: false },
+        { attendance: false, timestamp: new Date() },
         {
           where: {
             scheduleId: scheduleID,

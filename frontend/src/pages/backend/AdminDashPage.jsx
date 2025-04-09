@@ -26,20 +26,30 @@ const sideNavTabs = [
     link: '/admin-console/show-all-schedules',
   },
   {
-    name: `Płatności`,
+    name: `Rezerwacje`,
     symbol: 'event_available',
+    link: '/admin-console/show-all-bookings',
+  },
+  {
+    name: `Płatności`,
+    symbol: 'account_balance',
     link: '/admin-console/show-all-payments',
   },
   {
-    name: `Faktury`,
-    symbol: 'receipt_long',
-    link: '/admin-console/show-all-invoices',
+    name: `Karnety`,
+    symbol: 'local_activity',
+    link: '/admin-console/show-all-passes',
   },
-  {
-    name: `Newsletter'y`,
-    symbol: 'contact_mail',
-    link: '/admin-console/show-all-newsletters',
-  },
+  // {
+  //   name: `Faktury`,
+  //   symbol: 'receipt_long',
+  //   link: '/admin-console/show-all-invoices',
+  // },
+  // {
+  //   name: `Newsletter'y`,
+  //   symbol: 'contact_mail',
+  //   link: '/admin-console/show-all-newsletters',
+  // },
   {
     name: `Opinie`,
     symbol: 'reviews',
@@ -185,6 +195,19 @@ function AdminPage() {
           'Termin płatności',
           'Status',
           'Kwota',
+        ];
+        return modifier;
+      case path.includes('show-all-bookings'):
+        modifier = 'booking';
+        headers = [
+          'Id',
+          'Uczestnik',
+          'Termin',
+          'Płatność',
+          'Obecność',
+          'Utworzono',
+          'Data akcji',
+          'Wykonał',
         ];
         return modifier;
       case path.includes('show-all-newsletters'):
