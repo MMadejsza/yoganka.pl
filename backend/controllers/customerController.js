@@ -68,8 +68,8 @@ export const putEditCustomerDetails = (req, res, next) => {
 
 //! BOOKINGS_____________________________________________
 //@ GET
-export const getPaymentByID = (req, res, next) => {
-  const controllerName = 'getPaymentByID';
+export const getPaymentById = (req, res, next) => {
+  const controllerName = 'getPaymentById';
   callLog(req, person, controllerName);
 
   const PK = req.params.id;

@@ -306,8 +306,8 @@ export const getAllSchedules = (req, res, next) => {
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
-export const getScheduleByID = (req, res, next) => {
-  const controllerName = 'getScheduleByID';
+export const getScheduleById = (req, res, next) => {
+  const controllerName = 'getScheduleById';
   callLog(req, person, controllerName);
 
   const isUser = !!req.user;

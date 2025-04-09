@@ -86,8 +86,8 @@ export const getAllUsers = (req, res, next) => {
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
-export const getUserByID = (req, res, next) => {
-  const controllerName = 'getUserByID';
+export const getUserById = (req, res, next) => {
+  const controllerName = 'getUserById';
   callLog(req, person, controllerName);
 
   const PK = req.params.id || req.user.userId;
@@ -332,8 +332,8 @@ export const getAllCustomers = (req, res, next) => {
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
-export const getCustomerByID = (req, res, next) => {
-  const controllerName = 'getCustomerByID';
+export const getCustomerById = (req, res, next) => {
+  const controllerName = 'getCustomerById';
   callLog(req, person, controllerName);
 
   // console.log(req.user);
@@ -714,8 +714,8 @@ export const getAllSchedules = (req, res, next) => {
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
-export const getScheduleByID = (req, res, next) => {
-  const controllerName = 'getScheduleByID';
+export const getScheduleById = (req, res, next) => {
+  const controllerName = 'getScheduleById';
   console.log(`\n➡️➡️➡️ admin called`, controllerName);
 
   const PK = req.params.id;
@@ -833,7 +833,7 @@ export const getScheduleByID = (req, res, next) => {
     .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 export const getProductSchedules = (req, res, next) => {
-  const controllerName = 'getProductSchedulesByID';
+  const controllerName = 'getProductSchedulesById';
   console.log(`\n➡️➡️➡️ admin called`, controllerName);
 
   const productId = req.params.pId;
@@ -1170,8 +1170,8 @@ export const getAllParticipantsFeedback = (req, res, next) => {
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
-export const getAllParticipantsFeedbackByID = (req, res, next) => {
-  console.log(`\n➡️ admin called getAllParticipantsFeedbackByID`);
+export const getAllParticipantsFeedbackById = (req, res, next) => {
+  console.log(`\n➡️ admin called getAllParticipantsFeedbackById`);
 
   const PK = req.params.id;
   models.Feedback.findByPk(PK, {
@@ -1353,8 +1353,8 @@ export const getAllProducts = (req, res, next) => {
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
-export const getProductByID = (req, res, next) => {
-  const controllerName = 'getProductByID';
+export const getProductById = (req, res, next) => {
+  const controllerName = 'getProductById';
   callLog(req, person, controllerName);
 
   const PK = req.params.id;
@@ -1658,7 +1658,7 @@ export const getAllBookings = (req, res, next) => {
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
-export const getBookingByID = (req, res, next) => {
+export const getBookingById = (req, res, next) => {
   const controllerName = 'getBookingID';
   console.log(`\n➡️➡️➡️ admin called`, controllerName);
 
@@ -2241,8 +2241,8 @@ export const getAllPasses = (req, res, next) => {
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
-export const getPassByID = (req, res, next) => {
-  const controllerName = 'getPassByID';
+export const getPassById = (req, res, next) => {
+  const controllerName = 'getPassById';
   console.log(`\n➡️➡️➡️ admin called`, controllerName);
 
   const PK = req.params.id;
@@ -2404,8 +2404,8 @@ export const getAllPayments = (req, res, next) => {
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
-export const getPaymentByID = (req, res, next) => {
-  const controllerName = 'getPaymentByID';
+export const getPaymentById = (req, res, next) => {
+  const controllerName = 'getPaymentById';
   callLog(req, person, controllerName);
 
   const PK = req.params.id;

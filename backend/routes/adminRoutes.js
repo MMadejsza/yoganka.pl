@@ -5,13 +5,13 @@ const router = express.Router();
 //! GET___________________________________________________
 //@ routes DYNAMICALLY fetched from browser url - in english (set by AdminPage fetchData())
 router.get('/show-all-users', adminC.getAllUsers);
-router.get('/show-all-users/:id', adminC.getUserByID);
+router.get('/show-all-users/:id', adminC.getUserById);
 router.get('/show-user-settings/:id', adminC.getUserSettings);
 router.get('/show-all-customers', adminC.getAllCustomers);
-router.get('/show-all-customers/:id', adminC.getCustomerByID);
+router.get('/show-all-customers/:id', adminC.getCustomerById);
 router.get('/show-customer-data/:id', adminC.getCustomerDetails);
 router.get('/show-all-schedules', adminC.getAllSchedules);
-router.get('/show-all-schedules/:id', adminC.getScheduleByID);
+router.get('/show-all-schedules/:id', adminC.getScheduleById);
 router.get('/show-product-schedules/:pId/:cId', adminC.getProductSchedules);
 router.get('/show-booked-schedules', adminC.getBookings);
 router.get(
@@ -20,7 +20,7 @@ router.get(
 );
 router.get(
   '/show-all-participants-feedback/:id',
-  adminC.getAllParticipantsFeedbackByID
+  adminC.getAllParticipantsFeedbackById
 );
 router.get('/show-all-newsletters', adminC.getAllNewsletters);
 router.get(
@@ -28,14 +28,14 @@ router.get(
   adminC.getAllSubscribedNewsletters
 );
 router.get('/show-all-products', adminC.getAllProducts);
-router.get('/show-all-products/:id', adminC.getProductByID);
+router.get('/show-all-products/:id', adminC.getProductById);
 router.get('/show-all-payments', adminC.getAllPayments);
-router.get('/show-all-payments/:id', adminC.getPaymentByID);
+router.get('/show-all-payments/:id', adminC.getPaymentById);
 router.get('/show-all-invoices', adminC.getAllInvoices);
 router.get('/show-all-bookings', adminC.getAllBookings);
-router.get('/show-all-bookings/:id', adminC.getBookingByID);
+router.get('/show-all-bookings/:id', adminC.getBookingById);
 router.get('/show-all-passes', adminC.getAllPasses);
-router.get('/show-all-passes/:id', adminC.getPassByID);
+router.get('/show-all-passes/:id', adminC.getPassById);
 
 //! POST - CREATE__________________________________________
 router.post('/create-user', adminC.postCreateUser);

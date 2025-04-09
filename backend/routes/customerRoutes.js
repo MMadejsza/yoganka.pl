@@ -8,7 +8,7 @@ const router = express.Router();
 //! GET__________________________________________________________
 //@ routes DYNAMICALLY fetched from browser url
 //# set by ViewsController fetchItem()
-router.get('/konto/rezerwacje/:id', isAuth, customerC.getPaymentByID);
+router.get('/konto/rezerwacje/:id', isAuth, customerC.getPaymentById);
 
 //@ routes MANUALLY set
 router.get('/get-customer-details', isAuth, customerC.getCustomerDetails);
