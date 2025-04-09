@@ -1103,211 +1103,6 @@ export const deleteSchedule = (req, res, next) => {
     .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 
-//! FEEDBACK_____________________________________________
-//@ GET
-export const getAllParticipantsFeedback = (req, res, next) => {
-  const controllerName = 'getAllParticipantsFeedback';
-  callLog(req, person, controllerName);
-
-  models.Feedback.findAll({
-    include: [
-      {
-        model: models.Customer,
-      },
-      {
-        model: models.ScheduleRecord, //  ScheduleRecord
-        include: [
-          {
-            model: models.Product, // Product through ScheduleRecord
-            attributes: ['name'],
-          },
-        ],
-      },
-    ],
-    attributes: {
-      exclude: ['product'], // Deleting substituted ones
-    },
-  })
-    .then(records => {
-      if (!records) {
-        errCode = 404;
-        throw new Error('Nie znaleziono opinii.');
-      }
-
-      const formattedRecords = records.map(record => {
-        const feedback = record.toJSON();
-
-        return {
-          ...feedback,
-          rowid: feedback.feedbackId,
-          submissionDate: formatIsoDateTime(feedback.submissionDate),
-          customerFullName: `${feedback.Customer.firstName} ${feedback.Customer.lastName} (${feedback.Customer.customerId})`,
-          schedule: `
-          ${feedback.ScheduleRecord.Product.name}
-          ${feedback.ScheduleRecord.date} | ${feedback.ScheduleRecord.startTime}`,
-        };
-      });
-
-      const totalKeys = [
-        'feedbackId',
-        'submissionDate',
-        'delay',
-        'schedule',
-        'rating',
-        'content',
-        'customerFullName',
-      ];
-
-      // ✅ Return response to frontend
-      successLog(person, controllerName);
-      res.json({
-        confirmation: 1,
-        message: 'Opinie pobrane pomyślnie',
-        isLoggedIn: req.session.isLoggedIn,
-        totalKeys,
-        content: formattedRecords, // With new names
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
-};
-export const getAllParticipantsFeedbackById = (req, res, next) => {
-  console.log(`\n➡️ admin called getAllParticipantsFeedbackById`);
-
-  const PK = req.params.id;
-  models.Feedback.findByPk(PK, {
-    include: [
-      {
-        model: models.Customer,
-        attributes: { exclude: [] },
-      },
-      {
-        model: models.ScheduleRecord,
-        attributes: { exclude: ['productId'] },
-        include: [
-          {
-            model: models.Product,
-            attributes: { exclude: [] },
-          },
-        ],
-      },
-    ],
-    attributes: { exclude: ['customerId', 'scheduleId'] },
-  })
-    .then(review => {
-      if (!review) {
-        errCode = 404;
-        throw new Error('Nie znaleziono opinii.');
-      }
-      const customerId = review.Customer.customerId;
-
-      return models.Feedback.findAll({
-        where: {
-          customerId: customerId,
-          // op from sequelize means not equal
-          feedbackId: { [Op.ne]: PK },
-        },
-        include: [
-          {
-            model: models.ScheduleRecord,
-            attributes: { exclude: ['productId'] },
-            include: [
-              {
-                model: models.Product,
-                attributes: { exclude: [] },
-              },
-            ],
-          },
-        ],
-        attributes: { exclude: ['customerId', 'scheduleId'] },
-      }).then(otherReviews => {
-        successLog(person, controllerName);
-        return res.status(200).json({
-          confirmation: 1,
-          message: 'Opinia pobrana pomyślnie',
-          isLoggedIn: req.session.isLoggedIn,
-          review,
-          otherReviews,
-        });
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
-};
-//@ POST
-//@ PUT
-//@ DELETE
-export const deleteFeedback = (req, res, next) => {
-  const controllerName = 'deleteFeedback';
-  callLog(req, person, controllerName);
-
-  const id = req.params.id;
-  models.Feedback.destroy({
-    where: {
-      feedbackId: id,
-    },
-  })
-    .then(deletedCount => {
-      if (!deletedCount) {
-        errCode = 404;
-        throw new Error('Nie usunięto opinii.');
-      }
-      successLog(person, controllerName);
-      return res
-        .status(200)
-        .json({ confirmation: 1, message: 'Opinia usunięta pomyślnie.' });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
-};
-
-//! NEWSLETTERS_____________________________________________
-//@ GET
-export const getAllNewsletters = (req, res, next) => {
-  const controllerName = 'getAllNewsletters';
-  callLog(req, person, controllerName);
-
-  models.Newsletter.findAll()
-    .then(records => {
-      if (!records) {
-        errCode = 404;
-        throw new Error('Nie znaleziono rekordów.');
-      }
-
-      const formattedRecords = records.map(record => {
-        const newsletter = record.toJSON();
-
-        return {
-          ...newsletter,
-          rowId: newsletter.newsletterId,
-          creationDate: formatIsoDateTime(newsletter.creationDate),
-          sendDate: formatIsoDateTime(newsletter.sendDate),
-        };
-      });
-
-      const totalKeys = [
-        'newsletterId',
-        'status',
-        'creationDate',
-        'sendDate',
-        'title',
-        'content',
-      ];
-
-      successLog(person, controllerName);
-      return res.json({
-        totalKeys,
-        confirmation: 1,
-        message: 'Pobrano pomyślnie',
-        content: formattedRecords, //.sort((a, b) => new Date(b.Data) - new Date(a.Data)),
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
-};
-export const getAllSubscribedNewsletters = (req, res, next) => {
-  //
-};
-//@ POST
-//@ PUT
-//@ DELETE
-
 //! PRODUCTS_____________________________________________
 //@ GET
 export const getAllProducts = (req, res, next) => {
@@ -1577,6 +1372,165 @@ export const deleteProduct = (req, res, next) => {
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
+
+//! PASSES_______________________________________________
+//@ GET
+export const getAllPasses = (req, res, next) => {
+  const controllerName = 'getAllPasses';
+  callLog(req, person, controllerName);
+
+  models.PassDefinition.findAll({
+    where: { status: true },
+  })
+    .then(records => {
+      if (!records) {
+        errCode = 404;
+        throw new Error('Nie znaleziono rekordów.');
+      }
+
+      // Convert for records for different names
+      const formattedRecords = records.map(record => {
+        const passDef = record.toJSON();
+
+        return {
+          ...passDef,
+          rowId: passDef.passDefId,
+          usesTotal: passDef.usesTotal || '-',
+          validityDays: `${
+            passDef.validityDays ? `${passDef.validityDays} dni` : '-'
+          }`,
+          price: `${passDef.price} zł`,
+          allowedProductTypes: JSON.parse(passDef.allowedProductTypes).join(
+            ', '
+          ),
+        };
+      });
+
+      const sortedRecords = formattedRecords.sort(
+        (a, b) => new Date(a.passDefId) - new Date(b.passDefId)
+      );
+
+      const totalKeys = [
+        'passDefId',
+        'name',
+        'description',
+        'passType',
+        'usesTotal',
+        'validityDays',
+        'allowedProductTypes',
+        'price',
+      ];
+
+      successLog(person, controllerName);
+      return res.json({
+        totalKeys,
+        confirmation: 1,
+        message: 'Pobrano pomyślnie',
+        content: sortedRecords,
+      });
+    })
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
+};
+export const getPassById = (req, res, next) => {
+  const controllerName = 'getPassById';
+  console.log(`\n➡️➡️➡️ admin called`, controllerName);
+
+  const PK = req.params.id;
+  models.PassDefinition.findByPk(PK, {
+    include: [
+      {
+        model: models.CustomerPass,
+        include: [
+          {
+            model: models.Customer,
+            include: [
+              {
+                model: models.User,
+                attributes: { exclude: ['userId'] },
+              },
+            ],
+          },
+          { model: models.Payment },
+        ],
+      },
+    ],
+  })
+    .then(passData => {
+      if (!passData) {
+        errCode = 404;
+        throw new Error('Nie znaleziono definicji karnetu.');
+      }
+      // console.log(scheduleData);
+      let passDef = passData.toJSON();
+
+      const payments = passDef.CustomerPasses.map(customerPass => {
+        const cp = customerPass;
+        const customer = cp.Customer;
+        const payment = cp.Payment;
+        return {
+          ...payment,
+          rowId: payment.paymentId,
+          date: formatIsoDateTime(payment.date),
+          customerFullName: `${customer.firstName} ${customer.lastName} (${customer.customerId})`,
+        };
+      });
+
+      const customerPasses = passDef.CustomerPasses.map(customerPass => {
+        const cp = customerPass;
+        const customer = cp.Customer;
+
+        return {
+          customerPassId: cp.customerPassId,
+          rowId: cp.customerPassId,
+          customerFullName: `${customer.firstName} ${customer.lastName} (${customer.customerId})`,
+          purchaseDate: formatIsoDateTime(cp.purchaseDate),
+          validFrom: formatIsoDateTime(cp.validFrom),
+          validUntil: formatIsoDateTime(cp.validUntil),
+          usesLeft: cp.usesLeft,
+          status:
+            cp.status == 'active' || cp.status == 1
+              ? 'Aktywny'
+              : cp.status == 'suspended' || cp.status == 0
+              ? 'Zawieszony'
+              : 'Wygasły',
+        };
+      });
+
+      passDef = { ...passDef, CustomerPasses: null };
+
+      let passDefFormatted = {
+        ...passDef,
+        payments,
+        paymentsKeys: [
+          'paymentId',
+          'date',
+          'customerFullName',
+          'amountPaid',
+          'paymentMethod',
+        ],
+        customerPasses,
+        customerPassesKeys: [
+          'customerPassId',
+          'customerFullName',
+          'purchaseDate',
+          'validFrom',
+          'validUntil',
+          'usesLeft',
+          'status',
+        ],
+      };
+
+      successLog(person, controllerName);
+      return res.status(200).json({
+        confirmation: 1,
+        message: 'Definicja karnetu pobrana pomyślnie',
+        passDef: passDefFormatted,
+      });
+    })
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
+};
+//@ POST
+//@ PUT
 
 //! BOOKINGS_____________________________________________
 //@ GET
@@ -2183,165 +2137,6 @@ export const putEditMarkPresent = (req, res, next) => {
     .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 
-//! PASSES_______________________________________________
-//@ GET
-export const getAllPasses = (req, res, next) => {
-  const controllerName = 'getAllPasses';
-  callLog(req, person, controllerName);
-
-  models.PassDefinition.findAll({
-    where: { status: true },
-  })
-    .then(records => {
-      if (!records) {
-        errCode = 404;
-        throw new Error('Nie znaleziono rekordów.');
-      }
-
-      // Convert for records for different names
-      const formattedRecords = records.map(record => {
-        const passDef = record.toJSON();
-
-        return {
-          ...passDef,
-          rowId: passDef.passDefId,
-          usesTotal: passDef.usesTotal || '-',
-          validityDays: `${
-            passDef.validityDays ? `${passDef.validityDays} dni` : '-'
-          }`,
-          price: `${passDef.price} zł`,
-          allowedProductTypes: JSON.parse(passDef.allowedProductTypes).join(
-            ', '
-          ),
-        };
-      });
-
-      const sortedRecords = formattedRecords.sort(
-        (a, b) => new Date(a.passDefId) - new Date(b.passDefId)
-      );
-
-      const totalKeys = [
-        'passDefId',
-        'name',
-        'description',
-        'passType',
-        'usesTotal',
-        'validityDays',
-        'allowedProductTypes',
-        'price',
-      ];
-
-      successLog(person, controllerName);
-      return res.json({
-        totalKeys,
-        confirmation: 1,
-        message: 'Pobrano pomyślnie',
-        content: sortedRecords,
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
-};
-export const getPassById = (req, res, next) => {
-  const controllerName = 'getPassById';
-  console.log(`\n➡️➡️➡️ admin called`, controllerName);
-
-  const PK = req.params.id;
-  models.PassDefinition.findByPk(PK, {
-    include: [
-      {
-        model: models.CustomerPass,
-        include: [
-          {
-            model: models.Customer,
-            include: [
-              {
-                model: models.User,
-                attributes: { exclude: ['userId'] },
-              },
-            ],
-          },
-          { model: models.Payment },
-        ],
-      },
-    ],
-  })
-    .then(passData => {
-      if (!passData) {
-        errCode = 404;
-        throw new Error('Nie znaleziono definicji karnetu.');
-      }
-      // console.log(scheduleData);
-      let passDef = passData.toJSON();
-
-      const payments = passDef.CustomerPasses.map(customerPass => {
-        const cp = customerPass;
-        const customer = cp.Customer;
-        const payment = cp.Payment;
-        return {
-          ...payment,
-          rowId: payment.paymentId,
-          date: formatIsoDateTime(payment.date),
-          customerFullName: `${customer.firstName} ${customer.lastName} (${customer.customerId})`,
-        };
-      });
-
-      const customerPasses = passDef.CustomerPasses.map(customerPass => {
-        const cp = customerPass;
-        const customer = cp.Customer;
-
-        return {
-          customerPassId: cp.customerPassId,
-          rowId: cp.customerPassId,
-          customerFullName: `${customer.firstName} ${customer.lastName} (${customer.customerId})`,
-          purchaseDate: formatIsoDateTime(cp.purchaseDate),
-          validFrom: formatIsoDateTime(cp.validFrom),
-          validUntil: formatIsoDateTime(cp.validUntil),
-          usesLeft: cp.usesLeft,
-          status:
-            cp.status == 'active' || cp.status == 1
-              ? 'Aktywny'
-              : cp.status == 'suspended' || cp.status == 0
-              ? 'Zawieszony'
-              : 'Wygasły',
-        };
-      });
-
-      passDef = { ...passDef, CustomerPasses: null };
-
-      let passDefFormatted = {
-        ...passDef,
-        payments,
-        paymentsKeys: [
-          'paymentId',
-          'date',
-          'customerFullName',
-          'amountPaid',
-          'paymentMethod',
-        ],
-        customerPasses,
-        customerPassesKeys: [
-          'customerPassId',
-          'customerFullName',
-          'purchaseDate',
-          'validFrom',
-          'validUntil',
-          'usesLeft',
-          'status',
-        ],
-      };
-
-      successLog(person, controllerName);
-      return res.status(200).json({
-        confirmation: 1,
-        message: 'Definicja karnetu pobrana pomyślnie',
-        passDef: passDefFormatted,
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
-};
-//@ POST
-//@ PUT
-
 //! PAYMENTS_____________________________________________
 //@ GET
 export const getAllPayments = (req, res, next) => {
@@ -2839,6 +2634,211 @@ export const getAllInvoices = (req, res, next) => {
       });
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));
+};
+//@ POST
+//@ PUT
+//@ DELETE
+
+//! FEEDBACK_____________________________________________
+//@ GET
+export const getAllParticipantsFeedback = (req, res, next) => {
+  const controllerName = 'getAllParticipantsFeedback';
+  callLog(req, person, controllerName);
+
+  models.Feedback.findAll({
+    include: [
+      {
+        model: models.Customer,
+      },
+      {
+        model: models.ScheduleRecord, //  ScheduleRecord
+        include: [
+          {
+            model: models.Product, // Product through ScheduleRecord
+            attributes: ['name'],
+          },
+        ],
+      },
+    ],
+    attributes: {
+      exclude: ['product'], // Deleting substituted ones
+    },
+  })
+    .then(records => {
+      if (!records) {
+        errCode = 404;
+        throw new Error('Nie znaleziono opinii.');
+      }
+
+      const formattedRecords = records.map(record => {
+        const feedback = record.toJSON();
+
+        return {
+          ...feedback,
+          rowid: feedback.feedbackId,
+          submissionDate: formatIsoDateTime(feedback.submissionDate),
+          customerFullName: `${feedback.Customer.firstName} ${feedback.Customer.lastName} (${feedback.Customer.customerId})`,
+          schedule: `
+          ${feedback.ScheduleRecord.Product.name}
+          ${feedback.ScheduleRecord.date} | ${feedback.ScheduleRecord.startTime}`,
+        };
+      });
+
+      const totalKeys = [
+        'feedbackId',
+        'submissionDate',
+        'delay',
+        'schedule',
+        'rating',
+        'content',
+        'customerFullName',
+      ];
+
+      // ✅ Return response to frontend
+      successLog(person, controllerName);
+      res.json({
+        confirmation: 1,
+        message: 'Opinie pobrane pomyślnie',
+        isLoggedIn: req.session.isLoggedIn,
+        totalKeys,
+        content: formattedRecords, // With new names
+      });
+    })
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
+};
+export const getAllParticipantsFeedbackById = (req, res, next) => {
+  console.log(`\n➡️ admin called getAllParticipantsFeedbackById`);
+
+  const PK = req.params.id;
+  models.Feedback.findByPk(PK, {
+    include: [
+      {
+        model: models.Customer,
+        attributes: { exclude: [] },
+      },
+      {
+        model: models.ScheduleRecord,
+        attributes: { exclude: ['productId'] },
+        include: [
+          {
+            model: models.Product,
+            attributes: { exclude: [] },
+          },
+        ],
+      },
+    ],
+    attributes: { exclude: ['customerId', 'scheduleId'] },
+  })
+    .then(review => {
+      if (!review) {
+        errCode = 404;
+        throw new Error('Nie znaleziono opinii.');
+      }
+      const customerId = review.Customer.customerId;
+
+      return models.Feedback.findAll({
+        where: {
+          customerId: customerId,
+          // op from sequelize means not equal
+          feedbackId: { [Op.ne]: PK },
+        },
+        include: [
+          {
+            model: models.ScheduleRecord,
+            attributes: { exclude: ['productId'] },
+            include: [
+              {
+                model: models.Product,
+                attributes: { exclude: [] },
+              },
+            ],
+          },
+        ],
+        attributes: { exclude: ['customerId', 'scheduleId'] },
+      }).then(otherReviews => {
+        successLog(person, controllerName);
+        return res.status(200).json({
+          confirmation: 1,
+          message: 'Opinia pobrana pomyślnie',
+          isLoggedIn: req.session.isLoggedIn,
+          review,
+          otherReviews,
+        });
+      });
+    })
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
+};
+//@ POST
+//@ PUT
+//@ DELETE
+export const deleteFeedback = (req, res, next) => {
+  const controllerName = 'deleteFeedback';
+  callLog(req, person, controllerName);
+
+  const id = req.params.id;
+  models.Feedback.destroy({
+    where: {
+      feedbackId: id,
+    },
+  })
+    .then(deletedCount => {
+      if (!deletedCount) {
+        errCode = 404;
+        throw new Error('Nie usunięto opinii.');
+      }
+      successLog(person, controllerName);
+      return res
+        .status(200)
+        .json({ confirmation: 1, message: 'Opinia usunięta pomyślnie.' });
+    })
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
+};
+
+//! NEWSLETTERS_____________________________________________
+//@ GET
+export const getAllNewsletters = (req, res, next) => {
+  const controllerName = 'getAllNewsletters';
+  callLog(req, person, controllerName);
+
+  models.Newsletter.findAll()
+    .then(records => {
+      if (!records) {
+        errCode = 404;
+        throw new Error('Nie znaleziono rekordów.');
+      }
+
+      const formattedRecords = records.map(record => {
+        const newsletter = record.toJSON();
+
+        return {
+          ...newsletter,
+          rowId: newsletter.newsletterId,
+          creationDate: formatIsoDateTime(newsletter.creationDate),
+          sendDate: formatIsoDateTime(newsletter.sendDate),
+        };
+      });
+
+      const totalKeys = [
+        'newsletterId',
+        'status',
+        'creationDate',
+        'sendDate',
+        'title',
+        'content',
+      ];
+
+      successLog(person, controllerName);
+      return res.json({
+        totalKeys,
+        confirmation: 1,
+        message: 'Pobrano pomyślnie',
+        content: formattedRecords, //.sort((a, b) => new Date(b.Data) - new Date(a.Data)),
+      });
+    })
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
+};
+export const getAllSubscribedNewsletters = (req, res, next) => {
+  //
 };
 //@ POST
 //@ PUT
