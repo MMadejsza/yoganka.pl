@@ -106,6 +106,10 @@
         font-size: 3rem;
         color: map.get($colors, nav-muted);
       }
+
+      &--in-title {
+        color: map.get($colors, accent-bcg);
+      }
     }
 
     i.nav__icon {

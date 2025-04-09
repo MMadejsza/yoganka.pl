@@ -12,14 +12,14 @@ function DetailsListPassDefinition({ passDefinition }) {
     { label: 'Status:', content: passDefinition.status },
     { label: 'Typ:', content: passDefinition.passType },
     { label: 'Ważny na:', content: passDefinition.allowedProductTypes },
-    { label: 'Opis:', content: passDefinition.description },
-    { label: 'Cena:', content: passDefinition.price },
+
+    { label: 'Cena:', content: `${passDefinition.price} zł` },
   ];
 
   if (passDefinition.validityDays) {
     details.push({
       label: 'Ważny przez:',
-      content: passDefinition.validityDays,
+      content: `${passDefinition.validityDays} dni`,
     });
   }
   if (passDefinition.usesTotal) {
@@ -28,7 +28,7 @@ function DetailsListPassDefinition({ passDefinition }) {
       content: passDefinition.usesTotal,
     });
   }
-
+  details.push({ label: 'Opis:', content: passDefinition.description });
   return (
     <GenericList
       title='Typ karnetu:'

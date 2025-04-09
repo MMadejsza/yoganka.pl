@@ -25,7 +25,7 @@ function DetailsListCustomerPass({ customerPass }) {
   if (customerPass.usesLeft) {
     details.push({
       label: 'Pozostało:',
-      content: `${customerPass.usesLeft} sesji(a/e)`,
+      content: `${customerPass.usesLeft} sesj(i/a/e)`,
     });
   }
   details.push({ label: 'Status:', content: customerPass.status });

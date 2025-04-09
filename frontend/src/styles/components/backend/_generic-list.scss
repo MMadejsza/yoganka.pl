@@ -41,6 +41,10 @@ form.generic-details {
     flex-wrap: wrap;
     gap: 1rem 2rem !important;
 
+    &--in-title {
+      justify-content: center;
+    }
+
     &.danger {
       color: #c62828;
     }
