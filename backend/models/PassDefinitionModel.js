@@ -31,10 +31,10 @@ const PassDefinition = sequelizeDb.define(
       allowNull: true,
       field: 'uses_total',
     },
-    defaultValidityDays: {
+    validityDays: {
       type: DataTypes.INTEGER,
       allowNull: true,
-      field: 'default_validity_days',
+      field: 'validity_days',
     },
     allowedProductTypes: {
       type: DataTypes.JSON,

@@ -1658,6 +1658,71 @@ export const getAllBookings = (req, res, next) => {
     })
     .catch(err => catchErr(person, err, controllerName));
 };
+export const getBookingByID = (req, res, next) => {
+  const controllerName = 'getBookingID';
+  console.log(`\n➡️➡️➡️ admin called`, controllerName);
+
+  const PK = req.params.id;
+  models.Booking.findByPk(PK, {
+    include: [
+      {
+        model: models.Customer,
+        attributes: { exclude: ['userId'] },
+        include: [{ model: models.User }],
+      },
+      {
+        model: models.ScheduleRecord,
+        include: [{ model: models.Product }, { model: models.Booking }],
+        // attributes: { exclude: ['userId'] },
+      },
+      {
+        model: models.Payment,
+        // attributes: { exclude: ['userId'] },
+        required: false,
+      },
+      {
+        model: models.CustomerPass,
+        include: [{ model: models.PassDefinition }],
+        // attributes: { exclude: ['userId'] },
+        required: false,
+      },
+    ],
+  })
+    .then(bookingData => {
+      if (!bookingData) {
+        errCode = 404;
+        throw new Error('Nie znaleziono rezerwacji.');
+      }
+      // console.log(scheduleData);
+      let booking = bookingData.toJSON();
+      let attendance = 0;
+
+      if (
+        booking.ScheduleRecord.Bookings &&
+        booking.ScheduleRecord.Bookings.length > 0
+      ) {
+        booking.ScheduleRecord.Bookings.forEach(b => {
+          if (b.attendance == 1 || b.attendance == true) attendance += 1;
+        });
+      }
+      let bookingFormatted = {
+        ...booking,
+        ScheduleRecord: {
+          ...booking.ScheduleRecord,
+          attendance: attendance,
+        },
+      };
+
+      successLog(person, controllerName);
+      return res.status(200).json({
+        confirmation: 1,
+        message: 'Rezerwacja pobrana pomyślnie',
+        booking: bookingFormatted,
+        user: req.user,
+      });
+    })
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
+};
 //@ POST
 export const postCreateBooking = (req, res, next) => {
   const controllerName = 'adminCreateBooking';
@@ -2347,16 +2412,16 @@ export const postCreatePayment = (req, res, next) => {
               // ! MAIL WITH PAYMENT CONFIRMATION
 
               const purchaseDate = new Date(),
-                validityDays = currentPassDefinition.defaultValidityDays;
-              let calcExpiryDate;
+                validityDays = currentPassDefinition.validityDays;
+              let calcExpiryDate = null;
 
-              if (validityDays < 30) {
+              if (validityDays && validityDays < 30) {
                 // if less then month
                 calcExpiryDate = addDays(purchaseDate, validityDays);
-              } else if (validityDays % 30 == 0) {
+              } else if (validityDays && validityDays % 30 == 0) {
                 // if a couple of months where month = 30
                 calcExpiryDate = addMonths(purchaseDate, validityDays / 30);
-              } else if (validityDays == 365) {
+              } else if (validityDays && validityDays == 365) {
                 // if 1 year - no more expected
                 calcExpiryDate = addYears(purchaseDate, 1);
               }

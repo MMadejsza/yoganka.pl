@@ -6,6 +6,7 @@ import { useFeedback } from '../../hooks/useFeedback.js';
 import { fetchItem, mutateOnDelete, queryClient } from '../../utils/http.js';
 import FeedbackBox from './FeedbackBox.jsx';
 import WrapperModal from './WrapperModal.jsx';
+import ViewBooking from './views/ViewBooking.jsx';
 import ViewCustomer from './views/ViewCustomer.jsx';
 import ViewPayment from './views/ViewPayment.jsx';
 import ViewProduct from './views/ViewProduct.jsx';
@@ -159,7 +160,7 @@ function ViewsController({
         ];
         return controller;
 
-      case 'invoices':
+      case 'review':
         controller.recordDisplay = (
           <ViewReview data={customer} onClose={onClose} isModalOpen={visited} />
         );
@@ -168,6 +169,20 @@ function ViewsController({
         controller.deleteQuery = `delete-feedback/${data.feedback.feedbackId}`;
         controller.redirectTo = '/admin-console/show-all-participants-feedback';
         controller.warnings = '';
+        return controller;
+
+      case 'booking':
+        controller.recordDisplay = (
+          <ViewBooking data={data} onClose={onClose} isModalOpen={visited} />
+        );
+        controller.recordEditor = '';
+        controller.deleteBtnTitle = 'Rezerwację';
+        controller.deleteQuery = `delete-booking/${data.booking.bookingId}`;
+        controller.redirectTo = '/admin-console/show-all-bookings';
+        controller.warnings = [
+          'Powiązanej płatności (jeśli opłacona bezpośrednio)',
+          '🗒️ Jeśli chcesz tylko oznaczyć nieobecność, nie usuwaj rezerwacji',
+        ];
         return controller;
 
       default:

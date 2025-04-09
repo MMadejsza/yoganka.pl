@@ -17,17 +17,20 @@ import VerificationToken from './VerificationTokenModel.js';
 //@ User (1) ->| ⇄ (M) VerificationToken
 // When a User is deleted, all associated VerificationTokens are deleted.
 User.hasMany(VerificationToken, { foreignKey: 'user_id' });
-VerificationToken.belongsTo(User, { foreignKey: 'user_id' });
+VerificationToken.belongsTo(User, {
+  foreignKey: 'user_id',
+  onDelete: 'CASCADE',
+});
 
 //@ User (1) ->| ⇄ (1) Customer
 // When a User is deleted, the associated Customer is also deleted.
 User.hasOne(Customer, { foreignKey: 'user_id', onDelete: 'CASCADE' });
-Customer.belongsTo(User, { foreignKey: 'user_id' });
+Customer.belongsTo(User, { foreignKey: 'user_id', onDelete: 'CASCADE' });
 
 //@ User (1) ->| ⇄ (1) UserPrefSetting
 // When a User is deleted, the associated UserPrefSetting is also deleted.
 User.hasOne(UserPrefSetting, { foreignKey: 'user_id', onDelete: 'CASCADE' });
-UserPrefSetting.belongsTo(User, { foreignKey: 'user_id' });
+UserPrefSetting.belongsTo(User, { foreignKey: 'user_id', onDelete: 'CASCADE' });
 
 // ! CUSTOMER ASSOCIATIONS __________________________________________________
 //@ Customer (1) ->| ⇄ (M) Payment
@@ -38,7 +41,7 @@ Payment.belongsTo(Customer, { foreignKey: 'customer_id' });
 //@ Customer (1) ->| ⇄ (M) Booking
 // Deleting a Customer deletes all associated Bookings.
 Customer.hasMany(Booking, { foreignKey: 'customer_id', onDelete: 'CASCADE' });
-Booking.belongsTo(Customer, { foreignKey: 'customer_id' });
+Booking.belongsTo(Customer, { foreignKey: 'customer_id', onDelete: 'CASCADE' });
 
 //@ Customer (1) ->| ⇄ (M) Feedback
 // Deleting a Customer deletes all associated Feedback entries.
@@ -166,168 +169,3 @@ export {
   UserPrefSetting,
   VerificationToken,
 };
-
-// //
-// // ASSOCIATIONS BETWEEN THE USER MODEL AND OTHER MODELS
-// //
-
-// // User ⇄ VerificationToken (1:M)
-// // A user can have many verification tokens.
-// User.hasMany(VerificationToken, { foreignKey: 'user_id' });
-// VerificationToken.belongsTo(User, { foreignKey: 'user_id' });
-
-// // User ⇄ Customer (1:1, total participation on Customer)
-// // When a User is deleted, the associated Customer is also deleted.
-// User.hasOne(Customer, { foreignKey: 'user_id', onDelete: 'CASCADE' });
-// Customer.belongsTo(User, { foreignKey: 'user_id' });
-
-// // User ⇄ UserPrefSetting (1:1, total participation on UserPrefSetting)
-// // When a User is deleted, the associated UserPrefSetting are also deleted.
-// User.hasOne(UserPrefSetting, { foreignKey: 'user_id', onDelete: 'CASCADE' });
-// UserPrefSetting.belongsTo(User, { foreignKey: 'user_id' });
-
-// //
-// // ASSOCIATIONS BETWEEN THE CUSTOMER MODEL AND OTHER MODELS
-// //
-
-// // Customer ⇄ Payment (1:M, total participation on Payment)
-// // Deleting a Customer will delete all associated Payments.
-// Customer.hasMany(Payment, { foreignKey: 'customer_id', onDelete: 'CASCADE' });
-// Payment.belongsTo(Customer, { foreignKey: 'customer_id' });
-
-// // Customer ⇄ Booking (1:M, total participation on Booking)
-// // Deleting a Customer will delete all associated Booking records.
-// Customer.hasMany(Booking, { foreignKey: 'customer_id', onDelete: 'CASCADE' });
-// Booking.belongsTo(Customer, { foreignKey: 'customer_id' });
-
-// // Customer ⇄ Feedback (1:M, total participation on Feedback)
-// // Deleting a Customer will delete all associated Feedback entries.
-// Customer.hasMany(Feedback, { foreignKey: 'customer_id', onDelete: 'CASCADE' });
-// Feedback.belongsTo(Customer, { foreignKey: 'customer_id' });
-
-// // Customer ⇄ CustomerPass (1:M, total participation on CustomerPass)
-// // Every pass (CustomerPass) must be assigned to the customer.
-// Customer.hasMany(CustomerPass, {
-//   foreignKey: 'customer_id',
-//   onDelete: 'CASCADE',
-// });
-// CustomerPass.belongsTo(Customer, { foreignKey: 'customer_id' });
-
-// //
-// // ASSOCIATIONS BETWEEN THE SCHEDULERECORD MODEL AND OTHER MODELS
-// //
-
-// // ScheduleRecord ⇄ Feedback (1:M)
-// // Deleting a ScheduleRecord will delete all associated Feedback.
-// ScheduleRecord.hasMany(Feedback, {
-//   foreignKey: 'schedule_id',
-//   onDelete: 'CASCADE',
-// });
-// Feedback.belongsTo(ScheduleRecord, { foreignKey: 'schedule_id' });
-
-// // Product ⇄ ScheduleRecord (1:M, total participation on ScheduleRecord)
-// // Deleting a Product will delete all associated ScheduleRecords.
-// Product.hasMany(ScheduleRecord, {
-//   foreignKey: 'product_id',
-//   onDelete: 'CASCADE',
-// });
-// ScheduleRecord.belongsTo(Product, { foreignKey: 'product_id' });
-
-// //
-// // ASSOCIATIONS BETWEEN THE PAYMENT MODEL AND OTHER MODELS
-// //
-
-// // Payment ⇄ Booking (M:M, total participation on both sides)
-// // Through the join table Booking, deleting a Payment will delete its associated Booking records.
-// Payment.belongsToMany(ScheduleRecord, {
-//   through: { model: Booking, onDelete: 'CASCADE' },
-//   foreignKey: 'payment_id',
-// });
-// Booking.belongsTo(Payment, { foreignKey: 'payment_id', onDelete: 'CASCADE' });
-// // Booking ⇄ CustomerPass (1:M, optional relation)
-// // If the booking is payed with the pass, Booking.customer_pass_id points CustomerPass.
-// CustomerPass.hasMany(Booking, {
-//   foreignKey: 'customer_pass_id',
-//   onDelete: 'CASCADE',
-// });
-// Booking.belongsTo(CustomerPass, {
-//   foreignKey: 'customer_pass_id',
-//   onDelete: 'CASCADE',
-// });
-
-// // Payment ⇄ CustomerPass (1:M)
-// // Płatność, która dotyczy zakupu karnetu, może kupić wiele instancji karnetu.
-// Payment.hasMany(CustomerPass, {
-//   foreignKey: 'payment_id',
-//   onDelete: 'CASCADE',
-// });
-// CustomerPass.belongsTo(Payment, {
-//   foreignKey: 'payment_id',
-//   onDelete: 'CASCADE',
-// });
-
-// // Payment ⇄ Invoice (1:1, total participation on Invoice)
-// // Deleting a Payment will delete the associated Invoice.
-// Payment.hasOne(Invoice, { foreignKey: 'payment_id', onDelete: 'CASCADE' });
-// Invoice.belongsTo(Payment, { foreignKey: 'payment_id' });
-
-// // ScheduleRecord ⇄ Booking (1:M, total participation on Booking)
-// // Deleting a ScheduleRecord will delete all associated Booking records.
-// ScheduleRecord.hasMany(Booking, {
-//   foreignKey: 'schedule_id',
-//   onDelete: 'CASCADE',
-// });
-// Booking.belongsTo(ScheduleRecord, {
-//   foreignKey: 'schedule_id',
-//   onDelete: 'CASCADE',
-// });
-
-// // PassDefinition ⇄ CustomerPass (1:M)
-// // Every pass (CustomerPass) refers to 1 pass definition.
-// PassDefinition.hasMany(CustomerPass, {
-//   foreignKey: 'pass_def_id',
-//   onDelete: 'CASCADE',
-// });
-// CustomerPass.belongsTo(PassDefinition, {
-//   foreignKey: 'pass_def_id',
-//   onDelete: 'CASCADE',
-// });
-
-// // Additional many-to-many association:
-// // ScheduleRecord ⇄ Payment (M:M) using Booking as join table.
-// ScheduleRecord.belongsToMany(Payment, {
-//   through: Booking,
-//   foreignKey: 'schedule_id',
-// });
-
-// //
-// // ASSOCIATIONS BETWEEN THE NEWSLETTER MODEL AND THE USER MODEL
-// //
-
-// // Newsletter ⇄ User (M:M)
-// // Deleting a Newsletter or User will delete the corresponding entries in the join table.
-// Newsletter.belongsToMany(User, {
-//   through: SubscribedNewsletter,
-//   foreignKey: 'newsletter_id',
-//   onDelete: 'CASCADE',
-// });
-// User.belongsToMany(Newsletter, {
-//   through: SubscribedNewsletter,
-//   foreignKey: 'user_id',
-//   onDelete: 'CASCADE',
-// });
-
-// export {
-//   Booking,
-//   Customer,
-//   Feedback,
-//   Invoice,
-//   Newsletter,
-//   Payment,
-//   Product,
-//   ScheduleRecord,
-//   SubscribedNewsletter,
-//   User,
-//   UserPrefSetting,
-//   VerificationToken,
-// };

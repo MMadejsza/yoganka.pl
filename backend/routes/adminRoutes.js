@@ -33,6 +33,7 @@ router.get('/show-all-payments', adminC.getAllPayments);
 router.get('/show-all-payments/:id', adminC.getPaymentByID);
 router.get('/show-all-invoices', adminC.getAllInvoices);
 router.get('/show-all-bookings', adminC.getAllBookings);
+router.get('/show-all-bookings/:id', adminC.getBookingByID);
 // router.get('/show-all-passes', adminC.getAllPasses);
 
 //! POST - CREATE__________________________________________

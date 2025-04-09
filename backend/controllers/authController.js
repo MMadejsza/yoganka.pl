@@ -94,8 +94,7 @@ export const getStatus = (req, res, next) => {
                       name: pass.PassDefinition.name,
                       passType: pass.PassDefinition.passType,
                       usesTotal: pass.PassDefinition.usesTotal,
-                      defaultValidityDays:
-                        pass.PassDefinition.defaultValidityDays,
+                      validityDays: pass.PassDefinition.validityDays,
                       allowedProductTypes:
                         pass.PassDefinition.allowedProductTypes,
                       price: pass.PassDefinition.price,
