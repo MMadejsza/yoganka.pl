@@ -5,20 +5,10 @@ import DetailsListPassDefinition from './lists/DetailsListPassDefinition.jsx';
 import DetailsListPayment from './lists/DetailsListPayment.jsx';
 import DetailsListSchedule from './lists/DetailsListSchedule.jsx';
 
-function ViewBooking({ data }) {
-  console.log('ViewBooking data', data);
-  const { booking } = data;
-  const { Customer: customer } = booking;
-  const { ScheduleRecord: schedule } = booking;
-  const { Product: product } = schedule;
-  const type = product.type;
-  console.clear();
-  console.log(type);
-  console.log(
-    `📝
-	    Booking ViewBooking object from backend:`,
-    data
-  );
+function ViewPassDefinition({ data }) {
+  console.log('ViewPassDefinition data', data);
+
+  const { passDef } = data;
 
   return (
     <>
@@ -82,4 +72,4 @@ function ViewBooking({ data }) {
   );
 }
 
-export default ViewBooking;
+export default ViewPassDefinition;

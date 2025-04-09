@@ -8,6 +8,7 @@ import FeedbackBox from './FeedbackBox.jsx';
 import WrapperModal from './WrapperModal.jsx';
 import ViewBooking from './views/ViewBooking.jsx';
 import ViewCustomer from './views/ViewCustomer.jsx';
+import ViewPassDefinition from './views/ViewPassDefinition.jsx';
 import ViewPayment from './views/ViewPayment.jsx';
 import ViewProduct from './views/ViewProduct.jsx';
 import ViewReview from './views/ViewReview.jsx';
@@ -159,7 +160,6 @@ function ViewsController({
           '🗒️ Nie ma potrzeby tego robić jesli nie jest to płatność omyłkowa',
         ];
         return controller;
-
       case 'review':
         controller.recordDisplay = (
           <ViewReview data={customer} onClose={onClose} isModalOpen={visited} />
@@ -170,7 +170,6 @@ function ViewsController({
         controller.redirectTo = '/admin-console/show-all-participants-feedback';
         controller.warnings = '';
         return controller;
-
       case 'booking':
         controller.recordDisplay = (
           <ViewBooking data={data} onClose={onClose} isModalOpen={visited} />
@@ -182,6 +181,23 @@ function ViewsController({
         controller.warnings = [
           'Powiązanej płatności (jeśli opłacona bezpośrednio)',
           '🗒️ Jeśli chcesz tylko oznaczyć nieobecność, nie usuwaj rezerwacji',
+        ];
+        return controller;
+      case 'passDef':
+        controller.recordDisplay = (
+          <ViewPassDefinition
+            data={data}
+            onClose={onClose}
+            isModalOpen={visited}
+          />
+        );
+        controller.recordEditor = '';
+        controller.deleteBtnTitle = 'Definicję karnetu';
+        controller.deleteQuery = `delete-pass-definition/${data.passDef.passDefId}`;
+        controller.redirectTo = '/admin-console/show-all-passes';
+        controller.warnings = [
+          // 'Powiązanej płatności (jeśli opłacona bezpośrednio)',
+          // '🗒️ Jeśli chcesz tylko oznaczyć nieobecność, nie usuwaj rezerwacji',
         ];
         return controller;
 

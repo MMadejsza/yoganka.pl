@@ -211,7 +211,7 @@ function AdminPage() {
         ];
         return modifier;
       case path.includes('show-all-passes'):
-        modifier = 'pass';
+        modifier = 'passDef';
         headers = [
           'Id',
           'Nazwa',
