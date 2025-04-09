@@ -46,6 +46,12 @@ const PassDefinition = sequelizeDb.define(
       allowNull: false,
       field: 'price',
     },
+    status: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+      allowNull: false,
+      field: 'status',
+    },
   },
   {
     tableName: 'pass_definitions',

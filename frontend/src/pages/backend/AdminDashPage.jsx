@@ -210,6 +210,19 @@ function AdminPage() {
           'Wykonał',
         ];
         return modifier;
+      case path.includes('show-all-passes'):
+        modifier = 'pass';
+        headers = [
+          'Id',
+          'Nazwa',
+          'Opis',
+          'Typ',
+          'Liczba wejść',
+          'Ważność',
+          'Zakres',
+          'Cena',
+        ];
+        return modifier;
       case path.includes('show-all-newsletters'):
         modifier = 'newsletter';
         headers = ['Id', 'Status', 'Utworzono', 'Wysłano', 'Tytuł', 'Treść'];

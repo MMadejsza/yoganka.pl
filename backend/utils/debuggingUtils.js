@@ -22,8 +22,11 @@ export const catchErr = (
   controllerName,
   extraProps = {}
 ) => {
-  console.log(`\n❌❌❌ Error ${person} ${controllerName}`, err.message);
-  return res.status(errCode).json({
+  console.log(
+    `\n❌❌❌ Error ${person} ${controllerName}`,
+    err?.message || err
+  );
+  return res?.status(errCode).json({
     confirmation: -1,
     message: err.message,
     ...extraProps, // type: 'signup', code: 409,

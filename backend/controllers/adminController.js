@@ -1299,7 +1299,7 @@ export const getAllNewsletters = (req, res, next) => {
         content: formattedRecords, //.sort((a, b) => new Date(b.Data) - new Date(a.Data)),
       });
     })
-    .catch(err => catchErr(person, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 export const getAllSubscribedNewsletters = (req, res, next) => {
   //
@@ -1351,7 +1351,7 @@ export const getAllProducts = (req, res, next) => {
         content: formattedRecords, //.sort((a, b) => new Date(b.Data) - new Date(a.Data)),
       });
     })
-    .catch(err => catchErr(person, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 export const getProductByID = (req, res, next) => {
   const controllerName = 'getProductByID';
@@ -1656,7 +1656,7 @@ export const getAllBookings = (req, res, next) => {
         ),
       });
     })
-    .catch(err => catchErr(person, err, controllerName));
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 export const getBookingByID = (req, res, next) => {
   const controllerName = 'getBookingID';
@@ -2004,6 +2004,7 @@ export const deleteBookingRecord = (req, res, next) => {
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
+
 //! ATTENDANCE_____________________________________________
 //@ GET
 //@ POST
@@ -2181,6 +2182,84 @@ export const putEditMarkPresent = (req, res, next) => {
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
+
+//! PASSES_______________________________________________
+//@ GET
+export const getAllPasses = (req, res, next) => {
+  const controllerName = 'getAllPasses';
+  callLog(req, person, controllerName);
+
+  models.PassDefinition.findAll({
+    include: [
+      {
+        model: models.CustomerPass,
+        include: [
+          {
+            model: models.Customer,
+            include: [
+              {
+                model: models.User,
+                attributes: { exclude: ['userId'] },
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    where: { status: true },
+  })
+    .then(records => {
+      if (!records) {
+        errCode = 404;
+        throw new Error('Nie znaleziono rekordów.');
+      }
+
+      // Convert for records for different names
+      const formattedRecords = records.map(record => {
+        const passDef = record.toJSON();
+
+        return {
+          ...passDef,
+          rowId: passDef.passDefId,
+          usesTotal: passDef.usesTotal || '-',
+          validityDays: `${
+            passDef.validityDays ? `${passDef.validityDays} dni` : '-'
+          }`,
+          price: `${passDef.price} zł`,
+          allowedProductTypes: JSON.parse(passDef.allowedProductTypes).join(
+            ', '
+          ),
+        };
+      });
+
+      const sortedRecords = formattedRecords.sort(
+        (a, b) => new Date(a.passDefId) - new Date(b.passDefId)
+      );
+
+      const totalKeys = [
+        'passDefId',
+        'name',
+        'description',
+        'passType',
+        'usesTotal',
+        'validityDays',
+        'allowedProductTypes',
+        'price',
+      ];
+
+      successLog(person, controllerName);
+      return res.json({
+        totalKeys,
+        confirmation: 1,
+        message: 'Pobrano pomyślnie',
+        content: sortedRecords,
+      });
+    })
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
+};
+//@ POST
+//@ PUT
+
 //! PAYMENTS_____________________________________________
 //@ GET
 export const getAllPayments = (req, res, next) => {
