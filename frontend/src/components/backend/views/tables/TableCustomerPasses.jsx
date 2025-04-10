@@ -6,7 +6,7 @@ function TableCustomerPasses({ customerPasses, keys, isAdminPage }) {
   console.log('\nisAdminPage:', isAdminPage);
   console.log('\TableCustomerPasses customerPasses:', customerPasses);
 
-  const title = 'Wszystkie karnety do dzisiaj';
+  const title = 'Wszystkie zakupione karnety';
   const headers = [
     'Id',
     'Uczestnik',
@@ -22,7 +22,7 @@ function TableCustomerPasses({ customerPasses, keys, isAdminPage }) {
     <WrapperModalTable
       content={customerPasses}
       title={title}
-      noContentMsg={'wykupionych karnetów'}
+      noContentMsg={'zakupionych karnetów'}
     >
       <ModalTable
         classModifier={'admin-view'}

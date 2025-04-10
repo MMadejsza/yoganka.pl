@@ -30,11 +30,11 @@ function ViewsController({
   const callPath = location.pathname;
   const isAdminPanel = location.pathname.includes('admin-console');
   // const isUserSettings = location.pathname.includes('konto/ustawienia');
-  const isCustomerQuery = location.pathname.includes('konto/rezerwacje')
+  const isCustomerQuery = location.pathname.includes('konto/platnosci')
     ? '/customer'
     : '';
   const minRightsPrefix = role == 'ADMIN' ? '' : '';
-  const noFetchPaths = ['statystyki', 'zajecia', 'rezerwacje', 'faktury'];
+  const noFetchPaths = ['statystyki', 'zajecia', 'platnosci', 'faktury'];
 
   console.log('ViewsController callPath: ', callPath);
   console.log('ViewsController isCustomerQuery: ', isCustomerQuery);

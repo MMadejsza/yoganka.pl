@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import TabsList from '../../components/backend/TabsList.jsx';
+import ViewAccountCustomerPasses from '../../components/backend/views/ViewAccountCustomerPasses.jsx';
 import ViewAccountDashboard from '../../components/backend/views/ViewAccountDashboard.jsx';
 import ViewAccountPayments from '../../components/backend/views/ViewAccountPayments.jsx';
 import ViewAccountSchedulesHistory from '../../components/backend/views/ViewAccountSchedulesHistory.jsx';
@@ -21,15 +22,27 @@ const menuSet = [
     link: '/konto',
   },
   {
-    name: 'Historia zajęć',
+    name: 'Historia odbytych zajęć',
     symbol: 'history',
     link: 'zajecia',
     limitedTo: 'customer',
   },
   {
+    name: 'Wszystkie rezerwacje',
+    symbol: 'event_available',
+    link: 'rezerwacje',
+    limitedTo: 'customer',
+  },
+  {
+    name: 'Karnety',
+    symbol: 'local_activity',
+    link: 'karnety',
+    limitedTo: 'customer',
+  },
+  {
     name: 'Płatności',
     symbol: 'payments',
-    link: 'rezerwacje',
+    link: 'platnosci',
     limitedTo: 'customer',
   },
   // {
@@ -81,11 +94,16 @@ function AccountPage() {
       case isChosenContent.includes('zajecia'):
         content = <ViewAccountSchedulesHistory data={customer} />;
         break;
-      case isChosenContent.includes('rezerwacje'):
+      case isChosenContent.includes('platnosci'):
         content = <ViewAccountPayments data={customer} />;
         break;
       case isChosenContent.includes('ustawienia'):
         content = <ViewUser data={data} isUserAccountPage={true} />;
+        break;
+      case isChosenContent.includes('karnety'):
+        content = (
+          <ViewAccountCustomerPasses data={data} isUserAccountPage={true} />
+        );
         break;
 
       default:

@@ -33,7 +33,7 @@ const sideNavTabs = [
   },
   {
     name: `Płatności`,
-    symbol: 'account_balance',
+    symbol: 'payments',
     link: '/admin-console/show-all-payments',
   },
   {
