@@ -1,8 +1,9 @@
 import ModalTable from '../../ModalTable.jsx';
 import WrapperModalTable from '../../WrapperModalTable.jsx';
 
-function TableProductPayments({ type, payments, keys, isAdminPage }) {
+function TableProductPayments({ type, payments, isAdminPage }) {
   console.log('\n✅✅✅DetailsProductPayments:');
+  console.log(`TableProductPayments payments`, payments);
   console.log('\nisAdminPage:', isAdminPage);
 
   const paymentsArray = payments;
@@ -13,6 +14,13 @@ function TableProductPayments({ type, payments, keys, isAdminPage }) {
         ? 'Płatności'
         : 'Wszystkie płatności bezpośrednie - bezzwrotne';
   const headers = ['Id', 'Data', 'Uczestnik', 'Zadatek', 'Metoda płatności'];
+  const keys = [
+    'paymentId',
+    'date',
+    'customerFullName',
+    'amountPaid',
+    'paymentMethod',
+  ];
 
   const table = (
     <WrapperModalTable

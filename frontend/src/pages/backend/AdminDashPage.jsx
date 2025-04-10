@@ -4,6 +4,7 @@ import { useLocation, useMatch, useNavigate } from 'react-router-dom';
 import ModalTable from '../../components/backend/ModalTable.jsx';
 import SideNav from '../../components/backend/SideNav.jsx';
 import TabsList from '../../components/backend/TabsList.jsx';
+import TableCustomerPasses from '../../components/backend/views/tables/TableCustomerPasses.jsx';
 import ViewsController from '../../components/backend/ViewsController.jsx';
 import Section from '../../components/frontend/Section.jsx';
 import { fetchData, fetchStatus } from '../../utils/http.js';
@@ -71,7 +72,7 @@ const noCreateOptionPages = [
   'show-all-participants-feedback',
 ];
 const allowedPaths = sideNavTabs.map(tab => tab.link);
-
+allowedPaths.push('/admin-console/show-all-customer-passes');
 function AdminPage() {
   const navigate = useNavigate();
   const location = useLocation(); // fetch current path
@@ -83,9 +84,13 @@ function AdminPage() {
     location.pathname.includes(path)
   );
   const modalMatch = useMatch('/admin-console/show-all-users/:id');
+  const [isPageA, setIsPageA] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(modalMatch);
 
-  const handleSwitchContent = link => {
+  const handleSwitchContent = (link, shouldSwitchState) => {
+    if (shouldSwitchState) {
+      return setIsPageA(prev => !prev);
+    } else setIsPageA(true);
     navigate(`${location.pathname}/${link}`, {
       state: { background: location },
     });
@@ -104,12 +109,13 @@ function AdminPage() {
     navigate(location.state?.background?.pathname || '/', { replace: true });
   };
 
-  let headers;
+  let headers, title, subTabs;
   const pickModifier = path => {
     let modifier;
     switch (true) {
       case path.includes('show-all-users'):
         modifier = 'user';
+        title = 'Wszystkie konta';
         headers = [
           'Id',
           'Email',
@@ -121,6 +127,7 @@ function AdminPage() {
         return modifier;
       case path.includes('show-all-customers'):
         modifier = 'customer';
+        title = 'Wszyscy uczestnicy';
         headers = [
           'Id',
           'Konto',
@@ -135,6 +142,7 @@ function AdminPage() {
         return modifier;
       case path.includes('show-all-products'):
         modifier = 'product';
+        title = 'Wszystkie zajęcia';
         headers = [
           'Id',
           'Rodzaj',
@@ -148,6 +156,7 @@ function AdminPage() {
         return modifier;
       case path.includes('show-all-schedules'):
         modifier = 'schedule';
+        title = 'Wszystkie terminy';
         headers = [
           'Id',
           'Obecność',
@@ -162,6 +171,7 @@ function AdminPage() {
         return modifier;
       case path.includes('show-all-payments'):
         modifier = 'payment';
+        title = 'Wszystkie płatności';
         headers = [
           'Id',
           'Data',
@@ -175,6 +185,7 @@ function AdminPage() {
         return modifier;
       case path.includes('show-all-participants-feedback'):
         modifier = 'feedback';
+        title = 'Wszystkie opinie';
         headers = [
           'Id',
           'Wystawiono',
@@ -187,6 +198,7 @@ function AdminPage() {
         return modifier;
       case path.includes('show-all-invoices'):
         modifier = 'invoice';
+        title = 'Wszystkie faktury';
         headers = [
           'Id',
           'Płatność',
@@ -199,6 +211,7 @@ function AdminPage() {
         return modifier;
       case path.includes('show-all-bookings'):
         modifier = 'booking';
+        title = 'Wszystkie rezerwacje';
         headers = [
           'Id',
           'Uczestnik',
@@ -210,8 +223,20 @@ function AdminPage() {
           'Wykonał',
         ];
         return modifier;
-      case path.includes('show-all-passes'):
+      case path.includes('-passes'):
         modifier = 'passDef';
+        title = isPageA
+          ? 'Wszystkie definicje karnetów'
+          : 'Wszystkie zakupione karnety';
+        subTabs = [
+          {
+            name: isPageA ? 'Zakupione' : 'Definicje',
+            symbol: isPageA ? 'spa' : 'category',
+            link: isPageA
+              ? '/admin-console/show-all-customer-passes'
+              : '/admin-console/show-all-passes',
+          },
+        ];
         headers = [
           'Id',
           'Nazwa',
@@ -225,20 +250,24 @@ function AdminPage() {
         return modifier;
       case path.includes('show-all-newsletters'):
         modifier = 'newsletter';
+        title = 'Wszystkie newslettery';
         headers = ['Id', 'Status', 'Utworzono', 'Wysłano', 'Tytuł', 'Treść'];
         return modifier;
-
       default:
         return (modifier = '');
     }
   };
   const pickedModifier = pickModifier(location.pathname);
 
+  const query =
+    location.pathname == '/admin-console/show-all-customer-passes'
+      ? 'admin-console/show-all-passes'
+      : location.pathname;
   const { data, isError, error } = useQuery({
     // as id for later caching received data to not send the same request again where location.pathname is key
-    queryKey: ['data', location.pathname],
+    queryKey: ['data', query],
     // definition of the code sending the actual request- must be returning the promise
-    queryFn: () => fetchData(location.pathname),
+    queryFn: () => fetchData(query),
     // only when location.pathname is set extra beyond admin panel:
     enabled: allowedPaths.includes(location.pathname),
     // stopping unnecessary requests when jumping tabs
@@ -257,7 +286,7 @@ function AdminPage() {
     return <div>Loading...</div>;
   }
 
-  let table;
+  let table, keys, content;
   const adminTabs = (
     <TabsList
       menuSet={sideNavTabs}
@@ -278,16 +307,35 @@ function AdminPage() {
     // console.clear();
     console.log(`✅ Data: `);
     console.log(data);
+    keys = data.totalKeys || data.totalHeaders;
+    content = data.content;
+
     table = (
       <ModalTable
         classModifier='admin-view'
         headers={headers}
-        keys={data.totalKeys || data.totalHeaders}
-        content={data.content}
+        keys={keys}
+        content={content}
         active={!isInactiveTable}
         onOpen={handleOpenModal}
         status={status}
         isAdminPage={isAdminPage}
+      />
+    );
+  }
+  if (location.pathname == '/admin-console/show-all-customer-passes') {
+    console.log(
+      `if (location.pathname=='/admin-console/show-all-customer-passes')`
+    );
+    console.log('before tableCustomerPasses', data);
+    keys = data.customerPassesKeys;
+    content = data.formattedCustomerPasses;
+
+    table = (
+      <TableCustomerPasses
+        customerPasses={content}
+        keys={keys}
+        isAdminPage={true}
       />
     );
   }
@@ -307,15 +355,26 @@ function AdminPage() {
               onclose={handleCloseModal}
             />
           )}
+
+          <h1 className='modal__title modal__title--view'>{title}</h1>
+          {subTabs && (
+            <TabsList
+              menuSet={subTabs}
+              onClick={handleSwitchContent}
+              classModifier='admin-subTabs'
+              shouldSwitchState={true}
+              disableAutoActive={true}
+            />
+          )}
+          {table}
+          {isModalOpen && (
+            <ViewsController
+              modifier={pickedModifier}
+              visited={isModalOpen}
+              onClose={handleCloseModal}
+            />
+          )}
         </>
-      )}
-      {table}
-      {isModalOpen && (
-        <ViewsController
-          modifier={pickedModifier}
-          visited={isModalOpen}
-          onClose={handleCloseModal}
-        />
       )}
     </div>
   );

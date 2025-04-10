@@ -1378,9 +1378,10 @@ export const deleteProduct = (req, res, next) => {
 export const getAllPasses = (req, res, next) => {
   const controllerName = 'getAllPasses';
   callLog(req, person, controllerName);
+  let formattedRecords, sortedRecords, totalKeys, formattedCustomerPasses;
 
   models.PassDefinition.findAll({
-    where: { status: true },
+    // where: { status: true },
   })
     .then(records => {
       if (!records) {
@@ -1389,7 +1390,7 @@ export const getAllPasses = (req, res, next) => {
       }
 
       // Convert for records for different names
-      const formattedRecords = records.map(record => {
+      formattedRecords = records.map(record => {
         const passDef = record.toJSON();
 
         return {
@@ -1406,11 +1407,11 @@ export const getAllPasses = (req, res, next) => {
         };
       });
 
-      const sortedRecords = formattedRecords.sort(
+      sortedRecords = formattedRecords.sort(
         (a, b) => new Date(a.passDefId) - new Date(b.passDefId)
       );
 
-      const totalKeys = [
+      totalKeys = [
         'passDefId',
         'name',
         'description',
@@ -1421,14 +1422,58 @@ export const getAllPasses = (req, res, next) => {
         'price',
       ];
 
+      return models.CustomerPass.findAll({
+        include: [{ model: models.Customer }, { model: models.PassDefinition }],
+        // where: { status: true },
+      });
+    })
+    .then(cp => {
+      formattedCustomerPasses = cp.map(customerPass => {
+        const cp = customerPass;
+        const customer = cp.Customer;
+
+        return {
+          customerPassId: cp.customerPassId,
+          rowId: cp.customerPassId,
+          customerFullName: `${customer.firstName} ${customer.lastName} (${customer.customerId})`,
+          passName: cp.PassDefinition.name,
+          purchaseDate: formatIsoDateTime(cp.purchaseDate),
+          validFrom: formatIsoDateTime(cp.validFrom),
+          validUntil: formatIsoDateTime(cp.validUntil),
+          usesLeft: cp.usesLeft,
+          status:
+            cp.status == 'active' || cp.status == 1
+              ? 'Aktywny'
+              : cp.status == 'suspended' || cp.status == 0
+              ? 'Zawieszony'
+              : 'Wygasły',
+        };
+      });
+
+      formattedCustomerPasses.sort(
+        (a, b) => new Date(b.purchaseDate) - new Date(a.purchaseDate)
+      );
+
       successLog(person, controllerName);
       return res.json({
         totalKeys,
         confirmation: 1,
         message: 'Pobrano pomyślnie',
         content: sortedRecords,
+        formattedCustomerPasses,
+        customerPassesKeys: [
+          'customerPassId',
+          'customerFullName',
+          'passName',
+          'purchaseDate',
+          'validFrom',
+          'validUntil',
+          'usesLeft',
+          'status',
+        ],
       });
     })
+
     .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 export const getPassById = (req, res, next) => {
@@ -1440,18 +1485,7 @@ export const getPassById = (req, res, next) => {
     include: [
       {
         model: models.CustomerPass,
-        include: [
-          {
-            model: models.Customer,
-            include: [
-              {
-                model: models.User,
-                attributes: { exclude: ['userId'] },
-              },
-            ],
-          },
-          { model: models.Payment },
-        ],
+        include: [{ model: models.Customer }, { model: models.Payment }],
       },
     ],
   })

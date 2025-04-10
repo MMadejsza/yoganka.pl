@@ -4,11 +4,13 @@ import WrapperModalTable from '../../WrapperModalTable.jsx';
 function TableCustomerPasses({ customerPasses, keys, isAdminPage }) {
   console.log('\TableCustomerPasses:');
   console.log('\nisAdminPage:', isAdminPage);
+  console.log('\TableCustomerPasses customerPasses:', customerPasses);
 
   const title = 'Wszystkie karnety do dzisiaj';
   const headers = [
     'Id',
     'Uczestnik',
+    'Karnet',
     'Zakupiono',
     'Ważny od',
     'Ważny do',

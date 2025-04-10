@@ -17,6 +17,8 @@ function ModalTable({
     isCustomer = status?.role === 'CUSTOMER',
     isAdmin = status?.role === 'ADMIN';
   console.log('ModalTable content', content);
+  console.log('ModalTable headers', headers);
+  console.log('ModalTable keys', keys);
   console.log('ModalTable status', status);
 
   const customerViewSymbol = (row, isArchived, symbol) => {
@@ -109,7 +111,7 @@ function ModalTable({
     >
       <thead className='modal-table__headers'>
         <tr>
-          {headers.map((header, index) => (
+          {headers?.map((header, index) => (
             <th className='modal-table__single-header' key={index}>
               {header}
             </th>
@@ -148,7 +150,11 @@ function ModalTable({
                 return null;
               }}
             >
-              {keys.map((key, keyIndex) => {
+              {keys?.map((key, keyIndex) => {
+                // console.log('🧩 RENDERING CELL');
+                // console.log('🔑 key:', key);
+                // console.log('📦 row:', row);
+                // console.log('💥 value:', row[key]);
                 let value = row[key];
                 if (row[key] == 'date') {
                   value = new Date(row.date).toISOString().slice(0, 10);
