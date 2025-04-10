@@ -1,7 +1,7 @@
 import { Op, Sequelize, col, fn } from 'sequelize';
 import * as models from '../models/_index.js';
 import { areSettingsChanged } from '../utils/controllersUtils.js';
-import { getWeekDay } from '../utils/dateTimeUtils.js';
+import { formatIsoDateTime, getWeekDay } from '../utils/dateTimeUtils.js';
 import {
   callLog,
   catchErr,
@@ -16,6 +16,7 @@ const person = 'User';
 export const getAccount = (req, res, next) => {
   const controllerName = 'getAccount';
   callLog(req, person, controllerName);
+  let formattedCustomerPasses;
 
   // @ Fetching USER
   // check if there is logged in User
@@ -114,11 +115,32 @@ export const getAccount = (req, res, next) => {
         exclude: ['userId'], // deleting
       },
     })
-      .then(customer => {
-        if (!customer) {
+      .then(customerInstance => {
+        if (!customerInstance) {
           errCode = 404;
           throw new Error('Nie pobrano danych uczestnika.');
         }
+        const customer = customerInstance.toJSON();
+
+        customer.customerPasses = customer.CustomerPasses.map(cp => {
+          return {
+            rowId: cp.customerPassId,
+            customerPassId: cp.customerPassId,
+            passName: cp.PassDefinition.name,
+            purchaseDate: formatIsoDateTime(cp.purchaseDate),
+            validFrom: formatIsoDateTime(cp.validFrom),
+            validUntil: formatIsoDateTime(cp.validUntil),
+            usesLeft: cp.usesLeft,
+            status:
+              cp.status == 'active' || cp.status == 1
+                ? 'Aktywny'
+                : cp.status == 'suspended' || cp.status == 0
+                ? 'Zawieszony'
+                : 'Wygasły',
+          };
+        });
+        delete customer.CustomerPasses;
+
         console.log('\n✅✅✅ showAccount customer fetched');
         return res.status(200).json({
           customer,

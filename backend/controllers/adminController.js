@@ -1478,7 +1478,7 @@ export const getAllPasses = (req, res, next) => {
 };
 export const getPassById = (req, res, next) => {
   const controllerName = 'getPassById';
-  console.log(`\n➡️➡️➡️ admin called`, controllerName);
+  console.log(`\n➡️➡️➡️ ${person} called`, controllerName);
 
   const PK = req.params.id;
   models.PassDefinition.findByPk(PK, {

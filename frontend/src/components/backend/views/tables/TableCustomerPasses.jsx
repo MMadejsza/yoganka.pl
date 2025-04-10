@@ -1,22 +1,39 @@
 import ModalTable from '../../ModalTable.jsx';
 import WrapperModalTable from '../../WrapperModalTable.jsx';
 
-function TableCustomerPasses({ customerPasses, keys, isAdminPage }) {
+function TableCustomerPasses({
+  customerPasses,
+  keys,
+  isAdminPage,
+  isActive,
+  onOpen,
+}) {
   console.log('\TableCustomerPasses:');
   console.log('\nisAdminPage:', isAdminPage);
   console.log('\TableCustomerPasses customerPasses:', customerPasses);
 
   const title = 'Wszystkie zakupione karnety';
-  const headers = [
-    'Id',
-    'Uczestnik',
-    'Karnet',
-    'Zakupiono',
-    'Ważny od',
-    'Ważny do',
-    'Pozostało wejść',
-    'Status',
-  ];
+
+  const headers = isAdminPage
+    ? [
+        'Id',
+        'Uczestnik',
+        'Karnet',
+        'Zakupiono',
+        'Ważny od',
+        'Ważny do',
+        'Pozostało wejść',
+        'Status',
+      ]
+    : [
+        'Id',
+        'Karnet',
+        'Zakupiono',
+        'Ważny od',
+        'Ważny do',
+        'Pozostało wejść',
+        'Status',
+      ];
 
   const table = (
     <WrapperModalTable
@@ -29,7 +46,8 @@ function TableCustomerPasses({ customerPasses, keys, isAdminPage }) {
         headers={headers}
         keys={keys}
         content={customerPasses}
-        active={false}
+        active={isActive}
+        onOpen={onOpen}
       />
     </WrapperModalTable>
   );

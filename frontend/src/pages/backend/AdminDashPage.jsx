@@ -322,22 +322,22 @@ function AdminPage() {
         isAdminPage={isAdminPage}
       />
     );
-  }
-  if (location.pathname == '/admin-console/show-all-customer-passes') {
-    console.log(
-      `if (location.pathname=='/admin-console/show-all-customer-passes')`
-    );
-    console.log('before tableCustomerPasses', data);
-    keys = data.customerPassesKeys;
-    content = data.formattedCustomerPasses;
+    if (location.pathname == '/admin-console/show-all-customer-passes') {
+      console.log(
+        `if (location.pathname=='/admin-console/show-all-customer-passes')`
+      );
+      console.log('before tableCustomerPasses', data);
+      keys = data.customerPassesKeys;
+      content = data.formattedCustomerPasses;
 
-    table = (
-      <TableCustomerPasses
-        customerPasses={content}
-        keys={keys}
-        isAdminPage={true}
-      />
-    );
+      table = (
+        <TableCustomerPasses
+          customerPasses={content}
+          keys={keys}
+          isAdminPage={true}
+        />
+      );
+    }
   }
 
   return (

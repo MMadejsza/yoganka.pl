@@ -65,56 +65,110 @@ export const putEditCustomerDetails = (req, res, next) => {
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
-
-//! BOOKINGS_____________________________________________
+//! PASSES_____________________________________________
 //@ GET
-export const getPaymentById = (req, res, next) => {
-  const controllerName = 'getPaymentById';
-  callLog(req, person, controllerName);
+export const getPassById = (req, res, next) => {
+  const controllerName = 'getPassById';
+  console.log(`\n➡️➡️➡️ ${person} called`, controllerName);
 
   const PK = req.params.id;
-  const customerId = req.user.Customer && req.user.Customer.customerId;
-
-  models.Payment.findOne({
-    where: { paymentId: PK, customerId: customerId },
-    required: false,
+  models.PassDefinition.findByPk(PK, {
     include: [
       {
-        model: models.Customer,
-      },
-      {
-        model: models.Booking,
-        include: [
-          {
-            model: models.ScheduleRecord,
-            attributes: { exclude: ['userId'] },
-            include: [
-              {
-                model: models.Product,
-              },
-            ],
-          },
-        ],
+        model: models.CustomerPass,
+        include: [{ model: models.Payment }],
+        where: customerPassId === req.user.Customer.customerId,
       },
     ],
   })
-    .then(payment => {
-      if (!payment) {
+    .then(passData => {
+      if (!passData) {
         errCode = 404;
-        throw new Error(
-          'Nie znaleziono rezerwacji lub rezerwacja nie należy do zalogowanego klienta.'
-        );
+        throw new Error('Nie znaleziono definicji karnetu.');
       }
+      // console.log(scheduleData);
+      let passDef = passData.toJSON();
+
+      const payments = passDef.CustomerPasses.map(customerPass => {
+        const cp = customerPass;
+        const customer = cp.Customer;
+        const payment = cp.Payment;
+        return {
+          ...payment,
+          rowId: payment.paymentId,
+          date: formatIsoDateTime(payment.date),
+          customerFullName: `${customer.firstName} ${customer.lastName} (${customer.customerId})`,
+        };
+      });
+
+      const customerPasses = passDef.CustomerPasses.map(customerPass => {
+        const cp = customerPass;
+        const customer = cp.Customer;
+
+        return {
+          customerPassId: cp.customerPassId,
+          rowId: cp.customerPassId,
+          customerFullName: `${customer.firstName} ${customer.lastName} (${customer.customerId})`,
+          purchaseDate: formatIsoDateTime(cp.purchaseDate),
+          validFrom: formatIsoDateTime(cp.validFrom),
+          validUntil: formatIsoDateTime(cp.validUntil),
+          usesLeft: cp.usesLeft,
+          status:
+            cp.status == 'active' || cp.status == 1
+              ? 'Aktywny'
+              : cp.status == 'suspended' || cp.status == 0
+              ? 'Zawieszony'
+              : 'Wygasły',
+        };
+      });
+
+      passDef = {
+        ...passDef,
+        CustomerPasses: null,
+        allowedProductTypes: JSON.parse(passDef.allowedProductTypes).join(', '),
+        status:
+          passDef.status == 'active' || passDef.status == 1
+            ? 'Aktywny'
+            : passDef.status == 'suspended' || passDef.status == 0
+            ? 'Zawieszony'
+            : 'Wygasły',
+      };
+
+      let passDefFormatted = {
+        ...passDef,
+        payments,
+        paymentsKeys: [
+          'paymentId',
+          'date',
+          'customerFullName',
+          'amountPaid',
+          'paymentMethod',
+        ],
+        customerPasses,
+        customerPassesKeys: [
+          'customerPassId',
+          'customerFullName',
+          'purchaseDate',
+          'validFrom',
+          'validUntil',
+          'usesLeft',
+          'status',
+        ],
+      };
+
       successLog(person, controllerName);
       return res.status(200).json({
         confirmation: 1,
-        message: 'Płatność pobrana pomyślnie.',
-        isLoggedIn: req.session.isLoggedIn,
-        payment,
+        message: 'Definicja karnetu pobrana pomyślnie',
+        passDef: passDefFormatted,
       });
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
+
+//! BOOKINGS_____________________________________________
+//@ GET
+
 //@ POST
 export const postCreateBookSchedule = (req, res, next) => {
   const controllerName = 'postCreateBookSchedule';
@@ -498,6 +552,56 @@ export const putEditMarkAbsent = (req, res, next) => {
             'Nie znaleziono rezerwacji dla podanego terminu lub rezerwacja nie należy do klienta.'
           );
         }
+      });
+    })
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
+};
+
+//! PAYMENTS_____________________________________________
+//@ GET
+export const getPaymentById = (req, res, next) => {
+  const controllerName = 'getPaymentById';
+  callLog(req, person, controllerName);
+
+  const PK = req.params.id;
+  const customerId = req.user.Customer && req.user.Customer.customerId;
+
+  models.Payment.findOne({
+    where: { paymentId: PK, customerId: customerId },
+    required: false,
+    include: [
+      {
+        model: models.Customer,
+      },
+      {
+        model: models.Booking,
+        include: [
+          {
+            model: models.ScheduleRecord,
+            attributes: { exclude: ['userId'] },
+            include: [
+              {
+                model: models.Product,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  })
+    .then(payment => {
+      if (!payment) {
+        errCode = 404;
+        throw new Error(
+          'Nie znaleziono rezerwacji lub rezerwacja nie należy do zalogowanego klienta.'
+        );
+      }
+      successLog(person, controllerName);
+      return res.status(200).json({
+        confirmation: 1,
+        message: 'Płatność pobrana pomyślnie.',
+        isLoggedIn: req.session.isLoggedIn,
+        payment,
       });
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));

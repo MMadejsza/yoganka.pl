@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import ViewsController from '../ViewsController.jsx';
 import TableCustomerPasses from './tables/TableCustomerPasses.jsx';
 
 function ViewAccountCustomerPasses({ data }) {
   console.log('ViewPassDefinition data', data);
-  const { CustomerPasses: cp } = data;
+  const { customerPasses: cp } = data.customer;
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -17,7 +18,7 @@ function ViewAccountCustomerPasses({ data }) {
   };
 
   const handleOpenModal = row => {
-    const recordId = row.paymentId;
+    const recordId = row.rowId;
     setIsModalOpen(true);
     navigate(`${location.pathname}/${recordId}`, { state: { background } });
   };
@@ -29,7 +30,6 @@ function ViewAccountCustomerPasses({ data }) {
 
   const keys = [
     'customerPassId',
-    'customerFullName',
     'passName',
     'purchaseDate',
     'validFrom',
@@ -40,7 +40,13 @@ function ViewAccountCustomerPasses({ data }) {
 
   // @ CustomerPasses table for this definition
   const table = (
-    <TableCustomerPasses customerPasses={cp} keys={keys} isAdminPage={true} />
+    <TableCustomerPasses
+      customerPasses={cp}
+      keys={keys}
+      isAdminPage={false}
+      isActive={true}
+      onOpen={handleOpenModal}
+    />
   );
 
   return (
@@ -48,7 +54,7 @@ function ViewAccountCustomerPasses({ data }) {
       {table}
       {isModalOpen && (
         <ViewsController
-          modifier='payment'
+          modifier='customerPass'
           visited={isModalOpen}
           onClose={handleCloseModal}
           userAccountPage={true}
