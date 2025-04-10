@@ -1496,7 +1496,17 @@ export const getPassById = (req, res, next) => {
         };
       });
 
-      passDef = { ...passDef, CustomerPasses: null };
+      passDef = {
+        ...passDef,
+        CustomerPasses: null,
+        allowedProductTypes: JSON.parse(passDef.allowedProductTypes).join(', '),
+        status:
+          passDef.status == 'active' || passDef.status == 1
+            ? 'Aktywny'
+            : passDef.status == 'suspended' || passDef.status == 0
+            ? 'Zawieszony'
+            : 'Wygasły',
+      };
 
       let passDefFormatted = {
         ...passDef,

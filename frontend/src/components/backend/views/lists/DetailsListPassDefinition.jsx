@@ -12,7 +12,6 @@ function DetailsListPassDefinition({ passDefinition }) {
     { label: 'Status:', content: passDefinition.status },
     { label: 'Typ:', content: passDefinition.passType },
     { label: 'Ważny na:', content: passDefinition.allowedProductTypes },
-
     { label: 'Cena:', content: `${passDefinition.price} zł` },
   ];
 
@@ -29,6 +28,7 @@ function DetailsListPassDefinition({ passDefinition }) {
     });
   }
   details.push({ label: 'Opis:', content: passDefinition.description });
+
   return (
     <GenericList
       title='Typ karnetu:'
