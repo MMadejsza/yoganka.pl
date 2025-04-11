@@ -48,3 +48,8 @@ export const formatIsoDateTime = (dateInput, isSchedule) => {
   }
   return `${formattedDate} (${getWeekDay(date)}${formattedTime ? ` - ` + formattedTime : ``})`;
 };
+
+export const parsePLDateAtEndOfDay = dateString => {
+  const [day, month, year] = dateString.split('.');
+  return new Date(year, month - 1, day, 23, 59, 59);
+};

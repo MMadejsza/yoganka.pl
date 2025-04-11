@@ -1,3 +1,4 @@
+import { parsePLDateAtEndOfDay } from '../../utils/dateTime';
 function ModalTable({
   headers,
   content,
@@ -21,16 +22,55 @@ function ModalTable({
   console.log('ModalTable keys', keys);
   console.log('ModalTable status', status);
 
-  const customerViewSymbol = (row, isArchived, symbol) => {
+  const pickCustomerSymbol = (row, isArchived, symbol, hasValidPass) => {
     if (isAdminPage && adminActions) {
       return symbol;
     } else if (isLoggedIn && (isCustomer || isAdmin)) {
       if (row.isUserGoing) return 'check';
       else if (row.full || isArchived) return 'block';
       else if (row.wasUserReserved) return 'restore';
-      else return 'shopping_bag_speed';
+      else if (hasValidPass) return 'calendar_add_on';
+      else return 'local_mall';
     }
     return 'lock_person';
+  };
+
+  const hasValidPassFn = row => {
+    return status.user?.Customer?.CustomerPasses?.some(currentCustomerPass => {
+      const allowedTypeArr = JSON.parse(
+        currentCustomerPass.PassDefinition.allowedProductTypes
+      );
+      const isAllowedType = allowedTypeArr.some(
+        allowedType => allowedType === row.Product?.type
+      );
+      const parsedDate = parsePLDateAtEndOfDay(row.date);
+      const isExpiredAtTheTime =
+        new Date(parsedDate) > new Date(currentCustomerPass.validUntil);
+      const isStartedAtTheTime =
+        new Date(parsedDate) > new Date(currentCustomerPass.validFrom);
+      const haEntriesLeft = currentCustomerPass.usesLeft
+        ? currentCustomerPass.usesLeft > 0
+        : false;
+
+      return (
+        isAllowedType &&
+        !isExpiredAtTheTime &&
+        isStartedAtTheTime &&
+        haEntriesLeft
+      );
+    });
+  };
+
+  const getCustomerViewSymbol = (row, isArchived, action) => {
+    const hasValidPass = hasValidPassFn(row);
+
+    const conditionalClass = `material-symbols-rounded nav__icon${row.isActionDisabled === true ? ' dimmed' : ''}${action.extraClass ? ` ${action.extraClass}` : ''}${!hasValidPass && !row.isUserGoing ? ` black` : ''}`;
+
+    return (
+      <span className={conditionalClass}>
+        {pickCustomerSymbol(row, isArchived, action.symbol, hasValidPass)}
+      </span>
+    );
   };
 
   const pickCellSymbol = key => {
@@ -77,16 +117,17 @@ function ModalTable({
     const isArchived = archived != undefined ? archived : 'N/A';
     const isAuthorized =
       status?.role != undefined ? isCustomer || isAdmin : 'N/A';
+    const hasPass = hasValidPassFn(row);
+    // console.log('onRowBtnClick:', {
+    //   isUserGoing: isUserGoing,
+    //   isLoggedIn: isLoggedIn,
+    //   isArchived,
+    //   role: status?.role,
+    //   isAuthorized,
+    //   method: method,
+    // });
 
-    console.log('onRowBtnClick:', {
-      isUserGoing: isUserGoing,
-      isLoggedIn: isLoggedIn,
-      isArchived,
-      role: status?.role,
-      isAuthorized,
-      method: method,
-    });
-    if (!isUserGoing && isLoggedIn && !isArchived && isAuthorized) {
+    if (!isUserGoing && isLoggedIn && !isArchived && isAuthorized && hasPass) {
       e.stopPropagation();
       method({
         customerDetails: '',
@@ -99,7 +140,6 @@ function ModalTable({
         paymentStatus: 'Completed',
         customerId: row.customerId,
         rowId: row.rowId,
-        isActionDisabled: row.isActionDisabled,
       });
     }
     return null;
@@ -166,18 +206,11 @@ function ModalTable({
                         <button
                           key={index}
                           className={`form-action-btn symbol-only-btn symbol-only-btn--submit`}
+                          onClick={e => {
+                            onRowBtnClick(row, isArchived, action.method, e);
+                          }}
                         >
-                          <span
-                            className={`material-symbols-rounded nav__icon ${
-                              row.isActionDisabled === true ? 'dimmed' : ''
-                            } ${action.extraClass ? action.extraClass : ''}`}
-                            onClick={e => {
-                              if (row.isActionDisabled === true) return;
-                              onRowBtnClick(row, isArchived, action.method, e);
-                            }}
-                          >
-                            {customerViewSymbol(row, isArchived, action.symbol)}
-                          </span>
+                          {getCustomerViewSymbol(row, isArchived, action)}
                         </button>
                       ))}
                     </div>

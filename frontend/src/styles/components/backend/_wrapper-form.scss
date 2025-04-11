@@ -26,13 +26,18 @@
     text-shadow: map.get($shadows, active-text-icons-shadow);
   }
 
-  &--submit {
+  &--submit:not(:has(.black)) {
     color: map.get($colors, accent-bcg);
   }
 
   & .nav__icon {
     font-size: 3rem;
+
+    &.black {
+      color: map.get($colors, nav-muted);
+    }
   }
+
   .generic-details__title & .nav__icon {
     font-size: 4rem;
   }
