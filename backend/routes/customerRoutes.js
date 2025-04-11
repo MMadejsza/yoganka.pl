@@ -10,6 +10,7 @@ const router = express.Router();
 //# set by ViewsController fetchItem()
 router.get('/konto/platnosci/:id', isAuth, customerC.getPaymentById);
 router.get('/konto/karnety/:id', isAuth, customerC.getCustomerPassById);
+router.get('/konto/rezerwacje/:id', isAuth, customerC.getBookingById);
 
 //@ routes MANUALLY set
 router.get('/get-customer-details', isAuth, customerC.getCustomerDetails);

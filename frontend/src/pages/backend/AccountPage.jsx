@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import TabsList from '../../components/backend/TabsList.jsx';
+import ViewAccountBookings from '../../components/backend/views/ViewAccountBookings.jsx';
 import ViewAccountCustomerPasses from '../../components/backend/views/ViewAccountCustomerPasses.jsx';
 import ViewAccountDashboard from '../../components/backend/views/ViewAccountDashboard.jsx';
 import ViewAccountPayments from '../../components/backend/views/ViewAccountPayments.jsx';
@@ -92,18 +93,28 @@ function AccountPage() {
 
     switch (true) {
       case isChosenContent.includes('zajecia'):
-        content = <ViewAccountSchedulesHistory data={customer} />;
+        content = (
+          <ViewAccountSchedulesHistory
+            data={customer}
+            isUserAccountPage={true}
+          />
+        );
         break;
-      case isChosenContent.includes('platnosci'):
-        content = <ViewAccountPayments data={customer} />;
-        break;
-      case isChosenContent.includes('ustawienia'):
-        content = <ViewUser data={data} isUserAccountPage={true} />;
+      case isChosenContent.includes('rezerwacje'):
+        content = <ViewAccountBookings data={data} isUserAccountPage={true} />;
         break;
       case isChosenContent.includes('karnety'):
         content = (
           <ViewAccountCustomerPasses data={data} isUserAccountPage={true} />
         );
+        break;
+      case isChosenContent.includes('platnosci'):
+        content = (
+          <ViewAccountPayments data={customer} isUserAccountPage={true} />
+        );
+        break;
+      case isChosenContent.includes('ustawienia'):
+        content = <ViewUser data={data} isUserAccountPage={true} />;
         break;
 
       default:

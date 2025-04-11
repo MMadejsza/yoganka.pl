@@ -145,7 +145,81 @@ export const getCustomerPassById = (req, res, next) => {
 
 //! BOOKINGS_____________________________________________
 //@ GET
+export const getBookingById = (req, res, next) => {
+  const controllerName = 'getBookingById';
+  console.log(`\n➡️➡️➡️ ${person} called`, controllerName);
 
+  const passId = req.params.id;
+  models.CustomerPass.findOne({
+    where: {
+      customerPassId: passId,
+      customerId: req.user.Customer.customerId, // Ensure the pass belongs to the logged-in customer
+    },
+    include: [{ model: models.PassDefinition }, { model: models.Payment }],
+  })
+    .then(customerPassData => {
+      if (!customerPassData) {
+        errCode = 404;
+        throw new Error('Nie znaleziono definicji karnetu.');
+      }
+      // console.log(scheduleData);
+      let cp = customerPassData.toJSON();
+
+      // Format Payment data with only necessary fields
+      const payment = {
+        paymentId: cp.Payment.paymentId,
+        date: formatIsoDateTime(cp.Payment.date),
+        amountPaid: cp.Payment.amountPaid,
+        paymentMethod: cp.Payment.paymentMethod,
+      };
+
+      const passDefinition = {
+        passDefId: cp.PassDefinition.passDefId,
+        name: cp.PassDefinition.name,
+        description: cp.PassDefinition.description,
+        passType: cp.PassDefinition.passType,
+        usesTotal: cp.PassDefinition.usesTotal,
+        validityDays: cp.PassDefinition.validityDays,
+        allowedProductTypes: cp.PassDefinition.allowedProductTypes
+          ? JSON.parse(cp.PassDefinition.allowedProductTypes).join(', ')
+          : null,
+        price: cp.PassDefinition.price,
+        status:
+          cp.PassDefinition.status === 'active' ||
+          cp.PassDefinition.status === 1
+            ? 'Aktywny'
+            : cp.PassDefinition.status === 'suspended' ||
+              cp.PassDefinition.status === 0
+            ? 'Wstrzymany'
+            : 'Niekontynuowany',
+      };
+
+      const formattedCustomerPass = {
+        rowId: cp.customerPassId,
+        customerPassId: cp.customerPassId,
+        purchaseDate: formatIsoDateTime(cp.purchaseDate),
+        validFrom: formatIsoDateTime(cp.validFrom),
+        validUntil: cp.validUntil ? formatIsoDateTime(cp.validUntil) : '-',
+        usesLeft: cp.usesLeft || '-',
+        status:
+          cp.status === 'active' || cp.status === 1
+            ? 'Aktywny'
+            : cp.status === 'suspended' || cp.status === 0
+            ? 'Zawieszony'
+            : 'Wygasły',
+        payment: payment, // Attached formatted Payment
+        passDefinition: passDefinition, // Attached formatted PassDefinition
+      };
+
+      successLog(person, controllerName);
+      return res.status(200).json({
+        confirmation: 1,
+        message: 'Definicja karnetu pobrana pomyślnie',
+        customerPass: formattedCustomerPass,
+      });
+    })
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
+};
 //@ POST
 export const postCreateBookSchedule = (req, res, next) => {
   const controllerName = 'postCreateBookSchedule';

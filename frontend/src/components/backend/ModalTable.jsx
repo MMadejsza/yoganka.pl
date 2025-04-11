@@ -62,7 +62,7 @@ function ModalTable({
         <span
           className={`material-symbols-rounded nav__icon nav__icon--${keyClass}`}
         >
-          {value == true ? 'event_available' : 'event_busy'}
+          {value == true ? 'check' : 'close'}
         </span>
       );
     }

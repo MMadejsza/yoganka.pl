@@ -8,7 +8,7 @@ import DetailsListSchedule from './lists/DetailsListSchedule.jsx';
 function ViewBooking({ data }) {
   console.log('ViewBooking data', data);
   const { booking } = data;
-  const { Customer: customer } = booking;
+  const customer = booking.Customer || null;
   const { ScheduleRecord: schedule } = booking;
   const { Product: product } = schedule;
   const type = product.type;
@@ -48,10 +48,12 @@ function ViewBooking({ data }) {
         <DetailsListSchedule data={schedule} />
 
         {/*//@ Customer details */}
-        <DetailsListCustomer
-          customerData={customer}
-          isPaymentView={true} //to not show edit btn
-        />
+        {customer && (
+          <DetailsListCustomer
+            customerData={customer}
+            isPaymentView={true} //to not show edit btn
+          />
+        )}
 
         {/*//@ Payment main details */}
         {data.booking.Payment && (

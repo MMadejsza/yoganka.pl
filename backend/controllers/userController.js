@@ -16,7 +16,7 @@ const person = 'User';
 export const getAccount = (req, res, next) => {
   const controllerName = 'getAccount';
   callLog(req, person, controllerName);
-  let formattedCustomerPasses;
+  let formattedBookings;
 
   // @ Fetching USER
   // check if there is logged in User
@@ -36,7 +36,8 @@ export const getAccount = (req, res, next) => {
     });
   } else {
     let PK = req.user.Customer.customerId;
-    return models.Customer.findByPk(PK, {
+    return models.Customer.findOne({
+      where: { customerId: PK },
       include: [
         {
           model: models.User, // Add Customer
@@ -60,7 +61,6 @@ export const getAccount = (req, res, next) => {
               required: true,
             },
           ],
-          where: { customerId: req.user.Customer.customerId },
         },
         {
           model: models.Payment, // His reservations
@@ -74,7 +74,6 @@ export const getAccount = (req, res, next) => {
               },
             },
           ],
-          where: { customerId: req.user.Customer.customerId },
           attributes: {
             exclude: ['productId', 'customerId'], // deleting
           },
@@ -89,13 +88,12 @@ export const getAccount = (req, res, next) => {
 
               include: [
                 {
-                  model: models.Product, //schedule's product
+                  model: models.Product,
                   required: false,
                 },
                 {
                   model: models.Feedback,
                   required: false,
-                  where: { customerId: req.user.Customer.customerId }, // but only for particular customer
                   attributes: {
                     exclude: ['customerId', 'scheduleId'], // deleting
                   },
@@ -104,6 +102,10 @@ export const getAccount = (req, res, next) => {
               attributes: {
                 exclude: ['productId'], // deleting
               },
+            },
+            {
+              model: models.Payment,
+              required: false,
             },
           ],
           attributes: {
@@ -140,6 +142,30 @@ export const getAccount = (req, res, next) => {
           };
         });
         delete customer.CustomerPasses;
+
+        formattedBookings = (customerInstance.Bookings || []).map(booking => {
+          const schedule = booking.ScheduleRecord;
+          let scheduleDetails = '';
+          if (schedule) {
+            scheduleDetails = `${schedule.Product.name} - ${schedule.date} ${schedule.startTime} (Id: ${schedule.scheduleId})`;
+          }
+          const payment = booking.Payment
+            ? `(Id: ${booking.Payment.paymentId}) ${booking.Payment.paymentMethod}`
+            : booking.CustomerPass && booking.CustomerPass.PassDefinition
+            ? `${booking.CustomerPass.PassDefinition.name}`
+            : '';
+
+          return {
+            rowId: booking.bookingId,
+            bookingId: booking.bookingId,
+            attendance: booking.attendance,
+            scheduleDetails,
+            payment,
+            createdAt: booking.createdAt,
+            timestamp: booking.timestamp,
+          };
+        });
+        customer.formattedBookings = formattedBookings;
 
         console.log('\n✅✅✅ showAccount customer fetched');
         return res.status(200).json({
