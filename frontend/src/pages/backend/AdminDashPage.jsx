@@ -223,18 +223,36 @@ function AdminPage() {
           'Wykonał',
         ];
         return modifier;
-      case path.includes('-passes'):
+      case path.includes('show-all-passes'):
         modifier = 'passDef';
-        title = isPageA
-          ? 'Wszystkie definicje karnetów'
-          : 'Wszystkie zakupione karnety';
+        title = 'Wszystkie definicje karnetów';
+
         subTabs = [
           {
-            name: isPageA ? 'Zakupione' : 'Definicje',
-            symbol: isPageA ? 'spa' : 'category',
-            link: isPageA
-              ? '/admin-console/show-all-customer-passes'
-              : '/admin-console/show-all-passes',
+            name: 'Zakupione',
+            symbol: 'spa',
+            link: '/admin-console/show-all-customer-passes',
+          },
+        ];
+        headers = [
+          'Id',
+          'Nazwa',
+          'Opis',
+          'Typ',
+          'Liczba wejść',
+          'Ważność',
+          'Zakres',
+          'Cena',
+        ];
+        return modifier;
+      case path.includes('show-all-customer-passes'):
+        modifier = 'customerPass';
+        title = 'Wszystkie zakupione karnety';
+        subTabs = [
+          {
+            name: 'Definicje',
+            symbol: 'category',
+            link: '/admin-console/show-all-passes',
           },
         ];
         headers = [
@@ -323,18 +341,17 @@ function AdminPage() {
       />
     );
     if (location.pathname == '/admin-console/show-all-customer-passes') {
-      console.log(
-        `if (location.pathname=='/admin-console/show-all-customer-passes')`
-      );
-      console.log('before tableCustomerPasses', data);
       keys = data.customerPassesKeys;
       content = data.formattedCustomerPasses;
 
       table = (
         <TableCustomerPasses
-          customerPasses={content}
           keys={keys}
-          isAdminPage={true}
+          customerPasses={content}
+          isActive={!isInactiveTable}
+          onOpen={handleOpenModal}
+          isAdminView={true}
+          isAdminDash={true}
         />
       );
     }
@@ -372,6 +389,7 @@ function AdminPage() {
               modifier={pickedModifier}
               visited={isModalOpen}
               onClose={handleCloseModal}
+              userAccountPage={false}
             />
           )}
         </>

@@ -165,7 +165,7 @@ function ViewsController({
           'Wszystkich powiązanych z płatnością karnetów',
           '  ❗ Wszystkich powiązanych z tymi karnetami rezerwacji, a więc wpłynie na statystyki zajęć i użytkowników',
           '  ❗❗A więc wpłynie na statystyki zajęć i użytkowników',
-          '🗒️ Nie ma potrzeby tego robić jesli nie jest to płatność omyłkowa',
+          '🗒️ Nie powinno być potrzeby tego robić jesli nie jest to płatność omyłkowa',
         ];
         return controller;
       case 'review':
@@ -207,8 +207,8 @@ function ViewsController({
           'Powiązanej płatności - inaczej widok płatności nie będzie miał produktu',
           'Wszystkich zakupionych już karnetów',
           'Wszystkich rezerwacji "opłaconych" tymi karnetami',
-          '🗒️ Płatność nie zostanie usunięta z racji braku automatycznych zwrotów pieniędzy w systemie - należy usunąć ręcznie.',
-          '🗒️ Nie ma potrzeby usuwania definicji karnetu - ma wartość historyczną',
+          '🗒️ Płatność nie zostanie usunięta z racji braku automatycznych zwrotów pieniędzy w systemie - należy usunąć ręcznie po dokonaniu zwrotu pieniędzy.',
+          '🗒️ Nie powinno być potrzeby usuwania definicji karnetu - ma wartość historyczną',
         ];
         return controller;
       case 'customerPass':
@@ -227,7 +227,7 @@ function ViewsController({
         controller.warnings = [
           'Wszystkich rezerwacji "opłaconych" tym karnetem',
           '🗒️ Płatność nie zostanie usunięta z racji braku automatycznych zwrotów pieniędzy w systemie - należy usunąć ręcznie.',
-          '🗒️ Nie ma potrzeby usuwania zakupionego karnetu jesli nie został dodany omyłkowo - ma wartość historyczną',
+          '🗒️ Nie powinno być potrzeby usuwania zakupionego karnetu jesli nie został dodany omyłkowo - ma wartość historyczną',
         ];
         return controller;
 

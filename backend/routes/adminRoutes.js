@@ -36,6 +36,7 @@ router.get('/show-all-bookings', adminC.getAllBookings);
 router.get('/show-all-bookings/:id', adminC.getBookingById);
 router.get('/show-all-passes', adminC.getAllPasses);
 router.get('/show-all-passes/:id', adminC.getPassById);
+router.get('/show-all-customer-passes/:id', adminC.getCustomerPassById);
 
 //! POST - CREATE__________________________________________
 router.post('/create-user', adminC.postCreateUser);

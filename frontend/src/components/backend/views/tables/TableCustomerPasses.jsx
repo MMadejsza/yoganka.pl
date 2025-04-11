@@ -4,17 +4,18 @@ import WrapperModalTable from '../../WrapperModalTable.jsx';
 function TableCustomerPasses({
   customerPasses,
   keys,
-  isAdminPage,
+  isAdminView,
+  isAdminDash,
   isActive,
   onOpen,
 }) {
   console.log('\TableCustomerPasses:');
-  console.log('\nisAdminPage:', isAdminPage);
+  console.log('\nisAdminPage:', isAdminView);
   console.log('\TableCustomerPasses customerPasses:', customerPasses);
 
   const title = 'Wszystkie zakupione karnety';
 
-  const headers = isAdminPage
+  const headers = isAdminView
     ? [
         'Id',
         'Uczestnik',
@@ -35,7 +36,16 @@ function TableCustomerPasses({
         'Status',
       ];
 
-  const table = (
+  const table = isAdminDash ? (
+    <ModalTable
+      classModifier={'admin-view'}
+      headers={headers}
+      keys={keys}
+      content={customerPasses}
+      active={isActive}
+      onOpen={onOpen}
+    />
+  ) : (
     <WrapperModalTable
       content={customerPasses}
       title={title}

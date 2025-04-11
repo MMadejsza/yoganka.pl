@@ -84,6 +84,10 @@ const router = createBrowserRouter([
             element: <AdminPage modifier='pass' />,
           },
           {
+            path: 'show-all-customer-passes/:id',
+            element: <AdminPage modifier='customerPass' />,
+          },
+          {
             path: 'show-all-participants-feedback/:id',
             element: <AdminPage modifier='feedback' />,
           },
