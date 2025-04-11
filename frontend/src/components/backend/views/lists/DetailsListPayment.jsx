@@ -1,7 +1,7 @@
 import { formatIsoDateTime } from '../../../../utils/dateTime.js';
 import GenericList from '../../../common/GenericList.jsx';
 
-function DetailsListPayment({ paymentData }) {
+function DetailsListPayment({ paymentData, userAccountPage }) {
   const payment = paymentData;
   console.log(
     `📝
@@ -9,8 +9,10 @@ function DetailsListPayment({ paymentData }) {
     paymentData
   );
 
+  const title = userAccountPage ? 'Szczegoły płatności' : 'Szczegoły płatności'; //temp
+
   const details = [
-    { label: 'Data płatności:', content: formatIsoDateTime(payment.date) },
+    { label: 'Data:', content: formatIsoDateTime(payment.date) },
     { label: 'Kwota:', content: `${payment.amountPaid} zł` },
     { label: 'Metoda płatności:', content: payment.paymentMethod },
     { label: 'Opłacono:', content: payment.status },
@@ -26,11 +28,7 @@ function DetailsListPayment({ paymentData }) {
   }
 
   return (
-    <GenericList
-      title='Szczegóły:'
-      details={details}
-      classModifier='payment-view'
-    />
+    <GenericList title={title} details={details} classModifier='payment-view' />
   );
 }
 

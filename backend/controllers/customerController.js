@@ -4,7 +4,7 @@ import {
   areCustomerDetailsChanged,
   isPassValidForSchedule,
 } from '../utils/controllersUtils.js';
-import { isAdult } from '../utils/dateTimeUtils.js';
+import { formatIsoDateTime, isAdult } from '../utils/dateTimeUtils.js';
 import db from '../utils/db.js';
 import {
   callLog,
@@ -66,101 +66,78 @@ export const putEditCustomerDetails = (req, res, next) => {
     .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 //! PASSES_____________________________________________
-//@ GET
-export const getPassById = (req, res, next) => {
-  const controllerName = 'getPassById';
+//@ GETs
+export const getCustomerPassById = (req, res, next) => {
+  const controllerName = 'getCustomerPassById';
   console.log(`\n➡️➡️➡️ ${person} called`, controllerName);
 
-  const PK = req.params.id;
-  models.PassDefinition.findByPk(PK, {
-    include: [
-      {
-        model: models.CustomerPass,
-        include: [{ model: models.Payment }],
-        where: customerPassId === req.user.Customer.customerId,
-      },
-    ],
+  const passId = req.params.id;
+  models.CustomerPass.findOne({
+    where: {
+      customerPassId: passId,
+      customerId: req.user.Customer.customerId, // Ensure the pass belongs to the logged-in customer
+    },
+    include: [{ model: models.PassDefinition }, { model: models.Payment }],
   })
-    .then(passData => {
-      if (!passData) {
+    .then(customerPassData => {
+      if (!customerPassData) {
         errCode = 404;
         throw new Error('Nie znaleziono definicji karnetu.');
       }
       // console.log(scheduleData);
-      let passDef = passData.toJSON();
+      let cp = customerPassData.toJSON();
 
-      const payments = passDef.CustomerPasses.map(customerPass => {
-        const cp = customerPass;
-        const customer = cp.Customer;
-        const payment = cp.Payment;
-        return {
-          ...payment,
-          rowId: payment.paymentId,
-          date: formatIsoDateTime(payment.date),
-          customerFullName: `${customer.firstName} ${customer.lastName} (${customer.customerId})`,
-        };
-      });
-
-      const customerPasses = passDef.CustomerPasses.map(customerPass => {
-        const cp = customerPass;
-        const customer = cp.Customer;
-
-        return {
-          customerPassId: cp.customerPassId,
-          rowId: cp.customerPassId,
-          customerFullName: `${customer.firstName} ${customer.lastName} (${customer.customerId})`,
-          purchaseDate: formatIsoDateTime(cp.purchaseDate),
-          validFrom: formatIsoDateTime(cp.validFrom),
-          validUntil: formatIsoDateTime(cp.validUntil),
-          usesLeft: cp.usesLeft,
-          status:
-            cp.status == 'active' || cp.status == 1
-              ? 'Aktywny'
-              : cp.status == 'suspended' || cp.status == 0
-              ? 'Zawieszony'
-              : 'Wygasły',
-        };
-      });
-
-      passDef = {
-        ...passDef,
-        CustomerPasses: null,
-        allowedProductTypes: JSON.parse(passDef.allowedProductTypes).join(', '),
-        status:
-          passDef.status == 'active' || passDef.status == 1
-            ? 'Aktywny'
-            : passDef.status == 'suspended' || passDef.status == 0
-            ? 'Zawieszony'
-            : 'Wygasły',
+      // Format Payment data with only necessary fields
+      const payment = {
+        paymentId: cp.Payment.paymentId,
+        date: formatIsoDateTime(cp.Payment.date),
+        amountPaid: cp.Payment.amountPaid,
+        paymentMethod: cp.Payment.paymentMethod,
       };
 
-      let passDefFormatted = {
-        ...passDef,
-        payments,
-        paymentsKeys: [
-          'paymentId',
-          'date',
-          'customerFullName',
-          'amountPaid',
-          'paymentMethod',
-        ],
-        customerPasses,
-        customerPassesKeys: [
-          'customerPassId',
-          'customerFullName',
-          'purchaseDate',
-          'validFrom',
-          'validUntil',
-          'usesLeft',
-          'status',
-        ],
+      const passDefinition = {
+        passDefId: cp.PassDefinition.passDefId,
+        name: cp.PassDefinition.name,
+        description: cp.PassDefinition.description,
+        passType: cp.PassDefinition.passType,
+        usesTotal: cp.PassDefinition.usesTotal,
+        validityDays: cp.PassDefinition.validityDays,
+        allowedProductTypes: cp.PassDefinition.allowedProductTypes
+          ? JSON.parse(cp.PassDefinition.allowedProductTypes).join(', ')
+          : null,
+        price: cp.PassDefinition.price,
+        status:
+          cp.PassDefinition.status === 'active' ||
+          cp.PassDefinition.status === 1
+            ? 'Aktywny'
+            : cp.PassDefinition.status === 'suspended' ||
+              cp.PassDefinition.status === 0
+            ? 'Wstrzymany'
+            : 'Niekontynuowany',
+      };
+
+      const formattedCustomerPass = {
+        rowId: cp.customerPassId,
+        customerPassId: cp.customerPassId,
+        purchaseDate: formatIsoDateTime(cp.purchaseDate),
+        validFrom: formatIsoDateTime(cp.validFrom),
+        validUntil: cp.validUntil ? formatIsoDateTime(cp.validUntil) : '-',
+        usesLeft: cp.usesLeft || '-',
+        status:
+          cp.status === 'active' || cp.status === 1
+            ? 'Aktywny'
+            : cp.status === 'suspended' || cp.status === 0
+            ? 'Zawieszony'
+            : 'Wygasły',
+        payment: payment, // Attached formatted Payment
+        passDefinition: passDefinition, // Attached formatted PassDefinition
       };
 
       successLog(person, controllerName);
       return res.status(200).json({
         confirmation: 1,
         message: 'Definicja karnetu pobrana pomyślnie',
-        passDef: passDefFormatted,
+        customerPass: formattedCustomerPass,
       });
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));

@@ -1,12 +1,16 @@
 import { formatIsoDateTime } from '../../../../utils/dateTime.js';
 import GenericList from '../../../common/GenericList.jsx';
 
-function DetailsListCustomerPass({ customerPass }) {
+function DetailsListCustomerPass({ customerPass, userAccountPage }) {
   console.log(
     `📝
 	    DetailsListCustomerPass object:`,
     customerPass
   );
+
+  const title = userAccountPage
+    ? 'Szczegóły Twojego karnetu'
+    : 'Karnet uczestnika';
 
   const details = [
     {
@@ -32,7 +36,7 @@ function DetailsListCustomerPass({ customerPass }) {
 
   return (
     <GenericList
-      title='Karnet uczestnika:'
+      title={title}
       details={details}
       classModifier='customer-pass'
     />

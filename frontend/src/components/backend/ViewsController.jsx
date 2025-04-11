@@ -8,6 +8,7 @@ import FeedbackBox from './FeedbackBox.jsx';
 import WrapperModal from './WrapperModal.jsx';
 import ViewBooking from './views/ViewBooking.jsx';
 import ViewCustomer from './views/ViewCustomer.jsx';
+import ViewCustomerPass from './views/ViewCustomerPass.jsx';
 import ViewPassDefinition from './views/ViewPassDefinition.jsx';
 import ViewPayment from './views/ViewPayment.jsx';
 import ViewProduct from './views/ViewProduct.jsx';
@@ -24,13 +25,20 @@ function ViewsController({
   customer,
   role,
 }) {
+  const customerRoutes = [
+    'konto/platnosci',
+    'konto/karnety',
+    'konto/rezerwacje',
+  ];
   const navigate = useNavigate();
   const params = useParams();
   const location = useLocation();
   const callPath = location.pathname;
   const isAdminPanel = location.pathname.includes('admin-console');
   // const isUserSettings = location.pathname.includes('konto/ustawienia');
-  const isCustomerQuery = location.pathname.includes('konto/platnosci')
+  const isCustomerQuery = customerRoutes.some(route =>
+    location.pathname.includes(route)
+  )
     ? '/customer'
     : '';
   const minRightsPrefix = role == 'ADMIN' ? '' : '';
@@ -196,8 +204,30 @@ function ViewsController({
         controller.deleteQuery = `delete-pass-definition/${data.passDef.passDefId}`;
         controller.redirectTo = '/admin-console/show-all-passes';
         controller.warnings = [
-          // 'Powiązanej płatności (jeśli opłacona bezpośrednio)',
-          // '🗒️ Jeśli chcesz tylko oznaczyć nieobecność, nie usuwaj rezerwacji',
+          'Powiązanej płatności - inaczej widok płatności nie będzie miał produktu',
+          'Wszystkich zakupionych już karnetów',
+          'Wszystkich rezerwacji "opłaconych" tymi karnetami',
+          '🗒️ Płatność nie zostanie usunięta z racji braku automatycznych zwrotów pieniędzy w systemie - należy usunąć ręcznie.',
+          '🗒️ Nie ma potrzeby usuwania definicji karnetu - ma wartość historyczną',
+        ];
+        return controller;
+      case 'customerPass':
+        controller.recordDisplay = (
+          <ViewCustomerPass
+            data={data}
+            onClose={onClose}
+            isModalOpen={visited}
+            userAccountPage={userAccountPage}
+          />
+        );
+        controller.recordEditor = '';
+        controller.deleteBtnTitle = 'Karnet uczestnika';
+        controller.deleteQuery = `delete-customer-pass/${data.customerPass.customerPassId}`;
+        controller.redirectTo = '/admin-console/show-all-passes';
+        controller.warnings = [
+          'Wszystkich rezerwacji "opłaconych" tym karnetem',
+          '🗒️ Płatność nie zostanie usunięta z racji braku automatycznych zwrotów pieniędzy w systemie - należy usunąć ręcznie.',
+          '🗒️ Nie ma potrzeby usuwania zakupionego karnetu jesli nie został dodany omyłkowo - ma wartość historyczną',
         ];
         return controller;
 

@@ -38,6 +38,7 @@ const router = createBrowserRouter([
           { path: 'statystyki', element: <AccountPage /> },
           { path: 'zajecia', element: <AccountPage /> },
           { path: 'karnety', element: <AccountPage /> },
+          { path: 'karnety/:id', element: <AccountPage /> },
           { path: 'rezerwacje', element: <AccountPage /> },
           { path: 'rezerwacje/:id', element: <AccountPage /> },
           { path: 'platnosci', element: <AccountPage /> },

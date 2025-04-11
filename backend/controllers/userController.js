@@ -93,7 +93,7 @@ export const getAccount = (req, res, next) => {
                   required: false,
                 },
                 {
-                  model: models.Feedback, // harmonogram -> opinie
+                  model: models.Feedback,
                   required: false,
                   where: { customerId: req.user.Customer.customerId }, // but only for particular customer
                   attributes: {
