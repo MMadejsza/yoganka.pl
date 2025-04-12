@@ -1530,20 +1530,13 @@ export const getPassById = (req, res, next) => {
         };
       });
 
-      passDef = {
+      const passDefinition = {
         ...passDef,
         CustomerPasses: null,
-        allowedProductTypes: JSON.parse(passDef.allowedProductTypes).join(', '),
-        status:
-          passDef.status == 'active' || passDef.status == 1
-            ? 'Aktywny'
-            : passDef.status == 'suspended' || passDef.status == 0
-            ? 'Zawieszony'
-            : 'Wygasły',
       };
 
       let passDefFormatted = {
-        ...passDef,
+        ...passDefinition,
         payments,
         paymentsKeys: [
           'paymentId',
@@ -1568,7 +1561,7 @@ export const getPassById = (req, res, next) => {
       return res.status(200).json({
         confirmation: 1,
         message: 'Definicja karnetu pobrana pomyślnie',
-        passDef: passDefFormatted,
+        passDefinition: passDefFormatted,
       });
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));

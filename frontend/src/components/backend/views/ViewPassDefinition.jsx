@@ -1,19 +1,133 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuthStatus } from '../../../hooks/useAuthStatus.js';
+import { useFeedback } from '../../../hooks/useFeedback.js';
 import GenericListTagLi from '../../common/GenericListTagLi.jsx';
+import FeedbackBox from '../FeedbackBox.jsx';
+import NewCustomerFormForUser from './add-forms/NewCustomerFormForUser.jsx';
 import DetailsListPassDefinition from './lists/DetailsListPassDefinition.jsx';
 import TableCustomerPasses from './tables/TableCustomerPasses.jsx';
 import TableProductPayments from './tables/TableProductPayments.jsx';
 
-function ViewPassDefinition({ data, role }) {
+function ViewPassDefinition({
+  data,
+  role,
+  onClose,
+  isAdminPanel,
+  isPassPurchaseView,
+  paymentOps,
+}) {
   console.log('ViewPassDefinition data', data);
+  const { passDefinition } = data;
+  const isAdminViewEligible = role === 'ADMIN' && isAdminPanel;
 
-  const { passDef } = data;
+  const navigate = useNavigate();
+
+  const { data: status } = useAuthStatus();
+  const { isLoggedIn } = status;
+  console.log(`status`, status);
+
+  const { feedback, updateFeedback } = useFeedback({
+    getRedirectTarget: result => (result.confirmation === 1 ? '/konto' : null),
+    onClose: onClose,
+  });
+
+  // console.log(`status.role`, status.role);
+  const [newCustomerDetails, setNewCustomerDetails] = useState({
+    isFirstTimeBuyer: status.role == 'USER',
+  });
+  // console.log(`newCustomerDetails: `, newCustomerDetails);
+  const [isFillingTheForm, setIsFillingTheForm] = useState(false);
+
+  const handleFormSave = details => {
+    setNewCustomerDetails(details);
+    setIsFillingTheForm(false);
+  };
+
+  const handlePayment = async () => {
+    try {
+      const res = await paymentOps.booking.onBuy({
+        customerDetails: newCustomerDetails || null,
+        schedule: schedule.scheduleId, //!
+        product: product.name, //!
+        status: 'Paid',
+        amountPaid: product.price,
+        amountDue: 0,
+        paymentMethod: 'Credit Card',
+        paymentStatus: 'Completed',
+      });
+      updateFeedback(res);
+    } catch (err) {
+      updateFeedback(err);
+    }
+  };
+
+  const shouldShowFeedback =
+    feedback.status === 1 || feedback.status === 0 || feedback.status === -1;
+
+  const shouldShowBookBtn =
+    !paymentOps?.purchase?.isError && !isFillingTheForm && !isAdminPanel;
+  const shouldDisableBookBtn = isFillingTheForm;
+
+  const paymentBtn = isLoggedIn ? (
+    <button
+      onClick={
+        !shouldDisableBookBtn
+          ? newCustomerDetails.isFirstTimeBuyer
+            ? () => setIsFillingTheForm(true)
+            : handlePayment
+          : null
+      }
+      className={`book modal__btn ${shouldDisableBookBtn && 'disabled'}`}
+    >
+      <span className='material-symbols-rounded nav__icon'>
+        {shouldDisableBookBtn
+          ? 'block'
+          : newCustomerDetails.isFirstTimeBuyer
+            ? 'edit'
+            : 'shopping_bag'}
+      </span>
+      {shouldDisableBookBtn
+        ? isFillingTheForm
+          ? 'Wypełnianie formularza'
+          : ''
+        : newCustomerDetails.isFirstTimeBuyer
+          ? 'Uzupełnij dane osobowe'
+          : 'Kupuję'}
+    </button>
+  ) : (
+    // dynamic redirection back to schedule when logged in, in Login form useFeedback
+    <button
+      onClick={() =>
+        navigate(`/login?redirect=/grafik/karnety${passDefinition.passDefId}`)
+      }
+      className='book modal__btn'
+    >
+      <span className='material-symbols-rounded nav__icon'>login</span>
+      Zaloguj się w celu zakupu
+    </button>
+  );
+
+  const feedbackBox =
+    feedback.status !== undefined ? (
+      <FeedbackBox
+        warnings={feedback.warnings}
+        status={feedback.status}
+        successMsg={feedback.message}
+        isPending={false}
+        error={feedback.status === -1 ? { message: feedback.message } : null}
+        size='small'
+        redirectTarget={feedback.redirectTarget}
+        onClose={onClose}
+      />
+    ) : null;
 
   return (
     <>
-      <h1 className='modal__title modal__title--view'>{`${passDef.name}`}</h1>
-      {role === 'ADMIN' && (
+      <h1 className='modal__title modal__title--view'>{`${passDefinition.name}`}</h1>
+      {isAdminViewEligible && (
         <>
-          <h2 className='modal__title modal__title--status'>{`Karnet (Id:${passDef.passDefId})`}</h2>
+          <h2 className='modal__title modal__title--status'>{`Karnet (Id:${passDefinition.passDefId})`}</h2>
           <h3 className='modal__title modal__title--status'>
             <GenericListTagLi
               objectPair={{
@@ -22,7 +136,7 @@ function ViewPassDefinition({ data, role }) {
                   <span
                     className={`material-symbols-rounded nav__icon nav__icon--in-title`}
                   >
-                    {passDef.status ? 'check' : 'close'}
+                    {passDefinition.status ? 'check' : 'close'}
                   </span>
                 ),
               }}
@@ -34,30 +148,43 @@ function ViewPassDefinition({ data, role }) {
 
       {/*//@ Pass Definition details */}
       <div className='generic-component-wrapper'>
-        <DetailsListPassDefinition
-          passDefinition={passDef}
-          userAccountPage={role != 'ADMIN'}
-        />
+        {!isFillingTheForm ? (
+          <DetailsListPassDefinition
+            passDefinition={passDefinition}
+            userAccountPage={!isAdminViewEligible}
+            isPassPurchaseView={isPassPurchaseView}
+          />
+        ) : (
+          <NewCustomerFormForUser onSave={handleFormSave} />
+        )}
       </div>
 
-      {role === 'ADMIN' && (
+      {isAdminViewEligible && (
         <>
           {/* //@ CustomerPasses table for this definition */}
           <TableCustomerPasses
-            customerPasses={passDef.customerPasses}
-            keys={passDef.customerPassesKeys}
+            customerPasses={passDefinition.customerPasses}
+            keys={passDefinition.customerPassesKeys}
             isAdminPage={true}
           />
 
           {/*//@ Payments table for this definition */}
           <TableProductPayments
-            payments={passDef.payments}
-            keys={passDef.paymentsKeys}
+            payments={passDefinition.payments}
+            keys={passDefinition.paymentsKeys}
             type={'passDef'}
             isAdminPage={true}
           />
         </>
       )}
+
+      <footer className='modal__user-action'>
+        {shouldShowFeedback
+          ? feedbackBox
+          : shouldShowBookBtn
+            ? paymentBtn
+            : null}
+      </footer>
     </>
   );
 }

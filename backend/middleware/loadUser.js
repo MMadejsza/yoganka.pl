@@ -31,13 +31,22 @@ export const loadUserFromSession = (req, res, next) => {
         },
       },
     ],
+    attributes: {
+      exclude: ['passwordHash'],
+    },
   })
-    .then(user => {
+    .then(userInstance => {
+      if (!userInstance) return next();
+      let user = userInstance.toJSON();
+
+      if (user.Customer === null) {
+        delete user.Customer;
+      }
       req.user = user;
-      next();
+      return next();
     })
     .catch(err => {
       console.error(err);
-      next(err);
+      return next(err);
     });
 };

@@ -5,6 +5,7 @@ import { useAuthStatus } from '../../../hooks/useAuthStatus.js';
 import { useFeedback } from '../../../hooks/useFeedback.js';
 import { mutateOnEdit, queryClient } from '../../../utils/http.js';
 import { statsCalculatorForSchedule } from '../../../utils/statistics/statsCalculatorForSchedule.js';
+import { hasValidPassFn } from '../../../utils/userCustomerUtils.js';
 import FeedbackBox from '../FeedbackBox.jsx';
 import NewCustomerFormForUser from './add-forms/NewCustomerFormForUser.jsx';
 import DetailsListProduct from './lists/DetailsListProduct.jsx';
@@ -30,6 +31,8 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
 
   const { data: status } = useAuthStatus();
   console.log(`status`, status);
+  const hasValidPass = hasValidPassFn(status, schedule);
+  // console.log(`ViewSchedule hasValidPass`, hasValidPass);
 
   const { feedback, updateFeedback } = useFeedback({
     getRedirectTarget: result => (result.confirmation === 1 ? '/konto' : null),
@@ -76,9 +79,9 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
   };
 
   // Wrapper for paymentOps.onBook, updating feedback
-  const handlePayment = async () => {
+  const handleBooking = async () => {
     try {
-      const res = await paymentOps.onBook({
+      const res = await paymentOps.booking.onBook({
         customerDetails: newCustomerDetails || null,
         schedule: schedule.scheduleId,
         product: product.name,
@@ -109,7 +112,7 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
   const shouldShowBookBtn =
     !isArchived &&
     !schedule.isUserGoing &&
-    !paymentOps?.isError &&
+    !paymentOps?.booking?.isError &&
     !isFillingTheForm &&
     !isAdminPanel;
   const isFull = schedule.full;
@@ -122,7 +125,7 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
         !shouldDisableBookBtn
           ? newCustomerDetails.isFirstTimeBuyer
             ? () => setIsFillingTheForm(true)
-            : handlePayment
+            : handleBooking
           : null
       }
       className={`book modal__btn ${shouldDisableBookBtn && 'disabled'}`}
@@ -144,7 +147,9 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
           ? 'Wróć na zajęcia'
           : newCustomerDetails.isFirstTimeBuyer
             ? 'Uzupełnij dane osobowe'
-            : 'Płacę'}
+            : hasValidPass
+              ? 'Rezerwuję'
+              : 'Kupuję'}
     </button>
   ) : (
     // dynamic redirection back to schedule when logged in, in Login form useFeedback
@@ -153,7 +158,7 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
       className='book modal__btn'
     >
       <span className='material-symbols-rounded nav__icon'>login</span>
-      Zaloguj się
+      Zaloguj się w celu rezerwacji
     </button>
   );
 

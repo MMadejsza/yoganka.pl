@@ -4,8 +4,9 @@ import ViewsController from '../ViewsController.jsx';
 import TableCustomerPasses from './tables/TableCustomerPasses.jsx';
 
 function ViewAccountCustomerPasses({ data }) {
-  console.log('ViewPassDefinition data', data);
-  const { customerPasses: cp } = data.customer;
+  console.log('ViewAccountCustomerPasses data', data);
+  let cp;
+  if (data.customer) cp = data.customer.customerPasses;
 
   const navigate = useNavigate();
   const location = useLocation();

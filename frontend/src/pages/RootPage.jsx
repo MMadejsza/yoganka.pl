@@ -5,7 +5,7 @@ import Footer from '../components/frontend/Footer.jsx';
 import Burger from '../components/frontend/navigation/Burger.jsx';
 import Nav from '../components/frontend/navigation/Nav.jsx';
 import { useAuthStatus } from '../hooks/useAuthStatus.js';
-import { applyFontSize } from '../utils/userSettingsUtils.js';
+import { applyFontSize } from '../utils/userCustomerUtils.js';
 
 function RootPage() {
   const [isNavOpen, setIsNavOpen] = useState(false);

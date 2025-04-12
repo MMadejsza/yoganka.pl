@@ -7,6 +7,7 @@ const router = express.Router();
 //! GET____________________________________________________
 //@ routes dynamically fetched from browser url
 //# set by ViewsController fetchItem()
+router.get('/grafik/karnety/:id', userC.getPassById);
 router.get('/grafik/karnety', userC.getAllPasses);
 router.get('/grafik/:id', userC.getScheduleById);
 router.get('/konto/grafik/:id', isAuth, userC.getScheduleById);

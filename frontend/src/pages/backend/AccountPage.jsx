@@ -72,9 +72,9 @@ function AccountPage() {
   const { data, isError, error } = useQuery({
     queryKey: ['account'],
     queryFn: ({ signal }) => fetchItem('/show-account', { signal }),
-    staleTime: 300000,
-    refetchOnMount: false,
-    keepPreviousData: true, // when changing state
+    // staleTime: 300000,
+    // refetchOnMount: false,
+    // keepPreviousData: true, // when changing state
   });
 
   let userTabs, name, content, customer;
@@ -94,10 +94,7 @@ function AccountPage() {
     switch (true) {
       case isChosenContent.includes('zajecia'):
         content = (
-          <ViewAccountSchedulesHistory
-            data={customer}
-            isUserAccountPage={true}
-          />
+          <ViewAccountSchedulesHistory data={data} isUserAccountPage={true} />
         );
         break;
       case isChosenContent.includes('rezerwacje'):
@@ -109,9 +106,7 @@ function AccountPage() {
         );
         break;
       case isChosenContent.includes('platnosci'):
-        content = (
-          <ViewAccountPayments data={customer} isUserAccountPage={true} />
-        );
+        content = <ViewAccountPayments data={data} isUserAccountPage={true} />;
         break;
       case isChosenContent.includes('ustawienia'):
         content = <ViewUser data={data} isUserAccountPage={true} />;

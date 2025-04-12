@@ -436,7 +436,7 @@ export const getAllPasses = (req, res, next) => {
   const controllerName = 'getAllPassDefinitions';
   callLog(req, person, controllerName);
 
-  models.PassDefinition.findAll()
+  models.PassDefinition.findAll({ where: { status: 1 || true } })
     .then(records => {
       if (!records) {
         errCode = 404;
@@ -472,6 +472,33 @@ export const getAllPasses = (req, res, next) => {
         message: 'Terminy pobrane pomyślnie.',
         totalKeys, // to map to the rows attributes
         content: formattedRecords, // With new names
+      });
+    })
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
+};
+export const getPassById = (req, res, next) => {
+  const controllerName = 'getPassById';
+  console.log(`\n➡️➡️➡️ ${person} called`, controllerName);
+
+  const PK = req.params.id;
+  models.PassDefinition.findByPk(PK)
+    .then(passData => {
+      if (!passData) {
+        errCode = 404;
+        throw new Error('Nie znaleziono definicji karnetu.');
+      }
+      // console.log(scheduleData);
+      let passDef = passData.toJSON();
+
+      let passDefFormatted = {
+        ...passDef,
+      };
+
+      successLog(person, controllerName);
+      return res.status(200).json({
+        confirmation: 1,
+        message: 'Definicja karnetu pobrana pomyślnie',
+        passDefinition: passDefFormatted,
       });
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));

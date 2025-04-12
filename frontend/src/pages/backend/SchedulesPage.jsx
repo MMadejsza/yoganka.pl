@@ -50,6 +50,21 @@ function SchedulePage() {
     },
   });
 
+  const {
+    mutateAsync: buy, //async to let it return promise for child viewSchedule and let serve the feedback there based on the result of it
+    isError: isBuyError,
+    error: buyError,
+    reset: resetBuy,
+  } = useMutation({
+    mutationFn: formDataObj =>
+      mutateOnCreate(status, formDataObj, `/api/customer/create-purchase`),
+
+    onSuccess: res => {
+      queryClient.invalidateQueries(['authStatus']);
+      queryClient.invalidateQueries(['data', location.pathname]);
+    },
+  });
+
   const handleSwitchContent = link => {
     navigate(link, {
       state: { background: location },
@@ -82,7 +97,15 @@ function SchedulePage() {
     }
   }
 
-  let table, viewFrame, title, productTabs, contentSorted, headers, modifier;
+  let table,
+    viewFrame,
+    title,
+    productTabs,
+    contentSorted,
+    headers,
+    modifier,
+    keys,
+    paymentOps;
 
   if (data) {
     // console.clear();
@@ -95,14 +118,31 @@ function SchedulePage() {
         'Id',
         'Nazwa',
         'Opis',
-        'Typ',
+        // 'Typ',
         'Liczba wejść',
-        'Ważność',
+        // 'Ważność',
         'Zakres',
-        'Cena',
-        '',
+        // 'Cena',
+        // 'Kupuję',
       ];
-
+      keys = [
+        'passDefId',
+        'name',
+        'description',
+        // 'passType',
+        'usesTotal',
+        // 'validityDays',
+        'allowedProductTypes',
+        // 'price',
+        // '',
+      ];
+      paymentOps = {
+        purchase: {
+          onBuy: buy,
+          isError: isBuyError,
+          error: buyError,
+        },
+      };
       contentSorted = data.content.map(record => {
         const passDef = record; //.toJSON();
 
@@ -121,6 +161,11 @@ function SchedulePage() {
     } else {
       modifier = 'schedule';
       headers = data.totalHeaders;
+      keys = data.totalKeys;
+      paymentOps = {
+        // for schedule booking only as backend will chose if should make a payment or go for using the pass automatically
+        booking: { onBook: book, isError: isBookError, error: bookError },
+      };
       contentSorted = data.content.sort((a, b) => {
         const dateA = new Date(a.date.split('.').reverse().join('-'));
         const dateB = new Date(b.date.split('.').reverse().join('-'));
@@ -138,11 +183,12 @@ function SchedulePage() {
         table = (
           <ModalTable
             headers={headers}
-            keys={data.totalKeys}
+            keys={keys}
             content={contentSorted}
-            active={false}
+            active={true}
             status={status}
-            onQuickAction={[{ symbol: 'shopping_bag_speed', method: book }]}
+            onOpen={handleOpenModal}
+            // onQuickAction={[{ symbol: 'shopping_bag_speed', method: book }]}
             // classModifier={classModifier}
           />
         );
@@ -185,11 +231,7 @@ function SchedulePage() {
         modifier={modifier}
         visited={isModalOpen}
         onClose={handleCloseModal}
-        paymentOps={{
-          onBook: book,
-          isError: isBookError,
-          error: bookError,
-        }}
+        paymentOps={paymentOps}
         role={status.role}
       />
     );

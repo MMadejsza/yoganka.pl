@@ -35,6 +35,7 @@ function ViewsController({
   const location = useLocation();
   const callPath = location.pathname;
   const isAdminPanel = location.pathname.includes('admin-console');
+  const isPassPurchaseView = /^\/grafik\/karnety\/\d+/.test(location.pathname); // regex to dynamically check if id
   // const isUserSettings = location.pathname.includes('konto/ustawienia');
   const isCustomerQuery = customerRoutes.some(route =>
     location.pathname.includes(route)
@@ -198,11 +199,14 @@ function ViewsController({
             onClose={onClose}
             isModalOpen={visited}
             role={role}
+            isAdminPanel={isAdminPanel}
+            paymentOps={paymentOps}
+            isPassPurchaseView={isPassPurchaseView}
           />
         );
         controller.recordEditor = '';
         controller.deleteBtnTitle = 'Definicję karnetu';
-        controller.deleteQuery = `delete-pass-definition/${data.passDef.passDefId}`;
+        controller.deleteQuery = `delete-pass-definition/${data.passDefinition.passDefId}`;
         controller.redirectTo = '/admin-console/show-all-passes';
         controller.warnings = [
           'Powiązanej płatności - inaczej widok płatności nie będzie miał produktu',

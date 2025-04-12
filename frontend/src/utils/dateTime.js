@@ -50,6 +50,16 @@ export const formatIsoDateTime = (dateInput, isSchedule) => {
 };
 
 export const parsePLDateAtEndOfDay = dateString => {
-  const [day, month, year] = dateString.split('.');
-  return new Date(year, month - 1, day, 23, 59, 59);
+  // console.log(`parsePLDateAtEndOfDay [dateString]`, dateString);
+
+  let parsePLDateAtEndOfDay;
+  if (dateString.includes('.')) {
+    const [day, month, year] = dateString.split('.');
+    parsePLDateAtEndOfDay = new Date(year, month - 1, day, 23, 59, 59);
+  } else if (dateString.includes('-')) {
+    const [year, month, day] = dateString.split('-');
+    parsePLDateAtEndOfDay = new Date(year, month - 1, day, 23, 59, 59);
+  }
+  // console.log(`parsePLDateAtEndOfDay`, parsePLDateAtEndOfDay);
+  return parsePLDateAtEndOfDay;
 };

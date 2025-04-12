@@ -66,7 +66,7 @@ export const putEditCustomerDetails = (req, res, next) => {
     .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 //! PASSES_____________________________________________
-//@ GETs
+//@ GET
 export const getCustomerPassById = (req, res, next) => {
   const controllerName = 'getCustomerPassById';
   console.log(`\n➡️➡️➡️ ${person} called`, controllerName);
@@ -102,18 +102,9 @@ export const getCustomerPassById = (req, res, next) => {
         passType: cp.PassDefinition.passType,
         usesTotal: cp.PassDefinition.usesTotal,
         validityDays: cp.PassDefinition.validityDays,
-        allowedProductTypes: cp.PassDefinition.allowedProductTypes
-          ? JSON.parse(cp.PassDefinition.allowedProductTypes).join(', ')
-          : null,
+        allowedProductTypes: cp.PassDefinition.allowedProductTypes,
         price: cp.PassDefinition.price,
-        status:
-          cp.PassDefinition.status === 'active' ||
-          cp.PassDefinition.status === 1
-            ? 'Aktywny'
-            : cp.PassDefinition.status === 'suspended' ||
-              cp.PassDefinition.status === 0
-            ? 'Wstrzymany'
-            : 'Niekontynuowany',
+        status: cp.status,
       };
 
       const formattedCustomerPass = {

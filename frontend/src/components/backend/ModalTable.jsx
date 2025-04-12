@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom';
-import { parsePLDateAtEndOfDay } from '../../utils/dateTime';
+import { hasValidPassFn } from '../../utils/userCustomerUtils';
 
 function ModalTable({
   headers,
@@ -46,37 +46,11 @@ function ModalTable({
     return 'lock_person';
   };
 
-  const hasValidPassFn = row => {
-    return status?.user?.Customer?.CustomerPasses?.some(currentCustomerPass => {
-      const allowedTypeArr = JSON.parse(
-        currentCustomerPass.PassDefinition.allowedProductTypes
-      );
-      const isAllowedType = allowedTypeArr.some(
-        allowedType => allowedType === row.Product?.type
-      );
-      const parsedDate = parsePLDateAtEndOfDay(row.date);
-      const isExpiredAtTheTime =
-        new Date(parsedDate) > new Date(currentCustomerPass.validUntil);
-      const isStartedAtTheTime =
-        new Date(parsedDate) > new Date(currentCustomerPass.validFrom);
-      const haEntriesLeft = currentCustomerPass.usesLeft
-        ? currentCustomerPass.usesLeft > 0
-        : false;
-
-      return (
-        isAllowedType &&
-        !isExpiredAtTheTime &&
-        isStartedAtTheTime &&
-        haEntriesLeft
-      );
-    });
-  };
-
   const getSymbol = (row, isArchived, action) => {
     const hasValidPass =
-      isAdminView || isUserPassesView ? true : hasValidPassFn(row);
-
-    const conditionalClass = `material-symbols-rounded nav__icon${row.isActionDisabled === true ? ' dimmed' : ''}${action.extraClass ? ` ${action.extraClass}` : ''}${!hasValidPass && !row.isUserGoing ? ` black` : ''}`;
+      isAdminView || isUserPassesView ? true : hasValidPassFn(status, row);
+    // console.log('hasValidPass', hasValidPass);
+    const conditionalClass = `material-symbols-rounded nav__icon${row.isActionDisabled === true ? ' dimmed' : ''}${action.extraClass ? ` ${action.extraClass}` : ''}${!hasValidPass && !row.isUserGoing && !row.wasUserReserved ? ` black` : ''}`;
 
     return (
       <span className={conditionalClass}>
@@ -91,27 +65,27 @@ function ModalTable({
     );
   };
 
-  const pickCellSymbol = key => {
-    switch (true) {
-      case key.includes('Id'):
-        return 'badge';
-      case key == 'date':
-        return 'event';
-      case key == 'day':
-        return 'calendar_view_day';
-      case key == 'startTime':
-        return 'access_time';
-      case key == 'productType':
-        return 'class';
-      case key == 'productName':
-        return 'self_improvement';
-      case key == 'location':
-        return 'location_on';
+  // const pickCellSymbol = key => {
+  //   switch (true) {
+  //     case key.includes('Id'):
+  //       return 'badge';
+  //     case key == 'date':
+  //       return 'event';
+  //     case key == 'day':
+  //       return 'calendar_view_day';
+  //     case key == 'startTime':
+  //       return 'access_time';
+  //     case key == 'productType':
+  //       return 'class';
+  //     case key == 'productName':
+  //       return 'self_improvement';
+  //     case key == 'location':
+  //       return 'location_on';
 
-      default:
-        break;
-    }
-  };
+  //     default:
+  //       break;
+  //   }
+  // };
 
   const formatValue = (value, keyClass) => {
     let val = value;
@@ -136,7 +110,7 @@ function ModalTable({
     const isAuthorized =
       status?.role != undefined ? isCustomer || isAdmin : 'N/A';
     const hasPass =
-      isAdminView || isUserPassesView ? true : hasValidPassFn(row);
+      isAdminView || isUserPassesView ? true : hasValidPassFn(status, row);
     // console.log('onRowBtnClick:', {
     //   isUserGoing: isUserGoing,
     //   isLoggedIn: isLoggedIn,

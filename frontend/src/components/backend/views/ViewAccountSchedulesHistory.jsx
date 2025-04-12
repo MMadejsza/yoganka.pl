@@ -12,9 +12,9 @@ function ViewAccountSchedulesHistory({ data }) {
         ViewAccountSchedulesHistory object from backend:`,
     data
   );
-
-  const customerStats = statsCalculatorForCustomer(data);
-  const content = customerStats.attendedSchedules
+  let content, customerStats;
+  if (data.customer) customerStats = statsCalculatorForCustomer(data);
+  content = customerStats?.attendedSchedules
     .filter(record => {
       const scheduleDateTime = new Date(
         `${record.date}T${record.startTime}:00.000Z`
@@ -26,13 +26,13 @@ function ViewAccountSchedulesHistory({ data }) {
   // console.log(`✅ keys: `, keys);
   // console.log(`✅ customerStats: `, customerStats);
 
-  const stats = (
+  const stats = data.customer ? (
     <DetailsListCustomerStats
       customerStats={customerStats}
       altTitle={''}
       userAccountPage={true}
     />
-  );
+  ) : null;
 
   const headers = [
     'Id',
@@ -52,7 +52,7 @@ function ViewAccountSchedulesHistory({ data }) {
     >
       <ModalTable
         headers={headers}
-        keys={customerStats.recordsKeys}
+        keys={customerStats?.recordsKeys || []}
         content={content}
         active={false}
         notToArchive={location.pathname.includes(`konto/zajecia`)}

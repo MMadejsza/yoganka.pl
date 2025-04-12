@@ -10,10 +10,13 @@ function ViewAccountBookings({ data }) {
     data
   );
 
-  const content = data.customer.formattedBookings.sort(
-    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-  );
-  const formattedContent = content.map(booking => {
+  let content;
+  if (data.customer)
+    content = data.customer.formattedBookings.sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    );
+
+  const formattedContent = content?.map(booking => {
     return {
       ...booking,
       createdAt: formatIsoDateTime(booking.createdAt),

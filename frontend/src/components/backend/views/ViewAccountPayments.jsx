@@ -12,6 +12,16 @@ function ViewAccountPayments({ data }) {
         ViewAccountPayments object from backend:`,
     data
   );
+
+  let content, customerStats;
+  if (data.customer) customerStats = statsCalculatorForCustomer(data);
+  content = customerStats?.payments.sort(
+    (a, b) => new Date(b.date) - new Date(a.date)
+  );
+  // console.log(`✅ content: `, content);
+  // console.log(`✅ keys: `, keys);
+  // console.log(`✅ customerStats: `, customerStats);
+
   const navigate = useNavigate();
   const location = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,14 +40,6 @@ function ViewAccountPayments({ data }) {
     setIsModalOpen(false);
     navigate(-1);
   };
-
-  const customerStats = statsCalculatorForCustomer(data);
-  const content = customerStats.payments.sort(
-    (a, b) => new Date(b.date) - new Date(a.date)
-  );
-  // console.log(`✅ content: `, content);
-  // console.log(`✅ keys: `, keys);
-  // console.log(`✅ customerStats: `, customerStats);
 
   const table = (
     <WrapperModalTable
