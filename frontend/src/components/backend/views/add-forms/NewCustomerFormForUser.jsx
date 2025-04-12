@@ -2,15 +2,13 @@ import { useInput } from '../../../../hooks/useInput.js';
 import * as val from '../../../../utils/validation.js';
 import WrapperForm from '../../../backend/WrapperForm.jsx';
 import Input from '../../Input.jsx';
+import Cookies from 'js-cookie';
 
 function NewCustomerFormForUser({ onSave }) {
-  const minAge = () => {
-    const today = new Date();
-    const year = today.getFullYear() - 18;
-    const month = (today.getMonth() + 1).toString().padStart(2, '0');
-    const day = today.getDate().toString().padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  };
+  // get eventually abandoned previously data
+  const cookieData = Cookies.get('newCustomerFormData');
+  const defaults = cookieData ? JSON.parse(cookieData) : {};
+  
   // using custom hook with extracting and reassigning its 'return' for particular inputs and assign validation methods from imported utils. Every inout has its won state now
   const {
     value: firstNameValue,
@@ -22,7 +20,7 @@ function NewCustomerFormForUser({ onSave }) {
     isFocused: firstNameIsFocused,
     validationResults: firstNameValidationResults,
     hasError: firstNameHasError,
-  } = useInput('', val.firstNameValidations);
+  } = useInput(defaults.fname ||'', val.firstNameValidations);
   const {
     value: lastNameValue,
     handleChange: handleLastNameChange,
@@ -33,7 +31,7 @@ function NewCustomerFormForUser({ onSave }) {
     isFocused: lastNameIsFocused,
     validationResults: lastNameValidationResults,
     hasError: lastNameHasError,
-  } = useInput('', val.lastNameValidations);
+  } = useInput(defaults.lname ||'', val.lastNameValidations);
   const {
     value: DoBValue,
     handleChange: handleDoBChange,
@@ -44,7 +42,7 @@ function NewCustomerFormForUser({ onSave }) {
     isFocused: DoBIsFocused,
     validationResults: DoBValidationResults,
     hasError: DoBHasError,
-  } = useInput('', val.dobValidations);
+  } = useInput(defaults.dob ||'', val.dobValidations);
   const {
     value: phoneValue,
     handleChange: handlePhoneChange,
@@ -55,7 +53,7 @@ function NewCustomerFormForUser({ onSave }) {
     isFocused: phoneIsFocused,
     validationResults: phoneValidationResults,
     hasError: phoneHasError,
-  } = useInput(' ', val.phoneValidations);
+  } = useInput(defaults.phone || ' ', val.phoneValidations);
   const {
     value: cMethodValue,
     handleChange: handleCMethodChange,
@@ -66,7 +64,7 @@ function NewCustomerFormForUser({ onSave }) {
     isFocused: cMethodIsFocused,
     validationResults: cMethodValidationResults,
     hasError: cMethodHasError,
-  } = useInput('');
+  } = useInput(defaults.cMethod || '');
   const {
     value: referralSourceValue,
     handleChange: handleReferralSourceChange,
@@ -77,7 +75,7 @@ function NewCustomerFormForUser({ onSave }) {
     isFocused: referralSourceIsFocused,
     validationResults: referralSourceValidationResults,
     hasError: referralSourceHasError,
-  } = useInput('');
+  } = useInput(defaults.rSource ||'');
   const {
     value: notesValue,
     handleChange: handleNotesChange,
@@ -88,7 +86,7 @@ function NewCustomerFormForUser({ onSave }) {
     isFocused: notesIsFocused,
     validationResults: notesValidationResults,
     hasError: notesHasError,
-  } = useInput('', val.notesValidations);
+  } = useInput(defaults.notes ||'', val.notesValidations);
 
   // Reset all te inputs
   const handleReset = () => {
@@ -119,8 +117,8 @@ function NewCustomerFormForUser({ onSave }) {
     }
     console.log('Submit passed errors');
 
-    // passing given details to sabe as a customer in state of ViewSchedule
-    onSave({
+
+    const details = {
       isFirstTimeBuyer: false,
       cType: 'Indywidualny',
       fname: firstNameValue,
@@ -130,7 +128,15 @@ function NewCustomerFormForUser({ onSave }) {
       cMethod: cMethodValue,
       rSource: referralSourceValue,
       notes: notesValue,
+    }
+
+    Cookies.set('newCustomerFormData', JSON.stringify(details), {
+      expires: 3,
+      path: '/grafik'
     });
+
+    // passing given details to sabe as a customer in state of ViewSchedule
+    onSave(details);
     handleReset();
 
     //! assign registration date
@@ -142,6 +148,7 @@ function NewCustomerFormForUser({ onSave }) {
     title: '',
     actionTitle: 'Zapisz',
   };
+  
   // Extract values only
   const { formType, title, actionTitle } = formLabels;
   const areErrors = [
@@ -153,7 +160,6 @@ function NewCustomerFormForUser({ onSave }) {
   const areEmpty = [firstNameValue, lastNameValue, DoBValue, phoneValue].some(
     value => value.trim() === ''
   );
-  const requiredInputsValidated = !areErrors && !areEmpty;
 
   const content = (
     <WrapperForm
@@ -209,7 +215,7 @@ function NewCustomerFormForUser({ onSave }) {
         name='dob'
         label='Urodziny:*'
         value={DoBValue}
-        max={minAge()}
+        max={val.minAge()}
         onFocus={handleDoBFocus}
         onBlur={handleDoBBlur}
         onChange={handleDoBChange}

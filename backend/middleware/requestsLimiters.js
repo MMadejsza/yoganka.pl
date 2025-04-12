@@ -7,7 +7,7 @@ export const loginLimiter = rateLimit({
   message: {
     code: 429,
     message:
-      'Zbyt wiele nieudanych prób logowania. Spróbuj ponownie za 15 minut.',
+      '🌙 Logowanie chwilowo wstrzymane. Odpręż się i spróbuj ponownie za 15 minut.',
   },
   standardHeaders: true,
   legacyHeaders: false,
@@ -18,7 +18,8 @@ export const resetPasswordLimiter = rateLimit({
   max: 5, // max 5 requests
   message: {
     code: 429,
-    message: 'Zbyt wiele prób resetowania hasła. Spróbuj ponownie za 15 minut.',
+    message:
+      '🌙 Logowanie chwilowo wstrzymane. Odpręż się i spróbuj ponownie za 15 minut.',
   },
   standardHeaders: true,
   legacyHeaders: false,

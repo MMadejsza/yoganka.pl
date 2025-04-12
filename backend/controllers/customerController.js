@@ -1,4 +1,6 @@
+import { addDays, addMonths, addYears } from 'date-fns';
 import 'dotenv/config';
+import { Op } from 'sequelize';
 import * as models from '../models/_index.js';
 import {
   areCustomerDetailsChanged,
@@ -13,6 +15,7 @@ import {
   successLog,
 } from '../utils/debuggingUtils.js';
 import * as customerEmails from '../utils/mails/templates/customerActions/_customerEmails.js';
+import * as msgs from '../utils/resMessagesUtils.js';
 
 let errCode = errorCode;
 const person = 'Customer';
@@ -58,7 +61,7 @@ export const putEditCustomerDetails = (req, res, next) => {
       const affectedCustomerRows = results.customerResult[0];
       const status = affectedCustomerRows >= 1;
       return res.status(200).json({
-        message: 'Profil zaktualizowany pomyslnie.',
+        message: msgs.customerDetailsUpdated,
         confirmation: status,
         affectedCustomerRows,
       });
@@ -82,7 +85,7 @@ export const getCustomerPassById = (req, res, next) => {
     .then(customerPassData => {
       if (!customerPassData) {
         errCode = 404;
-        throw new Error('Nie znaleziono definicji karnetu.');
+        throw new Error(msgs.noPassDefFound);
       }
       // console.log(scheduleData);
       let cp = customerPassData.toJSON();
@@ -110,16 +113,11 @@ export const getCustomerPassById = (req, res, next) => {
       const formattedCustomerPass = {
         rowId: cp.customerPassId,
         customerPassId: cp.customerPassId,
-        purchaseDate: formatIsoDateTime(cp.purchaseDate),
-        validFrom: formatIsoDateTime(cp.validFrom),
-        validUntil: cp.validUntil ? formatIsoDateTime(cp.validUntil) : '-',
-        usesLeft: cp.usesLeft || '-',
-        status:
-          cp.status === 'active' || cp.status === 1
-            ? 'Aktywny'
-            : cp.status === 'suspended' || cp.status === 0
-            ? 'Zawieszony'
-            : 'Wygasły',
+        purchaseDate: cp.purchaseDate,
+        validFrom: cp.validFrom,
+        validUntil: cp.validUntil,
+        usesLeft: cp.usesLeft,
+        status: cp.status,
         payment: payment, // Attached formatted Payment
         passDefinition: passDefinition, // Attached formatted PassDefinition
       };
@@ -127,8 +125,246 @@ export const getCustomerPassById = (req, res, next) => {
       successLog(person, controllerName);
       return res.status(200).json({
         confirmation: 1,
-        message: 'Definicja karnetu pobrana pomyślnie',
+        message: msgs.passDefFound,
         customerPass: formattedCustomerPass,
+      });
+    })
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
+};
+//@ POST
+export const postCreateBuyPass = (req, res, next) => {
+  const controllerName = 'postCreateBuyPass';
+  callLog(req, person, controllerName);
+  // console.log(`req.body`, req.body);
+  // console.log(`req.user`, req.user);
+
+  // @ Fetching USER
+  let customerPromise,
+    currentCustomer,
+    currentPassDefinition,
+    userEmail = req.user.email,
+    isNewCustomer = false;
+
+  // If it's not a Customer yet
+  if (!req.user.Customer) {
+    const cDetails = req.body.customerDetails;
+    console.log(
+      '❗❗❗User is not the customer, creation of the record Customer...'
+    );
+    errCode = 400;
+    if (!cDetails) {
+      console.log('\n❌❌❌ No given customer data');
+      throw new Error(msgs.noCustomerData);
+    }
+    if (!cDetails.fname || !cDetails.fname.trim()) {
+      console.log('\n❌❌❌ fName field empty');
+      throw new Error(msgs.noFirstName);
+    }
+    if (!cDetails.lname || !cDetails.lname.trim()) {
+      console.log('\n❌❌❌ lname field empty');
+      throw new Error(msgs.noLastName);
+    }
+    if (!cDetails.dob || !cDetails.dob.trim()) {
+      console.log('\n❌❌❌ dob field empty');
+      throw new Error(msgs.noBirthDate);
+    }
+    if (!cDetails.phone || !cDetails.phone.trim()) {
+      console.log('\n❌❌❌ phone field empty');
+      throw new Error(msgs.noPhonePicked);
+    }
+    if (!isAdult(cDetails.dob)) {
+      console.log('\n❌❌❌ Customer below 18');
+      throw new Error(msgs.notAnAdult);
+    }
+
+    customerPromise = models.Customer.create({
+      customerType: cDetails.cType,
+      userId: req.user.userId,
+      firstName: cDetails.fname,
+      lastName: cDetails.lname,
+      dob: cDetails.dob,
+      phone: cDetails.phone,
+      preferredContactMethod: cDetails.cMethod || '-',
+      referralSource: cDetails.rSource || '-',
+      notes: cDetails.notes,
+    }).then(newCustomer => {
+      // Notification email
+      if (userEmail) {
+        customerEmails.sendCustomerCreatedMail({
+          to: userEmail,
+          firstName: cDetails.fname,
+        });
+      }
+      // first update db user with new role as the middleware actually always fetch from the db on request
+      return models.User.update(
+        { role: 'CUSTOMER' },
+        { where: { userId: req.user.userId } }
+      )
+        .then(() => {
+          return models.User.findByPk(req.user.userId, {
+            include: [
+              { model: models.Customer, required: false },
+              { model: models.UserPrefSetting, required: false },
+            ],
+          });
+        })
+        .then(updatedUser => {
+          req.session.user = updatedUser.toJSON();
+          req.session.role = updatedUser.role.toUpperCase(); // np. "CUSTOMER"
+          req.session.save(err => {
+            if (err) reject(new Error(msgs.sessionNotUpdated + err.message));
+          });
+
+          isNewCustomer = true;
+          successLog(
+            person,
+            controllerName,
+            'customer created and session updated'
+          );
+          return newCustomer;
+        });
+    });
+  } else {
+    // Fetching from the database again ensures you get a full Sequelize instance with all methods - this is essential for using instance methods like .save()
+    customerPromise = models.Customer.findByPk(req.user.Customer.customerId, {
+      include: [
+        {
+          model: models.CustomerPass,
+          include: [models.PassDefinition],
+        },
+      ],
+    });
+  }
+
+  customerPromise
+    .then(customer => {
+      currentCustomer = customer;
+
+      if (!req.body.passDefId) {
+        errCode = 400;
+        throw new Error(msgs.noPassIdPicked);
+      }
+
+      //@ PAYMENT
+      return models.PassDefinition.findByPk(req.body.passDefId);
+    })
+    .then(passDef => {
+      if (!passDef) {
+        throw new Error(msgs.noPassDefFound);
+      }
+      currentPassDefinition = passDef;
+
+      if (Number(currentPassDefinition.price) < 0) {
+        throw new Error('Nieprawidłowa cena karnetu.');
+      }
+
+      // check if has this pass already
+      return models.CustomerPass.findOne({
+        where: {
+          customerId: currentCustomer.customerId,
+          passDefId: currentPassDefinition.passDefId,
+          status: 'active',
+          validUntil: { [Op.gt]: new Date() },
+        },
+      }).then(existingPass => {
+        if (existingPass) {
+          throw new Error(
+            'Użytkownik już posiada aktywny karnet tego typu. Wybierz datę po jego wygaśnięciu.'
+          );
+        }
+
+        return currentPassDefinition;
+      });
+    })
+    .then(passDef => {
+      // Saving into db in transaction
+      return db.transaction(t => {
+        const purchaseDate = new Date();
+        const validityDays = currentPassDefinition.validityDays;
+        let calcExpiryDate = null;
+
+        return models.Payment.create(
+          {
+            customerId: currentCustomer.customerId,
+            date: new Date(),
+            product: currentPassDefinition.name,
+            status: 'COMPLETED', // temp
+            amountPaid: currentPassDefinition.price,
+            amountDue: 0, // temp
+            paymentMethod: req.body.paymentMethod,
+            paymentStatus: 'COMPLETED', // temp
+          },
+          { transaction: t }
+        ).then(payment => {
+          if (!payment) throw new Error(msgs.paymentSaveError);
+
+          if (validityDays && validityDays < 30) {
+            // if less then month
+            calcExpiryDate = addDays(purchaseDate, validityDays);
+          } else if (validityDays && validityDays >= 30) {
+            // if a couple of months where month = 30
+            calcExpiryDate = addMonths(
+              purchaseDate,
+              Math.floor(validityDays / 30)
+            );
+          } else if (validityDays && validityDays >= 365) {
+            // if over 1 year
+            calcExpiryDate = addYears(
+              purchaseDate,
+              Math.floor(validityDays / 365)
+            );
+          }
+
+          if (calcExpiryDate) {
+            calcExpiryDate.setHours(23, 59, 59, 999);
+          }
+
+          return models.CustomerPass.create(
+            {
+              customerId: currentCustomer.customerId,
+              passDefId: req.body.passDefId,
+              paymentId: payment.paymentId,
+              purchaseDate: purchaseDate,
+              usesLeft: currentPassDefinition.usesTotal,
+              validFrom: purchaseDate,
+              validUntil: calcExpiryDate,
+              status: 'ACTIVE', // temp
+            },
+            { transaction: t }
+          ).then(newPass => {
+            return { payment, newPass };
+          });
+        });
+      });
+    })
+    .then(paymentAndPassObj => {
+      // Update session
+      return models.User.findByPk(req.user.userId, {
+        include: [
+          {
+            model: models.Customer,
+            include: [
+              { model: models.CustomerPass, include: [models.PassDefinition] },
+            ],
+          },
+          { model: models.UserPrefSetting, required: false },
+        ],
+      }).then(updatedUser => {
+        req.session.user = updatedUser.toJSON();
+        req.session.role = updatedUser.role.toUpperCase();
+        req.session.save(err => {
+          if (err) reject(new Error(msgs.sessionNotUpdated + err.message));
+        });
+        return paymentAndPassObj;
+      });
+    })
+    .then(paymentAndPassObj => {
+      successLog(person, controllerName);
+      res.status(201).json({
+        isNewCustomer,
+        confirmation: 1,
+        message: msgs.newCustomerPass,
+        customerPass: paymentAndPassObj.newPass,
       });
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));
@@ -154,32 +390,32 @@ export const postCreateBookSchedule = (req, res, next) => {
   if (!req.user.Customer) {
     const cDetails = req.body.customerDetails;
     console.log(
-      '❗❗❗User isnt the customer, creation of the record Customer...'
+      '❗❗❗User is not the customer, creation of the record Customer...'
     );
     errCode = 400;
     if (!cDetails) {
       console.log('\n❌❌❌ No given customer data');
-      throw new Error('Brak danych klienta.');
+      throw new Error(msgs.noCustomerData);
     }
     if (!cDetails.fname || !cDetails.fname.trim()) {
       console.log('\n❌❌❌ fName field empty');
-      throw new Error('Imię nie może być puste.');
+      throw new Error(msgs.noFirstName);
     }
     if (!cDetails.lname || !cDetails.lname.trim()) {
       console.log('\n❌❌❌ lname field empty');
-      throw new Error('Nazwisko nie może być puste.');
+      throw new Error(msgs.noLastName);
     }
     if (!cDetails.dob || !cDetails.dob.trim()) {
       console.log('\n❌❌❌ dob field empty');
-      throw new Error('Data urodzenia nie może być pusta.');
+      throw new Error(msgs.noBirthDate);
     }
     if (!cDetails.phone || !cDetails.phone.trim()) {
       console.log('\n❌❌❌ phone field empty');
-      throw new Error('Numer telefonu nie może być pusty.');
+      throw new Error(msgs.noPhonePicked);
     }
     if (!isAdult(cDetails.dob)) {
       console.log('\n❌❌❌ Customer below 18');
-      throw new Error('Uczestnik musi być pełnoletni.');
+      throw new Error(msgs.notAnAdult);
     }
 
     customerPromise = models.Customer.create({
@@ -194,7 +430,7 @@ export const postCreateBookSchedule = (req, res, next) => {
       notes: cDetails.notes,
     }).then(newCustomer => {
       // Notification email
-      if (userEmail && wantsNotifications) {
+      if (userEmail) {
         customerEmails.sendCustomerCreatedMail({
           to: userEmail,
           firstName: cDetails.fname,
@@ -224,7 +460,7 @@ export const postCreateBookSchedule = (req, res, next) => {
           req.session.role = updatedUser.role.toUpperCase(); // np. "CUSTOMER"
           req.session.save(err => {
             if (err) {
-              console.error('Error saving session:', err);
+              console.error(msgs.sessionNotUpdated, err);
             }
           });
 
@@ -239,7 +475,8 @@ export const postCreateBookSchedule = (req, res, next) => {
     });
   } else {
     // Fetching from the database again ensures you get a full Sequelize instance with all methods - this is essential for using instance methods like .save()
-    customerPromise = models.Customer.findByPk(req.user.Customer.customerId, {
+    customerPromise = models.Customer.findOne({
+      where: { customerId: req.user.Customer.customerId },
       include: [
         {
           model: models.CustomerPass,
@@ -249,9 +486,9 @@ export const postCreateBookSchedule = (req, res, next) => {
     });
   }
 
-  if (!req.body.schedule) {
+  if (!req.body.passDefId) {
     errCode = 400;
-    throw new Error('Brak identyfikatora terminu.');
+    throw new Error(msgs.noPassIdPicked);
   }
 
   //@ BOOKING
@@ -274,7 +511,7 @@ export const postCreateBookSchedule = (req, res, next) => {
       .then(scheduleRecord => {
         if (!scheduleRecord) {
           errCode = 404;
-          throw new Error('Nie znaleziono terminu');
+          throw new Error(msgs.noScheduleFound);
         }
         currentScheduleRecord = scheduleRecord;
         successLog(person, controllerName, 'schedule found');
@@ -283,7 +520,7 @@ export const postCreateBookSchedule = (req, res, next) => {
         );
         if (scheduleDateTime < new Date()) {
           errCode = 401;
-          throw new Error('Nie można rezerwować terminu, który już minął.');
+          throw new Error(msgs.cantMarkAbsentForPassedSchedule);
         }
         // Count the current amount of reservations
         return models.Booking.count({
@@ -296,7 +533,7 @@ export const postCreateBookSchedule = (req, res, next) => {
           if (currentAttendance >= scheduleRecord.capacity) {
             // If limit is reached
             errCode = 409;
-            throw new Error('Brak wolnych miejsc na ten termin.');
+            throw new Error(msgs.noSpotsLeft);
           }
 
           // If still enough spaces - check if booked in the past
@@ -442,7 +679,7 @@ export const postCreateBookSchedule = (req, res, next) => {
       res.status(201).json({
         isNewCustomer,
         confirmation: 1,
-        message: 'Miejsce zaklepane - do zobaczenia ;)',
+        message: msgs.attendanceMarkedPresent,
         paymentOrBooking,
       });
     })
@@ -474,7 +711,7 @@ export const putEditMarkAbsent = (req, res, next) => {
     .then(scheduleRecord => {
       if (!scheduleRecord) {
         errCode = 404;
-        throw new Error('Nie znaleziono terminu.');
+        throw new Error(msgs.noScheduleFound);
       }
       currentScheduleRecord = scheduleRecord;
       const scheduleDateTime = new Date(
@@ -483,7 +720,7 @@ export const putEditMarkAbsent = (req, res, next) => {
 
       if (scheduleDateTime < new Date()) {
         errCode = 401;
-        throw new Error('Nie można zwolnić miejsca dla minionego terminu.');
+        throw new Error(msgs.cantMarkAbsentForPassedSchedule);
       }
       return models.Booking.update(
         { attendance: false, timestamp: new Date() },
@@ -509,14 +746,12 @@ export const putEditMarkAbsent = (req, res, next) => {
 
           return res.status(200).json({
             confirmation: 1,
-            message: 'Miejsce zwolnione - dziękujemy za informację :)',
+            message: msgs.attendanceMarkedAbsent,
           });
         } else {
           errCode = 404;
 
-          throw new Error(
-            'Nie znaleziono rezerwacji dla podanego terminu lub rezerwacja nie należy do klienta.'
-          );
+          throw new Error(msgs.noBookingFound);
         }
       });
     })
@@ -558,14 +793,12 @@ export const getPaymentById = (req, res, next) => {
     .then(payment => {
       if (!payment) {
         errCode = 404;
-        throw new Error(
-          'Nie znaleziono rezerwacji lub rezerwacja nie należy do zalogowanego klienta.'
-        );
+        throw new Error(msgs.noPaymentFound);
       }
       successLog(person, controllerName);
       return res.status(200).json({
         confirmation: 1,
-        message: 'Płatność pobrana pomyślnie.',
+        message: msgs.paymentFound,
         isLoggedIn: req.session.isLoggedIn,
         payment,
       });

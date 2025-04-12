@@ -20,7 +20,7 @@ export function useFeedback({
       console.log('updateFeedback res: ', result);
       // if warnings - don't redirect or close
       if (
-        result.confirmation === 0 &&
+        (result.confirmation === 0||result.confirmation === -1) &&
         result.warnings &&
         result.warnings.length > 0
       ) {
@@ -56,9 +56,13 @@ export function useFeedback({
           } else {
             navigate(redirectTarget, { replace: true });
           }
-        }, 1000);
-      } else {
-        onClose();
+        }, 3000);
+      } else if (newStatus === 1) {
+        // close only if success
+        setTimeout(() => {
+          setFeedback({ status: undefined, message: '', warnings: null });
+          onClose();
+        }, 3000);
       }
     },
     [navigate, getRedirectTarget, onClose]

@@ -15,7 +15,7 @@ function DetailsListPayment({ paymentData, userAccountPage }) {
     { label: 'Data:', content: formatIsoDateTime(payment.date) },
     { label: 'Kwota:', content: `${payment.amountPaid} zł` },
     { label: 'Metoda płatności:', content: payment.paymentMethod },
-    { label: 'Opłacono:', content: payment.status },
+    { label: 'Opłacono:', content: payment.status.toUpperCase() === 'COMPLETED' ? 'Zrealizowana' : 'Niekompletna', },
     { label: 'Produkty:', content: payment.product },
   ];
 

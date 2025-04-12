@@ -14,7 +14,7 @@ function ViewAccountPayments({ data }) {
   );
 
   let content, customerStats;
-  if (data.customer) customerStats = statsCalculatorForCustomer(data);
+  if (data.customer) customerStats = statsCalculatorForCustomer(data.customer);
   content = customerStats?.payments.sort(
     (a, b) => new Date(b.date) - new Date(a.date)
   );

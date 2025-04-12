@@ -29,6 +29,7 @@ export const statsCalculatorForCustomer = customer => {
       ...payment,
       rowId: payment.paymentId,
       date: formatIsoDateTime(payment.date),
+      paymentStatus: payment.status.toUpperCase() === 'COMPLETED' ? 'Zrealizowana' : 'Niekompletna',
     });
     const invoice = payment.Invoice;
     if (!!invoice) {

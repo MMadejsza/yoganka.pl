@@ -17,6 +17,10 @@ function DetailsListPassDefinition({
   );
 
   const title = userAccountPage ? 'Rodzaj karnetu' : 'Typ karnetu';
+  const passStatus =
+    typeof passDefinition.status == 'boolean'
+      ? passDefinition.status
+      : passDefinition.status.toUpperCase();
 
   const details = [];
   if (!isPassPurchaseView)
@@ -25,10 +29,9 @@ function DetailsListPassDefinition({
       {
         label: 'Status:',
         content:
-          passDefinition.status === 'active' || passDefinition.status == 1
+          passStatus === 'ACTIVE' || passStatus == 1
             ? 'Aktywny'
-            : passDefinition.status === 'suspended' ||
-                passDefinition.status == 0
+            : passStatus === 'SUSPENDED' || passStatus == 0
               ? 'Wstrzymany'
               : 'Niekontynuowany',
       }

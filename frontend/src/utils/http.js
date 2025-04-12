@@ -1,4 +1,5 @@
 import { QueryClient } from '@tanstack/react-query';
+import * as msgs from '../../../backend/utils/resMessagesUtils';
 export const queryClient = new QueryClient();
 
 // Util function for managing behavior of fetch for http requests
@@ -12,7 +13,7 @@ export async function fetchStatus() {
   // if error
   if (!response.ok) {
     // instantiate error with message
-    const error = new Error('Error occurs while fetching from db');
+    const error = new Error(msgs.userStatusError);
     // encode response status code
     error.code = response.status;
     // encode as message actual error from db
@@ -37,7 +38,7 @@ export async function fetchItem(callPath, { signal }, minRightsPrefix) {
   });
 
   if (!response.ok) {
-    const error = new Error('An error occurred while fetching the item');
+    const error = new Error(msgs.fetchItemError);
     error.code = response.status;
     error.info = await response.json();
     throw error;
@@ -56,7 +57,7 @@ export async function fetchData(link) {
   // if error
   if (!response.ok) {
     // instantiate error with message
-    const error = new Error('Error occurs while fetching from db');
+    const error = new Error(msgs.fetchDataError);
     // encode response status code
     error.code = response.status;
     // encode as message actual error from db

@@ -1435,18 +1435,16 @@ export const getAllPasses = (req, res, next) => {
         return {
           customerPassId: cp.customerPassId,
           rowId: cp.customerPassId,
-          customerFullName: `${customer.firstName} ${customer.lastName} (${customer.customerId})`,
+          customerFirstName: customer.firstName,
+          customerLastName: customer.lastName,
+          customerId: customer.customerId,
+          // customerFullName: `${customer.firstName} ${customer.lastName} (${customer.customerId})`,
           passName: cp.PassDefinition.name,
-          purchaseDate: formatIsoDateTime(cp.purchaseDate),
-          validFrom: formatIsoDateTime(cp.validFrom),
-          validUntil: formatIsoDateTime(cp.validUntil),
+          purchaseDate: cp.purchaseDate,
+          validFrom: cp.validFrom,
+          validUntil: cp.validUntil,
           usesLeft: cp.usesLeft,
-          status:
-            cp.status == 'active' || cp.status == 1
-              ? 'Aktywny'
-              : cp.status == 'suspended' || cp.status == 0
-              ? 'Zawieszony'
-              : 'Wygasły',
+          status: cp.status,
         };
       });
 
@@ -1516,17 +1514,15 @@ export const getPassById = (req, res, next) => {
         return {
           customerPassId: cp.customerPassId,
           rowId: cp.customerPassId,
-          customerFullName: `${customer.firstName} ${customer.lastName} (${customer.customerId})`,
-          purchaseDate: formatIsoDateTime(cp.purchaseDate),
-          validFrom: formatIsoDateTime(cp.validFrom),
-          validUntil: formatIsoDateTime(cp.validUntil),
+          customerFirstName: customer.firstName,
+          customerLastName: customer.lastName,
+          customerId: customer.customerId,
+          // customerFullName: `${customer.firstName} ${customer.lastName} (${customer.customerId})`,
+          purchaseDate: cp.purchaseDate,
+          validFrom: cp.validFrom,
+          validUntil: cp.validUntil,
           usesLeft: cp.usesLeft,
-          status:
-            cp.status == 'active' || cp.status == 1
-              ? 'Aktywny'
-              : cp.status == 'suspended' || cp.status == 0
-              ? 'Zawieszony'
-              : 'Wygasły',
+          status: cp.status,
         };
       });
 
@@ -1600,33 +1596,19 @@ export const getCustomerPassById = (req, res, next) => {
         passType: cp.PassDefinition.passType,
         usesTotal: cp.PassDefinition.usesTotal,
         validityDays: cp.PassDefinition.validityDays,
-        allowedProductTypes: cp.PassDefinition.allowedProductTypes
-          ? JSON.parse(cp.PassDefinition.allowedProductTypes).join(', ')
-          : null,
+        allowedProductTypes: cp.PassDefinition.allowedProductTypes,
         price: cp.PassDefinition.price,
-        status:
-          cp.PassDefinition.status === 'active' ||
-          cp.PassDefinition.status === 1
-            ? 'Aktywny'
-            : cp.PassDefinition.status === 'suspended' ||
-              cp.PassDefinition.status === 0
-            ? 'Wstrzymany'
-            : 'Wygasły',
+        status: cp.PassDefinition.status,
       };
 
       const formattedCustomerPass = {
         rowId: cp.customerPassId,
         customerPassId: cp.customerPassId,
-        purchaseDate: formatIsoDateTime(cp.purchaseDate),
-        validFrom: formatIsoDateTime(cp.validFrom),
-        validUntil: cp.validUntil ? formatIsoDateTime(cp.validUntil) : '-',
-        usesLeft: cp.usesLeft || '-',
-        status:
-          cp.status === 'active' || cp.status === 1
-            ? 'Aktywny'
-            : cp.status === 'suspended' || cp.status === 0
-            ? 'Zawieszony'
-            : 'Wygasły',
+        purchaseDate: cp.purchaseDate,
+        validFrom: cp.validFrom,
+        validUntil: cp.validUntil,
+        usesLeft: cp.usesLeft,
+        status: cp.status,
         payment: payment, // Attached formatted Payment
         passDefinition: passDefinition, // Attached formatted PassDefinition
       };
@@ -2485,12 +2467,22 @@ export const postCreatePayment = (req, res, next) => {
               if (validityDays && validityDays < 30) {
                 // if less then month
                 calcExpiryDate = addDays(purchaseDate, validityDays);
-              } else if (validityDays && validityDays % 30 == 0) {
+              } else if (validityDays && validityDays >= 30) {
                 // if a couple of months where month = 30
-                calcExpiryDate = addMonths(purchaseDate, validityDays / 30);
-              } else if (validityDays && validityDays == 365) {
-                // if 1 year - no more expected
-                calcExpiryDate = addYears(purchaseDate, 1);
+                calcExpiryDate = addMonths(
+                  purchaseDate,
+                  Math.floor(validityDays / 30)
+                );
+              } else if (validityDays && validityDays >= 365) {
+                // if over 1 year
+                calcExpiryDate = addYears(
+                  purchaseDate,
+                  Math.floor(validityDays / 365)
+                );
+              }
+
+              if (calcExpiryDate) {
+                calcExpiryDate.setHours(23, 59, 59, 999);
               }
 
               return models.CustomerPass.create(

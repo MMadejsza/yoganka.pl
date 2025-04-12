@@ -16,6 +16,7 @@ router.get('/get-customer-details', isAuth, customerC.getCustomerDetails);
 
 //! POST - CREATE________________________________________________
 router.post('/create-booking', isAuthUser, customerC.postCreateBookSchedule);
+router.post('/create-pass-purchase', isAuthUser, customerC.postCreateBuyPass);
 
 //! PUT - EDIT____________________________________________________
 router.put(

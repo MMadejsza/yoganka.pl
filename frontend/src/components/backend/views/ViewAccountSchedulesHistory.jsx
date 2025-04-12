@@ -13,7 +13,7 @@ function ViewAccountSchedulesHistory({ data }) {
     data
   );
   let content, customerStats;
-  if (data.customer) customerStats = statsCalculatorForCustomer(data);
+  if (data.customer) customerStats = statsCalculatorForCustomer(data.customer);
   content = customerStats?.attendedSchedules
     .filter(record => {
       const scheduleDateTime = new Date(

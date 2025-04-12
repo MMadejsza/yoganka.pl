@@ -8,6 +8,8 @@ function DetailsListCustomerPass({ customerPass, userAccountPage }) {
     customerPass
   );
 
+
+  const passStatus = customerPass.status.toUpperCase();
   const title = userAccountPage
     ? 'Szczegóły Twojego karnetu'
     : 'Karnet uczestnika';
@@ -32,7 +34,15 @@ function DetailsListCustomerPass({ customerPass, userAccountPage }) {
       content: `${customerPass.usesLeft} sesj(i/a/e)`,
     });
   }
-  details.push({ label: 'Status:', content: customerPass.status });
+  details.push({
+    label: 'Status:',
+    content:
+      passStatus === 'ACTIVE' || passStatus == 1
+        ? 'Aktywny'
+        : passStatus === 'SUSPENDED' || passStatus == 0
+          ? 'Wstrzymany'
+          : 'Wygasły',
+  });
 
   return (
     <GenericList

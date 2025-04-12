@@ -6,6 +6,7 @@ import {
   useParams,
   useSearchParams,
 } from 'react-router-dom';
+import * as msgs from '../../../../backend/utils/resMessagesUtils.js';
 import { useAuthStatus } from '../../hooks/useAuthStatus.js';
 import { useFeedback } from '../../hooks/useFeedback.js';
 import { useInput } from '../../hooks/useInput.js';
@@ -75,12 +76,12 @@ function LoginFrom({ successMsg, errorMsg }) {
       if (verified === '1') {
         updateFeedback({
           confirmation: 1,
-          message: 'Twój adres e-mail został potwierdzony!',
+          message: msgs.emailVerified,
         });
       } else if (verified === '0') {
         updateFeedback({
           confirmation: -1,
-          message: 'Weryfikacja e-maila nie powiodła się.',
+          message: msgs.emailNotVerified,
         });
       }
       setFeedbackUpdated(true);

@@ -1,13 +1,14 @@
 import { Op, Sequelize, col, fn } from 'sequelize';
 import * as models from '../models/_index.js';
 import { areSettingsChanged } from '../utils/controllersUtils.js';
-import { formatIsoDateTime, getWeekDay } from '../utils/dateTimeUtils.js';
+import { getWeekDay } from '../utils/dateTimeUtils.js';
 import {
   callLog,
   catchErr,
   errorCode,
   successLog,
 } from '../utils/debuggingUtils.js';
+import * as msgs from '../utils/resMessagesUtils.js';
 let errCode = errorCode;
 const person = 'User';
 
@@ -22,7 +23,7 @@ export const getAccount = (req, res, next) => {
   // check if there is logged in User
   if (!req.user) {
     errCode = 401;
-    throw new Error('Użytkownik nie jest zalogowany');
+    throw new Error(msgs.notLoggedIn);
   }
 
   // if only user
@@ -31,7 +32,7 @@ export const getAccount = (req, res, next) => {
     console.log('\n✅✅✅ getAccount user fetched');
     return res.status(200).json({
       confirmation: 1,
-      message: 'Profil uczestnika pobrany pomyślnie.',
+      message: msgs.customerLoaded,
       user,
     });
   } else {
@@ -120,7 +121,7 @@ export const getAccount = (req, res, next) => {
       .then(customerInstance => {
         if (!customerInstance) {
           errCode = 404;
-          throw new Error('Nie pobrano danych uczestnika.');
+          throw new Error(msgs.noCustomerFound);
         }
         const customer = customerInstance.toJSON();
 
@@ -129,16 +130,11 @@ export const getAccount = (req, res, next) => {
             rowId: cp.customerPassId,
             customerPassId: cp.customerPassId,
             passName: cp.PassDefinition.name,
-            purchaseDate: formatIsoDateTime(cp.purchaseDate),
-            validFrom: formatIsoDateTime(cp.validFrom),
-            validUntil: formatIsoDateTime(cp.validUntil),
+            purchaseDate: cp.purchaseDate,
+            validFrom: cp.validFrom,
+            validUntil: cp.validUntil,
             usesLeft: cp.usesLeft,
-            status:
-              cp.status == 'active' || cp.status == 1
-                ? 'Aktywny'
-                : cp.status == 'suspended' || cp.status == 0
-                ? 'Zawieszony'
-                : 'Wygasły',
+            status: cp.status,
           };
         });
         delete customer.CustomerPasses;
@@ -171,7 +167,7 @@ export const getAccount = (req, res, next) => {
         return res.status(200).json({
           customer,
           confirmation: 1,
-          message: 'Profil uczestnika pobrany pomyślnie.',
+          message: msgs.customerLoaded,
         });
       })
       .catch(err => catchErr(person, res, errCode, err, controllerName));
@@ -189,15 +185,14 @@ export const getSettings = (req, res, next) => {
         successLog(person, controllerName, 'default');
         return res.status(200).json({
           confirmation: 1,
-          message: 'Ustawienia domyślne.',
+          message: msgs.defaultSettingsLoaded,
           preferences,
         });
-        // throw new Error('Nie pobrano ustawień.');
       }
       successLog(person, controllerName, 'custom');
       return res.status(200).json({
         confirmation: 1,
-        message: 'Ustawienia pobrana pomyślnie.',
+        message: msgs.settingsLoaded,
         preferences,
       });
     })
@@ -238,7 +233,7 @@ export const putEditSettings = (req, res, next) => {
       } else {
         // New preferences created
         successLog(person, controllerName, 'created');
-        return { confirmation: 1, message: 'Ustawienia zostały utworzone' };
+        return { confirmation: 1, message: msgs.settingsUpdated };
       }
     })
     .then(result => {
@@ -290,7 +285,7 @@ export const getAllSchedules = (req, res, next) => {
     .then(records => {
       if (!records) {
         errCode = 404;
-        throw new Error('Nie znaleziono terminów.');
+        throw new Error(msgs.noSchedulesFound);
       }
       // Convert for records for different names
       const formattedRecords = records.map(s => {
@@ -353,7 +348,7 @@ export const getAllSchedules = (req, res, next) => {
       successLog(person, controllerName);
       res.json({
         confirmation: 1,
-        message: 'Terminy pobrane pomyślnie.',
+        message: msgs.schedulesFound,
         totalHeaders, // To render
         totalKeys, // to map to the rows attributes
         content: formattedRecords, // With new names
@@ -384,7 +379,7 @@ export const getScheduleById = (req, res, next) => {
     .then(scheduleData => {
       if (!scheduleData) {
         errCode = 404;
-        throw new Error('Nie znaleziono terminu.');
+        throw new Error(msgs.noScheduleFound);
       }
 
       // Convert to JSON
@@ -440,7 +435,7 @@ export const getAllPasses = (req, res, next) => {
     .then(records => {
       if (!records) {
         errCode = 404;
-        throw new Error('Nie znaleziono karnetów.');
+        throw new Error(msgs.noPassDefsFound);
       }
 
       // Convert for records for different names
@@ -469,7 +464,7 @@ export const getAllPasses = (req, res, next) => {
       successLog(person, controllerName);
       res.json({
         confirmation: 1,
-        message: 'Terminy pobrane pomyślnie.',
+        message: msgs.passDefsFound,
         totalKeys, // to map to the rows attributes
         content: formattedRecords, // With new names
       });
@@ -485,7 +480,7 @@ export const getPassById = (req, res, next) => {
     .then(passData => {
       if (!passData) {
         errCode = 404;
-        throw new Error('Nie znaleziono definicji karnetu.');
+        throw new Error(msgs.noPassDefFound);
       }
       // console.log(scheduleData);
       let passDef = passData.toJSON();
@@ -497,7 +492,7 @@ export const getPassById = (req, res, next) => {
       successLog(person, controllerName);
       return res.status(200).json({
         confirmation: 1,
-        message: 'Definicja karnetu pobrana pomyślnie',
+        message: msgs.passDefFound,
         passDefinition: passDefFormatted,
       });
     })

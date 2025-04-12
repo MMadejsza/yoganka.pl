@@ -13,6 +13,7 @@ import {
   sendResetPassRequestMail,
   sendSignupConfirmationMail,
 } from '../utils/mails/templates/authorization/authorizationEmails.js';
+import * as msgs from '../utils/resMessagesUtils.js';
 let errCode = errorCode;
 const person = 'User';
 
@@ -116,7 +117,7 @@ export const getStatus = (req, res, next) => {
         console.error('❌ Error in getStatus:', err);
         return res.status(500).json({
           confirmation: 0,
-          message: 'Internal error loading user status.',
+          message: msgs.userStatusError,
         });
       });
   } else {
@@ -144,15 +145,13 @@ export const postLogin = (req, res, next) => {
       if (!user) {
         errCode = 404;
         console.log("\n❌❌❌ User doesn't exist");
-        throw new Error('Użytkownik nie istnieje.');
+        throw new Error(msgs.userNotFound);
       }
 
       if (user.emailVerified === false) {
         errCode = 403;
         console.log('\n⛔ Konto nieaktywne – brak potwierdzenia maila');
-        throw new Error(
-          'Aby się zalogować, najpierw potwierdź swój adres e-mail.'
-        );
+        throw new Error(msgs.emailNotYetVerified);
       }
 
       user.update({ lastLoginDate: date });
@@ -177,12 +176,12 @@ export const postLogin = (req, res, next) => {
               type: 'login',
               code: 200,
               confirmation: 1,
-              message: 'Zalogowano pomyślnie',
+              message: msgs.userLoggedIn,
             });
           } else {
             errCode = 400;
             console.log('\n❌❌❌ Password incorrect');
-            throw new Error('Hasło nieprawidłowe.');
+            throw new Error(msgs.wrongPassword);
           }
         });
     })
@@ -216,12 +215,12 @@ export const getEmailToken = (req, res, next) => {
 
   if (!token) {
     errCode = 400;
-    throw new Error('Link prawdopodobnie wygasł.');
+    throw new Error(msgs.invalidTokenMessage);
   }
 
   if (token.length !== 64) {
     errCode = 400;
-    throw new Error('Link jest nieprawidłowy.');
+    throw new Error(msgs.invalidTokenMessage);
   }
 
   models.VerificationToken.findOne({
@@ -242,7 +241,7 @@ export const getEmailToken = (req, res, next) => {
       if (!validTokenRecord) {
         errCode = 400;
         console.log('\n❌ Nieprawidłowy lub wygasły token weryfikacyjny.');
-        throw new Error('Link jest nieważny lub wygasł.');
+        throw new Error(msgs.invalidTokenMessage);
       }
 
       // To change the status of the linked account
@@ -257,7 +256,7 @@ export const getEmailToken = (req, res, next) => {
 
       return res.status(200).json({
         confirmation: 1,
-        message: 'konto aktywowane.',
+        message: msgs.accountActivated,
       });
     })
     .catch(err =>
@@ -276,14 +275,14 @@ export const postSignup = (req, res, next) => {
 
   if (password !== confirmedPassword) {
     errCode = 400;
-    throw new Error('Hasła nie są zgodne.');
+    throw new Error(msgs.passwordsNotMatching);
   }
 
   models.User.findOne({ where: { email } })
     .then(user => {
       if (user) {
         errCode = 303;
-        throw new Error('Użytkownik już istnieje.');
+        throw new Error(msgs.userAlreadyExists);
       }
 
       // it returns the promise
@@ -328,8 +327,7 @@ export const postSignup = (req, res, next) => {
             type: 'signup',
             code: 200,
             confirmation: 1,
-            message:
-              'Zarejestrowano pomyślnie. Sprawdź maila, aby aktywować konto.',
+            message: msgs.registrationSuccess,
           });
         });
     })
@@ -351,11 +349,11 @@ export const getPasswordToken = (req, res, next) => {
 
   if (!token) {
     errCode = 400;
-    throw Error('Link jest niekompletny.');
+    throw Error(msgs.incompleteToken);
   }
   if (token.length !== 64) {
     errCode = 400;
-    throw Error('Link jest nieprawidłowy.');
+    throw Error(msgs.invalidTokenMessage);
   }
 
   models.VerificationToken.findOne({
@@ -376,12 +374,12 @@ export const getPasswordToken = (req, res, next) => {
       if (!validTokenRecord) {
         errCode = 400;
         console.log('\n❌❌❌ Wrong token');
-        throw Error('Link wygasł lub jest nieprawidłowy.');
+        throw Error(msgs.invalidTokenMessage);
       }
       return res.status(200).json({
         confirmation: 1,
         userId: validTokenRecord.userId,
-        message: 'Link jest prawidłowy.',
+        message: msgs.validTokenMessage,
       });
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));
@@ -403,7 +401,7 @@ export const postResetPassword = (req, res, next) => {
         if (!user) {
           errCode = 404;
           console.log("\n❌❌❌ User doesn't exist");
-          throw new Error('Użytkownik nie istnieje.');
+          throw new Error(msgs.userNotFound);
         }
 
         return models.VerificationToken.create({
@@ -420,7 +418,7 @@ export const postResetPassword = (req, res, next) => {
           type: 'reset',
           code: 200,
           confirmation: 1,
-          message: 'Link resetujący hasło wysłany na maila.',
+          message: msgs.passwordResetLinkSent,
         });
       })
       .catch(err =>
@@ -445,7 +443,7 @@ export const putEditPassword = (req, res, next) => {
 
   if (password !== confirmedPassword) {
     errCode = 400;
-    throw new Error('Hasła nie są zgodne.');
+    throw new Error(msgs.passwordsNotMatching);
   }
 
   // Find te token for this user
@@ -464,13 +462,12 @@ export const putEditPassword = (req, res, next) => {
     ],
   })
     .then(validTokenRecord => {
-      if (!validTokenRecord) throw new Error('Sesja wygasła');
+      if (!validTokenRecord) throw new Error(msgs.sessionExpired);
       // save assigned user for later methods
       const user = validTokenRecord.User;
 
       return bcrypt.hash(password, 12).then(hashedPassword => {
-        if (!hashedPassword)
-          throw Error('Błąd szyfrowania hasła - prośba odrzucona.');
+        if (!hashedPassword) throw Error(msgs.passwordEncryptionError);
         user.passwordHash = hashedPassword;
         // save user but remain the token in the db for eventual abuse logging later on
         return user.save();
@@ -482,7 +479,7 @@ export const putEditPassword = (req, res, next) => {
         type: 'new-password',
         code: 200,
         confirmation: 1,
-        message: 'Nowe hasło przyjęte - zaloguj się.',
+        message: msgs.passwordUpdated,
       });
     })
     .catch(err =>

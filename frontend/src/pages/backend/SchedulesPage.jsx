@@ -57,7 +57,7 @@ function SchedulePage() {
     reset: resetBuy,
   } = useMutation({
     mutationFn: formDataObj =>
-      mutateOnCreate(status, formDataObj, `/api/customer/create-purchase`),
+      mutateOnCreate(status, formDataObj, `/api/customer/create-pass-purchase`),
 
     onSuccess: res => {
       queryClient.invalidateQueries(['authStatus']);

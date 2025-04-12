@@ -19,13 +19,14 @@ function ViewPassDefinition({
 }) {
   console.log('ViewPassDefinition data', data);
   const { passDefinition } = data;
-  const isAdminViewEligible = role === 'ADMIN' && isAdminPanel;
-
+  console.log('isAdminPanel', isAdminPanel);
   const navigate = useNavigate();
 
   const { data: status } = useAuthStatus();
   const { isLoggedIn } = status;
   console.log(`status`, status);
+  const isAdminViewEligible = status.role === 'ADMIN' && isAdminPanel;
+  console.log('isAdminViewEligible', isAdminViewEligible);
 
   const { feedback, updateFeedback } = useFeedback({
     getRedirectTarget: result => (result.confirmation === 1 ? '/konto' : null),
@@ -46,13 +47,11 @@ function ViewPassDefinition({
 
   const handlePayment = async () => {
     try {
-      const res = await paymentOps.booking.onBuy({
+      const res = await paymentOps.purchase.onBuy({
         customerDetails: newCustomerDetails || null,
-        schedule: schedule.scheduleId, //!
-        product: product.name, //!
-        status: 'Paid',
-        amountPaid: product.price,
-        amountDue: 0,
+        passDefId: passDefinition.passDefId,
+        passDefinition,
+        amountPaid: passDefinition.price,
         paymentMethod: 'Credit Card',
         paymentStatus: 'Completed',
       });

@@ -42,7 +42,9 @@ export const areCustomerDetailsChanged = (
 ) => {
   if (!newPhone || !newPhone.trim()) {
     console.log(`\n❌❌❌ ${person} Error putEditCustomerDetails:`, 'No phone');
-    res.status(400).json({ message: 'Numer telefonu nie może być pusty' });
+    res.status(400).json({
+      message: msgs.noPhonePicked,
+    });
     return true;
   }
 
@@ -53,7 +55,7 @@ export const areCustomerDetailsChanged = (
     console.log(`\n❓❓❓ ${person} pudEditCustomer No change`);
     res.status(200).json({
       confirmation: 0,
-      message: 'Brak zmian',
+      message: msgs.noCustomerDetailsChanged,
     });
     return true;
   }
@@ -77,7 +79,10 @@ export const areSettingsChanged = (
   ) {
     // Nothing changed
     console.log(`\n❓❓❓ putEditUserSettings ${person} Preferences no change`);
-    res.status(200).json({ confirmation: 0, message: 'Brak zmian' });
+    res.status(200).json({
+      confirmation: 0,
+      message: msgs.noSettingsChange,
+    });
     return null;
   } else {
     // Update
@@ -91,7 +96,7 @@ export const areSettingsChanged = (
       successLog(person, controllerName, 'updated');
       return {
         confirmation: 1,
-        message: 'Ustawienia zostały zaktualizowane.',
+        message: msgs.settingsUpdated,
       };
     });
   }
@@ -100,7 +105,7 @@ export const areSettingsChanged = (
 export const convertDurationToTime = durationInput => {
   const durationInHours = parseFloat(durationInput);
   if (isNaN(durationInHours)) {
-    throw new Error('Nieprawidłowa wartość duration.');
+    throw new Error(msgs.invalidDuration);
   }
   const hours = Math.floor(durationInHours);
   const minutes = Math.floor((durationInHours - hours) * 60);
