@@ -47,8 +47,10 @@ const router = createBrowserRouter([
           { path: 'ustawienia', element: <AccountPage /> },
         ],
       },
-      { path: 'grafik', element: <SchedulePage /> },
+      { path: 'grafik/karnety', element: <SchedulePage /> },
       { path: 'grafik/:id', element: <SchedulePage /> },
+      { path: 'grafik', element: <SchedulePage /> },
+
       {
         path: 'admin-console',
         element: <AdminPage />,

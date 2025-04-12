@@ -84,14 +84,10 @@ function AdminPage() {
     location.pathname.includes(path)
   );
   const modalMatch = useMatch('/admin-console/show-all-users/:id');
-  const [isPageA, setIsPageA] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(modalMatch);
 
-  const handleSwitchContent = (link, shouldSwitchState) => {
-    if (shouldSwitchState) {
-      return setIsPageA(prev => !prev);
-    } else setIsPageA(true);
-    navigate(`${location.pathname}/${link}`, {
+  const handleSwitchContent = link => {
+    navigate(`${link}`, {
       state: { background: location },
     });
   };

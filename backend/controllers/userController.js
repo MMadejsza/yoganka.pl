@@ -295,29 +295,36 @@ export const getAllSchedules = (req, res, next) => {
       // Convert for records for different names
       const formattedRecords = records.map(s => {
         // Transform to pure js object - not sequelize instance - to get all known features
-        const schedule = s.get({ plain: true });
+        const schedule = s.toJSON();
 
         const activeBookings = schedule.Bookings?.filter(
           booking => booking.attendance === 1 || booking.attendance === true
         );
 
-        schedule.day = getWeekDay(schedule.date);
-        schedule.productType = schedule.Product.type;
-        schedule.productName = schedule.Product.name;
-        schedule.productPrice = schedule.Product.price;
-        schedule.wasUserReserved =
+        const wasUserReserved =
           schedule.Bookings?.some(
             booking => booking.customerId === req.user?.Customer?.customerId
           ) || false;
-        schedule.isUserGoing = activeBookings.some(booking => {
+
+        const isUserGoing = activeBookings.some(booking => {
           const customerId = booking.customerId;
           const loggedInID = req.user?.Customer?.customerId;
-
           return customerId == loggedInID;
         });
-        schedule.attendance = `${activeBookings?.length}/${schedule.capacity}`;
-        schedule.full = activeBookings?.length >= schedule.capacity;
-        return schedule; // Return new record object
+
+        return {
+          ...schedule,
+          rowId: schedule.scheduleId,
+          day: getWeekDay(schedule.date),
+          productType: schedule.Product.type,
+          productName: schedule.Product.name,
+          productPrice: schedule.Product.price,
+          wasUserReserved,
+          isUserGoing,
+          attendance: `${activeBookings?.length}/${schedule.capacity}`,
+          full: activeBookings?.length >= schedule.capacity,
+          rowId: schedule.scheduleId,
+        };
       });
 
       // New headers (keys from columnMap)
@@ -382,33 +389,90 @@ export const getScheduleById = (req, res, next) => {
 
       // Convert to JSON
       const schedule = scheduleData.toJSON();
-      let isUserGoing = false;
-      schedule.attendance = 0;
-      schedule.full = false;
-      // We substitute payments content for security
-      if (schedule.Bookings && schedule.Bookings?.length > 0) {
-        let wasUserReserved;
-        const beingAttendedSchedules = schedule.Bookings.filter(
-          schedule => schedule.attendance == 1 || schedule.attendance == true
-        );
-        if (isUser && isCustomer) {
-          wasUserReserved = schedule.Bookings.some(
-            booking => booking.customerId === req.user?.Customer.customerId
-          );
-          isUserGoing = beingAttendedSchedules.some(
-            booking => booking.customerId === req.user.Customer.customerId
-          );
-          schedule.Bookings = beingAttendedSchedules.length;
-        }
-        schedule.attendance = beingAttendedSchedules.length;
-        schedule.isUserGoing = isUserGoing;
-        schedule.wasUserReserved = wasUserReserved;
-        schedule.full = beingAttendedSchedules.length >= schedule.capacity;
-      }
+
+      const beingAttendedSchedules =
+        schedule.Bookings && schedule.Bookings.length > 0
+          ? schedule.Bookings.filter(
+              booking => booking.attendance == 1 || booking.attendance == true
+            )
+          : [];
+      const wasUserReserved =
+        isUser && isCustomer
+          ? schedule.Bookings?.some(
+              booking => booking.customerId === req.user?.Customer.customerId
+            )
+          : false;
+      const isUserGoing =
+        isUser && isCustomer
+          ? beingAttendedSchedules.some(
+              booking => booking.customerId === req.user.Customer.customerId
+            )
+          : false;
+
+      const formattedSchedule = {
+        ...schedule,
+        attendance: beingAttendedSchedules.length,
+        full: beingAttendedSchedules.length >= schedule.capacity,
+        isUserGoing,
+        wasUserReserved,
+        Bookings:
+          isUser && isCustomer
+            ? beingAttendedSchedules.length
+            : schedule.Bookings,
+      };
 
       successLog(person, controllerName);
-      return res.status(200).json({ schedule, user: req.user });
+      return res
+        .status(200)
+        .json({ schedule: formattedSchedule, user: req.user });
       // return res.status(200).json({schedule});
+    })
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
+};
+
+//! PASSES_______________________________________________
+//@ GET
+export const getAllPasses = (req, res, next) => {
+  const controllerName = 'getAllPassDefinitions';
+  callLog(req, person, controllerName);
+
+  models.PassDefinition.findAll()
+    .then(records => {
+      if (!records) {
+        errCode = 404;
+        throw new Error('Nie znaleziono karnetów.');
+      }
+
+      // Convert for records for different names
+      const formattedRecords = records.map(record => {
+        const passDef = record.toJSON();
+
+        return {
+          ...passDef,
+          rowId: passDef.passDefId,
+        };
+      });
+
+      const totalKeys = [
+        'passDefId',
+        'name',
+        'description',
+        'passType',
+        'usesTotal',
+        'validityDays',
+        'allowedProductTypes',
+        'price',
+        '',
+      ];
+
+      // ✅ Return response to frontend
+      successLog(person, controllerName);
+      res.json({
+        confirmation: 1,
+        message: 'Terminy pobrane pomyślnie.',
+        totalKeys, // to map to the rows attributes
+        content: formattedRecords, // With new names
+      });
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));
 };

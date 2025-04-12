@@ -164,6 +164,7 @@ function TableAttendance({ stats, isAdminPage }) {
         isAdminPage={isAdminPage}
         adminActions={true}
         onQuickAction={[{ symbol: 'person_remove', method: markAbsent }]}
+        status={status}
       />
     </WrapperModalTable>
   );

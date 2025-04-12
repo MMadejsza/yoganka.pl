@@ -1,4 +1,6 @@
+import { useLocation } from 'react-router-dom';
 import { parsePLDateAtEndOfDay } from '../../utils/dateTime';
+
 function ModalTable({
   headers,
   content,
@@ -17,26 +19,35 @@ function ModalTable({
       status?.isLoggedIn != undefined ? status.isLoggedIn : 'N/A',
     isCustomer = status?.role === 'CUSTOMER',
     isAdmin = status?.role === 'ADMIN';
+  const location = useLocation();
+  const isAdminView = location.pathname.includes('admin-console');
+  const isUserPassesView = location.pathname.includes('grafik/karnety');
   console.log('ModalTable content', content);
   console.log('ModalTable headers', headers);
   console.log('ModalTable keys', keys);
   console.log('ModalTable status', status);
 
-  const pickCustomerSymbol = (row, isArchived, symbol, hasValidPass) => {
+  const pickCustomerSymbol = (
+    row,
+    isArchived,
+    symbol,
+    hasValidPass,
+    isUserPassesView
+  ) => {
     if (isAdminPage && adminActions) {
       return symbol;
     } else if (isLoggedIn && (isCustomer || isAdmin)) {
       if (row.isUserGoing) return 'check';
       else if (row.full || isArchived) return 'block';
       else if (row.wasUserReserved) return 'restore';
-      else if (hasValidPass) return 'calendar_add_on';
+      else if (hasValidPass && !isUserPassesView) return 'calendar_add_on';
       else return 'local_mall';
     }
     return 'lock_person';
   };
 
   const hasValidPassFn = row => {
-    return status.user?.Customer?.CustomerPasses?.some(currentCustomerPass => {
+    return status?.user?.Customer?.CustomerPasses?.some(currentCustomerPass => {
       const allowedTypeArr = JSON.parse(
         currentCustomerPass.PassDefinition.allowedProductTypes
       );
@@ -61,14 +72,21 @@ function ModalTable({
     });
   };
 
-  const getCustomerViewSymbol = (row, isArchived, action) => {
-    const hasValidPass = hasValidPassFn(row);
+  const getSymbol = (row, isArchived, action) => {
+    const hasValidPass =
+      isAdminView || isUserPassesView ? true : hasValidPassFn(row);
 
     const conditionalClass = `material-symbols-rounded nav__icon${row.isActionDisabled === true ? ' dimmed' : ''}${action.extraClass ? ` ${action.extraClass}` : ''}${!hasValidPass && !row.isUserGoing ? ` black` : ''}`;
 
     return (
       <span className={conditionalClass}>
-        {pickCustomerSymbol(row, isArchived, action.symbol, hasValidPass)}
+        {pickCustomerSymbol(
+          row,
+          isArchived,
+          action.symbol,
+          hasValidPass,
+          isUserPassesView
+        )}
       </span>
     );
   };
@@ -117,7 +135,8 @@ function ModalTable({
     const isArchived = archived != undefined ? archived : 'N/A';
     const isAuthorized =
       status?.role != undefined ? isCustomer || isAdmin : 'N/A';
-    const hasPass = hasValidPassFn(row);
+    const hasPass =
+      isAdminView || isUserPassesView ? true : hasValidPassFn(row);
     // console.log('onRowBtnClick:', {
     //   isUserGoing: isUserGoing,
     //   isLoggedIn: isLoggedIn,
@@ -210,7 +229,7 @@ function ModalTable({
                             onRowBtnClick(row, isArchived, action.method, e);
                           }}
                         >
-                          {getCustomerViewSymbol(row, isArchived, action)}
+                          {getSymbol(row, isArchived, action)}
                         </button>
                       ))}
                     </div>
@@ -226,11 +245,6 @@ function ModalTable({
                     }${key == 'Hasło (Szyfrowane)' ? 'hash' : ''}`}
                     key={keyIndex}
                   >
-                    {/* <span
-                      className={`material-symbols-rounded nav__icon nav__icon--${keyClass}`}
-                    >
-                      {pickCellSymbol(key)}
-                    </span> */}
                     {formatValue(value, keyClass)}
                   </td>
                 );

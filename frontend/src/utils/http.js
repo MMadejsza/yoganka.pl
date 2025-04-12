@@ -47,6 +47,9 @@ export async function fetchItem(callPath, { signal }, minRightsPrefix) {
   return data;
 }
 export async function fetchData(link) {
+  console.log('✅✅✅ fetchData Called');
+  console.log('✅✅ link ', link);
+  console.log('✅ final fetchPath ', `/api${link}`);
   // console.log(`fetchData link: ${link}`);
   // await promise solve
   const response = await fetch(`/api${link}`);

@@ -220,16 +220,18 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
           <TableAttendance
             stats={scheduleStats}
             type={product.type}
+            status={status}
             isAdminPage={isAdminPanel}
           />
           <TableProductPayments
             payments={scheduleStats.totalPayments}
             type={product.type}
+            status={status}
             isAdminPage={isAdminPanel}
           />
 
           {/*//@ Feedback */}
-          <TableProductReviews stats={scheduleStats} />
+          <TableProductReviews stats={scheduleStats} status={status} />
         </>
       )}
 

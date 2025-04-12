@@ -197,6 +197,7 @@ function ViewsController({
             data={data}
             onClose={onClose}
             isModalOpen={visited}
+            role={role}
           />
         );
         controller.recordEditor = '';
