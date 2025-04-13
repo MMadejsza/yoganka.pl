@@ -51,7 +51,7 @@ function ViewAccountPayments({ data }) {
         headers={[
           'Id',
           'Data',
-          'Zajęcia',
+          'Produkt (Nr)',
           'Kwota całkowita',
           'Metoda płatności',
           'Status płatności',

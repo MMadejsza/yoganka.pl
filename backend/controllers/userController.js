@@ -108,6 +108,16 @@ export const getAccount = (req, res, next) => {
               model: models.Payment,
               required: false,
             },
+            {
+              model: models.CustomerPass,
+              required: false,
+              include: [
+                {
+                  model: models.PassDefinition,
+                  required: true,
+                },
+              ],
+            },
           ],
           attributes: {
             exclude: ['customerId', 'scheduleId'], // deleting
@@ -143,12 +153,12 @@ export const getAccount = (req, res, next) => {
           const schedule = booking.ScheduleRecord;
           let scheduleDetails = '';
           if (schedule) {
-            scheduleDetails = `${schedule.Product.name} - ${schedule.date} ${schedule.startTime} (Id: ${schedule.scheduleId})`;
+            scheduleDetails = `${schedule.Product.name} - ${schedule.date} ${schedule.startTime} (${schedule.scheduleId})`;
           }
           const payment = booking.Payment
-            ? `(Id: ${booking.Payment.paymentId}) ${booking.Payment.paymentMethod}`
+            ? `${booking.Payment.paymentMethod} (${booking.Payment.paymentId})`
             : booking.CustomerPass && booking.CustomerPass.PassDefinition
-            ? `${booking.CustomerPass.PassDefinition.name}`
+            ? `${booking.CustomerPass.PassDefinition.name} (${booking.CustomerPass.customerPassId})`
             : '';
 
           return {

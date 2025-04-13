@@ -2,7 +2,11 @@ import { addDays, addMonths, addYears } from 'date-fns';
 import 'dotenv/config';
 import { Op } from 'sequelize';
 import * as models from '../models/_index.js';
-import { areCustomerDetailsChanged } from '../utils/controllersUtils.js';
+import {
+  areCustomerDetailsChanged,
+  isPassValidForSchedule,
+  pickTheBestPassForSchedule,
+} from '../utils/controllersUtils.js';
 import { formatIsoDateTime, isAdult } from '../utils/dateTimeUtils.js';
 import db from '../utils/db.js';
 import {
@@ -13,7 +17,6 @@ import {
 } from '../utils/debuggingUtils.js';
 import * as customerEmails from '../utils/mails/templates/customerActions/_customerEmails.js';
 import * as msgs from '../utils/resMessagesUtils.js';
-
 let errCode = errorCode;
 const person = 'Customer';
 
@@ -287,7 +290,7 @@ export const postCreateBuyPass = (req, res, next) => {
           {
             customerId: currentCustomer.customerId,
             date: new Date(),
-            product: currentPassDefinition.name,
+            product: `${currentPassDefinition.name} (${currentPassDefinition.passDefId})`,
             status: 'COMPLETED', // temp
             amountPaid: currentPassDefinition.price,
             amountDue: 0, // temp
@@ -486,10 +489,10 @@ export const postCreateBookSchedule = (req, res, next) => {
     });
   }
 
-  if (!req.body.passDefId) {
-    errCode = 400;
-    throw new Error(msgs.noPassIdPicked);
-  }
+  // if (!req.body.passDefId) {
+  //   errCode = 400;
+  //   throw new Error(msgs.noPassIdPicked);
+  // }
 
   //@ BOOKING
   db.transaction(t => {
@@ -571,19 +574,34 @@ export const postCreateBookSchedule = (req, res, next) => {
               return existingBooking;
             });
         } else {
-          // Booking doesn't exist - we need to create one but first we have to check again if customer has already the pass for this particular type of schedule or he will have to issue single payment
+          // Booking doesn't exist - we need to create one but first we have to check again if customer has already the pass for this particular type of schedule or he will have to issue single payment (or chose it)
           let validPass = null;
 
           // Fetch passes from middleware
+          const chosenCustomerPassId = req.body.chosenCustomerPassId;
+          const numericId = Number(chosenCustomerPassId);
+          console.log('❗❗❗ chosenCustomerPassId: ', chosenCustomerPassId);
           if (
+            chosenCustomerPassId &&
+            chosenCustomerPassId != 'gateway' &&
             currentCustomer.CustomerPasses &&
             currentCustomer.CustomerPasses.length > 0
           ) {
-            // Apply validation from prepared util to Chose the best for User pass
-            validPass = chooseBestPassForSchedule(
-              currentCustomer.CustomerPasses,
-              currentScheduleRecord
-            );
+            // Apply validation from prepared util to Chose the best for User pass unless customer manually chose the one
+            if (!isNaN(numericId)) {
+              validPass = isPassValidForSchedule(
+                currentCustomer.CustomerPasses.find(
+                  cp => cp.customerPassId == numericId
+                ),
+                currentScheduleRecord
+              );
+            } else {
+              validPass = pickTheBestPassForSchedule(
+                currentCustomer.CustomerPasses,
+                currentScheduleRecord
+              ).bestPass;
+            }
+            console.log('❗❗❗ valid pass: ', validPass.PassDefinition.name);
           }
 
           if (validPass) {
@@ -626,12 +644,13 @@ export const postCreateBookSchedule = (req, res, next) => {
               return booking;
             });
           } else {
+            if (numericId) throw new Error('Nie rozpoznano wybranego karnetu.');
             // No pass - payment first
             return models.Payment.create(
               {
                 customerId: currentCustomer.customerId,
                 date: new Date(),
-                product: `${currentScheduleRecord.Product.name} (sId: ${currentScheduleRecord.scheduleId})`,
+                product: `${currentScheduleRecord.Product.name} (${currentScheduleRecord.scheduleId})`,
                 status: req.body.status,
                 amountPaid: currentScheduleRecord.Product.price,
                 amountDue: req.body.amountDue,

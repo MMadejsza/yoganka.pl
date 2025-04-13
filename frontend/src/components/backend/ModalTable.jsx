@@ -50,7 +50,11 @@ function ModalTable({
     const hasValidPass =
       isAdminView || isUserPassesView ? true : hasValidPassFn(status, row);
     // console.log('hasValidPass', hasValidPass);
-    const conditionalClass = `material-symbols-rounded nav__icon${row.isActionDisabled === true ? ' dimmed' : ''}${action.extraClass ? ` ${action.extraClass}` : ''}${!hasValidPass && !row.isUserGoing && !row.wasUserReserved ? ` black` : ''}`;
+    const conditionalClass = `material-symbols-rounded nav__icon${
+      row.isActionDisabled === true ? ' dimmed' : ''
+    }${action.extraClass ? ` ${action.extraClass}` : ''}${
+      !hasValidPass && !row.isUserGoing && !row.wasUserReserved ? ` black` : ''
+    }`;
 
     return (
       <span className={conditionalClass}>
@@ -124,7 +128,7 @@ function ModalTable({
       e.stopPropagation();
       method({
         customerDetails: '',
-        schedule: row.scheduleId,
+        scheduleId: row.scheduleId,
         product: row.productName,
         status: 'Paid',
         amountPaid: row.price,
@@ -140,7 +144,9 @@ function ModalTable({
 
   return (
     <table
-      className={`modal-table ${classModifier ? `modal-table--${classModifier}` : ''}`}
+      className={`modal-table ${
+        classModifier ? `modal-table--${classModifier}` : ''
+      }`}
     >
       <thead className='modal-table__headers'>
         <tr>

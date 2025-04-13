@@ -1,11 +1,14 @@
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { pickTheBestPassForSchedule } from '../../../../../backend/utils/controllersUtils.js';
 import { useAuthStatus } from '../../../hooks/useAuthStatus.js';
 import { useFeedback } from '../../../hooks/useFeedback.js';
+import { useInput } from '../../../hooks/useInput.js';
 import { mutateOnEdit, queryClient } from '../../../utils/http.js';
 import { statsCalculatorForSchedule } from '../../../utils/statistics/statsCalculatorForSchedule.js';
 import { hasValidPassFn } from '../../../utils/userCustomerUtils.js';
+import Input from '../../backend/Input.jsx';
 import FeedbackBox from '../FeedbackBox.jsx';
 import NewCustomerFormForUser from './add-forms/NewCustomerFormForUser.jsx';
 import DetailsListProduct from './lists/DetailsListProduct.jsx';
@@ -73,6 +76,41 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
   const handleCancellation = () => {
     cancel();
   };
+
+  const paymentSelectOptions = [
+    { label: 'Płatność bezpośrednia (bramka płatnicza)', value: 'gateway' },
+  ];
+  const bestPasses =
+    pickTheBestPassForSchedule(status.user?.Customer?.CustomerPasses, schedule)
+      ?.allSorted || [];
+  const bestPassesFormatted = bestPasses?.map(p => {
+    const fDate = p.validUntil ? p.validUntil.slice(0, 10) : '';
+    const fTypes = p.PassDefinition.allowedProductTypes
+      ? JSON.parse(p.PassDefinition.allowedProductTypes).join(', ')
+      : '';
+    const expiryDate = fDate ? `Do: ${fDate},` : '';
+    const usesLeft = p.usesLeft ? `Pozostałe wejścia: ${p.usesLeft},` : '';
+    const types = fTypes ? `Na: ${fTypes}` : '';
+
+    return {
+      label: `${p.PassDefinition.name} (${expiryDate} ${usesLeft} ${types})`,
+      value: p.customerPassId,
+    };
+  });
+  paymentSelectOptions.unshift(...bestPassesFormatted);
+
+  const {
+    value: paymentMethodValue,
+    handleChange: handlePaymentMethodChange,
+    handleFocus: handlePaymentMethodFocus,
+    handleBlur: handlePaymentMethodBlur,
+    handleReset: handlePaymentMethodReset,
+    didEdit: paymentMethodDidEdit,
+    isFocused: paymentMethodIsFocused,
+    validationResults: paymentMethodValidationResults,
+    hasError: paymentMethodHasError,
+  } = useInput(paymentSelectOptions[0].value);
+
   const handleFormSave = details => {
     setNewCustomerDetails(details);
     setIsFillingTheForm(false);
@@ -88,10 +126,12 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
         status: 'Paid',
         amountPaid: product.price,
         amountDue: 0,
+        chosenCustomerPassId: paymentMethodValue,
         paymentMethod: 'Credit Card',
         paymentStatus: 'Completed',
       });
       updateFeedback(res);
+      if (res.confirmation == 1) handlePaymentMethodReset();
     } catch (err) {
       updateFeedback(err);
     }
@@ -110,6 +150,7 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
     userAccountPage &&
     !shouldShowFeedback;
   const shouldShowBookBtn =
+    !shouldShowCancelBtn &&
     !isArchived &&
     !schedule.isUserGoing &&
     !paymentOps?.booking?.isError &&
@@ -176,6 +217,26 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
       />
     ) : null;
 
+  const passSelect = (
+    <Input
+      embedded={false}
+      formType={'login'}
+      type='select'
+      options={paymentSelectOptions}
+      id='paymentMethod'
+      name='paymentMethod'
+      label='Metoda płatności (domyślnie najkorzystniejszy karnet)'
+      value={paymentMethodValue}
+      required
+      onFocus={handlePaymentMethodFocus}
+      onBlur={handlePaymentMethodBlur}
+      onChange={handlePaymentMethodChange}
+      validationResults={paymentMethodValidationResults}
+      didEdit={paymentMethodDidEdit}
+      isFocused={paymentMethodIsFocused}
+    />
+  );
+
   return (
     <>
       {userAccessed ? (
@@ -241,12 +302,9 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
       )}
 
       <footer className='modal__user-action'>
-        {shouldShowFeedback
-          ? feedbackBox
-          : shouldShowBookBtn
-          ? paymentBtn
-          : null}
-
+        {shouldShowFeedback && feedbackBox}
+        {shouldShowBookBtn && passSelect}
+        {shouldShowBookBtn && paymentBtn}
         {shouldShowCancelBtn && (
           <button
             onClick={handleCancellation}

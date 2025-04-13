@@ -37,8 +37,8 @@ function ViewAccountBookings({ data }) {
         headers={[
           'Obecność',
           'Id',
-          'Termin',
-          'Płatność',
+          'Termin (Nr)',
+          'Płatność (Nr)',
           'Utworzono',
           'Ostatnia zmiana',
         ]}
