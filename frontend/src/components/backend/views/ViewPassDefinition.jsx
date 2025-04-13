@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStatus } from '../../../hooks/useAuthStatus.js';
 import { useFeedback } from '../../../hooks/useFeedback.js';
+import { useInput } from '../../../hooks/useInput.js';
+import Input from '../../backend/Input.jsx';
 import GenericListTagLi from '../../common/GenericListTagLi.jsx';
 import FeedbackBox from '../FeedbackBox.jsx';
 import NewCustomerFormForUser from './add-forms/NewCustomerFormForUser.jsx';
@@ -40,6 +42,34 @@ function ViewPassDefinition({
   // console.log(`newCustomerDetails: `, newCustomerDetails);
   const [isFillingTheForm, setIsFillingTheForm] = useState(false);
 
+  let newPassSuggestedDate;
+  const customerTheSamePasses = status.user?.Customer?.CustomerPasses?.filter(
+    pass => pass.PassDefinition.passDefId == passDefinition.passDefId
+  );
+  // chose the very next day after the expiration date of the same pass
+  if (customerTheSamePasses && customerTheSamePasses.length > 0) {
+    const latestExpiryDate = customerTheSamePasses.sort(
+      (a, b) => new Date(b.validUntil) - new Date(a.validUntil)
+    )[0].validUntil;
+
+    const nextDay = new Date(latestExpiryDate);
+    nextDay.setDate(nextDay.getDate() + 1);
+
+    newPassSuggestedDate = nextDay.toISOString().split('T')[0];
+  }
+
+  const {
+    value: dateValue,
+    handleChange: handleDateChange,
+    handleFocus: handleDateFocus,
+    handleBlur: handleDateBlur,
+    handleReset: handleDateReset,
+    didEdit: dateDidEdit,
+    isFocused: dateIsFocused,
+    validationResults: dateValidationResults,
+    hasError: dateHasError,
+  } = useInput(newPassSuggestedDate || new Date().toISOString().split('T')[0]);
+
   const handleFormSave = details => {
     setNewCustomerDetails(details);
     setIsFillingTheForm(false);
@@ -54,8 +84,10 @@ function ViewPassDefinition({
         amountPaid: passDefinition.price,
         paymentMethod: 'Credit Card',
         paymentStatus: 'Completed',
+        validFrom: dateValue,
       });
       updateFeedback(res);
+      if (res.confirmation == 1) handleDateReset();
     } catch (err) {
       updateFeedback(err);
     }
@@ -65,7 +97,8 @@ function ViewPassDefinition({
     feedback.status === 1 || feedback.status === 0 || feedback.status === -1;
 
   const shouldShowBookBtn =
-    !paymentOps?.purchase?.isError && !isFillingTheForm && !isAdminPanel;
+    // !paymentOps?.purchase?.isError &&
+    !isFillingTheForm && !isAdminPanel && !dateHasError;
   const shouldDisableBookBtn = isFillingTheForm;
 
   const paymentBtn = isLoggedIn ? (
@@ -83,16 +116,16 @@ function ViewPassDefinition({
         {shouldDisableBookBtn
           ? 'block'
           : newCustomerDetails.isFirstTimeBuyer
-            ? 'edit'
-            : 'shopping_bag'}
+          ? 'edit'
+          : 'shopping_bag'}
       </span>
       {shouldDisableBookBtn
         ? isFillingTheForm
           ? 'Wypełnianie formularza'
           : ''
         : newCustomerDetails.isFirstTimeBuyer
-          ? 'Uzupełnij dane osobowe'
-          : 'Kupuję'}
+        ? 'Uzupełnij dane osobowe'
+        : 'Kupuję'}
     </button>
   ) : (
     // dynamic redirection back to schedule when logged in, in Login form useFeedback
@@ -120,6 +153,27 @@ function ViewPassDefinition({
         onClose={onClose}
       />
     ) : null;
+
+  const dateInput = (
+    <Input
+      embedded={false}
+      formType={'login'}
+      type='date'
+      id='date'
+      name='date'
+      label='Data rozpoczęcia (najszybsza możliwa wybrana domyślnie)'
+      value={dateValue}
+      onFocus={handleDateFocus}
+      onBlur={handleDateBlur}
+      onChange={handleDateChange}
+      autoComplete='off'
+      required
+      validationResults={dateValidationResults}
+      didEdit={dateDidEdit}
+      classModifier={'table-form'}
+      isFocused={dateIsFocused}
+    />
+  );
 
   return (
     <>
@@ -178,11 +232,9 @@ function ViewPassDefinition({
       )}
 
       <footer className='modal__user-action'>
-        {shouldShowFeedback
-          ? feedbackBox
-          : shouldShowBookBtn
-            ? paymentBtn
-            : null}
+        {shouldShowFeedback && feedbackBox}
+        {shouldShowBookBtn && dateInput}
+        {shouldShowBookBtn && paymentBtn}
       </footer>
     </>
   );

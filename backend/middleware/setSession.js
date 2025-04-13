@@ -9,6 +9,7 @@ const options = {
   user: process.env.SQLSTORE_USER,
   password: process.env.SQLSTORE_PASS,
   database: process.env.SQLSTORE_DB,
+  createDatabaseTable: true,
 };
 
 const MySQLStore = MySQLStoreFactory(session);

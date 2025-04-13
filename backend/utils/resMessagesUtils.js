@@ -102,6 +102,10 @@ const passDefsFound = `🌿 Karnety gotowe do wyboru. Wybierz to, co wspiera Two
 //! CUSTOMER PASSES__________________________________________________________________
 const newCustomerPass =
   '🧘‍♀️ Twoja praktyka właśnie zyskała nowe możliwości. Do zobaczenia na macie - karnet aktywowany 🙏';
+const customerPassOVerlapping =
+  '🌿 Spokojnie... Masz już aktywny karnet tego typu. Wybierz datę po jego wygaśnięciu, a praktyka będzie płynąć dalej 🙏';
+const noPassStartDate =
+  '🌙 Nie znamy jeszcze momentu rozpoczęcia tej podróży. Podaj datę, by rozpocząć swoją praktykę.';
 
 //! PAYMENTS__________________________________________________________________
 const paymentFound = '💳 Szczegóły płatności załadowane. Spokój w przepływie.';
@@ -127,6 +131,7 @@ export {
   cantMarkAbsentForPassedSchedule,
   customerDetailsUpdated,
   customerLoaded,
+  customerPassOVerlapping,
   defaultSettingsLoaded,
   emailNotVerified,
   emailNotYetVerified,
@@ -147,6 +152,7 @@ export {
   noPassDefFound,
   noPassDefsFound,
   noPassIdPicked,
+  noPassStartDate,
   noPaymentFound,
   noPhonePicked,
   noScheduleFound,

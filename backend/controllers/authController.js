@@ -92,6 +92,7 @@ export const getStatus = (req, res, next) => {
                     usesLeft: pass.usesLeft,
                     status: pass.status,
                     PassDefinition: {
+                      passDefId: pass.PassDefinition.passDefId,
                       name: pass.PassDefinition.name,
                       passType: pass.PassDefinition.passType,
                       usesTotal: pass.PassDefinition.usesTotal,

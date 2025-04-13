@@ -2,10 +2,7 @@ import { addDays, addMonths, addYears } from 'date-fns';
 import 'dotenv/config';
 import { Op } from 'sequelize';
 import * as models from '../models/_index.js';
-import {
-  areCustomerDetailsChanged,
-  isPassValidForSchedule,
-} from '../utils/controllersUtils.js';
+import { areCustomerDetailsChanged } from '../utils/controllersUtils.js';
 import { formatIsoDateTime, isAdult } from '../utils/dateTimeUtils.js';
 import db from '../utils/db.js';
 import {
@@ -96,6 +93,7 @@ export const getCustomerPassById = (req, res, next) => {
         date: formatIsoDateTime(cp.Payment.date),
         amountPaid: cp.Payment.amountPaid,
         paymentMethod: cp.Payment.paymentMethod,
+        status: cp.Payment.status,
       };
 
       const passDefinition = {
@@ -175,6 +173,10 @@ export const postCreateBuyPass = (req, res, next) => {
     if (!isAdult(cDetails.dob)) {
       console.log('\n❌❌❌ Customer below 18');
       throw new Error(msgs.notAnAdult);
+    }
+    if (!isAdult(req.body.validFrom)) {
+      console.log('\n❌❌❌ No pass start date specified');
+      throw new Error(msgs.noPassStartDate);
     }
 
     customerPromise = models.Customer.create({
@@ -268,9 +270,7 @@ export const postCreateBuyPass = (req, res, next) => {
         },
       }).then(existingPass => {
         if (existingPass) {
-          throw new Error(
-            'Użytkownik już posiada aktywny karnet tego typu. Wybierz datę po jego wygaśnięciu.'
-          );
+          throw new Error(msgs.customerPassOVerlapping);
         }
 
         return currentPassDefinition;
@@ -498,7 +498,7 @@ export const postCreateBookSchedule = (req, res, next) => {
         currentCustomer = customer;
         // Fetch schedule and lock it for other paralele transactions
         return models.ScheduleRecord.findOne({
-          where: { scheduleId: req.body.schedule }, //from mutation
+          where: { scheduleId: req.body.scheduleId }, //from mutation
           include: [
             {
               model: models.Product,
@@ -515,6 +515,7 @@ export const postCreateBookSchedule = (req, res, next) => {
         }
         currentScheduleRecord = scheduleRecord;
         successLog(person, controllerName, 'schedule found');
+
         const scheduleDateTime = new Date(
           `${scheduleRecord.date}T${scheduleRecord.startTime}:00`
         );
@@ -522,9 +523,10 @@ export const postCreateBookSchedule = (req, res, next) => {
           errCode = 401;
           throw new Error(msgs.cantMarkAbsentForPassedSchedule);
         }
+
         // Count the current amount of reservations
         return models.Booking.count({
-          where: { scheduleId: req.body.schedule, attendance: 1 },
+          where: { scheduleId: req.body.scheduleId, attendance: 1 },
           transaction: t,
           lock: t.LOCK.UPDATE, //@
         }).then(currentAttendance => {
@@ -540,7 +542,7 @@ export const postCreateBookSchedule = (req, res, next) => {
           return models.Booking.findOne({
             where: {
               customerId: currentCustomer.customerId,
-              scheduleId: req.body.schedule,
+              scheduleId: req.body.scheduleId,
             },
             transaction: t,
             lock: t.LOCK.UPDATE,
@@ -549,25 +551,27 @@ export const postCreateBookSchedule = (req, res, next) => {
       })
       .then(existingBooking => {
         if (existingBooking) {
-          if (userEmail && wantsNotifications) {
-            customerEmails.sendAttendanceReturningMail({
-              to: userEmail,
-              productName: currentScheduleRecord.Product.name,
-              date: currentScheduleRecord.date,
-              startTime: currentScheduleRecord.startTime,
-              location: currentScheduleRecord.location,
-            });
-          }
-
           //! assuming single schedule chosen
           return existingBooking
             .update(
               { attendance: true, timestamp: new Date() },
               { transaction: t }
             )
-            .then(() => existingBooking);
+            .then(() => {
+              if (userEmail && wantsNotifications) {
+                customerEmails.sendAttendanceReturningMail({
+                  to: userEmail,
+                  productName: currentScheduleRecord.Product.name,
+                  date: currentScheduleRecord.date,
+                  startTime: currentScheduleRecord.startTime,
+                  location: currentScheduleRecord.location,
+                });
+              }
+
+              return existingBooking;
+            });
         } else {
-          // Booking doesn't exist -we need to create one but first we have to check again if customer has already the pass for this particular type of schedule or he will have to issue single payment
+          // Booking doesn't exist - we need to create one but first we have to check again if customer has already the pass for this particular type of schedule or he will have to issue single payment
           let validPass = null;
 
           // Fetch passes from middleware
@@ -575,9 +579,10 @@ export const postCreateBookSchedule = (req, res, next) => {
             currentCustomer.CustomerPasses &&
             currentCustomer.CustomerPasses.length > 0
           ) {
-            // Apply validation from prepared util
-            validPass = currentCustomer.CustomerPasses.find(pass =>
-              isPassValidForSchedule(pass, currentScheduleRecord)
+            // Apply validation from prepared util to Chose the best for User pass
+            validPass = chooseBestPassForSchedule(
+              currentCustomer.CustomerPasses,
+              currentScheduleRecord
             );
           }
 
@@ -605,12 +610,15 @@ export const postCreateBookSchedule = (req, res, next) => {
               }
               successLog(person, controllerName, 'booking created with pass');
 
-              // If pass was of typ count
+              // If pass was of type count
               if (validPass?.PassDefinition.passType === 'count') {
                 return models.CustomerPass.update(
                   { usesLeft: validPass.usesLeft - 1 },
                   {
-                    where: { customerPassId: validPass.customerPassId },
+                    where: {
+                      customerId: currentCustomer.customerId,
+                      customerPassId: validPass.customerPassId,
+                    },
                     transaction: t,
                   }
                 ).then(() => booking);
@@ -632,7 +640,7 @@ export const postCreateBookSchedule = (req, res, next) => {
               },
               { transaction: t }
             ).then(payment => {
-              if (userEmail) {
+              if (payment && userEmail) {
                 customerEmails.sendPaymentSuccessfulMail({
                   to: userEmail,
                   amountPaid: payment.amountPaid,
@@ -648,14 +656,14 @@ export const postCreateBookSchedule = (req, res, next) => {
               return models.Booking.create(
                 {
                   customerId: currentCustomer.customerId,
-                  scheduleId: req.body.schedule,
+                  scheduleId: req.body.scheduleId,
                   timestamp: new Date(),
                   paymentId: payment.paymentId,
                   attendance: true,
                 },
                 { transaction: t }
               ).then(booking => {
-                if (userEmail && wantsNotifications) {
+                if (booking && userEmail && wantsNotifications) {
                   customerEmails.sendNewReservationMail({
                     to: userEmail,
                     productName: currentScheduleRecord.Product.name,

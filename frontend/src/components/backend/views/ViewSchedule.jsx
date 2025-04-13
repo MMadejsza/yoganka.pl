@@ -83,7 +83,7 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
     try {
       const res = await paymentOps.booking.onBook({
         customerDetails: newCustomerDetails || null,
-        schedule: schedule.scheduleId,
+        scheduleId: schedule.scheduleId,
         product: product.name,
         status: 'Paid',
         amountPaid: product.price,
@@ -134,22 +134,22 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
         {shouldDisableBookBtn
           ? 'block'
           : schedule.wasUserReserved
-            ? 'restore'
-            : newCustomerDetails.isFirstTimeBuyer
-              ? 'edit'
-              : 'shopping_bag'}
+          ? 'restore'
+          : newCustomerDetails.isFirstTimeBuyer
+          ? 'edit'
+          : 'shopping_bag'}
       </span>
       {shouldDisableBookBtn
         ? isFillingTheForm
           ? 'Wypełnianie formularza'
           : 'Brak Miejsc'
         : schedule.wasUserReserved
-          ? 'Wróć na zajęcia'
-          : newCustomerDetails.isFirstTimeBuyer
-            ? 'Uzupełnij dane osobowe'
-            : hasValidPass
-              ? 'Rezerwuję'
-              : 'Kupuję'}
+        ? 'Wróć na zajęcia'
+        : newCustomerDetails.isFirstTimeBuyer
+        ? 'Uzupełnij dane osobowe'
+        : hasValidPass
+        ? 'Rezerwuję'
+        : 'Kupuję'}
     </button>
   ) : (
     // dynamic redirection back to schedule when logged in, in Login form useFeedback
@@ -244,8 +244,8 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
         {shouldShowFeedback
           ? feedbackBox
           : shouldShowBookBtn
-            ? paymentBtn
-            : null}
+          ? paymentBtn
+          : null}
 
         {shouldShowCancelBtn && (
           <button

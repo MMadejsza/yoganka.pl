@@ -1587,6 +1587,7 @@ export const getCustomerPassById = (req, res, next) => {
         date: formatIsoDateTime(cp.Payment.date),
         amountPaid: cp.Payment.amountPaid,
         paymentMethod: cp.Payment.paymentMethod,
+        status: cp.Payment.status,
       };
 
       const passDefinition = {
