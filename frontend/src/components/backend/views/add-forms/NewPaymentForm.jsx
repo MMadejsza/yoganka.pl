@@ -30,18 +30,6 @@ function NewPaymentForm() {
   });
 
   const {
-    data: productsList,
-    isError: isProductsError,
-    error: productsError,
-  } = useQuery({
-    // as id for later caching received data to not send the same request again where location.pathname is key
-    queryKey: ['data', '/admin-console/show-all-products'],
-    // definition of the code sending the actual request- must be returning the promise
-    queryFn: () => fetchData('/admin-console/show-all-products'),
-    // only when location.pathname is set extra beyond admin panel:
-  });
-
-  const {
     value: customerValue,
     handleChange: handleCustomerChange,
     handleFocus: handleCustomerFocus,
@@ -52,6 +40,32 @@ function NewPaymentForm() {
     validationResults: customerValidationResults,
     hasError: customerHasError,
   } = useInput(1);
+
+  const {
+    value: transactionTypeValue,
+    handleChange: handleTransactionTypeChange,
+    handleFocus: handleTransactionTypeFocus,
+    handleBlur: handleTransactionTypeBlur,
+    handleReset: handleTransactionTypeReset,
+    didEdit: transactionTypeDidEdit,
+    isFocused: transactionTypeIsFocused,
+    validationResults: transactionTypeValidationResults,
+    hasError: transactionTypeHasError,
+  } = useInput('pass');
+
+  const {
+    data: productsList,
+    isError: isProductsError,
+    error: productsError,
+  } = useQuery({
+    // as id for later caching received data to not send the same request again where location.pathname is key
+    queryKey: ['data', '/admin-console/show-all-products'],
+    // definition of the code sending the actual request- must be returning the promise
+    queryFn: () => fetchData('/admin-console/show-all-products'),
+    // only when location.pathname is set extra beyond admin panel:
+    enabled: transactionTypeValue === 'classes',
+  });
+
   const {
     value: productValue,
     handleChange: handleProductChange,
@@ -64,8 +78,9 @@ function NewPaymentForm() {
     hasError: productHasError,
   } = useInput('');
 
-  const pickedProductID = productValue || null;
   const pickedCustomerID = customerValue || null;
+  const pickedProductID = productValue || null;
+
   const {
     data: schedulesList,
     isPending: isSchedulesListPending,
@@ -83,21 +98,11 @@ function NewPaymentForm() {
         `/admin-console/show-product-schedules/${pickedProductID}/${pickedCustomerID}`
       ),
     // only when location.pathname is set extra beyond admin panel:
-    enabled: !!pickedProductID && !!pickedCustomerID,
+    enabled:
+      !!pickedProductID &&
+      !!pickedCustomerID &&
+      transactionTypeValue === 'classes',
   });
-
-  const customersOptionsList = customersList?.content?.sort((a, b) =>
-    a.customerFullName.localeCompare(b.customerFullName)
-  );
-  console.log('customersOptionsList: ', customersOptionsList);
-  const productsOptionsList = productsList?.content?.sort((a, b) =>
-    b.type.localeCompare(a.type)
-  );
-  console.log('productOptionsList: ', productsOptionsList);
-  const schedulesOptionsList = schedulesList?.content?.sort(
-    (a, b) => new Date(b.date) - new Date(a.date)
-  );
-  console.log('schedulesOptionsList: ', schedulesOptionsList);
 
   const {
     mutate: createPayment,
@@ -120,6 +125,29 @@ function NewPaymentForm() {
   });
 
   // using custom hook with extracting and reassigning its 'return' for particular inputs and assign validation methods from imported utils. Every inout has its won state now
+
+  const {
+    data: passesList,
+    isError: isPassesError,
+    error: passesError,
+  } = useQuery({
+    queryKey: ['data', '/admin-console/show-all-passes'],
+    queryFn: () => fetchData('/admin-console/show-all-passes'),
+    enabled: transactionTypeValue === 'pass',
+  });
+
+  // Nowy hook do obsługi wyboru karnetu – używany tylko, gdy wybrano "pass"
+  const {
+    value: passValue,
+    handleChange: handlePassChange,
+    handleFocus: handlePassFocus,
+    handleBlur: handlePassBlur,
+    handleReset: handlePassReset,
+    didEdit: passDidEdit,
+    isFocused: passIsFocused,
+    validationResults: passValidationResults,
+    hasError: passHasError,
+  } = useInput('');
 
   const {
     value: scheduleValue,
@@ -160,10 +188,12 @@ function NewPaymentForm() {
     resetFeedback();
 
     handleCustomerReset();
+    handleTransactionTypeReset();
     handleProductReset();
     handleScheduleReset();
     handleAmountPaidReset();
     handlePaymentMethodReset();
+    handlePassReset();
   };
 
   // Submit handling
@@ -171,33 +201,62 @@ function NewPaymentForm() {
     amountPaidHasError ||
     paymentMethodHasError ||
     customerHasError ||
-    productHasError ||
-    scheduleHasError;
+    (transactionTypeValue === 'classes'
+      ? productHasError || scheduleHasError
+      : passHasError);
   const handleSubmit = async e => {
     e.preventDefault(); // No reloading
     console.log('Submit triggered');
 
     if (areErrors) {
       return;
-    } else if (schedulesList?.length <= 0) {
-      // updating feedback
+    }
+
+    if (
+      transactionTypeValue === 'classes' &&
+      (!schedulesList || schedulesList?.content?.length <= 0)
+    ) {
       updateFeedback({
         status: -1,
-        message: 'Pole termin nie może być puste.',
+        message: 'Pole terminu nie może być puste.',
         warnings: null,
       });
+      return;
+    }
+    if (
+      transactionTypeValue === 'pass' &&
+      (!passesList || passesList?.content?.length <= 0)
+    ) {
+      updateFeedback({
+        status: -1,
+        message: 'Brak dostępnych karnetów.',
+        warnings: null,
+      });
+      return;
     }
     console.log('Submit passed errors');
 
     const fd = new FormData(e.target);
     const formDataObj = Object.fromEntries(fd.entries());
+    formDataObj.transactionType = transactionTypeValue;
 
-    const selectedProduct = productsOptionsList.find(
-      product => product.productId.toString() === formDataObj.productId
-    );
-    if (selectedProduct) {
-      formDataObj.productName = `(Id: ${selectedProduct.productId}) ${selectedProduct.name}`;
-      formDataObj.productPrice = selectedProduct.price;
+    if (transactionTypeValue === 'classes') {
+      const selectedProduct = productsList?.content?.find(
+        product => product.productId.toString() === formDataObj.productId
+      );
+      if (selectedProduct) {
+        formDataObj.productName = `(Id: ${selectedProduct.productId}) ${selectedProduct.name}`;
+        formDataObj.productPrice = selectedProduct.price;
+      }
+    } else if (transactionTypeValue === 'pass') {
+      const selectedPass = passesList?.content?.find(
+        pass => pass.passDefId.toString() === formDataObj.passDefId
+      );
+      if (selectedPass) {
+        console.log('selectedPass', selectedPass);
+        formDataObj.passName = `(Id: ${selectedPass.passDefId}) ${selectedPass.name}`;
+        formDataObj.passPrice = selectedPass.price;
+      }
     }
 
     console.log('sent data:', formDataObj);
@@ -217,7 +276,20 @@ function NewPaymentForm() {
   // Extract values only
   const { formType, title, note, subTitle, actionTitle } = formLabels;
 
-  const form = productsList && customersList && (
+  const customersOptionsList =
+    customersList?.content?.sort((a, b) =>
+      a.customerFullName.localeCompare(b.customerFullName)
+    ) || [];
+  const productsOptionsList =
+    productsList?.content?.sort((a, b) => b.type.localeCompare(a.type)) || [];
+  const schedulesOptionsList =
+    schedulesList?.content?.sort(
+      (a, b) => new Date(b.date) - new Date(a.date)
+    ) || [];
+  const passesOptionsList =
+    passesList?.content?.sort((a, b) => a.name.localeCompare(b.name)) || [];
+
+  const form = customersList && (
     <WrapperForm
       title={''}
       subTitle={subTitle}
@@ -249,59 +321,110 @@ function NewPaymentForm() {
         required
         isFocused={customerIsFocused}
       />
+
       <Input
         embedded={true}
         formType={formType}
-        type='select'
-        options={productsOptionsList.map(productObj => ({
-          key: productObj.productId,
-          label: `(Id: ${productObj.productId}) ${productObj.name}`,
-          value: productObj.productId,
-        }))}
-        id='productId'
-        name='productId'
-        label='Zajęcia:*'
-        value={productValue}
-        onFocus={handleProductFocus}
-        onBlur={handleProductBlur}
-        onChange={handleProductChange}
-        required
-        validationResults={productValidationResults}
-        didEdit={productDidEdit}
-        isFocused={productIsFocused}
+        type='radio'
+        id='transactionType' // id as group name (look into input component)
+        label='Typ płatności:'
+        value={transactionTypeValue}
+        onChange={handleTransactionTypeChange}
+        options={[
+          { label: 'Zajęcia', value: 'classes' },
+          { label: 'Karnet', value: 'pass' },
+        ]}
       />
-      <Input
-        embedded={true}
-        formType={formType}
-        type='select'
-        options={
-          schedulesOptionsList?.length > 0
-            ? schedulesOptionsList.map(scheduleObj => ({
-                key: scheduleObj.scheduleId,
-                label: `(Id: ${scheduleObj.scheduleId}) ${getWeekDay(
-                  scheduleObj.date
-                )} ${scheduleObj.date} ${scheduleObj.startTime}`,
-                value: scheduleObj.scheduleId,
-              }))
-            : [
-                {
-                  label: 'Uczestnik już rezerwował wszystkie terminy',
-                  value: '',
-                },
-              ]
-        }
-        id='scheduleId'
-        name='scheduleId'
-        label='Termin:*'
-        value={scheduleValue}
-        onFocus={handleScheduleFocus}
-        onBlur={handleScheduleBlur}
-        onChange={handleScheduleChange}
-        required
-        validationResults={scheduleValidationResults}
-        didEdit={scheduleDidEdit}
-        isFocused={scheduleIsFocused}
-      />
+
+      {transactionTypeValue === 'classes' ? (
+        <>
+          <Input
+            embedded={true}
+            formType={formType}
+            type='select'
+            options={productsOptionsList?.map(productObj => ({
+              key: productObj.productId,
+              label: `(Id: ${productObj.productId}) ${productObj.name}`,
+              value: productObj.productId,
+            }))}
+            id='productId'
+            name='productId'
+            label='Zajęcia:*'
+            value={productValue}
+            onFocus={handleProductFocus}
+            onBlur={handleProductBlur}
+            onChange={handleProductChange}
+            required
+            validationResults={productValidationResults}
+            didEdit={productDidEdit}
+            isFocused={productIsFocused}
+          />
+
+          <Input
+            embedded={true}
+            formType={formType}
+            type='select'
+            options={
+              schedulesOptionsList?.length > 0
+                ? schedulesOptionsList.map(scheduleObj => ({
+                    key: scheduleObj.scheduleId,
+                    label: `(Id: ${scheduleObj.scheduleId}) ${getWeekDay(
+                      scheduleObj.date
+                    )} ${scheduleObj.date} ${scheduleObj.startTime}`,
+                    value: scheduleObj.scheduleId,
+                  }))
+                : [
+                    {
+                      label: 'Uczestnik już rezerwował wszystkie terminy',
+                      value: '',
+                    },
+                  ]
+            }
+            id='scheduleId'
+            name='scheduleId'
+            label='Termin:*'
+            value={scheduleValue}
+            onFocus={handleScheduleFocus}
+            onBlur={handleScheduleBlur}
+            onChange={handleScheduleChange}
+            required
+            validationResults={scheduleValidationResults}
+            didEdit={scheduleDidEdit}
+            isFocused={scheduleIsFocused}
+          />
+        </>
+      ) : (
+        <Input
+          embedded={true}
+          formType={formType}
+          type='select'
+          options={
+            passesOptionsList?.length > 0
+              ? passesOptionsList.map(passObj => ({
+                  key: passObj.passDefId,
+                  label: `(Id: ${passObj.passDefId}) ${passObj.name}`,
+                  value: passObj.passDefId,
+                }))
+              : [
+                  {
+                    label: 'Brak dostępnych karnetów',
+                    value: '',
+                  },
+                ]
+          }
+          id='passDefId'
+          name='passDefId'
+          label='Karnet:*'
+          value={passValue}
+          onFocus={handlePassFocus}
+          onBlur={handlePassBlur}
+          onChange={handlePassChange}
+          required
+          validationResults={passValidationResults}
+          didEdit={passDidEdit}
+          isFocused={passIsFocused}
+        />
+      )}
       <Input
         embedded={true}
         formType={formType}

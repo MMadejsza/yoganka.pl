@@ -57,9 +57,12 @@ router.put('/edit-schedule-data/:id', adminC.putEditSchedule);
 router.delete('/delete-user/:id', adminC.deleteUser);
 router.delete('/delete-customer/:id', adminC.deleteCustomer);
 router.delete('/delete-booking-record', adminC.deleteBookingRecord);
+router.delete('/delete-booking/:id', adminC.deleteBooking);
 router.delete('/delete-product/:id', adminC.deleteProduct);
 router.delete('/delete-schedule/:id', adminC.deleteSchedule);
 router.delete('/delete-payment/:id', adminC.deletePayment);
 router.delete('/delete-feedback/:id', adminC.deleteFeedback);
+router.delete('/delete-customer-pass/:id', adminC.deleteCustomerPass);
+router.delete('/delete-pass-definition/:id', adminC.deletePassDefinition);
 
 export default router;

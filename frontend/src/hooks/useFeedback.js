@@ -38,6 +38,7 @@ export function useFeedback({
         timerRef.current = null;
       }
 
+      setModalClosedManually(false);
       console.log('updateFeedback res: ', result);
       // if warnings - don't redirect or close
       if (

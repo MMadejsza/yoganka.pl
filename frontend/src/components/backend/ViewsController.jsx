@@ -89,6 +89,7 @@ function ViewsController({
         );
         controller.deleteBtnTitle = 'Konto';
         controller.deleteQuery = `delete-user/${data.user.userId}`;
+        controller.deleteBody = { entityId: data.user.userId };
         controller.redirectTo = '/admin-console/show-all-users';
         controller.warnings = [
           'Powiązanego profilu uczestnika',
@@ -104,8 +105,8 @@ function ViewsController({
         controller.recordDisplay = <ViewCustomer data={data} />;
         controller.recordEditor = '';
         controller.deleteBtnTitle = 'Profil Uczestnika';
-
         controller.deleteQuery = `delete-customer/${data.customer.customerId}`;
+        controller.deleteBody = { entityId: data.customer.customerId };
         controller.redirectTo = '/admin-console/show-all-customers';
         controller.warnings = [
           'Wszystkich powiązanych płatności',
@@ -121,6 +122,7 @@ function ViewsController({
         controller.recordEditor = '';
         controller.deleteBtnTitle = 'Produkt';
         controller.deleteQuery = `delete-product/${data.product.productId}`;
+        controller.deleteBody = { entityId: data.product.productId };
         controller.redirectTo = '/admin-console/show-all-products';
         controller.warnings = [
           'Wszystkich powiązanych terminów',
@@ -140,6 +142,7 @@ function ViewsController({
         controller.recordEditor = '';
         controller.deleteBtnTitle = 'Termin';
         controller.deleteQuery = `delete-schedule/${data.schedule.scheduleId}`;
+        controller.deleteBody = { entityId: data.schedule.scheduleId };
         controller.redirectTo = '/admin-console/show-all-schedules';
         controller.warnings = [
           'Wszystkich powiązanych opinii',
@@ -159,6 +162,7 @@ function ViewsController({
         controller.recordEditor = '';
         controller.deleteBtnTitle = 'Płatność';
         controller.deleteQuery = `delete-payment/${data.payment.paymentId}`;
+        controller.deleteBody = { entityId: data.payment.paymentId };
         controller.redirectTo = '/admin-console/show-all-payments';
         controller.warnings = [
           'Wszystkich powiązanych faktur',
@@ -176,6 +180,7 @@ function ViewsController({
         controller.recordEditor = '';
         controller.deleteBtnTitle = 'Opinię';
         controller.deleteQuery = `delete-feedback/${data.feedback.feedbackId}`;
+        controller.deleteBody = { entityId: data.feedback.feedbackId };
         controller.redirectTo = '/admin-console/show-all-participants-feedback';
         controller.warnings = '';
         return controller;
@@ -186,6 +191,7 @@ function ViewsController({
         controller.recordEditor = '';
         controller.deleteBtnTitle = 'Rezerwację';
         controller.deleteQuery = `delete-booking/${data.booking.bookingId}`;
+        controller.deleteBody = { entityId: data.booking.bookingId };
         controller.redirectTo = '/admin-console/show-all-bookings';
         controller.warnings = [
           'Powiązanej płatności (jeśli opłacona bezpośrednio)',
@@ -207,6 +213,7 @@ function ViewsController({
         controller.recordEditor = '';
         controller.deleteBtnTitle = 'Definicję karnetu';
         controller.deleteQuery = `delete-pass-definition/${data.passDefinition.passDefId}`;
+        controller.deleteBody = { entityId: data.passDefinition.passDefId };
         controller.redirectTo = '/admin-console/show-all-passes';
         controller.warnings = [
           'Powiązanej płatności - inaczej widok płatności nie będzie miał produktu',
@@ -228,6 +235,7 @@ function ViewsController({
         controller.recordEditor = '';
         controller.deleteBtnTitle = 'Karnet uczestnika';
         controller.deleteQuery = `delete-customer-pass/${data.customerPass.customerPassId}`;
+        controller.deleteBody = { entityId: data.customerPass.customerPassId };
         controller.redirectTo = '/admin-console/show-all-passes';
         controller.warnings = [
           'Wszystkich rezerwacji "opłaconych" tym karnetem',
@@ -245,7 +253,7 @@ function ViewsController({
   let dataEditor;
   let deleteWarnings;
   let redirectToPage;
-  let dataDeleteQuery;
+  let dataDeleteQuery, deleteBodyObj;
 
   if (isPending) {
     dataDisplay = 'Loading...';
@@ -269,6 +277,7 @@ function ViewsController({
       warnings,
       deleteQuery,
       redirectTo,
+      deleteBody,
     } = resolveModifier();
     dataDisplay = recordDisplay;
     dataEditor = recordEditor;
@@ -276,6 +285,7 @@ function ViewsController({
     deleteWarnings = warnings;
     dataDeleteQuery = deleteQuery;
     redirectToPage = redirectTo;
+    deleteBodyObj = deleteBody;
   }
 
   const { feedback, updateFeedback, resetFeedback } = useFeedback({
@@ -323,7 +333,7 @@ function ViewsController({
       // 2nd click
       resetFeedback(); //!_______________________________________________________________________________
       reset();
-      deleteRecord({});
+      deleteRecord(deleteBodyObj);
     }
   };
   const handleCancelDelete = () => {

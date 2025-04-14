@@ -1625,6 +1625,53 @@ export const getCustomerPassById = (req, res, next) => {
 };
 //@ POST
 //@ PUT
+//@ DELETE
+export const deleteCustomerPass = (req, res, next) => {
+  const controllerName = 'deleteCustomerPass';
+  callLog(req, person, controllerName);
+
+  const id = req.params.id;
+  models.CustomerPass.destroy({
+    where: {
+      customerPassId: id,
+    },
+  })
+    .then(deletedCount => {
+      if (!deletedCount) {
+        errCode = 404;
+        throw new Error('Nie usunięto karnetu uczestnika.');
+      }
+      successLog(person, controllerName);
+      return res.status(200).json({
+        confirmation: 1,
+        message: 'Karnet uczestnika usunięty pomyślnie.',
+      });
+    })
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
+};
+export const deletePassDefinition = (req, res, next) => {
+  const controllerName = 'deletePassDefinition';
+  callLog(req, person, controllerName);
+
+  const id = req.params.id;
+  models.PassDefinition.destroy({
+    where: {
+      passDefId: id,
+    },
+  })
+    .then(deletedCount => {
+      if (!deletedCount) {
+        errCode = 404;
+        throw new Error('Nie usunięto definicji karnetu.');
+      }
+      successLog(person, controllerName);
+      return res.status(200).json({
+        confirmation: 1,
+        message: 'Definicja karnetu usunięta pomyślnie.',
+      });
+    })
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
+};
 
 //! BOOKINGS_____________________________________________
 //@ GET
@@ -1678,8 +1725,8 @@ export const getAllBookings = (req, res, next) => {
           customerFullName,
           scheduleDetails,
           payment,
-          createdAt: formatIsoDateTime(record.createdAt),
-          timestamp: formatIsoDateTime(record.timestamp),
+          createdAt: record.createdAt,
+          timestamp: record.timestamp,
         };
       });
 
@@ -1984,6 +2031,85 @@ export const deleteBookingRecord = (req, res, next) => {
     where: {
       customerId: customerId,
       bookingId: rowId,
+    },
+    include: [
+      {
+        model: models.ScheduleRecord,
+        required: true,
+        include: [
+          {
+            model: models.Product,
+            required: true,
+          },
+        ],
+      },
+      {
+        model: models.Customer,
+        required: true,
+        include: [
+          {
+            model: models.User,
+            attributes: ['email'],
+          },
+        ],
+      },
+    ],
+  })
+    .then(foundRecord => {
+      if (!foundRecord) {
+        // No attendance found
+        errCode = 404;
+        throw new Error('Nie znaleziono rekordu obecności w dzienniku.');
+      }
+
+      currentScheduleRecord = foundRecord.ScheduleRecord;
+      customerEmail = foundRecord.Customer.User.email;
+      wantsNotifications = foundRecord.Customer.User.UserPrefSetting
+        ? foundRecord.Customer.User.UserPrefSetting?.notifications
+        : true;
+
+      // Return deleted number
+      return foundRecord.destroy();
+    })
+    .then(deleted => {
+      if (!deleted) {
+        errCode = 404;
+        throw new Error('Nie usunięto rekordu.');
+      }
+
+      // Send confirmation
+      if (customerEmail && wantsNotifications) {
+        adminEmails.sendBookingDeletedMail({
+          to: customerEmail,
+          productName: currentScheduleRecord.Product.name || 'Zajęcia',
+          date: currentScheduleRecord.date,
+          startTime: currentScheduleRecord.startTime,
+          location: currentScheduleRecord.location,
+          isAdmin: true,
+        });
+      }
+
+      // Confirmation for frontend
+      successLog(person, controllerName);
+      return res.status(200).json({
+        confirmation: 1,
+        message:
+          'Rekord obecności usunięty. Rekord płatności pozostał nieruszony.',
+      });
+    })
+    .catch(err => catchErr(person, res, errCode, err, controllerName));
+};
+export const deleteBooking = (req, res, next) => {
+  const controllerName = 'deleteBooking';
+  callLog(req, person, controllerName);
+
+  const { entityId } = req.body;
+  let currentScheduleRecord, customerEmail, wantsNotifications;
+
+  // Find booking to get info for email as well
+  models.Booking.findOne({
+    where: {
+      bookingId: entityId,
     },
     include: [
       {

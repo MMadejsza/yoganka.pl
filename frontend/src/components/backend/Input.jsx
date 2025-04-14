@@ -10,15 +10,20 @@ function Input({
   isLogin,
   classModifier,
   isNotes,
+  options,
   ...props
 }) {
   let input;
   const inputClass = !embedded
     ? `${formType}-form__${id}-input`
-    : `generic-details__content ${classModifier ? `generic-details__content--${classModifier}` : ''}  ${isNotes ? `generic-details__content--notes` : ''}`;
+    : `generic-details__content ${
+        classModifier ? `generic-details__content--${classModifier}` : ''
+      }  ${isNotes ? `generic-details__content--notes` : ''}`;
   const selectClass = !embedded
     ? `${formType}-form__${id}-input`
-    : `generic-details__content ${classModifier ? `generic-details__content--${classModifier}` : ''}  ${isNotes ? `generic-details__content--notes` : ''}`;
+    : `generic-details__content ${
+        classModifier ? `generic-details__content--${classModifier}` : ''
+      }  ${isNotes ? `generic-details__content--notes` : ''}`;
   const textAreaClass = `${formType}-form__${id}-textarea`;
 
   if (props.type === 'checkbox') {
@@ -40,7 +45,7 @@ function Input({
         value={value}
         className={selectClass}
       >
-        {props.options.map((option, index) => (
+        {options.map((option, index) => (
           <option key={index} value={option.value}>
             {option.label}
           </option>
@@ -57,6 +62,26 @@ function Input({
         className={textAreaClass}
       ></textarea>
     );
+  } else if (props.type === 'radio') {
+    input = (
+      <div className='radio-group'>
+        {options.map((option, index) => (
+          <label key={index} htmlFor={`${id}_${index}`} className='radio-label'>
+            <input
+              type='radio'
+              id={`${id}_${index}`}
+              name={id} // all radio with the same name are making the group
+              value={option.value}
+              checked={value === option.value}
+              onChange={props.onChange}
+              onFocus={props.onFocus}
+              onBlur={props.onBlur}
+            />
+            {option.label}
+          </label>
+        ))}
+      </div>
+    );
   } else {
     input = <input id={id} {...props} value={value} className={inputClass} />;
   }
@@ -65,13 +90,21 @@ function Input({
     <div
       className={`${
         embedded
-          ? `generic-details__item ${classModifier ? `generic-details__item--${classModifier}` : ''} modal-checklist__li`
+          ? `generic-details__item ${
+              classModifier ? `generic-details__item--${classModifier}` : ''
+            } modal-checklist__li`
           : 'input-pair'
       } ${props.type == 'tel' ? 'phone' : ''}`}
     >
       <label
         htmlFor={id}
-        className={`${embedded ? `generic-details__label ${classModifier ? `generic-details__label--${classModifier}` : ''}` : ''}`}
+        className={`${
+          embedded
+            ? `generic-details__label ${
+                classModifier ? `generic-details__label--${classModifier}` : ''
+              }`
+            : ''
+        }`}
       >
         {label}
       </label>
@@ -90,8 +123,8 @@ function Input({
                 !value
                   ? 'validation-msgs-list__msg validation-msgs-list__msg--help'
                   : result.valid
-                    ? 'validation-msgs-list__msg validation-msgs-list__msg--valid'
-                    : 'validation-msgs-list__msg validation-msgs-list__msg--error'
+                  ? 'validation-msgs-list__msg validation-msgs-list__msg--valid'
+                  : 'validation-msgs-list__msg validation-msgs-list__msg--error'
               }
             >
               {/* Assign proper symbol */}
