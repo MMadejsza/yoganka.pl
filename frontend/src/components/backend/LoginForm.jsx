@@ -362,7 +362,9 @@ function LoginFrom({ successMsg, errorMsg }) {
             onFocus={handleEmailFocus}
             onBlur={handleEmailBlur}
             onChange={handleEmailChange}
-            placeholder={`${firstTime && !resetPassword ? '(Wyślemy link aktywacyjny)' : ''}`}
+            placeholder={`${
+              firstTime && !resetPassword ? '(Wyślemy link aktywacyjny)' : ''
+            }`}
             autoComplete='email'
             required
             validationResults={emailValidationResults}
@@ -420,6 +422,7 @@ function LoginFrom({ successMsg, errorMsg }) {
         {feedback.status !== undefined && (
           // {!userIsEditing && feedback.status !== undefined && (
           <FeedbackBox
+            onCloseFeedback={resetFeedback}
             status={feedback.status}
             isPending={isPending || isNewPasswordPending || isTokenLoading}
             isError={isError || isNewPasswordError || isTokenError}

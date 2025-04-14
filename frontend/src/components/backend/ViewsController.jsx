@@ -346,19 +346,22 @@ function ViewsController({
   };
 
   return (
-    <WrapperModal visited={visited} onClose={onClose}>
+    <WrapperModal
+      visited={visited}
+      onClose={onClose}
+      onCloseFeedback={resetFeedback}
+    >
       {!deleteWarningTriggered
         ? dataDisplay
         : (feedback.status != undefined || deleteWarningTriggered) && (
             <FeedbackBox
+              onCloseFeedback={resetFeedback}
               warnings={feedback.warnings}
               status={feedback.status}
               successMsg={feedback.message}
               isPending={isDeletePending}
               isError={isDeleteError}
               error={deleteError ? { message: deleteError.message } : null}
-              redirectTarget={redirectToPage}
-              onClose={onClose}
               size='small'
             />
           )}

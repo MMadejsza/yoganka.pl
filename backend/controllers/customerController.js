@@ -582,7 +582,6 @@ export const postCreateBookSchedule = (req, res, next) => {
           const numericId = Number(chosenCustomerPassId);
           console.log('❗❗❗ chosenCustomerPassId: ', chosenCustomerPassId);
           if (
-            chosenCustomerPassId &&
             chosenCustomerPassId != 'gateway' &&
             currentCustomer.CustomerPasses &&
             currentCustomer.CustomerPasses.length > 0
@@ -644,7 +643,8 @@ export const postCreateBookSchedule = (req, res, next) => {
               return booking;
             });
           } else {
-            if (numericId) throw new Error('Nie rozpoznano wybranego karnetu.');
+            if (numericId)
+              throw new Error('❗❗❗ Nie rozpoznano wybranego karnetu.');
             // No pass - payment first
             return models.Payment.create(
               {

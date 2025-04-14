@@ -47,7 +47,7 @@ export const hasValidPassFn = (status, row) => {
     // Parsujemy datę harmonogramu przy użyciu funkcji parsePLDateAtEndOfDay
     const parsedDate = parsePLDateAtEndOfDay(row.date); // Upewnij się, że ta funkcja działa poprawnie
     if (!parsedDate || isNaN(new Date(parsedDate))) {
-      console.log('hasValidPassFn: parsedDate error', row.date, parsedDate);
+      // console.log('hasValidPassFn: parsedDate error', row.date, parsedDate);
       return false;
     }
 
@@ -64,16 +64,16 @@ export const hasValidPassFn = (status, row) => {
         : true;
 
     // Log dla debugowania
-    console.log('[hasValidPassFn]', {
-      productType,
-      allowedTypeArr,
-      scheduleDate,
-      validUntil: currentCustomerPass.validUntil,
-      validFrom: currentCustomerPass.validFrom,
-      isExpiredAtTheTime,
-      isStartedAtTheTime,
-      hasEntriesLeft,
-    });
+    // console.log('[hasValidPassFn]', {
+    //   productType,
+    //   allowedTypeArr,
+    //   scheduleDate,
+    //   validUntil: currentCustomerPass.validUntil,
+    //   validFrom: currentCustomerPass.validFrom,
+    //   isExpiredAtTheTime,
+    //   isStartedAtTheTime,
+    //   hasEntriesLeft,
+    // });
 
     return (
       isAllowedType &&

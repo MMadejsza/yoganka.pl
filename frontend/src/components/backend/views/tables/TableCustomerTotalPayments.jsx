@@ -28,7 +28,7 @@ function TableCustomerTotalPayments({ data }) {
   };
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    navigate(-1);
+    navigate('admin-console/show-all-customers');
   };
 
   const customerStats = statsCalculatorForCustomer(data);

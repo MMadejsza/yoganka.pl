@@ -27,8 +27,8 @@ function DetailsFormCustomer({
   const queryKey = customerAccessed
     ? ['formFilling', 'putEditCustomerDetails']
     : adminAccessed
-      ? ['formFilling', 'putEditCustomerDetails', customerData.customerId]
-      : null;
+    ? ['formFilling', 'putEditCustomerDetails', customerData.customerId]
+    : null;
   const dynamicFetch = signal => {
     if (customerAccessed)
       return fetchItem('/customer/get-customer-details', { signal });
@@ -55,8 +55,8 @@ function DetailsFormCustomer({
   const dynamicMutationAddress = customerAccessed
     ? '/api/customer' + '/edit-customer-data'
     : adminAccessed
-      ? `/api/admin-console` + `/edit-customer-data/${customerData.customerId}`
-      : null;
+    ? `/api/admin-console` + `/edit-customer-data/${customerData.customerId}`
+    : null;
   const {
     mutate: editCustomerDetails,
     isPending: isEditCustomerDetailsPending,
@@ -260,6 +260,7 @@ function DetailsFormCustomer({
 
       {feedback.status !== undefined && (
         <FeedbackBox
+          onCloseFeedback={resetFeedback}
           status={feedback.status}
           isPending={isEditCustomerDetailsPending}
           isError={isEditCustomerDetailsError}

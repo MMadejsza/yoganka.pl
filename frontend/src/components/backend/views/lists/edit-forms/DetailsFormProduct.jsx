@@ -298,6 +298,7 @@ function DetailsFormProduct({ productData }) {
       />{' '}
       {feedback.status !== undefined && (
         <FeedbackBox
+          onCloseFeedback={resetFeedback}
           status={feedback.status}
           isPending={isEditProductDataPending}
           isError={isEditProductDataError}

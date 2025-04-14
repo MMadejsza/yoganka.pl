@@ -172,6 +172,7 @@ function NewUserForm() {
       />
       {feedback.status !== undefined && (
         <FeedbackBox
+          onCloseFeedback={resetFeedback}
           status={feedback.status}
           isPending={isCreateUserPending}
           isError={isCreateUserError}

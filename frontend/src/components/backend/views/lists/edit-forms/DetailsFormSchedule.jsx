@@ -224,6 +224,7 @@ function DetailsFormSchedule({ scheduleData }) {
       />{' '}
       {feedback.status !== undefined && (
         <FeedbackBox
+          onCloseFeedback={resetFeedback}
           status={feedback.status}
           isPending={isEditScheduleDataPending}
           isError={isEditScheduleDataError}

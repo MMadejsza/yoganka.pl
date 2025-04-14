@@ -299,6 +299,7 @@ function NewProductForm() {
       />{' '}
       {feedback.status !== undefined && (
         <FeedbackBox
+          onCloseFeedback={resetFeedback}
           status={feedback.status}
           isPending={isCreateProductPending}
           isError={isCreateProductError}

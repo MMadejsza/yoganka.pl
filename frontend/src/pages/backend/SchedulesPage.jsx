@@ -85,7 +85,7 @@ function SchedulePage() {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     reset(); // resets mutation state and flags
-    navigate(-1);
+    navigate('/grafik');
   };
 
   if (isError) {

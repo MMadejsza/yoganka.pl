@@ -182,6 +182,7 @@ function NewBookingForm() {
     <>
       {feedback.status !== undefined && (
         <FeedbackBox
+          onCloseFeedback={resetFeedback}
           status={feedback.status}
           successMsg={feedback.message}
           warnings={feedback.warnings}

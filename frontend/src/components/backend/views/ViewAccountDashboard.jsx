@@ -10,8 +10,8 @@ function ViewAccountDashboard({ data, queryStatus }) {
   const today = new Date();
   const navigate = useNavigate();
   const location = useLocation(); // fetch current path
-  const matchPayments = useMatch('/konto/rezerwacje/:id');
-  const [isModalOpen, setIsModalOpen] = useState(matchPayments);
+  const match = useMatch('/konto/grafik/:id');
+  const [isModalOpen, setIsModalOpen] = useState(match);
 
   const background = {
     pathname: location.pathname,
@@ -26,7 +26,7 @@ function ViewAccountDashboard({ data, queryStatus }) {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    navigate(-1);
+    navigate('/konto');
   };
 
   // console.clear();

@@ -13,7 +13,6 @@ import TableProductPayments from './tables/TableProductPayments.jsx';
 
 function ViewPassDefinition({
   data,
-  role,
   onClose,
   isAdminPanel,
   isPassPurchaseView,
@@ -30,7 +29,7 @@ function ViewPassDefinition({
   const isAdminViewEligible = status.role === 'ADMIN' && isAdminPanel;
   console.log('isAdminViewEligible', isAdminViewEligible);
 
-  const { feedback, updateFeedback } = useFeedback({
+  const { feedback, updateFeedback, resetFeedback } = useFeedback({
     getRedirectTarget: result => (result.confirmation === 1 ? '/konto' : null),
     onClose: onClose,
   });
@@ -143,14 +142,13 @@ function ViewPassDefinition({
   const feedbackBox =
     feedback.status !== undefined ? (
       <FeedbackBox
+        onCloseFeedback={resetFeedback}
         warnings={feedback.warnings}
         status={feedback.status}
         successMsg={feedback.message}
         isPending={false}
         error={feedback.status === -1 ? { message: feedback.message } : null}
         size='small'
-        redirectTarget={feedback.redirectTarget}
-        onClose={onClose}
       />
     ) : null;
 

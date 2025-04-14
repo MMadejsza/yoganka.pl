@@ -376,6 +376,7 @@ function NewCustomerFormForAdmin() {
       />
       {feedback.status !== undefined && (
         <FeedbackBox
+          onCloseFeedback={resetFeedback}
           status={feedback.status}
           isPending={isCreateCustomerPending}
           isError={isCreateCustomerError}

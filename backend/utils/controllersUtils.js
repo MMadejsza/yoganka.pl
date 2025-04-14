@@ -2,7 +2,10 @@ import { successLog } from './debuggingUtils.js';
 
 // util pass validation
 export const isPassValidForSchedule = (pass, schedule) => {
-  console.log('[isPassValidForSchedule] Checking pass:', pass);
+  console.log(
+    '[isPassValidForSchedule] Checking pass:',
+    pass.PassDefinition.name
+  );
 
   // 1. Is defined?
   if (!pass.PassDefinition) {
@@ -10,7 +13,7 @@ export const isPassValidForSchedule = (pass, schedule) => {
     return false;
   }
   const passDef = pass.PassDefinition;
-  console.log('[isPassValidForSchedule] Found PassDefinition:', passDef);
+  // console.log('[isPassValidForSchedule] Found PassDefinition:', passDef);
 
   // 2. Is active?
   if (pass.status.toUpperCase() !== 'ACTIVE') {
@@ -136,12 +139,18 @@ export const isPassValidForSchedule = (pass, schedule) => {
 // If they have the same expiration or no expiration, the one with fewer remaining uses is chosen.
 //
 export const pickTheBestPassForSchedule = (customerPasses, schedule) => {
-  console.log('[pickTheBestPassForSchedule] Customer passes:', customerPasses);
+  // console.log(
+  //   '[pickTheBestPassForSchedule] Customer passes:',
+  //   ...customerPasses.map(cp => cp.PassDefinition.name)
+  // );
   // Filter passes that are valid for this schedule using our utility function.
   const validPasses = customerPasses.filter(pass =>
     isPassValidForSchedule(pass, schedule)
   );
-  console.log('[pickTheBestPassForSchedule] Valid passes:', validPasses);
+  // console.log(
+  //   '[pickTheBestPassForSchedule] Valid passes:',
+  //   ...validPasses.map(cp => cp.PassDefinition.name)
+  // );
   if (validPasses.length === 0) {
     console.log('[pickTheBestPassForSchedule] No valid passes found.');
     return null;
@@ -163,11 +172,11 @@ export const pickTheBestPassForSchedule = (customerPasses, schedule) => {
   const sortedPasses = validPasses.sort((a, b) => {
     const priorityA = getPriority(a);
     const priorityB = getPriority(b);
-    console.log(
-      '[pickTheBestPassForSchedule] Comparing passes, priorities:',
-      priorityA,
-      priorityB
-    );
+    // console.log(
+    //   '[pickTheBestPassForSchedule] Comparing passes, priorities:',
+    //   priorityA,
+    //   priorityB
+    // );
 
     // If priorities are different, sort by them.
     if (priorityA !== priorityB) return priorityA - priorityB;
@@ -178,49 +187,52 @@ export const pickTheBestPassForSchedule = (customerPasses, schedule) => {
       if (a.validUntil && b.validUntil) {
         const diff = new Date(a.validUntil) - new Date(b.validUntil);
         if (diff !== 0) {
-          console.log(
-            '[pickTheBestPassForSchedule] Both count passes have expiration dates. Difference:',
-            diff
-          );
+          // console.log(
+          //   '[pickTheBestPassForSchedule] Both count passes have expiration dates. Difference:',
+          //   diff
+          // );
           return diff;
         }
       }
       // If only one has an expiration date, that one wins.
       if (a.validUntil && !b.validUntil) {
-        console.log(
-          '[pickTheBestPassForSchedule] Only first pass has validUntil. Picking first.'
-        );
+        // console.log(
+        //   '[pickTheBestPassForSchedule] Only first pass has validUntil. Picking first.'
+        // );
         return -1;
       }
       if (!a.validUntil && b.validUntil) {
-        console.log(
-          '[pickTheBestPassForSchedule] Only second pass has validUntil. Picking second.'
-        );
+        // console.log(
+        //   '[pickTheBestPassForSchedule] Only second pass has validUntil. Picking second.'
+        // );
         return 1;
       }
       // If both don't have an expiration date or dates are equal,
       // choose the one with fewer uses left.
-      console.log(
-        '[pickTheBestPassForSchedule] Both count passes have same expiration status. Comparing usesLeft:',
-        a.usesLeft,
-        b.usesLeft
-      );
+      // console.log(
+      //   '[pickTheBestPassForSchedule] Both count passes have same expiration status. Comparing usesLeft:',
+      //   a.usesLeft,
+      //   b.usesLeft
+      // );
       return a.usesLeft - b.usesLeft;
     }
 
     // For time or mixed passes, if both have an expiration date, pick the one expiring earlier.
     if (a.validUntil && b.validUntil) {
       const diff = new Date(a.validUntil) - new Date(b.validUntil);
-      console.log(
-        '[pickTheBestPassForSchedule] Comparing expiration of time/mixed passes. Difference:',
-        diff
-      );
+      // console.log(
+      //   '[pickTheBestPassForSchedule] Comparing expiration of time/mixed passes. Difference:',
+      //   diff
+      // );
       return diff;
     }
     return 0; // No further differences found.
   });
 
-  console.log('[pickTheBestPassForSchedule] Sorted passes:', sortedPasses);
+  console.log(
+    '[pickTheBestPassForSchedule] Sorted passes:',
+    ...sortedPasses.map(cp => cp.PassDefinition.name)
+  );
   // Return the best pass, which is at the start of the sorted array.
   return { bestPass: sortedPasses[0], allSorted: sortedPasses };
 };

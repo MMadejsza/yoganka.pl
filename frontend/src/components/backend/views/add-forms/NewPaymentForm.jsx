@@ -343,6 +343,7 @@ function NewPaymentForm() {
 
       {feedback.status !== undefined && (
         <FeedbackBox
+          onCloseFeedback={resetFeedback}
           status={feedback.status}
           isPending={isCreatePaymentPending}
           isError={isCreatePaymentError}

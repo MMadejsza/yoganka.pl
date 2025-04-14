@@ -26,7 +26,7 @@ function ViewAccountCustomerPasses({ data }) {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    navigate(-1);
+    navigate('/konto/karnety');
   };
 
   const keys = [

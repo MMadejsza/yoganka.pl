@@ -37,7 +37,7 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
   const hasValidPass = hasValidPassFn(status, schedule);
   // console.log(`ViewSchedule hasValidPass`, hasValidPass);
 
-  const { feedback, updateFeedback } = useFeedback({
+  const { feedback, updateFeedback, resetFeedback } = useFeedback({
     getRedirectTarget: result => (result.confirmation === 1 ? '/konto' : null),
     onClose: onClose,
   });
@@ -66,6 +66,7 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
   });
   // console.log(`newCustomerDetails: `, newCustomerDetails);
   const [isFillingTheForm, setIsFillingTheForm] = useState(false);
+  const [bookingCancelled, setBookingCancelled] = useState(false);
 
   const { isLoggedIn } = status;
   const userAccessed = status.role != 'ADMIN';
@@ -75,6 +76,7 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
 
   const handleCancellation = () => {
     cancel();
+    setBookingCancelled(true);
   };
 
   const paymentSelectOptions = [
@@ -148,14 +150,17 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
     status?.isLoggedIn &&
     schedule.isUserGoing &&
     userAccountPage &&
-    !shouldShowFeedback;
+    !shouldShowFeedback &&
+    !bookingCancelled;
+
   const shouldShowBookBtn =
     !shouldShowCancelBtn &&
     !isArchived &&
     !schedule.isUserGoing &&
     !paymentOps?.booking?.isError &&
     !isFillingTheForm &&
-    !isAdminPanel;
+    !isAdminPanel &&
+    !bookingCancelled;
   const isFull = schedule.full;
   const shouldDisableBookBtn =
     (isFull && shouldShowBookBtn && !isAdminPanel) || isFillingTheForm;
@@ -212,8 +217,7 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
         isPending={false}
         error={feedback.status === -1 ? { message: feedback.message } : null}
         size='small'
-        redirectTarget={feedback.redirectTarget}
-        onClose={onClose}
+        onCloseFeedback={resetFeedback}
       />
     ) : null;
 
@@ -303,8 +307,8 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
 
       <footer className='modal__user-action'>
         {shouldShowFeedback && feedbackBox}
-        {shouldShowBookBtn && passSelect}
-        {shouldShowBookBtn && paymentBtn}
+        {shouldShowBookBtn && !shouldShowCancelBtn && passSelect}
+        {shouldShowBookBtn && !shouldShowCancelBtn && paymentBtn}
         {shouldShowCancelBtn && (
           <button
             onClick={handleCancellation}

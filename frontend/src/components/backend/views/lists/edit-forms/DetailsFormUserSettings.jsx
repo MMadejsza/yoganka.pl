@@ -26,14 +26,14 @@ function DetailsFormUserSettings({
   const queryKey = customerAccessed
     ? ['formFilling', 'userSettings']
     : adminAccessed
-      ? ['formFilling', 'userSettings', settingsData?.userPrefId || params.id]
-      : null;
+    ? ['formFilling', 'userSettings', settingsData?.userPrefId || params.id]
+    : null;
 
   const dynamicFetchAddress = customerAccessed
     ? '/show-user-settings'
     : adminAccessed
-      ? `/admin-console/show-user-settings/${settingsData?.userPrefId}`
-      : null;
+    ? `/admin-console/show-user-settings/${settingsData?.userPrefId}`
+    : null;
 
   const { data, isLoading: isFormLoading } = useQuery({
     queryKey,
@@ -47,8 +47,8 @@ function DetailsFormUserSettings({
   const dynamicMutationAddress = customerAccessed
     ? '/api/edit-user-settings'
     : adminAccessed
-      ? `/api/admin-console/edit-user-settings/${params.id}`
-      : null;
+    ? `/api/admin-console/edit-user-settings/${params.id}`
+    : null;
   console.log('dynamicMutationAddress', dynamicMutationAddress);
 
   const {
@@ -299,6 +299,7 @@ function DetailsFormUserSettings({
       /> */}
       {feedback.status !== undefined && (
         <FeedbackBox
+          onCloseFeedback={resetFeedback}
           status={feedback.status}
           isPending={isEditUserSettingsPending}
           isError={isEditUserSettingsError}

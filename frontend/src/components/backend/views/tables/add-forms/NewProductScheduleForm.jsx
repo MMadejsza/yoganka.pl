@@ -286,6 +286,7 @@ function NewProductScheduleForm({ defaultDataObj }) {
     <>
       {feedback.status !== undefined && (
         <FeedbackBox
+          onCloseFeedback={resetFeedback}
           status={feedback.status}
           isPending={isCreateSchedulePending}
           isError={isCreateScheduleError}

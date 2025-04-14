@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useModal } from '../../hooks/useModal';
 
-function WrapperModal({ visited, onClose, children }) {
+function WrapperModal({ visited, onClose, onCloseFeedback, children }) {
   const { isOpen, isVisible, isClosing, openModal, closeModal } =
     useModal(false);
 
@@ -25,6 +25,9 @@ function WrapperModal({ visited, onClose, children }) {
   }, [isVisible]);
 
   const handleClose = () => {
+    if (onCloseFeedback) {
+      onCloseFeedback();
+    }
     closeModal(onClose);
   };
 
@@ -37,7 +40,9 @@ function WrapperModal({ visited, onClose, children }) {
         onClick={handleClose}
       />
       <div
-        className={`modal ${isClosing ? 'fade-out' : isVisible ? 'visible' : ''}`}
+        className={`modal ${
+          isClosing ? 'fade-out' : isVisible ? 'visible' : ''
+        }`}
         onClick={e => e.stopPropagation()}
       >
         <div className='modal__x-btn'>

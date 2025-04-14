@@ -38,7 +38,7 @@ function ViewAccountPayments({ data }) {
   };
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    navigate(-1);
+    navigate('/konto/platnosci');
   };
 
   const table = (

@@ -202,6 +202,7 @@ function TableAttendance({ stats, isAdminPage }) {
     <>
       {(feedback.status != undefined || deleteWarningTriggered) && (
         <FeedbackBox
+          onCloseFeedback={resetFeedback}
           warnings={feedback.warnings}
           status={feedback.status}
           successMsg={feedback.message}
