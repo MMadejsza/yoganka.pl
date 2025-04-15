@@ -148,6 +148,17 @@ function NewPaymentForm() {
     validationResults: passValidationResults,
     hasError: passHasError,
   } = useInput('');
+  const {
+    value: StartDateValue,
+    handleChange: handleStartDateChange,
+    handleFocus: handleStartDateFocus,
+    handleBlur: handleStartDateBlur,
+    handleReset: handleStartDateReset,
+    didEdit: StartDateDidEdit,
+    isFocused: StartDateIsFocused,
+    validationResults: StartDateValidationResults,
+    hasError: StartDateHasError,
+  } = useInput('');
 
   const {
     value: scheduleValue,
@@ -254,7 +265,7 @@ function NewPaymentForm() {
       );
       if (selectedPass) {
         console.log('selectedPass', selectedPass);
-        formDataObj.passName = `(Id: ${selectedPass.passDefId}) ${selectedPass.name}`;
+        formDataObj.passName = `${selectedPass.name} (Id: ${selectedPass.passDefId}) na ~${selectedPass.validityDays}`;
         formDataObj.passPrice = selectedPass.price;
       }
     }
@@ -327,7 +338,7 @@ function NewPaymentForm() {
         formType={formType}
         type='radio'
         id='transactionType' // id as group name (look into input component)
-        label='Typ płatności:'
+        label='Płatność za:'
         value={transactionTypeValue}
         onChange={handleTransactionTypeChange}
         options={[
@@ -394,36 +405,55 @@ function NewPaymentForm() {
           />
         </>
       ) : (
-        <Input
-          embedded={true}
-          formType={formType}
-          type='select'
-          options={
-            passesOptionsList?.length > 0
-              ? passesOptionsList.map(passObj => ({
-                  key: passObj.passDefId,
-                  label: `(Id: ${passObj.passDefId}) ${passObj.name}`,
-                  value: passObj.passDefId,
-                }))
-              : [
-                  {
-                    label: 'Brak dostępnych karnetów',
-                    value: '',
-                  },
-                ]
-          }
-          id='passDefId'
-          name='passDefId'
-          label='Karnet:*'
-          value={passValue}
-          onFocus={handlePassFocus}
-          onBlur={handlePassBlur}
-          onChange={handlePassChange}
-          required
-          validationResults={passValidationResults}
-          didEdit={passDidEdit}
-          isFocused={passIsFocused}
-        />
+        <>
+          <Input
+            embedded={true}
+            formType={formType}
+            type='select'
+            options={
+              passesOptionsList?.length > 0
+                ? passesOptionsList.map(passObj => ({
+                    key: passObj.passDefId,
+                    label: `${passObj.name} (Id: ${passObj.passDefId} - na ~${passObj.validityDays}) `,
+                    value: passObj.passDefId,
+                  }))
+                : [
+                    {
+                      label: 'Brak dostępnych karnetów',
+                      value: '',
+                    },
+                  ]
+            }
+            id='passDefId'
+            name='passDefId'
+            label='Karnet:*'
+            value={passValue}
+            onFocus={handlePassFocus}
+            onBlur={handlePassBlur}
+            onChange={handlePassChange}
+            required
+            validationResults={passValidationResults}
+            didEdit={passDidEdit}
+            isFocused={passIsFocused}
+          />
+          <Input
+            embedded={true}
+            formType={formType}
+            type='date'
+            id='startDate'
+            name='passStartDate'
+            label='Data rozpoczęcia: *'
+            value={StartDateValue}
+            onFocus={handleStartDateFocus}
+            onBlur={handleStartDateBlur}
+            onChange={handleStartDateChange}
+            autoComplete='off'
+            required
+            validationResults={StartDateValidationResults}
+            didEdit={StartDateDidEdit}
+            isFocused={StartDateIsFocused}
+          />
+        </>
       )}
       <Input
         embedded={true}

@@ -66,7 +66,30 @@ function Input({
     input = (
       <div className='radio-group'>
         {options.map((option, index) => (
-          <label key={index} htmlFor={`${id}_${index}`} className='radio-label'>
+          <div
+            className={`${
+              embedded
+                ? `generic-details__item ${
+                    classModifier
+                      ? `generic-details__item--${classModifier}`
+                      : ''
+                  } modal-checklist__li`
+                : 'input-pair'
+            } ${props.type == 'tel' ? 'phone' : ''}`}
+          >
+            <label
+              key={index}
+              htmlFor={`${id}_${index}`}
+              className={`${
+                embedded
+                  ? `generic-details__label ${
+                      classModifier
+                        ? `generic-details__label--${classModifier}`
+                        : ''
+                    }`
+                  : ''
+              }`}
+            ></label>
             <input
               type='radio'
               id={`${id}_${index}`}
@@ -78,7 +101,7 @@ function Input({
               onBlur={props.onBlur}
             />
             {option.label}
-          </label>
+          </div>
         ))}
       </div>
     );

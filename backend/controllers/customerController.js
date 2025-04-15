@@ -268,7 +268,7 @@ export const postCreateBuyPass = (req, res, next) => {
         where: {
           customerId: currentCustomer.customerId,
           passDefId: currentPassDefinition.passDefId,
-          status: 'active',
+          status: 'ACTIVE',
           validUntil: { [Op.gt]: new Date() },
         },
       }).then(existingPass => {

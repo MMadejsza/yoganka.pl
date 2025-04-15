@@ -1952,6 +1952,7 @@ export const postCreateBooking = (req, res, next) => {
                     customerPassId: validPass.customerPassId,
                     attendance: true,
                     timestamp: new Date(),
+                    performedBy: 'Administrator',
                   },
                   {
                     transaction: t,
@@ -1980,6 +1981,7 @@ export const postCreateBooking = (req, res, next) => {
                   amountDue: amountDueCalculated,
                   paymentMethod: paymentMethodDeduced,
                   paymentStatus: 'Completed',
+                  performedBy: 'Administrator',
                 },
                 {
                   transaction: t,
@@ -1992,6 +1994,7 @@ export const postCreateBooking = (req, res, next) => {
                     paymentId: payment.paymentId,
                     attendance: true,
                     timestamp: new Date(),
+                    performedBy: 'Administrator',
                   },
                   {
                     transaction: t,
@@ -2469,7 +2472,7 @@ export const postCreatePayment = (req, res, next) => {
   const {
     customerId,
     scheduleId,
-    passDefinitionId,
+    passDefId,
     passStartDate,
     amountPaid,
     paymentMethod,
@@ -2529,13 +2532,13 @@ export const postCreatePayment = (req, res, next) => {
           : true;
 
         // If passDefinitionId is provided, then the payment should be for a pass.
-        if (passDefinitionId) {
+        if (passDefId) {
           // Check if customer already has that pass
           return models.CustomerPass.findOne({
             where: {
               customerId: customer.customerId,
-              passDefId: passDefinitionId,
-              status: 'active',
+              passDefId: passDefId,
+              status: 'ACTIVE',
               validUntil: { [Op.gt]: passStartDate },
             },
             transaction: t,
@@ -2550,7 +2553,7 @@ export const postCreatePayment = (req, res, next) => {
               successLog(person, controllerName, 'customerPass NOT found');
 
               // Fetch definition
-              return models.PassDefinition.findByPk(passDefinitionId, {
+              return models.PassDefinition.findByPk(passDefId, {
                 transaction: t,
               });
             })
@@ -2578,6 +2581,7 @@ export const postCreatePayment = (req, res, next) => {
                   amountDue: amountDueCalculated,
                   paymentMethod: paymentMethodDeduced,
                   paymentStatus: 'Completed',
+                  performedBy: 'Administrator',
                 },
                 { transaction: t }
               );
@@ -2621,7 +2625,7 @@ export const postCreatePayment = (req, res, next) => {
                   validFrom: passStartDate,
                   validUntil: calcExpiryDate,
                   usesLeft: currentPassDefinition.usesTotal,
-                  status: 'active',
+                  status: 'ACTIVE',
                 },
                 {
                   transaction: t,
@@ -2629,7 +2633,10 @@ export const postCreatePayment = (req, res, next) => {
               ).then(customerPass => {
                 if (customerPass)
                   successLog(person, controllerName, 'customerPass created');
-
+                console.log(
+                  `currentPassDefinition.allowedProductTypes`,
+                  currentPassDefinition.allowedProductTypes
+                );
                 if (customerEmail) {
                   adminEmails.sendNewPassPurchasedMail({
                     to: customerEmail,
@@ -2638,8 +2645,9 @@ export const postCreatePayment = (req, res, next) => {
                     purchaseDate: customerPass.purchaseDate,
                     validFrom: customerPass.validFrom,
                     validUntil: customerPass.validUntil,
-                    allowedProductTypes:
-                      currentPassDefinition.allowedProductTypes,
+                    allowedProductTypes: JSON.parse(
+                      currentPassDefinition.allowedProductTypes
+                    ),
                     usesTotal: currentPassDefinition.usesTotal,
                     description: currentPassDefinition.description,
                   });
@@ -2700,6 +2708,7 @@ export const postCreatePayment = (req, res, next) => {
                     amountDue: amountDueCalculated,
                     paymentMethod: paymentMethodDeduced,
                     paymentStatus: 'Completed',
+                    performedBy: 'Administrator',
                   },
                   {
                     transaction: t,
@@ -2715,6 +2724,7 @@ export const postCreatePayment = (req, res, next) => {
                       paymentId: payment.paymentId,
                       timestamp: new Date(),
                       attendance: true,
+                      performedBy: 'Administrator',
                     },
                     {
                       transaction: t,
