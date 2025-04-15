@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMemo } from 'react'; // to avoid infinite loop with passing [] to useInput
 import { useParams } from 'react-router-dom';
 import { useAuthStatus } from '../../../../../hooks/useAuthStatus.js';
 import { useFeedback } from '../../../../../hooks/useFeedback.js';
@@ -19,12 +20,34 @@ function NewBookingForm() {
     error: customersError,
   } = useQuery({
     // as id for later caching received data to not send the same request again where location.pathname is key
-    queryKey: ['data', '/admin-console/show-all-customers'],
+    queryKey: [
+      'data',
+      `/admin-console/show-all-customers-with-eligible-passes/${params.id}`,
+    ],
     // definition of the code sending the actual request- must be returning the promise
-    queryFn: () => fetchData('/admin-console/show-all-customers'),
+    queryFn: () =>
+      fetchData(
+        `/admin-console/show-all-customers-with-eligible-passes/${params.id}`
+      ),
     // only when location.pathname is set extra beyond admin panel:
   });
 
+  console.log('customersList', customersList);
+  const customersOptionsList = customersList?.content
+    ? customersList.content.sort((a, b) => a.lastName.localeCompare(b.lastName))
+    : [];
+  const formattedCustomersOptionsList = customersOptionsList?.map(
+    customerObj => ({
+      key: customerObj.customerId,
+      label: `(${customerObj.customerId}) ${customerObj.firstName} ${customerObj.lastName}`,
+      value: customerObj.customerId,
+    })
+  );
+
+  const defaultCustomer = useMemo(
+    () => formattedCustomersOptionsList[0],
+    [formattedCustomersOptionsList]
+  );
   const {
     value: customerValue,
     handleChange: handleCustomerChange,
@@ -35,16 +58,13 @@ function NewBookingForm() {
     isFocused: customerIsFocused,
     validationResults: customerValidationResults,
     hasError: customerHasError,
-  } = useInput(1);
+  } = useInput(defaultCustomer ? defaultCustomer.value : '');
 
-  const customersOptionsList = customersList?.content?.sort((a, b) =>
-    a.customerFullName.localeCompare(b.customerFullName)
-  );
   console.log('customersOptionsList: ', customersOptionsList);
 
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: formData => {
-      return fetch(`/api/admin-console/add-attendance`, {
+      return fetch(`/api/admin-console/create-booking-with-pass/${params.id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -74,30 +94,43 @@ function NewBookingForm() {
     },
   });
 
-  // using custom hook with extracting and reassigning its 'return' for particular inputs and assign validation methods from imported utils. Every inout has its won state now
-
+  const customerIdPicked = customerValue;
   const {
-    value: paymentMethodValue,
-    handleChange: handlePaymentMethodChange,
-    handleFocus: handlePaymentMethodFocus,
-    handleBlur: handlePaymentMethodBlur,
-    handleReset: handlePaymentMethodReset,
-    didEdit: paymentMethodDidEdit,
-    isFocused: paymentMethodIsFocused,
-    validationResults: paymentMethodValidationResults,
-    hasError: paymentMethodHasError,
-  } = useInput(1);
+    value: customerPassValue,
+    handleChange: handleCustomerPassChange,
+    handleFocus: handleCustomerPassFocus,
+    handleBlur: handleCustomerPassBlur,
+    handleReset: handleCustomerPassReset,
+    didEdit: customerPassDidEdit,
+    isFocused: customerPassIsFocused,
+    validationResults: customerPassValidationResults,
+    hasError: customerPassHasError,
+  } = useInput('');
+
+  const selectedCustomer = customersOptionsList.find(
+    cust => cust.customerId == customerIdPicked
+  );
+  const formattedEligiblePasses =
+    selectedCustomer && selectedCustomer.eligiblePasses
+      ? selectedCustomer.eligiblePasses.map(elPass => ({
+          key: elPass.customerPassId,
+          label: `(${elPass.customerPassId}) ${elPass.PassDefinition.name}`,
+          value: elPass.customerPassId,
+        }))
+      : [];
+
+  console.log('formattedEligiblePasses', formattedEligiblePasses);
 
   // Reset all te inputs
   const handleReset = () => {
     resetFeedback();
 
     handleCustomerReset();
-    handlePaymentMethodReset();
+    handleCustomerPassReset();
   };
 
   // Submit handling
-  const areErrors = paymentMethodHasError || customerHasError;
+  const areErrors = customerPassHasError || customerHasError;
   const handleSubmit = async e => {
     e.preventDefault(); // No reloading
     console.log('Submit triggered');
@@ -136,12 +169,8 @@ function NewBookingForm() {
         embedded={true}
         formType={formType}
         type='select'
-        options={customersOptionsList.map(customerObj => ({
-          key: customerObj.Id,
-          label: `(Id: ${customerObj.Id}) ${customerObj['Imię Nazwisko']}`,
-          value: customerObj.Id,
-        }))}
-        id='customer'
+        options={formattedCustomersOptionsList}
+        id='customerId'
         name='customerId'
         label='Uczestnik:*'
         value={customerValue}
@@ -158,22 +187,19 @@ function NewBookingForm() {
         embedded={true}
         formType={formType}
         type='select'
-        options={[
-          { label: 'Membership (future)', value: 1 },
-          { label: 'Balance (future)', value: 2 },
-        ]}
-        id='paymentMethod'
-        name='paymentMethod'
-        label='Metoda płatności:*'
-        value={paymentMethodValue}
-        onFocus={handlePaymentMethodFocus}
-        onBlur={handlePaymentMethodBlur}
-        onChange={handlePaymentMethodChange}
+        options={formattedEligiblePasses}
+        id='customerPassId'
+        name='customerPassId'
+        label='Ważny karnet:*'
+        value={customerPassValue}
+        onFocus={handleCustomerPassFocus}
+        onBlur={handleCustomerPassBlur}
+        onChange={handleCustomerPassChange}
         required
-        validationResults={paymentMethodValidationResults}
-        didEdit={paymentMethodDidEdit}
+        validationResults={customerPassValidationResults}
+        didEdit={customerPassDidEdit}
         classModifier={'table-form'}
-        isFocused={paymentMethodIsFocused}
+        isFocused={customerPassIsFocused}
       />
     </WrapperForm>
   );
@@ -186,9 +212,9 @@ function NewBookingForm() {
           status={feedback.status}
           successMsg={feedback.message}
           warnings={feedback.warnings}
-          isPending
-          isError
-          error
+          isPending={isPending}
+          isError={isError}
+          error={error}
           size='small'
         />
       )}

@@ -153,33 +153,28 @@ export const postCreateBuyPass = (req, res, next) => {
       '❗❗❗User is not the customer, creation of the record Customer...'
     );
     errCode = 400;
-    if (!cDetails) {
-      console.log('\n❌❌❌ No given customer data');
-      throw new Error(msgs.noCustomerData);
-    }
-    if (!cDetails.fname || !cDetails.fname.trim()) {
-      console.log('\n❌❌❌ fName field empty');
-      throw new Error(msgs.noFirstName);
-    }
-    if (!cDetails.lname || !cDetails.lname.trim()) {
-      console.log('\n❌❌❌ lname field empty');
-      throw new Error(msgs.noLastName);
-    }
-    if (!cDetails.dob || !cDetails.dob.trim()) {
-      console.log('\n❌❌❌ dob field empty');
-      throw new Error(msgs.noBirthDate);
-    }
-    if (!cDetails.phone || !cDetails.phone.trim()) {
-      console.log('\n❌❌❌ phone field empty');
-      throw new Error(msgs.noPhonePicked);
-    }
-    if (!isAdult(cDetails.dob)) {
-      console.log('\n❌❌❌ Customer below 18');
-      throw new Error(msgs.notAnAdult);
-    }
+
     if (!isAdult(req.body.validFrom)) {
       console.log('\n❌❌❌ No pass start date specified');
       throw new Error(msgs.noPassStartDate);
+    }
+    try {
+      isEmptyInput(cDetails, '"dane uczestnika"', msgs.noCustomerData);
+      isEmptyInput(cDetails.fname, '"imię"', msgs.noFirstName);
+      isEmptyInput(cDetails.lname, '"nazwisko"', msgs.noLastName);
+      isEmptyInput(cDetails.dob, '"data urodzenia"', msgs.noBirthDate);
+      isEmptyInput(cDetails.phone, '"telefon"', msgs.noPhonePicked);
+      isEmptyInput(
+        req.body.validFrom,
+        '"data rozpoczęcia"',
+        msgs.noPassStartDate
+      );
+      if (!isAdult(cDetails.dob)) {
+        console.log('\n❌❌❌ Customer below 18');
+        throw new Error(msgs.notAnAdult);
+      }
+    } catch (err) {
+      return catchErr(person, res, errCode, err, controllerName, { code: 409 });
     }
 
     customerPromise = models.Customer.create({
@@ -396,29 +391,19 @@ export const postCreateBookSchedule = (req, res, next) => {
       '❗❗❗User is not the customer, creation of the record Customer...'
     );
     errCode = 400;
-    if (!cDetails) {
-      console.log('\n❌❌❌ No given customer data');
-      throw new Error(msgs.noCustomerData);
-    }
-    if (!cDetails.fname || !cDetails.fname.trim()) {
-      console.log('\n❌❌❌ fName field empty');
-      throw new Error(msgs.noFirstName);
-    }
-    if (!cDetails.lname || !cDetails.lname.trim()) {
-      console.log('\n❌❌❌ lname field empty');
-      throw new Error(msgs.noLastName);
-    }
-    if (!cDetails.dob || !cDetails.dob.trim()) {
-      console.log('\n❌❌❌ dob field empty');
-      throw new Error(msgs.noBirthDate);
-    }
-    if (!cDetails.phone || !cDetails.phone.trim()) {
-      console.log('\n❌❌❌ phone field empty');
-      throw new Error(msgs.noPhonePicked);
-    }
-    if (!isAdult(cDetails.dob)) {
-      console.log('\n❌❌❌ Customer below 18');
-      throw new Error(msgs.notAnAdult);
+
+    try {
+      isEmptyInput(cDetails, 'dane uczestnika', msgs.noCustomerData);
+      isEmptyInput(cDetails.fname, 'imię', msgs.noFirstName);
+      isEmptyInput(cDetails.lname, 'nazwisko', msgs.noLastName);
+      isEmptyInput(cDetails.dob, 'data urodzenia', msgs.noBirthDate);
+      isEmptyInput(cDetails.phone, 'telefon', msgs.noPhonePicked);
+      if (!isAdult(cDetails.dob)) {
+        console.log('\n❌❌❌ Customer below 18');
+        throw new Error(msgs.notAnAdult);
+      }
+    } catch (err) {
+      return catchErr(person, res, errCode, err, controllerName, { code: 409 });
     }
 
     customerPromise = models.Customer.create({
@@ -628,7 +613,9 @@ export const postCreateBookSchedule = (req, res, next) => {
               successLog(person, controllerName, 'booking created with pass');
 
               // If pass was of type count
-              if (validPass?.PassDefinition.passType === 'count') {
+              if (
+                validPass?.PassDefinition.passType.toUpperCase() === 'COUNT'
+              ) {
                 return models.CustomerPass.update(
                   { usesLeft: validPass.usesLeft - 1 },
                   {

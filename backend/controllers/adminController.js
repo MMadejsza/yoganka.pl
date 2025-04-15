@@ -5,7 +5,9 @@ import * as models from '../models/_index.js';
 import {
   areCustomerDetailsChanged,
   areSettingsChanged,
+  calcPassExpiryDate,
   convertDurationToTime,
+  isEmptyInput,
   isPassValidForSchedule,
 } from '../utils/controllersUtils.js';
 import {
@@ -332,6 +334,61 @@ export const getAllCustomers = (req, res, next) => {
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
+export const getAllCustomersWithEligiblePasses = (req, res, next) => {
+  const controllerName = 'getAllCustomersWithEligiblePasses';
+  callLog(req, person, controllerName);
+  const { scheduleId } = req.params;
+  let schedule;
+
+  //  Get schedule with product for future validation
+  models.ScheduleRecord.findByPk(scheduleId, {
+    include: [{ model: models.Product }],
+  })
+    .then(foundSchedule => {
+      if (!foundSchedule) {
+        throw new Error('Nie znaleziono terminu.');
+      }
+      schedule = foundSchedule.toJSON();
+      // Get all customers having passes with nested passes
+      return models.Customer.findAll({
+        include: [
+          {
+            model: models.CustomerPass,
+            include: [{ model: models.PassDefinition }],
+          },
+        ],
+      });
+    })
+    .then(customers => {
+      if (!customers || customers.length === 0) {
+        throw new Error('Nie znaleziono klientów.');
+      }
+      // Filter eligible passes for each customer
+      const eligibleCustomers = customers
+        .map(customer => {
+          const cust = customer.toJSON();
+          if (cust.CustomerPasses && Array.isArray(cust.CustomerPasses)) {
+            cust.eligiblePasses = cust.CustomerPasses.filter(pass =>
+              isPassValidForSchedule(pass, schedule)
+            );
+          } else {
+            cust.eligiblePasses = [];
+          }
+
+          delete cust.CustomerPasses;
+          return cust;
+        })
+        // return the customer with at least 1 eligible pass
+        .filter(cust => cust.eligiblePasses.length > 0);
+
+      successLog(null, controllerName);
+      return res.status(200).json({
+        confirmation: 1,
+        content: eligibleCustomers,
+      });
+    })
+    .catch(err => catchErr(null, res, 500, err, controllerName));
+};
 export const getCustomerById = (req, res, next) => {
   const controllerName = 'getCustomerById';
   callLog(req, person, controllerName);
@@ -454,25 +511,17 @@ export const postCreateCustomer = (req, res, next) => {
   } = req.body;
   let customerEmail;
 
-  if (!firstName || !firstName.trim()) {
-    console.log('\n❌❌❌ firstName field empty');
-    throw new Error('Imię nie może być puste.');
-  }
-  if (!lastName || !lastName.trim()) {
-    console.log('\n❌❌❌ lastName field empty');
-    throw new Error('Nazwisko nie może być puste.');
-  }
-  if (!dob || !dob.trim()) {
-    console.log('\n❌❌❌ dob field empty');
-    throw new Error('Data urodzenia nie może być pusta.');
-  }
-  if (!phone || !phone.trim()) {
-    console.log('\n❌❌❌ phone field empty');
-    throw new Error('Numer telefonu nie może być pusty.');
-  }
-  if (!isAdult(dob)) {
-    console.log('\n❌❌❌ Customer below 18');
-    throw new Error('Uczestnik musi być pełnoletni.');
+  try {
+    isEmptyInput(firstName, 'imię');
+    isEmptyInput(lastName, 'nazwisko');
+    isEmptyInput(dob, 'data urodzenia');
+    isEmptyInput(phone, 'telefon');
+    if (!isAdult(dob)) {
+      console.log('\n❌❌❌ Customer below 18');
+      throw new Error('Uczestnik musi być pełnoletni.');
+    }
+  } catch (err) {
+    return catchErr(person, res, errCode, err, controllerName, { code: 409 });
   }
 
   models.Customer.findOne({ where: { userId: userId } })
@@ -1631,36 +1680,54 @@ export const postCreatePassDefinition = async (req, res, next) => {
 
   const {
     name,
-    description,
     allowedProductTypes,
     count,
     validityDays,
     price,
     status,
+    description,
   } = req.body;
+  let passType;
 
-  models.PassDefinition.findOne({ where: { name: name } })
-    .then(product => {
-      if (product) {
-        errCode = 409;
-        throw new Error('Karnet o tej nazwie już istnieje.');
-      }
-      return models.PassDefinition.create({
-        name: name,
-        type: productType,
-        location: location,
-        duration: convertDurationToTime(duration),
-        price: price,
-        startDate: startDate,
-        status: status || 'Aktywny',
-      });
-    })
+  try {
+    isEmptyInput(name, '"nazwa"');
+    isEmptyInput(allowedProductTypes, '"obejmuje"');
+    isEmptyInput(price, '"cena"');
+    isEmptyInput(status, '"status"');
+    isEmptyInput(description, '"opis"');
+    if (
+      (!count || !String(count).trim()) &&
+      (!validityDays || !String(validityDays).trim())
+    ) {
+      console.log('\n❌❌❌ count and validityDays field empty');
+      throw new Error(
+        'Karnet musi posiada co najmniej 1 z wartości: ważność lub ilość wejść.'
+      );
+    }
+  } catch (err) {
+    return catchErr(person, res, errCode, err, controllerName, { code: 409 });
+  }
+
+  if (count && validityDays) passType = 'MIXED';
+  else if (!count && validityDays) passType = 'TIME';
+  else passType = 'COUNT';
+
+  models.PassDefinition.create({
+    name,
+    passType,
+    description,
+    allowedProductTypes,
+    price,
+    usesTotal: count || null,
+    validityDays: validityDays || null,
+    status: status == 'Aktywny' ? 1 : status == 'Zakończony' ? -1 : 0,
+  })
     .then(newProduct => {
       successLog(person, controllerName);
       return res.status(200).json({
         code: 200,
         confirmation: 1,
-        message: 'Stworzono pomyślnie.',
+        message: 'Karnet stworzono pomyślnie.',
       });
     })
     .catch(err =>
@@ -1862,58 +1929,38 @@ export const getBookingById = (req, res, next) => {
     .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 //@ POST
-export const postCreateBooking = (req, res, next) => {
-  const controllerName = 'adminCreateBooking';
+export const postCreateBookingWithPass = (req, res, next) => {
+  const controllerName = 'postCreateBookingWithPass';
   callLog(req, person, controllerName);
-
-  const {
-    customerId,
-    scheduleId,
-    passDefinitionId,
-    bookingType,
-    amountPaid,
-    paymentMethod,
-  } = req.body;
+  const { scheduleId } = req.params;
+  const { customerId, customerPassId } = req.body;
   console.log(req.body);
-  if (isNaN(amountPaid) || Number(amountPaid) < 0) {
-    console.log('\n❌❌❌ amountPaid wrong');
-    throw new Error('amountPaid wrong');
-  }
-  if ([1, 2, 3].includes(Number(paymentMethod))) {
-    console.log('\n❌❌❌ paymentMethod wrong');
-    throw new Error('paymentMethod wrong');
-  }
-  if (!customerId || !scheduleId || !bookingType) {
-    errCode = 400;
-    return next(new Error('Brakuje pól: customerId, scheduleId, bookingType'));
+  console.log(scheduleId);
+  try {
+    isEmptyInput(customerId, '"Numer uczestnika"');
+    isEmptyInput(scheduleId, '"Numer terminu"');
+    isEmptyInput(customerPassId, '"Numer karnetu uczestnika"');
+  } catch (err) {
+    return catchErr(person, res, errCode, err, controllerName);
   }
   const wantsNotifications = req.user?.UserPrefSetting
     ? req.user?.UserPrefSetting?.notifications
     : true;
 
-  let currentCustomer, currentScheduleRecord;
-  const paymentMethodDeduced =
-    paymentMethod == 1
-      ? 'Gotówka (M)'
-      : paymentMethod == 2
-      ? 'BLIK (M)'
-      : 'Przelew (M)';
-  // Load customer with passes
+  let currentCustomerPass, currentScheduleRecord;
 
+  // Load customer with passes
   return db
     .transaction(t => {
-      return models.Customer.findByPk(customerId, {
-        include: [
-          {
-            model: models.CustomerPass,
-            include: [models.PassDefinition],
-          },
-        ],
+      return models.CustomerPass.findOne({
+        where: { customerId, customerPassId },
+        include: [{ model: models.PassDefinition }],
         transaction: t,
       })
-        .then(customer => {
-          if (!customer) throw new Error('Nie znaleziono profilu uczestnika');
-          currentCustomer = customer;
+        .then(customerPass => {
+          if (!customerPass)
+            throw new Error('Nie znaleziono karnetu uczestnika');
+          currentCustomerPass = customerPass;
 
           return models.ScheduleRecord.findOne({
             where: { scheduleId },
@@ -1940,7 +1987,7 @@ export const postCreateBooking = (req, res, next) => {
           // Check if booking already exists (by customer & schedule)
           return models.Booking.findOne({
             where: {
-              customerId: currentCustomer.customerId,
+              customerId,
               scheduleId,
             },
             transaction: t,
@@ -1948,113 +1995,60 @@ export const postCreateBooking = (req, res, next) => {
           });
         })
         .then(existingBooking => {
+          let validPass = null;
+
           if (existingBooking) {
-            if (req.user.email && wantsNotifications) {
-              adminEmails.sendAttendanceReturningMail({
-                to: req.user.email,
-                productName: currentScheduleRecord.Product.name,
-                date: currentScheduleRecord.date,
-                startTime: currentScheduleRecord.startTime,
-                location: currentScheduleRecord.location,
-              });
-            }
-
-            // If booking exists, update attendance flag.
-            return existingBooking.update(
-              { attendance: false, timestamp: new Date() },
-              {
-                transaction: t,
-              }
-            );
-          } else {
-            // Create new booking based on bookingType
-            if (bookingType === 'pass') {
-              let validPass = null;
-
-              if (!passDefinitionId) {
-                throw new Error(
-                  'Brak id karnetu do użycia w celu identyfikacji.'
-                );
-              }
-
-              // Check if customer already has a valid pass for this schedule.
-              if (
-                currentCustomer.CustomerPasses &&
-                currentCustomer.CustomerPasses.length > 0
-              ) {
-                validPass = currentCustomer.CustomerPasses.find(pass =>
-                  isPassValidForSchedule(pass, currentScheduleRecord)
-                );
-              }
-
-              if (validPass) {
-                return models.Booking.create(
-                  {
-                    customerId: currentCustomer.customerId,
-                    scheduleId: currentScheduleRecord.scheduleId,
-                    customerPassId: validPass.customerPassId,
-                    attendance: true,
-                    timestamp: new Date(),
-                    performedBy: 'Administrator',
-                  },
-                  {
-                    transaction: t,
-                  }
-                );
-              } else {
-                throw new Error('Karnet nie jest ważny na ten termin.');
-              }
-            } else if (bookingType === 'direct') {
-              if (validPass.PassDefinition.price < amountPaid)
-                throw new Error('Kwota nie może być większa niż żądana cena.');
-              const amountDueCalculated =
-                parseFloat(validPass.PassDefinition.price) -
-                parseFloat(amountPaid);
-              const statusDeduced =
-                amountDueCalculated <= 0 ? 'w pełni' : 'Częściowo';
-
-              // Create payment first, then booking.
-              return models.Payment.create(
-                {
-                  customerId: currentCustomer.customerId,
-                  date: new Date(),
-                  product: `${currentScheduleRecord.Product.name} (sId: ${currentScheduleRecord.scheduleId})`,
-                  status: statusDeduced,
-                  amountPaid: amountPaid,
-                  amountDue: amountDueCalculated,
-                  paymentMethod: paymentMethodDeduced,
-                  paymentStatus: 'Completed',
-                  performedBy: 'Administrator',
-                },
-                {
-                  transaction: t,
-                }
-              ).then(payment => {
-                return models.Booking.create(
-                  {
-                    customerId: currentCustomer.customerId,
-                    scheduleId,
-                    paymentId: payment.paymentId,
-                    attendance: true,
-                    timestamp: new Date(),
-                    performedBy: 'Administrator',
-                  },
-                  {
-                    transaction: t,
-                  }
-                ).then(booking => {
-                  return { payment, booking };
-                });
-              });
-            } else {
-              throw new Error(
-                'Typ rezerwacji nieprawidłowy - dozwolona jest z karnetem lub płatnością bezpośrednią'
-              );
-            }
+            errCode = 409;
+            throw new Error('Użytkownik już ma rezerwację');
           }
+
+          // Check if customer already has a valid pass for this schedule.
+          validPass = isPassValidForSchedule(
+            currentCustomerPass,
+            currentScheduleRecord
+          );
+
+          if (!validPass) {
+            throw new Error('Karnet nie jest ważny na ten termin.');
+          }
+
+          return models.Booking.create(
+            {
+              customerId,
+              scheduleId: currentScheduleRecord.scheduleId,
+              customerPassId: currentCustomerPass.customerPassId,
+              attendance: true,
+              timestamp: new Date(),
+              performedBy: 'Administrator',
+            },
+            {
+              transaction: t,
+            }
+          );
+        })
+        .then(newBooking => {
+          if (typeof currentCustomerPass.usesLeft === 'number') {
+            return currentCustomerPass
+              .update(
+                { usesLeft: currentCustomerPass.usesLeft - 1 },
+                { transaction: t }
+              )
+              .then(() => newBooking);
+          }
+          return newBooking;
         });
     })
     .then(result => {
+      if (req.user.email && wantsNotifications) {
+        adminEmails.sendNewReservationMail({
+          to: req.user.email,
+          productName: currentScheduleRecord.Product.name,
+          date: currentScheduleRecord.date,
+          startTime: currentScheduleRecord.startTime,
+          location: currentScheduleRecord.location,
+          isAdmin: true,
+        });
+      }
       successLog(person, controllerName);
       res.status(201).json({
         confirmation: 1,
@@ -2301,6 +2295,7 @@ export const putEditMarkAbsent = (req, res, next) => {
           date: currentScheduleRecord.date,
           startTime: currentScheduleRecord.startTime,
           location: currentScheduleRecord.location,
+          isAdmin: true,
         });
       }
 
@@ -2388,6 +2383,7 @@ export const putEditMarkPresent = (req, res, next) => {
           date: currentScheduleRecord.date,
           startTime: currentScheduleRecord.startTime,
           location: currentScheduleRecord.location,
+          isAdmin: true,
         });
       }
 
@@ -2636,28 +2632,7 @@ export const postCreatePayment = (req, res, next) => {
 
               const purchaseDate = new Date(),
                 validityDays = currentPassDefinition.validityDays;
-              let calcExpiryDate = null;
-
-              if (validityDays && validityDays < 30) {
-                // if less then month
-                calcExpiryDate = addDays(purchaseDate, validityDays);
-              } else if (validityDays && validityDays >= 30) {
-                // if a couple of months where month = 30
-                calcExpiryDate = addMonths(
-                  purchaseDate,
-                  Math.floor(validityDays / 30)
-                );
-              } else if (validityDays && validityDays >= 365) {
-                // if over 1 year
-                calcExpiryDate = addYears(
-                  purchaseDate,
-                  Math.floor(validityDays / 365)
-                );
-              }
-
-              if (calcExpiryDate) {
-                calcExpiryDate.setHours(23, 59, 59, 999);
-              }
+              let calcExpiryDate = calcPassExpiryDate(validityDays);
 
               return models.CustomerPass.create(
                 {
@@ -2693,6 +2668,7 @@ export const postCreatePayment = (req, res, next) => {
                     ),
                     usesTotal: currentPassDefinition.usesTotal,
                     description: currentPassDefinition.description,
+                    isAdmin: true,
                   });
                 }
                 return { payment, customerPass };
@@ -2782,6 +2758,7 @@ export const postCreatePayment = (req, res, next) => {
                         date: scheduleRecord.date,
                         startTime: scheduleRecord.startTime,
                         location: scheduleRecord.location,
+                        isAdmin: true,
                       });
                     }
                     return { payment, booking };
@@ -2835,6 +2812,7 @@ export const deletePayment = (req, res, next) => {
         adminEmails.sendPaymentCancelledMail({
           to: customerEmail,
           paymentId: payment.paymentId,
+          isAdmin: true,
         });
       }
 

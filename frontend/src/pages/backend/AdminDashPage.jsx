@@ -67,7 +67,7 @@ const sideNavActions = [
 ];
 const noCreateOptionPages = [
   'show-all-schedules',
-  'show-all-schedules',
+  'show-all-bookings',
   'show-all-customer-passes',
   'show-all-invoices',
   'show-all-newsletters',

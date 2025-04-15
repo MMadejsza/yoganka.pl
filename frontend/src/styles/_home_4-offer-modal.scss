@@ -106,8 +106,7 @@
         0.5
       );
       border-radius: 25px;
-      box-shadow:
-        rgba(0, 0, 0, 0.3) 0px 19px 38px,
+      box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
         rgba(0, 0, 0, 0.22) 0px 15px 12px,
         rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
         rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
@@ -349,7 +348,7 @@
 
     &.book {
       flex-basis: 65%;
-      margin-top: 3rem;
+      // margin-top: 3rem;
     }
 
     &.disabled {

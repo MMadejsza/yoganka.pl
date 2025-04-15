@@ -144,7 +144,8 @@ export const pickTheBestPassForSchedule = (customerPasses, schedule) => {
   //   ...customerPasses.map(cp => cp.PassDefinition.name)
   // );
   // Filter passes that are valid for this schedule using our utility function.
-  const validPasses = customerPasses.filter(pass =>
+  if (!customerPasses || customerPasses.length == 0) return;
+  const validPasses = customerPasses?.filter(pass =>
     isPassValidForSchedule(pass, schedule)
   );
   // console.log(
@@ -319,4 +320,39 @@ export const convertDurationToTime = durationInput => {
   return `${hours.toString().padStart(2, '0')}:${minutes
     .toString()
     .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+};
+
+export const isEmptyInput = (value, PLFieldName, extraMsg) => {
+  const isEmptyArr = Array.isArray(value) && value.length == 0;
+  const msg = extraMsg || `Pole ${PLFieldName} nie może być puste`;
+
+  if (isEmptyArr || !value || !String(value).trim()) {
+    console.log(`\n❌❌❌ ${[value]} field empty`);
+    throw new Error(msg);
+  }
+};
+
+export const calcPassExpiryDate = validityDays => {
+  const purchaseDate = new Date();
+  let calcExpiryDate;
+
+  if (!validityDays || validityDays <= 0) return null;
+
+  if (validityDays >= 365) {
+    // over a year
+    calcExpiryDate = addYears(purchaseDate, Math.floor(validityDays / 365));
+  } else if (validityDays >= 30) {
+    // multiple months (approx. 30 days each)
+    calcExpiryDate = addMonths(purchaseDate, Math.floor(validityDays / 30));
+  } else {
+    // less than a month
+    calcExpiryDate = addDays(purchaseDate, validityDays);
+  }
+
+  if (calcExpiryDate) {
+    // set expiry to end of that day
+    calcExpiryDate.setHours(23, 59, 59, 999);
+  }
+
+  return calcExpiryDate;
 };

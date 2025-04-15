@@ -60,7 +60,7 @@ function NewPassDefinitionForm() {
     isFocused: allowedProductTypesIsFocused,
     validationResults: allowedProductTypesValidationResults,
     hasError: allowedProductTypesHasError,
-  } = useInput(defaultAllowedTypes, val.allowedTypesValidations);
+  } = useInput(defaultAllowedTypes);
 
   // to handle the state as an array with group values - not just one
   const handleAllowedProductTypesGroupChange = e => {
@@ -150,8 +150,7 @@ function NewPassDefinitionForm() {
       validityDaysHasError ||
       countHasError ||
       nameHasError ||
-      descriptionHasError ||
-      allowedProductTypesHasError
+      descriptionHasError
     ) {
       return;
     }
@@ -207,7 +206,7 @@ function NewPassDefinitionForm() {
         type='checkbox'
         id='allowedProductTypes'
         name='allowedProductTypes'
-        label='Obejmuje:'
+        label='Obejmuje: *'
         value={allowedProductTypesValue} // ["CLASS", "EVENT"]
         onChange={handleAllowedProductTypesGroupChange}
         options={[
@@ -225,9 +224,8 @@ function NewPassDefinitionForm() {
         name='count'
         step='1'
         min='0'
-        label='Ilość wejść: *'
+        label='Ilość wejść:'
         placeholder='1...99'
-        required
         value={countValue}
         onFocus={handleCountFocus}
         onBlur={handleCountBlur}
@@ -243,7 +241,7 @@ function NewPassDefinitionForm() {
         step='1'
         id='validityDays'
         name='validityDays'
-        label='Ważny przez: *'
+        label='Ważny przez:'
         placeholder='Etykieta rozpoznawcza - dla uczestników (30 = miesiąc,60[...], 365 rok itp.)'
         value={validityDaysValue}
         autoComplete='off'
@@ -282,7 +280,7 @@ function NewPassDefinitionForm() {
         ]}
         id='status'
         name='status'
-        label='Status:'
+        label='Status: *'
         value={statusValue}
         required
         onFocus={handleStatusFocus}
@@ -298,7 +296,7 @@ function NewPassDefinitionForm() {
         type='textarea'
         id='description'
         name='description'
-        label='Krótki opis w systemie:'
+        label='Krótki opis w systemie: *'
         placeholder='Widoczny dla uczestników - opis sprzedażowy'
         cols='40'
         rows='10'

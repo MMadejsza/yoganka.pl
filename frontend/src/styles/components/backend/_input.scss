@@ -19,6 +19,7 @@ textarea {
   -webkit-appearance: none;
   -moz-appearance: none;
   box-sizing: border-box;
+  font-size: 1.7rem;
 }
 
 // Restore native appearance where needed
@@ -49,6 +50,7 @@ input[type='radio'] {
   margin: 0;
   width: auto;
   height: auto;
+  flex-basis: auto;
 }
 
 // Disabled inputs
@@ -142,7 +144,7 @@ input {
     @include flex(row, center, center);
 
     &.generic-details__content--settings {
-      flex-basis: 20%;
+      flex-basis: auto;
     }
   }
 }

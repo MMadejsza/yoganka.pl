@@ -37,6 +37,10 @@ router.get('/show-all-bookings/:id', adminC.getBookingById);
 router.get('/show-all-passes', adminC.getAllPasses);
 router.get('/show-all-passes/:id', adminC.getPassById);
 router.get('/show-all-customer-passes/:id', adminC.getCustomerPassById);
+router.get(
+  '/show-all-customers-with-eligible-passes/:scheduleId',
+  adminC.getAllCustomersWithEligiblePasses
+);
 
 //! POST - CREATE__________________________________________
 router.post('/create-user', adminC.postCreateUser);
@@ -45,6 +49,10 @@ router.post('/create-schedule', adminC.postCreateScheduleRecord);
 router.post('/create-product', adminC.postCreateProduct);
 router.post('/create-pass-definition', adminC.postCreatePassDefinition);
 router.post('/create-payment', adminC.postCreatePayment);
+router.post(
+  '/create-booking-with-pass/:scheduleId',
+  adminC.postCreateBookingWithPass
+);
 
 //! PUT - EDIT______________________________________________
 router.put('/edit-customer-data/:id', adminC.putEditCustomerDetails);

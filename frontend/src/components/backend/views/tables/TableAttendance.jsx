@@ -140,18 +140,24 @@ function TableAttendance({ stats, isAdminPage }) {
   const toggleBtn = (
     <ToggleAddButton isEditing={isFormVisible} onToggle={setIsFormVisible} />
   );
-
+  const headers = [
+    'Id',
+    'Metoda rezerwacji',
+    'Data zapisania',
+    'Uczestnik',
+    '',
+  ];
   const table = (
     <WrapperModalTable
       content={attendedBookingsArray}
       title={'Potwierdzone rezerwacje'}
       noContentMsg={'aktywnych rezerwacji'}
-      // toggleBtn={toggleBtn}
+      toggleBtn={toggleBtn}
       form={isFormVisible && form}
     >
       <ModalTable
         classModifier={'admin-view'}
-        headers={['Id', 'Metoda płatności', 'Data zapisania', 'Uczestnik', '']}
+        headers={headers}
         keys={[
           'bookingId',
           'paymentMethod',
@@ -174,11 +180,10 @@ function TableAttendance({ stats, isAdminPage }) {
       content={cancelledBookingsArray}
       title={'Anulowane rezerwacje'}
       noContentMsg={'anulowanych rezerwacji'}
-      // toggleBtn={toggleBtn}
     >
       <ModalTable
         classModifier={'admin-view'}
-        headers={['Id', 'Metoda płatności', 'Data zapisania', 'Uczestnik', '']}
+        headers={headers}
         keys={[
           'bookingId',
           'paymentMethod',

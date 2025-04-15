@@ -38,7 +38,10 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
   // console.log(`ViewSchedule hasValidPass`, hasValidPass);
 
   const { feedback, updateFeedback, resetFeedback } = useFeedback({
-    getRedirectTarget: result => (result.confirmation === 1 ? '/konto' : null),
+    getRedirectTarget: result =>
+      result.confirmation === 1
+        ? `${userAccountPage ? '/konto' : '/grafik'}`
+        : null,
     onClose: onClose,
   });
 
@@ -157,7 +160,7 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
     !shouldShowCancelBtn &&
     !isArchived &&
     !schedule.isUserGoing &&
-    !paymentOps?.booking?.isError &&
+    // !paymentOps?.booking?.isError &&
     !isFillingTheForm &&
     !isAdminPanel &&
     !bookingCancelled;
@@ -307,7 +310,10 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
 
       <footer className='modal__user-action'>
         {shouldShowFeedback && feedbackBox}
-        {shouldShowBookBtn && !shouldShowCancelBtn && passSelect}
+        {shouldShowBookBtn &&
+          !shouldShowCancelBtn &&
+          !schedule.wasUserReserved &&
+          passSelect}
         {shouldShowBookBtn && !shouldShowCancelBtn && paymentBtn}
         {shouldShowCancelBtn && (
           <button

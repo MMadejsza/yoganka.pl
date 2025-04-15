@@ -250,7 +250,8 @@ export const getEmailToken = (req, res, next) => {
       user.emailVerified = true;
       validTokenRecord.used = true;
 
-      return user.save();
+      // save both records
+      return Promise.all([user.save(), validTokenRecord.save()]);
     })
     .then(() => {
       successLog(person, controllerName);
