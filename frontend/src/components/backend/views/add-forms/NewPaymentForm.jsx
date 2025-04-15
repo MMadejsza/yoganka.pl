@@ -205,6 +205,7 @@ function NewPaymentForm() {
     handleAmountPaidReset();
     handlePaymentMethodReset();
     handlePassReset();
+    handleStartDateReset();
   };
 
   // Submit handling

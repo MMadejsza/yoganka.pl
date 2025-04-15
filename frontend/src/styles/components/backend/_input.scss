@@ -86,12 +86,16 @@ textarea::placeholder {
   }
 }
 
-.radio-group {
+.radio-group,
+.checkbox-group {
   @include flex(row, space-evenly);
+  gap: 2.5rem;
+
   .input-pair,
   .generic-details__item {
     @include flex(row, space-evenly, center);
     flex-wrap: nowrap;
+    gap: 1rem !important;
   }
 }
 

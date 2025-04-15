@@ -43,6 +43,7 @@ router.post('/create-user', adminC.postCreateUser);
 router.post('/create-customer', adminC.postCreateCustomer);
 router.post('/create-schedule', adminC.postCreateScheduleRecord);
 router.post('/create-product', adminC.postCreateProduct);
+router.post('/create-pass-definition', adminC.postCreatePassDefinition);
 router.post('/create-payment', adminC.postCreatePayment);
 
 //! PUT - EDIT______________________________________________

@@ -7,10 +7,11 @@ function ViewCustomerPass({ data, userAccountPage }) {
   console.log('ViewCustomerPass data', data);
 
   const { customerPass } = data;
+  const passName = `${customerPass.passDefinition.name}`;
 
   return (
     <>
-      <h1 className='modal__title modal__title--view'>{`${customerPass.passDefinition.name}`}</h1>
+      <h1 className='modal__title modal__title--view'>{passName}</h1>
       <h3 className='modal__title modal__title--status'>
         <GenericListTagLi
           objectPair={{

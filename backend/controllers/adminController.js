@@ -1624,6 +1624,49 @@ export const getCustomerPassById = (req, res, next) => {
     .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 //@ POST
+//@ POST
+export const postCreatePassDefinition = async (req, res, next) => {
+  const controllerName = 'postCreatePassDefinition';
+  callLog(req, person, controllerName);
+
+  const {
+    name,
+    description,
+    allowedProductTypes,
+    count,
+    validityDays,
+    price,
+    status,
+  } = req.body;
+
+  models.PassDefinition.findOne({ where: { name: name } })
+    .then(product => {
+      if (product) {
+        errCode = 409;
+        throw new Error('Karnet o tej nazwie już istnieje.');
+      }
+      return models.PassDefinition.create({
+        name: name,
+        type: productType,
+        location: location,
+        duration: convertDurationToTime(duration),
+        price: price,
+        startDate: startDate,
+        status: status || 'Aktywny',
+      });
+    })
+    .then(newProduct => {
+      successLog(person, controllerName);
+      return res.status(200).json({
+        code: 200,
+        confirmation: 1,
+        message: 'Stworzono pomyślnie.',
+      });
+    })
+    .catch(err =>
+      catchErr(person, res, errCode, err, controllerName, { code: 409 })
+    );
+};
 //@ PUT
 //@ DELETE
 export const deleteCustomerPass = (req, res, next) => {

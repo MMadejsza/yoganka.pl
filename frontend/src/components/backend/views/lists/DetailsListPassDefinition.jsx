@@ -22,7 +22,12 @@ function DetailsListPassDefinition({
       ? passDefinition.status
       : passDefinition.status.toUpperCase();
 
-  const details = [];
+  const details = [
+    {
+      label: 'Numer:',
+      content: passDefinition.passDefId,
+    },
+  ];
   if (!isPassPurchaseView)
     details.push(
       { label: 'Nazwa:', content: passDefinition.name },
@@ -32,8 +37,8 @@ function DetailsListPassDefinition({
           passStatus === 'ACTIVE' || passStatus == 1
             ? 'Aktywny'
             : passStatus === 'SUSPENDED' || passStatus == 0
-              ? 'Wstrzymany'
-              : 'Niekontynuowany',
+            ? 'Wstrzymany'
+            : 'Niekontynuowany',
       }
     );
 

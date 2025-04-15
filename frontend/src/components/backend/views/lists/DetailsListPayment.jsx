@@ -12,6 +12,7 @@ function DetailsListPayment({ paymentData, userAccountPage }) {
   const title = userAccountPage ? 'Szczegoły płatności' : 'Szczegoły płatności'; //temp
 
   const details = [
+    { label: 'Numer:', content: payment.paymentId },
     { label: 'Data:', content: formatIsoDateTime(payment.date) },
     { label: 'Kwota:', content: `${payment.amountPaid} zł` },
     { label: 'Metoda płatności:', content: payment.paymentMethod },

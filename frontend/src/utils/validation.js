@@ -1529,3 +1529,10 @@ export const priceValidations = [
     message: 'Cena nie może być mniejsza niż 0.',
   },
 ];
+//@ CHECKBOXES RULESET
+export const allowedTypesValidations = [
+  {
+    rule: value => Array.isArray(value) && value.length > 0,
+    message: 'Wybierz przynajmniej jeden typ.',
+  },
+];
