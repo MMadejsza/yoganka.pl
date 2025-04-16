@@ -188,10 +188,10 @@ function NewProductForm() {
         formType={formType}
         type='select'
         options={[
-          { label: 'Online', value: 'Online' },
-          { label: 'Camp', value: 'Camp' },
-          { label: 'Event', value: 'Event' },
-          { label: 'Class', value: 'Class' },
+          { label: 'Online', value: 'ONLINE' },
+          { label: 'Camp', value: 'CAMP' },
+          { label: 'Event', value: 'EVENT' },
+          { label: 'Class', value: 'CLASS' },
         ]}
         id='productType'
         name='productType'

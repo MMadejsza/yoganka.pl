@@ -8,6 +8,7 @@ function FeedbackBox({
   error,
   size,
   onCloseFeedback,
+  counter,
 }) {
   // Initialize countdown timer with 3 seconds
   const [countdown, setCountdown] = useState(3);
@@ -21,7 +22,7 @@ function FeedbackBox({
 
   // Start the countdown when the status is success (status === 1) and not pending
   useEffect(() => {
-    if (!isPending && status === 1) {
+    if (!isPending && (status === 1 || status === 0)) {
       const intervalId = setInterval(() => {
         setCountdown(prev => {
           // counter reaches 1 - stop further counting
@@ -36,9 +37,11 @@ function FeedbackBox({
     }
   }, [isPending, status]);
 
-  if (countdown === 0) {
-    onCloseFeedback();
-  }
+  useEffect(() => {
+    if (countdown === 0) {
+      onCloseFeedback();
+    }
+  }, [countdown, onCloseFeedback]);
 
   // Determine CSS class based on the feedback status and warnings
   const statusClass =
@@ -95,7 +98,10 @@ function FeedbackBox({
           if (onCloseFeedback) onCloseFeedback();
         }}
       >
-        X {status === 1 && !isPending ? `(${countdown} s...)` : ''}
+        {(status === 1 || status === 0 || counter) && !isPending && 'X '}
+        {(status === 1 || status === 0) && !isPending
+          ? `(${countdown} s...)`
+          : ''}
       </button>
       {statusMsg}
     </div>

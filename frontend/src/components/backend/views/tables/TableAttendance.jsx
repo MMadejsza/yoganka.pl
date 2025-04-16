@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { useAuthStatus } from '../../../../hooks/useAuthStatus.js';
 import { useFeedback } from '../../../../hooks/useFeedback.js';
 import {
@@ -19,8 +19,12 @@ function TableAttendance({ stats, isAdminPage }) {
   let attendedBookingsArray = stats.attendedBookings;
   let cancelledBookingsArray = stats.cancelledBookings;
   let params = useParams();
-  const [isFormVisible, setIsFormVisible] = useState();
+  let location = useLocation();
+  const isProductView = location.pathname.includes(
+    `show-all-products/${params.id}`
+  );
 
+  const [isFormVisible, setIsFormVisible] = useState();
   const [deleteWarningTriggered, setDeleteWarningTriggered] = useState(false);
   const { data: status } = useAuthStatus();
   const { feedback, updateFeedback, resetFeedback } = useFeedback({
@@ -135,9 +139,15 @@ function TableAttendance({ stats, isAdminPage }) {
       deleteBookingRecord(params);
     }
   };
+
+  const handleCloseFeedback = () => {
+    resetFeedback();
+    setDeleteWarningTriggered(false);
+  };
+
   const form = <NewBookingForm />;
 
-  const toggleBtn = (
+  const toggleBtn = !isProductView && (
     <ToggleAddButton isEditing={isFormVisible} onToggle={setIsFormVisible} />
   );
   const headers = [
@@ -147,6 +157,32 @@ function TableAttendance({ stats, isAdminPage }) {
     'Uczestnik',
     '',
   ];
+
+  const shouldShowForm = !(
+    feedback.status != undefined || deleteWarningTriggered
+  );
+
+  const feedbackBox = (feedback.status != undefined ||
+    deleteWarningTriggered) && (
+    <FeedbackBox
+      onCloseFeedback={handleCloseFeedback}
+      warnings={feedback.warnings}
+      status={feedback.status}
+      successMsg={feedback.message}
+      isPending={
+        deleteBookingRecordIsPending ||
+        markAbsentIsPending ||
+        markPresentIsPending
+      }
+      isError={
+        deleteBookingRecordIsError || markAbsentIsError || markPresentIsError
+      }
+      error={deleteBookingRecordError || markAbsentError || markPresentError}
+      size='small'
+      counter={true}
+    />
+  );
+
   const table = (
     <WrapperModalTable
       content={attendedBookingsArray}
@@ -154,7 +190,9 @@ function TableAttendance({ stats, isAdminPage }) {
       noContentMsg={'aktywnych rezerwacji'}
       toggleBtn={toggleBtn}
       form={isFormVisible && form}
+      shouldShowForm={shouldShowForm}
     >
+      {!deleteWarningTriggered && feedbackBox}
       <ModalTable
         classModifier={'admin-view'}
         headers={headers}
@@ -180,7 +218,9 @@ function TableAttendance({ stats, isAdminPage }) {
       content={cancelledBookingsArray}
       title={'Anulowane rezerwacje'}
       noContentMsg={'anulowanych rezerwacji'}
+      shouldShowForm={shouldShowForm}
     >
+      {feedbackBox}
       <ModalTable
         classModifier={'admin-view'}
         headers={headers}
@@ -205,29 +245,6 @@ function TableAttendance({ stats, isAdminPage }) {
 
   return (
     <>
-      {(feedback.status != undefined || deleteWarningTriggered) && (
-        <FeedbackBox
-          onCloseFeedback={resetFeedback}
-          warnings={feedback.warnings}
-          status={feedback.status}
-          successMsg={feedback.message}
-          isPending={
-            deleteBookingRecordIsPending ||
-            markAbsentIsPending ||
-            markPresentIsPending
-          }
-          isError={
-            deleteBookingRecordIsError ||
-            markAbsentIsError ||
-            markPresentIsError
-          }
-          error={
-            deleteBookingRecordError || markAbsentError || markPresentError
-          }
-          size='small'
-        />
-      )}
-
       {table}
 
       {cancelledTable}

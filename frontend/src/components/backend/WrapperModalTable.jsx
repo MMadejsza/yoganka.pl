@@ -5,6 +5,7 @@ function WrapperModalTable({
   toggleBtn,
   form,
   children,
+  shouldShowForm,
 }) {
   const shouldDisplayContent = !!content && content.length > 0;
   // console.log('🚨 WrapperModalTable: content.length =', content?.length);
@@ -13,10 +14,12 @@ function WrapperModalTable({
   return (
     <>
       <h2 className='generic-details__title admin-action modal-table__title'>
-        {`${title} ${content && content.length > 0 ? `(${content.length})` : ''}`}
+        {`${title} ${
+          content && content.length > 0 ? `(${content.length})` : ''
+        }`}
         {toggleBtn}
       </h2>
-      {form}
+      {shouldShowForm && form}
       {shouldDisplayContent && children}
 
       {!shouldDisplayContent && (

@@ -34,6 +34,8 @@ const fetchDataError =
   '🪷 Coś poszło nie tak podczas pobierania danych. Spróbuj ponownie.';
 const fetchItemError =
   '✨ Nie udało się załadować elementu. Oddech – spróbuj za chwilę.';
+const alreadyLoggedIn =
+  '🧘‍♂️ Już jesteś z nami. Oddychaj spokojnie i kontynuuj swoją podróż.';
 
 //! USER__________________________________________________________________
 const notLoggedIn =
@@ -49,7 +51,7 @@ const passwordResetLinkSent =
 const settingsUpdated =
   '🌿 Zmiany zapisane. Twoja przestrzeń dostosowana do Ciebie.';
 const noSettingsChange =
-  '🌿 Zmiany zapisane. Twoja przestrzeń dostosowana do Ciebie.';
+  '🌱 Nie zapisano żadnych zmian. Może coś umknęło? Sprawdź spokojnie jeszcze raz.';
 const settingsLoaded = '🌿 Preferencje pobrane. Wszystko tak, jak lubisz.';
 const defaultSettingsLoaded =
   '🌿 Załadowano ustawienia domyślne. Czysty start, pełen przestrzeni.';
@@ -126,6 +128,7 @@ const cantMarkAbsentForPassedSchedule =
 
 export {
   accountActivated,
+  alreadyLoggedIn,
   attendanceMarkedAbsent,
   attendanceMarkedPresent,
   cantMarkAbsentForPassedSchedule,

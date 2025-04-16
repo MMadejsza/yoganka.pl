@@ -65,6 +65,11 @@ function TableSchedules({ data, scheduleRecords, placement, status }) {
     }
   };
 
+  const handleCloseFeedback = () => {
+    resetFeedback();
+    setDeleteWarningTriggered(false);
+  };
+
   let form;
   let processedScheduleRecordsArr = scheduleRecords;
   let headers = ['Id', 'Dzień', 'Data', 'Godzina', 'Lokacja', 'Frekwencja', ''];
@@ -115,20 +120,11 @@ function TableSchedules({ data, scheduleRecords, placement, status }) {
     form = <NewProductScheduleForm defaultDataObj={data} />;
   }
 
+  const shouldShowForm = !(
+    feedback.status != undefined || deleteWarningTriggered
+  );
   return (
     <>
-      {(feedback.status != undefined || deleteWarningTriggered) && (
-        <FeedbackBox
-          onCloseFeedback={resetFeedback}
-          warnings={feedback.warnings}
-          status={feedback.status}
-          successMsg={feedback.message}
-          isPending={deleteScheduleRecordIsPending}
-          isError={deleteScheduleRecordIsError}
-          error={deleteScheduleRecordError}
-          size='small'
-        />
-      )}
       <WrapperModalTable
         content={processedScheduleRecordsArr}
         title={'Terminy'}
@@ -139,7 +135,21 @@ function TableSchedules({ data, scheduleRecords, placement, status }) {
         }
         toggleBtn={toggleBtn}
         form={isFormVisible && form}
+        shouldShowForm={shouldShowForm}
       >
+        {(feedback.status != undefined || deleteWarningTriggered) && (
+          <FeedbackBox
+            onCloseFeedback={handleCloseFeedback}
+            warnings={feedback.warnings}
+            status={feedback.status}
+            successMsg={feedback.message}
+            isPending={deleteScheduleRecordIsPending}
+            isError={deleteScheduleRecordIsError}
+            error={deleteScheduleRecordError}
+            size='small'
+            counter={true}
+          />
+        )}
         <ModalTable
           classModifier={'admin-view'}
           headers={headers}

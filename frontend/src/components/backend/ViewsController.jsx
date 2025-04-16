@@ -355,17 +355,22 @@ function ViewsController({
     );
   };
 
+  const handleCloseFeedback = () => {
+    resetFeedback();
+    setDeleteWarningTriggered(false);
+  };
+
   return (
     <WrapperModal
       visited={visited}
       onClose={onClose}
-      onCloseFeedback={resetFeedback}
+      onCloseFeedback={handleCloseFeedback}
     >
       {!deleteWarningTriggered
         ? dataDisplay
         : (feedback.status != undefined || deleteWarningTriggered) && (
             <FeedbackBox
-              onCloseFeedback={resetFeedback}
+              onCloseFeedback={handleCloseFeedback}
               warnings={feedback.warnings}
               status={feedback.status}
               successMsg={feedback.message}

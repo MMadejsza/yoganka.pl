@@ -25,8 +25,8 @@ export function useFeedback({
       clearTimeout(timerRef.current);
       timerRef.current = null;
     }
-    setModalClosedManually(true);
     setFeedback({ status: undefined, message: '', warnings: null });
+    // setModalClosedManually(true);
   }, []);
 
   // Function to update feedback - for example after mutation
@@ -82,7 +82,7 @@ export function useFeedback({
             }
           }
         }, 3000);
-      } else if (newStatus === 1 && !modalClosedManually) {
+      } else if ((newStatus === 1 || newStatus === 0) && !modalClosedManually) {
         // close only if success
         timerRef.current = setTimeout(() => {
           setFeedback({ status: undefined, message: '', warnings: null });

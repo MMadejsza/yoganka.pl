@@ -1,11 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import {
-  useLocation,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import * as msgs from '../../../../backend/utils/resMessagesUtils.js';
 import { useAuthStatus } from '../../hooks/useAuthStatus.js';
 import { useFeedback } from '../../hooks/useFeedback.js';
@@ -30,7 +25,7 @@ function LoginFrom({ successMsg, errorMsg }) {
   const [searchParams] = useSearchParams();
   const verified = searchParams.get('verified');
   const redirectParam = searchParams.get('redirect');
-  const location = useLocation();
+  const { data: status, isLoading: isStatusLoading } = useAuthStatus();
   const [firstTime, setFirstTime] = useState(false); // state to switch between registration and login in term of labels and http request method
   const [resetPassword, setResetPassword] = useState(false);
   const [feedbackUpdated, setFeedbackUpdated] = useState(false); //to flag confirmation message after account activation and stop useEffect from constant checking
@@ -52,8 +47,7 @@ function LoginFrom({ successMsg, errorMsg }) {
           (result.code === 303 || result.code === 200)
         ) {
           setFirstTime(!true);
-          // return '/'; // no redirect - the same url
-          return null;
+          return '/';
         }
         if (result.type === 'login') {
           return redirectParam ? redirectParam : '/'; // after login go back to given site in param or main page
@@ -190,7 +184,6 @@ function LoginFrom({ successMsg, errorMsg }) {
     hasError: confirmedPasswordHasError,
   } = useInput('', getConfirmedPasswordValidations(passwordValue));
 
-  const { data: status, isLoading: isStatusLoading } = useAuthStatus();
   if (isStatusLoading || !status?.token) {
     return <p>Ładowanie formularza logowania...</p>;
   }
@@ -227,13 +220,14 @@ function LoginFrom({ successMsg, errorMsg }) {
   // Submit handling
   const handleSubmit = async e => {
     e.preventDefault(); // No reloading
+    console.log('Submit triggered');
     if (!status?.token) {
       console.warn(
         'Błąd autentykcji sesji. Przeładuj stronę i spróbuj ponownie.'
       );
       return;
     }
-    console.log('Submit triggered');
+
     resetFeedback();
 
     if (params.token) {
@@ -245,6 +239,15 @@ function LoginFrom({ successMsg, errorMsg }) {
         return;
     } else {
       if (emailHasError || passwordHasError) return;
+    }
+
+    if (status?.isLoggedIn && status?.user.email === emailValue) {
+      updateFeedback({
+        confirmation: 0,
+        message: msgs.alreadyLoggedIn,
+        warnings: null,
+      });
+      return;
     }
 
     console.log('Submit passed errors');
