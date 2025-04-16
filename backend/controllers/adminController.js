@@ -2318,61 +2318,81 @@ export const putEditMarkPresent = (req, res, next) => {
   let currentScheduleRecord, customerEmail, wantsNotifications;
 
   // Find schedule
-  models.Booking.findOne({
-    where: {
-      customerId: customerId,
-      bookingId: rowId,
-    },
-    include: [
-      {
-        model: models.ScheduleRecord,
+  return db
+    .transaction(t => {
+      return models.Booking.findOne({
+        where: {
+          customerId: customerId,
+          bookingId: rowId,
+        },
         include: [
           {
-            model: models.Product,
+            model: models.ScheduleRecord,
+            include: [
+              {
+                model: models.Product,
+                required: true,
+              },
+            ],
             required: true,
           },
-        ],
-        required: true,
-      },
-      {
-        model: models.Customer,
-        required: true,
-        include: [
           {
-            model: models.User,
-            attributes: ['email'],
+            model: models.Customer,
+            required: true,
+            include: [
+              {
+                model: models.User,
+                attributes: ['email'],
+              },
+            ],
           },
         ],
-      },
-    ],
-  })
-    .then(foundRecord => {
-      if (!foundRecord) {
-        errCode = 404;
-        throw new Error('Nie znaleziono rekordu obecności w dzienniku.');
-      }
-
-      // Assign for email data
-      currentScheduleRecord = foundRecord.ScheduleRecord;
-      // Assign for email data
-      customerEmail = foundRecord.Customer.User.email;
-      wantsNotifications = foundRecord.Customer.User.UserPrefSetting
-        ? foundRecord.Customer.User.UserPrefSetting.notifications
-        : true;
-      // Finally update attendance
-      return models.Booking.update(
-        {
-          timestamp: new Date(),
-          attendance: 1,
-          performedBy: person,
-        },
-        {
-          where: {
-            customerId: foundRecord.Customer.customerId,
-            bookingId: foundRecord.bookingId,
-          },
+        transaction: t,
+        lock: t.LOCK.UPDATE,
+      }).then(foundRecord => {
+        if (!foundRecord) {
+          errCode = 404;
+          throw new Error('Nie znaleziono rekordu obecności w dzienniku.');
         }
-      );
+        currentScheduleRecord = foundRecord.ScheduleRecord;
+        // check if still places left
+        return models.Booking.count({
+          where: {
+            scheduleId: currentScheduleRecord.scheduleId,
+            attendance: 1,
+          },
+          transaction: t,
+        }).then(currentAttendance => {
+          successLog(person, controllerName, 'got current attendance count');
+
+          if (currentAttendance >= currentScheduleRecord.capacity) {
+            errCode = 409;
+            throw new Error('🪷 Brak wolnych miejsc na ten termin.');
+          }
+
+          currentScheduleRecord = foundRecord.ScheduleRecord;
+          // Assign for email data
+          customerEmail = foundRecord.Customer.User.email;
+          wantsNotifications = foundRecord.Customer.User.UserPrefSetting
+            ? foundRecord.Customer.User.UserPrefSetting.notifications
+            : true;
+          // Finally update attendance
+          return models.Booking.update(
+            {
+              timestamp: new Date(),
+              attendance: 1,
+              performedBy: person,
+            },
+            {
+              where: {
+                customerId: foundRecord.Customer.customerId,
+                bookingId: foundRecord.bookingId,
+              },
+              transaction: t,
+            }
+          );
+        });
+      });
     })
     .then(updatedRecord => {
       // Send confirmation email
@@ -2706,64 +2726,87 @@ export const postCreatePayment = (req, res, next) => {
                 }
                 successLog(person, controllerName, 'scheduleRecord found');
 
-                const amountDueCalculated =
-                  parseFloat(scheduleRecord.Product.price) -
-                  parseFloat(amountPaid);
-                const statusDeduced =
-                  amountDueCalculated <= 0 ? 'w pełni' : 'Częściowo';
-
-                if (scheduleRecord.Product.price < amountPaid)
-                  throw new Error(
-                    'Kwota nie może być większa niż żądana cena.'
-                  );
-                // No pass purchase: create a direct payment and booking.
-                return models.Payment.create(
-                  {
-                    customerId: currentCustomer.customerId,
-                    date: new Date(),
-                    product: `${scheduleRecord.Product.name} (sId: ${scheduleRecord.scheduleId})`,
-                    status: statusDeduced,
-                    amountPaid: amountPaid,
-                    amountDue: amountDueCalculated,
-                    paymentMethod: paymentMethodDeduced,
-                    paymentStatus: 'Completed',
-                    performedBy: 'Administrator',
+                // Check if any spots left
+                return models.Booking.count({
+                  where: {
+                    scheduleId: scheduleRecord.scheduleId,
+                    attendance: 1,
                   },
-                  {
-                    transaction: t,
-                  }
-                ).then(payment => {
-                  if (payment)
-                    successLog(person, controllerName, 'Payment created');
-                  // ! MAIL WITH PAYMENT CONFIRMATION
-                  return models.Booking.create(
-                    {
-                      customerId: currentCustomer.customerId,
-                      scheduleId: scheduleRecord.scheduleId,
-                      paymentId: payment.paymentId,
-                      timestamp: new Date(),
-                      attendance: true,
-                      performedBy: 'Administrator',
-                    },
-                    {
-                      transaction: t,
+                  transaction: t,
+                  lock: t.LOCK.UPDATE,
+                })
+                  .then(currentAttendance => {
+                    successLog(
+                      person,
+                      controllerName,
+                      'got current attendance count'
+                    );
+
+                    if (currentAttendance >= scheduleRecord.capacity) {
+                      errCode = 409;
+                      throw new Error('🪷 Brak wolnych miejsc na ten termin.');
                     }
-                  ).then(booking => {
-                    if (booking)
-                      successLog(person, controllerName, 'Booking created');
-                    if (customerEmail && wantsNotifications) {
-                      adminEmails.sendNewReservationMail({
-                        to: customerEmail,
-                        productName: scheduleRecord.Product.name,
-                        date: scheduleRecord.date,
-                        startTime: scheduleRecord.startTime,
-                        location: scheduleRecord.location,
-                        isAdmin: true,
-                      });
-                    }
-                    return { payment, booking };
+
+                    const amountDueCalculated =
+                      parseFloat(scheduleRecord.Product.price) -
+                      parseFloat(amountPaid);
+                    const statusDeduced =
+                      amountDueCalculated <= 0 ? 'w pełni' : 'Częściowo';
+
+                    if (scheduleRecord.Product.price < amountPaid)
+                      throw new Error(
+                        'Kwota nie może być większa niż żądana cena.'
+                      );
+                    // No pass purchase: create a direct payment and booking.
+                    return models.Payment.create(
+                      {
+                        customerId: currentCustomer.customerId,
+                        date: new Date(),
+                        product: `${scheduleRecord.Product.name} (sId: ${scheduleRecord.scheduleId})`,
+                        status: statusDeduced,
+                        amountPaid: amountPaid,
+                        amountDue: amountDueCalculated,
+                        paymentMethod: paymentMethodDeduced,
+                        paymentStatus: 'Completed',
+                        performedBy: 'Administrator',
+                      },
+                      {
+                        transaction: t,
+                      }
+                    );
+                  })
+                  .then(payment => {
+                    if (payment)
+                      successLog(person, controllerName, 'Payment created');
+                    // ! MAIL WITH PAYMENT CONFIRMATION
+                    return models.Booking.create(
+                      {
+                        customerId: currentCustomer.customerId,
+                        scheduleId: scheduleRecord.scheduleId,
+                        paymentId: payment.paymentId,
+                        timestamp: new Date(),
+                        attendance: true,
+                        performedBy: 'Administrator',
+                      },
+                      {
+                        transaction: t,
+                      }
+                    ).then(booking => {
+                      if (booking)
+                        successLog(person, controllerName, 'Booking created');
+                      if (customerEmail && wantsNotifications) {
+                        adminEmails.sendNewReservationMail({
+                          to: customerEmail,
+                          productName: scheduleRecord.Product.name,
+                          date: scheduleRecord.date,
+                          startTime: scheduleRecord.startTime,
+                          location: scheduleRecord.location,
+                          isAdmin: true,
+                        });
+                      }
+                      return { payment, booking };
+                    });
                   });
-                });
               })
           );
         }

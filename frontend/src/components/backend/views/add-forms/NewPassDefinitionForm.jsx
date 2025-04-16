@@ -1,9 +1,13 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react'; // to avoid infinite loop with passing [] to useInput
 import { useAuthStatus } from '../../../../hooks/useAuthStatus.js';
 import { useFeedback } from '../../../../hooks/useFeedback.js';
 import { useInput } from '../../../../hooks/useInput.js';
-import { mutateOnCreate, queryClient } from '../../../../utils/http.js';
+import {
+  fetchData,
+  mutateOnCreate,
+  queryClient,
+} from '../../../../utils/http.js';
 import * as val from '../../../../utils/validation.js';
 import FeedbackBox from '../../FeedbackBox.jsx';
 import Input from '../../Input.jsx';
@@ -35,6 +39,30 @@ function NewPassDefinitionForm() {
     },
   });
 
+  const {
+    data: productsList,
+    isError: isProductsError,
+    error: productsError,
+  } = useQuery({
+    // as id for later caching received data to not send the same request again where location.pathname is key
+    queryKey: ['data', '/admin-console/show-all-products'],
+    // definition of the code sending the actual request- must be returning the promise
+    queryFn: () => fetchData('/admin-console/show-all-products'),
+    // only when location.pathname is set extra beyond admin panel:
+  });
+
+  let formattedProductsTypes = [];
+  if (productsList && productsList.content) {
+    const seen = {};
+    for (const product of productsList.content) {
+      const type = product.type.toUpperCase();
+      if (!seen[type]) {
+        seen[type] = true;
+        formattedProductsTypes.push({ label: product.type, value: type });
+      }
+    }
+  }
+  console.log(productsList);
   // using custom hook with extracting and reassigning its 'return' for particular inputs and assign validation methods from imported utils. Every inout has its won state now
   const {
     value: nameValue,
@@ -209,12 +237,7 @@ function NewPassDefinitionForm() {
         label='Obejmuje: *'
         value={allowedProductTypesValue} // ["CLASS", "EVENT"]
         onChange={handleAllowedProductTypesGroupChange}
-        options={[
-          { label: 'Wyjazdy', value: 'CAMP' },
-          { label: 'Wydarzenia', value: 'EVENT' },
-          { label: 'Online', value: 'ONLINE' },
-          { label: 'Stacjonarne', value: 'CLASS' },
-        ]}
+        options={formattedProductsTypes}
       />
       <Input
         embedded={true}
