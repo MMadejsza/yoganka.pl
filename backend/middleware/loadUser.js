@@ -37,6 +37,44 @@ export const loadUserFromSession = (req, res, next) => {
   })
     .then(userInstance => {
       if (!userInstance) return next();
+
+      //  Check each customer pass for expiration conditions.
+      if (
+        userInstance?.Customer?.CustomerPasses &&
+        Array.isArray(userInstance.Customer.CustomerPasses)
+      ) {
+        const now = new Date();
+
+        const updatePromises = userInstance.Customer.CustomerPasses.map(
+          passInstance => {
+            // If already -1 - do nothing
+            if (passInstance.status !== -1) {
+              // Expired
+              const isExpiredByDate =
+                passInstance.validUntil &&
+                new Date(passInstance.validUntil) < now;
+              // UsesLeft = 0.
+              const isCountPass =
+                passInstance?.PassDefinition?.passType.toUpperCase() ===
+                'COUNT';
+              const isExpiredByUses = isCountPass && passInstance.usesLeft <= 0;
+
+              if (isExpiredByDate || isExpiredByUses) {
+                // Update
+                return passInstance.update({ status: -1 });
+              }
+            }
+            // Make sure every iteration return promise
+            return Promise.resolve();
+          }
+        );
+        // Wait for all updates before returning userInstance
+        return Promise.all(updatePromises).then(() => userInstance);
+      }
+      return userInstance;
+    })
+    .then(userInstance => {
+      if (!userInstance) return next();
       let user = userInstance.toJSON();
 
       if (user.Customer === null) {

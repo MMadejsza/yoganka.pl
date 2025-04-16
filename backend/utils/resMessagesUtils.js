@@ -36,6 +36,10 @@ const fetchItemError =
   '✨ Nie udało się załadować elementu. Oddech – spróbuj za chwilę.';
 const alreadyLoggedIn =
   '🧘‍♂️ Już jesteś z nami. Oddychaj spokojnie i kontynuuj swoją podróż.';
+const emailVerifiedSent =
+  '🌸 Twój mail weryfikacyjny został wysłany. Oddychaj spokojnie i poczuj zen. ✨';
+const emailAlreadyVerified =
+  '🧘‍♀️ Twój e-mail został już wcześniej potwierdzony. Możesz spokojnie kontynuować swoją praktykę. 🌸';
 
 //! USER__________________________________________________________________
 const notLoggedIn =
@@ -136,9 +140,11 @@ export {
   customerLoaded,
   customerPassOVerlapping,
   defaultSettingsLoaded,
+  emailAlreadyVerified,
   emailNotVerified,
   emailNotYetVerified,
   emailVerified,
+  emailVerifiedSent,
   fetchDataError,
   fetchItemError,
   incompleteToken,

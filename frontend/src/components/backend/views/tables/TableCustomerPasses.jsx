@@ -43,7 +43,7 @@ function TableCustomerPasses({
             ? 'Aktywny'
             : cp.status === 'SUSPENDED' || cp.status == 0
             ? 'Wstrzymany'
-            : 'Niekontynuowany',
+            : 'Wygasły',
       };
     });
 

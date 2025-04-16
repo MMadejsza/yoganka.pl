@@ -5,6 +5,7 @@ import {
   getStatus,
   postLogin,
   postLogout,
+  postResendActivation,
   postResetPassword,
   postSignup,
   putEditPassword,
@@ -26,6 +27,7 @@ router.post('/login', loginLimiter, postLogin);
 router.post('/signup', postSignup);
 router.post('/logout', postLogout);
 router.post('/reset', resetPasswordLimiter, postResetPassword);
+router.post('/resend-activation', resetPasswordLimiter, postResendActivation);
 
 //! PUT - EDIT____________________________________________________
 router.put('/new-password/:token', putEditPassword);

@@ -19,7 +19,7 @@ import WrapperForm from '../backend/WrapperForm.jsx';
 import FeedbackBox from './FeedbackBox.jsx';
 import Input from './Input.jsx';
 
-function LoginFrom({ successMsg, errorMsg }) {
+function LoginFrom() {
   const params = useParams();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -29,6 +29,7 @@ function LoginFrom({ successMsg, errorMsg }) {
   const [firstTime, setFirstTime] = useState(false); // state to switch between registration and login in term of labels and http request method
   const [resetPassword, setResetPassword] = useState(false);
   const [feedbackUpdated, setFeedbackUpdated] = useState(false); //to flag confirmation message after account activation and stop useEffect from constant checking
+  const [resetCompleted, setResetCompleted] = useState(false);
 
   // call back to avoid overwriting at each render and infinite loop with confirmation of activating email
   const handleClose = () => {
@@ -60,12 +61,12 @@ function LoginFrom({ successMsg, errorMsg }) {
   });
 
   useEffect(() => {
-    console.log(
-      'Feedback effect: verified =',
-      verified,
-      'feedbackUpdated =',
-      feedbackUpdated
-    );
+    // console.log(
+    //   'Feedback effect: verified =',
+    //   verified,
+    //   'feedbackUpdated =',
+    //   feedbackUpdated
+    // );
     if (!feedbackUpdated && (verified === '1' || verified === '0')) {
       if (verified === '1') {
         updateFeedback({
@@ -83,6 +84,7 @@ function LoginFrom({ successMsg, errorMsg }) {
   }, [verified, updateFeedback, feedbackUpdated, navigate]);
 
   // check if eventually given in URL token is valid
+  const shouldFetchToken = !!params.token && !resetCompleted;
   const {
     data: tokenValidity,
     isLoading: isTokenLoading,
@@ -103,11 +105,12 @@ function LoginFrom({ successMsg, errorMsg }) {
         updateFeedback(data);
         throw data;
       }
-      return data;
+
+      return data; // just throw error
     },
-    enabled: !!params.token,
-    retry: false,
-    staleTime: 0,
+    enabled: shouldFetchToken,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
 
   const { mutate, isPending, isError, error } = useMutation({
@@ -117,7 +120,10 @@ function LoginFrom({ successMsg, errorMsg }) {
     onSuccess: res => {
       queryClient.invalidateQueries(['authStatus']);
       updateFeedback(res);
-      if (res.type == 'new-password') navigate('/login');
+      if (res.type == 'new-password') {
+        setResetCompleted(true);
+        navigate('/login', { replace: true });
+      }
     },
     onError: err => {
       updateFeedback(err);
@@ -140,7 +146,8 @@ function LoginFrom({ successMsg, errorMsg }) {
     onSuccess: res => {
       queryClient.invalidateQueries(['authStatus']);
       updateFeedback(res);
-      navigate('/login');
+      setResetCompleted(true);
+      navigate('/login', { replace: true });
     },
     onError: err => {
       updateFeedback(err);
@@ -184,6 +191,22 @@ function LoginFrom({ successMsg, errorMsg }) {
     hasError: confirmedPasswordHasError,
   } = useInput('', getConfirmedPasswordValidations(passwordValue));
 
+  const resendActivationMutation = useMutation({
+    mutationFn: () =>
+      fetch('/api/login-pass/resend-activation', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': status.token,
+        },
+        body: JSON.stringify({ email: emailValue }),
+      }).then(r => r.json()),
+
+    onSuccess: data => updateFeedback(data),
+    onError: err => updateFeedback(err),
+  });
+
   if (isStatusLoading || !status?.token) {
     return <p>Ładowanie formularza logowania...</p>;
   }
@@ -223,7 +246,7 @@ function LoginFrom({ successMsg, errorMsg }) {
     console.log('Submit triggered');
     if (!status?.token) {
       console.warn(
-        'Błąd autentykcji sesji. Przeładuj stronę i spróbuj ponownie.'
+        'Błąd autentykacji sesji. Przeładuj stronę i spróbuj ponownie.'
       );
       return;
     }
@@ -303,16 +326,6 @@ function LoginFrom({ successMsg, errorMsg }) {
     formLabels;
 
   let content;
-  let userIsEditing =
-    confirmedPasswordIsFocused ||
-    emailIsFocused ||
-    passwordIsFocused ||
-    confirmedPasswordDidEdit ||
-    emailDidEdit ||
-    passwordDidEdit;
-
-  console.log('feedback:', feedback);
-  console.log('userIsEditing:', userIsEditing);
 
   const resetPassBtn = !resetPassword && (
     <button
@@ -429,8 +442,8 @@ function LoginFrom({ successMsg, errorMsg }) {
             status={feedback.status}
             isPending={isPending || isNewPasswordPending || isTokenLoading}
             isError={isError || isNewPasswordError || isTokenError}
-            error={errorMsg || error || newPasswordError || tokenError}
-            successMsg={successMsg || feedback.message}
+            error={error || newPasswordError || tokenError}
+            successMsg={feedback.message}
             warnings={feedback.warnings}
             size='small'
           />
@@ -441,7 +454,21 @@ function LoginFrom({ successMsg, errorMsg }) {
 
   return (
     <>
-      <main className='login-box'>{content}</main>
+      <main className='login-box'>
+        {content}
+        {
+          <button
+            className='modal__btn modal__btn--small modal__btn--secondary'
+            disabled={resendActivationMutation.isLoading}
+            onClick={() => resendActivationMutation.mutate()}
+            size='small'
+          >
+            {resendActivationMutation.isLoading
+              ? 'Wysyłanie…'
+              : 'Wyślij ponownie mail aktywacyjny'}
+          </button>
+        }
+      </main>
     </>
   );
 }
