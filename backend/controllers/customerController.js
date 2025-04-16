@@ -790,17 +790,19 @@ export const getPaymentById = (req, res, next) => {
       },
       {
         model: models.Booking,
+        required: false,
         include: [
           {
             model: models.ScheduleRecord,
             attributes: { exclude: ['userId'] },
-            include: [
-              {
-                model: models.Product,
-              },
-            ],
+            include: [{ model: models.Product }],
           },
         ],
+      },
+      {
+        model: models.CustomerPass,
+        include: [{ model: models.Customer }, { model: models.PassDefinition }],
+        required: false,
       },
     ],
   })
@@ -809,12 +811,38 @@ export const getPaymentById = (req, res, next) => {
         errCode = 404;
         throw new Error(msgs.noPaymentFound);
       }
+
+      const parsedPayment = payment.toJSON();
+
+      const customerPasses = parsedPayment?.CustomerPasses?.map(
+        customerPass => {
+          const cp = customerPass;
+          const customer = cp.Customer;
+
+          return {
+            customerPassId: cp.customerPassId,
+            rowId: cp.customerPassId,
+            customerFirstName: customer.firstName,
+            customerLastName: customer.lastName,
+            customerId: customer.customerId,
+            // customerFullName: `${customer.firstName} ${customer.lastName} (${customer.customerId})`,
+            passName: cp.PassDefinition.name,
+            purchaseDate: cp.purchaseDate,
+            validFrom: cp.validFrom,
+            validUntil: cp.validUntil,
+            usesLeft: cp.usesLeft,
+            status: cp.status,
+          };
+        }
+      );
+      delete parsedPayment.CustomerPasses;
+
       successLog(person, controllerName);
       return res.status(200).json({
         confirmation: 1,
         message: msgs.paymentFound,
         isLoggedIn: req.session.isLoggedIn,
-        payment,
+        payment: { ...parsedPayment, customerPasses },
       });
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));

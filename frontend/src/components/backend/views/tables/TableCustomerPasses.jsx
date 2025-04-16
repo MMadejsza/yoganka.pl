@@ -4,21 +4,20 @@ import WrapperModalTable from '../../WrapperModalTable.jsx';
 
 function TableCustomerPasses({
   customerPasses,
-  keys,
-  isAdminView,
+  shouldShowPassName,
+  shouldShowCustomerName,
   isAdminDash,
   isActive,
   onOpen,
 }) {
   console.log('TableCustomerPasses:');
-  console.log('\nisAdminPage:', isAdminView);
   console.log('TableCustomerPasses customerPasses:', customerPasses);
 
   const formattedCustomerPasses = customerPasses
     ?.slice() // copy to not work on original
     .sort((a, b) => {
-      const isAActive = a.status === 'active' || a.status == 1;
-      const isBActive = b.status === 'active' || b.status == 1;
+      const isAActive = a.status === 'ACTIVE' || a.status == 1;
+      const isBActive = b.status === 'ACTIVE' || b.status == 1;
 
       if (isAActive && !isBActive) return -1;
       if (!isAActive && isBActive) return 1;
@@ -50,26 +49,31 @@ function TableCustomerPasses({
 
   const title = 'Wszystkie zakupione karnety';
 
-  const headers = isAdminView
-    ? [
-        'Id',
-        'Uczestnik',
-        'Karnet',
-        'Zakupiono',
-        'Ważny od',
-        'Ważny do',
-        'Pozostało wejść',
-        'Status',
-      ]
-    : [
-        'Id',
-        'Karnet',
-        'Zakupiono',
-        'Ważny od',
-        'Ważny do',
-        'Pozostało wejść',
-        'Status',
-      ];
+  const headers = [
+    'Id',
+    'Uczestnik',
+    'Karnet',
+    'Zakupiono',
+    'Ważny od',
+    'Ważny do',
+    'Pozostało wejść',
+    'Status',
+  ];
+  if (!shouldShowCustomerName) headers.splice(1, 1);
+  else if (!shouldShowPassName) headers.splice(2, 1);
+
+  const keys = [
+    'customerPassId',
+    'customerFullName',
+    'passName',
+    'purchaseDate',
+    'validFrom',
+    'validUntil',
+    'usesLeft',
+    'status',
+  ];
+  if (!shouldShowCustomerName) keys.splice(1, 1);
+  else if (!shouldShowPassName) keys.splice(2, 1);
 
   const table = isAdminDash ? (
     <ModalTable

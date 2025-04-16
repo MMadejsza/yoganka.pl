@@ -2,6 +2,7 @@ import { useLocation } from 'react-router-dom';
 import { getWeekDay } from '../../../utils/dateTime.js';
 import DetailsListCustomer from './lists/DetailsListCustomer.jsx';
 import DetailsListPayment from './lists/DetailsListPayment.jsx';
+import TableCustomerPasses from './tables/TableCustomerPasses.jsx';
 import TableSchedules from './tables/TableSchedules.jsx';
 
 function ViewPayment({ data, isUserAccountPage }) {
@@ -29,6 +30,11 @@ function ViewPayment({ data, isUserAccountPage }) {
     };
   });
   console.log(`ViewPayment schedules`, schedules);
+
+  const shouldShowPasses =
+    payment.customerPasses && payment.customerPasses.length > 0;
+  const shouldShowSchedules = schedules && schedules.length > 0;
+
   return (
     <>
       <h1 className='modal__title modal__title--view'>{`Płatność (Id: ${
@@ -60,7 +66,18 @@ function ViewPayment({ data, isUserAccountPage }) {
       </div>
 
       {/*//@ Schedules included */}
-      <TableSchedules scheduleRecords={schedules} placement='payment' />
+      {shouldShowSchedules && (
+        <TableSchedules scheduleRecords={schedules} placement='payment' />
+      )}
+
+      {/*//@ Passes included */}
+      {shouldShowPasses && (
+        <TableCustomerPasses
+          customerPasses={payment.customerPasses}
+          shouldShowCustomerName={adminAccessed && !isPaymentView}
+          shouldShowPassName={true}
+        />
+      )}
     </>
   );
 }

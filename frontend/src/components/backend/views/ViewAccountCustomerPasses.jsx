@@ -43,8 +43,7 @@ function ViewAccountCustomerPasses({ data }) {
   const table = (
     <TableCustomerPasses
       customerPasses={cp}
-      keys={keys}
-      isAdminPage={false}
+      shouldShowPassName={true}
       isActive={true}
       onOpen={handleOpenModal}
     />

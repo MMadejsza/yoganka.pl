@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useAuthStatus } from '../../../../hooks/useAuthStatus.js';
 import { useFeedback } from '../../../../hooks/useFeedback.js';
 import {
@@ -14,15 +14,11 @@ import ModalTable from '../../ModalTable.jsx';
 import WrapperModalTable from '../../WrapperModalTable.jsx';
 import NewBookingForm from './add-forms/NewBookingForm.jsx';
 
-function TableAttendance({ stats, isAdminPage }) {
+function TableAttendance({ allBookings, isAdminPage, shouldToggleFrom }) {
   // console.log('\n✅✅✅DetailsTableAttendance:');
-  let attendedBookingsArray = stats.attendedBookings;
-  let cancelledBookingsArray = stats.cancelledBookings;
+  let attendedBookingsArray = allBookings.attendedBookings;
+  let cancelledBookingsArray = allBookings.cancelledBookings;
   let params = useParams();
-  let location = useLocation();
-  const isProductView = location.pathname.includes(
-    `show-all-products/${params.id}`
-  );
 
   const [isFormVisible, setIsFormVisible] = useState();
   const [deleteWarningTriggered, setDeleteWarningTriggered] = useState(false);
@@ -147,7 +143,7 @@ function TableAttendance({ stats, isAdminPage }) {
 
   const form = <NewBookingForm />;
 
-  const toggleBtn = !isProductView && (
+  const toggleBtn = shouldToggleFrom && (
     <ToggleAddButton isEditing={isFormVisible} onToggle={setIsFormVisible} />
   );
   const headers = [

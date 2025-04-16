@@ -29,7 +29,10 @@ export const statsCalculatorForCustomer = customer => {
       ...payment,
       rowId: payment.paymentId,
       date: formatIsoDateTime(payment.date),
-      paymentStatus: payment.status.toUpperCase() === 'COMPLETED' ? 'Zrealizowana' : 'Niekompletna',
+      paymentStatus:
+        payment.status.toUpperCase() === 'COMPLETED'
+          ? 'Zrealizowana'
+          : 'Niekompletna',
     });
     const invoice = payment.Invoice;
     if (!!invoice) {
@@ -43,6 +46,9 @@ export const statsCalculatorForCustomer = customer => {
 
   const attendedBookings = customer.Bookings?.filter(
     booking => booking.attendance == 1 || booking.attendance == true
+  );
+  const cancelledBookings = customer.Bookings?.filter(
+    booking => booking.attendance == 0 || booking.attendance == false
   );
   for (let booking of attendedBookings) {
     // console.group(`schedule: ${schedule}`);
@@ -106,6 +112,8 @@ export const statsCalculatorForCustomer = customer => {
   const splitDuration = secondsToDuration(totalTimeInSeconds, 'hours');
   const stats = {
     attendedSchedules: attendedScheduleRecords,
+    attendedBookings,
+    cancelledBookings,
     allBookings: customer.Bookings,
     recordsKeys: [
       // '',

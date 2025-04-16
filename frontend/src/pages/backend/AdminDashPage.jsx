@@ -344,11 +344,12 @@ function AdminPage() {
 
       table = (
         <TableCustomerPasses
-          keys={keys}
+          // keys={keys}
           customerPasses={content}
           isActive={!isInactiveTable}
           onOpen={handleOpenModal}
-          isAdminView={true}
+          shouldShowCustomerName={true}
+          shouldShowPassName={true}
           isAdminDash={true}
         />
       );

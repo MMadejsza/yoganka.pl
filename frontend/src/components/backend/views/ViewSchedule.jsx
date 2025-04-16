@@ -291,10 +291,11 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
         <>
           {/*//@ all payments if not event/camp? */}
           <TableAttendance
-            stats={scheduleStats}
+            allBookings={scheduleStats}
             type={product.type}
             status={status}
             isAdminPage={isAdminPanel}
+            shouldToggleFrom={true}
           />
           <TableProductPayments
             payments={scheduleStats.totalPayments}

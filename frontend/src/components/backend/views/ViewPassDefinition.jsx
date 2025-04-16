@@ -215,8 +215,9 @@ function ViewPassDefinition({
           {/* //@ CustomerPasses table for this definition */}
           <TableCustomerPasses
             customerPasses={passDefinition.customerPasses}
-            keys={passDefinition.customerPassesKeys}
-            isAdminPage={true}
+            // keys={passDefinition.customerPassesKeys}
+            shouldShowCustomerName={isAdminPanel}
+            isPassDefView={true}
           />
 
           {/*//@ Payments table for this definition */}

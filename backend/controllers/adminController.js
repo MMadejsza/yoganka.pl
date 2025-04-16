@@ -411,6 +411,11 @@ export const getCustomerById = (req, res, next) => {
         ],
       },
       {
+        model: models.CustomerPass,
+        required: false,
+        include: [{ model: models.PassDefinition }],
+      },
+      {
         model: models.Payment, // His reservations
         required: false,
         include: [
@@ -464,11 +469,37 @@ export const getCustomerById = (req, res, next) => {
         errCode = 404;
         throw new Error('Nie znaleziono profilu uczestnika.');
       }
+
+      const parsedCustomer = customer.toJSON();
+
+      const formattedCustomerPasses = parsedCustomer?.CustomerPasses?.map(
+        cp => {
+          return {
+            ...cp,
+            passName: `${cp.PassDefinition.name} (${cp.PassDefinition.passDefId})`,
+          };
+        }
+      );
+      parsedCustomer.CustomerPasses = formattedCustomerPasses;
+
+      const customerPassesKeys = [
+        'customerPassId',
+        'passName',
+        'purchaseDate',
+        'validFrom',
+        'validUntil',
+        'usesLeft',
+        'status',
+      ];
+
       successLog(person, controllerName);
       return res.status(200).json({
         confirmation: 1,
         isLoggedIn: req.session.isLoggedIn,
-        customer,
+        customer: {
+          ...parsedCustomer,
+          customerPassesKeys,
+        },
       });
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));
@@ -2503,7 +2534,7 @@ export const getPaymentById = (req, res, next) => {
       },
       {
         model: models.CustomerPass,
-        include: [{ model: models.PassDefinition }],
+        include: [{ model: models.Customer }, { model: models.PassDefinition }],
         required: false,
       },
     ],
@@ -2513,12 +2544,38 @@ export const getPaymentById = (req, res, next) => {
         errCode = 404;
         throw new Error('Nie znaleziono płatności.');
       }
+
+      const parsedPayment = payment.toJSON();
+
+      const customerPasses = parsedPayment?.CustomerPasses?.map(
+        customerPass => {
+          const cp = customerPass;
+          const customer = cp.Customer;
+
+          return {
+            customerPassId: cp.customerPassId,
+            rowId: cp.customerPassId,
+            customerFirstName: customer.firstName,
+            customerLastName: customer.lastName,
+            customerId: customer.customerId,
+            // customerFullName: `${customer.firstName} ${customer.lastName} (${customer.customerId})`,
+            passName: cp.PassDefinition.name,
+            purchaseDate: cp.purchaseDate,
+            validFrom: cp.validFrom,
+            validUntil: cp.validUntil,
+            usesLeft: cp.usesLeft,
+            status: cp.status,
+          };
+        }
+      );
+      delete parsedPayment.CustomerPasses;
+
       successLog(person, controllerName);
       return res.status(200).json({
         confirmation: 1,
         message: 'Płatność pobrana pomyślnie.',
         isLoggedIn: req.session.isLoggedIn,
-        payment,
+        payment: { ...parsedPayment, customerPasses },
       });
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));

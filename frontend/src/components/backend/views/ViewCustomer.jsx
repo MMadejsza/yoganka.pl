@@ -5,6 +5,7 @@ import DetailsListCustomerStats from './lists/DetailsListCustomerStats.jsx';
 import DetailsListUser from './lists/DetailsListUser.jsx';
 import DetailsListUserSettings from './lists/DetailsListUserSettings.jsx';
 import TableCustomerInvoices from './tables/TableCustomerInvoices.jsx';
+import TableCustomerPasses from './tables/TableCustomerPasses.jsx';
 import TableCustomerReviews from './tables/TableCustomerReviews.jsx';
 import TableCustomerSchedules from './tables/TableCustomerSchedules.jsx';
 import TableCustomerTotalPayments from './tables/TableCustomerTotalPayments.jsx';
@@ -57,6 +58,13 @@ function ViewCustomer({ data }) {
         {/*//@ Stats */}
         <DetailsListCustomerStats customerStats={customerStats} />
       </div>
+
+      {/*//@ Customer passes  */}
+      <TableCustomerPasses
+        customerPasses={customer.CustomerPasses}
+        shouldShowPassName={true}
+        // keys={customer.customerPassesKeys}
+      />
 
       {/*//@ Schedules */}
       <TableCustomerSchedules

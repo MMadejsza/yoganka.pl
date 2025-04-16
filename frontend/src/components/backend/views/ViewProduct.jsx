@@ -57,11 +57,7 @@ function ViewProduct({ data, isAdminPanel }) {
       />
 
       {(type == 'CAMP' || type == 'EVENT') && (
-        <TableAttendance
-          stats={prodStats}
-          type={type}
-          isAdminPage={isAdminPanel}
-        />
+        <TableAttendance allBookings={prodStats} isAdminPage={isAdminPanel} />
       )}
 
       {/*//@ All payments */}
