@@ -159,31 +159,40 @@ export const postLogin = (req, res, next) => {
       return user;
     })
     .then(fetchedUser => {
-      if (!fetchedUser) {
-        return;
-      }
+      if (!fetchedUser) return;
       successLog(person, controllerName, 'fetched');
+
       // regardless match or mismatch catch takes only if something is wrong with bcrypt itself. otherwise it goes to the next block with promise as boolean
       return bcrypt
         .compare(password, fetchedUser.passwordHash)
         .then(doMatch => {
-          if (doMatch) {
-            successLog(person, controllerName, 'pass match as well');
-            req.session.isLoggedIn = true;
-            req.session.user = fetchedUser;
-            req.session.role = fetchedUser.role.toUpperCase();
-            req.session.save();
-            return res.status(200).json({
-              type: 'login',
-              code: 200,
-              confirmation: 1,
-              message: msgs.userLoggedIn,
-            });
-          } else {
+          if (!doMatch) {
             errCode = 400;
             console.log('\n❌❌❌ Password incorrect');
             throw new Error(msgs.wrongPassword);
           }
+
+          successLog(person, controllerName, 'pass match as well');
+          // regenerate the session first so we get a brand‑new session ID
+          req.session.regenerate(err => {
+            if (err) return next(err);
+
+            // now it’s safe to write into the new session
+            req.session.isLoggedIn = true;
+            req.session.user = fetchedUser;
+            req.session.role = fetchedUser.role.toUpperCase();
+
+            // save the session, and only after that send the JSON response
+            req.session.save(err => {
+              if (err) return next(err);
+              return res.status(200).json({
+                type: 'login',
+                code: 200,
+                confirmation: 1,
+                message: msgs.userLoggedIn,
+              });
+            });
+          });
         });
     })
     .catch(err =>
