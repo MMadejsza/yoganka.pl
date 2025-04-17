@@ -136,7 +136,10 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
         paymentStatus: 'Completed',
       });
       updateFeedback(res);
-      if (res.confirmation == 1) handlePaymentMethodReset();
+      if (res.confirmation == 1) {
+        queryClient.invalidateQueries(['data', '/grafik']);
+        handlePaymentMethodReset();
+      }
     } catch (err) {
       updateFeedback(err);
     }

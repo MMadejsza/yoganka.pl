@@ -7,6 +7,7 @@ import TabsList from '../../components/backend/TabsList.jsx';
 import TableCustomerPasses from '../../components/backend/views/tables/TableCustomerPasses.jsx';
 import ViewsController from '../../components/backend/ViewsController.jsx';
 import Section from '../../components/frontend/Section.jsx';
+import { formatIsoDateTime } from '../../utils/dateTime.js';
 import { fetchData, fetchStatus } from '../../utils/http.js';
 
 const sideNavTabs = [
@@ -88,6 +89,29 @@ function AdminPage() {
   const modalMatch = useMatch('/admin-console/show-all-users/:id');
   const [isModalOpen, setIsModalOpen] = useState(modalMatch);
 
+  const query =
+    location.pathname == '/admin-console/show-all-customer-passes'
+      ? 'admin-console/show-all-passes'
+      : location.pathname;
+  const { data, isError, error } = useQuery({
+    // as id for later caching received data to not send the same request again where location.pathname is key
+    queryKey: ['data', query],
+    // definition of the code sending the actual request- must be returning the promise
+    queryFn: () => fetchData(query),
+    // only when location.pathname is set extra beyond admin panel:
+    enabled: allowedPaths.includes(location.pathname),
+    // stopping unnecessary requests when jumping tabs
+    staleTime: 10000,
+    // how long tada is cached (default 5 mins)
+    // gcTime:30000
+  });
+
+  const { data: status, isLoading: isStatusLoading } = useQuery({
+    queryKey: ['authStatus'],
+    queryFn: fetchStatus,
+    cache: 'no-store',
+  });
+
   const handleSwitchContent = link => {
     navigate(`${link}`, {
       state: { background: location },
@@ -107,7 +131,12 @@ function AdminPage() {
     navigate(location.state?.background?.pathname || '/', { replace: true });
   };
 
-  let headers, title, subTabs;
+  let table,
+    keys,
+    content = data?.content,
+    headers,
+    title,
+    subTabs;
   const pickModifier = path => {
     let modifier;
     switch (true) {
@@ -210,6 +239,15 @@ function AdminPage() {
       case path.includes('show-all-bookings'):
         modifier = 'booking';
         title = 'Wszystkie rezerwacje';
+
+        let formattedContent = content?.map(booking => {
+          return {
+            ...booking,
+            createdAt: formatIsoDateTime(booking.createdAt),
+            timestamp: formatIsoDateTime(booking.timestamp),
+          };
+        });
+        content = formattedContent;
         headers = [
           'Id',
           'Uczestnik',
@@ -253,16 +291,6 @@ function AdminPage() {
             link: '/admin-console/show-all-passes',
           },
         ];
-        headers = [
-          'Id',
-          'Nazwa',
-          'Opis',
-          'Typ',
-          'Liczba wejść',
-          'Ważność',
-          'Zakres',
-          'Cena',
-        ];
         return modifier;
       case path.includes('show-all-newsletters'):
         modifier = 'newsletter';
@@ -275,34 +303,10 @@ function AdminPage() {
   };
   const pickedModifier = pickModifier(location.pathname);
 
-  const query =
-    location.pathname == '/admin-console/show-all-customer-passes'
-      ? 'admin-console/show-all-passes'
-      : location.pathname;
-  const { data, isError, error } = useQuery({
-    // as id for later caching received data to not send the same request again where location.pathname is key
-    queryKey: ['data', query],
-    // definition of the code sending the actual request- must be returning the promise
-    queryFn: () => fetchData(query),
-    // only when location.pathname is set extra beyond admin panel:
-    enabled: allowedPaths.includes(location.pathname),
-    // stopping unnecessary requests when jumping tabs
-    staleTime: 10000,
-    // how long tada is cached (default 5 mins)
-    // gcTime:30000
-  });
-
-  const { data: status, isLoading: isStatusLoading } = useQuery({
-    queryKey: ['authStatus'],
-    queryFn: fetchStatus,
-    cache: 'no-store',
-  });
-
   if (isStatusLoading) {
     return <div>Loading...</div>;
   }
 
-  let table, keys, content;
   const adminTabs = (
     <TabsList
       menuSet={sideNavTabs}
@@ -320,11 +324,9 @@ function AdminPage() {
     }
   }
   if (data && status?.role === 'ADMIN') {
-    // console.clear();
     console.log(`✅ Data: `);
     console.log(data);
     keys = data.totalKeys || data.totalHeaders;
-    content = data.content;
 
     table = (
       <ModalTable
@@ -344,12 +346,12 @@ function AdminPage() {
 
       table = (
         <TableCustomerPasses
-          // keys={keys}
           customerPasses={content}
           isActive={!isInactiveTable}
           onOpen={handleOpenModal}
           shouldShowCustomerName={true}
           shouldShowPassName={true}
+          shouldShowAllowedProductTypes={false}
           isAdminDash={true}
         />
       );

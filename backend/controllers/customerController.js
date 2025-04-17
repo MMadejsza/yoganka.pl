@@ -4,6 +4,7 @@ import { Op } from 'sequelize';
 import * as models from '../models/_index.js';
 import {
   areCustomerDetailsChanged,
+  isEmptyInput,
   isPassValidForSchedule,
   pickTheBestPassForSchedule,
 } from '../utils/controllersUtils.js';
@@ -825,7 +826,8 @@ export const getPaymentById = (req, res, next) => {
             customerFirstName: customer.firstName,
             customerLastName: customer.lastName,
             customerId: customer.customerId,
-            // customerFullName: `${customer.firstName} ${customer.lastName} (${customer.customerId})`,
+            passDefId: cp.PassDefinition.passDefId,
+            allowedProductTypes: cp.PassDefinition.allowedProductTypes,
             passName: cp.PassDefinition.name,
             purchaseDate: cp.purchaseDate,
             validFrom: cp.validFrom,

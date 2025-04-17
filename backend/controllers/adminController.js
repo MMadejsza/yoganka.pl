@@ -959,6 +959,7 @@ export const postCreateScheduleRecord = (req, res, next) => {
     repeatCount,
     shouldRepeat,
   } = req.body;
+
   const inputsContent = [
     date,
     capacity,
@@ -1518,8 +1519,9 @@ export const getAllPasses = (req, res, next) => {
           customerFirstName: customer.firstName,
           customerLastName: customer.lastName,
           customerId: customer.customerId,
-          // customerFullName: `${customer.firstName} ${customer.lastName} (${customer.customerId})`,
           passName: cp.PassDefinition.name,
+          passDefId: cp.PassDefinition.passDefId,
+          allowedProductTypes: cp.PassDefinition.allowedProductTypes,
           purchaseDate: cp.purchaseDate,
           validFrom: cp.validFrom,
           validUntil: cp.validUntil,
@@ -2558,6 +2560,8 @@ export const getPaymentById = (req, res, next) => {
             customerFirstName: customer.firstName,
             customerLastName: customer.lastName,
             customerId: customer.customerId,
+            passDefId: cp.PassDefinition.passDefId,
+            allowedProductTypes: cp.PassDefinition.allowedProductTypes,
             // customerFullName: `${customer.firstName} ${customer.lastName} (${customer.customerId})`,
             passName: cp.PassDefinition.name,
             purchaseDate: cp.purchaseDate,

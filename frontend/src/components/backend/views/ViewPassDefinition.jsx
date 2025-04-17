@@ -41,10 +41,10 @@ function ViewPassDefinition({
   // console.log(`newCustomerDetails: `, newCustomerDetails);
   const [isFillingTheForm, setIsFillingTheForm] = useState(false);
 
-  let newPassSuggestedDate;
   const customerTheSamePasses = status.user?.Customer?.CustomerPasses?.filter(
     pass => pass.PassDefinition.passDefId == passDefinition.passDefId
   );
+  let newPassSuggestedDate;
   // chose the very next day after the expiration date of the same pass
   if (customerTheSamePasses && customerTheSamePasses.length > 0) {
     const latestExpiryDate = customerTheSamePasses.sort(

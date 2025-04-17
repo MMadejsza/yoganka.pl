@@ -6,6 +6,8 @@ function TableCustomerPasses({
   customerPasses,
   shouldShowPassName,
   shouldShowCustomerName,
+  shouldShowPurchaseDate,
+  shouldShowAllowedProductTypes,
   isAdminDash,
   isActive,
   onOpen,
@@ -32,11 +34,26 @@ function TableCustomerPasses({
     })
     .map(cp => {
       cp.status = cp.status.toUpperCase();
+      let allowedProductTypes = '';
+      try {
+        const parsed = JSON.parse(cp.allowedProductTypes);
+        allowedProductTypes = Array.isArray(parsed) ? parsed.join(', ') : '';
+      } catch (e) {
+        console.log(
+          'Błąd parsowania allowedProductTypes:',
+          cp.allowedProductTypes,
+          e
+        );
+        allowedProductTypes = '';
+      }
+
       return {
         ...cp,
         customerFullName: `${cp.customerFirstName} ${cp.customerLastName} (${cp.customerId})`,
-        purchaseDate: formatIsoDateTime(cp.purchaseDate),
+        passName: `${cp.passName} (${cp.passDefId})`,
+        allowedProductTypes,
         validFrom: formatIsoDateTime(cp.validFrom),
+        purchaseDate: formatIsoDateTime(cp.purchaseDate),
         validUntil: formatIsoDateTime(cp.validUntil),
         status:
           cp.status === 'ACTIVE' || cp.status == 1
@@ -49,31 +66,31 @@ function TableCustomerPasses({
 
   const title = 'Wszystkie zakupione karnety';
 
-  const headers = [
-    'Id',
-    'Uczestnik',
-    'Karnet',
-    'Zakupiono',
-    'Ważny od',
-    'Ważny do',
-    'Pozostało wejść',
-    'Status',
-  ];
-  if (!shouldShowCustomerName) headers.splice(1, 1);
-  else if (!shouldShowPassName) headers.splice(2, 1);
+  const tableMap = {
+    customerPassId: 'Id',
+    customerFullName: 'Uczestnik',
+    passName: 'Karnet (Nr)',
+    allowedProductTypes: 'Obejmuje',
+    purchaseDate: 'Zakupiono',
+    validFrom: 'Ważny od',
+    validUntil: 'Ważny do',
+    usesLeft: 'Pozostało wejść',
+    status: 'Status',
+  };
 
-  const keys = [
-    'customerPassId',
-    'customerFullName',
-    'passName',
-    'purchaseDate',
-    'validFrom',
-    'validUntil',
-    'usesLeft',
-    'status',
-  ];
-  if (!shouldShowCustomerName) keys.splice(1, 1);
-  else if (!shouldShowPassName) keys.splice(2, 1);
+  let visibleMap = { ...tableMap };
+
+  if (!shouldShowCustomerName) {
+    delete visibleMap.customerFullName;
+    delete visibleMap.purchaseDate;
+  } else if (!shouldShowPassName) {
+    delete visibleMap.passName;
+    delete visibleMap.allowedProductTypes;
+  }
+  if (!shouldShowAllowedProductTypes) delete visibleMap.allowedProductTypes;
+
+  const keys = Object.keys(visibleMap);
+  const headers = keys.map(key => visibleMap[key]);
 
   const table = isAdminDash ? (
     <ModalTable

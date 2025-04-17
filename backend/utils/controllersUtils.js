@@ -1,4 +1,6 @@
+import { addDays, addMonths, addYears } from 'date-fns';
 import { successLog } from './debuggingUtils.js';
+
 import * as msgs from './resMessagesUtils.js';
 // util pass validation
 export const isPassValidForSchedule = (pass, schedule) => {
@@ -144,8 +146,9 @@ export const pickTheBestPassForSchedule = (customerPasses, schedule) => {
   //   ...customerPasses.map(cp => cp.PassDefinition.name)
   // );
   // Filter passes that are valid for this schedule using our utility function.
+  let validPasses;
   if (!customerPasses || customerPasses.length == 0) return;
-  const validPasses = customerPasses?.filter(pass =>
+  validPasses = customerPasses?.filter(pass =>
     isPassValidForSchedule(pass, schedule)
   );
   // console.log(
@@ -355,4 +358,21 @@ export const calcPassExpiryDate = validityDays => {
   }
 
   return calcExpiryDate;
+};
+
+export const addRepeatUnit = (date, repeatInterval) => {
+  if (!(date instanceof Date) || isNaN(date)) {
+    throw new Error('addRepeatUnit: invalid date input');
+  }
+
+  switch (repeatInterval) {
+    case 7:
+      return addDays(date, 7);
+    case 30:
+      return addMonths(date, 1);
+    case 365:
+      return addYears(date, 1);
+    default:
+      return date; // no change
+  }
 };

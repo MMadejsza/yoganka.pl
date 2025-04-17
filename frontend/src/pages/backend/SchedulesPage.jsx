@@ -62,6 +62,7 @@ function SchedulePage() {
     onSuccess: res => {
       queryClient.invalidateQueries(['authStatus']);
       queryClient.invalidateQueries(['data', location.pathname]);
+      queryClient.invalidateQueries(['data', '/grafik']);
     },
   });
 

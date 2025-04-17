@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { useAuthStatus } from '../../../../hooks/useAuthStatus.js';
 import { useFeedback } from '../../../../hooks/useFeedback.js';
 import { useInput } from '../../../../hooks/useInput.js';
@@ -148,6 +149,29 @@ function NewPaymentForm() {
     validationResults: passValidationResults,
     hasError: passHasError,
   } = useInput('');
+
+  const customerTheSamePasses = Array.isArray(
+    passesList?.formattedCustomerPasses
+  )
+    ? passesList.formattedCustomerPasses.filter(
+        pass => String(pass.passDefId) === String(passValue)
+      )
+    : [];
+  let newPassSuggestedDate;
+  // chose the very next day after the expiration date of the same pass
+  if (customerTheSamePasses && customerTheSamePasses.length > 0) {
+    const latestExpiryDate = customerTheSamePasses.sort(
+      (a, b) => new Date(b.validUntil) - new Date(a.validUntil)
+    )[0].validUntil;
+    console.log(customerTheSamePasses);
+    console.log(latestExpiryDate);
+
+    const nextDay = new Date(latestExpiryDate);
+    nextDay.setDate(nextDay.getDate() + 1);
+
+    newPassSuggestedDate = nextDay.toISOString().split('T')[0];
+  }
+
   const {
     value: StartDateValue,
     handleChange: handleStartDateChange,
@@ -158,8 +182,17 @@ function NewPaymentForm() {
     isFocused: StartDateIsFocused,
     validationResults: StartDateValidationResults,
     hasError: StartDateHasError,
-  } = useInput('');
+  } = useInput(passValue ? newPassSuggestedDate : '');
 
+  useEffect(() => {
+    if (passValue && newPassSuggestedDate) {
+      handleStartDateChange({
+        target: { value: newPassSuggestedDate },
+      });
+    }
+  }, [passValue, newPassSuggestedDate]);
+  console.log('newPassSuggestedDate:', newPassSuggestedDate);
+  console.log('StartDateValue:', StartDateValue);
   const {
     value: scheduleValue,
     handleChange: handleScheduleChange,
