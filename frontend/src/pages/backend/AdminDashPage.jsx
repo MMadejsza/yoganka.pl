@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useMatch, useNavigate } from 'react-router-dom';
 import FloatingBtnAddItem from '../../components/backend/FloatingBtnAddItem.jsx';
 import ModalTable from '../../components/backend/ModalTable.jsx';
@@ -73,6 +73,7 @@ function AdminPage() {
   );
   const modalMatch = useMatch('/admin-console/show-all-users/:id');
   const [isModalOpen, setIsModalOpen] = useState(modalMatch);
+  const [isMenuSide, setIsMenuSide] = useState(false);
 
   const query =
     location.pathname == '/admin-console/show-all-customer-passes'
@@ -96,6 +97,12 @@ function AdminPage() {
     queryFn: fetchStatus,
     cache: 'no-store',
   });
+
+  useEffect(() => {
+    if (status) {
+      setIsMenuSide(status?.user?.UserPrefSetting?.handedness);
+    }
+  }, [status]);
 
   const handleSwitchContent = link => {
     navigate(`${link}`, {
@@ -371,7 +378,7 @@ function AdminPage() {
             />
           )}
           {
-            <FloatingBtns>
+            <FloatingBtns side={isMenuSide}>
               <FloatingBtnAddItem />
             </FloatingBtns>
           }

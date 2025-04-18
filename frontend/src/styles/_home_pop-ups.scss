@@ -6,10 +6,16 @@
   position: fixed;
   bottom: 1.5rem;
   right: 1rem;
-  z-index: 10;
+  left: auto;
+  z-index: 15;
   @include flex(column, center, center, 1.5rem);
 
   transition: map.get($behavior, base-transition);
+
+  &--left {
+    right: auto;
+    left: 1rem;
+  }
 
   &__single {
     position: relative;
@@ -74,5 +80,57 @@
     line-height: 7rem;
     margin-right: 2rem;
     color: map.get($colors, accent-text);
+  }
+}
+
+@include respond-to(mobile-xs) {
+  .pop-ups {
+    bottom: 1.5rem;
+    right: 1.5rem;
+    gap: 1rem;
+
+    &--left {
+      right: auto;
+      left: 1.5rem;
+    }
+  }
+}
+
+@include respond-to(mobile-m) {
+  .pop-ups {
+    gap: 1.5rem;
+
+    &__single {
+      width: 6.6rem;
+      height: 6.6rem;
+    }
+    &__body {
+      height: 6.6rem;
+    }
+    &__icon {
+      line-height: 6.6rem;
+    }
+  }
+}
+@include respond-to(mobile-mh) {
+  .pop-ups {
+    right: 2rem;
+    gap: 1.8rem;
+
+    &--left {
+      right: auto;
+      left: 2rem;
+    }
+
+    &__single {
+      width: 7rem;
+      height: 7rem;
+    }
+    &__body {
+      height: 7rem;
+    }
+    &__icon {
+      line-height: 7rem;
+    }
   }
 }

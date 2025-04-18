@@ -35,7 +35,7 @@ function RootPage() {
         <Nav status={status} side={isMenuSide} setIsNavOpen={setIsNavOpen} />
         <Outlet />
         <Footer />
-        <FloatingBtns />
+        <FloatingBtns side={isMenuSide} />
       </div>
     </>
   );

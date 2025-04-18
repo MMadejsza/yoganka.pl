@@ -29,11 +29,6 @@
       font-size: 4rem;
     }
   }
-  .pop-ups {
-    bottom: 1.5rem;
-    right: 1.5rem;
-    gap: 1rem;
-  }
 }
 @media (min-width: 480px) {
   html {
@@ -339,20 +334,6 @@
       }
     }
   }
-  .pop-ups {
-    gap: 1.5rem;
-
-    &__single {
-      width: 6.6rem;
-      height: 6.6rem;
-    }
-    &__body {
-      height: 6.6rem;
-    }
-    &__icon {
-      line-height: 6.6rem;
-    }
-  }
 }
 
 @media (min-width: 960px) {
@@ -388,21 +369,6 @@
       &::after {
         width: 7vw;
       }
-    }
-  }
-  .pop-ups {
-    right: 2rem;
-    gap: 1.8rem;
-
-    &__single {
-      width: 7rem;
-      height: 7rem;
-    }
-    &__body {
-      height: 7rem;
-    }
-    &__icon {
-      line-height: 7rem;
     }
   }
 }

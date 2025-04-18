@@ -2,12 +2,12 @@ import { useLocation } from 'react-router-dom';
 import FloatingBtnCookie from '../frontend/FloatingBtnCookie.jsx';
 import FloatingBtnMailerLite from '../frontend/FloatingBtnMailerLite.jsx';
 
-function FloatingBtns({ children }) {
+function FloatingBtns({ side, children }) {
   const location = useLocation();
   const isAdminPanel = location.pathname.includes('admin-console');
 
   const content = (
-    <div className={`pop-ups`} tabIndex='0'>
+    <div className={`pop-ups${!side ? ` pop-ups--left` : ''}`} tabIndex='0'>
       {!isAdminPanel && (
         <>
           <FloatingBtnMailerLite />
