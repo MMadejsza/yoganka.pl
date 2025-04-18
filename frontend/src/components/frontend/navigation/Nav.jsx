@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { useSwipe } from '../../../hooks/useSwipe';
 import { mutateOnLoginOrSignup, queryClient } from '../../../utils/http.js';
 import { smoothScrollInto } from '../../../utils/utils.jsx';
 import Logo from '../../frontend/Logo.jsx';
@@ -87,6 +88,13 @@ const menuSideSet = [
 function Nav({ side, status, setIsNavOpen }) {
   const navigate = useNavigate();
   const location = useLocation();
+
+  useSwipe(
+    side,
+    () => setIsNavOpen(true),
+    () => setIsNavOpen(false),
+    { edgePercent: 0.35, thresholdPercent: 0.1 }
+  );
 
   console.log('nav data', status);
   const logoutMutation = useMutation({
