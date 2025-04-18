@@ -19,6 +19,7 @@ function FloatingBtnAddItem({}) {
     'show-all-invoices',
     'show-all-newsletters',
     'show-all-participants-feedback',
+    'add',
   ];
   const shouldAllowCreation = !noCreateOptionPages.some(lockedPath =>
     location.pathname.includes(lockedPath)
@@ -87,13 +88,12 @@ function FloatingBtnAddItem({}) {
           <span className='material-symbols-rounded nav__icon account'>
             add_circle
           </span>
-
-          {isModalOpen && (
-            <WrapperModal visited={isModalOpen} onClose={handleCloseModal}>
-              {pickDestination(location).comp}
-            </WrapperModal>
-          )}
         </button>
+      )}
+      {isModalOpen && (
+        <WrapperModal visited={isModalOpen} onClose={handleCloseModal}>
+          {pickDestination(location).comp}
+        </WrapperModal>
       )}
     </>
   );

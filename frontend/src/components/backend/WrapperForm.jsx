@@ -24,34 +24,40 @@ function WrapperForm({
   classModifier,
 }) {
   const mainClass = isTableRowLike
-    ? `generic-details generic-details--table-form ${classModifier ? `generic-details--${classModifier}` : ''}`
-    : `generic-details ${classModifier ? `generic-details--${classModifier}` : ''}`;
+    ? `generic-details generic-details--table-form ${
+        classModifier ? `generic-details--${classModifier}` : ''
+      }`
+    : `generic-details ${
+        classModifier ? `generic-details--${classModifier}` : ''
+      }`;
   const fieldsClass = isTableRowLike
-    ? `generic-details__list generic-details__list--table-form  ${classModifier ? `generic-details__list--${classModifier}` : ''} modal-checklist__list`
-    : `generic-details__list  ${classModifier ? `generic-details__list--${classModifier}` : ''} modal-checklist__list`;
+    ? `generic-details__list generic-details__list--table-form  ${
+        classModifier ? `generic-details__list--${classModifier}` : ''
+      } modal-checklist__list`
+    : `generic-details__list  ${
+        classModifier ? `generic-details__list--${classModifier}` : ''
+      } modal-checklist__list`;
   const btnsClass = isTableRowLike
     ? 'action-btns'
-    : `modal__user-action ${classModifier ? `modal__user-action--${classModifier}` : ''}`;
+    : `modal__user-action ${
+        classModifier ? `modal__user-action--${classModifier}` : ''
+      }`;
   const resetClass = isTableRowLike
     ? 'form-switch-btn modal__btn--secondary form-switch-btn--table-form symbol-only-btn'
     : classModifier == 'login-page'
-      ? 'form-switch-btn modal__btn  modal__btn--secondary'
-      : 'form-switch-btn modal__btn--secondary modal__btn modal__btn--small';
+    ? 'form-switch-btn modal__btn  modal__btn--secondary'
+    : 'form-switch-btn modal__btn--secondary modal__btn modal__btn--small';
   const submitClass = isTableRowLike
     ? `form-action-btn form-action-btn--table-form  symbol-only-btn symbol-only-btn--submit`
-    : `form-action-btn modal__btn ${
-        classModifier == 'login-page'
-          ? ''
-          : classModifier != 'customer-first-purchase'
-            ? 'modal__btn--small'
-            : ''
-      }`;
+    : `form-action-btn modal__btn ${classModifier == 'login-page' ? '' : ''}`;
   return (
     <>
       <form onSubmit={onSubmit} className={mainClass}>
         {title && (
           <h2
-            className={`generic-details__title ${classModifier ? `generic-details__title--${classModifier}` : ''} modal__title--day`}
+            className={`generic-details__title ${
+              classModifier ? `generic-details__title--${classModifier}` : ''
+            } modal__title--day`}
           >
             {title}
             {toggleBtn}
@@ -59,14 +65,18 @@ function WrapperForm({
         )}
         {subTitle && (
           <h3
-            className={`generic-details__subtitle ${classModifier ? `generic-details__subtitle--${classModifier}` : ''} modal__title--status`}
+            className={`generic-details__subtitle ${
+              classModifier ? `generic-details__subtitle--${classModifier}` : ''
+            } modal__title--status`}
           >
             {subTitle}
           </h3>
         )}
         {note && (
           <h3
-            className={`generic-details__subtitle ${classModifier ? `generic-details__subtitle--${classModifier}` : ''} modal__title dimmed`}
+            className={`generic-details__subtitle ${
+              classModifier ? `generic-details__subtitle--${classModifier}` : ''
+            } modal__title dimmed`}
           >
             {note}
           </h3>

@@ -11,7 +11,7 @@
   flex-basis: 10%;
   height: 100%;
   @include flex(row, center, center);
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
 .symbol-only-btn {
