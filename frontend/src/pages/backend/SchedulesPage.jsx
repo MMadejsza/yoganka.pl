@@ -218,7 +218,7 @@ function SchedulePage() {
         productTabs = [
           {
             name: 'Karnety',
-            symbol: 'local_activity',
+            symbol: 'card_membership',
             link: '/grafik/karnety',
           },
         ];

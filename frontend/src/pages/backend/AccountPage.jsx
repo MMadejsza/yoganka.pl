@@ -18,12 +18,12 @@ const menuSet = [
   // 	link: 'statystyki',
   // },
   {
-    name: 'Konto',
-    symbol: 'home',
+    name: 'Profil',
+    symbol: 'account_circle',
     link: '/konto',
   },
   {
-    name: 'Historia odbytych zajęć',
+    name: 'Odbyte zajęcia',
     symbol: 'history',
     link: 'zajecia',
     limitedTo: 'customer',
@@ -36,7 +36,7 @@ const menuSet = [
   },
   {
     name: 'Karnety',
-    symbol: 'local_activity',
+    symbol: 'card_membership',
     link: 'karnety',
     limitedTo: 'customer',
   },

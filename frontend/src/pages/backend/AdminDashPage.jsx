@@ -13,19 +13,23 @@ import { formatIsoDateTime } from '../../utils/dateTime.js';
 import { fetchData, fetchStatus } from '../../utils/http.js';
 
 const sideNavTabs = [
-  { name: 'Konta', symbol: 'group', link: '/admin-console/show-all-users' },
+  {
+    name: 'Konta',
+    symbol: 'account_circle',
+    link: '/admin-console/show-all-users',
+  },
   {
     name: 'Uczestnicy',
-    symbol: 'sentiment_satisfied',
+    symbol: 'group',
     link: '/admin-console/show-all-customers',
   },
   {
-    name: 'Zajęcia',
-    symbol: 'inventory',
+    name: 'Rodzaje zajęć',
+    symbol: 'category',
     link: '/admin-console/show-all-products',
   },
   {
-    name: 'Grafik',
+    name: 'Grafik zajęć',
     symbol: 'calendar_month',
     link: '/admin-console/show-all-schedules',
   },
@@ -41,7 +45,7 @@ const sideNavTabs = [
   },
   {
     name: `Karnety`,
-    symbol: 'local_activity',
+    symbol: 'card_membership',
     link: '/admin-console/show-all-passes',
   },
   // {
@@ -56,7 +60,7 @@ const sideNavTabs = [
   // },
   {
     name: `Opinie`,
-    symbol: 'reviews',
+    symbol: 'rate_review',
     link: '/admin-console/show-all-participants-feedback',
   },
 ];

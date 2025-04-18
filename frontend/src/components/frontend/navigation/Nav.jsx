@@ -9,12 +9,12 @@ import Logo from '../../frontend/Logo.jsx';
 const menuSet = [
   {
     name: 'Wyjazdy',
-    symbol: 'landscape_2', // Represents travel in nature; peaceful and connected to retreats
+    symbol: 'spa', // Represents travel in nature; peaceful and connected to retreats
     link: '/wyjazdy',
   },
   {
     name: 'Wydarzenia',
-    symbol: 'notifications', // Bell symbolizes mindfulness and yoga-related events
+    symbol: 'event ', // Bell symbolizes mindfulness and yoga-related events
     // link: '/wydarzenia',
     link: '/',
     scroll: '#wydarzenia',
@@ -29,12 +29,12 @@ const menuSet = [
   // },
   {
     name: 'Grafik',
-    symbol: 'event', // Light and informal symbol for easy communication
+    symbol: 'calendar_month', // Light and informal symbol for easy communication
     link: '/grafik',
   },
   {
     name: 'Dla firm',
-    symbol: 'work',
+    symbol: 'home_work',
     link: '/yoga-dla-firm',
   },
   {
@@ -74,7 +74,7 @@ const menuSideSet = [
   {
     auth: true,
     name: 'Admin Panel',
-    symbol: 'admin_panel_settings',
+    symbol: 'shield_lock',
     link: '/admin-console/show-all-users',
   },
   {
