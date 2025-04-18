@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
-function FloatingPopUps() {
+function FloatingBtns() {
   const [cookies, setCookies] = useState({
     delete: false,
   });
-
+  const location = useLocation();
+  const isAdminPanel = location.pathname.includes('admin-console');
   const [isNewsletterScriptReady, setIsNewsletterScriptReady] = useState(false);
 
   useEffect(() => {
@@ -73,7 +75,7 @@ function FloatingPopUps() {
     });
   }
 
-  return (
+  const content = !isAdminPanel && (
     <div className={`pop-ups`} tabIndex='0'>
       {isNewsletterScriptReady && (
         <a
@@ -109,6 +111,8 @@ function FloatingPopUps() {
       )}
     </div>
   );
+
+  return content;
 }
 
-export default FloatingPopUps;
+export default FloatingBtns;
