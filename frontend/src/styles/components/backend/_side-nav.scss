@@ -14,14 +14,17 @@
       top: 50%;
       transform: translateY(-50%);
       right: 50%;
-      left: -187px;
+      left: 0;
       width: $width;
       z-index: 5;
+      padding: 0;
 
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
-      border-top-right-radius: map.get($sizes, border-radius);
-      border-bottom-right-radius: map.get($sizes, border-radius);
+      // border-top-right-radius: map.get($sizes, border-radius);
+      // border-bottom-right-radius: map.get($sizes, border-radius);
+      background-color: transparent;
+      box-shadow: none;
 
       @include flex(row, $align: center);
       flex-wrap: wrap;
@@ -51,23 +54,54 @@
         }
       }
 
+      $icon-size: 3rem;
+      $icon-left-m: 1rem;
+      $icon-right-m: 1rem;
+      $icons-nav-size: calc($icon-size + $icon-left-m + $icon-right-m);
+
       &__list {
-        @include flex(column, $align: flex-end);
+        @include flex(column, $align: flex-start);
         flex-wrap: wrap;
-        gap: 1rem;
+        gap: 1rem 0;
         margin-top: 0;
+        background-color: map.get($colors, nav);
+        border-top-right-radius: map.get($sizes, border-radius);
+        border-bottom-right-radius: map.get($sizes, border-radius);
+        transition: map.get($behavior, base-transition);
+        box-shadow: map.get($shadows, tile-shadow);
+
+        &:hover {
+          &:not(.nav__list--bottom) {
+            // border-radius: 0;
+          }
+          .nav__list--bottom {
+            left: calc(100% - 1.3 * $icons-nav-size);
+          }
+        }
+
+        &--bottom {
+          left: calc(-300px + $icons-nav-size);
+          margin-left: $icons-nav-size;
+          position: absolute;
+          z-index: -1;
+          box-shadow: map.get($shadows, box-shadow);
+        }
       }
 
       &__link {
-        margin: 0 0 0 1rem;
         line-height: 4.5rem;
         font-size: 1.8rem;
         text-align: right;
 
+        &--bottom {
+          margin-left: calc(0.7 * $icons-nav-size);
+        }
+
         .nav__icon {
           min-width: 33px;
-          margin: 0rem 1rem 0 1.5rem;
-          font-size: 3rem;
+          margin: 0rem $icon-right-m 0 $icon-left-m;
+          font-size: $icon-size;
+          line-height: 4.5rem;
         }
 
         &.active,
@@ -75,6 +109,12 @@
           color: map.get($colors, accent-bcg);
           text-shadow: map.get($shadows, active-text-icons-shadow);
         }
+      }
+
+      &__content {
+        margin: 0 1.5rem 0 0.5rem;
+        border-top-right-radius: map.get($sizes, border-radius);
+        border-bottom-right-radius: map.get($sizes, border-radius);
       }
     }
   }
