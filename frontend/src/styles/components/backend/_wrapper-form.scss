@@ -41,4 +41,23 @@
   .generic-details__title & .nav__icon {
     font-size: 4rem;
   }
+
+  // THIS ONE IS IN FLOATING BTNS COMPONENT (TO BE MOVED)
+  &--floating {
+    height: auto;
+    color: map.get($colors, accent-bcg);
+    border-radius: 50%;
+    background-color: rgba(map.get($colors, nav), 0.5);
+    box-shadow: map.get($shadows, tile-shadow);
+
+    &:hover {
+      transform: scale(1.1);
+    }
+
+    .nav__icon {
+      font-size: 4.5rem;
+      margin: 1rem;
+      margin-bottom: 1rem;
+    }
+  }
 }

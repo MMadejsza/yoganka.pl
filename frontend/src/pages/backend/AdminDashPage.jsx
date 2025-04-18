@@ -1,11 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useLocation, useMatch, useNavigate } from 'react-router-dom';
+import FloatingBtnAddItem from '../../components/backend/FloatingBtnAddItem.jsx';
 import ModalTable from '../../components/backend/ModalTable.jsx';
-import SideNav from '../../components/backend/SideNav.jsx';
+import SideNav from '../../components/backend/navigation/SideNav.jsx';
 import TabsList from '../../components/backend/TabsList.jsx';
 import TableCustomerPasses from '../../components/backend/views/tables/TableCustomerPasses.jsx';
 import ViewsController from '../../components/backend/ViewsController.jsx';
+import FloatingBtns from '../../components/common/FloatingBtns.jsx';
 import Section from '../../components/frontend/Section.jsx';
 import { formatIsoDateTime } from '../../utils/dateTime.js';
 import { fetchData, fetchStatus } from '../../utils/http.js';
@@ -59,29 +61,12 @@ const sideNavTabs = [
   },
 ];
 
-const sideNavActions = [
-  {
-    name: 'Dodaj',
-    symbol: 'add_circle',
-    link: 'add-user',
-  },
-];
-const noCreateOptionPages = [
-  'show-all-schedules',
-  'show-all-bookings',
-  'show-all-customer-passes',
-  'show-all-invoices',
-  'show-all-newsletters',
-  'show-all-participants-feedback',
-];
 const allowedPaths = sideNavTabs.map(tab => tab.link);
 allowedPaths.push('/admin-console/show-all-customer-passes');
 function AdminPage() {
   const navigate = useNavigate();
   const location = useLocation(); // fetch current path
-  const shouldAllowCreation = !noCreateOptionPages.some(lockedPath =>
-    location.pathname.includes(lockedPath)
-  );
+
   const isAdminPage = location.pathname.includes('admin-console') ?? false;
   const isInactiveTable = ['invoices', 'newsletters', 'feedback'].some(path =>
     location.pathname.includes(path)
@@ -365,14 +350,6 @@ function AdminPage() {
           <Section classy='admin-intro' header={`Admin Panel`}></Section>
           <SideNav menuSet={sideNavTabs} />
           {adminTabs}
-          {shouldAllowCreation && (
-            <SideNav
-              menuSet={sideNavActions}
-              side='right'
-              type='action'
-              onclose={handleCloseModal}
-            />
-          )}
 
           <h1 className='modal__title modal__title--view'>{title}</h1>
           {subTabs && (
@@ -393,6 +370,11 @@ function AdminPage() {
               userAccountPage={false}
             />
           )}
+          {
+            <FloatingBtns>
+              <FloatingBtnAddItem />
+            </FloatingBtns>
+          }
         </>
       )}
     </div>
