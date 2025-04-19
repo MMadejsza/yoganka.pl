@@ -11,7 +11,7 @@ function FloatingBtns({ side, children }) {
       {!isAdminPanel && (
         <>
           <FloatingBtnMailerLite />
-          <FloatingBtnCookie />
+          <FloatingBtnCookie side={side} />
         </>
       )}
       {children}
