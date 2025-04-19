@@ -226,7 +226,15 @@ function SchedulePage() {
         break;
     }
 
-    cardsList = <CardsList content={contentSorted} />;
+    cardsList = (
+      <CardsList
+        content={contentSorted}
+        active={true}
+        status={status}
+        onOpen={handleOpenModal}
+        onQuickAction={[{ symbol: 'shopping_bag_speed', method: book }]}
+      />
+    );
   }
 
   if (data && status) {
