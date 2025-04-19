@@ -11,51 +11,50 @@ function FloatingBtnCookie({ side }) {
     });
   }
 
-  const cookieBtn = !cookies.delete && (
-    <a
-      // --cookies  required for scss opening on :focus
-      className={`pop-ups__single${
-        !side ? ` pop-ups__single--left` : ''
-      } pop-ups__single--cookies`}
-      href='#'
-      onClick={e => e.preventDefault()}
-      tabIndex='0'
-    >
-      {/* <i className={`pop-ups__icon fas fa-cookie-bite fa-bounce`} /> */}
-      <span
-        className={`material-symbols-rounded pop-ups__icon${
-          !side ? ` pop-ups__icon--left` : ''
-        }`}
-      >
-        cookie
-      </span>
-      <div className={`pop-ups__body${!side ? ` pop-ups__body--left` : ''}`}>
-        <div
-          className={`pop-ups__body--msg${
-            !side ? ` pop-ups__body--msg-left` : ''
-          }`}
-        >
-          <span
-            className={`pop-ups__msg-content${
-              !side ? ` pop-ups__msg-content---left` : ''
-            }`}
-          >
-            Używamy tylko niezbędnych plików cookie.
-          </span>
-        </div>
-        <i
-          onClick={() => handleCookiesClose()}
-          className={`fas fa-times pop-ups__icon${
-            !side ? ` pop-ups__icon--left` : ''
-          } pop-ups__icon--body-close${
-            !side ? ` pop-ups__icon--body-close-left` : ''
-          }`}
-        />
-      </div>
-    </a>
-  );
+  const singleCookieBtnClass = `pop-ups__single${
+    !side ? ` pop-ups__single--left` : ''
+  } pop-ups__single--cookies`;
 
-  return cookieBtn;
+  const cookieBtnSymbolClass = `material-symbols-rounded pop-ups__icon${
+    !side ? ` pop-ups__icon--left` : ''
+  }`;
+  const cookieBtnIconClass = `fas fa-times pop-ups__icon${
+    !side ? ` pop-ups__icon--left` : ''
+  } pop-ups__icon--body-close${!side ? ` pop-ups__icon--body-close-left` : ''}`;
+
+  const cookieBtnMsgBoxClass = `pop-ups__body${
+    !side ? ` pop-ups__body--left` : ''
+  }`;
+  const cookieBtnMsgContentClass = `pop-ups__body--msg${
+    !side ? ` pop-ups__body--msg-left` : ''
+  }`;
+
+  return (
+    <>
+      {!cookies.delete && (
+        <a
+          // --cookies  required for scss opening on :focus
+          className={singleCookieBtnClass}
+          href='#'
+          onClick={e => e.preventDefault()}
+          tabIndex='0'
+        >
+          {/* <i className={`pop-ups__icon fas fa-cookie-bite fa-bounce`} /> */}
+          <span className={cookieBtnSymbolClass}>cookie</span>
+
+          <div className={cookieBtnMsgBoxClass}>
+            <div className={cookieBtnMsgContentClass}>
+              Używamy tylko niezbędnych plików cookie.
+            </div>
+            <i
+              onClick={() => handleCookiesClose()}
+              className={cookieBtnIconClass}
+            />
+          </div>
+        </a>
+      )}
+    </>
+  );
 }
 
 export default FloatingBtnCookie;
