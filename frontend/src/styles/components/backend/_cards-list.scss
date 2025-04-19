@@ -11,9 +11,10 @@
   gap: 2rem;
 
   .card {
+    width: 100%;
     padding: 1.5rem;
     display: grid;
-    grid-template-columns: repeat(auto-fit, 1fr);
+    grid-template-columns: 12.5% 12.5% 1fr 12.5% 12.5%;
     grid-template-areas:
       'dateTime dateTime modifier . . . . . id'
       'dateTime dateTime name name name name name name name'
@@ -23,10 +24,26 @@
     background-color: rgba(map.get($colors, tile), 0.8);
     border: 1px solid rgba(map.get($colors, nav), 0.3);
     border-radius: map.get($sizes, border-radius);
-    box-shadow: map.get($shadows, box-shadow);
+    box-shadow: map.get($shadows, tile-shadow);
     transition: map.get($behavior, base-transition);
 
-    place-self: center;
+    // place-self: center;
+    $big-width: 100%;
+    $circle-height: calc($big-width);
+    $title-size: 1.6rem;
+    $timing-size: 1.6rem;
+    $secondary-size: 1.4rem;
+    $safety-padding: 0.4rem;
+    $dimmed-color: map.get($colors, tile-text-muted);
+    $heavily-dimmed-color: map.get($colors, nav-muted);
+
+    > * {
+      @include flex(row, flex-start, center);
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: $safety-padding;
+      margin: 0;
+    }
 
     &:nth-child(2n) {
       background-color: rgba(map.get($colors, nav), 0.5);
@@ -46,41 +63,59 @@
       color: map.get($colors, accent-bcg);
       font-size: 2rem;
 
-      &--productType,
-      &--rowId {
+      &--secondary {
         color: map.get($colors, nav-muted);
       }
     }
 
-    $title-size: 1.8rem;
-    $timing-size: 1.6rem;
-    $location-size: 1.3rem;
-    $dimmed-color: map.get($colors, tile-text-muted);
-    $heavy-dimmed-color: map.get($colors, nav-muted);
-
-    &__date-time {
-      grid-area: dateTime;
-      padding: 0;
-      margin: 0;
-      font-weight: 500;
-      color: $heavy-dimmed-color;
-      place-self: center;
+    &__single-content {
+      &--secondary {
+        font-size: $secondary-size;
+        color: $heavily-dimmed-color;
+      }
     }
+
+    &__date {
+      grid-area: dateTime;
+      width: $big-width;
+      height: 100%;
+      font-weight: 500;
+      color: $heavily-dimmed-color;
+      place-self: center;
+
+      @include flex(column, center, center);
+      gap: 1rem;
+
+      > * {
+        width: 100%;
+      }
+
+      &--day-name {
+        font-size: calc(0.9 * $title-size);
+        color: $dimmed-color;
+      }
+
+      &--day {
+        font-size: calc(2 * $title-size);
+        color: map.get($colors, accent-bcg);
+      }
+
+      &--year {
+        font-size: calc(0.7 * $title-size);
+      }
+    }
+
     &__modifier {
       grid-area: modifier;
-      padding: 0;
-      margin: 0;
       font-weight: 500;
-      color: $heavy-dimmed-color;
-      place-self: center;
+      color: $heavily-dimmed-color;
+      font-size: $secondary-size;
     }
 
     &__id {
       grid-area: id;
-      padding: 0;
-      margin: 0;
-      color: $heavy-dimmed-color;
-      place-self: center;
+      color: $heavily-dimmed-color;
+      font-size: $secondary-size;
     }
 
     &__title {
@@ -91,18 +126,28 @@
 
     &__status-circle {
       grid-area: circle;
-      padding: 0;
       font-size: $timing-size;
+      margin: 0 auto;
+      width: $big-width;
+      aspect-ratio: 1 / 1;
+      border-radius: 50%;
+      background-color: red;
+
+      justify-content: center;
+      display: grid;
+      place-items: center;
     }
+
     &__desc {
       grid-area: desc;
-      padding: 0;
+
       font-size: $timing-size;
     }
+
     &__footer {
       grid-area: footer;
       color: map.get($colors, $dimmed-color);
-      font-size: $location-size;
+      font-size: $secondary-size;
     }
 
     &:last-child {
@@ -110,128 +155,3 @@
     }
   }
 }
-
-// @include respond-to(mobile-mh) {
-//   .modal-table {
-//     &--admin-view {
-//       display: table;
-//       width: 100%;
-//       margin: 3rem 0rem 5rem;
-//       padding: 0;
-//       border-collapse: separate;
-//       border-spacing: 0;
-//       font-size: 1.5rem;
-//       overflow: visible;
-//       span {
-//         display: none;
-//       }
-//     }
-
-//     &__headers--admin-view {
-//       display: table-column-group;
-//       margin-bottom: 0.5rem;
-//       font-size: 1.7rem;
-//       border-bottom: 2px solid black;
-//       background-color: rgba(map.get($colors, nav), 1);
-//       box-shadow: map.get($shadows, box-shadow);
-//       border-top-left-radius: map.get($sizes, border-radius);
-//       border-top-right-radius: map.get($sizes, border-radius);
-//     }
-
-//     &__single-header--admin-view {
-//       transition: map.get($behavior, base-transition);
-//       padding: 0.5rem;
-
-//       &:first-child {
-//         border-top-left-radius: map.get($sizes, border-radius);
-//       }
-
-//       &:last-child {
-//         border-top-right-radius: map.get($sizes, border-radius);
-//       }
-//     }
-
-//     & tbody {
-//       display: table-row-group;
-//     }
-
-//     &__cells--admin-view {
-//       display: table-row;
-//       transition: map.get($behavior, base-transition);
-//       border: none;
-
-//       &:nth-child(2n) {
-//         background-color: color.adjust(map.get($colors, nav), $lightness: 15%);
-//       }
-
-//       &.active {
-//         box-shadow: none;
-
-//         &:hover {
-//           position: relative;
-//           z-index: 3;
-//           opacity: 1;
-//           box-shadow: map.get($shadows, tile-shadow);
-//           border-radius: map.get($sizes, border-radius);
-
-//           .modal-table__single-cell:first-child {
-//             border-top-left-radius: map.get($sizes, border-radius);
-//             border-bottom-left-radius: map.get($sizes, border-radius);
-//           }
-
-//           .modal-table__single-cell:last-child {
-//             border-top-right-radius: map.get($sizes, border-radius);
-//             border-bottom-right-radius: map.get($sizes, border-radius);
-//           }
-//         }
-//       }
-
-//       &:first-child {
-//         padding-top: 2rem;
-//       }
-
-//       &.booked {
-//         background-color: color.adjust(green, $lightness: 80%);
-//         opacity: 0.6;
-//       }
-
-//       &.booked span {
-//         color: green;
-//       }
-
-//       &.full,
-//       &.archived {
-//         background-color: map.get($colors, nav);
-//         opacity: 0.25;
-
-//         & span {
-//           color: inherit;
-//         }
-//       }
-//     }
-
-//     &__single-cell--admin-view {
-//       display: table-cell;
-//       width: min-content;
-//       padding: 1rem;
-//       transition: map.get($behavior, base-transition);
-//       white-space: preserve;
-//     }
-
-//     &__no-table-note--admin-view {
-//       font-size: 2rem;
-//       margin-bottom: 5rem;
-//     }
-//   }
-// }
-
-// @include respond-to(mobile-l) {
-//   .modal-table {
-//     margin: 3rem 0.5rem 5rem;
-
-//     & .hash {
-//       max-width: 100px;
-//       overflow: hidden;
-//     }
-//   }
-// }

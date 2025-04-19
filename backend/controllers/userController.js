@@ -271,7 +271,7 @@ export const getAllSchedules = (req, res, next) => {
     include: [
       {
         model: models.Product,
-        attributes: ['type', 'name', 'price'],
+        attributes: ['type', 'name', 'duration', 'price'],
       },
       {
         model: models.Booking,
@@ -324,6 +324,7 @@ export const getAllSchedules = (req, res, next) => {
           productType: schedule.Product.type,
           productName: schedule.Product.name,
           productPrice: schedule.Product.price,
+          productDuration: schedule.Product.duration,
           wasUserReserved,
           isUserGoing,
           attendance: `${activeBookings?.length}/${schedule.capacity}`,
@@ -331,6 +332,8 @@ export const getAllSchedules = (req, res, next) => {
           rowId: schedule.scheduleId,
         };
       });
+
+      delete formattedRecords.Product;
 
       // New headers (keys from columnMap)
       const totalHeaders = [

@@ -4,6 +4,7 @@ import { useLocation, useMatch, useNavigate } from 'react-router-dom';
 import ModalTable from '../../components/backend/ModalTable.jsx';
 import TabsList from '../../components/backend/TabsList.jsx';
 import ViewsController from '../../components/backend/ViewsController.jsx';
+import CardsList from '../../components/common/CardsList.jsx';
 import Section from '../../components/frontend/Section.jsx';
 import { useAuthStatus } from '../../hooks/useAuthStatus.js';
 import { formatIsoDateTime } from '../../utils/dateTime.js';
@@ -99,6 +100,7 @@ function SchedulePage() {
   }
 
   let table,
+    cardsList,
     viewFrame,
     title,
     productTabs,
@@ -212,7 +214,6 @@ function SchedulePage() {
             status={status}
             onOpen={handleOpenModal}
             onQuickAction={[{ symbol: 'shopping_bag_speed', method: book }]}
-            // classModifier={classModifier}
           />
         );
         productTabs = [
@@ -224,6 +225,8 @@ function SchedulePage() {
         ];
         break;
     }
+
+    cardsList = <CardsList content={contentSorted} />;
   }
 
   if (data && status) {
@@ -250,7 +253,8 @@ function SchedulePage() {
         shouldSwitchState={true}
         disableAutoActive={true}
       />
-      {table}
+      {/* {table} */}
+      {cardsList}
       {isModalOpen && viewFrame}
     </div>
   );
