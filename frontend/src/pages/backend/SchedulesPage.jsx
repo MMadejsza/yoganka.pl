@@ -146,21 +146,27 @@ function SchedulePage() {
           error: buyError,
         },
       };
-      contentSorted = data.content.map(record => {
-        const passDef = record; //.toJSON();
+      contentSorted = data.content
+        .map(record => {
+          const passDef = record; //.toJSON();
 
-        return {
-          ...passDef,
-          usesTotal: passDef.usesTotal || '-',
-          validityDays: `${
-            passDef.validityDays ? `${passDef.validityDays} dni` : '-'
-          }`,
-          price: `${passDef.price} zł`,
-          allowedProductTypes: JSON.parse(passDef.allowedProductTypes).join(
-            ', '
-          ),
-        };
-      });
+          return {
+            ...passDef,
+            usesTotal: passDef.usesTotal || '-',
+            validityDays: `${
+              passDef.validityDays ? `${passDef.validityDays} dni` : '-'
+            }`,
+            price: `${passDef.price} zł`,
+            allowedProductTypes: JSON.parse(passDef.allowedProductTypes).join(
+              ', '
+            ),
+          };
+        })
+        .sort((a, b) => {
+          const order = { time: 0, mixed: 1, count: 2 };
+          // ex. a.passTYpe = 'time' => time: 0 => 0
+          return order[a.passType] - order[b.passType];
+        });
     } else {
       modifier = 'schedule';
       headers = data.totalHeaders;

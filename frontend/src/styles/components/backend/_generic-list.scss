@@ -110,6 +110,10 @@ form.generic-details {
   flex-wrap: wrap;
   gap: 1.5rem;
 
+  .modal__user-action {
+    gap: 3rem;
+  }
+
   .modal__btn {
     // margin: 0 $generic-list-vertical-padding;
     padding: 0 $generic-list-vertical-padding;

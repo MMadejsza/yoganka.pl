@@ -208,6 +208,11 @@ function ViewPassDefinition({
         ) : (
           <NewCustomerFormForUser onSave={handleFormSave} />
         )}
+        <footer className='modal__user-action'>
+          {shouldShowFeedback && feedbackBox}
+          {shouldShowBookBtn && dateInput}
+          {shouldShowBookBtn && paymentBtn}
+        </footer>
       </div>
 
       {isAdminViewEligible && (
@@ -229,12 +234,6 @@ function ViewPassDefinition({
           />
         </>
       )}
-
-      <footer className='modal__user-action'>
-        {shouldShowFeedback && feedbackBox}
-        {shouldShowBookBtn && dateInput}
-        {shouldShowBookBtn && paymentBtn}
-      </footer>
     </>
   );
 }
