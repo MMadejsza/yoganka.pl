@@ -1,5 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import { statsCalculatorForCustomer } from '../../../utils/statistics/statsCalculatorForCustomer.js';
+import CardsList from '../../common/CardsList.jsx';
 import ModalTable from '../ModalTable.jsx';
 import WrapperModalTable from '../WrapperModalTable.jsx';
 import DetailsListCustomerStats from './lists/DetailsListCustomerStats.jsx';
@@ -21,10 +22,11 @@ function ViewAccountSchedulesHistory({ data }) {
       );
       return scheduleDateTime < new Date();
     })
-    .sort((a, b) => new Date(b.date) - new Date(a.date));
-  // console.log(`✅ content: `, content);
-  // console.log(`✅ keys: `, keys);
-  // console.log(`✅ customerStats: `, customerStats);
+    .sort(
+      (a, b) =>
+        new Date(`${b.date}T${b.startTime}:00.000Z`) -
+        new Date(`${a.date}T${a.startTime}:00.000Z`)
+    );
 
   const stats = data.customer ? (
     <DetailsListCustomerStats
@@ -43,6 +45,17 @@ function ViewAccountSchedulesHistory({ data }) {
     'Zajęcia',
     'Miejsce',
   ];
+  const tableInside = (
+    <ModalTable
+      headers={headers}
+      keys={customerStats?.recordsKeys || []}
+      content={content}
+      active={false}
+      notToArchive={location.pathname.includes(`konto/zajecia`)}
+    />
+  );
+
+  const cards = <CardsList content={content} active={false} />;
 
   const table = (
     <WrapperModalTable
@@ -50,13 +63,7 @@ function ViewAccountSchedulesHistory({ data }) {
       title={'Ukończone zajęcia'}
       noContentMsg={'ukończonych zajęć'}
     >
-      <ModalTable
-        headers={headers}
-        keys={customerStats?.recordsKeys || []}
-        content={content}
-        active={false}
-        notToArchive={location.pathname.includes(`konto/zajecia`)}
-      />
+      {cards}
     </WrapperModalTable>
   );
 

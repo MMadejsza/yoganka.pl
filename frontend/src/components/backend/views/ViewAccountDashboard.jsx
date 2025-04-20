@@ -49,10 +49,17 @@ function ViewAccountDashboard({ data, queryStatus }) {
     customerStats = statsCalculatorForCustomer(data.customer);
 
     const content = customerStats.attendedSchedules;
-    contentUpcoming = content.filter(
-      schedule =>
-        new Date(`${schedule.date}T${schedule.startTime}:00.000Z`) >= today
-    );
+    contentUpcoming = content
+      .filter(
+        schedule =>
+          new Date(`${schedule.date}T${schedule.startTime}:00.000Z`) >= today
+      )
+      .sort(
+        (a, b) =>
+          new Date(`${a.date}T${a.startTime}:00.000Z`) -
+          new Date(`${b.date}T${b.startTime}:00.000Z`)
+      );
+    console.log('contentUpcoming', contentUpcoming);
   }
 
   if (queryStatus.isError) {
@@ -68,7 +75,31 @@ function ViewAccountDashboard({ data, queryStatus }) {
     }
   }
 
-  const cards = <CardsList content={contentUpcoming} />;
+  const cards = (
+    <CardsList
+      content={contentUpcoming}
+      active={true}
+      onOpen={handleOpenScheduleModal}
+    />
+  );
+  const tableInside = (
+    <ModalTable
+      headers={headers}
+      keys={[
+        'scheduleId',
+        'date',
+        'day',
+        'startTime',
+        'productType',
+        'productName',
+        'location',
+      ]}
+      content={contentUpcoming}
+      active={true}
+      onOpen={handleOpenScheduleModal}
+      classModifier={'user-account'}
+    />
+  );
 
   const table = (
     <WrapperModalTable
@@ -76,28 +107,13 @@ function ViewAccountDashboard({ data, queryStatus }) {
       title={'Nadchodząca Yoga'}
       noContentMsg={'nowych rezerwacji'}
     >
-      <ModalTable
-        headers={headers}
-        keys={[
-          'scheduleId',
-          'date',
-          'day',
-          'startTime',
-          'productType',
-          'productName',
-          'location',
-        ]}
-        content={contentUpcoming}
-        active={true}
-        onOpen={handleOpenScheduleModal}
-        classModifier={'user-account'}
-      />
+      {/* {tableInside} */}
+      {cards}
     </WrapperModalTable>
   );
   return (
     <>
       {statsBlock}
-      {/* {cards} */}
       {table}
       {isModalOpen && (
         <ViewsController

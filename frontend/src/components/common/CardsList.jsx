@@ -6,7 +6,7 @@ function CardsList({
   content,
   active,
   onOpen,
-  onQuickAction,
+  onQuickAction = [],
   status,
   isAdminPage,
   adminActions,
@@ -14,12 +14,13 @@ function CardsList({
   console.log(`✅ CardsList Data: `);
   console.log(content);
   const isLoggedIn =
-      status?.isLoggedIn != undefined ? status.isLoggedIn : 'N/A',
+      status?.isLoggedIn != undefined ? status?.isLoggedIn : 'N/A',
     isCustomer = status?.role === 'CUSTOMER',
     isAdmin = status?.role === 'ADMIN';
   const location = useLocation();
   const isAdminView = location.pathname.includes('admin-console');
   const isAvailablePassesView = location.pathname.includes('grafik/karnety');
+  const isAccountView = location.pathname.includes('/konto');
   const isCommonScheduleView = location.pathname.includes('/grafik');
 
   const pickCustomerSymbol = (
@@ -85,7 +86,9 @@ function CardsList({
     const isAuthorized =
       status?.role != undefined ? isCustomer || isAdmin : 'N/A';
     const hasPass =
-      isAdminView || isAvailablePassesView ? true : hasValidPassFn(status, row);
+      isAdminView || isAvailablePassesView || isAccountView
+        ? true
+        : hasValidPassFn(status, row);
 
     if (!isUserGoing && isLoggedIn && !isArchived && isAuthorized && hasPass) {
       e.stopPropagation();
@@ -135,7 +138,7 @@ function CardsList({
       descriptionIcon,
       footerIcon;
 
-    if (isCommonScheduleView && !isAvailablePassesView) {
+    if ((isCommonScheduleView || isAccountView) && !isAvailablePassesView) {
       const isArchived =
         new Date(
           `${row.date?.split('.').reverse().join('-')}T${
@@ -143,50 +146,59 @@ function CardsList({
           }`
         ) < new Date();
       const hasValidPass =
-        isAdminView || isAvailablePassesView
+        isAdminView || isAvailablePassesView || isAccountView
           ? true
           : hasValidPassFn(status, row);
-      const quickBtnRawSymbol = pickCustomerSymbol(
-        row,
-        isArchived,
-        onQuickAction[0].symbol,
-        hasValidPass,
-        isAvailablePassesView
-      );
 
-      isActive =
-        quickBtnRawSymbol == 'restore' || quickBtnRawSymbol == 'calendar_add_on'
-          ? true
-          : false;
+      let quickActionBtn = null;
+      let quickBtnRawSymbol = '';
+      if (!isAccountView && Array.isArray(onQuickAction) && onQuickAction[0]) {
+        quickBtnRawSymbol = pickCustomerSymbol(
+          row,
+          isArchived,
+          onQuickAction[0].symbol,
+          hasValidPass,
+          isAvailablePassesView
+        );
 
-      const quickActionSymbol = getSymbol(
-        row,
-        hasValidPass,
-        isArchived,
-        onQuickAction[0]
-      );
-      const quickActionBtn = (
-        <div className='action-btns'>
-          <button
-            key={index}
-            className={`form-action-btn symbol-only-btn symbol-only-btn--submit`}
-            onClick={e => {
-              onRowBtnClick(row, isArchived, onQuickAction[0].method, e);
-            }}
-          >
-            {quickActionSymbol}
-          </button>
-        </div>
-      );
+        isActive =
+          quickBtnRawSymbol == 'restore' ||
+          quickBtnRawSymbol == 'calendar_add_on';
+
+        const quickActionSymbol = getSymbol(
+          row,
+          hasValidPass,
+          isArchived,
+          onQuickAction[0]
+        );
+
+        quickActionBtn = (
+          <div className='action-btns'>
+            <button
+              key={index}
+              className={`form-action-btn symbol-only-btn symbol-only-btn--submit`}
+              onClick={e => {
+                onRowBtnClick(row, isArchived, onQuickAction[0].method, e);
+              }}
+            >
+              {quickActionSymbol}
+            </button>
+          </div>
+        );
+      } else {
+        isActive = false;
+      }
 
       const durationRaw = row.productDuration.split(':').slice(0, 2);
       const durationHH = String(Number(durationRaw[0]));
       const durationMM = String(Number(durationRaw[1]));
 
-      const dateParts = row.date.split('.'); // [2025, 04, 19]
-      const day = dateParts[0];
+      const isPLDate = row.date.includes('.');
+      const dateParts = isPLDate ? row.date.split('.') : row.date.split('-'); // [2025, 04, 19] ||
+      console.log(dateParts);
+      const day = isPLDate ? dateParts[0] : dateParts[2];
       const month = dateParts[1];
-      const year = dateParts[2];
+      const year = isPLDate ? dateParts[2] : dateParts[0];
       const monthName = monthMap[month] || '';
 
       const typePart = row.productType.slice(1).toLowerCase();
@@ -194,7 +206,7 @@ function CardsList({
 
       cardTypeModifier = type || row.paymentMethod || '';
       cardId = row.rowId || '';
-      cardCircle = quickActionBtn || `status`;
+      cardCircle = quickActionBtn || ``;
       cardTitle = row.productName || row.product || '';
       squareTop = row.day || '';
       squareMiddle = day || '';
