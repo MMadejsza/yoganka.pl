@@ -1,4 +1,5 @@
 import { formatIsoDateTime } from '../../../utils/dateTime.js';
+import CardsList from '../../common/CardsList.jsx';
 import ModalTable from '../ModalTable.jsx';
 import WrapperModalTable from '../WrapperModalTable.jsx';
 
@@ -13,12 +14,14 @@ function ViewAccountBookings({ data }) {
   let content;
   if (data.customer)
     content = data.customer.formattedBookings.sort(
-      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
     );
 
   const formattedContent = content?.map(booking => {
     return {
       ...booking,
+      cardCreatedAt: booking.createdAt,
+      cardTimestamp: booking.timestamp,
       createdAt: formatIsoDateTime(booking.createdAt),
       timestamp: formatIsoDateTime(booking.timestamp),
     };
@@ -27,32 +30,38 @@ function ViewAccountBookings({ data }) {
   // console.log(`✅ keys: `, keys);
   // console.log(`✅ customerStats: `, customerStats);
 
+  const tableInside = (
+    <ModalTable
+      headers={[
+        'Obecność',
+        'Id',
+        'Termin (Nr)',
+        'Płatność (Nr)',
+        'Utworzono',
+        'Ostatnia zmiana',
+      ]}
+      keys={[
+        'attendance',
+        'bookingId',
+        'scheduleDetails',
+        'payment',
+        'createdAt',
+        'timestamp',
+      ]}
+      content={formattedContent}
+      active={false}
+    />
+  );
+
+  const cards = <CardsList content={formattedContent} active={false} />;
+
   const table = (
     <WrapperModalTable
       content={formattedContent}
       title={'Wszystkie rezerwacje'}
       noContentMsg={'rezerwacji'}
     >
-      <ModalTable
-        headers={[
-          'Obecność',
-          'Id',
-          'Termin (Nr)',
-          'Płatność (Nr)',
-          'Utworzono',
-          'Ostatnia zmiana',
-        ]}
-        keys={[
-          'attendance',
-          'bookingId',
-          'scheduleDetails',
-          'payment',
-          'createdAt',
-          'timestamp',
-        ]}
-        content={formattedContent}
-        active={false}
-      />
+      {cards}
     </WrapperModalTable>
   );
 

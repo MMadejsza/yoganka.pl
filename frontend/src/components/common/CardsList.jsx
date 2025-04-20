@@ -1,4 +1,5 @@
 import { useLocation } from 'react-router-dom';
+import { formatIsoDateTime, getWeekDay } from '../../utils/dateTime.js';
 import { hasValidPassFn } from '../../utils/userCustomerUtils';
 import SymbolOrIcon from './SymbolOrIcon.jsx';
 
@@ -22,6 +23,7 @@ function CardsList({
   const isAvailablePassesView = location.pathname.includes('grafik/karnety');
   const isAccountView = location.pathname.includes('/konto');
   const isCommonScheduleView = location.pathname.includes('/grafik');
+  const isBookingsView = location.pathname.includes('/rezerwacje');
 
   const pickCustomerSymbol = (
     row,
@@ -63,22 +65,17 @@ function CardsList({
     );
   };
 
-  // const formatValue = (value, keyClass) => {
-  //   let val = value;
-  //   if (value != undefined && typeof value == 'boolean') {
-  //     val = (
-  //       <span
-  //         className={`material-symbols-rounded nav__icon nav__icon--${keyClass}`}
-  //       >
-  //         {value == true ? 'check' : 'close'}
-  //       </span>
-  //     );
-  //   }
-  //   if (value == undefined) {
-  //     val = '';
-  //   }
-  //   return val;
-  // };
+  const formatAttendance = value => {
+    let val = value;
+
+    if (value == undefined) {
+      val = '';
+    } else if (value != undefined && typeof value == 'boolean') {
+      val = value == true ? 'check' : 'close';
+    }
+
+    return <SymbolOrIcon specifier={val} classModifier={'attendance'} />;
+  };
 
   const onRowBtnClick = (row, archived, method, e) => {
     const isUserGoing = row.isUserGoing != undefined ? row.isUserGoing : false;
@@ -135,10 +132,44 @@ function CardsList({
       squareBottom,
       description,
       cardFooter,
+      typeIcon = 'category',
       descriptionIcon,
       footerIcon;
 
-    if ((isCommonScheduleView || isAccountView) && !isAvailablePassesView) {
+    if (isBookingsView) {
+      const creationDate = row.cardCreatedAt;
+      let day = '-',
+        month = '-',
+        year = '-',
+        monthName = '-';
+
+      if (row.cardCreatedAt) {
+        const dateParts = row.cardCreatedAt.slice(0, 10).split('-'); // [2025, 04, 19]
+        // console.log(dateParts);
+        day = dateParts[2];
+        month = dateParts[1];
+        year = dateParts[0];
+        monthName = monthMap[month] || '';
+      }
+
+      cardId = row.rowId || '';
+      cardTypeModifier = row.payment || '';
+      cardCircle = formatAttendance(row.attendance);
+      cardTitle = `${row.scheduleName} (${row.scheduleId})`;
+      squareTop = getWeekDay(creationDate) || '-';
+      squareMiddle = day || '';
+      squareBottom = `${monthName} ${year}` || '';
+      description = '';
+      dimmedDescription = '';
+      cardFooter = ``;
+      description = `${formatIsoDateTime(row.cardCreatedAt, false)}`;
+      typeIcon = 'credit_card';
+      descriptionIcon = 'event_upcoming';
+      footerIcon = '';
+    } else if (
+      (isCommonScheduleView || isAccountView) &&
+      !isAvailablePassesView
+    ) {
       const isArchived =
         new Date(
           `${row.date?.split('.').reverse().join('-')}T${
@@ -259,7 +290,7 @@ function CardsList({
         </div>
 
         <div className='card__modifier'>
-          <SymbolOrIcon specifier='category' classModifier={'secondary'} />
+          <SymbolOrIcon specifier={typeIcon} classModifier={'secondary'} />
           <span className='card__single-content'>{cardTypeModifier}</span>
         </div>
 

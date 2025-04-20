@@ -96,7 +96,8 @@ $heavily-dimmed-color: map.get($colors, nav-muted);
 
     &__square {
       grid-area: square;
-      width: $card-width;
+      // width: $card-width;
+      min-width: 120px;
       height: 100%;
       font-weight: 500;
       color: $heavily-dimmed-color;
@@ -145,7 +146,6 @@ $heavily-dimmed-color: map.get($colors, nav-muted);
       margin-top: $title-margin;
       font-weight: bold;
       font-size: var(--font-title);
-      // overflow: visible;
     }
 
     &__circle {
@@ -186,7 +186,7 @@ $heavily-dimmed-color: map.get($colors, nav-muted);
     }
 
     &__desc {
-      align-items: flex-start;
+      // align-items: flex-start;
       grid-area: desc;
       text-align: left;
       font-size: var(--font-desc);
@@ -212,12 +212,26 @@ $heavily-dimmed-color: map.get($colors, nav-muted);
     --card-font-base: 1.2rem;
     --card-action-btn-width: 56px;
   }
+  .cards-container {
+    padding: 1.5rem;
+
+    .card {
+      padding: 0.5rem;
+    }
+  }
 }
 
 @include respond-to(mobile-s) {
   :root {
     --card-action-btn-width: 76px;
     --card-action-btn-pos-horizontal: 3.5%;
+  }
+  .cards-container {
+    padding: 1.5rem;
+
+    .card {
+      padding: 1.5rem;
+    }
   }
 }
 

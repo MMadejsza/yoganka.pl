@@ -180,13 +180,14 @@ form.generic-details {
   .generic-details {
     padding: $generic-list-vertical-padding 0rem;
 
+    &--customer-account-stats {
+      // width: 65%;
+      margin: 0 auto;
+    }
+
     &__list {
       min-width: 300px;
       align-self: center !important;
-    }
-
-    &__list--customer-account-stats {
-      // width: 65%;
     }
 
     &__label {
