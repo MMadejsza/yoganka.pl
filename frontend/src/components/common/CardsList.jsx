@@ -20,6 +20,7 @@ function CardsList({
     isAdmin = status?.role === 'ADMIN';
   const location = useLocation();
   const isAdminView = location.pathname.includes('admin-console');
+  const isCustomerPassesView = location.pathname.includes('konto/karnety');
   const isAvailablePassesView = location.pathname.includes('grafik/karnety');
   const isAccountView = location.pathname.includes('/konto');
   const isCommonScheduleView = location.pathname.includes('/grafik');
@@ -122,7 +123,67 @@ function CardsList({
 
   const chooseContent = (row, index) => {
     let isActive;
-    if (isBookingsView) {
+    if (isCustomerPassesView) {
+      const expiryDate = row.validUntil;
+      let day = '-',
+        month = '-',
+        year = '-',
+        monthName = '-';
+      const typePart = JSON.parse(row.allowedProductTypes)
+        .map(type => {
+          const clean = type.trim().toLowerCase();
+          return clean.charAt(0).toUpperCase() + clean.slice(1);
+        })
+        .join(', ');
+
+      if (row.validUntil) {
+        const dateParts = row.validUntil.slice(0, 10).split('-'); // [2025, 04, 19]
+        // console.log(dateParts);
+        day = dateParts[2];
+        month = dateParts[1];
+        year = dateParts[0];
+        monthName = monthMap[month] || '';
+      }
+
+      const isTimeType = row.passType.toUpperCase() == 'TIME';
+      const chosenSquareTop = isTimeType ? getWeekDay(expiryDate) : `Sesje`;
+      const chosenSquareMiddle = isTimeType ? day : row.usesLeft;
+      const chosenSquareBottom = isTimeType
+        ? `${monthName} ${year}`
+        : `(${
+            row.status == 1
+              ? 'Aktywny'
+              : row.status == 0
+              ? 'Zawieszony'
+              : 'Wygasły'
+          })`;
+
+      // const squareTopWithIcon = (
+      //   <span className='card__square--top-content'>
+      //     <SymbolOrIcon specifier='event_upcoming' />
+      //     <br />
+      //     <br />
+      //     {getWeekDay(expiryDate)}
+      //   </span>
+      // );
+
+      return {
+        isActive,
+        cardId: row.rowId || '',
+        cardTypeModifier: typePart || '',
+        cardCircle: ``,
+        cardTitle: `${row.passName} (${row.passDefId})`,
+        squareTop: chosenSquareTop,
+        squareMiddle: chosenSquareMiddle,
+        squareBottom: chosenSquareBottom,
+        description: `${formatIsoDateTime(row.validFrom, false)}`,
+        dimmedDescription: '',
+        cardFooter: `${formatIsoDateTime(expiryDate, false)}`,
+        typeIcon: 'category',
+        descriptionIcon: 'event_available',
+        footerIcon: 'event_upcoming',
+      };
+    } else if (isBookingsView) {
       const creationDate = row.cardCreatedAt;
       let day = '-',
         month = '-',
@@ -237,6 +298,7 @@ function CardsList({
         description: row.startTime || '',
         cardFooter: row.location || 'status - time',
         descriptionIcon: 'schedule',
+        typeIcon: 'category',
         footerIcon: 'location_on',
       };
     } else if (isAvailablePassesView) {
@@ -265,6 +327,8 @@ function CardsList({
         dimmedDescription: '',
         cardFooter: row.validityDays,
         footerIcon: 'calendar_month',
+        descriptionIcon: '',
+        typeIcon: 'category',
       };
     }
   };

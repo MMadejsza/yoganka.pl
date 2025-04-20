@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import CardsList from '../../common/CardsList.jsx';
 import ViewsController from '../ViewsController.jsx';
+import WrapperModalTable from '../WrapperModalTable.jsx';
 import TableCustomerPasses from './tables/TableCustomerPasses.jsx';
 
 function ViewAccountCustomerPasses({ data }) {
@@ -40,6 +42,16 @@ function ViewAccountCustomerPasses({ data }) {
   ];
 
   // @ CustomerPasses table for this definition
+  const cards = (
+    <WrapperModalTable
+      content={cp}
+      title={'Wszystkie zakupione karnety'}
+      noContentMsg={'zakupionych karnetów'}
+    >
+      <CardsList content={cp} active={true} onOpen={handleOpenModal} />;
+    </WrapperModalTable>
+  );
+
   const table = (
     <TableCustomerPasses
       customerPasses={cp}
@@ -51,7 +63,8 @@ function ViewAccountCustomerPasses({ data }) {
 
   return (
     <>
-      {table}
+      {/* {table} */}
+      {cards}
       {isModalOpen && (
         <ViewsController
           modifier='customerPass'
