@@ -64,11 +64,11 @@ export const getAccount = (req, res, next) => {
           ],
         },
         {
-          model: models.Payment, // His reservations
+          model: models.Payment,
           required: false,
           include: [
             {
-              model: models.Invoice, // eventual invoices
+              model: models.Invoice,
               required: false,
               attributes: {
                 exclude: ['paymentId'], // deleting

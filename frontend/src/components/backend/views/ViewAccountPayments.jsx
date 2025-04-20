@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { statsCalculatorForCustomer } from '../../../utils/statistics/statsCalculatorForCustomer.js';
+import CardsList from '../../common/CardsList.jsx';
 import ModalTable from '../ModalTable.jsx';
 import ViewsController from '../ViewsController.jsx';
 import WrapperModalTable from '../WrapperModalTable.jsx';
@@ -18,9 +19,6 @@ function ViewAccountPayments({ data }) {
   content = customerStats?.payments.sort(
     (a, b) => new Date(b.date) - new Date(a.date)
   );
-  // console.log(`✅ content: `, content);
-  // console.log(`✅ keys: `, keys);
-  // console.log(`✅ customerStats: `, customerStats);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -41,33 +39,42 @@ function ViewAccountPayments({ data }) {
     navigate('/konto/platnosci');
   };
 
+  const tableInside = (
+    <ModalTable
+      headers={[
+        'Id',
+        'Data',
+        'Produkt (Nr)',
+        'Kwota całkowita',
+        'Metoda płatności',
+        'Status płatności',
+      ]}
+      keys={[
+        'paymentId',
+        'date',
+        'product',
+        'amountPaid',
+        'paymentMethod',
+        'paymentStatus',
+      ]}
+      content={content}
+      active={true}
+      onOpen={handleOpenModal}
+    />
+  );
+
+  const cards = (
+    <CardsList content={content} active={true} onOpen={handleOpenModal} />
+  );
+
   const table = (
     <WrapperModalTable
       content={content}
       title={'Historia płatności'}
       noContentMsg={'płatności'}
     >
-      <ModalTable
-        headers={[
-          'Id',
-          'Data',
-          'Produkt (Nr)',
-          'Kwota całkowita',
-          'Metoda płatności',
-          'Status płatności',
-        ]}
-        keys={[
-          'paymentId',
-          'date',
-          'product',
-          'amountPaid',
-          'paymentMethod',
-          'paymentStatus',
-        ]}
-        content={content}
-        active={true}
-        onOpen={handleOpenModal}
-      />
+      {/* {tableInside} */}
+      {cards}
     </WrapperModalTable>
   );
 

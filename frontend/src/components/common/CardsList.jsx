@@ -25,6 +25,7 @@ function CardsList({
   const isAccountView = location.pathname.includes('/konto');
   const isCommonScheduleView = location.pathname.includes('/grafik');
   const isBookingsView = location.pathname.includes('/rezerwacje');
+  const isPaymentsView = location.pathname.includes('/platnosci');
 
   const pickCustomerSymbol = (
     row,
@@ -78,6 +79,22 @@ function CardsList({
     return <SymbolOrIcon specifier={val} classModifier={'attendance'} />;
   };
 
+  const formatPaymentStatus = value => {
+    let val = value.toUpperCase();
+    let symbol = 'pending';
+
+    if (value == undefined) return;
+
+    if (val == 'COMPLETED' || val == 'PAID') {
+      symbol = 'check';
+    }
+    if (val == 0) {
+      symbol = val == 1 ? 'check' : val == 0 ? 'pending' : 'close';
+    }
+
+    return <SymbolOrIcon specifier={symbol} />;
+  };
+
   const onRowBtnClick = (row, archived, method, e) => {
     const isUserGoing = row.isUserGoing != undefined ? row.isUserGoing : false;
     const isArchived = archived != undefined ? archived : 'N/A';
@@ -123,7 +140,44 @@ function CardsList({
 
   const chooseContent = (row, index) => {
     let isActive;
-    if (isCustomerPassesView) {
+    if (isPaymentsView) {
+      const creationDate = row.cardDate;
+      let day = '-',
+        month = '-',
+        year = '-',
+        monthName = '-';
+
+      if (row.cardDate) {
+        const dateParts = row.cardDate.slice(0, 10).split('-'); // [2025, 04, 19]
+        // console.log(dateParts);
+        day = dateParts[2];
+        month = dateParts[1];
+        year = dateParts[0];
+        monthName = monthMap[month] || '';
+      }
+      const cardTypeModifier = `${row.paymentMethod} ${
+        row.performedBy != 'Customer' ? `(${row.performedBy})` : ''
+      }`;
+
+      const cardCircle = formatPaymentStatus(row.status);
+
+      return {
+        isActive,
+        cardId: row.rowId || '',
+        cardTypeModifier,
+        cardCircle,
+        cardTitle: `${row.product}`,
+        squareTop: getWeekDay(creationDate),
+        squareMiddle: day,
+        squareBottom: `${monthName} ${year}` || '',
+        description: `${row.amountPaid} zł`,
+        dimmedDescription: ` (${row.cardTime})`,
+        cardFooter: ``,
+        typeIcon: 'credit_card',
+        descriptionIcon: 'sell',
+        footerIcon: '',
+      };
+    } else if (isCustomerPassesView) {
       const expiryDate = row.validUntil;
       let day = '-',
         month = '-',
@@ -155,7 +209,7 @@ function CardsList({
               ? 'Aktywny'
               : row.status == 0
               ? 'Zawieszony'
-              : 'Wygasły'
+              : 'Karnet wygasł'
           })`;
 
       // const squareTopWithIcon = (
@@ -211,7 +265,7 @@ function CardsList({
         dimmedDescription: '',
         cardFooter: '',
         typeIcon: 'credit_card',
-        descriptionIcon: 'event_upcoming',
+        descriptionIcon: 'event',
         footerIcon: '',
       };
     } else if (

@@ -29,6 +29,8 @@ export const statsCalculatorForCustomer = customer => {
       ...payment,
       rowId: payment.paymentId,
       date: formatIsoDateTime(payment.date),
+      cardDate: payment.date,
+      cardTime: payment.date.split('T')[1].slice(0, 8),
       paymentStatus:
         payment.status.toUpperCase() === 'COMPLETED'
           ? 'Zrealizowana'

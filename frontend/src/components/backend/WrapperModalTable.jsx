@@ -8,9 +8,7 @@ function WrapperModalTable({
   shouldShowForm,
 }) {
   const shouldDisplayContent = !!content && content.length > 0;
-  // console.log('🚨 WrapperModalTable: content.length =', content?.length);
-  // console.log('🚨 WrapperModalTable: typeof content =', typeof content);
-  // console.log('🚨 WrapperModalTable: isArray =', Array.isArray(content));
+
   return (
     <>
       <h2 className='generic-details__title admin-action modal-table__title'>
