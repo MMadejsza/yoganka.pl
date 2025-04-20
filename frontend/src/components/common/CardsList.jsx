@@ -176,6 +176,7 @@ function CardsList({
         typeIcon: 'credit_card',
         descriptionIcon: 'sell',
         footerIcon: '',
+        titleIcon: 'inventory',
       };
     } else if (isCustomerPassesView) {
       const expiryDate = row.validUntil;
@@ -236,6 +237,7 @@ function CardsList({
         typeIcon: 'category',
         descriptionIcon: 'event_available',
         footerIcon: 'event_upcoming',
+        titleIcon: 'card_membership',
       };
     } else if (isBookingsView) {
       const creationDate = row.cardCreatedAt;
@@ -383,6 +385,7 @@ function CardsList({
         footerIcon: 'calendar_month',
         descriptionIcon: '',
         typeIcon: 'category',
+        titleIcon: 'card_membership',
       };
     }
   };
@@ -400,6 +403,7 @@ function CardsList({
       description,
       dimmedDescription,
       cardFooter,
+      titleIcon = 'self_improvement',
       typeIcon = 'category',
       descriptionIcon,
       footerIcon,
@@ -428,7 +432,7 @@ function CardsList({
         </div>
 
         <div className='card__title'>
-          <SymbolOrIcon specifier='self_improvement' />
+          <SymbolOrIcon specifier={titleIcon} />
           <span className='card__single-content'>{cardTitle}</span>
         </div>
 
