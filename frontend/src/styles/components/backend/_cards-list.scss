@@ -221,17 +221,20 @@ $heavily-dimmed-color: map.get($colors, nav-muted);
   }
 }
 
-@include respond-to(mobile-s) {
-  :root {
-    --card-action-btn-width: 76px;
-    --card-action-btn-pos-horizontal: 3.5%;
-  }
+@media (min-width: 385px) {
   .cards-container {
     padding: 1.5rem;
 
     .card {
       padding: 1.5rem;
     }
+  }
+}
+
+@include respond-to(mobile-s) {
+  :root {
+    --card-action-btn-width: 76px;
+    --card-action-btn-pos-horizontal: 3.5%;
   }
 }
 

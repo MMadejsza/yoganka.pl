@@ -120,22 +120,8 @@ function CardsList({
     12: 'Grudzień',
   };
 
-  const list = content.map((row, index) => {
-    let isActive,
-      cardTypeModifier,
-      cardId,
-      cardCircle,
-      cardTitle,
-      dimmedDescription,
-      squareTop,
-      squareMiddle,
-      squareBottom,
-      description,
-      cardFooter,
-      typeIcon = 'category',
-      descriptionIcon,
-      footerIcon;
-
+  const chooseContent = (row, index) => {
+    let isActive;
     if (isBookingsView) {
       const creationDate = row.cardCreatedAt;
       let day = '-',
@@ -151,21 +137,22 @@ function CardsList({
         year = dateParts[0];
         monthName = monthMap[month] || '';
       }
-
-      cardId = row.rowId || '';
-      cardTypeModifier = row.payment || '';
-      cardCircle = formatAttendance(row.attendance);
-      cardTitle = `${row.scheduleName} (${row.scheduleId})`;
-      squareTop = getWeekDay(creationDate) || '-';
-      squareMiddle = day || '';
-      squareBottom = `${monthName} ${year}` || '';
-      description = '';
-      dimmedDescription = '';
-      cardFooter = ``;
-      description = `${formatIsoDateTime(row.cardCreatedAt, false)}`;
-      typeIcon = 'credit_card';
-      descriptionIcon = 'event_upcoming';
-      footerIcon = '';
+      return {
+        isActive,
+        cardId: row.rowId || '',
+        cardTypeModifier: row.payment || '',
+        cardCircle: formatAttendance(row.attendance),
+        cardTitle: `${row.scheduleName} (${row.scheduleId})`,
+        squareTop: getWeekDay(creationDate) || '-',
+        squareMiddle: day || '',
+        squareBottom: `${monthName} ${year}` || '',
+        description: `${formatIsoDateTime(row.cardCreatedAt, false)}`,
+        dimmedDescription: '',
+        cardFooter: '',
+        typeIcon: 'credit_card',
+        descriptionIcon: 'event_upcoming',
+        footerIcon: '',
+      };
     } else if (
       (isCommonScheduleView || isAccountView) &&
       !isAvailablePassesView
@@ -225,8 +212,8 @@ function CardsList({
       const durationMM = String(Number(durationRaw[1]));
 
       const isPLDate = row.date.includes('.');
-      const dateParts = isPLDate ? row.date.split('.') : row.date.split('-'); // [2025, 04, 19] ||
-      console.log(dateParts);
+      const dateParts = isPLDate ? row.date?.split('.') : row.date?.split('-'); // [2025, 04, 19] ||
+      // console.log(dateParts);
       const day = isPLDate ? dateParts[0] : dateParts[2];
       const month = dateParts[1];
       const year = isPLDate ? dateParts[2] : dateParts[0];
@@ -234,22 +221,24 @@ function CardsList({
 
       const typePart = row.productType.slice(1).toLowerCase();
       const type = row.productType[0] + typePart;
-
-      cardTypeModifier = type || row.paymentMethod || '';
-      cardId = row.rowId || '';
-      cardCircle = quickActionBtn || ``;
-      cardTitle = row.productName || row.product || '';
-      squareTop = row.day || '';
-      squareMiddle = day || '';
-      squareBottom = `${monthName} ${year}` || '';
-      dimmedDescription =
-        durationMM != '0'
-          ? ` (${durationHH}h ${durationMM}min)`
-          : ` (${durationHH}h)`;
-      description = row.startTime || '';
-      cardFooter = row.location || `status - time`;
-      descriptionIcon = 'schedule';
-      footerIcon = 'location_on';
+      return {
+        isActive,
+        cardTypeModifier: type || row.paymentMethod || '',
+        cardId: row.rowId || '',
+        cardCircle: quickActionBtn || '',
+        cardTitle: row.productName || row.product || '',
+        squareTop: row.day || '',
+        squareMiddle: day || '',
+        squareBottom: `${monthName} ${year}` || '',
+        dimmedDescription:
+          durationMM !== '0'
+            ? ` (${durationHH}h ${durationMM}min)`
+            : ` (${durationHH}h)`,
+        description: row.startTime || '',
+        cardFooter: row.location || 'status - time',
+        descriptionIcon: 'schedule',
+        footerIcon: 'location_on',
+      };
     } else if (isAvailablePassesView) {
       const typePart = row.allowedProductTypes
         .split(',')
@@ -258,24 +247,45 @@ function CardsList({
           return clean.charAt(0).toUpperCase() + clean.slice(1);
         })
         .join(', ');
-
-      cardId = row.rowId || '';
-      cardTypeModifier = typePart || '';
-      cardCircle = '';
-      cardTitle = row.name || row.product || '';
-      squareTop = 'Sesje';
-      squareMiddle =
-        row.usesTotal != '-' ? (
-          row.usesTotal
-        ) : (
-          <SymbolOrIcon specifier='all_inclusive' />
-        );
-      squareBottom = ``;
-      description = row.description;
-      dimmedDescription = '';
-      cardFooter = row.validityDays;
-      footerIcon = 'calendar_month';
+      return {
+        isActive,
+        cardId: row.rowId || '',
+        cardTypeModifier: typePart || '',
+        cardCircle: '',
+        cardTitle: row.name || row.product || '',
+        squareTop: 'Sesje',
+        squareMiddle:
+          row.usesTotal !== '-' ? (
+            row.usesTotal
+          ) : (
+            <SymbolOrIcon specifier='all_inclusive' />
+          ),
+        squareBottom: '',
+        description: row.description,
+        dimmedDescription: '',
+        cardFooter: row.validityDays,
+        footerIcon: 'calendar_month',
+      };
     }
+  };
+
+  const list = content.map((row, index) => {
+    const {
+      isActive,
+      cardTypeModifier,
+      cardId,
+      cardCircle,
+      cardTitle,
+      squareTop,
+      squareMiddle,
+      squareBottom,
+      description,
+      dimmedDescription,
+      cardFooter,
+      typeIcon = 'category',
+      descriptionIcon,
+      footerIcon,
+    } = chooseContent(row, index);
 
     return (
       <div
