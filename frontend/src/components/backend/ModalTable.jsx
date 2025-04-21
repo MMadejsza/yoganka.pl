@@ -1,5 +1,9 @@
 import { useLocation } from 'react-router-dom';
-import { formatValue, getSymbol } from '../../utils/cardsAndTableUtils.jsx';
+import {
+  formatValue,
+  getSymbol,
+  onRowBtnClick,
+} from '../../utils/cardsAndTableUtils.jsx';
 import { hasValidPassFn } from '../../utils/userCustomerUtils';
 
 function ModalTable({
@@ -16,12 +20,12 @@ function ModalTable({
   notToArchive = false,
 }) {
   const today = new Date();
-  const isLoggedIn =
-      status?.isLoggedIn != undefined ? status.isLoggedIn : 'N/A',
+  const isLoggedIn = status?.isLoggedIn === true,
     isCustomer = status?.role === 'CUSTOMER',
     isAdmin = status?.role === 'ADMIN';
   const location = useLocation();
   const isAdminView = location.pathname.includes('admin-console');
+  const isAccountView = location.pathname.includes('/konto');
   const isUserPassesView = location.pathname.includes('grafik/karnety');
   console.log('ModalTable content', content);
   console.log('ModalTable headers', headers);
@@ -49,32 +53,6 @@ function ModalTable({
   //       break;
   //   }
   // };
-
-  const onRowBtnClick = (row, archived, method, e) => {
-    const isUserGoing = row.isUserGoing != undefined ? row.isUserGoing : false;
-    const isArchived = archived != undefined ? archived : 'N/A';
-    const isAuthorized =
-      status?.role != undefined ? isCustomer || isAdmin : 'N/A';
-    const hasPass =
-      isAdminView || isUserPassesView ? true : hasValidPassFn(status, row);
-
-    if (!isUserGoing && isLoggedIn && !isArchived && isAuthorized && hasPass) {
-      e.stopPropagation();
-      method({
-        customerDetails: '',
-        scheduleId: row.scheduleId,
-        product: row.productName,
-        status: 'Paid',
-        amountPaid: row.price,
-        amountDue: 0,
-        paymentMethod: 'Credit Card',
-        paymentStatus: 'Completed',
-        customerId: row.customerId,
-        rowId: row.rowId,
-      });
-    }
-    return null;
-  };
 
   return (
     <table
@@ -144,7 +122,18 @@ function ModalTable({
                           key={index}
                           className={`form-action-btn symbol-only-btn symbol-only-btn--submit`}
                           onClick={e => {
-                            onRowBtnClick(row, isArchived, action.method, e);
+                            onRowBtnClick(
+                              row,
+                              isArchived,
+                              action.method,
+                              status,
+                              isAdminView,
+                              isUserPassesView,
+                              isAccountView,
+                              isCustomer,
+                              isAdmin,
+                              e
+                            );
                           }}
                         >
                           {getSymbol(

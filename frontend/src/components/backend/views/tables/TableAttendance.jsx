@@ -235,6 +235,7 @@ function TableAttendance({ allBookings, isAdminPage, shouldToggleFrom }) {
           { extraClass: 'dimmed', symbol: 'delete', method: handleDelete },
           { symbol: 'restore', method: markPresent },
         ]}
+        status={status}
       />
     </WrapperModalTable>
   );
