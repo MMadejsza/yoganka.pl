@@ -8,7 +8,31 @@ import TableCustomerPasses from './tables/TableCustomerPasses.jsx';
 function ViewAccountCustomerPasses({ data }) {
   console.log('ViewAccountCustomerPasses data', data);
   let cp;
-  if (data.customer) cp = data.customer.customerPasses;
+  if (data.customer)
+    cp = data.customer.customerPasses.sort((a, b) => {
+      const aStatus =
+        a.status == 1 || a.status == 'ACTIVE'
+          ? 1
+          : a.status == 0 || a.status == 'SUSPENDED'
+          ? 0
+          : -1;
+      const bStatus =
+        b.status == 1 || b.status == 'ACTIVE'
+          ? 1
+          : b.status == 0 || b.status == 'SUSPENDED'
+          ? 0
+          : -1;
+
+      if (aStatus !== bStatus) {
+        return bStatus - aStatus;
+      }
+
+      // getTime to get ms
+      const timeA = a.validUntil ? new Date(a.validUntil).getTime() : Infinity;
+      const timeB = b.validUntil ? new Date(b.validUntil).getTime() : Infinity;
+
+      return timeA - timeB;
+    });
 
   const navigate = useNavigate();
   const location = useLocation();

@@ -19,7 +19,11 @@ function ViewCustomerPass({ data, userAccountPage }) {
             label: 'Aktywny: ',
             content: (
               <SymbolOrIcon
-                specifier={customerPass.status ? 'check' : 'close'}
+                specifier={
+                  customerPass.status == 1 || customerPass.status == 'ACTIVE'
+                    ? 'check'
+                    : 'close'
+                }
                 classModifier={'in-title'}
               />
             ),

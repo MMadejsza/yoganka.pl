@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useMatch, useNavigate } from 'react-router-dom';
 import ModalTable from '../../components/backend/ModalTable.jsx';
 import TabsList from '../../components/backend/TabsList.jsx';
@@ -13,10 +13,16 @@ import { fetchData, mutateOnCreate, queryClient } from '../../utils/http.js';
 function SchedulePage() {
   const navigate = useNavigate();
   const location = useLocation(); // fetch current path
-  const isPassDefinitions = location.pathname.includes('/grafik/karnety');
-  const modalMatch = !!useMatch('/grafik/:id') && !isPassDefinitions;
-  console.log('modalMatch', modalMatch);
-  const [isModalOpen, setIsModalOpen] = useState(modalMatch);
+
+  const isPassDefinitions = location.pathname.startsWith('/grafik/karnety');
+  const scheduleModalMatch = !!useMatch('/grafik/:id') && !isPassDefinitions;
+  const passModalMatch = !!useMatch('/grafik/karnety/:id');
+  const shouldOpenModal = scheduleModalMatch || passModalMatch;
+
+  const [isModalOpen, setIsModalOpen] = useState(shouldOpenModal);
+  useEffect(() => {
+    setIsModalOpen(shouldOpenModal);
+  }, [shouldOpenModal]);
 
   const { data: status } = useAuthStatus();
 
@@ -87,7 +93,7 @@ function SchedulePage() {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     reset(); // resets mutation state and flags
-    navigate('/grafik');
+    navigate(query);
   };
 
   if (isError) {

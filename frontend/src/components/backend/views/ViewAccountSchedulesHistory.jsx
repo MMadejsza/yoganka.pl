@@ -55,7 +55,9 @@ function ViewAccountSchedulesHistory({ data }) {
     />
   );
 
-  const cards = <CardsList content={content} active={false} />;
+  const cards = (
+    <CardsList content={content} active={false} notToArchive={true} />
+  );
 
   const table = (
     <WrapperModalTable

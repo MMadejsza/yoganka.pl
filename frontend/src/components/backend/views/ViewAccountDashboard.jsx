@@ -80,6 +80,7 @@ function ViewAccountDashboard({ data, queryStatus }) {
       content={contentUpcoming}
       active={true}
       onOpen={handleOpenScheduleModal}
+      notToArchive={true}
     />
   );
   const tableInside = (

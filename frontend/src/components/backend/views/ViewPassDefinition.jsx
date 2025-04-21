@@ -31,7 +31,8 @@ function ViewPassDefinition({
   console.log('isAdminViewEligible', isAdminViewEligible);
 
   const { feedback, updateFeedback, resetFeedback } = useFeedback({
-    getRedirectTarget: result => (result.confirmation === 1 ? '/konto' : null),
+    getRedirectTarget: result =>
+      result.confirmation === 1 ? '/grafik/karnety' : null,
     onClose: onClose,
   });
 

@@ -22,6 +22,7 @@ export const applyFontSize = fontsize => {
 };
 
 export const hasValidPassFn = (status, row) => {
+  if (!status?.user?.Customer?.CustomerPasses) return false;
   return status.user?.Customer?.CustomerPasses?.some(currentCustomerPass => {
     // Parsujemy allowedProductTypes i przekształcamy wszystko do uppercase
     let allowedTypeArr = [];
