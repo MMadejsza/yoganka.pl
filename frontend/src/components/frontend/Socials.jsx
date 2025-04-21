@@ -17,7 +17,7 @@ function Socials({ leadingClass, items }) {
             <SymbolOrIcon
               specifier={social.iconClass}
               type='ICON'
-              extraClass={'${leadingClass}__social-icon'}
+              extraClass={`${leadingClass}__social-icon`}
             />
             {isNotMobile && (
               <div className={`${leadingClass}__qr`}>
