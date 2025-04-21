@@ -1,14 +1,5 @@
-/*
-  GenericForm component wraps a form with common layout and actions.
-  Props:
-    - title: form title.
-    - onSubmit: form submission handler.
-    - onReset: form reset handler.
-    - children: form fields (inputs, selects, etc.).
-    - submitLabel: label for the submit button.
-    - resetLabel: label for the reset button.
-    - extraButtons: any extra action buttons.
-*/
+import SymbolOrIcon from '../../components/common/SymbolOrIcon.jsx';
+
 function WrapperForm({
   title,
   subTitle,
@@ -85,13 +76,11 @@ function WrapperForm({
         <footer className={btnsClass}>
           {extraButtons} {/*//! EXTRA NOT STANDARD BTNS*/}
           <button type='reset' onClick={onReset} className={resetClass}>
-            <span className='material-symbols-rounded nav__icon'>
-              restart_alt
-            </span>
+            <SymbolOrIcon specifier={'restart_alt'} />
             {resetLabel}
           </button>
           <button type='submit' className={submitClass}>
-            <span className='material-symbols-rounded nav__icon'>check</span>
+            <SymbolOrIcon specifier={'check'} />
             {submitLabel}
           </button>
         </footer>

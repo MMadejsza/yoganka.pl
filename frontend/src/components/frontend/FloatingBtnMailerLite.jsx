@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import SymbolOrIcon from '../common/SymbolOrIcon';
 
 function FloatingBtnMailerLite() {
   const [isNewsletterScriptReady, setIsNewsletterScriptReady] = useState(false);
@@ -70,7 +71,7 @@ function FloatingBtnMailerLite() {
       href='#'
       onClick={handleClickNewsletter}
     >
-      <span className='material-symbols-rounded pop-ups__icon'>mail</span>
+      <SymbolOrIcon specifier={'mail'} extraClass={'pop-ups__icon'} />
     </a>
   );
 

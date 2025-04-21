@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { pickTheBestPassForSchedule } from '../../../../../backend/utils/controllersUtils.js';
+import SymbolOrIcon from '../../../components/common/SymbolOrIcon.jsx';
 import { useAuthStatus } from '../../../hooks/useAuthStatus.js';
 import { useFeedback } from '../../../hooks/useFeedback.js';
 import { useInput } from '../../../hooks/useInput.js';
@@ -182,15 +183,17 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
       }
       className={`book modal__btn ${shouldDisableBookBtn && 'disabled'}`}
     >
-      <span className='material-symbols-rounded nav__icon'>
-        {shouldDisableBookBtn
-          ? 'block'
-          : schedule.wasUserReserved
-          ? 'restore'
-          : newCustomerDetails.isFirstTimeBuyer
-          ? 'edit'
-          : 'shopping_bag'}
-      </span>
+      <SymbolOrIcon
+        specifier={
+          shouldDisableBookBtn
+            ? 'block'
+            : schedule.wasUserReserved
+            ? 'restore'
+            : newCustomerDetails.isFirstTimeBuyer
+            ? 'edit'
+            : 'shopping_bag'
+        }
+      />
       {shouldDisableBookBtn
         ? isFillingTheForm
           ? 'Wypełnianie formularza'
@@ -209,7 +212,7 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
       onClick={() => navigate(`/login?redirect=/grafik/${schedule.scheduleId}`)}
       className='book modal__btn'
     >
-      <span className='material-symbols-rounded nav__icon'>login</span>
+      <SymbolOrIcon specifier={'login'} />
       Zaloguj się w celu rezerwacji
     </button>
   );
@@ -324,9 +327,7 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
             onClick={handleCancellation}
             className='book modal__btn modal__btn--cancel'
           >
-            <span className='material-symbols-rounded nav__icon'>
-              sentiment_dissatisfied
-            </span>
+            <SymbolOrIcon specifier={'sentiment_dissatisfied'} />
             Daj znać, że nie przyjdziesz...
           </button>
         )}

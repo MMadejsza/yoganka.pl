@@ -1,3 +1,4 @@
+import SymbolOrIcon from '../../../components/common/SymbolOrIcon.jsx';
 import GenericListTagLi from '../../common/GenericListTagLi.jsx';
 import DetailsListCustomer from './lists/DetailsListCustomer.jsx';
 import DetailsListCustomerPass from './lists/DetailsListCustomerPass.jsx';
@@ -31,15 +32,13 @@ function ViewBooking({ data }) {
           objectPair={{
             label: 'Obecność: ',
             content: (
-              <span
-                className={`material-symbols-rounded nav__icon nav__icon--in-title`}
-              >
-                {booking.attendance ? 'check' : 'close'}
-              </span>
+              <SymbolOrIcon
+                specifier={booking.attendance ? 'check' : 'close'}
+                classModifier={'in-title'}
+              />
             ),
           }}
           classModifier={'in-title'}
-          //   extraClass={item.extraClass ?? ''}
         />
       </h3>
 

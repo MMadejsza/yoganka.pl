@@ -11,6 +11,7 @@ function CardsList({
   status,
   isAdminPage,
   adminActions,
+  notToArchive = false,
 }) {
   console.log(`✅ CardsList Data: `);
   console.log(content);
@@ -47,23 +48,23 @@ function CardsList({
   };
 
   const getSymbol = (row, hasValidPass, isArchived, action) => {
-    // console.log('hasValidPass', hasValidPass);
-    const conditionalClass = `material-symbols-rounded nav__icon${
+    const conditionalExtraClass = `${
       row.isActionDisabled === true ? ' dimmed' : ''
     }${action.extraClass ? ` ${action.extraClass}` : ''}${
       !hasValidPass && !row.isUserGoing && !row.wasUserReserved ? ` black` : ''
     }`;
 
     return (
-      <span className={conditionalClass}>
-        {pickCustomerSymbol(
+      <SymbolOrIcon
+        specifier={pickCustomerSymbol(
           row,
           isArchived,
           action.symbol,
           hasValidPass,
-          isAvailablePassesView
+          isUserPassesView
         )}
-      </span>
+        extraClass={conditionalExtraClass}
+      />
     );
   };
 
@@ -409,10 +410,31 @@ function CardsList({
       footerIcon,
     } = chooseContent(row, index);
 
+    const isArchived =
+      new Date(
+        `${row.date?.split('.').reverse().join('-')}T${
+          row.startTime ?? '00:00:00'
+        }`
+      ) < new Date();
+
+    const cardConditionalClass = `card${active ? ` card--active` : ''}${
+      !isAdminPage
+        ? row.isUserGoing && status?.isLoggedIn
+          ? ' booked'
+          : ''
+        : ''
+    }${
+      !isAdminPage && !notToArchive
+        ? isArchived && !isAdminPage
+          ? ' archived'
+          : ''
+        : ''
+    }${row.full && !isAdminView ? ' full' : ''}`;
+
     return (
       <div
         key={index}
-        className={`card${active ? ` card--active` : ''}`}
+        className={cardConditionalClass}
         onClick={() => active && onOpen(row)}
       >
         <div className='card__square'>

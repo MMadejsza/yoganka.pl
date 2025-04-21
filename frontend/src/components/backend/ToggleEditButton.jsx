@@ -1,4 +1,4 @@
-// ToggleEditButton.jsx
+import SymbolOrIcon from '../../components/common/SymbolOrIcon.jsx';
 
 function ToggleEditButton({
   isEditing,
@@ -11,17 +11,8 @@ function ToggleEditButton({
       className='modal__btn'
       onClick={() => (isEditing ? onCloseEditing() : onStartEditing())}
     >
-      {isEditing ? (
-        <>
-          <span className='material-symbols-rounded nav__icon'>undo</span>{' '}
-          {!isJustSymbol && 'Wróć'}
-        </>
-      ) : (
-        <>
-          <span className='material-symbols-rounded nav__icon'>edit</span>{' '}
-          {!isJustSymbol && 'Edytuj'}
-        </>
-      )}
+      <SymbolOrIcon specifier={isEditing ? 'undo' : 'edit'} />
+      {isEditing && !isJustSymbol ? 'Wróć' : 'Edytuj'}
     </button>
   );
 }

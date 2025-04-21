@@ -1,10 +1,11 @@
+import SymbolOrIcon from '../common/SymbolOrIcon';
+
 function ModalList({ extraClass, listType, data }) {
   const icons = {
-    included: 'fa-solid fa-check modal__icon modal-checklist__icon',
-    excluded:
-      'fa-regular fa-hand-point-right modal__icon modal-checklist__icon',
-    optional: 'fa-solid fa-plus modal__icon modal-checklist__icon',
-    freeTime: 'fa-brands fa-pagelines modal__icon modal-checklist__icon',
+    included: 'fa-solid fa-check',
+    excluded: 'fa-regular fa-hand-point-right',
+    optional: 'fa-solid fa-plus',
+    freeTime: 'fa-brands fa-pagelines',
   };
 
   const pickIconClass = item => {
@@ -25,7 +26,12 @@ function ModalList({ extraClass, listType, data }) {
 
     return (
       <li key={index} className='modal-checklist__li'>
-        <i className={iconClass} aria-hidden='true'></i>
+        <SymbolOrIcon
+          specifier={iconClass}
+          type='ICON'
+          extraClass={'modal__icon modal-checklist__icon'}
+          aria-hidden='true'
+        />
         {activity}
       </li>
     );

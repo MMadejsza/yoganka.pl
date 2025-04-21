@@ -1,3 +1,5 @@
+import SymbolOrIcon from '../common/SymbolOrIcon';
+
 function Socials({ leadingClass, items }) {
   const mediaQuery = window.matchMedia('(max-width: 1024px)');
   const isNotMobile = !mediaQuery.matches;
@@ -12,14 +14,11 @@ function Socials({ leadingClass, items }) {
           title={social.title}
         >
           <div className={`${leadingClass}__social`}>
-            {/* {social.materialSymbol ? (
-							<span
-								className={`material-symbols-rounded ${leadingClass}__social-icon ${social.materialSymbol}`}>
-								{social.materialSymbol}
-							</span>
-						) : ( */}
-            <i className={`${leadingClass}__social-icon ${social.iconClass}`} />
-            {/* )} */}
+            <SymbolOrIcon
+              specifier={social.iconClass}
+              type='ICON'
+              extraClass={'${leadingClass}__social-icon'}
+            />
             {isNotMobile && (
               <div className={`${leadingClass}__qr`}>
                 <img

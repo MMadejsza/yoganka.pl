@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import SymbolOrIcon from '../common/SymbolOrIcon';
 
 function FloatingBtnCookie({ side }) {
   const [cookies, setCookies] = useState({
@@ -15,10 +16,11 @@ function FloatingBtnCookie({ side }) {
     !side ? ` pop-ups__single--left` : ''
   } pop-ups__single--cookies`;
 
-  const cookieBtnSymbolClass = `material-symbols-rounded pop-ups__icon${
+  const cookieBtnSymbolExtraClass = `pop-ups__icon${
     !side ? ` pop-ups__icon--left` : ''
   }`;
-  const cookieBtnIconClass = `fas fa-times pop-ups__icon${
+  const cookieBtnIconClass = `fas fa-times`;
+  const cookieBtnIconExtraClass = `pop-ups__icon${
     !side ? ` pop-ups__icon--left` : ''
   } pop-ups__icon--body-close${!side ? ` pop-ups__icon--body-close-left` : ''}`;
 
@@ -39,16 +41,23 @@ function FloatingBtnCookie({ side }) {
           onClick={e => e.preventDefault()}
           tabIndex='0'
         >
-          {/* <i className={`pop-ups__icon fas fa-cookie-bite fa-bounce`} /> */}
-          <span className={cookieBtnSymbolClass}>cookie</span>
+          <SymbolOrIcon
+            specifier='cookie'
+            classModifier={side ? '' : 'left'}
+            extraClass={cookieBtnSymbolExtraClass}
+          />
 
           <div className={cookieBtnMsgBoxClass}>
             <div className={cookieBtnMsgContentClass}>
               Używamy tylko niezbędnych plików cookie.
             </div>
-            <i
+
+            <SymbolOrIcon
               onClick={() => handleCookiesClose()}
-              className={cookieBtnIconClass}
+              specifier={cookieBtnIconClass}
+              type='ICON'
+              classModifier={side ? '' : 'left'}
+              extraClass={cookieBtnIconExtraClass}
             />
           </div>
         </a>

@@ -1,17 +1,26 @@
-function SymbolOrIcon({ type = 'SYMBOL', specifier, classModifier }) {
+function SymbolOrIcon({
+  type = 'SYMBOL',
+  specifier,
+  classModifier,
+  extraClass,
+  ...rest
+}) {
   const icon = (
     <i
       className={`${specifier} nav__icon ${
         classModifier ? `nav__icon--${classModifier}` : ''
-      }`}
+      }${extraClass ? ` ${extraClass}` : ''}`}
       aria-hidden='true'
+      {...rest}
     ></i>
   );
   const symbol = (
     <span
-      className={`material-symbols-rounded nav__icon ${
+      className={`account material-symbols-rounded nav__icon notranslate ${
         classModifier ? `nav__icon--${classModifier}` : ''
-      } account`}
+      } ${extraClass ? ` ${extraClass}` : ''}`}
+      translate='no'
+      {...rest}
     >
       {`${specifier}`}
     </span>

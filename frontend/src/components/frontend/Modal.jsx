@@ -1,5 +1,6 @@
 import { createPortal } from 'react-dom';
 import { Helmet } from 'react-helmet';
+import SymbolOrIcon from '../common/SymbolOrIcon';
 import CampDay from './camps/CampDay.jsx';
 import GlideContainer from './glide/GlideContainer.jsx';
 import CampGlance from './ModalGlance.jsx';
@@ -107,25 +108,6 @@ function Modal({ tile, singleImg, onClose, today, isVisible, isClosing }) {
     const noBtns = modal.btnsContent?.length === 0;
     if (noBtns) return null;
 
-    // Chose if material design symbol or icon //# similar to renderBtns in Tile.jsx
-    const symbolOrIcon = btn => {
-      if (btn.icon && btn.symbol) return;
-      if (btn.icon) {
-        return (
-          <i
-            className={`${btn.icon} nav__icon`}
-            style={{ paddingRight: '1rem' }}
-          ></i>
-        );
-      } else if (btn.symbol) {
-        return (
-          <span className='material-symbols-rounded nav__icon'>
-            {btn.symbol}
-          </span>
-        );
-      }
-    };
-
     return (
       isUpToDate && (
         <footer className='modal__user-action'>
@@ -137,7 +119,11 @@ function Modal({ tile, singleImg, onClose, today, isVisible, isClosing }) {
               title={btn.title}
               className={`modal__btn`}
             >
-              {symbolOrIcon(btn)}
+              <SymbolOrIcon
+                type={btn.icon ? 'ICON' : 'SYMBOL'}
+                specifier={btn.icon || btn.symbol}
+                style={btn.icon ? { paddingRight: '1rem' } : {}}
+              />
               {btn.text}
             </a>
           ))}
@@ -194,12 +180,18 @@ function Modal({ tile, singleImg, onClose, today, isVisible, isClosing }) {
       />
 
       <div
-        className={`modal ${isClosing ? 'fade-out' : isVisible ? 'visible' : ''}`}
+        className={`modal ${
+          isClosing ? 'fade-out' : isVisible ? 'visible' : ''
+        }`}
         onClick={e => e.stopPropagation()}
       >
         <div className='modal__x-btn'>
           <a className='modal__close-btn' onClick={handleClose}>
-            <i className='fa-solid fa-xmark modal__icon'></i>
+            <SymbolOrIcon
+              specifier={'fa-solid fa-xmark'}
+              type='ICON'
+              extraClass={'modal__icon'}
+            />
           </a>
         </div>
 

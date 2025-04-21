@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import SymbolOrIcon from '../../components/common/SymbolOrIcon.jsx';
 import { useAuthStatus } from '../../hooks/useAuthStatus.js';
 import { useFeedback } from '../../hooks/useFeedback.js';
 import { fetchItem, mutateOnDelete, queryClient } from '../../utils/http.js';
@@ -349,7 +350,7 @@ function ViewsController({
         onClick={onClick}
         className={`modal__btn modal__btn--small modal__btn--small-${type}`}
       >
-        {<span className='material-symbols-rounded nav__icon'>{symbol}</span>}
+        <SymbolOrIcon specifier={symbol} />
         {content}
       </button>
     );

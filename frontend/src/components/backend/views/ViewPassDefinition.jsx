@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import SymbolOrIcon from '../../../components/common/SymbolOrIcon.jsx';
 import { useAuthStatus } from '../../../hooks/useAuthStatus.js';
 import { useFeedback } from '../../../hooks/useFeedback.js';
 import { useInput } from '../../../hooks/useInput.js';
@@ -111,13 +112,15 @@ function ViewPassDefinition({
       }
       className={`book modal__btn ${shouldDisableBookBtn && 'disabled'}`}
     >
-      <span className='material-symbols-rounded nav__icon'>
-        {shouldDisableBookBtn
-          ? 'block'
-          : newCustomerDetails.isFirstTimeBuyer
-          ? 'edit'
-          : 'shopping_bag'}
-      </span>
+      <SymbolOrIcon
+        specifier={
+          shouldDisableBookBtn
+            ? 'block'
+            : newCustomerDetails.isFirstTimeBuyer
+            ? 'edit'
+            : 'shopping_bag'
+        }
+      />
       {shouldDisableBookBtn
         ? isFillingTheForm
           ? 'Wypełnianie formularza'
@@ -134,7 +137,7 @@ function ViewPassDefinition({
       }
       className='book modal__btn'
     >
-      <span className='material-symbols-rounded nav__icon'>login</span>
+      <SymbolOrIcon specifier={'login'} />
       Zaloguj się w celu zakupu
     </button>
   );
@@ -184,11 +187,10 @@ function ViewPassDefinition({
               objectPair={{
                 label: 'Aktywny: ',
                 content: (
-                  <span
-                    className={`material-symbols-rounded nav__icon nav__icon--in-title`}
-                  >
-                    {passDefinition.status ? 'check' : 'close'}
-                  </span>
+                  <SymbolOrIcon
+                    specifier={passDefinition.status ? 'check' : 'close'}
+                    classModifier={'in-title'}
+                  />
                 ),
               }}
               classModifier={'in-title'}

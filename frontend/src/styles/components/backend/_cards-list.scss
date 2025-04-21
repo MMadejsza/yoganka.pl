@@ -203,6 +203,17 @@ $heavily-dimmed-color: map.get($colors, nav-muted);
     &:last-child {
       border-bottom: none;
     }
+
+    &.booked {
+      background-color: color.adjust(green, $lightness: 80%);
+      opacity: 0.6;
+    }
+
+    &.full,
+    &.archived {
+      background-color: map.get($colors, nav);
+      opacity: 0.25;
+    }
   }
 }
 

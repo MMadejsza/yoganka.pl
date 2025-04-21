@@ -1,12 +1,7 @@
+import SymbolOrIcon from '../common/SymbolOrIcon';
+
 function CampGlance({ glance }) {
-  // const icons = {
-  // 	area: 'fa-solid fa-location-dot',
-  // 	accommodation: 'fa-solid fa-bed',
-  // 	capacity: 'fa-solid fa-people-group',
-  // 	price: 'fa-solid fa-tag',
-  // 	travel: 'fa-solid fa-plane-departure',
-  // };
-  const icons = {
+  const symbols = {
     area: 'location_on',
     accommodation: 'hotel',
     capacity: 'groups',
@@ -19,10 +14,7 @@ function CampGlance({ glance }) {
       .filter(([key, text]) => key != 'title' && text)
       .map(([key, text], index) => (
         <li key={index} className='modal__li modal__li--at-glance'>
-          {/* <i className={`${icons[key] || 'fa-solid fa-check'} modal__icon`} /> */}
-          <span className='material-symbols-rounded modal__icon'>
-            {icons[key]}
-          </span>
+          <SymbolOrIcon specifier={symbols[key]} extraClass={'modal__icon'} />
           {text}
         </li>
       ));

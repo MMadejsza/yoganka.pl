@@ -1,3 +1,5 @@
+import SymbolOrIcon from '../../components/common/SymbolOrIcon.jsx';
+
 function ToggleAddButton({ isEditing, onToggle }) {
   return (
     <button
@@ -7,9 +9,10 @@ function ToggleAddButton({ isEditing, onToggle }) {
       }}
       className={`form-action-btn symbol-only-btn symbol-only-btn--submit`}
     >
-      <span className='material-symbols-rounded nav__icon nav__icon--side account'>
-        {!isEditing ? 'add_circle' : 'undo'}
-      </span>
+      <SymbolOrIcon
+        specifier={!isEditing ? 'add_circle' : 'undo'}
+        classModifier={'side'}
+      />
     </button>
   );
 }

@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom';
+import SymbolOrIcon from '../../../components/common/SymbolOrIcon.jsx';
 
 function SideNav({ menuSet, side }) {
   return (
@@ -34,15 +35,10 @@ function SideNav({ menuSet, side }) {
                 }
               >
                 {({ isActive }) => (
-                  <>
-                    <span
-                      className={`${li.symbol} nav__icon ${
-                        isActive ? 'active' : ''
-                      } material-symbols-rounded nav__icon`}
-                    >
-                      {li.symbol}
-                    </span>
-                  </>
+                  <SymbolOrIcon
+                    specifier={li.symbol}
+                    classModifier={isActive ? 'active' : ''}
+                  />
                 )}
               </NavLink>
             </li>

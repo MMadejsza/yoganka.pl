@@ -1,5 +1,6 @@
 import { BTNS } from '../../../DATA/B2B_DATA.js';
 import Section from '../../../components/frontend/Section.jsx';
+import SymbolOrIcon from '../../common/SymbolOrIcon';
 
 function PriceList() {
   const mediaQuery = window.matchMedia('(max-width: 1024px)');
@@ -13,7 +14,9 @@ function PriceList() {
           title={btn.title}
           className={`tile__btn tile__btn--${data.fileName}`}
         >
-          {btn.icon ? <i className={btn.icon} /> : null}
+          {btn.icon ? (
+            <SymbolOrIcon type={'ICON'} specifier={btn.icon} />
+          ) : null}
           {btn.text}
         </Link>
       );
@@ -29,13 +32,10 @@ function PriceList() {
           title={btn.title}
           className={`tile__btn modal__btn`}
         >
-          {btn.icon ? (
-            <i className={`${btn.icon} nav__icon`}></i>
-          ) : btn.symbol ? (
-            <span className='material-symbols-rounded nav__icon'>
-              {btn.symbol}
-            </span>
-          ) : null}
+          <SymbolOrIcon
+            type={btn.icon ? 'ICON' : 'SYMBOL'}
+            specifier={btn.icon || btn.symbol}
+          />
           {btn.text}
         </a>
       );

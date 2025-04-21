@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom';
+import SymbolOrIcon from '../../components/common/SymbolOrIcon.jsx';
 
 function TabsList({
   menuSet,
@@ -9,7 +10,9 @@ function TabsList({
 }) {
   // console.log(`TabsList person: `, person);
   const elementMainClass = el => {
-    return `tabs-list__${el}  ${classModifier ? `tabs-list__${el}--${classModifier}` : ''} nav__${el}`;
+    return `tabs-list__${el}  ${
+      classModifier ? `tabs-list__${el}--${classModifier}` : ''
+    } nav__${el}`;
   };
 
   const conditionalNavLinkActiveClass = (isActive, disableAutoActive) => {
@@ -18,21 +21,11 @@ function TabsList({
     return isActive ? `${base} active` : base;
   };
 
-  const tabSymbolOrIcon = tab =>
-    tab.symbol ? (
-      <span className={`material-symbols-rounded ${elementMainClass('icon')}`}>
-        {tab.symbol}
-      </span>
-    ) : tab.icon ? (
-      <i
-        className={`${tab.icon} ${elementMainClass('icon')}`}
-        aria-hidden='true'
-      ></i>
-    ) : null;
-
   return (
     <ul
-      className={`tabs-list ${classModifier ? `tabs-list--${classModifier}` : ''}`}
+      className={`tabs-list ${
+        classModifier ? `tabs-list--${classModifier}` : ''
+      }`}
     >
       {menuSet.map((tab, index) => {
         return (
@@ -45,7 +38,12 @@ function TabsList({
                 conditionalNavLinkActiveClass(isActive, disableAutoActive)
               }
             >
-              {tabSymbolOrIcon(tab)}
+              <SymbolOrIcon
+                type={tab.icon ? 'ICON' : 'SYMBOL'}
+                specifier={tab.icon || tab.symbol}
+                classModifier={classModifier}
+                extraClass={elementMainClass('icon')}
+              />
               {tab.name ?? null}
             </NavLink>
           </li>

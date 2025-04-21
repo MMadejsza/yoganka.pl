@@ -1,3 +1,4 @@
+import SymbolOrIcon from '../../../components/common/SymbolOrIcon.jsx';
 import GenericListTagLi from '../../common/GenericListTagLi.jsx';
 import DetailsListCustomerPass from './lists/DetailsListCustomerPass.jsx';
 import DetailsListPassDefinition from './lists/DetailsListPassDefinition.jsx';
@@ -17,11 +18,10 @@ function ViewCustomerPass({ data, userAccountPage }) {
           objectPair={{
             label: 'Aktywny: ',
             content: (
-              <span
-                className={`material-symbols-rounded nav__icon nav__icon--in-title`}
-              >
-                {customerPass.status ? 'check' : 'close'}
-              </span>
+              <SymbolOrIcon
+                specifier={customerPass.status ? 'check' : 'close'}
+                classModifier={'in-title'}
+              />
             ),
           }}
           classModifier={'in-title'}

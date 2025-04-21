@@ -1,4 +1,5 @@
 import { useLocation } from 'react-router-dom';
+import SymbolOrIcon from '../../components/common/SymbolOrIcon.jsx';
 import { hasValidPassFn } from '../../utils/userCustomerUtils';
 
 function ModalTable({
@@ -49,23 +50,23 @@ function ModalTable({
   const getSymbol = (row, isArchived, action) => {
     const hasValidPass =
       isAdminView || isUserPassesView ? true : hasValidPassFn(status, row);
-    // console.log('hasValidPass', hasValidPass);
-    const conditionalClass = `material-symbols-rounded nav__icon${
+    const conditionalExtraClass = `${
       row.isActionDisabled === true ? ' dimmed' : ''
     }${action.extraClass ? ` ${action.extraClass}` : ''}${
       !hasValidPass && !row.isUserGoing && !row.wasUserReserved ? ` black` : ''
     }`;
 
     return (
-      <span className={conditionalClass}>
-        {pickCustomerSymbol(
+      <SymbolOrIcon
+        specifier={pickCustomerSymbol(
           row,
           isArchived,
           action.symbol,
           hasValidPass,
           isUserPassesView
         )}
-      </span>
+        extraClass={conditionalExtraClass}
+      />
     );
   };
 
@@ -92,18 +93,16 @@ function ModalTable({
   // };
 
   const formatValue = (value, keyClass) => {
+    if (value == undefined) return '';
     let val = value;
-    if (value != undefined && typeof value == 'boolean') {
+
+    if (typeof val == 'boolean') {
       val = (
-        <span
-          className={`material-symbols-rounded nav__icon nav__icon--${keyClass}`}
-        >
-          {value == true ? 'check' : 'close'}
-        </span>
+        <SymbolOrIcon
+          specifier={value == true ? 'check' : 'close'}
+          classModifier={keyClass}
+        />
       );
-    }
-    if (value == undefined) {
-      val = '';
     }
     return val;
   };

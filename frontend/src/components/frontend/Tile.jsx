@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useModalByURL } from '../../hooks/useModalByURL.js';
 import { smoothScrollInto } from '../../utils/utils.jsx';
+import SymbolOrIcon from '../common/SymbolOrIcon';
 import ImgDynamic from './imgsRelated/ImgDynamic.jsx';
 import Modal from './Modal.jsx';
 
@@ -14,7 +15,9 @@ function Tile({ data, today, clickable }) {
     isPast ? 'past' : '',
     data.extraClass ? `tile--${data.extraClass}` : '',
   ].join(' ');
-  const modalPath = `/${data.type === 'camp' ? 'wyjazdy' : 'wydarzenia'}/${data.link}`;
+  const modalPath = `/${data.type === 'camp' ? 'wyjazdy' : 'wydarzenia'}/${
+    data.link
+  }`;
 
   if (isPast && data.modal) data.modal.glance.price = '-';
 
@@ -60,11 +63,6 @@ function Tile({ data, today, clickable }) {
   // Btns rendering definition
   const renderBtns = data.front.btnsContent.map((btn, index) => {
     // Chose if material design symbol or icon
-    const symbolOrIcon = btn.icon ? (
-      <i className={`${btn.icon} nav__icon`}></i>
-    ) : btn.symbol ? (
-      <span className='material-symbols-rounded nav__icon'>{btn.symbol}</span>
-    ) : null;
 
     // If btn supposes to redirect to different page - use Link (no reloading)
     if (btn.action === 'subPage') {
@@ -75,7 +73,10 @@ function Tile({ data, today, clickable }) {
           title={btn.title}
           className={`tile__btn tile__btn--${data.fileName}`}
         >
-          {symbolOrIcon}
+          <SymbolOrIcon
+            type={btn.icon ? 'ICON' : 'SYMBOL'}
+            specifier={btn.icon || btn.symbol}
+          />
           {btn.text}
         </Link>
       );
@@ -90,7 +91,10 @@ function Tile({ data, today, clickable }) {
           title={btn.title}
           className={`tile__btn tile__btn--${data.fileName}`}
         >
-          {symbolOrIcon}
+          <SymbolOrIcon
+            type={btn.icon ? 'ICON' : 'SYMBOL'}
+            specifier={btn.icon || btn.symbol}
+          />
           {btn.text}
         </a>
       );

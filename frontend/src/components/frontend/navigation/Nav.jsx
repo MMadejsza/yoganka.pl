@@ -4,6 +4,7 @@ import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useSwipe } from '../../../hooks/useSwipe';
 import { mutateOnLoginOrSignup, queryClient } from '../../../utils/http.js';
 import { smoothScrollInto } from '../../../utils/utils.jsx';
+import SymbolOrIcon from '../../common/SymbolOrIcon';
 import Logo from '../../frontend/Logo.jsx';
 
 const menuSet = [
@@ -158,16 +159,12 @@ function Nav({ side, status, setIsNavOpen }) {
                 onClick={handleLogout}
                 className='nav__link nav__link--side'
               >
-                {li.symbol ? (
-                  <span className='material-symbols-rounded nav__icon nav__icon--side account'>
-                    {li.symbol}
-                  </span>
-                ) : li.icon ? (
-                  <i
-                    className={`${li.icon} nav__icon nav__icon--side`}
-                    aria-hidden='true'
-                  ></i>
-                ) : null}
+                <SymbolOrIcon
+                  type={li.icon ? 'ICON' : 'SYMBOL'}
+                  specifier={li.icon || li.symbol}
+                  classModifier={'side'}
+                  aria-hidden={li.icon ? 'true' : null}
+                />
                 {li.text ?? li.name}
               </button>
             </li>
@@ -195,16 +192,12 @@ function Nav({ side, status, setIsNavOpen }) {
           to={li.link}
           className='nav__link nav__link--side'
         >
-          {li.symbol ? (
-            <span className='material-symbols-rounded nav__icon nav__icon--side account'>
-              {li.symbol}
-            </span>
-          ) : li.icon ? (
-            <i
-              className={`${li.icon} nav__icon nav__icon--side`}
-              aria-hidden='true'
-            ></i>
-          ) : null}
+          <SymbolOrIcon
+            type={li.icon ? 'ICON' : 'SYMBOL'}
+            specifier={li.icon || li.symbol}
+            classModifier={'side'}
+            aria-hidden={li.icon ? 'true' : null}
+          />
           {li.text ?? null}
         </Link>
       </li>
@@ -245,16 +238,10 @@ function Nav({ side, status, setIsNavOpen }) {
                   className='nav__link'
                   data-scroll={li.scroll}
                 >
-                  {li.symbol ? (
-                    <span className='material-symbols-rounded nav__icon'>
-                      {li.symbol}
-                    </span>
-                  ) : li.icon ? (
-                    <i
-                      className={`${li.icon} nav__icon`}
-                      aria-hidden='true'
-                    ></i>
-                  ) : null}
+                  <SymbolOrIcon
+                    type={li.icon ? 'ICON' : 'SYMBOL'}
+                    specifier={li.icon || li.symbol}
+                  />
                   {li.name}
                 </a>
               ) : (
@@ -270,13 +257,10 @@ function Nav({ side, status, setIsNavOpen }) {
                 >
                   {({ isActive }) => (
                     <>
-                      <span
-                        className={`${li.symbol} nav__icon ${
-                          isActive ? 'active' : ''
-                        } material-symbols-rounded nav__icon`}
-                      >
-                        {li.symbol}
-                      </span>
+                      <SymbolOrIcon
+                        specifier={li.symbol}
+                        extraClass={isActive ? 'active' : ''}
+                      />
                       {li.name}
                     </>
                   )}

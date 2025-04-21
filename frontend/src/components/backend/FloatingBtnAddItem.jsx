@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import WrapperModal from './WrapperModal.jsx';
+import SymbolOrIcon from '../common/SymbolOrIcon.jsx';
 import NewCustomerFormForAdmin from './views/add-forms/NewCustomerFormForAdmin.jsx';
 import NewPassDefinitionForm from './views/add-forms/NewPassDefinitionForm.jsx';
 import NewPaymentForm from './views/add-forms/NewPaymentForm.jsx';
 import NewProductForm from './views/add-forms/NewProductForm.jsx';
 import NewUserForm from './views/add-forms/NewUserForm.jsx';
+import WrapperModal from './WrapperModal.jsx';
 
 function FloatingBtnAddItem({}) {
   const navigate = useNavigate();
@@ -85,9 +86,7 @@ function FloatingBtnAddItem({}) {
           }}
           className={`form-action-btn symbol-only-btn symbol-only-btn--floating`}
         >
-          <span className='material-symbols-rounded nav__icon account'>
-            add_circle
-          </span>
+          <SymbolOrIcon specifier={'add_circle'} />
         </button>
       )}
       {isModalOpen && (

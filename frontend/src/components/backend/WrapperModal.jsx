@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import SymbolOrIcon from '../../components/common/SymbolOrIcon.jsx';
 import { useModal } from '../../hooks/useModal';
 
 function WrapperModal({ visited, onClose, onCloseFeedback, children }) {
@@ -47,7 +48,10 @@ function WrapperModal({ visited, onClose, onCloseFeedback, children }) {
       >
         <div className='modal__x-btn'>
           <a className='modal__close-btn' onClick={handleClose}>
-            <i className='fa-solid fa-xmark modal__icon'></i>
+            <SymbolOrIcon
+              type='ICON'
+              specifier={'fa-solid fa-xmark modal__icon'}
+            />
           </a>
         </div>
         {children}
