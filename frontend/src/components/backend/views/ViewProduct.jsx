@@ -24,11 +24,17 @@ function ViewProduct({ data, isAdminPanel }) {
   const { product } = data;
   const type = product.type?.toUpperCase();
   const prodStats = statsCalculatorForProduct(product, product.ScheduleRecords);
-
+  const statusMap = {
+    1: 'Aktywny',
+    0: 'Zawieszony',
+    '-1': 'Wygasły',
+  };
   return (
     <>
       <h1 className='modal__title modal__title--view'>{`${product.name} (Id:${product.productId})`}</h1>
-      <h3 className='modal__title modal__title--status'>{product.status}</h3>
+      <h3 className='modal__title modal__title--status'>
+        {statusMap[product.status]}
+      </h3>
 
       {/*//@ Product main details */}
       <div className='generic-outer-wrapper'>

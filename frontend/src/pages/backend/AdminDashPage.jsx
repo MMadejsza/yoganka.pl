@@ -164,6 +164,19 @@ function AdminPage() {
         ];
         return modifier;
       case path.includes('show-all-products'):
+        const statusMap = {
+          1: 'Aktywny',
+          0: 'Zawieszony',
+          '-1': 'Wygasły',
+        };
+
+        let formattedProducts = content?.map(product => {
+          return {
+            ...product,
+            status: statusMap[product.status],
+          };
+        });
+        content = formattedProducts;
         modifier = 'product';
         title = 'Wszystkie zajęcia';
         headers = [

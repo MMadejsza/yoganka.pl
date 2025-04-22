@@ -60,9 +60,9 @@ const CustomerPass = sequelizeDb.define(
       field: 'uses_left',
     },
     status: {
-      type: DataTypes.STRING(255),
+      type: DataTypes.TINYINT(1),
       allowNull: true,
-      field: 'status', //active, expired, suspended
+      field: 'status', //1/0/-1
     },
   },
   {

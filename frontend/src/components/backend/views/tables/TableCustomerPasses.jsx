@@ -18,8 +18,8 @@ function TableCustomerPasses({
   const formattedCustomerPasses = customerPasses
     ?.slice() // copy to not work on original
     .sort((a, b) => {
-      const isAActive = a.status === 'ACTIVE' || a.status == 1;
-      const isBActive = b.status === 'ACTIVE' || b.status == 1;
+      const isAActive = Number(a.status) === 1;
+      const isBActive = Number(b.status) === 1;
 
       if (isAActive && !isBActive) return -1;
       if (!isAActive && isBActive) return 1;
@@ -33,7 +33,12 @@ function TableCustomerPasses({
       return 0; // rest no change
     })
     .map(cp => {
-      cp.status = cp.status.toUpperCase();
+      const statusMap = {
+        1: 'Aktywny',
+        0: 'Zawieszony',
+        '-1': 'Wygasły',
+      };
+
       let allowedProductTypes = '';
       try {
         const parsed = JSON.parse(cp.allowedProductTypes);
@@ -55,12 +60,8 @@ function TableCustomerPasses({
         validFrom: formatIsoDateTime(cp.validFrom),
         purchaseDate: formatIsoDateTime(cp.purchaseDate),
         validUntil: formatIsoDateTime(cp.validUntil),
-        status:
-          cp.status === 'ACTIVE' || cp.status == 1
-            ? 'Aktywny'
-            : cp.status === 'SUSPENDED' || cp.status == 0
-            ? 'Wstrzymany'
-            : 'Wygasły',
+        status: statusMap[Number(cp.status)] || 'NIEZNANY',
+        usesLeft: cp.usesLeft === null ? '-' : cp.usesLeft,
       };
     });
 

@@ -160,7 +160,7 @@ export const postCreateUser = (req, res, next) => {
             passwordHash: passwordHashed,
             lastLoginDate: date,
             email: email,
-            role: 'user',
+            role: 'USER',
             profilePictureSrcSetJson: null,
           });
         })
@@ -589,7 +589,7 @@ export const postCreateCustomer = (req, res, next) => {
         loyalty: loyalty || 5,
         notes: notes,
       }).then(newCustomer => {
-        return user.update({ role: 'customer' }).then(() => newCustomer);
+        return user.update({ role: 'CUSTOMER' }).then(() => newCustomer);
       });
     })
     .then(newCustomer => {
@@ -1323,7 +1323,7 @@ export const postCreateProduct = async (req, res, next) => {
         duration: convertDurationToTime(duration),
         price: price,
         startDate: startDate,
-        status: status || 'Aktywny',
+        status: Number(status) || 1,
       });
     })
     .then(newProduct => {
@@ -1753,7 +1753,7 @@ export const postCreatePassDefinition = async (req, res, next) => {
     price,
     usesTotal: count || null,
     validityDays: validityDays || null,
-    status: status == 'Aktywny' ? 1 : status == 'Zakończony' ? -1 : 0,
+    status: Number(status),
   })
     .then(newProduct => {
       successLog(person, controllerName);
@@ -2658,7 +2658,7 @@ export const postCreatePayment = (req, res, next) => {
             where: {
               customerId: customer.customerId,
               passDefId: passDefId,
-              status: 'ACTIVE',
+              status: 1,
               validUntil: { [Op.gt]: passStartDate },
             },
             transaction: t,
@@ -2724,7 +2724,7 @@ export const postCreatePayment = (req, res, next) => {
                   validFrom: passStartDate,
                   validUntil: calcExpiryDate,
                   usesLeft: currentPassDefinition.usesTotal,
-                  status: 'ACTIVE',
+                  status: 1,
                 },
                 {
                   transaction: t,

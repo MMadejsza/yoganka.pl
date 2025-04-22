@@ -189,7 +189,9 @@ function ViewPassDefinition({
                 label: 'Aktywny: ',
                 content: (
                   <SymbolOrIcon
-                    specifier={passDefinition.status ? 'check' : 'close'}
+                    specifier={
+                      Number(passDefinition.status) === 1 ? 'check' : 'close'
+                    }
                     classModifier={'in-title'}
                   />
                 ),

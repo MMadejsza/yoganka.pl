@@ -7,8 +7,13 @@ function DetailsListCustomerPass({ customerPass, userAccountPage }) {
 	    DetailsListCustomerPass object:`,
     customerPass
   );
+  const statusMap = {
+    1: 'Aktywny',
+    0: 'Zawieszony',
+    '-1': 'Wygasły',
+  };
 
-  const passStatus = customerPass.status.toUpperCase();
+  const passStatus = Number(customerPass.status);
   const title = userAccountPage
     ? 'Szczegóły Twojego karnetu'
     : 'Karnet uczestnika';
@@ -39,12 +44,7 @@ function DetailsListCustomerPass({ customerPass, userAccountPage }) {
   }
   details.push({
     label: 'Status:',
-    content:
-      passStatus === 'ACTIVE' || passStatus == 1
-        ? 'Aktywny'
-        : passStatus === 'SUSPENDED' || passStatus == 0
-        ? 'Wstrzymany'
-        : 'Wygasły',
+    content: statusMap[passStatus] || 'NIEZNANY',
   });
 
   return (

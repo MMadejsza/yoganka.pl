@@ -18,14 +18,14 @@ export const isPassValidForSchedule = (pass, schedule) => {
   // console.log('[isPassValidForSchedule] Found PassDefinition:', passDef);
 
   // 2. Is active?
-  if (pass.status.toUpperCase() !== 'ACTIVE') {
+  if (Number(pass.status) !== 1) {
     console.log(
-      '[isPassValidForSchedule] Pass status is not ACTIVE:',
+      '[isPassValidForSchedule] Pass status is not ACTIVE (1):',
       pass.status
     );
     return false;
   }
-  console.log('[isPassValidForSchedule] Pass is ACTIVE.');
+  console.log('[isPassValidForSchedule] Pass is ACTIVE(1).');
 
   // 6. Is count type
   if (passDef.passType.toUpperCase() === 'COUNT' && pass.usesLeft <= 0) {

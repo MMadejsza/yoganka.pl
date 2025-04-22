@@ -15,12 +15,13 @@ function DetailsListPassDefinition({
 	    DetailsListPassDefinition isPassPurchaseView:`,
     isPassPurchaseView
   );
-
+  const statusMap = {
+    1: 'Aktywny',
+    0: 'Zawieszony',
+    '-1': 'Wygasły',
+  };
   const title = userAccountPage ? 'Rodzaj karnetu' : 'Typ karnetu';
-  const passStatus =
-    typeof passDefinition.status == 'boolean'
-      ? passDefinition.status
-      : passDefinition.status.toUpperCase();
+  const passStatus = Number(passDefinition.status);
 
   const details = [
     {
@@ -33,12 +34,7 @@ function DetailsListPassDefinition({
       { label: 'Nazwa:', content: passDefinition.name },
       {
         label: 'Status:',
-        content:
-          passStatus === 'ACTIVE' || passStatus == 1
-            ? 'Aktywny'
-            : passStatus === 'SUSPENDED' || passStatus == 0
-            ? 'Wstrzymany'
-            : 'Niekontynuowany',
+        content: statusMap[passStatus] || 'NIEZNANY',
       }
     );
 

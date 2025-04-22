@@ -112,9 +112,9 @@ function CardsList({
       const chosenSquareBottom = isTimeType
         ? `${monthName} ${year}`
         : `(${
-            row.status == 1
+            Number(row.status) == 1
               ? 'Aktywny'
-              : row.status == 0
+              : Number(row.status) == 0
               ? 'Zawieszony'
               : 'Karnet wygasł'
           })`;
@@ -285,7 +285,7 @@ function CardsList({
             ? ` (${durationHH}h ${durationMM}min)`
             : ` (${durationHH}h)`,
         description: row.startTime || '',
-        cardFooter: row.location || 'status - time',
+        cardFooter: row.location || '',
         descriptionIcon: 'schedule',
         typeIcon: 'category',
         footerIcon: 'location_on',

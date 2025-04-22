@@ -52,7 +52,7 @@ function DetailsFormProduct({ productData }) {
   const totalHours = hours + minutes / 60 + seconds / 3600;
   const durationDefault = totalHours || 1;
   const priceDefault = productData?.price || 500.0;
-  const statusDefault = productData?.status || 'Aktywny';
+  const statusDefault = productData?.status || 1;
 
   // using custom hook with extracting and reassigning its 'return' for particular inputs and assign validation methods from imported utils. Every inout has its won state now
   const {
@@ -280,9 +280,9 @@ function DetailsFormProduct({ productData }) {
         formType={formType}
         type='select'
         options={[
-          { label: 'Aktywny', value: 'Aktywny' },
-          { label: 'Zakończony', value: 'Zakończony' },
-          { label: 'Zawieszony', value: 'Zawieszony' },
+          { label: 'Aktywny', value: 1 },
+          { label: 'Zakończony', value: -1 },
+          { label: 'Zawieszony', value: 0 },
         ]}
         id='status'
         name='status'

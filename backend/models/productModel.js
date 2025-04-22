@@ -42,7 +42,7 @@ const Product = sequelizeDb.define(
       field: 'start_date',
     },
     status: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.TINYINT(1),
       allowNull: true,
       field: 'status',
     },

@@ -10,21 +10,11 @@ function ViewAccountCustomerPasses({ data }) {
   let cp;
   if (data.customer)
     cp = data.customer.customerPasses.sort((a, b) => {
-      const aStatus =
-        a.status == 1 || a.status == 'ACTIVE'
-          ? 1
-          : a.status == 0 || a.status == 'SUSPENDED'
-          ? 0
-          : -1;
-      const bStatus =
-        b.status == 1 || b.status == 'ACTIVE'
-          ? 1
-          : b.status == 0 || b.status == 'SUSPENDED'
-          ? 0
-          : -1;
+      const aStatusInt = Number(a) || -1;
+      const bStatusInt = Number(b) || -1;
 
-      if (aStatus !== bStatus) {
-        return bStatus - aStatus;
+      if (aStatusInt !== bStatusInt) {
+        return bStatusInt - aStatusInt;
       }
 
       // getTime to get ms

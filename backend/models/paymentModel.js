@@ -56,7 +56,7 @@ const Payment = sequelizeDb.define(
       field: 'payment_status',
     },
     performedBy: {
-      type: DataTypes.STRING(10),
+      type: DataTypes.STRING(13),
       allowNull: false,
       defaultValue: 'Customer',
       field: 'performed_by',

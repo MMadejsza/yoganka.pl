@@ -20,9 +20,7 @@ function ViewCustomerPass({ data, userAccountPage }) {
             content: (
               <SymbolOrIcon
                 specifier={
-                  customerPass.status == 1 || customerPass.status == 'ACTIVE'
-                    ? 'check'
-                    : 'close'
+                  Number(customerPass.status) === 1 ? 'check' : 'close'
                 }
                 classModifier={'in-title'}
               />

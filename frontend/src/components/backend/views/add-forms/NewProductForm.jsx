@@ -281,9 +281,9 @@ function NewProductForm() {
         formType={formType}
         type='select'
         options={[
-          { label: 'Aktywny', value: 'Aktywny' },
-          { label: 'Zakończony', value: 'Zakończony' },
-          { label: 'Zawieszony', value: 'Zawieszony' },
+          { label: 'Aktywny', value: 1 },
+          { label: 'Zakończony', value: -1 },
+          { label: 'Zawieszony', value: 0 },
         ]}
         id='status'
         name='status'
