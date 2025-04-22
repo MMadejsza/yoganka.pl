@@ -54,9 +54,9 @@ export const loadUserFromSession = (req, res, next) => {
                 passInstance.validUntil &&
                 new Date(passInstance.validUntil) < now;
               // UsesLeft = 0.
-              const isCountPass =
-                passInstance?.PassDefinition?.passType.toUpperCase() ===
-                'COUNT';
+              const passType =
+                passInstance?.PassDefinition?.passType.toUpperCase();
+              const isCountPass = passType === 'COUNT' || passType === 'MIXED';
               const isExpiredByUses = isCountPass && passInstance.usesLeft <= 0;
 
               if (isExpiredByDate || isExpiredByUses) {

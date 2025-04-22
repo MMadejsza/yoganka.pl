@@ -28,7 +28,8 @@ export const isPassValidForSchedule = (pass, schedule) => {
   console.log('[isPassValidForSchedule] Pass is ACTIVE(1).');
 
   // 6. Is count type
-  if (passDef.passType.toUpperCase() === 'COUNT' && pass.usesLeft <= 0) {
+  const passType = passDef.passType.toUpperCase();
+  if ((passType === 'COUNT' || passType === 'MIXED') && pass.usesLeft <= 0) {
     console.log(
       '[isPassValidForSchedule] Count pass with no uses left:',
       pass.usesLeft

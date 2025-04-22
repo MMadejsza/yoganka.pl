@@ -614,9 +614,8 @@ export const postCreateBookSchedule = (req, res, next) => {
               successLog(person, controllerName, 'booking created with pass');
 
               // If pass was of type count
-              if (
-                validPass?.PassDefinition.passType.toUpperCase() === 'COUNT'
-              ) {
+              const passType = validPass?.PassDefinition.passType.toUpperCase();
+              if (passType === 'COUNT' || passType === 'MIXED') {
                 return models.CustomerPass.update(
                   { usesLeft: validPass.usesLeft - 1 },
                   {

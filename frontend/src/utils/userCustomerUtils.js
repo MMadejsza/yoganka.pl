@@ -59,8 +59,9 @@ export const hasValidPassFn = (status, row) => {
     const isStartedAtTheTime =
       scheduleDate >= new Date(currentCustomerPass.validFrom);
 
+    const passType = currentCustomerPass.PassDefinition.passType;
     const hasEntriesLeft =
-      currentCustomerPass.PassDefinition.passType.toUpperCase() === 'COUNT'
+      passType === 'COUNT' || passType === 'MIXED'
         ? currentCustomerPass.usesLeft > 0
         : true;
 

@@ -171,7 +171,9 @@ function SchedulePage() {
         .sort((a, b) => {
           const order = { time: 0, mixed: 1, count: 2 };
           // ex. a.passTYpe = 'time' => time: 0 => 0
-          return order[a.passType] - order[b.passType];
+          return (
+            order[a.passType.toLowerCase()] - order[b.passType.toLowerCase()]
+          );
         });
     } else {
       modifier = 'schedule';
