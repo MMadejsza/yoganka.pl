@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useMatch, useNavigate } from 'react-router-dom';
 import ModalTable from '../../components/backend/ModalTable.jsx';
 import TabsList from '../../components/backend/TabsList.jsx';
@@ -40,6 +40,44 @@ function SchedulePage() {
     // gcTime:30000
   });
 
+  // Compute formattedContent once, avoid mutating and re-formatting on every render
+  const formattedContent = useMemo(() => {
+    if (!data?.content) return [];
+
+    if (isPassDefinitions) {
+      const order = { time: 0, mixed: 1, count: 2 };
+      return data.content
+        .map(passDef => ({
+          ...passDef,
+          usesTotal: passDef.usesTotal ?? '-',
+          validityDays: passDef.validityDays
+            ? `${passDef.validityDays} dni`
+            : '-',
+          price: `${passDef.price} zł`,
+          allowedProductTypes: JSON.parse(passDef.allowedProductTypes).join(
+            ', '
+          ),
+        }))
+        .sort((a, b) => {
+          const aKey = a.passType.toLowerCase();
+          const bKey = b.passType.toLowerCase();
+          return (order[aKey] || 0) - (order[bKey] || 0);
+        });
+    }
+
+    // schedules: clone, sort by date, and format date once
+    return data.content
+      .slice()
+      .sort((a, b) => {
+        const dateA = new Date(a.date.split('.').reverse().join('-'));
+        const dateB = new Date(b.date.split('.').reverse().join('-'));
+        return dateA - dateB;
+      })
+      .map(schedule => ({
+        ...schedule,
+        date: formatIsoDateTime(schedule.date, true),
+      }));
+  }, [data, isPassDefinitions]);
   const {
     mutateAsync: book, //async to let it return promise for child viewSchedule and let serve the feedback there based on the result of it
     isError: isBookError,
@@ -152,29 +190,31 @@ function SchedulePage() {
           error: buyError,
         },
       };
-      contentSorted = data.content
-        .map(record => {
-          const passDef = record; //.toJSON();
-
-          return {
-            ...passDef,
-            usesTotal: passDef.usesTotal || '-',
-            validityDays: `${
-              passDef.validityDays ? `${passDef.validityDays} dni` : '-'
-            }`,
-            price: `${passDef.price} zł`,
-            allowedProductTypes: JSON.parse(passDef.allowedProductTypes).join(
-              ', '
-            ),
-          };
-        })
-        .sort((a, b) => {
-          const order = { time: 0, mixed: 1, count: 2 };
-          // ex. a.passTYpe = 'time' => time: 0 => 0
-          return (
-            order[a.passType.toLowerCase()] - order[b.passType.toLowerCase()]
-          );
-        });
+      productTabs = [
+        {
+          name: 'Grafik',
+          symbol: 'calendar_month',
+          link: '/grafik',
+        },
+      ];
+      table = (
+        <ModalTable
+          headers={headers}
+          keys={keys}
+          content={formattedContent}
+          active={true}
+          status={status}
+          onOpen={handleOpenModal}
+        />
+      );
+      cardsList = (
+        <CardsList
+          content={formattedContent}
+          active={true}
+          status={status}
+          onOpen={handleOpenModal}
+        />
+      );
     } else {
       modifier = 'schedule';
       headers = data.totalHeaders;
@@ -183,103 +223,62 @@ function SchedulePage() {
         // for schedule booking only as backend will chose if should make a payment or go for using the pass automatically
         booking: { onBook: book, isError: isBookError, error: bookError },
       };
-      contentSorted = data.content.sort((a, b) => {
-        const dateA = new Date(a.date.split('.').reverse().join('-'));
-        const dateB = new Date(b.date.split('.').reverse().join('-'));
-        return dateA - dateB;
-      });
+      productTabs = [
+        { name: 'Karnety', symbol: 'card_membership', link: '/grafik/karnety' },
+      ];
 
-      // format date
-      contentSorted.forEach(schedule => {
-        schedule.date = formatIsoDateTime(schedule.date, true);
-      });
+      table = (
+        <ModalTable
+          headers={headers}
+          keys={keys}
+          content={formattedContent}
+          active={true}
+          status={status}
+          onOpen={handleOpenModal}
+          onQuickAction={[{ symbol: 'shopping_bag_speed', method: book }]}
+        />
+      );
+
+      cardsList = (
+        <CardsList
+          content={formattedContent}
+          active={true}
+          status={status}
+          onOpen={handleOpenModal}
+          onQuickAction={[{ symbol: 'shopping_bag_speed', method: book }]}
+        />
+      );
     }
 
-    switch (true) {
-      case isPassDefinitions:
-        table = (
-          <ModalTable
-            headers={headers}
-            keys={keys}
-            content={contentSorted}
-            active={true}
-            status={status}
-            onOpen={handleOpenModal}
-            // onQuickAction={[{ symbol: 'shopping_bag_speed', method: book }]}
-            // classModifier={classModifier}
-          />
-        );
-        productTabs = [
-          {
-            name: 'Grafik',
-            symbol: 'calendar_month',
-            link: '/grafik',
-          },
-        ];
-        break;
-
-      default:
-        table = (
-          <ModalTable
-            headers={data.totalHeaders}
-            keys={data.totalKeys}
-            content={contentSorted}
-            active={true}
-            status={status}
-            onOpen={handleOpenModal}
-            onQuickAction={[{ symbol: 'shopping_bag_speed', method: book }]}
-          />
-        );
-        productTabs = [
-          {
-            name: 'Karnety',
-            symbol: 'card_membership',
-            link: '/grafik/karnety',
-          },
-        ];
-        break;
+    if (data && status) {
+      viewFrame = (
+        <ViewsController
+          modifier={modifier}
+          visited={isModalOpen}
+          onClose={handleCloseModal}
+          paymentOps={paymentOps}
+          role={status.role}
+        />
+      );
     }
 
-    cardsList = (
-      <CardsList
-        content={contentSorted}
-        active={true}
-        status={status}
-        onOpen={handleOpenModal}
-        onQuickAction={[{ symbol: 'shopping_bag_speed', method: book }]}
-      />
+    title = isPassDefinitions ? 'Nasze karnety' : `Najbliższa Yoga`;
+
+    return (
+      <div className='admin-console'>
+        <Section classy='admin-intro' header={title} />
+        <TabsList
+          menuSet={productTabs || []}
+          onClick={handleSwitchContent}
+          classModifier='product-tabs'
+          shouldSwitchState={true}
+          disableAutoActive={true}
+        />
+        {/* {table} */}
+        {cardsList}
+        {isModalOpen && viewFrame}
+      </div>
     );
   }
-
-  if (data && status) {
-    viewFrame = (
-      <ViewsController
-        modifier={modifier}
-        visited={isModalOpen}
-        onClose={handleCloseModal}
-        paymentOps={paymentOps}
-        role={status.role}
-      />
-    );
-  }
-
-  title = isPassDefinitions ? 'Nasze karnety' : `Najbliższa Yoga`;
-
-  return (
-    <div className='admin-console'>
-      <Section classy='admin-intro' header={title} />
-      <TabsList
-        menuSet={productTabs || []}
-        onClick={handleSwitchContent}
-        classModifier='product-tabs'
-        shouldSwitchState={true}
-        disableAutoActive={true}
-      />
-      {/* {table} */}
-      {cardsList}
-      {isModalOpen && viewFrame}
-    </div>
-  );
 }
-
 export default SchedulePage;

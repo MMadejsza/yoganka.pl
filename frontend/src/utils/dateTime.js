@@ -25,6 +25,13 @@ export const formatIsoDateTime = (dateInput, isSchedule) => {
   // format [date] [time (hh:mm)]
   let formattedDate = isoString.slice(0, 10);
   if (isSchedule) {
+    // if we have already the polish format -don't try again(regex for that)
+    if (
+      typeof dateInput === 'string' &&
+      /^\d{2}\.\d{2}\.\d{4}$/.test(dateInput)
+    ) {
+      return dateInput;
+    }
     formattedDate = date.toLocaleString('pl-PL', {
       year: 'numeric',
       month: '2-digit',
@@ -46,7 +53,9 @@ export const formatIsoDateTime = (dateInput, isSchedule) => {
   if (isSchedule) {
     return `${formattedDate}`;
   }
-  return `${formattedDate} (${getWeekDay(date)}${formattedTime ? ` - ` + formattedTime : ``})`;
+  return `${formattedDate} (${getWeekDay(date)}${
+    formattedTime ? ` - ` + formattedTime : ``
+  })`;
 };
 
 export const parsePLDateAtEndOfDay = dateString => {
