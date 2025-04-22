@@ -113,7 +113,7 @@ export const CAMPS_DATA = [
           // symbol: `edit`,
           symbol: `shopping_bag`,
           // link: `https://forms.gle/fX2Dx8KJaBhQFEGh9`,
-          link: `http://localhost:5000/grafik/43`,
+          navLink: `/grafik/83`,
         },
       ],
       // questionTemplate(subject) {
@@ -219,9 +219,9 @@ export const CAMPS_DATA = [
           action: 'classic',
           title: `Formularz Google w osobnej zakładce`,
 
-          text: `Wypełnij formularz`,
-          symbol: `edit`,
-          link: `https://forms.gle/fX2Dx8KJaBhQFEGh9`,
+          text: `Rezerwuj`,
+          symbol: `shopping_bag`,
+          navLink: `/grafik/84`,
         },
       ],
       // questionTemplate(subject) {
@@ -337,7 +337,7 @@ export const CAMPS_DATA = [
           // symbol: `edit`,
           symbol: `shopping_bag`,
           // link: `https://forms.gle/fX2Dx8KJaBhQFEGh9`,
-          link: `http://localhost:5000/grafik/41`,
+          navLink: `/grafik/41`,
         },
       ],
       // questionTemplate(subject) {
@@ -477,7 +477,7 @@ export const CAMPS_DATA = [
           // symbol: `edit`,
           symbol: `shopping_bag`,
           // link: `https://forms.gle/fX2Dx8KJaBhQFEGh9`,
-          link: `http://localhost:5000/grafik/42`,
+          navLink: `/grafik/42`,
           // symbol: `edit`,
           // link: `https://forms.gle/KL6LU2pXRGn4SmXw6`,
         },
