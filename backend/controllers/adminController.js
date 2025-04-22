@@ -476,7 +476,7 @@ export const getCustomerById = (req, res, next) => {
         cp => {
           return {
             ...cp,
-            passName: `${cp.PassDefinition.name} (${cp.PassDefinition.passDefId})`,
+            passName: `${cp.PassDefinition.name}`,
           };
         }
       );
@@ -2687,8 +2687,7 @@ export const postCreatePayment = (req, res, next) => {
 
               const amountDueCalculated =
                 parseFloat(definition.price) - parseFloat(amountPaid);
-              const statusDeduced =
-                amountDueCalculated <= 0 ? 'w pełni' : 'Częściowo';
+              const statusDeduced = amountDueCalculated <= 0 ? 1 : 0;
 
               // Create Payment for the pass purchase.
               return models.Payment.create(
@@ -2700,7 +2699,7 @@ export const postCreatePayment = (req, res, next) => {
                   amountPaid,
                   amountDue: amountDueCalculated,
                   paymentMethod: paymentMethodDeduced,
-                  paymentStatus: 'Completed',
+                  paymentStatus: 1,
                   performedBy: 'Administrator',
                 },
                 { transaction: t }
@@ -2811,8 +2810,7 @@ export const postCreatePayment = (req, res, next) => {
                     const amountDueCalculated =
                       parseFloat(scheduleRecord.Product.price) -
                       parseFloat(amountPaid);
-                    const statusDeduced =
-                      amountDueCalculated <= 0 ? 'w pełni' : 'Częściowo';
+                    const statusDeduced = amountDueCalculated <= 0 ? 1 : 0;
 
                     if (scheduleRecord.Product.price < amountPaid)
                       throw new Error(
@@ -2828,7 +2826,7 @@ export const postCreatePayment = (req, res, next) => {
                         amountPaid: amountPaid,
                         amountDue: amountDueCalculated,
                         paymentMethod: paymentMethodDeduced,
-                        paymentStatus: 'Completed',
+                        paymentStatus: 1,
                         performedBy: 'Administrator',
                       },
                       {

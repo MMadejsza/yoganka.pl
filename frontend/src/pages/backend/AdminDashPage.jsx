@@ -207,6 +207,18 @@ function AdminPage() {
         return modifier;
       case path.includes('show-all-payments'):
         modifier = 'payment';
+        let map = {
+          1: '100%',
+          0: 'Częściowo',
+          '-1': 'Anulowana',
+        };
+        let formattedPayments = content?.map(payment => {
+          return {
+            ...payment,
+            status: map[Number(payment.status)],
+          };
+        });
+        content = formattedPayments;
         title = 'Wszystkie płatności';
         headers = [
           'Id',

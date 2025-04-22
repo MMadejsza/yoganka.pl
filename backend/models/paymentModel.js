@@ -31,7 +31,7 @@ const Payment = sequelizeDb.define(
       field: 'product',
     },
     status: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.TINYINT(1),
       allowNull: false,
       field: 'status',
     },
@@ -51,7 +51,7 @@ const Payment = sequelizeDb.define(
       field: 'payment_method',
     },
     paymentStatus: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.TINYINT(1),
       allowNull: false,
       field: 'payment_status',
     },

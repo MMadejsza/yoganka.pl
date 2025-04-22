@@ -35,7 +35,7 @@ const Invoice = sequelizeDb.define(
       field: 'total_amount',
     },
     paymentStatus: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.TINYINT(1),
       allowNull: false,
       field: 'payment_status',
     },

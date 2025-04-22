@@ -129,12 +129,12 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
         customerDetails: newCustomerDetails || null,
         scheduleId: schedule.scheduleId,
         product: product.name,
-        status: 'Paid',
+        status: 1,
         amountPaid: product.price,
         amountDue: 0,
         chosenCustomerPassId: paymentMethodValue,
         paymentMethod: 'Credit Card',
-        paymentStatus: 'Completed',
+        paymentStatus: 1,
       });
       updateFeedback(res);
       if (res.confirmation == 1) {

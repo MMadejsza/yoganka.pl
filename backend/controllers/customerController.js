@@ -287,11 +287,11 @@ export const postCreateBuyPass = (req, res, next) => {
             customerId: currentCustomer.customerId,
             date: new Date(),
             product: `${currentPassDefinition.name} (${currentPassDefinition.passDefId})`,
-            status: 'COMPLETED', // temp
+            status: 1, // temp
             amountPaid: currentPassDefinition.price,
             amountDue: 0, // temp
             paymentMethod: req.body.paymentMethod,
-            paymentStatus: 'COMPLETED', // temp
+            paymentStatus: 1, // temp
           },
           { transaction: t }
         ).then(payment => {

@@ -161,7 +161,7 @@ export const getAccount = (req, res, next) => {
           const payment = booking.Payment
             ? `${booking.Payment.paymentMethod} (${booking.Payment.paymentId})`
             : booking.CustomerPass && booking.CustomerPass.PassDefinition
-            ? `${booking.CustomerPass.PassDefinition.name} (${booking.CustomerPass.customerPassId})`
+            ? `${booking.CustomerPass.PassDefinition.name}`
             : '';
 
           return {
@@ -174,6 +174,8 @@ export const getAccount = (req, res, next) => {
             scheduleDate: schedule.date,
             scheduleStartTime: schedule.startTime,
             payment,
+            customerPassId: booking.CustomerPass?.customerPassId,
+            passDefId: booking.CustomerPass?.PassDefinition?.passDefId,
             createdAt: booking.createdAt,
             timestamp: booking.timestamp,
           };

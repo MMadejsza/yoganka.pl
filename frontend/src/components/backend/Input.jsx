@@ -110,6 +110,7 @@ function Input({
       <div className='radio-group'>
         {options.map((option, index) => (
           <div
+            key={index}
             className={`${
               embedded
                 ? `generic-details__item ${

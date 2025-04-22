@@ -8,6 +8,11 @@ function DetailsListPayment({ paymentData, userAccountPage }) {
 	    paymentData object from backend:`,
     paymentData
   );
+  const map = {
+    1: 'Całkowicie',
+    0: 'Częściowo',
+    '-1': 'Płatność anulowana',
+  };
 
   const title = userAccountPage ? 'Szczegoły płatności' : 'Szczegoły płatności'; //temp
 
@@ -18,10 +23,7 @@ function DetailsListPayment({ paymentData, userAccountPage }) {
     { label: 'Metoda płatności:', content: payment.paymentMethod },
     {
       label: 'Opłacono:',
-      content:
-        payment.status.toUpperCase() === 'COMPLETED'
-          ? 'Zrealizowana'
-          : 'Niekompletna',
+      content: map[Number(payment.status)],
     },
     { label: 'Produkty:', content: payment.product },
   ];

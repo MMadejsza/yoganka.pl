@@ -31,10 +31,7 @@ export const statsCalculatorForCustomer = customer => {
       date: formatIsoDateTime(payment.date),
       cardDate: payment.date,
       cardTime: payment.date.split('T')[1].slice(0, 8),
-      paymentStatus:
-        payment.status.toUpperCase() === 'COMPLETED'
-          ? 'Zrealizowana'
-          : 'Niekompletna',
+      paymentStatus: payment.status,
     });
     const invoice = payment.Invoice;
     if (!!invoice) {

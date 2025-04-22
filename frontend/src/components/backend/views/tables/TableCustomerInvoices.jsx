@@ -2,6 +2,11 @@ import ModalTable from '../../ModalTable';
 import WrapperModalTable from '../../WrapperModalTable';
 
 function TableCustomerInvoices({ invoicesArray, noInvoices }) {
+  let map = {
+    1: 'Opłacona',
+    0: 'Częściowo',
+    '-1': 'Anulowana',
+  };
   const headers = [
     'Id',
     'Id Płatności',
@@ -18,10 +23,16 @@ function TableCustomerInvoices({ invoicesArray, noInvoices }) {
     'totalAmount',
     'paymentStatus',
   ];
+  const content = invoicesArray.map(inv => {
+    return {
+      ...inv,
+      paymentStatus: map[Number(inv.paymentStatus)],
+    };
+  });
   return (
     <>
       <WrapperModalTable
-        content={invoicesArray}
+        content={content}
         title={'Faktury:'}
         noContentMsg={'faktur'}
       >
@@ -29,7 +40,7 @@ function TableCustomerInvoices({ invoicesArray, noInvoices }) {
           classModifier={'admin-view'}
           headers={headers}
           keys={keys}
-          content={invoicesArray}
+          content={content}
           active={false}
         />
       </WrapperModalTable>

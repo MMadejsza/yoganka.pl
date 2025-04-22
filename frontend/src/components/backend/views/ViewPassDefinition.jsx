@@ -84,7 +84,7 @@ function ViewPassDefinition({
         passDefinition,
         amountPaid: passDefinition.price,
         paymentMethod: 'Credit Card',
-        paymentStatus: 'Completed',
+        paymentStatus: 1,
         validFrom: dateValue,
       });
       updateFeedback(res);

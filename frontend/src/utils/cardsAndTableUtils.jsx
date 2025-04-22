@@ -46,11 +46,11 @@ export function onRowBtnClick(
       customerDetails: '',
       scheduleId: row.scheduleId,
       product: row.productName,
-      status: 'Paid',
+      status: 1,
       amountPaid: row.price,
       amountDue: 0,
       paymentMethod: 'Credit Card',
-      paymentStatus: 'Completed',
+      paymentStatus: 1,
       customerId: row.customerId,
       rowId: row.rowId,
     });
@@ -69,9 +69,10 @@ export function formatAttendance(value) {
 export function formatPaymentStatus(value) {
   if (value == null) return null;
   const val = typeof value === 'string' ? value.toUpperCase() : value;
-  let symbol = 'pending';
-  if (val === 'COMPLETED' || val === 'PAID' || val === 1) symbol = 'check';
-  if (val === 0) symbol = 'pending';
+  let symbol = 'close';
+  if (val === 'COMPLETED' || val === 'PAID' || Number(val) === 1)
+    symbol = 'check';
+  if (Number(val) === 0) symbol = 'pending';
   return <SymbolOrIcon specifier={symbol} />;
 }
 

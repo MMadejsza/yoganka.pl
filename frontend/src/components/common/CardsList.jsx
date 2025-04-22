@@ -165,7 +165,7 @@ function CardsList({
         cardId: row.rowId || '',
         cardTypeModifier: row.payment || '',
         cardCircle: formatAttendance(row.attendance),
-        cardTitle: `${row.scheduleName} (${row.scheduleId})`,
+        cardTitle: `${row.scheduleName}`,
         squareTop: getWeekDay(scheduleDate) || '-',
         squareMiddle: day || '',
         squareBottom: `${monthName} ${year}` || '',

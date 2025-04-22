@@ -30,11 +30,20 @@ function TableCustomerTotalPayments({ data }) {
     setIsModalOpen(false);
     navigate('admin-console/show-all-customers');
   };
-
+  let map = {
+    1: '100%',
+    0: 'Częściowo',
+    '-1': 'Anulowana',
+  };
   const customerStats = statsCalculatorForCustomer(data);
-  const content = customerStats.payments.sort(
-    (a, b) => new Date(b.date) - new Date(a.date)
-  );
+  const content = customerStats.payments
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+    .map(payment => {
+      return {
+        ...payment,
+        status: map[Number(payment.status)],
+      };
+    });
   // console.log(`✅ content: `, content);
   // console.log(`✅ keys: `, keys);
   // console.log(`✅ customerStats: `, customerStats);
@@ -53,7 +62,7 @@ function TableCustomerTotalPayments({ data }) {
     'product',
     'amountPaid',
     'paymentMethod',
-    'paymentStatus',
+    'status',
   ];
   const table = (
     <WrapperModalTable
