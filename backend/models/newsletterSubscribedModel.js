@@ -27,9 +27,16 @@ export const SubscribedNewsletter = sequelizeDb.define(
       field: 'subscription_status',
     },
   },
+
   {
     tableName: 'subscribed_newsletters',
     timestamps: false,
+    indexes: [
+      {
+        unique: true,
+        fields: ['user_id', 'newsletter_id'],
+      },
+    ],
   }
 );
 

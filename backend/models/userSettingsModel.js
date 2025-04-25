@@ -13,6 +13,7 @@ const UserPrefSetting = sequelizeDb.define(
     userId: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
+      unique: true,
       field: 'user_id',
       references: {
         model: 'users', // tabel

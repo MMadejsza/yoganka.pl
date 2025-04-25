@@ -24,6 +24,10 @@ const Booking = sequelizeDb.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       field: 'customer_id',
+      references: {
+        model: 'customers',
+        key: 'customer_id',
+      },
     },
     paymentId: {
       type: DataTypes.INTEGER,
