@@ -29,506 +29,715 @@ const person = 'Admin';
 
 //! USERS_____________________________________________
 //@ GET
-export const getAllUsers = (req, res, next) => {
+export const getAllUsers = async (req, res, next) => {
   const controllerName = 'getAllUsers';
+  // Log the incoming request for debugging purposes
   callLog(req, person, controllerName);
 
   const model = models.User;
-  model
-    .findAll({
+  try {
+    // Fetch all users, including their preference setting ID if it exists
+    const records = await model.findAll({
       include: [
         {
           model: models.UserPrefSetting,
           attributes: ['userPrefId'],
         },
       ],
-    })
-    .then(records => {
-      if (!records) {
-        errCode = 404;
-        throw new Error('Nie znaleziono użytkowników.');
-      }
+      attributes: {
+        exclude: ['passwordHash'], // deleting
+      },
+    });
 
-      // Convert for records
-      const formattedRecords = records.map(record => {
-        const user = record.toJSON();
+    // If no records found, set error code and throw an error
+    if (!records || records.length === 0) {
+      errCode = 404;
+      throw new Error('Nie znaleziono użytkowników.');
+    }
 
-        return {
-          ...user,
-          rowId: user.userId,
-          registrationDate: formatIsoDateTime(user.registrationDate),
-          prefSettings: user.UserPrefSetting
-            ? `Tak (Id: ${user.UserPrefSetting.userPrefId})`
-            : 'Nie',
-          lastLoginDate: formatIsoDateTime(user.lastLoginDate),
-        };
-      });
+    // Convert each Sequelize record to plain object and format fields
+    const formattedRecords = records.map(record => {
+      const user = record.toJSON();
 
-      // New headers (keys from columnMap)
-      const totalKeys = [
-        'userId',
-        'email',
-        'lastLoginDate',
-        'registrationDate',
-        'role',
-        'prefSettings',
-      ];
+      return {
+        // Add a rowId field for UI tables
+        rowId: user.userId,
+        userId: user.userId,
 
-      // ✅ Return response to frontend
-      successLog(person, controllerName);
-      res.json({
-        confirmation: 1,
-        message: 'Konta pobrane pomyślnie.',
-        isLoggedIn: req.session.isLoggedIn,
-        totalKeys,
-        content: formattedRecords.sort((a, b) =>
-          a.email.localeCompare(b.email)
-        ), // With new names
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+        role: user.role,
+        email: user.email,
+        // Format the registration date to ISO + weekday
+        registrationDate: formatIsoDateTime(user.registrationDate),
+        // Show if user has pref settings or not
+        // Format last login date similarly
+        lastLoginDate: formatIsoDateTime(user.lastLoginDate),
+        prefSettings: user.UserPrefSetting
+          ? `Tak (Id: ${user.UserPrefSetting.userPrefId})`
+          : 'Nie',
+      };
+    });
+
+    // Define the column order/headers to send back
+    const totalKeys = [
+      'userId',
+      'email',
+      'lastLoginDate',
+      'registrationDate',
+      'role',
+      'prefSettings',
+    ];
+
+    // All good: log success and return JSON response
+    successLog(person, controllerName);
+    return res.json({
+      confirmation: 1,
+      message: 'Konta pobrane pomyślnie.',
+      isLoggedIn: req.session.isLoggedIn,
+      totalKeys,
+      // Sort records by email before sending
+      content: formattedRecords.sort((a, b) => a.email.localeCompare(b.email)),
+    });
+  } catch (err) {
+    // Handle any errors in one place
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
-export const getUserById = (req, res, next) => {
+export const getUserById = async (req, res, next) => {
   const controllerName = 'getUserById';
+  // Log the request details for debugging
   callLog(req, person, controllerName);
 
+  // Use the ID from URL params or fallback to the logged-in user's ID
   const PK = req.params.id || req.user.userId;
-  models.User.findByPk(PK, {
-    include: [
-      {
-        model: models.Customer, // Add Customer
-        required: false, // May not exist
+  try {
+    // Fetch the user by primary key, including related Customer and settings
+    const user = await models.User.findByPk(PK, {
+      include: [
+        {
+          model: models.Customer, // Include Customer record if exists
+          required: false, // It's optional
+          attributes: {
+            exclude: ['userId', 'user_id', 'emailVerified'], // deleting
+          },
+        },
+        {
+          model: models.UserPrefSetting, // Include user preference settings
+          required: false, // It's optional
+          attributes: {
+            exclude: ['passwordHash', 'userId', 'user_id'], // deleting
+          },
+        },
+      ],
+      attributes: {
+        exclude: ['passwordHash'], // deleting
       },
-      {
-        model: models.UserPrefSetting, // User settings if exist
-        required: false,
-      },
-    ],
-  })
-    .then(user => {
-      if (!user) {
-        errCode = 404;
-        throw new Error('Nie znaleziono użytkownika.');
-      }
+    });
 
-      successLog(person, controllerName);
-      return res
-        .status(200)
-        .json({ confirmation: 1, isLoggedIn: req.session.isLoggedIn, user });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+    // If no user found, set 404 error and throw
+    if (!user) {
+      errCode = 404;
+      throw new Error('Nie znaleziono użytkownika.');
+    }
+
+    // Log success and return the user object
+    successLog(person, controllerName);
+    return res.status(200).json({
+      confirmation: 1,
+      isLoggedIn: req.session.isLoggedIn,
+      user,
+    });
+  } catch (err) {
+    // Handle errors in a centralized way
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
-export const getUserSettings = (req, res, next) => {
+export const getUserSettings = async (req, res, next) => {
   const controllerName = 'getUserSettings';
+  // Log request for debugging
   callLog(req, person, controllerName);
 
-  models.UserPrefSetting.findByPk(req.params.id)
-    .then(preferences => {
-      if (!preferences) {
-        successLog(person, controllerName, 'fetched default');
+  let errCode = 500; // default error code
 
-        res.status(200).json({
-          confirmation: 1,
-          message: 'Brak własnych ustawień - załadowane domyślne.',
-        });
-        return null;
-      }
-      successLog(person, controllerName, 'fetched custom settings');
-      return res.status(200).json({ confirmation: 1, preferences });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+  try {
+    // Try to find user settings by PK
+    const preferences = await models.UserPrefSetting.findByPk(req.params.id, {
+      attributes: {
+        exclude: ['userId', 'user_id'], // deleting
+      },
+    });
+
+    // If no custom settings, send default message
+    if (!preferences) {
+      successLog(person, controllerName, 'fetched default');
+      return res.status(200).json({
+        confirmation: 1,
+        message: 'Brak własnych ustawień - załadowane domyślne.',
+      });
+    }
+
+    // If found, return them
+    successLog(person, controllerName, 'fetched custom settings');
+    return res.status(200).json({
+      confirmation: 1,
+      preferences,
+    });
+  } catch (err) {
+    // Log full error, then handle centrally
+    console.error('[getUserSettings] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
 //@ POST
-export const postCreateUser = (req, res, next) => {
+export const postCreateUser = async (req, res, next) => {
   const controllerName = 'postCreateUser';
+  // Log request for debugging
   callLog(req, person, controllerName);
+
   const { email, password, confirmedPassword, date } = req.body;
+  let errCode = 500; // default error code
 
-  models.User.findOne({ where: { email } })
-    .then(user => {
-      if (user) {
-        errCode = 409;
-        throw new Error('Konto już istnieje.');
-      }
+  try {
+    // Check if user already exists
+    const existing = await models.User.findOne({ where: { email } });
+    if (existing) {
+      errCode = 409;
+      throw new Error('Konto już istnieje.');
+    }
 
-      // it returns the promise
-      return bcrypt
-        .hash(password, 12)
-        .then(passwordHashed => {
-          return models.User.create({
-            registrationDate: date,
-            passwordHash: passwordHashed,
-            lastLoginDate: date,
-            email: email,
-            role: 'USER',
-            profilePictureSrcSetJson: null,
-          });
-        })
-        .then(newUser => {
-          // Notification email
-          if (email) {
-            adminEmails.sendUserAccountCreatedMail({ to: email });
-          }
+    // Hash the password
+    const passwordHashed = await bcrypt.hash(password, 12);
 
-          successLog(person, controllerName);
-          return res.status(200).json({
-            type: 'signup',
-            code: 200,
-            confirmation: 1,
-            message: 'Konto utworzone pomyślnie',
-          });
-        });
-    })
-    .catch(err =>
-      catchErr(person, res, errCode, err, controllerName, {
-        type: 'signup',
-        code: 409,
-      })
-    );
+    // Create new user record
+    const newUser = await models.User.create({
+      registrationDate: date,
+      passwordHash: passwordHashed,
+      lastLoginDate: date,
+      email: email,
+      role: 'USER',
+      profilePictureSrcSetJson: null,
+    });
+
+    // Send notification email
+    if (email) {
+      adminEmails.sendUserAccountCreatedMail({ to: email });
+    }
+
+    // Log success and respond
+    successLog(person, controllerName);
+    return res.status(200).json({
+      type: 'signup',
+      code: 200,
+      confirmation: 1,
+      message: 'Konto utworzone pomyślnie',
+    });
+  } catch (err) {
+    // Print full error, then handle centrally
+    console.error('[postCreateUser] error:', err);
+    return catchErr(person, res, errCode, err, controllerName, {
+      type: 'signup',
+      code: 409,
+    });
+  }
 };
 //@ PUT
-export const putEditUserSettings = (req, res, next) => {
+export const putEditUserSettings = async (req, res, next) => {
   const controllerName = 'putEditUserSettings';
+  // Log request for debugging
   callLog(req, person, controllerName);
 
   const givenSettings = req.body;
   const { handedness, font, notifications, animation, theme } = givenSettings;
   const userId = req.params.id;
+  let errCode = 500; // default error code
+
   console.log(`❗❗❗`, req.body);
   console.log(`❗❗❗`, req.params.id);
 
-  if (!userId) {
-    throw new Error('Brak identyfikatora użytkownika');
-  }
+  try {
+    // Check if userId param is provided
+    if (!userId) {
+      errCode = 400;
+      throw new Error('Brak identyfikatora użytkownika');
+    }
 
-  // if preferences don't exist - create new ones:
-  models.UserPrefSetting.findOrCreate({
-    where: { userId: userId },
-    defaults: {
-      userId: userId,
-      handedness: !!handedness || false,
-      fontSize: font || 'M',
-      notifications: !!notifications || false,
-      animation: !!animation || false,
-      theme: !!theme || false,
-    },
-  })
-    .then(([preferences, created]) => {
-      if (!created) {
-        // Nothing changed
-        return areSettingsChanged(
-          res,
-          person,
-          controllerName,
-          preferences,
-          givenSettings
-        );
-      } else {
-        // New preferences created
-        successLog(person, controllerName, 'created');
-        return { confirmation: 1, message: 'Ustawienia zostały utworzone' };
-      }
-    })
-    .then(result => {
-      if (!result) return;
-      successLog(person, controllerName, 'sent');
-      return res.status(200).json({
-        confirmation: result.confirmation,
-        message: result.message,
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+    // Try to find or create the settings row
+    const [preferences, created] = await models.UserPrefSetting.findOrCreate({
+      where: { userId: userId },
+      defaults: {
+        userId: userId,
+        handedness: !!handedness,
+        fontSize: font || 'M',
+        notifications: !!notifications,
+        animation: !!animation,
+        theme: !!theme,
+      },
+    });
+
+    let result;
+    if (!created) {
+      // If already existed, check for changes
+      // areSettingsChanged returns null if no change,
+      // or a promise resolving to update info
+      result = await areSettingsChanged(
+        res,
+        person,
+        controllerName,
+        preferences,
+        givenSettings
+      );
+    } else {
+      // New settings were created
+      successLog(person, controllerName, 'created');
+      result = {
+        confirmation: 1,
+        message: 'Ustawienia zostały utworzone',
+      };
+    }
+
+    // If result is null, means no change happened, so response already sent
+    if (!result) return;
+
+    // Send the final response
+    successLog(person, controllerName, 'sent');
+    return res.status(200).json({
+      confirmation: result.confirmation,
+      message: result.message,
+    });
+  } catch (err) {
+    // Log full error then handle centrally
+    console.error('[putEditUserSettings] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
 //@ DELETE
-export const deleteUser = (req, res, next) => {
+export const deleteUser = async (req, res, next) => {
   const controllerName = 'deleteUser';
+  // Log request for debugging
   callLog(req, person, controllerName);
 
+  let errCode = 500; // default error code
   const id = req.params.id;
   let userEmail;
 
-  // Fetch user to delete to get email
-  models.User.findByPk(id)
-    .then(user => {
-      if (!user) {
-        errCode = 404;
-        throw new Error('Nie znaleziono użytkownika.');
-      }
+  try {
+    // Find the user to delete
+    const user = await models.User.findByPk(id, {
+      attributes: ['email'],
+    });
 
-      // Assign for notification email
-      userEmail = user.email;
+    if (!user) {
+      errCode = 404;
+      throw new Error('Nie znaleziono użytkownika.');
+    }
 
-      // Finally delete
-      return models.User.destroy({
-        where: {
-          userId: id,
-        },
-      });
-    })
-    .then(deletedCount => {
-      if (!deletedCount) {
-        errCode = 404;
-        throw new Error('Nie usunięto użytkownika.');
-      }
+    // Save email for notification
+    userEmail = user.email;
 
-      // Send notification
-      if (userEmail) {
-        adminEmails.sendUserAccountDeletedMail({ to: userEmail });
-      }
+    // Delete the user record
+    const deletedCount = await models.User.destroy({
+      where: { userId: id },
+    });
 
-      successLog(person, controllerName);
-      return res.status(200).json({
-        confirmation: 1,
-        message: 'Konto usunięte pomyślnie.',
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+    if (!deletedCount) {
+      errCode = 404;
+      throw new Error('Nie usunięto użytkownika.');
+    }
+
+    // Send deletion email if we have the address
+    if (userEmail) {
+      adminEmails.sendUserAccountDeletedMail({ to: userEmail });
+    }
+
+    // Log success and send response
+    successLog(person, controllerName);
+    return res.status(200).json({
+      confirmation: 1,
+      message: 'Konto usunięte pomyślnie.',
+    });
+  } catch (err) {
+    // Print full error, then handle centrally
+    console.error('[deleteUser] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
 
 //! CUSTOMERS_____________________________________________
 //@ GET
-export const getAllCustomers = (req, res, next) => {
+export const getAllCustomers = async (req, res, next) => {
   const controllerName = 'getAllCustomers';
+  // Log request for debugging
   callLog(req, person, controllerName);
 
-  models.Customer.findAll()
-    .then(records => {
-      if (!records) {
-        errCode = 404;
-        throw new Error('Nie znaleziono użytkowników.');
-      }
+  let errCode = 500; // default error code
 
-      const formattedRecords = records.map(record => {
-        const customer = record.toJSON();
+  try {
+    // Fetch only needed columns, exclude userId
+    const records = await models.Customer.findAll({
+      attributes: {
+        exclude: ['user_id'], // deleting
+      },
+    });
 
-        return {
-          ...customer,
-          rowId: customer.customerId,
-          userId: customer.userId,
-          customerFullName: `${customer.firstName} ${customer.lastName}`,
-        };
-      });
+    // If no records, throw 404
+    if (!records || records.length === 0) {
+      errCode = 404;
+      throw new Error('Nie znaleziono klientów.');
+    }
 
-      const totalKeys = [
-        'customerId',
-        'userId',
-        'customerFullName',
-        'dob',
-        'customerType',
-        'preferredContactMethod',
-        'referralSource',
-        'loyalty',
-        'notes',
-      ];
+    // Convert and add rowId + full name
+    const formattedRecords = records.map(record => {
+      const {
+        customerId,
+        firstName,
+        lastName,
+        dob,
+        userId,
+        customerType,
+        preferredContactMethod,
+        referralSource,
+        loyalty,
+        notes,
+      } = record.toJSON();
 
-      // ✅ Return response to frontend
-      successLog(person, controllerName);
-      res.json({
-        confirmation: 1,
-        isLoggedIn: req.session.isLoggedIn,
-        totalKeys,
-        content: formattedRecords.sort((a, b) =>
-          a.lastName.localeCompare(b.lastName)
-        ), // With new names
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+      return {
+        // For table rows
+        rowId: customerId,
+        customerId,
+        userId,
+        // Combine first+last name
+        customerFullName: `${firstName} ${lastName}`,
+        firstName,
+        lastName,
+        dob,
+        customerType,
+        preferredContactMethod,
+        referralSource,
+        loyalty,
+        notes,
+      };
+    });
+
+    // Define headers for front end (exclude userId)
+    const totalKeys = [
+      'customerId',
+      'userId',
+      'customerFullName',
+      'dob',
+      'customerType',
+      'preferredContactMethod',
+      'referralSource',
+      'loyalty',
+      'notes',
+    ];
+
+    // Log success and send response
+    successLog(person, controllerName);
+    return res.json({
+      confirmation: 1,
+      isLoggedIn: req.session.isLoggedIn,
+      totalKeys,
+      // Sort by last name
+      content: formattedRecords.sort((a, b) =>
+        a.lastName.localeCompare(b.lastName)
+      ),
+    });
+  } catch (err) {
+    // Print error then central handler
+    console.error('[getAllCustomers] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
-export const getAllCustomersWithEligiblePasses = (req, res, next) => {
+export const getAllCustomersWithEligiblePasses = async (req, res, next) => {
   const controllerName = 'getAllCustomersWithEligiblePasses';
+  // Log request for debugging
   callLog(req, person, controllerName);
-  const { scheduleId } = req.params;
-  let schedule;
 
-  //  Get schedule with product for future validation
-  models.ScheduleRecord.findByPk(scheduleId, {
-    include: [{ model: models.Product }],
-  })
-    .then(foundSchedule => {
-      if (!foundSchedule) {
-        throw new Error('Nie znaleziono terminu.');
-      }
-      schedule = foundSchedule.toJSON();
-      // Get all customers having passes with nested passes
-      return models.Customer.findAll({
-        include: [
-          {
-            model: models.CustomerPass,
-            include: [{ model: models.PassDefinition }],
-          },
+  let errCode = 500; // default error code
+  try {
+    const { scheduleId } = req.params;
+
+    // Fetch schedule with its product
+    const scheduleRecord = await models.ScheduleRecord.findByPk(scheduleId, {
+      attributes: {
+        exclude: [
+          'scheduleId', // not needed
+          'productId', // we only need Product.type
+          'location', // irrelevant here
+          'capacity', // irrelevant here
         ],
-      });
-    })
-    .then(customers => {
-      if (!customers || customers.length === 0) {
-        throw new Error('Nie znaleziono klientów.');
-      }
-      // Filter eligible passes for each customer
-      const eligibleCustomers = customers
-        .map(customer => {
-          const cust = customer.toJSON();
-          if (cust.CustomerPasses && Array.isArray(cust.CustomerPasses)) {
-            cust.eligiblePasses = cust.CustomerPasses.filter(pass =>
-              isPassValidForSchedule(pass, schedule)
-            );
-          } else {
-            cust.eligiblePasses = [];
-          }
+      },
+      include: [{ model: models.Product, attributes: ['type'] }], // only need the type for validation
+    });
+    if (!scheduleRecord) {
+      errCode = 404;
+      throw new Error('Nie znaleziono terminu.');
+    }
+    const schedule = scheduleRecord.toJSON();
 
-          delete cust.CustomerPasses;
-          return cust;
-        })
-        // return the customer with at least 1 eligible pass
-        .filter(cust => cust.eligiblePasses.length > 0);
+    // Fetch all customers with their passes and pass definitions
+    const customers = await models.Customer.findAll({
+      include: [
+        {
+          model: models.CustomerPass,
+          attributes: [
+            'customerPassId',
+            'status', // needed for active check
+            'usesLeft', // needed for count check
+            'validFrom', // needed for date window
+            'validUntil', // needed for expiry check
+          ],
+          include: [
+            {
+              model: models.PassDefinition,
+              attributes: [
+                'name', // for logging
+                'passType', // for sort order
+                'allowedProductTypes', // for matching product types
+              ],
+            },
+          ],
+        },
+      ],
+    });
+    if (!customers || customers.length === 0) {
+      errCode = 404;
+      throw new Error('Nie znaleziono klientów.');
+    }
 
-      successLog(null, controllerName);
-      return res.status(200).json({
-        confirmation: 1,
-        content: eligibleCustomers,
-      });
-    })
-    .catch(err => catchErr(null, res, 500, err, controllerName));
+    // For each customer, keep only passes valid for this schedule
+    const eligibleCustomers = customers
+      .map(customer => {
+        const cust = customer.toJSON();
+        const passes = Array.isArray(cust.CustomerPasses)
+          ? cust.CustomerPasses
+          : [];
+        cust.eligiblePasses = passes.filter(pass =>
+          isPassValidForSchedule(pass, schedule)
+        );
+        delete cust.CustomerPasses; // remove old passes array
+        return cust;
+      })
+      .filter(cust => cust.eligiblePasses.length > 0); // only customers with at least one
+
+    // Log success and return result
+    successLog(person, controllerName);
+    return res.status(200).json({
+      confirmation: 1,
+      content: eligibleCustomers,
+    });
+  } catch (err) {
+    // Print error then handle it centrally
+    console.error('[getAllCustomersWithEligiblePasses] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
-export const getCustomerById = (req, res, next) => {
+export const getCustomerById = async (req, res, next) => {
   const controllerName = 'getCustomerById';
+  // Log request for debugging
   callLog(req, person, controllerName);
 
-  // console.log(req.user);
+  let errCode = 500;
   const PK = req.params.id;
-  models.Customer.findByPk(PK, {
-    include: [
-      {
-        model: models.User, // Add Customer
-        required: false, // May not exist
-        include: [
-          {
-            model: models.UserPrefSetting, // Customer phone numbers
-            required: false,
-            attributes: {
-              exclude: ['userId'], // deleting
-            },
-          },
-        ],
-      },
-      {
-        model: models.CustomerPass,
-        required: false,
-        include: [{ model: models.PassDefinition }],
-      },
-      {
-        model: models.Payment, // His reservations
-        required: false,
-        include: [
-          {
-            model: models.Invoice, // eventual invoices
-            required: false,
-          },
-        ],
-        attributes: {
-          exclude: ['productId', 'customerId'], // deleting
-        },
-      },
-      {
-        model: models.Booking,
-        required: false,
-        include: [
-          {
-            model: models.ScheduleRecord, // schedules trough booked schedule
-            required: false,
 
-            include: [
-              {
-                model: models.Product, //schedule's product
-                required: false,
-              },
-              {
-                model: models.Feedback,
-                required: false,
-                where: { customerId: PK }, // but only for particular customer
-                attributes: {
-                  exclude: ['customerId', 'scheduleId'], // deleting
-                },
-              },
+  try {
+    // Fetch customer and related data, excluding unneeded columns
+    const customer = await models.Customer.findByPk(PK, {
+      attributes: {
+        exclude: ['userId', 'user_id'], // we don't need the foreign key here
+      },
+      include: [
+        {
+          model: models.User, // include linked user account
+          required: false,
+          attributes: {
+            exclude: [
+              'passwordHash', // remove sensitive fields
+              'profilePictureSrcSetJson',
+              'emailVerified',
             ],
-            attributes: {
-              exclude: ['productId'], // deleting
-            },
           },
-        ],
-        attributes: {
-          exclude: ['customerId', 'scheduleId'], // deleting
+          include: [
+            {
+              model: models.UserPrefSetting, // include user preferences
+              required: false,
+              attributes: {
+                exclude: ['userId', 'user_id'], // foreign key not needed
+              },
+            },
+          ],
         },
+        {
+          model: models.CustomerPass, // include all passes
+          required: false,
+          attributes: {
+            exclude: [
+              'customerId',
+              'customer_id',
+              'paymentId',
+              'payment_id',
+              'pass_def_id',
+            ], // remove FKs
+          },
+          include: [
+            {
+              model: models.PassDefinition, // include pass details
+              attributes: ['name', 'passDefId'],
+            },
+          ],
+        },
+        {
+          model: models.Payment, // include payments
+          required: false,
+          attributes: {
+            exclude: ['customerId', 'customer_id'], // remove FK
+          },
+          include: [
+            {
+              model: models.Invoice, // include invoices
+              required: false,
+            },
+          ],
+        },
+        {
+          model: models.Booking, // include bookings
+          required: false,
+          attributes: {
+            exclude: [
+              'customerId', // remove FK
+              'customer_id',
+              'customer_pass_id',
+              'scheduleId', // remove FK
+              'schedule_id', // remove FK
+              'paymentId', // remove FK
+              'customerPassId', // remove FK
+            ],
+          },
+          include: [
+            {
+              model: models.ScheduleRecord, // include schedule info
+              required: false,
+              attributes: {
+                exclude: [
+                  'productId', // remove FK
+                  'product_id', // remove FK
+                  'capacity', // not needed here
+                ],
+              },
+              include: [
+                {
+                  model: models.Product, // include product details
+                  required: false,
+                  attributes: ['productId', 'name', 'type', 'duration'],
+                },
+                {
+                  model: models.Feedback, // include feedback for this customer
+                  required: false,
+                  where: { customerId: PK },
+                  attributes: {
+                    exclude: ['customerId', 'scheduleId'], // remove FKs
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
+    // If not found, return 404
+    if (!customer) {
+      errCode = 404;
+      throw new Error('Nie znaleziono profilu uczestnika.');
+    }
+
+    // Convert to plain object
+    const parsed = customer.toJSON();
+
+    // Add human-readable pass name
+    parsed.CustomerPasses =
+      parsed.CustomerPasses?.map(cp => ({
+        ...cp,
+        passName: cp.PassDefinition.name,
+      })) || [];
+
+    // Define which keys to show for passes table
+    const customerPassesKeys = [
+      'customerPassId',
+      'passName',
+      'purchaseDate',
+      'validFrom',
+      'validUntil',
+      'usesLeft',
+      'status',
+    ];
+
+    // Log success and send response
+    successLog(person, controllerName);
+    return res.status(200).json({
+      confirmation: 1,
+      isLoggedIn: req.session.isLoggedIn,
+      customer: {
+        ...parsed,
+        customerPassesKeys,
       },
-    ],
-    attributes: {
-      exclude: ['userId'], // deleting
-    },
-  })
-    .then(customer => {
-      if (!customer) {
-        errCode = 404;
-        throw new Error('Nie znaleziono profilu uczestnika.');
-      }
-
-      const parsedCustomer = customer.toJSON();
-
-      const formattedCustomerPasses = parsedCustomer?.CustomerPasses?.map(
-        cp => {
-          return {
-            ...cp,
-            passName: `${cp.PassDefinition.name}`,
-          };
-        }
-      );
-      parsedCustomer.CustomerPasses = formattedCustomerPasses;
-
-      const customerPassesKeys = [
-        'customerPassId',
-        'passName',
-        'purchaseDate',
-        'validFrom',
-        'validUntil',
-        'usesLeft',
-        'status',
-      ];
-
-      successLog(person, controllerName);
-      return res.status(200).json({
-        confirmation: 1,
-        isLoggedIn: req.session.isLoggedIn,
-        customer: {
-          ...parsedCustomer,
-          customerPassesKeys,
-        },
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+    });
+  } catch (err) {
+    // Print full error, then handle centrally
+    console.error('[getCustomerById] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
-export const getCustomerDetails = (req, res, next) => {
+export const getCustomerDetails = async (req, res, next) => {
   const controllerName = 'getEditCustomerDetails';
+  // Log request for debugging
   callLog(req, person, controllerName);
 
-  models.Customer.findByPk(req.params.id)
-    .then(customer => {
-      if (!customer) {
-        errCode = 404;
-        throw new Error('Nie znaleziono danych uczestnika.');
-      }
-      successLog(person, controllerName);
-      return res.status(200).json({
-        confirmation: 1,
-        customer,
-        message: 'Dane uczestnika pobrane pomyślnie.',
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+  let errCode = 500; // default error code
+
+  try {
+    // Fetch only the fields needed on the frontend form
+    const customer = await models.Customer.findByPk(req.params.id, {
+      attributes: {
+        exclude: [
+          'referralSource',
+          'customerType',
+          'customerId',
+          'firstName',
+          'lastName',
+          'dob',
+        ],
+      },
+    });
+
+    // If no customer, throw 404
+    if (!customer) {
+      errCode = 404;
+      throw new Error('Nie znaleziono danych uczestnika.');
+    }
+
+    // Convert to plain object
+    const data = customer.toJSON();
+
+    // Log success and send response
+    successLog(person, controllerName);
+    return res.status(200).json({
+      confirmation: 1,
+      customer: data,
+      message: 'Dane uczestnika pobrane pomyślnie.',
+    });
+  } catch (err) {
+    // Print full error then handle centrally
+    console.error('[getCustomerDetails] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
 //@ POST
-export const postCreateCustomer = (req, res, next) => {
+export const postCreateCustomer = async (req, res, next) => {
   const controllerName = 'postCreateCustomer';
+  // Log request for debugging
   callLog(req, person, controllerName);
-  console.log(`req.body`, req.body);
 
+  let errCode = 500; // default error code
   const {
     userId,
     customerType,
@@ -543,82 +752,82 @@ export const postCreateCustomer = (req, res, next) => {
   let customerEmail;
 
   try {
+    // Validate required fields
     isEmptyInput(firstName, 'imię');
     isEmptyInput(lastName, 'nazwisko');
     isEmptyInput(dob, 'data urodzenia');
     isEmptyInput(phone, 'telefon');
+
+    // Check age
     if (!isAdult(dob)) {
+      errCode = 400;
       console.log('\n❌❌❌ Customer below 18');
       throw new Error('Uczestnik musi być pełnoletni.');
     }
+
+    // Make sure no customer exists for this user
+    const existing = await models.Customer.findOne({ where: { userId } });
+    if (existing) {
+      errCode = 409;
+      throw new Error('Profil uczestnika już istnieje.');
+    }
+
+    // Fetch user email for notification
+    const user = await models.User.findByPk(userId, {
+      attributes: ['userId', 'email'],
+    });
+    if (!user) {
+      errCode = 404;
+      throw new Error('Nie znaleziono użytkownika.');
+    }
+    customerEmail = user.email;
+
+    // Create new customer record
+    const newCustomer = await models.Customer.create({
+      customerType: customerType || 'Indywidualny',
+      userId,
+      firstName,
+      lastName,
+      dob,
+      phone,
+      preferredContactMethod: cMethod || '=',
+      referralSource: 'Admin insert',
+      loyalty: loyalty ?? 5,
+      notes,
+    });
+
+    // Update user role to CUSTOMER
+    await user.update({ role: 'CUSTOMER' });
+
+    // Send notification email
+    if (customerEmail) {
+      adminEmails.sendCustomerCreatedMail({
+        to: customerEmail,
+        firstName,
+      });
+    }
+
+    // Success response
+    successLog(person, controllerName);
+    return res.status(200).json({
+      code: 200,
+      confirmation: 1,
+      message: 'Zarejestrowano pomyślnie.',
+    });
   } catch (err) {
+    // Print error then handle centrally
+    console.error('[postCreateCustomer] error:', err);
     return catchErr(person, res, errCode, err, controllerName, { code: 409 });
   }
-
-  models.Customer.findOne({ where: { userId: userId } })
-    .then(customer => {
-      if (customer) {
-        errCode = 409;
-        throw new Error('Profil uczestnika już istnieje.');
-      }
-
-      // Getting user for email purposes
-      return models.User.findByPk(userId, {
-        attributes: ['userId', 'email'],
-      });
-    })
-    .then(user => {
-      if (!user) {
-        errCode = 404;
-        throw new Error('Nie znaleziono użytkownika.');
-      }
-
-      // Assign email
-      customerEmail = user.email;
-
-      // Create user
-      return models.Customer.create({
-        customerType: customerType || 'Indywidualny',
-        userId: userId,
-        firstName: firstName,
-        lastName: lastName,
-        dob: dob,
-        phone: phone,
-        preferredContactMethod: cMethod || '=',
-        referralSource: 'Admin insert',
-        loyalty: loyalty || 5,
-        notes: notes,
-      }).then(newCustomer => {
-        return user.update({ role: 'CUSTOMER' }).then(() => newCustomer);
-      });
-    })
-    .then(newCustomer => {
-      // Notification email
-      if (customerEmail) {
-        adminEmails.sendCustomerCreatedMail({
-          to: customerEmail,
-          firstName,
-        });
-      }
-
-      successLog(person, controllerName);
-      return res.status(200).json({
-        code: 200,
-        confirmation: 1,
-        message: 'Zarejestrowano pomyślnie.',
-      });
-    })
-    .catch(err =>
-      catchErr(person, res, errCode, err, controllerName, { code: 409 })
-    );
 };
 //@ PUT
-export const putEditCustomerDetails = (req, res, next) => {
+export const putEditCustomerDetails = async (req, res, next) => {
   const controllerName = 'putEditCustomerDetails';
+  // Log request for debugging
   callLog(req, person, controllerName);
 
+  let errCode = 500; // default error code
   const customerId = req.params.id;
-
   const {
     phone: newPhone,
     cMethod: newContactMethod,
@@ -626,107 +835,126 @@ export const putEditCustomerDetails = (req, res, next) => {
     notes: newNotes,
   } = req.body;
 
-  models.Customer.findByPk(customerId)
-    .then(customer => {
+  try {
+    // 1. Find customer by PK
+    const customer = await models.Customer.findByPk(customerId, {
+      attributes: ['phone', 'preferredContactMethod', 'loyalty', 'notes'],
+    });
+
+    if (!customer) {
       errCode = 404;
-      if (!customer) throw new Error('Nie znaleziono danych uczestnika.');
+      throw new Error('Nie znaleziono danych uczestnika.');
+    }
+    successLog(person, controllerName, 'fetched');
 
-      successLog(person, controllerName, 'fetched');
-      return customer;
-    })
-    .then(foundCustomer => {
-      const interrupted = areCustomerDetailsChanged(
-        res,
-        person,
-        foundCustomer,
-        newPhone,
-        newContactMethod
-      );
-      if (interrupted) return;
+    // 2. Check if phone or contact method missing or unchanged
+    const interrupted = areCustomerDetailsChanged(
+      res,
+      person,
+      customer,
+      newPhone,
+      newContactMethod
+    );
+    if (interrupted) return;
 
-      const { phone, preferredContactMethod, loyalty, notes } = foundCustomer;
+    // 3. Check if other fields are unchanged
+    const { phone, preferredContactMethod, loyalty, notes } = customer;
 
-      if (
-        phone == newPhone &&
-        preferredContactMethod == newContactMethod &&
-        loyalty == newLoyalty &&
-        notes == newNotes
-      ) {
-        // Nothing changed
-        console.log('\n❓❓❓ Admin Customer no change');
-        res.status(200).json({ confirmation: 0, message: 'Brak zmian' });
-        return null;
-      }
-      return foundCustomer;
-    })
-    .then(fetchedCustomer => {
-      if (!fetchedCustomer) return;
-      models.Customer.update(
-        {
-          phone: newPhone,
-          preferredContactMethod: newContactMethod,
-          loyalty: newLoyalty,
-          notes: newNotes,
-        },
-        { where: { customerId: customerId } }
-      )
-        .then(customerResult => {
-          return { customerResult };
-        })
-        .then(results => {
-          successLog(person, controllerName);
-          const affectedCustomerRows = results.customerResult[0];
-          const status = affectedCustomerRows >= 1;
-          return res.status(200).json({
-            message: 'Profil zaktualizowany pomyślnie.',
-            confirmation: status,
-            affectedCustomerRows,
-          });
-        })
-        .catch(err => catchErr(person, res, errCode, err, controllerName));
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+    if (
+      phone === newPhone &&
+      preferredContactMethod === newContactMethod &&
+      loyalty === newLoyalty &&
+      notes === newNotes
+    ) {
+      // Nothing changed
+      console.log('\n❓❓❓ Admin Customer no change');
+      return res.status(200).json({
+        confirmation: 0,
+        message: 'Brak zmian',
+      });
+    }
+
+    // 4. Perform update
+    const [affectedRows] = await models.Customer.update(
+      {
+        phone: newPhone,
+        preferredContactMethod: newContactMethod,
+        loyalty: newLoyalty,
+        notes: newNotes,
+      },
+      { where: { customerId } }
+    );
+
+    // 5. Log success and send response
+    successLog(person, controllerName);
+    return res.status(200).json({
+      message: 'Profil zaktualizowany pomyślnie.',
+      confirmation: affectedRows >= 1,
+      affectedCustomerRows: affectedRows,
+    });
+  } catch (err) {
+    // Print full error then handle centrally
+    console.error('[putEditCustomerDetails] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
 //@ DELETE
-export const deleteCustomer = (req, res, next) => {
+export const deleteCustomer = async (req, res, next) => {
   const controllerName = 'deleteCustomer';
+  // Log request for debugging
   callLog(req, person, controllerName);
 
+  let errCode = 500; // default error code
   const id = req.params.id;
   let userEmail;
 
-  models.Customer.findOne({
-    where: { customerId: id },
-    include: [
-      {
-        model: models.User,
-        attributes: ['email'],
+  try {
+    // Fetch customer and only the email from linked User
+    const customer = await models.Customer.findOne({
+      where: { customerId: id },
+      attributes: {
+        exclude: ['userId', 'user_id'], // drop foreign key
       },
-    ],
-  })
-    .then(customer => {
-      if (!customer) {
-        errCode = 404;
-        throw new Error('Nie znaleziono profilu uczestnika.');
-      }
+      include: [
+        {
+          model: models.User,
+          required: false,
+          attributes: ['email'], // only need email
+        },
+      ],
+    });
 
-      userEmail = customer.User?.email;
-      return customer.destroy();
-    })
-    .then(() => {
-      // email notification
-      if (userEmail) {
-        adminEmails.sendCustomerDeletedMail({ to: userEmail });
-      }
+    // If no record, throw 404
+    if (!customer) {
+      errCode = 404;
+      throw new Error('Nie znaleziono profilu uczestnika.');
+    }
 
-      successLog(person, controllerName);
-      return res
-        .status(200)
-        .json({ confirmation: 1, message: 'Profil usunięty pomyślnie.' });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+    // Save email for later notification
+    userEmail = customer.User?.email;
+
+    // Delete the customer record
+    await customer.destroy();
+
+    // Send deletion email if available
+    if (userEmail) {
+      adminEmails.sendCustomerDeletedMail({ to: userEmail });
+    }
+
+    // Log success and respond
+    successLog(person, controllerName);
+    return res.status(200).json({
+      confirmation: 1,
+      message: 'Profil usunięty pomyślnie.',
+    });
+  } catch (err) {
+    // Print full error then handle centrally
+    console.error('[deleteCustomer] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
 
+//# KONTNUUJ Z TRY CATCH
 //! SCHEDULES_____________________________________________
 //@ GET
 export const getAllSchedules = (req, res, next) => {

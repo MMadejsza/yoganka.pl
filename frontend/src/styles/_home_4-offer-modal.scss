@@ -161,7 +161,7 @@
   &.visible {
     opacity: 1;
     width: 95vw;
-    min-height: max-content;
+    // min-height: max-content;
     max-height: 92vh;
     transform: translate(-50%, -50%) scale(1);
     transition: map.get($behavior, base-transition);
