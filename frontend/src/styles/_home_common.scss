@@ -119,3 +119,16 @@ footer {
 }
 
 //! COMMON BLOCKS END
+@supports (-webkit-grid: auto) {
+	.wrapper {
+	  /* Safari-only fixes for grid and tiles */
+	  align-items: stretch; /* ensure tiles in a row have equal height */
+	  grid-auto-rows: minmax(250px, auto); /* set row min height */
+	  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* use auto-fill instead of auto-fit */
+	  grid-template-rows: repeat(5, auto) minmax(0, 1fr) auto; /* auto rows, flexible space, auto */
+	  gap: .5rem; /* space between tiles */
+	}
+  
+
+  } 
+

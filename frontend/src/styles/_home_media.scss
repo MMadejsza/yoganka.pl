@@ -572,3 +572,16 @@
     font-size: calc(var(--scale) * 12px);
   }
 }
+
+@supports (-webkit-grid: auto) {
+	@media (min-width: 1024px) {
+	  .wrapper {
+		grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+	  }
+	}
+	@media (max-width: 768px) {
+	  .wrapper {
+		grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+	  }
+	}
+  }
