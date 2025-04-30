@@ -28,9 +28,9 @@ body {
 }
 .wrapper {
 	display: grid;
-	min-height: 100vh;
-	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-	grid-template-rows: auto auto auto auto auto 1fr auto;
+	// min-height: 100vh;
+	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	grid-template-rows: repeat(5, auto) minmax(0, 1fr) auto;
 	grid-template-areas:
 		'header header header header header '
 		'about about about about about'
@@ -40,7 +40,10 @@ body {
 		'space space space space space'
 		'footer footer footer footer footer';
 	// gap: 5rem 0;
+	gap: .5rem;
 	-webkit-overflow-scrolling: touch;
+
+	
 }
 .space {
 	grid-area: space;
@@ -121,3 +124,19 @@ footer {
 }
 
 //! COMMON BLOCKS END
+@supports (-webkit-grid: auto) {
+	.wrapper {
+	  /* Safari-only fixes for grid and tiles */
+	  align-items: stretch; /* ensure tiles in a row have equal height */
+	  grid-auto-rows: minmax(250px, auto); /* set row min height */
+	  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* use auto-fill instead of auto-fit */
+	  grid-template-rows: repeat(5, auto) minmax(0, 1fr) auto; /* auto rows, flexible space, auto */
+	  gap: .5rem; /* space between tiles */
+	}
+  
+
+  }
+ 
+  
+	
+  

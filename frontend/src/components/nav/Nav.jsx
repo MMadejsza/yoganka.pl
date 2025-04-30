@@ -47,7 +47,7 @@ const menuSideSet = [
 	{
 		name: 'Instagram',
 		icon: 'fa-brands fa-instagram',
-		link: 'https://www.instagram.com/yoganka_bodyhealing/',
+		link: 'https://www.instagram.com/tu_yoganka',
 	},
 	{
 		name: 'Facebook',

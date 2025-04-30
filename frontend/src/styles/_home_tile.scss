@@ -140,3 +140,19 @@
 	}
 }
 //! TILE END
+@supports (-webkit-grid: auto) {
+	.tile {
+		/* flex layout inside each tile to equalise height */
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		min-height: 250px; /* enforce a sensible minimum */
+	  }
+	
+	  .tile__img {
+		/* force images to cover their container */
+		width: 100%;
+		height: auto;
+		object-fit: cover;
+	  }
+  }

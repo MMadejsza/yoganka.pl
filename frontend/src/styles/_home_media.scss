@@ -510,7 +510,16 @@
 			'partners partners partners partners partners'
 			'space space space space space'
 			'footer footer footer footer footer';
+
+			// for safari:	
 	}
+
+	@supports (-webkit-grid: auto) {
+		.wrapper {
+		  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+		}
+	  }
+
 	.burger {
 		display: none;
 	}
@@ -781,3 +790,17 @@
 		font-size: 12px;
 	}
 }
+
+
+@supports (-webkit-grid: auto) {
+	@media (min-width: 1024px) {
+	  .wrapper {
+		grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+	  }
+	}
+	@media (max-width: 768px) {
+	  .wrapper {
+		grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+	  }
+	}
+  }
