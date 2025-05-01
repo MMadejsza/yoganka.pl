@@ -954,230 +954,262 @@ export const deleteCustomer = async (req, res, next) => {
   }
 };
 
-//# KONTNUUJ Z TRY CATCH
 //! SCHEDULES_____________________________________________
 //@ GET
-export const getAllSchedules = (req, res, next) => {
+export const getAllSchedules = async (req, res, next) => {
   const controllerName = 'getAllSchedules';
+  // Log request for debugging
   callLog(req, person, controllerName);
 
-  models.ScheduleRecord.findAll({
-    include: [
-      {
-        model: models.Product,
-        attributes: ['type', 'name', 'price'],
-      },
-      {
-        model: models.Booking,
-      },
-    ],
-    attributes: {
-      exclude: ['productId'], // Deleting substituted ones
-    },
-  })
-    .then(records => {
-      if (!records) {
-        errCode = 404;
-        throw new Error('Nie znaleziono terminów.');
-      }
-      // Convert for records for different names
-      const formattedRecords = records.map(s => {
-        // Transform to pure js object - not sequelize instance - to get all known features
-        const schedule = s.get({ plain: true });
+  let errCode = 500; // default error code
 
-        const activeBookings = schedule.Bookings?.filter(
-          booking => booking.attendance === 1 || booking.attendance === true
-        );
-        schedule.attendance = `${activeBookings?.length}/${schedule.capacity}`;
-        schedule.day = getWeekDay(schedule.date);
-        schedule.rowId = schedule.scheduleId;
-
-        schedule.productType = schedule.Product.type;
-        schedule.productName = schedule.Product.name;
-        schedule.productPrice = schedule.Product.price;
-        return schedule;
-      });
-
-      const totalKeys = [
-        'scheduleId',
-        'attendance',
-        'date',
-        'day',
-        'startTime',
-        'location',
-        'productType',
-        'productName',
-        'productPrice',
-      ];
-      // ✅ Return response to frontend
-      successLog(person, controllerName);
-      res.json({
-        confirmation: 1,
-        message: 'Terminy pobrane pomyślnie.',
-        totalKeys, // to map to the rows attributes
-        content: formattedRecords.sort(
-          (a, b) => new Date(b.date) - new Date(a.date)
-        ), // With new names
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
-};
-export const getScheduleById = (req, res, next) => {
-  const controllerName = 'getScheduleById';
-  console.log(`\n➡️➡️➡️ admin called`, controllerName);
-
-  const PK = req.params.id;
-  models.ScheduleRecord.findByPk(PK, {
-    include: [
-      {
-        model: models.Product,
-        required: true,
-      },
-      {
-        model: models.Booking,
-        required: false,
-        include: [
-          {
-            model: models.Customer,
-            attributes: { exclude: ['userId'] },
-          },
-          // For direct payment bookings
-          {
-            model: models.Payment,
-            required: false,
-            // attributes: ['paymentId'],
-          },
-          // For bookings paid with a pass
-          {
-            model: models.CustomerPass,
-            required: false,
-            include: [
-              {
-                model: models.PassDefinition,
-                attributes: { exclude: ['userId'] },
-              },
-            ],
-            // attributes: ['customerPassId'],
-          },
-        ],
-      },
-      {
-        model: models.Feedback,
-        required: false,
-        include: [
-          {
-            model: models.Customer,
-            attributes: { exclude: ['userId'] },
-          },
-        ],
-        attributes: { exclude: ['customerId'] },
-      },
-    ],
-  })
-    .then(scheduleData => {
-      if (!scheduleData) {
-        errCode = 404;
-        throw new Error('Nie znaleziono terminu.');
-      }
-      // console.log(scheduleData);
-      let schedule = scheduleData.toJSON();
-
-      schedule.attendance = 0;
-      let attendedRecords = [];
-      let cancelledRecords = [];
-      if (schedule.Bookings && schedule.Bookings.length > 0) {
-        schedule.Bookings.forEach(b => {
-          if (b.attendance == 1 || b.attendance == true)
-            attendedRecords.push({ ...b, rowId: b.bookingId });
-          if (b.attendance == 0 || b.attendance == false)
-            cancelledRecords.push({ ...b, rowId: b.bookingId });
-        });
-
-        schedule.attendance = attendedRecords.length;
-        schedule.full = attendedRecords.length >= schedule.capacity;
-      }
-
-      const scheduleDateTime = new Date(
-        `${schedule.date}T${schedule.startTime}:00`
-      );
-      const now = new Date();
-      schedule.isCompleted = scheduleDateTime <= now;
-      schedule.attendedRecords = attendedRecords;
-      schedule.cancelledRecords = cancelledRecords;
-
-      // Find all schedule payment regardless relation to booking because they are non refundable
-      return models.Payment.findAll({
-        where: {
-          product: {
-            [Op.like]: `%sId: ${schedule.scheduleId}%`, // % any amount of characters
-          },
+  try {
+    // Fetch schedules, exclude productId, include only needed fields
+    const records = await models.ScheduleRecord.findAll({
+      attributes: { exclude: ['productId'] },
+      include: [
+        {
+          model: models.Product,
+          required: false,
+          // only need type, name, price for display
+          attributes: ['type', 'name', 'price'],
         },
-        include: [
-          {
-            model: models.Customer,
-            attributes: { exclude: ['userId'] },
-          },
-        ],
-      }).then(paymentsList => {
-        schedule.payments = paymentsList.map(payment => {
-          const p = payment.toJSON();
-          console.log(`❗❗❗p.date`, p.date);
-          return {
-            ...p,
-            rowId: p.paymentId,
-            date: formatIsoDateTime(p.date),
-            customerFullName: `${p.Customer.firstName} ${p.Customer.lastName} (${p.Customer.customerId})`,
-          };
-        });
-        successLog(person, controllerName);
-        return res.status(200).json({
-          confirmation: 1,
-          message: 'Termin pobrany pomyślnie',
-          schedule,
-          user: req.user,
-        });
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+        {
+          model: models.Booking,
+          required: false,
+          // only need attendance to count active bookings
+          attributes: ['attendance'],
+        },
+      ],
+    });
+
+    // If no schedules found, throw 404
+    if (!records || records.length === 0) {
+      errCode = 404;
+      throw new Error('Nie znaleziono terminów.');
+    }
+
+    // Transform each schedule to plain object and add computed fields
+    const formattedRecords = records.map(rec => {
+      // turn Sequelize instance into plain JS object
+      const sched = rec.get({ plain: true });
+
+      // count active bookings (attendance true/1)
+      const activeBookings = (sched.Bookings || []).filter(
+        b => b.attendance === true || b.attendance === 1
+      );
+      sched.attendance = `${activeBookings.length}/${sched.capacity}`;
+      // add weekday name
+      sched.day = getWeekDay(sched.date);
+      // add rowId for row key
+      sched.rowId = sched.scheduleId;
+      // flatten product details
+      sched.productType = sched.Product?.type;
+      sched.productName = sched.Product?.name;
+      sched.productPrice = sched.Product?.price;
+      // we don't need the Bookings or Product objects any more
+      delete sched.Bookings;
+      delete sched.Product;
+      return sched;
+    });
+
+    // Define columns for front end table
+    const totalKeys = [
+      'scheduleId',
+      'attendance',
+      'date',
+      'day',
+      'startTime',
+      'location',
+      'productType',
+      'productName',
+      'productPrice',
+    ];
+
+    // Log success and send response
+    successLog(person, controllerName);
+    return res.json({
+      confirmation: 1,
+      message: 'Terminy pobrane pomyślnie.',
+      totalKeys,
+      // sort by date descending
+      content: formattedRecords.sort(
+        (a, b) => new Date(b.date) - new Date(a.date)
+      ),
+    });
+  } catch (err) {
+    // Print error then central handler
+    console.error('[getAllSchedules] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
-export const getProductSchedules = (req, res, next) => {
+export const getScheduleById = async (req, res, next) => {
+  const controllerName = 'getScheduleById';
+  // Log that admin called this endpoint
+  console.log(`➡️➡️➡️ admin called`, controllerName);
+
+  let errCode = 500;
+  try {
+    const PK = req.params.id;
+    // Fetch the schedule record with related models
+    const scheduleData = await models.ScheduleRecord.findByPk(PK, {
+      include: [
+        { model: models.Product, required: true },
+        {
+          model: models.Booking,
+          required: false,
+          include: [
+            { model: models.Customer, attributes: { exclude: ['userId'] } },
+            { model: models.Payment, required: false },
+            {
+              model: models.CustomerPass,
+              required: false,
+              include: [
+                {
+                  model: models.PassDefinition,
+                  attributes: { exclude: ['userId'] },
+                },
+              ],
+            },
+          ],
+        },
+        {
+          model: models.Feedback,
+          required: false,
+          include: [
+            { model: models.Customer, attributes: { exclude: ['userId'] } },
+          ],
+          attributes: { exclude: ['customerId'] },
+        },
+      ],
+    });
+
+    // If not found, throw an error
+    if (!scheduleData) {
+      errCode = 404;
+      throw new Error('Nie znaleziono terminu.');
+    }
+
+    // Convert the Sequelize instance to a plain JS object
+    let schedule = scheduleData.toJSON();
+
+    // Initialize attendance counts
+    schedule.attendance = 0;
+    let attendedRecords = [];
+    let cancelledRecords = [];
+
+    // Split bookings into attended vs cancelled
+    if (schedule.Bookings && schedule.Bookings.length > 0) {
+      schedule.Bookings.forEach(b => {
+        // Mark attended
+        if (b.attendance == 1 || b.attendance === true) {
+          attendedRecords.push({ ...b, rowId: b.bookingId });
+        }
+        // Mark cancelled
+        if (b.attendance == 0 || b.attendance === false) {
+          cancelledRecords.push({ ...b, rowId: b.bookingId });
+        }
+      });
+      // Set attendance count and full flag
+      schedule.attendance = attendedRecords.length;
+      schedule.full = attendedRecords.length >= schedule.capacity;
+    }
+
+    // Determine if the schedule is already completed
+    const scheduleDateTime = new Date(
+      `${schedule.date}T${schedule.startTime}:00`
+    );
+    schedule.isCompleted = scheduleDateTime <= new Date();
+    schedule.attendedRecords = attendedRecords;
+    schedule.cancelledRecords = cancelledRecords;
+
+    // Fetch any standalone payments related to this schedule
+    const paymentsList = await models.Payment.findAll({
+      where: {
+        product: { [Op.like]: `%sId: ${schedule.scheduleId}%` }, // % any amount of characters
+      },
+      include: [
+        { model: models.Customer, attributes: { exclude: ['userId'] } },
+      ],
+    });
+
+    // Format those payments for response
+    schedule.payments = paymentsList.map(payment => {
+      const p = payment.toJSON();
+      return {
+        ...p,
+        rowId: p.paymentId,
+        date: formatIsoDateTime(p.date),
+        customerFullName: `${p.Customer.firstName} ${p.Customer.lastName} (${p.Customer.customerId})`,
+      };
+    });
+
+    // Log success and send the JSON response
+    successLog(person, controllerName);
+    return res.status(200).json({
+      confirmation: 1,
+      message: 'Termin pobrany pomyślnie',
+      schedule,
+      user: req.user,
+    });
+  } catch (err) {
+    // In case of error, handle centrally
+    console.error('[getScheduleById] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
+};
+// Controller for NewPaymentForm Selects
+export const getProductSchedules = async (req, res, next) => {
+  // Controller for NewPaymentForm Selects
   const controllerName = 'getProductSchedulesById';
-  console.log(`\n➡️➡️➡️ admin called`, controllerName);
+  // Log that admin called this endpoint
+  console.log(`➡️➡️➡️ admin called`, controllerName);
 
-  const productId = req.params.pId;
-  const customerId = req.params.cId;
+  let errCode = 500;
+  try {
+    const productId = req.params.pId;
+    const customerId = req.params.cId;
 
-  // find all schedule for chosen Product
-  models.ScheduleRecord.findAll({ where: { productId: productId } })
-    .then(foundSchedules => {
-      //find all bookings for given customer
-      return models.Booking.findAll({
-        where: { customerId: customerId },
-      }).then(bookedByCustomerSchedules => {
-        // filter bookings which have not been booked yet by him
-        const filteredSchedules = foundSchedules.filter(foundSchedule => {
-          return !bookedByCustomerSchedules.some(
-            bs => bs.scheduleId == foundSchedule.scheduleId
-          );
-        });
-        return filteredSchedules;
-      });
-    })
-    .then(filteredFoundSchedules => {
-      successLog(person, controllerName);
-      res.status(200).json({
-        confirmation: 1,
-        message: 'Terminy pobrane pomyślnie.',
-        content: filteredFoundSchedules,
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+    // Get all schedules for the chosen product
+    const foundSchedules = await models.ScheduleRecord.findAll({
+      where: { productId },
+    });
+
+    // Get all bookings made by this customer
+    const bookedByCustomerSchedules = await models.Booking.findAll({
+      where: { customerId },
+    });
+
+    // Exclude schedules the customer has already booked
+    const filteredSchedules = foundSchedules.filter(
+      schedule =>
+        !bookedByCustomerSchedules.some(
+          bs => bs.scheduleId == schedule.scheduleId
+        )
+    );
+
+    // Log success and return the filtered list
+    successLog(person, controllerName);
+    return res.status(200).json({
+      confirmation: 1,
+      message: 'Terminy pobrane pomyślnie.',
+      content: filteredSchedules,
+    });
+  } catch (err) {
+    // Handle errors centrally
+    console.error('[getProductSchedules] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
+
 export const getBookings = (req, res, next) => {};
 //@ POST
-export const postCreateScheduleRecord = (req, res, next) => {
+export const postCreateScheduleRecord = async (req, res, next) => {
   const controllerName = 'postCreateScheduleRecord';
+  // Log request for debugging
   callLog(req, person, controllerName);
+
+  let errCode = 500;
   const {
     productId,
     date,
@@ -1188,7 +1220,8 @@ export const postCreateScheduleRecord = (req, res, next) => {
     shouldRepeat,
   } = req.body;
 
-  const inputsContent = [
+  // Check required inputs
+  const inputs = [
     date,
     capacity,
     location,
@@ -1196,749 +1229,774 @@ export const postCreateScheduleRecord = (req, res, next) => {
     repeatCount || 1,
     shouldRepeat,
   ];
-
-  let currentDate = new Date(`${date}T${startTime}`);
-
-  inputsContent.forEach(inputValue => {
-    if (!inputValue || !inputValue.toString().trim()) {
-      errCode = 400;
-      console.log('\n❌❌❌ Error postCreateScheduleRecord:', 'No enough data');
-      throw new Error('Nie podano wszystkich danych.');
-    }
-  });
-
-  // chose amount of iterations
-  const iterations = shouldRepeat == 1 ? 1 : repeatCount;
-  // Recursive function to let each call finish and update the date in between
-  function createRecord(i, currentDate, records = [], transaction) {
-    // base condition to stop and resolve the promise
-    if (i >= iterations) {
-      return Promise.resolve(records);
-    }
-    // create schedule within passed transaction
-    return models.ScheduleRecord.create(
-      {
-        productId: productId,
-        date: currentDate,
-        startTime: startTime,
-        location: location,
-        capacity: capacity,
-      },
-      { transaction }
-    ).then(record => {
-      successLog(person, controllerName, `created for: ${currentDate}`);
-      // Update the date based on shouldRepeat:
-      if (shouldRepeat == 7) {
-        currentDate = addDays(currentDate, 7);
-      } else if (shouldRepeat == 30) {
-        currentDate = addMonths(currentDate, 1);
-      } else if (shouldRepeat == 365) {
-        currentDate = addYears(currentDate, 1);
+  try {
+    inputs.forEach(val => {
+      if (!val || !val.toString().trim()) {
+        errCode = 400;
+        throw new Error('Nie podano wszystkich danych.');
       }
-      records.push(record);
-      return createRecord(i + 1, currentDate, records, transaction);
     });
-  }
 
-  // # Transaction start to eventually rollback all the changes if anything wrong
+    // Determine how many times to run
+    const iterations = shouldRepeat == 1 ? 1 : repeatCount;
+    let currentDate = new Date(`${date}T${startTime}`);
 
-  db.transaction(t => {
-    return createRecord(0, currentDate, [], t);
-  })
-    .then(createdRecords => {
-      successLog(person, controllerName);
-      res.status(201).json({
-        confirmation: 1,
-        message: 'Terminy utworzone pomyślnie.',
-        records: createdRecords,
+    // Recursive helper to create multiple schedule records
+    const createRecord = (i, currDate, records, transaction) => {
+      if (i >= iterations) return Promise.resolve(records); // base condition to stop and resolve the promise
+      return models.ScheduleRecord.create(
+        {
+          productId,
+          date: currDate,
+          startTime,
+          location,
+          capacity,
+        },
+        { transaction }
+      ).then(rec => {
+        successLog(person, controllerName, `created for: ${currDate}`);
+        // Update date based on repeat interval
+        if (shouldRepeat == 7) currDate = addDays(currDate, 7);
+        else if (shouldRepeat == 30) currDate = addMonths(currDate, 1);
+        else if (shouldRepeat == 365) currDate = addYears(currDate, 1);
+        records.push(rec);
+        return createRecord(i + 1, currDate, records, transaction);
       });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+    };
+
+    // Run all creates in one transaction
+    const createdRecords = await db.transaction(t =>
+      createRecord(0, currentDate, [], t)
+    );
+
+    successLog(person, controllerName);
+    return res.status(201).json({
+      confirmation: 1,
+      message: 'Terminy utworzone pomyślnie.',
+      records: createdRecords,
+    });
+  } catch (err) {
+    // Handle errors centrally
+    console.error('[postCreateScheduleRecord] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
 //@ PUT
 export const putEditSchedule = async (req, res, next) => {
   const controllerName = 'putEditSchedule';
+  // Log request for debugging
   callLog(req, person, controllerName);
 
+  let errCode = 500;
   const scheduleId = req.params.id;
-
-  console.log(`❗❗❗req.body`, req.body);
+  // Get new values from request body
   const {
     capacity: newCapacity,
-    date: newStartDate,
+    date: newDate,
     startTime: newStartTime,
     location: newLocation,
   } = req.body;
 
-  if (
-    !newCapacity ||
-    !newStartDate ||
-    !newStartDate.trim() ||
-    !newLocation ||
-    !newLocation.trim() ||
-    !newStartTime ||
-    !newStartTime.trim()
-  ) {
-    errCode = 400;
-    console.log('\n❌❌❌ Error putEditSchedule:', 'No enough data');
-    throw new Error('Nie podano wszystkich danych.');
+  try {
+    // Check for missing inputs
+    if (
+      !newCapacity ||
+      !newDate?.trim() ||
+      !newStartTime?.trim() ||
+      !newLocation?.trim()
+    ) {
+      errCode = 400;
+      throw new Error('Nie podano wszystkich danych.');
+    }
+
+    // Fetch existing schedule record
+    const schedule = await models.ScheduleRecord.findByPk(scheduleId);
+    if (!schedule) {
+      errCode = 404;
+      throw new Error('Nie znaleziono danych terminu.');
+    }
+    // Log that we fetched the record
+    successLog(person, controllerName, 'fetched');
+
+    // Check if schedule date is in the past
+    const originalDateTime = new Date(
+      `${schedule.date}T${schedule.startTime}:00`
+    );
+    if (originalDateTime < new Date()) {
+      errCode = 400;
+      console.log('\n❓❓❓ Admin schedule is past - not to edit');
+      throw new Error('Nie można edytować minionego terminu.');
+    }
+
+    // Check if no fields actually changed
+    if (
+      schedule.capacity == newCapacity &&
+      schedule.date === newDate &&
+      schedule.startTime === newStartTime &&
+      schedule.location === newLocation
+    ) {
+      // Nothing changed, return early
+      console.log('\n❓❓❓ Admin schedule no change');
+      return res.status(200).json({ confirmation: 0, message: 'Brak zmian' });
+    }
+
+    // Perform the update
+    const [affectedRows] = await models.ScheduleRecord.update(
+      {
+        capacity: newCapacity,
+        date: newDate,
+        startTime: newStartTime,
+        location: newLocation,
+      },
+      { where: { scheduleId } }
+    );
+
+    // Log success and send response
+    successLog(person, controllerName);
+    return res.status(200).json({
+      confirmation: affectedRows >= 1,
+      message: 'Termin zaktualizowany pomyślnie.',
+      affectedScheduleRows: affectedRows,
+    });
+  } catch (err) {
+    // Log error then handle centrally
+    console.error('[putEditSchedule] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
   }
-
-  models.ScheduleRecord.findByPk(scheduleId)
-    .then(schedule => {
-      if (!schedule) {
-        errCode = 404;
-        throw new Error('Nie znaleziono danych terminu.');
-      }
-      successLog(person, controllerName, 'fetched');
-
-      return schedule;
-    })
-    .then(foundSchedule => {
-      const {
-        capacity,
-        date: scheduleDate,
-        location,
-        startTime,
-      } = foundSchedule;
-      if (
-        new Date(`${foundSchedule.date}T${foundSchedule.startTime}:00`) <
-        new Date()
-      ) {
-        errCode = 400;
-        console.log('\n❓❓❓ Admin schedule is past - not to edit');
-        throw new Error('Nie można edytować minionego terminu.');
-      } else if (
-        capacity == newCapacity &&
-        scheduleDate === newStartDate &&
-        location === newLocation &&
-        startTime === newStartTime
-      ) {
-        // Nothing changed
-        console.log('\n❓❓❓ Admin schedule no change');
-        res.status(200).json({ confirmation: 0, message: 'Brak zmian' });
-        return null;
-      }
-      return foundSchedule;
-    })
-    .then(fetchedSchedule => {
-      if (!fetchedSchedule) return;
-      models.ScheduleRecord.update(
-        {
-          capacity: newCapacity,
-          date: newStartDate,
-          startTime: newStartTime,
-          location: newLocation,
-        },
-        { where: { scheduleId: scheduleId } }
-      )
-        .then(scheduleResult => {
-          return { scheduleResult };
-        })
-        .then(results => {
-          successLog(person, controllerName);
-          const affectedScheduleRows = results.scheduleResult[0];
-          const status = affectedScheduleRows >= 1;
-          return res.status(200).json({
-            message: 'Termin zaktualizowany pomyślnie.',
-            confirmation: status,
-            affectedScheduleRows,
-          });
-        })
-        .catch(err => catchErr(person, res, errCode, err, controllerName));
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 //@ DELETE
-export const deleteSchedule = (req, res, next) => {
+export const deleteSchedule = async (req, res, next) => {
   const controllerName = 'deleteSchedule';
+  // Log request for debugging
   callLog(req, person, controllerName);
+
+  let errCode = 500; // default error code
   const id = req.params.id;
   console.log(`${controllerName} deleting id: `, id);
 
-  models.ScheduleRecord.findOne({
-    where: {
-      scheduleId: id,
-    },
-  })
-    .then(foundSchedule => {
-      if (!foundSchedule) {
-        errCode = 404;
-        console.log(
-          `\n❌❌❌ Error Admin ${controllerName} Schedule to delete not found.`
-        );
-        throw new Error('Nie znaleziono terminu do usunięcia.');
-      } else if (
-        new Date(`${foundSchedule.date}T${foundSchedule.startTime}:00`) <
-        new Date()
-      ) {
-        errCode = 400;
-        console.log(
-          `\n❌❌❌ Error Admin ${controllerName} Schedule is passed - can't be deleted.`
-        );
-        throw new Error(
-          'Nie można usunąć terminu który już minął. Posiada też wartość historyczną dla statystyk.'
-        );
-      }
+  try {
+    // Find the schedule record by ID
+    const foundSchedule = await models.ScheduleRecord.findOne({
+      where: { scheduleId: id },
+    });
 
-      return models.Booking.findOne({
-        where: { scheduleId: id },
-      }).then(foundRecord => {
-        if (foundRecord) {
-          errCode = 409;
-          console.log(
-            `\n❌❌❌ Error Admin ${controllerName} Schedule is booked - can't be deleted.`
-          );
-          throw new Error(
-            'Nie można usunąć terminu, który posiada rekordy obecności (obecny/anulowany). Najpierw USUŃ rekordy obecności w konkretnym terminie.'
-          );
-        }
-        return foundSchedule.destroy();
-      });
-    })
-    .then(deletedCount => {
-      if (!deletedCount) {
-        errCode = 404;
-        console.log(
-          `\n❌❌❌ Error Admin ${controllerName} Schedule not deleted.`
-        );
-        throw new Error('Nie usunięto terminu.');
-      }
-      successLog(person, controllerName);
-      return res
-        .status(200)
-        .json({ confirmation: 1, message: 'Termin usunięty pomyślnie.' });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+    // If not found, throw 404
+    if (!foundSchedule) {
+      errCode = 404;
+      console.log(
+        `❌❌❌ Error Admin ${controllerName} Schedule to delete not found.`
+      );
+      throw new Error('Nie znaleziono terminu do usunięcia.');
+    }
+
+    // If the schedule is in the past, block deletion
+    const scheduleDateTime = new Date(
+      `${foundSchedule.date}T${foundSchedule.startTime}:00`
+    );
+    if (scheduleDateTime < new Date()) {
+      errCode = 400;
+      console.log(
+        `❌❌❌ Error Admin ${controllerName} Schedule is passed - can't be deleted.`
+      );
+      throw new Error(
+        'Nie można usunąć terminu który już minął. Posiada też wartość historyczną dla statystyk.'
+      );
+    }
+
+    // Check if any bookings exist for this schedule
+    const foundRecord = await models.Booking.findOne({
+      where: { scheduleId: id },
+    });
+    if (foundRecord) {
+      errCode = 409;
+      console.log(
+        `❌❌❌ Error Admin ${controllerName} Schedule is booked - can't be deleted.`
+      );
+      throw new Error(
+        'Nie można usunąć terminu, który posiada rekordy obecności (obecny/anulowany). Najpierw USUŃ rekordy obecności w konkretnym terminie.'
+      );
+    }
+
+    // Delete the schedule
+    const deletedCount = await foundSchedule.destroy();
+    // If destroy() returns falsy, treat as not deleted
+    if (!deletedCount) {
+      errCode = 404;
+      console.log(`❌❌❌ Error Admin ${controllerName} Schedule not deleted.`);
+      throw new Error('Nie usunięto terminu.');
+    }
+
+    // Log success and send response
+    successLog(person, controllerName);
+    return res.status(200).json({
+      confirmation: 1,
+      message: 'Termin usunięty pomyślnie.',
+    });
+  } catch (err) {
+    // Handle errors centrally
+    console.error('[deleteSchedule] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
 
 //! PRODUCTS_____________________________________________
 //@ GET
-export const getAllProducts = (req, res, next) => {
+export const getAllProducts = async (req, res, next) => {
   const controllerName = 'getAllProducts';
+  // Log request for debugging
   callLog(req, person, controllerName);
 
-  models.Product.findAll()
-    .then(records => {
-      if (!records) {
-        errCode = 404;
-        throw new Error('Nie znaleziono rekordów.');
-      }
+  let errCode = 500; // default error code
 
-      // Convert for records for different names
-      const formattedRecords = records.map(record => {
-        const product = record.toJSON();
+  try {
+    // Fetch all product records
+    const records = await models.Product.findAll();
 
-        return {
-          ...product,
-          rowId: product.productId,
-          startDate: formatIsoDateTime(product.startDate),
-        };
-      });
+    // If no records found, throw 404
+    if (!records || records.length === 0) {
+      errCode = 404;
+      throw new Error('Nie znaleziono rekordów.');
+    }
 
-      const totalKeys = [
-        'productId',
-        'type',
-        'name',
-        'location',
-        'duration',
-        'price',
-        'startDate',
-        'status',
-      ];
+    // Convert each record to plain object and format startDate
+    const formattedRecords = records.map(record => {
+      const product = record.toJSON();
+      return {
+        ...product,
+        // Add rowId for table rows
+        rowId: product.productId,
+        // Format startDate for display
+        startDate: formatIsoDateTime(product.startDate),
+      };
+    });
 
-      successLog(person, controllerName);
-      return res.json({
-        totalKeys,
-        confirmation: 1,
-        message: 'Pobrano pomyślnie',
-        content: formattedRecords, //.sort((a, b) => new Date(b.Data) - new Date(a.Data)),
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+    // Define table headers / keys
+    const totalKeys = [
+      'productId',
+      'type',
+      'name',
+      'location',
+      'duration',
+      'price',
+      'startDate',
+      'status',
+    ];
+
+    // Log success and send response
+    successLog(person, controllerName);
+    return res.json({
+      totalKeys,
+      confirmation: 1,
+      message: 'Pobrano pomyślnie',
+      content: formattedRecords,
+    });
+  } catch (err) {
+    // Log error then handle centrally
+    console.error('[getAllProducts] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
-export const getProductById = (req, res, next) => {
+export const getProductById = async (req, res, next) => {
   const controllerName = 'getProductById';
+  // Log request for debugging
   callLog(req, person, controllerName);
 
-  const PK = req.params.id;
-  models.Product.findByPk(PK, {
-    include: [
-      {
-        model: models.ScheduleRecord,
-        required: false,
-        include: [
-          {
-            model: models.Booking,
-            required: false,
-            include: [
-              {
-                model: models.Customer,
-                attributes: { exclude: ['userId'] },
-              },
-              {
-                model: models.Payment,
-                required: false,
-                attributes: {
-                  exclude: ['product'],
+  let errCode = 500; // default error code
+  try {
+    const PK = req.params.id;
+
+    // Fetch product and related records
+    const product = await models.Product.findByPk(PK, {
+      include: [
+        {
+          model: models.ScheduleRecord,
+          required: false,
+          attributes: { exclude: ['productId'] },
+          include: [
+            {
+              model: models.Booking,
+              required: false,
+              attributes: { exclude: ['customerId'] },
+              include: [
+                {
+                  model: models.Customer,
+                  attributes: { exclude: ['userId'] },
                 },
-                include: [
-                  {
-                    model: models.Customer,
-                    attributes: { exclude: ['userId'] },
-                  },
-                ],
-              },
-              {
-                model: models.CustomerPass,
-                required: false,
-                include: [{ model: models.PassDefinition }],
-              },
-            ],
-            attributes: { exclude: ['customerId'] },
-          },
-          {
-            model: models.Feedback,
-            required: false,
-            include: [
-              {
-                model: models.Customer,
-                attributes: { exclude: ['userId'] },
-              },
-            ],
-            attributes: { exclude: ['customerId'] },
-          },
-        ],
-        attributes: {
-          exclude: ['productId'],
+                {
+                  model: models.Payment,
+                  required: false,
+                  attributes: { exclude: ['product'] },
+                  include: [
+                    {
+                      model: models.Customer,
+                      attributes: { exclude: ['userId'] },
+                    },
+                  ],
+                },
+                {
+                  model: models.CustomerPass,
+                  required: false,
+                  include: [{ model: models.PassDefinition }],
+                },
+              ],
+            },
+            {
+              model: models.Feedback,
+              required: false,
+              attributes: { exclude: ['customerId'] },
+              include: [
+                {
+                  model: models.Customer,
+                  attributes: { exclude: ['userId'] },
+                },
+              ],
+            },
+          ],
         },
-      },
-    ],
-  })
-    .then(product => {
-      if (!product) {
-        errCode = 404;
-        throw new Error('Nie znaleziono produktu.');
-      }
-      successLog(person, controllerName);
-      return res.status(200).json({
-        confirmation: 1,
-        message: 'Produkt pobrany pomyślnie pomyślnie.',
-        isLoggedIn: req.session.isLoggedIn,
-        product,
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+      ],
+    });
+
+    // If not found, throw 404
+    if (!product) {
+      errCode = 404;
+      throw new Error('Nie znaleziono produktu.');
+    }
+
+    // Log success and send the product object
+    successLog(person, controllerName);
+    return res.status(200).json({
+      confirmation: 1,
+      message: 'Produkt pobrany pomyślnie.',
+      isLoggedIn: req.session.isLoggedIn,
+      product,
+    });
+  } catch (err) {
+    // Handle errors centrally
+    console.error('[getProductById] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
 //@ POST
 export const postCreateProduct = async (req, res, next) => {
   const controllerName = 'postCreateProduct';
   callLog(req, person, controllerName);
+  let errCode = 500;
 
-  const { name, productType, startDate, duration, location, price, status } =
-    req.body;
+  try {
+    const { name, productType, startDate, duration, location, price, status } =
+      req.body;
 
-  models.Product.findOne({ where: { name: name } })
-    .then(product => {
-      if (product) {
-        errCode = 409;
-        throw new Error('Produkt już istnieje.');
-      }
-      return models.Product.create({
-        name: name,
-        type: productType,
-        location: location,
-        duration: convertDurationToTime(duration),
-        price: price,
-        startDate: startDate,
-        status: Number(status) || 1,
-      });
-    })
-    .then(newProduct => {
-      successLog(person, controllerName);
-      return res.status(200).json({
-        code: 200,
-        confirmation: 1,
-        message: 'Stworzono pomyślnie.',
-      });
-    })
-    .catch(err =>
-      catchErr(person, res, errCode, err, controllerName, { code: 409 })
-    );
+    // Check if product already exists
+    const existing = await models.Product.findOne({ where: { name } });
+    if (existing) {
+      errCode = 409;
+      throw new Error('Produkt już istnieje.');
+    }
+
+    // Create new product
+    await models.Product.create({
+      name,
+      type: productType,
+      location,
+      duration: convertDurationToTime(duration),
+      price,
+      startDate,
+      status: Number(status) || 1,
+    });
+
+    // Log success and respond
+    successLog(person, controllerName);
+    return res.status(200).json({
+      code: 200,
+      confirmation: 1,
+      message: 'Stworzono pomyślnie.',
+    });
+  } catch (err) {
+    console.error('[postCreateProduct] error:', err);
+    return catchErr(person, res, errCode, err, controllerName, { code: 409 });
+  }
 };
 //@ PUT
 export const putEditProduct = async (req, res, next) => {
   const controllerName = 'putEditProduct';
   callLog(req, person, controllerName);
-  const productId = req.params.id;
+  let errCode = 500;
 
-  const {
-    type: newType,
-    date: newStartDate,
-    location: newLocation,
-    duration: newDuration,
-    price: newPrice,
-    status: newStatus,
-  } = req.body;
-  console.log('❗❗❗ req.body ', req.body);
-  if (
-    !newType ||
-    !newType.trim() ||
-    !newStartDate ||
-    !newStartDate.trim() ||
-    !newLocation ||
-    !newLocation.trim() ||
-    !newDuration ||
-    !newPrice ||
-    !newStatus ||
-    !newStatus.trim()
-  ) {
-    console.log('\n❌❌❌ Error putEditProduct:', 'No enough data');
-    errCode = 400;
-    throw new Error('Nie podano wszystkich danych.');
+  try {
+    const productId = req.params.id;
+    const {
+      type: newType,
+      date: newStartDate,
+      location: newLocation,
+      duration: newDuration,
+      price: newPrice,
+      status: newStatus,
+    } = req.body;
+    console.log('❗❗❗ req.body ', req.body);
+    // Check for missing inputs
+    if (
+      !newType?.trim() ||
+      !newStartDate?.trim() ||
+      !newLocation?.trim() ||
+      !newDuration ||
+      newPrice == null ||
+      !newStatus?.trim()
+    ) {
+      errCode = 400;
+      console.log('\n❌❌❌ Error putEditProduct:', 'No enough data');
+      throw new Error('Nie podano wszystkich danych.');
+    }
+
+    // Fetch existing product
+    const product = await models.Product.findByPk(productId);
+    if (!product) {
+      errCode = 404;
+      throw new Error('Nie znaleziono danych produktu.');
+    }
+    successLog(person, controllerName, 'fetched');
+
+    // Check if nothing changed
+    if (
+      product.type === newType &&
+      product.startDate === newStartDate &&
+      product.location === newLocation &&
+      product.duration === newDuration &&
+      product.price === newPrice &&
+      String(product.status) === newStatus
+    ) {
+      // Nothing changed
+      console.log('\n❓❓❓ Admin Product no change');
+      return res.status(200).json({
+        confirmation: 0,
+        message: 'Brak zmian',
+      });
+    }
+
+    // Perform update
+    const [affectedRows] = await models.Product.update(
+      {
+        type: newType,
+        startDate: newStartDate,
+        location: newLocation,
+        duration: newDuration,
+        price: newPrice,
+        status: newStatus,
+      },
+      { where: { productId } }
+    );
+
+    // Log success and respond
+    successLog(person, controllerName);
+    return res.status(200).json({
+      confirmation: affectedRows >= 1,
+      message: 'Zmiany zaakceptowane.',
+      affectedProductRows: affectedRows,
+    });
+  } catch (err) {
+    console.error('[putEditProduct] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
   }
-
-  models.Product.findByPk(productId)
-    .then(product => {
-      if (!product) {
-        errCode = 404;
-        throw new Error('Nie znaleziono danych uczestnika.');
-      }
-      successLog(person, controllerName, 'fetched');
-      return product;
-    })
-    .then(foundProduct => {
-      const { type, startDate, location, duration, price, status } =
-        foundProduct;
-      if (
-        type === newType &&
-        startDate === newStartDate &&
-        location === newLocation &&
-        duration === newDuration &&
-        price === newPrice &&
-        status === newStatus
-      ) {
-        // Nothing changed
-        console.log('\n❓❓❓ Admin Product no change');
-        res.status(200).json({
-          confirmation: 0,
-          message: 'Brak zmian',
-        });
-        return null;
-      }
-      return foundProduct;
-    })
-    .then(fetchedProduct => {
-      if (!fetchedProduct) return;
-      models.Product.update(
-        {
-          type: newType,
-          startDate: newStartDate,
-          location: newLocation,
-          duration: newDuration,
-          price: newPrice,
-          status: newStatus,
-        },
-        { where: { productId: productId } }
-      )
-        .then(productResult => {
-          return { productResult };
-        })
-        .then(results => {
-          successLog(person, controllerName);
-          const affectedProductRows = results.productResult[0];
-          const status = affectedProductRows >= 1;
-          return res.status(200).json({
-            confirmation: status,
-            message: 'Zmiany zaakceptowane.',
-            affectedProductRows,
-          });
-        })
-        .catch(err => catchErr(person, res, errCode, err, controllerName));
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
 //@ DELETE
-export const deleteProduct = (req, res, next) => {
+export const deleteProduct = async (req, res, next) => {
   const controllerName = 'deleteProduct';
   callLog(req, person, controllerName);
+  let errCode = 500;
 
-  const id = req.params.id;
-  models.Product.destroy({
-    where: {
-      productId: id,
-    },
-  })
-    .then(deletedCount => {
-      if (!deletedCount) {
-        errCode = 404;
-        throw new Error('Nie usunięto zajęć.');
-      }
-      successLog(person, controllerName);
-      return res
-        .status(200)
-        .json({ confirmation: 1, message: 'Produkt usunięty pomyślnie.' });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+  try {
+    const id = req.params.id;
+
+    // Delete product by ID
+    const deletedCount = await models.Product.destroy({
+      where: { productId: id },
+    });
+
+    if (!deletedCount) {
+      errCode = 404;
+      throw new Error('Nie usunięto zajęć.');
+    }
+
+    // Log success and respond
+    successLog(person, controllerName);
+    return res.status(200).json({
+      confirmation: 1,
+      message: 'Produkt usunięty pomyślnie.',
+    });
+  } catch (err) {
+    console.error('[deleteProduct] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
 
 //! PASSES_______________________________________________
 //@ GET
-export const getAllPasses = (req, res, next) => {
+export const getAllPasses = async (req, res, next) => {
   const controllerName = 'getAllPasses';
+  // Log request for debugging
   callLog(req, person, controllerName);
-  let formattedRecords, sortedRecords, totalKeys, formattedCustomerPasses;
 
-  models.PassDefinition.findAll({
-    // where: { status: true },
-  })
-    .then(records => {
-      if (!records) {
-        errCode = 404;
-        throw new Error('Nie znaleziono rekordów.');
-      }
+  let errCode = 500;
+  try {
+    //Fetch all pass definitions
+    const records = await models.PassDefinition.findAll();
+    if (!records || records.length === 0) {
+      errCode = 404;
+      throw new Error('Nie znaleziono rekordów.');
+    }
 
-      // Convert for records for different names
-      formattedRecords = records.map(record => {
-        const passDef = record.toJSON();
-
-        return {
-          ...passDef,
-          rowId: passDef.passDefId,
-          usesTotal: passDef.usesTotal || '-',
-          validityDays: `${
-            passDef.validityDays ? `${passDef.validityDays} dni` : '-'
-          }`,
-          price: `${passDef.price} zł`,
-          allowedProductTypes: JSON.parse(passDef.allowedProductTypes).join(
-            ', '
-          ),
-        };
-      });
-
-      sortedRecords = formattedRecords.sort(
-        (a, b) => new Date(a.passDefId) - new Date(b.passDefId)
-      );
-
-      totalKeys = [
-        'passDefId',
-        'name',
-        'description',
-        'passType',
-        'usesTotal',
-        'validityDays',
-        'allowedProductTypes',
-        'price',
-      ];
-
-      return models.CustomerPass.findAll({
-        include: [{ model: models.Customer }, { model: models.PassDefinition }],
-        // where: { status: true },
-      });
-    })
-    .then(cp => {
-      formattedCustomerPasses = cp.map(customerPass => {
-        const cp = customerPass;
-        const customer = cp.Customer;
-
-        return {
-          customerPassId: cp.customerPassId,
-          rowId: cp.customerPassId,
-          customerFirstName: customer.firstName,
-          customerLastName: customer.lastName,
-          customerId: customer.customerId,
-          passName: cp.PassDefinition.name,
-          passDefId: cp.PassDefinition.passDefId,
-          allowedProductTypes: cp.PassDefinition.allowedProductTypes,
-          purchaseDate: cp.purchaseDate,
-          validFrom: cp.validFrom,
-          validUntil: cp.validUntil,
-          usesLeft: cp.usesLeft,
-          status: cp.status,
-        };
-      });
-
-      formattedCustomerPasses.sort(
-        (a, b) => new Date(b.purchaseDate) - new Date(a.purchaseDate)
-      );
-
-      successLog(person, controllerName);
-      return res.json({
-        totalKeys,
-        confirmation: 1,
-        message: 'Pobrano pomyślnie',
-        content: sortedRecords,
-        formattedCustomerPasses,
-        customerPassesKeys: [
-          'customerPassId',
-          'customerFullName',
-          'passName',
-          'purchaseDate',
-          'validFrom',
-          'validUntil',
-          'usesLeft',
-          'status',
-        ],
-      });
-    })
-
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
-};
-export const getPassById = (req, res, next) => {
-  const controllerName = 'getPassById';
-  console.log(`\n➡️➡️➡️ ${person} called`, controllerName);
-
-  const PK = req.params.id;
-  models.PassDefinition.findByPk(PK, {
-    include: [
-      {
-        model: models.CustomerPass,
-        include: [{ model: models.Customer }, { model: models.Payment }],
-      },
-    ],
-  })
-    .then(passData => {
-      if (!passData) {
-        errCode = 404;
-        throw new Error('Nie znaleziono definicji karnetu.');
-      }
-      // console.log(scheduleData);
-      let passDef = passData.toJSON();
-
-      const payments = passDef.CustomerPasses.map(customerPass => {
-        const cp = customerPass;
-        const customer = cp.Customer;
-        const payment = cp.Payment;
-        return {
-          ...payment,
-          rowId: payment.paymentId,
-          date: formatIsoDateTime(payment.date),
-          customerFullName: `${customer.firstName} ${customer.lastName} (${customer.customerId})`,
-        };
-      });
-
-      const customerPasses = passDef.CustomerPasses.map(customerPass => {
-        const cp = customerPass;
-        const customer = cp.Customer;
-
-        return {
-          customerPassId: cp.customerPassId,
-          rowId: cp.customerPassId,
-          customerFirstName: customer.firstName,
-          customerLastName: customer.lastName,
-          customerId: customer.customerId,
-          // customerFullName: `${customer.firstName} ${customer.lastName} (${customer.customerId})`,
-          purchaseDate: cp.purchaseDate,
-          validFrom: cp.validFrom,
-          validUntil: cp.validUntil,
-          usesLeft: cp.usesLeft,
-          status: cp.status,
-        };
-      });
-
-      const passDefinition = {
+    //Format each pass definition for frontend
+    const formattedRecords = records.map(record => {
+      const passDef = record.toJSON();
+      return {
         ...passDef,
-        CustomerPasses: null,
+        rowId: passDef.passDefId,
+        usesTotal: passDef.usesTotal || '-',
+        validityDays: passDef.validityDays
+          ? `${passDef.validityDays} dni`
+          : '-',
+        price: `${passDef.price} zł`,
+        allowedProductTypes: JSON.parse(passDef.allowedProductTypes).join(', '),
       };
+    });
 
-      let passDefFormatted = {
-        ...passDefinition,
-        payments,
-        paymentsKeys: [
-          'paymentId',
-          'date',
-          'customerFullName',
-          'amountPaid',
-          'paymentMethod',
-        ],
-        customerPasses,
-        customerPassesKeys: [
-          'customerPassId',
-          'customerFullName',
-          'purchaseDate',
-          'validFrom',
-          'validUntil',
-          'usesLeft',
-          'status',
-        ],
-      };
+    //Sort definitions by ID
+    const sortedRecords = formattedRecords.sort(
+      (a, b) => a.passDefId - b.passDefId
+    );
 
-      successLog(person, controllerName);
-      return res.status(200).json({
-        confirmation: 1,
-        message: 'Definicja karnetu pobrana pomyślnie',
-        passDefinition: passDefFormatted,
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+    //Define table columns
+    const totalKeys = [
+      'passDefId',
+      'name',
+      'description',
+      'passType',
+      'usesTotal',
+      'validityDays',
+      'allowedProductTypes',
+      'price',
+    ];
+
+    //Fetch all customer passes with related models
+    const cp = await models.CustomerPass.findAll({
+      include: [{ model: models.Customer }, { model: models.PassDefinition }],
+    });
+
+    //Format customer passes for frontend
+    const formattedCustomerPasses = cp
+      .map(customerPass => {
+        const { Customer: customer, PassDefinition } = customerPass;
+        return {
+          customerPassId: customerPass.customerPassId,
+          rowId: customerPass.customerPassId,
+          customerFirstName: customer.firstName,
+          customerLastName: customer.lastName,
+          customerId: customer.customerId,
+          passName: PassDefinition.name,
+          passDefId: PassDefinition.passDefId,
+          allowedProductTypes: PassDefinition.allowedProductTypes,
+          purchaseDate: customerPass.purchaseDate,
+          validFrom: customerPass.validFrom,
+          validUntil: customerPass.validUntil,
+          usesLeft: customerPass.usesLeft,
+          status: customerPass.status,
+        };
+      })
+      .sort((a, b) => new Date(b.purchaseDate) - new Date(a.purchaseDate));
+
+    //Send response
+    successLog(person, controllerName);
+    return res.json({
+      totalKeys,
+      confirmation: 1,
+      message: 'Pobrano pomyślnie',
+      content: sortedRecords,
+      formattedCustomerPasses,
+      customerPassesKeys: [
+        'customerPassId',
+        'customerFullName',
+        'passName',
+        'purchaseDate',
+        'validFrom',
+        'validUntil',
+        'usesLeft',
+        'status',
+      ],
+    });
+  } catch (err) {
+    console.error('[getAllPasses] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
-export const getCustomerPassById = (req, res, next) => {
-  const controllerName = 'getCustomerPassById';
-  console.log(`\n➡️➡️➡️ ${person} called`, controllerName);
 
-  const passId = req.params.id;
-  models.CustomerPass.findOne({
-    where: {
-      customerPassId: passId,
-    },
-    include: [{ model: models.PassDefinition }, { model: models.Payment }],
-  })
-    .then(customerPassData => {
-      if (!customerPassData) {
-        errCode = 404;
-        throw new Error('Nie znaleziono definicji karnetu.');
-      }
-      // console.log(scheduleData);
-      let cp = customerPassData.toJSON();
+export const getPassById = async (req, res, next) => {
+  const controllerName = 'getPassById';
+  // Log request for debugging
+  console.log(`➡️➡️➡️ ${person} called`, controllerName);
 
-      // Format Payment data with only necessary fields
-      const payment = {
-        paymentId: cp.Payment.paymentId,
-        date: formatIsoDateTime(cp.Payment.date),
-        amountPaid: cp.Payment.amountPaid,
-        paymentMethod: cp.Payment.paymentMethod,
-        status: cp.Payment.status,
+  let errCode = 500;
+  try {
+    const PK = req.params.id;
+
+    //Fetch pass definition with its customer passes and payments
+    const passData = await models.PassDefinition.findByPk(PK, {
+      include: [
+        {
+          model: models.CustomerPass,
+          include: [{ model: models.Customer }, { model: models.Payment }],
+        },
+      ],
+    });
+
+    if (!passData) {
+      errCode = 404;
+      throw new Error('Nie znaleziono definicji karnetu.');
+    }
+    const passDef = passData.toJSON();
+
+    //Extract and format payments
+    const payments = passDef.CustomerPasses.map(cp => {
+      const { Customer, Payment } = cp;
+      return {
+        ...Payment,
+        rowId: Payment.paymentId,
+        date: formatIsoDateTime(Payment.date),
+        customerFullName: `${Customer.firstName} ${Customer.lastName} (${Customer.customerId})`,
       };
+    });
 
-      const passDefinition = {
-        passDefId: cp.PassDefinition.passDefId,
-        name: cp.PassDefinition.name,
-        description: cp.PassDefinition.description,
-        passType: cp.PassDefinition.passType,
-        usesTotal: cp.PassDefinition.usesTotal,
-        validityDays: cp.PassDefinition.validityDays,
-        allowedProductTypes: cp.PassDefinition.allowedProductTypes,
-        price: cp.PassDefinition.price,
-        status: cp.PassDefinition.status,
-      };
-
-      const formattedCustomerPass = {
-        rowId: cp.customerPassId,
+    //Extract and format customer passes
+    const customerPasses = passDef.CustomerPasses.map(cp => {
+      const { Customer } = cp;
+      return {
         customerPassId: cp.customerPassId,
+        rowId: cp.customerPassId,
+        customerFirstName: Customer.firstName,
+        customerLastName: Customer.lastName,
+        customerId: Customer.customerId,
         purchaseDate: cp.purchaseDate,
         validFrom: cp.validFrom,
         validUntil: cp.validUntil,
         usesLeft: cp.usesLeft,
         status: cp.status,
-        payment: payment, // Attached formatted Payment
-        passDefinition: passDefinition, // Attached formatted PassDefinition
       };
+    });
 
-      successLog(person, controllerName);
-      return res.status(200).json({
-        confirmation: 1,
-        message: 'Definicja karnetu pobrana pomyślnie',
-        customerPass: formattedCustomerPass,
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+    //Prepare final passDefinition object
+    const passDefinition = {
+      ...passDef,
+      CustomerPasses: null,
+    };
+    const passDefFormatted = {
+      ...passDefinition,
+      payments,
+      paymentsKeys: [
+        'paymentId',
+        'date',
+        'customerFullName',
+        'amountPaid',
+        'paymentMethod',
+      ],
+      customerPasses,
+      customerPassesKeys: [
+        'customerPassId',
+        'customerFullName',
+        'purchaseDate',
+        'validFrom',
+        'validUntil',
+        'usesLeft',
+        'status',
+      ],
+    };
+
+    //Return response
+    successLog(person, controllerName);
+    return res.status(200).json({
+      confirmation: 1,
+      message: 'Definicja karnetu pobrana pomyślnie',
+      passDefinition: passDefFormatted,
+    });
+  } catch (err) {
+    console.error('[getPassById] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
+};
+
+export const getCustomerPassById = async (req, res, next) => {
+  const controllerName = 'getCustomerPassById';
+  // Log request for debugging
+  console.log(`➡️➡️➡️ ${person} called`, controllerName);
+
+  let errCode = 500;
+  try {
+    const passId = req.params.id;
+
+    //Fetch specific customer pass with definition and payment
+    const cpData = await models.CustomerPass.findOne({
+      where: { customerPassId: passId },
+      include: [{ model: models.PassDefinition }, { model: models.Payment }],
+    });
+
+    if (!cpData) {
+      errCode = 404;
+      throw new Error('Nie znaleziono definicji karnetu.');
+    }
+    const cp = cpData.toJSON();
+
+    //Format payment
+    const payment = {
+      paymentId: cp.Payment.paymentId,
+      date: formatIsoDateTime(cp.Payment.date),
+      amountPaid: cp.Payment.amountPaid,
+      paymentMethod: cp.Payment.paymentMethod,
+      status: cp.Payment.status,
+    };
+
+    //Format pass definition fields
+    const passDefinition = {
+      passDefId: cp.PassDefinition.passDefId,
+      name: cp.PassDefinition.name,
+      description: cp.PassDefinition.description,
+      passType: cp.PassDefinition.passType,
+      usesTotal: cp.PassDefinition.usesTotal,
+      validityDays: cp.PassDefinition.validityDays,
+      allowedProductTypes: cp.PassDefinition.allowedProductTypes,
+      price: cp.PassDefinition.price,
+      status: cp.PassDefinition.status,
+    };
+
+    //Build final customerPass object
+    const formattedCustomerPass = {
+      rowId: cp.customerPassId,
+      customerPassId: cp.customerPassId,
+      purchaseDate: cp.purchaseDate,
+      validFrom: cp.validFrom,
+      validUntil: cp.validUntil,
+      usesLeft: cp.usesLeft,
+      status: cp.status,
+      payment,
+      passDefinition,
+    };
+
+    //Return response
+    successLog(person, controllerName);
+    return res.status(200).json({
+      confirmation: 1,
+      message: 'Definicja karnetu pobrana pomyślnie',
+      customerPass: formattedCustomerPass,
+    });
+  } catch (err) {
+    console.error('[getCustomerPassById] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
 //@ POST
 //@ POST
 export const postCreatePassDefinition = async (req, res, next) => {
   const controllerName = 'postCreatePassDefinition';
+  // Log request for debugging
   callLog(req, person, controllerName);
 
+  let errCode = 500; // default error code
   const {
     name,
     allowedProductTypes,
@@ -1951,97 +2009,117 @@ export const postCreatePassDefinition = async (req, res, next) => {
   let passType;
 
   try {
+    // Validate required text fields
     isEmptyInput(name, '"nazwa"');
     isEmptyInput(allowedProductTypes, '"obejmuje"');
     isEmptyInput(price, '"cena"');
     isEmptyInput(status, '"status"');
     isEmptyInput(description, '"opis"');
+
+    // Ensure at least one of count or validityDays is provided
     if (
       (!count || !String(count).trim()) &&
       (!validityDays || !String(validityDays).trim())
     ) {
       console.log('\n❌❌❌ count and validityDays field empty');
       throw new Error(
-        'Karnet musi posiada co najmniej 1 z wartości: ważność lub ilość wejść.'
+        'Karnet musi posiadać co najmniej 1 z wartości: ważność lub ilość wejść.'
       );
     }
+
+    // Determine passType based on provided fields
+    if (count && validityDays) passType = 'MIXED';
+    else if (!count && validityDays) passType = 'TIME';
+    else passType = 'COUNT';
+
+    // Create the new pass definition
+    await models.PassDefinition.create({
+      name,
+      passType,
+      description,
+      allowedProductTypes,
+      price,
+      usesTotal: count || null,
+      validityDays: validityDays || null,
+      status: Number(status),
+    });
+
+    // Log success and send response
+    successLog(person, controllerName);
+    return res.status(200).json({
+      code: 200,
+      confirmation: 1,
+      message: 'Karnet stworzono pomyślnie.',
+    });
   } catch (err) {
+    // Log error then handle centrally
+    console.error('[postCreatePassDefinition] error:', err);
     return catchErr(person, res, errCode, err, controllerName, { code: 409 });
   }
-
-  if (count && validityDays) passType = 'MIXED';
-  else if (!count && validityDays) passType = 'TIME';
-  else passType = 'COUNT';
-
-  models.PassDefinition.create({
-    name,
-    passType,
-    description,
-    allowedProductTypes,
-    price,
-    usesTotal: count || null,
-    validityDays: validityDays || null,
-    status: Number(status),
-  })
-    .then(newProduct => {
-      successLog(person, controllerName);
-      return res.status(200).json({
-        code: 200,
-        confirmation: 1,
-        message: 'Karnet stworzono pomyślnie.',
-      });
-    })
-    .catch(err =>
-      catchErr(person, res, errCode, err, controllerName, { code: 409 })
-    );
 };
 //@ PUT
 //@ DELETE
-export const deleteCustomerPass = (req, res, next) => {
+export const deleteCustomerPass = async (req, res, next) => {
   const controllerName = 'deleteCustomerPass';
+  // Log request for debugging
   callLog(req, person, controllerName);
 
-  const id = req.params.id;
-  models.CustomerPass.destroy({
-    where: {
-      customerPassId: id,
-    },
-  })
-    .then(deletedCount => {
-      if (!deletedCount) {
-        errCode = 404;
-        throw new Error('Nie usunięto karnetu uczestnika.');
-      }
-      successLog(person, controllerName);
-      return res.status(200).json({
-        confirmation: 1,
-        message: 'Karnet uczestnika usunięty pomyślnie.',
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+  let errCode = 500; // default error code
+  try {
+    const id = req.params.id;
+    // Delete the customer pass by ID
+    const deletedCount = await models.CustomerPass.destroy({
+      where: { customerPassId: id },
+    });
+
+    // If nothing was deleted, throw 404
+    if (!deletedCount) {
+      errCode = 404;
+      throw new Error('Nie usunięto karnetu uczestnika.');
+    }
+
+    // Log success and send response
+    successLog(person, controllerName);
+    return res.status(200).json({
+      confirmation: 1,
+      message: 'Karnet uczestnika usunięty pomyślnie.',
+    });
+  } catch (err) {
+    // Log error then handle it centrally
+    console.error('[deleteCustomerPass] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
-export const deletePassDefinition = (req, res, next) => {
+export const deletePassDefinition = async (req, res, next) => {
   const controllerName = 'deletePassDefinition';
+  // Log request for debugging
   callLog(req, person, controllerName);
 
-  const id = req.params.id;
-  models.PassDefinition.destroy({
-    where: {
-      passDefId: id,
-    },
-  })
-    .then(deletedCount => {
-      if (!deletedCount) {
-        errCode = 404;
-        throw new Error('Nie usunięto definicji karnetu.');
-      }
-      successLog(person, controllerName);
-      return res.status(200).json({
-        confirmation: 1,
-        message: 'Definicja karnetu usunięta pomyślnie.',
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+  let errCode = 500; // default error code
+  try {
+    const id = req.params.id;
+    // Delete the pass definition by ID
+    const deletedCount = await models.PassDefinition.destroy({
+      where: { passDefId: id },
+    });
+
+    // If nothing was deleted, throw 404
+    if (!deletedCount) {
+      errCode = 404;
+      throw new Error('Nie usunięto definicji karnetu.');
+    }
+
+    // Log success and send response
+    successLog(person, controllerName);
+    return res.status(200).json({
+      confirmation: 1,
+      message: 'Definicja karnetu usunięta pomyślnie.',
+    });
+  } catch (err) {
+    // Log error then handle it centrally
+    console.error('[deletePassDefinition] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
 
 //! BOOKINGS_____________________________________________
