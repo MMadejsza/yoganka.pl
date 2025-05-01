@@ -716,6 +716,13 @@
 			grid-area: credit;
 		}
 	}
+
+  @supports (-webkit-grid: auto) {
+	  .wrapper {
+		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-rows: repeat(5, auto) minmax(0, 1fr) auto;
+	  }
+	}
 }
 @media (min-width: 1080px) {
 	.nav__link {
@@ -792,15 +799,6 @@
 }
 
 
-@supports (-webkit-grid: auto) {
-	@media (min-width: 1024px) {
-	  .wrapper {
-		grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-	  }
-	}
-	@media (max-width: 768px) {
-	  .wrapper {
-		grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-	  }
-	}
-  }
+
+	
+  

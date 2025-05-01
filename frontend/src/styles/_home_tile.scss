@@ -141,18 +141,22 @@
 }
 //! TILE END
 @supports (-webkit-grid: auto) {
+  .offer-type {
+  
 	.tile {
 		/* flex layout inside each tile to equalise height */
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
-		min-height: 250px; /* enforce a sensible minimum */
-	  }
-	
-	  .tile__img {
+    min-height: auto !important; /* enforce a sensible minimum */
+
+	  &__img {
 		/* force images to cover their container */
 		width: 100%;
 		height: auto;
 		object-fit: cover;
 	  }
+	  }
+	
+  }
   }
