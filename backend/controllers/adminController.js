@@ -11,6 +11,11 @@ import {
   isPassValidForSchedule,
 } from '../utils/controllersUtils.js';
 import {
+  createDelete,
+  createGetAll,
+  createGetById,
+} from '../utils/crudFactory.js';
+import {
   formatIsoDateTime,
   getWeekDay,
   isAdult,
@@ -25,136 +30,69 @@ import {
 import * as adminEmails from '../utils/mails/templates/adminOnlyActions/_adminEmails.js';
 
 let errCode = errorCode;
-const person = 'Admin';
+const actor = 'Admin';
 
 //! USERS_____________________________________________
 //@ GET
-export const getAllUsers = async (req, res, next) => {
-  const controllerName = 'getAllUsers';
-  // Log the incoming request for debugging purposes
-  callLog(req, person, controllerName);
-
-  const model = models.User;
-  try {
-    // Fetch all users, including their preference setting ID if it exists
-    const records = await model.findAll({
-      include: [
-        {
-          model: models.UserPrefSetting,
-          attributes: ['userPrefId'],
-        },
-      ],
+export const getAllUsers = createGetAll(actor, models.User, {
+  includeRelations: [
+    { model: models.UserPrefSetting, attributes: ['userPrefId'] },
+  ],
+  excludeFields: ['passwordHash'],
+  mapRecord: user => {
+    return {
+      rowId: user.userId,
+      userId: user.userId,
+      email: user.email,
+      role: user.role,
+      registrationDate: formatIsoDateTime(user.registrationDate),
+      lastLoginDate: formatIsoDateTime(user.lastLoginDate),
+      prefSettings: user.UserPrefSetting
+        ? `Tak (Id: ${user.UserPrefSetting.userPrefId})`
+        : 'Nie',
+    };
+  },
+  columnKeys: [
+    'userId',
+    'email',
+    'lastLoginDate',
+    'registrationDate',
+    'role',
+    'prefSettings',
+  ],
+  sortFunction: (a, b) => a.email.localeCompare(b.email),
+  successMessage: 'Konta pobrane pomyślnie.',
+});
+export const getUserById = createGetById(actor, models.User, {
+  includeRelations: [
+    {
+      model: models.Customer,
+      required: false,
       attributes: {
-        exclude: ['passwordHash'], // deleting
+        exclude: ['userId', 'user_id', 'emailVerified'],
       },
-    });
-
-    // If no records found, set error code and throw an error
-    if (!records || records.length === 0) {
-      errCode = 404;
-      throw new Error('Nie znaleziono użytkowników.');
-    }
-
-    // Convert each Sequelize record to plain object and format fields
-    const formattedRecords = records.map(record => {
-      const user = record.toJSON();
-
-      return {
-        // Add a rowId field for UI tables
-        rowId: user.userId,
-        userId: user.userId,
-
-        role: user.role,
-        email: user.email,
-        // Format the registration date to ISO + weekday
-        registrationDate: formatIsoDateTime(user.registrationDate),
-        // Show if user has pref settings or not
-        // Format last login date similarly
-        lastLoginDate: formatIsoDateTime(user.lastLoginDate),
-        prefSettings: user.UserPrefSetting
-          ? `Tak (Id: ${user.UserPrefSetting.userPrefId})`
-          : 'Nie',
-      };
-    });
-
-    // Define the column order/headers to send back
-    const totalKeys = [
-      'userId',
-      'email',
-      'lastLoginDate',
-      'registrationDate',
-      'role',
-      'prefSettings',
-    ];
-
-    // All good: log success and return JSON response
-    successLog(person, controllerName);
-    return res.json({
-      confirmation: 1,
-      message: 'Konta pobrane pomyślnie.',
-      isLoggedIn: req.session.isLoggedIn,
-      totalKeys,
-      // Sort records by email before sending
-      content: formattedRecords.sort((a, b) => a.email.localeCompare(b.email)),
-    });
-  } catch (err) {
-    // Handle any errors in one place
-    return catchErr(person, res, errCode, err, controllerName);
-  }
-};
-export const getUserById = async (req, res, next) => {
-  const controllerName = 'getUserById';
-  // Log the request details for debugging
-  callLog(req, person, controllerName);
-
-  // Use the ID from URL params or fallback to the logged-in user's ID
-  const PK = req.params.id || req.user.userId;
-  try {
-    // Fetch the user by primary key, including related Customer and settings
-    const user = await models.User.findByPk(PK, {
-      include: [
-        {
-          model: models.Customer, // Include Customer record if exists
-          required: false, // It's optional
-          attributes: {
-            exclude: ['userId', 'user_id', 'emailVerified'], // deleting
-          },
-        },
-        {
-          model: models.UserPrefSetting, // Include user preference settings
-          required: false, // It's optional
-          attributes: {
-            exclude: ['passwordHash', 'userId', 'user_id'], // deleting
-          },
-        },
-      ],
+    },
+    {
+      model: models.UserPrefSetting,
+      required: false,
       attributes: {
-        exclude: ['passwordHash'], // deleting
+        exclude: ['passwordHash', 'userId', 'user_id'],
       },
-    });
-
-    // If no user found, set 404 error and throw
-    if (!user) {
-      errCode = 404;
-      throw new Error('Nie znaleziono użytkownika.');
-    }
-
-    // Log success and return the user object
-    successLog(person, controllerName);
-    return res.status(200).json({
-      confirmation: 1,
-      isLoggedIn: req.session.isLoggedIn,
-      user,
-    });
-  } catch (err) {
-    // Handle errors in a centralized way
-    return catchErr(person, res, errCode, err, controllerName);
-  }
-};
+    },
+  ],
+  excludeFields: ['passwordHash'],
+  mapRecord: instance => {
+    const user = instance.toJSON();
+    delete user.passwordHash;
+    return user;
+  },
+  successMessage: 'Konto pobrane pomyślnie.',
+});
+//! NO FACTORY USED
 export const getUserSettings = async (req, res, next) => {
   const controllerName = 'getUserSettings';
   // Log request for debugging
-  callLog(req, person, controllerName);
+  callLog(req, actor, controllerName);
 
   let errCode = 500; // default error code
 
@@ -168,7 +106,7 @@ export const getUserSettings = async (req, res, next) => {
 
     // If no custom settings, send default message
     if (!preferences) {
-      successLog(person, controllerName, 'fetched default');
+      successLog(actor, controllerName, 'fetched default');
       return res.status(200).json({
         confirmation: 1,
         message: 'Brak własnych ustawień - załadowane domyślne.',
@@ -176,7 +114,7 @@ export const getUserSettings = async (req, res, next) => {
     }
 
     // If found, return them
-    successLog(person, controllerName, 'fetched custom settings');
+    successLog(actor, controllerName, 'fetched custom settings');
     return res.status(200).json({
       confirmation: 1,
       preferences,
@@ -184,14 +122,14 @@ export const getUserSettings = async (req, res, next) => {
   } catch (err) {
     // Log full error, then handle centrally
     console.error('[getUserSettings] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 //@ POST
 export const postCreateUser = async (req, res, next) => {
   const controllerName = 'postCreateUser';
   // Log request for debugging
-  callLog(req, person, controllerName);
+  callLog(req, actor, controllerName);
 
   const { email, password, confirmedPassword, date } = req.body;
   let errCode = 500; // default error code
@@ -223,7 +161,7 @@ export const postCreateUser = async (req, res, next) => {
     }
 
     // Log success and respond
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.status(200).json({
       type: 'signup',
       code: 200,
@@ -233,7 +171,7 @@ export const postCreateUser = async (req, res, next) => {
   } catch (err) {
     // Print full error, then handle centrally
     console.error('[postCreateUser] error:', err);
-    return catchErr(person, res, errCode, err, controllerName, {
+    return catchErr(actor, res, errCode, err, controllerName, {
       type: 'signup',
       code: 409,
     });
@@ -243,7 +181,7 @@ export const postCreateUser = async (req, res, next) => {
 export const putEditUserSettings = async (req, res, next) => {
   const controllerName = 'putEditUserSettings';
   // Log request for debugging
-  callLog(req, person, controllerName);
+  callLog(req, actor, controllerName);
 
   const givenSettings = req.body;
   const { handedness, font, notifications, animation, theme } = givenSettings;
@@ -280,14 +218,14 @@ export const putEditUserSettings = async (req, res, next) => {
       // or a promise resolving to update info
       result = await areSettingsChanged(
         res,
-        person,
+        actor,
         controllerName,
         preferences,
         givenSettings
       );
     } else {
       // New settings were created
-      successLog(person, controllerName, 'created');
+      successLog(actor, controllerName, 'created');
       result = {
         confirmation: 1,
         message: 'Ustawienia zostały utworzone',
@@ -298,7 +236,7 @@ export const putEditUserSettings = async (req, res, next) => {
     if (!result) return;
 
     // Send the final response
-    successLog(person, controllerName, 'sent');
+    successLog(actor, controllerName, 'sent');
     return res.status(200).json({
       confirmation: result.confirmation,
       message: result.message,
@@ -306,362 +244,244 @@ export const putEditUserSettings = async (req, res, next) => {
   } catch (err) {
     // Log full error then handle centrally
     console.error('[putEditUserSettings] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 //@ DELETE
-export const deleteUser = async (req, res, next) => {
-  const controllerName = 'deleteUser';
-  // Log request for debugging
-  callLog(req, person, controllerName);
-
-  let errCode = 500; // default error code
-  const id = req.params.id;
-  let userEmail;
-
-  try {
-    // Find the user to delete
-    const user = await models.User.findByPk(id, {
+export const deleteUser = createDelete(actor, models.User, {
+  primaryKey: 'userId',
+  // Find the user first so we can grab their email
+  preAction: async req => {
+    const user = await models.User.findByPk(req.params.id, {
       attributes: ['email'],
     });
-
     if (!user) {
-      errCode = 404;
-      throw new Error('Nie znaleziono użytkownika.');
+      const err = new Error('Nie znaleziono użytkownika.');
+      err.status = 404;
+      throw err;
     }
+    return user.email; // Pass email onward to postAction (check factory)
+  },
 
-    // Save email for notification
-    userEmail = user.email;
-
-    // Delete the user record
-    const deletedCount = await models.User.destroy({
-      where: { userId: id },
-    });
-
-    if (!deletedCount) {
-      errCode = 404;
-      throw new Error('Nie usunięto użytkownika.');
-    }
-
-    // Send deletion email if we have the address
+  // After delete, send notification to the saved email
+  postAction: async userEmail => {
     if (userEmail) {
       adminEmails.sendUserAccountDeletedMail({ to: userEmail });
     }
+  },
 
-    // Log success and send response
-    successLog(person, controllerName);
-    return res.status(200).json({
-      confirmation: 1,
-      message: 'Konto usunięte pomyślnie.',
-    });
-  } catch (err) {
-    // Print full error, then handle centrally
-    console.error('[deleteUser] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
-  }
-};
+  successMessage: 'Konto usunięte pomyślnie.',
+  notFoundMessage: 'Nie znaleziono konta.',
+});
 
 //! CUSTOMERS_____________________________________________
 //@ GET
-export const getAllCustomers = async (req, res, next) => {
-  const controllerName = 'getAllCustomers';
-  // Log request for debugging
-  callLog(req, person, controllerName);
-
-  let errCode = 500; // default error code
-
-  try {
-    // Fetch only needed columns, exclude userId
-    const records = await models.Customer.findAll({
-      attributes: {
-        exclude: ['user_id'], // deleting
-      },
-    });
-
-    // If no records, throw 404
-    if (!records || records.length === 0) {
-      errCode = 404;
-      throw new Error('Nie znaleziono klientów.');
-    }
-
-    // Convert and add rowId + full name
-    const formattedRecords = records.map(record => {
-      const {
-        customerId,
-        firstName,
-        lastName,
-        dob,
-        userId,
-        customerType,
-        preferredContactMethod,
-        referralSource,
-        loyalty,
-        notes,
-      } = record.toJSON();
-
-      return {
-        // For table rows
-        rowId: customerId,
-        customerId,
-        userId,
-        // Combine first+last name
-        customerFullName: `${firstName} ${lastName}`,
-        firstName,
-        lastName,
-        dob,
-        customerType,
-        preferredContactMethod,
-        referralSource,
-        loyalty,
-        notes,
-      };
-    });
-
-    // Define headers for front end (exclude userId)
-    const totalKeys = [
-      'customerId',
-      'userId',
-      'customerFullName',
-      'dob',
-      'customerType',
-      'preferredContactMethod',
-      'referralSource',
-      'loyalty',
-      'notes',
-    ];
-
-    // Log success and send response
-    successLog(person, controllerName);
-    return res.json({
-      confirmation: 1,
-      isLoggedIn: req.session.isLoggedIn,
-      totalKeys,
-      // Sort by last name
-      content: formattedRecords.sort((a, b) =>
-        a.lastName.localeCompare(b.lastName)
-      ),
-    });
-  } catch (err) {
-    // Print error then central handler
-    console.error('[getAllCustomers] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
-  }
-};
-export const getAllCustomersWithEligiblePasses = async (req, res, next) => {
-  const controllerName = 'getAllCustomersWithEligiblePasses';
-  // Log request for debugging
-  callLog(req, person, controllerName);
-
-  let errCode = 500; // default error code
-  try {
-    const { scheduleId } = req.params;
-
-    // Fetch schedule with its product
-    const scheduleRecord = await models.ScheduleRecord.findByPk(scheduleId, {
-      attributes: {
-        exclude: [
-          'scheduleId', // not needed
-          'productId', // we only need Product.type
-          'location', // irrelevant here
-          'capacity', // irrelevant here
+export const getAllCustomers = createGetAll(actor, models.Customer, {
+  includeRelations: [], // no extra joins
+  excludeFields: [], // hide foreign key
+  mapRecord: c => {
+    return {
+      rowId: c.customerId,
+      customerId: c.customerId,
+      userId: c.userId,
+      customerFullName: `${c.firstName} ${c.lastName}`,
+      firstName: c.firstName,
+      lastName: c.lastName,
+      dob: c.dob,
+      customerType: c.customerType,
+      preferredContactMethod: c.preferredContactMethod,
+      referralSource: c.referralSource,
+      loyalty: c.loyalty,
+      notes: c.notes,
+    };
+  },
+  columnKeys: [
+    'customerId',
+    'userId',
+    'customerFullName',
+    'dob',
+    'customerType',
+    'preferredContactMethod',
+    'referralSource',
+    'loyalty',
+    'notes',
+  ],
+  successMessage: 'Customers loaded successfully.',
+});
+export const getAllCustomersWithEligiblePasses = createGetAll(
+  actor,
+  models.Customer,
+  {
+    // fetch exactly those fields on CustomerPass that you need
+    includeRelations: [
+      {
+        model: models.CustomerPass,
+        attributes: [
+          'customerPassId',
+          'status',
+          'usesLeft',
+          'validFrom',
+          'validUntil',
+        ],
+        include: [
+          {
+            model: models.PassDefinition,
+            attributes: ['name', 'passType', 'allowedProductTypes'],
+          },
         ],
       },
-      include: [{ model: models.Product, attributes: ['type'] }], // only need the type for validation
-    });
-    if (!scheduleRecord) {
-      errCode = 404;
-      throw new Error('Nie znaleziono terminu.');
-    }
-    const schedule = scheduleRecord.toJSON();
+    ],
 
-    // Fetch all customers with their passes and pass definitions
-    const customers = await models.Customer.findAll({
-      include: [
+    // first load the schedule + its product.type
+    preAction: async req => {
+      const sched = await models.ScheduleRecord.findByPk(
+        req.params.scheduleId,
         {
-          model: models.CustomerPass,
-          attributes: [
-            'customerPassId',
-            'status', // needed for active check
-            'usesLeft', // needed for count check
-            'validFrom', // needed for date window
-            'validUntil', // needed for expiry check
-          ],
-          include: [
-            {
-              model: models.PassDefinition,
-              attributes: [
-                'name', // for logging
-                'passType', // for sort order
-                'allowedProductTypes', // for matching product types
-              ],
-            },
-          ],
-        },
-      ],
-    });
-    if (!customers || customers.length === 0) {
-      errCode = 404;
-      throw new Error('Nie znaleziono klientów.');
-    }
+          attributes: {
+            exclude: ['scheduleId', 'productId', 'location', 'capacity'],
+          },
+          include: [{ model: models.Product, attributes: ['type'] }],
+        }
+      );
+      if (!sched) {
+        const err = new Error('Nie znaleziono terminu.');
+        err.status = 404;
+        throw err;
+      }
+      return sched.toJSON();
+    },
 
-    // For each customer, keep only passes valid for this schedule
-    const eligibleCustomers = customers
-      .map(customer => {
-        const cust = customer.toJSON();
-        const passes = Array.isArray(cust.CustomerPasses)
-          ? cust.CustomerPasses
-          : [];
-        cust.eligiblePasses = passes.filter(pass =>
-          isPassValidForSchedule(pass, schedule)
-        );
-        delete cust.CustomerPasses; // remove old passes array
-        return cust;
-      })
-      .filter(cust => cust.eligiblePasses.length > 0); // only customers with at least one
+    // filter and attach eligiblePasses exactly as before
+    mapRecord: (customerInstance, schedule) => {
+      const customer = customerInstance.toJSON();
+      const allPasses = Array.isArray(customer.CustomerPasses)
+        ? customer.CustomerPasses
+        : [];
+      const eligible = allPasses.filter(p =>
+        isPassValidForSchedule(p, schedule)
+      );
+      if (eligible.length === 0) return null;
+      customer.eligiblePasses = eligible;
+      delete customer.CustomerPasses;
+      return customer;
+    },
 
-    // Log success and return result
-    successLog(person, controllerName);
-    return res.status(200).json({
-      confirmation: 1,
-      content: eligibleCustomers,
-    });
-  } catch (err) {
-    // Print error then handle it centrally
-    console.error('[getAllCustomersWithEligiblePasses] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    // frontend only reads `content`, so these can stay empty
+    columnKeys: [],
+    successMessage: '',
+    notFoundMessage: 'Nie znaleziono klientów.',
   }
-};
-export const getCustomerById = async (req, res, next) => {
-  const controllerName = 'getCustomerById';
-  // Log request for debugging
-  callLog(req, person, controllerName);
+);
+export const getCustomerById = createGetById(actor, models.Customer, {
+  // remove fields we don't need from Customer
+  excludeFields: ['userId', 'user_id'],
 
-  let errCode = 500;
-  const PK = req.params.id;
-
-  try {
-    // Fetch customer and related data, excluding unneeded columns
-    const customer = await models.Customer.findByPk(PK, {
+  // load related User and its settings
+  includeRelations: [
+    {
+      model: models.User,
+      required: false,
+      // drop sensitive columns
       attributes: {
-        exclude: ['userId', 'user_id'], // we don't need the foreign key here
+        exclude: ['passwordHash', 'profilePictureSrcSetJson', 'emailVerified'],
       },
       include: [
         {
-          model: models.User, // include linked user account
+          model: models.UserPrefSetting,
           required: false,
-          attributes: {
-            exclude: [
-              'passwordHash', // remove sensitive fields
-              'profilePictureSrcSetJson',
-              'emailVerified',
-            ],
-          },
-          include: [
-            {
-              model: models.UserPrefSetting, // include user preferences
-              required: false,
-              attributes: {
-                exclude: ['userId', 'user_id'], // foreign key not needed
-              },
-            },
-          ],
+          // remove the FK
+          attributes: { exclude: ['userId', 'user_id'] },
         },
+      ],
+    },
+    // load all passes belonging to this customer
+    {
+      model: models.CustomerPass,
+      required: false,
+      // exclude unused foreign keys
+      attributes: {
+        exclude: [
+          'customerId',
+          'customer_id',
+          'paymentId',
+          'payment_id',
+          'pass_def_id',
+        ],
+      },
+      include: [
         {
-          model: models.CustomerPass, // include all passes
-          required: false,
-          attributes: {
-            exclude: [
-              'customerId',
-              'customer_id',
-              'paymentId',
-              'payment_id',
-              'pass_def_id',
-            ], // remove FKs
-          },
-          include: [
-            {
-              model: models.PassDefinition, // include pass details
-              attributes: ['name', 'passDefId'],
-            },
-          ],
+          model: models.PassDefinition,
+          // we need the pass name and its ID
+          attributes: ['name', 'passDefId'],
         },
+      ],
+    },
+    // load payments and any invoices
+    {
+      model: models.Payment,
+      required: false,
+      // drop the link back to Customer
+      attributes: { exclude: ['customerId', 'customer_id'] },
+      include: [
         {
-          model: models.Payment, // include payments
+          model: models.Invoice,
           required: false,
-          attributes: {
-            exclude: ['customerId', 'customer_id'], // remove FK
-          },
-          include: [
-            {
-              model: models.Invoice, // include invoices
-              required: false,
-            },
-          ],
         },
+      ],
+    },
+    // load bookings with schedule, product and feedback
+    {
+      model: models.Booking,
+      required: false,
+      attributes: {
+        exclude: [
+          'customerId',
+          'customer_id',
+          'customer_pass_id',
+          'scheduleId',
+          'schedule_id',
+          'paymentId',
+          'customerPassId',
+        ],
+      },
+      include: [
         {
-          model: models.Booking, // include bookings
+          model: models.ScheduleRecord,
           required: false,
-          attributes: {
-            exclude: [
-              'customerId', // remove FK
-              'customer_id',
-              'customer_pass_id',
-              'scheduleId', // remove FK
-              'schedule_id', // remove FK
-              'paymentId', // remove FK
-              'customerPassId', // remove FK
-            ],
-          },
+          // remove unused schedule fields
+          attributes: { exclude: ['productId', 'product_id', 'capacity'] },
           include: [
             {
-              model: models.ScheduleRecord, // include schedule info
+              model: models.Product,
               required: false,
-              attributes: {
-                exclude: [
-                  'productId', // remove FK
-                  'product_id', // remove FK
-                  'capacity', // not needed here
-                ],
-              },
-              include: [
-                {
-                  model: models.Product, // include product details
-                  required: false,
-                  attributes: ['productId', 'name', 'type', 'duration'],
-                },
-                {
-                  model: models.Feedback, // include feedback for this customer
-                  required: false,
-                  where: { customerId: PK },
-                  attributes: {
-                    exclude: ['customerId', 'scheduleId'], // remove FKs
-                  },
-                },
-              ],
+              // only bring productId, name, type, duration
+              attributes: ['productId', 'name', 'type', 'duration'],
+            },
+            {
+              model: models.Feedback,
+              required: false,
+              // limit to this customer’s feedback
+              attributes: { exclude: ['customerId', 'scheduleId'] },
             },
           ],
         },
       ],
-    });
+    },
+  ],
 
-    // If not found, return 404
-    if (!customer) {
-      errCode = 404;
-      throw new Error('Nie znaleziono profilu uczestnika.');
-    }
+  // after fetching, convert instance to JSON and adjust output
+  mapRecord: (instance, req) => {
+    // convert Sequelize object to plain JS
+    const customer = instance.toJSON();
 
-    // Convert to plain object
-    const parsed = customer.toJSON();
+    // for each pass, add human-readable passName
+    customer.CustomerPasses = (customer.CustomerPasses || []).map(cp => ({
+      ...cp,
+      passName: cp.PassDefinition.name,
+    }));
 
-    // Add human-readable pass name
-    parsed.CustomerPasses =
-      parsed.CustomerPasses?.map(cp => ({
-        ...cp,
-        passName: cp.PassDefinition.name,
-      })) || [];
-
-    // Define which keys to show for passes table
-    const customerPassesKeys = [
+    // tell frontend which columns to show for passes table
+    customer.customerPassesKeys = [
       'customerPassId',
       'passName',
       'purchaseDate',
@@ -671,71 +491,40 @@ export const getCustomerById = async (req, res, next) => {
       'status',
     ];
 
-    // Log success and send response
-    successLog(person, controllerName);
-    return res.status(200).json({
-      confirmation: 1,
-      isLoggedIn: req.session.isLoggedIn,
-      customer: {
-        ...parsed,
-        customerPassesKeys,
-      },
-    });
-  } catch (err) {
-    // Print full error, then handle centrally
-    console.error('[getCustomerById] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
-  }
-};
-export const getCustomerDetails = async (req, res, next) => {
-  const controllerName = 'getEditCustomerDetails';
-  // Log request for debugging
-  callLog(req, person, controllerName);
+    return customer;
+  },
 
-  let errCode = 500; // default error code
+  // include login flag in top-level response
+  attachResponse: req => ({
+    isLoggedIn: req.session.isLoggedIn,
+  }),
 
-  try {
-    // Fetch only the fields needed on the frontend form
-    const customer = await models.Customer.findByPk(req.params.id, {
-      attributes: {
-        exclude: [
-          'referralSource',
-          'customerType',
-          'customerId',
-          'firstName',
-          'lastName',
-          'dob',
-        ],
-      },
-    });
+  // no custom message here
+  successMessage: '',
+  notFoundMessage: 'Nie znaleziono profilu uczestnika.',
+});
+export const getCustomerDetails = createGetById(actor, models.Customer, {
+  // drop fields the edit form doesn't need
+  excludeFields: [
+    'referralSource',
+    'customerType',
+    'customerId',
+    'firstName',
+    'lastName',
+    'dob',
+  ],
 
-    // If no customer, throw 404
-    if (!customer) {
-      errCode = 404;
-      throw new Error('Nie znaleziono danych uczestnika.');
-    }
-
-    // Convert to plain object
-    const data = customer.toJSON();
-
-    // Log success and send response
-    successLog(person, controllerName);
-    return res.status(200).json({
-      confirmation: 1,
-      customer: data,
-      message: 'Dane uczestnika pobrane pomyślnie.',
-    });
-  } catch (err) {
-    // Print full error then handle centrally
-    console.error('[getCustomerDetails] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
-  }
-};
+  // no related models to include here
+  // the message to send on success
+  successMessage: 'Dane uczestnika pobrane pomyślnie.',
+  // the message if no record is found
+  notFoundMessage: 'Nie znaleziono danych uczestnika.',
+});
 //@ POST
 export const postCreateCustomer = async (req, res, next) => {
   const controllerName = 'postCreateCustomer';
   // Log request for debugging
-  callLog(req, person, controllerName);
+  callLog(req, actor, controllerName);
 
   let errCode = 500; // default error code
   const {
@@ -808,7 +597,7 @@ export const postCreateCustomer = async (req, res, next) => {
     }
 
     // Success response
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.status(200).json({
       code: 200,
       confirmation: 1,
@@ -817,14 +606,14 @@ export const postCreateCustomer = async (req, res, next) => {
   } catch (err) {
     // Print error then handle centrally
     console.error('[postCreateCustomer] error:', err);
-    return catchErr(person, res, errCode, err, controllerName, { code: 409 });
+    return catchErr(actor, res, errCode, err, controllerName, { code: 409 });
   }
 };
 //@ PUT
 export const putEditCustomerDetails = async (req, res, next) => {
   const controllerName = 'putEditCustomerDetails';
   // Log request for debugging
-  callLog(req, person, controllerName);
+  callLog(req, actor, controllerName);
 
   let errCode = 500; // default error code
   const customerId = req.params.id;
@@ -845,12 +634,12 @@ export const putEditCustomerDetails = async (req, res, next) => {
       errCode = 404;
       throw new Error('Nie znaleziono danych uczestnika.');
     }
-    successLog(person, controllerName, 'fetched');
+    successLog(actor, controllerName, 'fetched');
 
     // 2. Check if phone or contact method missing or unchanged
     const interrupted = areCustomerDetailsChanged(
       res,
-      person,
+      actor,
       customer,
       newPhone,
       newContactMethod
@@ -886,7 +675,7 @@ export const putEditCustomerDetails = async (req, res, next) => {
     );
 
     // 5. Log success and send response
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.status(200).json({
       message: 'Profil zaktualizowany pomyślnie.',
       confirmation: affectedRows >= 1,
@@ -895,21 +684,17 @@ export const putEditCustomerDetails = async (req, res, next) => {
   } catch (err) {
     // Print full error then handle centrally
     console.error('[putEditCustomerDetails] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 //@ DELETE
-export const deleteCustomer = async (req, res, next) => {
-  const controllerName = 'deleteCustomer';
-  // Log request for debugging
-  callLog(req, person, controllerName);
+export const deleteCustomer = createDelete(actor, models.Customer, {
+  // our PK field in the model
+  primaryKeyName: 'customerId',
 
-  let errCode = 500; // default error code
-  const id = req.params.id;
-  let userEmail;
-
-  try {
-    // Fetch customer and only the email from linked User
+  // before deleting, fetch the customer to get their email
+  preAction: async req => {
+    const id = req.params.id;
     const customer = await models.Customer.findOne({
       where: { customerId: id },
       attributes: {
@@ -918,48 +703,42 @@ export const deleteCustomer = async (req, res, next) => {
       include: [
         {
           model: models.User,
+          attributes: ['email'], // only need the email field
           required: false,
-          attributes: ['email'], // only need email
         },
       ],
     });
 
-    // If no record, throw 404
+    // if no customer found, signal a 404
     if (!customer) {
-      errCode = 404;
-      throw new Error('Nie znaleziono profilu uczestnika.');
+      const err = new Error('Nie znaleziono profilu uczestnika.');
+      err.status = 404;
+      throw err;
     }
 
-    // Save email for later notification
-    userEmail = customer.User?.email;
+    // return the email address (or undefined)
+    return customer.User?.email;
+  },
 
-    // Delete the customer record
-    await customer.destroy();
-
-    // Send deletion email if available
-    if (userEmail) {
-      adminEmails.sendCustomerDeletedMail({ to: userEmail });
+  // after successful delete, send notification if we have an email
+  postAction: async email => {
+    if (email) {
+      await adminEmails.sendCustomerDeletedMail({ to: email });
     }
+  },
 
-    // Log success and respond
-    successLog(person, controllerName);
-    return res.status(200).json({
-      confirmation: 1,
-      message: 'Profil usunięty pomyślnie.',
-    });
-  } catch (err) {
-    // Print full error then handle centrally
-    console.error('[deleteCustomer] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
-  }
-};
+  // message on successful deletion
+  successMessage: 'Profil usunięty pomyślnie.',
+  // message if record wasn't found
+  notFoundMessage: 'Nie znaleziono profilu uczestnika.',
+});
 
 //! SCHEDULES_____________________________________________
 //@ GET
 export const getAllSchedules = async (req, res, next) => {
   const controllerName = 'getAllSchedules';
   // Log request for debugging
-  callLog(req, person, controllerName);
+  callLog(req, actor, controllerName);
 
   let errCode = 500; // default error code
 
@@ -1027,7 +806,7 @@ export const getAllSchedules = async (req, res, next) => {
     ];
 
     // Log success and send response
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.json({
       confirmation: 1,
       message: 'Terminy pobrane pomyślnie.',
@@ -1040,7 +819,7 @@ export const getAllSchedules = async (req, res, next) => {
   } catch (err) {
     // Print error then central handler
     console.error('[getAllSchedules] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 export const getScheduleById = async (req, res, next) => {
@@ -1145,7 +924,7 @@ export const getScheduleById = async (req, res, next) => {
     });
 
     // Log success and send the JSON response
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.status(200).json({
       confirmation: 1,
       message: 'Termin pobrany pomyślnie',
@@ -1155,7 +934,7 @@ export const getScheduleById = async (req, res, next) => {
   } catch (err) {
     // In case of error, handle centrally
     console.error('[getScheduleById] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 // Controller for NewPaymentForm Selects
@@ -1189,7 +968,7 @@ export const getProductSchedules = async (req, res, next) => {
     );
 
     // Log success and return the filtered list
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.status(200).json({
       confirmation: 1,
       message: 'Terminy pobrane pomyślnie.',
@@ -1198,7 +977,7 @@ export const getProductSchedules = async (req, res, next) => {
   } catch (err) {
     // Handle errors centrally
     console.error('[getProductSchedules] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 
@@ -1207,7 +986,7 @@ export const getBookings = (req, res, next) => {};
 export const postCreateScheduleRecord = async (req, res, next) => {
   const controllerName = 'postCreateScheduleRecord';
   // Log request for debugging
-  callLog(req, person, controllerName);
+  callLog(req, actor, controllerName);
 
   let errCode = 500;
   const {
@@ -1254,7 +1033,7 @@ export const postCreateScheduleRecord = async (req, res, next) => {
         },
         { transaction }
       ).then(rec => {
-        successLog(person, controllerName, `created for: ${currDate}`);
+        successLog(actor, controllerName, `created for: ${currDate}`);
         // Update date based on repeat interval
         if (shouldRepeat == 7) currDate = addDays(currDate, 7);
         else if (shouldRepeat == 30) currDate = addMonths(currDate, 1);
@@ -1269,7 +1048,7 @@ export const postCreateScheduleRecord = async (req, res, next) => {
       createRecord(0, currentDate, [], t)
     );
 
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.status(201).json({
       confirmation: 1,
       message: 'Terminy utworzone pomyślnie.',
@@ -1278,14 +1057,14 @@ export const postCreateScheduleRecord = async (req, res, next) => {
   } catch (err) {
     // Handle errors centrally
     console.error('[postCreateScheduleRecord] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 //@ PUT
 export const putEditSchedule = async (req, res, next) => {
   const controllerName = 'putEditSchedule';
   // Log request for debugging
-  callLog(req, person, controllerName);
+  callLog(req, actor, controllerName);
 
   let errCode = 500;
   const scheduleId = req.params.id;
@@ -1316,7 +1095,7 @@ export const putEditSchedule = async (req, res, next) => {
       throw new Error('Nie znaleziono danych terminu.');
     }
     // Log that we fetched the record
-    successLog(person, controllerName, 'fetched');
+    successLog(actor, controllerName, 'fetched');
 
     // Check if schedule date is in the past
     const originalDateTime = new Date(
@@ -1352,7 +1131,7 @@ export const putEditSchedule = async (req, res, next) => {
     );
 
     // Log success and send response
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.status(200).json({
       confirmation: affectedRows >= 1,
       message: 'Termin zaktualizowany pomyślnie.',
@@ -1361,14 +1140,14 @@ export const putEditSchedule = async (req, res, next) => {
   } catch (err) {
     // Log error then handle centrally
     console.error('[putEditSchedule] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 //@ DELETE
 export const deleteSchedule = async (req, res, next) => {
   const controllerName = 'deleteSchedule';
   // Log request for debugging
-  callLog(req, person, controllerName);
+  callLog(req, actor, controllerName);
 
   let errCode = 500; // default error code
   const id = req.params.id;
@@ -1427,7 +1206,7 @@ export const deleteSchedule = async (req, res, next) => {
     }
 
     // Log success and send response
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.status(200).json({
       confirmation: 1,
       message: 'Termin usunięty pomyślnie.',
@@ -1435,7 +1214,7 @@ export const deleteSchedule = async (req, res, next) => {
   } catch (err) {
     // Handle errors centrally
     console.error('[deleteSchedule] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 
@@ -1444,7 +1223,7 @@ export const deleteSchedule = async (req, res, next) => {
 export const getAllProducts = async (req, res, next) => {
   const controllerName = 'getAllProducts';
   // Log request for debugging
-  callLog(req, person, controllerName);
+  callLog(req, actor, controllerName);
 
   let errCode = 500; // default error code
 
@@ -1483,7 +1262,7 @@ export const getAllProducts = async (req, res, next) => {
     ];
 
     // Log success and send response
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.json({
       totalKeys,
       confirmation: 1,
@@ -1493,13 +1272,13 @@ export const getAllProducts = async (req, res, next) => {
   } catch (err) {
     // Log error then handle centrally
     console.error('[getAllProducts] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 export const getProductById = async (req, res, next) => {
   const controllerName = 'getProductById';
   // Log request for debugging
-  callLog(req, person, controllerName);
+  callLog(req, actor, controllerName);
 
   let errCode = 500; // default error code
   try {
@@ -1563,7 +1342,7 @@ export const getProductById = async (req, res, next) => {
     }
 
     // Log success and send the product object
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.status(200).json({
       confirmation: 1,
       message: 'Produkt pobrany pomyślnie.',
@@ -1573,13 +1352,13 @@ export const getProductById = async (req, res, next) => {
   } catch (err) {
     // Handle errors centrally
     console.error('[getProductById] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 //@ POST
 export const postCreateProduct = async (req, res, next) => {
   const controllerName = 'postCreateProduct';
-  callLog(req, person, controllerName);
+  callLog(req, actor, controllerName);
   let errCode = 500;
 
   try {
@@ -1605,7 +1384,7 @@ export const postCreateProduct = async (req, res, next) => {
     });
 
     // Log success and respond
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.status(200).json({
       code: 200,
       confirmation: 1,
@@ -1613,13 +1392,13 @@ export const postCreateProduct = async (req, res, next) => {
     });
   } catch (err) {
     console.error('[postCreateProduct] error:', err);
-    return catchErr(person, res, errCode, err, controllerName, { code: 409 });
+    return catchErr(actor, res, errCode, err, controllerName, { code: 409 });
   }
 };
 //@ PUT
 export const putEditProduct = async (req, res, next) => {
   const controllerName = 'putEditProduct';
-  callLog(req, person, controllerName);
+  callLog(req, actor, controllerName);
   let errCode = 500;
 
   try {
@@ -1653,7 +1432,7 @@ export const putEditProduct = async (req, res, next) => {
       errCode = 404;
       throw new Error('Nie znaleziono danych produktu.');
     }
-    successLog(person, controllerName, 'fetched');
+    successLog(actor, controllerName, 'fetched');
 
     // Check if nothing changed
     if (
@@ -1686,7 +1465,7 @@ export const putEditProduct = async (req, res, next) => {
     );
 
     // Log success and respond
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.status(200).json({
       confirmation: affectedRows >= 1,
       message: 'Zmiany zaakceptowane.',
@@ -1694,13 +1473,13 @@ export const putEditProduct = async (req, res, next) => {
     });
   } catch (err) {
     console.error('[putEditProduct] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 //@ DELETE
 export const deleteProduct = async (req, res, next) => {
   const controllerName = 'deleteProduct';
-  callLog(req, person, controllerName);
+  callLog(req, actor, controllerName);
   let errCode = 500;
 
   try {
@@ -1717,14 +1496,14 @@ export const deleteProduct = async (req, res, next) => {
     }
 
     // Log success and respond
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.status(200).json({
       confirmation: 1,
       message: 'Produkt usunięty pomyślnie.',
     });
   } catch (err) {
     console.error('[deleteProduct] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 
@@ -1733,7 +1512,7 @@ export const deleteProduct = async (req, res, next) => {
 export const getAllPasses = async (req, res, next) => {
   const controllerName = 'getAllPasses';
   // Log request for debugging
-  callLog(req, person, controllerName);
+  callLog(req, actor, controllerName);
 
   let errCode = 500;
   try {
@@ -1804,7 +1583,7 @@ export const getAllPasses = async (req, res, next) => {
       .sort((a, b) => new Date(b.purchaseDate) - new Date(a.purchaseDate));
 
     //Send response
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.json({
       totalKeys,
       confirmation: 1,
@@ -1824,14 +1603,14 @@ export const getAllPasses = async (req, res, next) => {
     });
   } catch (err) {
     console.error('[getAllPasses] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 
 export const getPassById = async (req, res, next) => {
   const controllerName = 'getPassById';
   // Log request for debugging
-  console.log(`➡️➡️➡️ ${person} called`, controllerName);
+  console.log(`➡️➡️➡️ ${actor} called`, controllerName);
 
   let errCode = 500;
   try {
@@ -1909,7 +1688,7 @@ export const getPassById = async (req, res, next) => {
     };
 
     //Return response
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.status(200).json({
       confirmation: 1,
       message: 'Definicja karnetu pobrana pomyślnie',
@@ -1917,14 +1696,14 @@ export const getPassById = async (req, res, next) => {
     });
   } catch (err) {
     console.error('[getPassById] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 
 export const getCustomerPassById = async (req, res, next) => {
   const controllerName = 'getCustomerPassById';
   // Log request for debugging
-  console.log(`➡️➡️➡️ ${person} called`, controllerName);
+  console.log(`➡️➡️➡️ ${actor} called`, controllerName);
 
   let errCode = 500;
   try {
@@ -1978,7 +1757,7 @@ export const getCustomerPassById = async (req, res, next) => {
     };
 
     //Return response
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.status(200).json({
       confirmation: 1,
       message: 'Definicja karnetu pobrana pomyślnie',
@@ -1986,7 +1765,7 @@ export const getCustomerPassById = async (req, res, next) => {
     });
   } catch (err) {
     console.error('[getCustomerPassById] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 //@ POST
@@ -1994,7 +1773,7 @@ export const getCustomerPassById = async (req, res, next) => {
 export const postCreatePassDefinition = async (req, res, next) => {
   const controllerName = 'postCreatePassDefinition';
   // Log request for debugging
-  callLog(req, person, controllerName);
+  callLog(req, actor, controllerName);
 
   let errCode = 500; // default error code
   const {
@@ -2045,7 +1824,7 @@ export const postCreatePassDefinition = async (req, res, next) => {
     });
 
     // Log success and send response
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.status(200).json({
       code: 200,
       confirmation: 1,
@@ -2054,7 +1833,7 @@ export const postCreatePassDefinition = async (req, res, next) => {
   } catch (err) {
     // Log error then handle centrally
     console.error('[postCreatePassDefinition] error:', err);
-    return catchErr(person, res, errCode, err, controllerName, { code: 409 });
+    return catchErr(actor, res, errCode, err, controllerName, { code: 409 });
   }
 };
 //@ PUT
@@ -2062,7 +1841,7 @@ export const postCreatePassDefinition = async (req, res, next) => {
 export const deleteCustomerPass = async (req, res, next) => {
   const controllerName = 'deleteCustomerPass';
   // Log request for debugging
-  callLog(req, person, controllerName);
+  callLog(req, actor, controllerName);
 
   let errCode = 500; // default error code
   try {
@@ -2079,7 +1858,7 @@ export const deleteCustomerPass = async (req, res, next) => {
     }
 
     // Log success and send response
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.status(200).json({
       confirmation: 1,
       message: 'Karnet uczestnika usunięty pomyślnie.',
@@ -2087,13 +1866,13 @@ export const deleteCustomerPass = async (req, res, next) => {
   } catch (err) {
     // Log error then handle it centrally
     console.error('[deleteCustomerPass] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 export const deletePassDefinition = async (req, res, next) => {
   const controllerName = 'deletePassDefinition';
   // Log request for debugging
-  callLog(req, person, controllerName);
+  callLog(req, actor, controllerName);
 
   let errCode = 500; // default error code
   try {
@@ -2110,7 +1889,7 @@ export const deletePassDefinition = async (req, res, next) => {
     }
 
     // Log success and send response
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.status(200).json({
       confirmation: 1,
       message: 'Definicja karnetu usunięta pomyślnie.',
@@ -2118,7 +1897,7 @@ export const deletePassDefinition = async (req, res, next) => {
   } catch (err) {
     // Log error then handle it centrally
     console.error('[deletePassDefinition] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 
@@ -2127,7 +1906,7 @@ export const deletePassDefinition = async (req, res, next) => {
 export const getAllBookings = async (req, res, next) => {
   const controllerName = 'getAllBookings';
   // Log request for debugging
-  callLog(req, person, controllerName);
+  callLog(req, actor, controllerName);
 
   let errCode = 500;
   try {
@@ -2191,7 +1970,7 @@ export const getAllBookings = async (req, res, next) => {
     ];
 
     // Log success and send response
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.json({
       totalKeys,
       confirmation: 1,
@@ -2202,7 +1981,7 @@ export const getAllBookings = async (req, res, next) => {
     });
   } catch (err) {
     console.error('[getAllBookings] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 export const getBookingById = async (req, res, next) => {
@@ -2266,7 +2045,7 @@ export const getBookingById = async (req, res, next) => {
     };
 
     // Log success and send response
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.status(200).json({
       confirmation: 1,
       message: 'Rezerwacja pobrana pomyślnie',
@@ -2275,14 +2054,14 @@ export const getBookingById = async (req, res, next) => {
     });
   } catch (err) {
     console.error('[getBookingById] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 //@ POST
 export const postCreateBookingWithPass = async (req, res, next) => {
   const controllerName = 'postCreateBookingWithPass';
   // Log request for debugging
-  callLog(req, person, controllerName);
+  callLog(req, actor, controllerName);
 
   let errCode = 500; // default error code
 
@@ -2395,7 +2174,7 @@ export const postCreateBookingWithPass = async (req, res, next) => {
     }
 
     //Log success and return response
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.status(201).json({
       confirmation: 1,
       message: 'Rezerwacja stworzona pomyślnie.',
@@ -2404,7 +2183,7 @@ export const postCreateBookingWithPass = async (req, res, next) => {
   } catch (err) {
     // Handle any errors centrally
     console.error('[postCreateBookingWithPass] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 
@@ -2412,7 +2191,7 @@ export const postCreateBookingWithPass = async (req, res, next) => {
 export const deleteBookingRecord = async (req, res, next) => {
   const controllerName = 'deleteBookingRecord';
   // Log request for debugging
-  callLog(req, person, controllerName);
+  callLog(req, actor, controllerName);
 
   let errCode = 500;
   try {
@@ -2466,7 +2245,7 @@ export const deleteBookingRecord = async (req, res, next) => {
     }
 
     // Log success and send response
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.status(200).json({
       confirmation: 1,
       message:
@@ -2474,13 +2253,13 @@ export const deleteBookingRecord = async (req, res, next) => {
     });
   } catch (err) {
     console.error('[deleteBookingRecord] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 export const deleteBooking = async (req, res, next) => {
   const controllerName = 'deleteBooking';
   // Log request for debugging
-  callLog(req, person, controllerName);
+  callLog(req, actor, controllerName);
 
   let errCode = 500;
   try {
@@ -2534,7 +2313,7 @@ export const deleteBooking = async (req, res, next) => {
     }
 
     // Log success and send response
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.status(200).json({
       confirmation: 1,
       message:
@@ -2542,7 +2321,7 @@ export const deleteBooking = async (req, res, next) => {
     });
   } catch (err) {
     console.error('[deleteBooking] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 
@@ -2553,7 +2332,7 @@ export const deleteBooking = async (req, res, next) => {
 export const putEditMarkAbsent = async (req, res, next) => {
   const controllerName = 'putEditMarkAbsent';
   // Log request for debugging
-  callLog(req, person, controllerName);
+  callLog(req, actor, controllerName);
 
   let errCode = 500;
   try {
@@ -2591,7 +2370,7 @@ export const putEditMarkAbsent = async (req, res, next) => {
       {
         attendance: 0,
         timestamp: new Date(),
-        performedBy: person,
+        performedBy: actor,
       },
       {
         where: { customerId, bookingId: rowId },
@@ -2611,7 +2390,7 @@ export const putEditMarkAbsent = async (req, res, next) => {
     }
 
     // Respond success
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.status(200).json({
       confirmation: 1,
       message: 'Uczestnik oznaczony jako nieobecny.',
@@ -2619,13 +2398,13 @@ export const putEditMarkAbsent = async (req, res, next) => {
     });
   } catch (err) {
     console.error('[putEditMarkAbsent] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 export const putEditMarkPresent = async (req, res, next) => {
   const controllerName = 'putEditMarkPresent';
   // Log request for debugging
-  callLog(req, person, controllerName);
+  callLog(req, actor, controllerName);
 
   let errCode = 500;
   try {
@@ -2677,7 +2456,7 @@ export const putEditMarkPresent = async (req, res, next) => {
         {
           attendance: 1,
           timestamp: new Date(),
-          performedBy: person,
+          performedBy: actor,
         },
         {
           where: { customerId, bookingId: rowId },
@@ -2702,7 +2481,7 @@ export const putEditMarkPresent = async (req, res, next) => {
     }
 
     // Respond success
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.status(200).json({
       confirmation: 1,
       message: 'Uczestnik oznaczony jako obecny.',
@@ -2710,7 +2489,7 @@ export const putEditMarkPresent = async (req, res, next) => {
     });
   } catch (err) {
     console.error('[putEditMarkPresent] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 
@@ -2719,7 +2498,7 @@ export const putEditMarkPresent = async (req, res, next) => {
 export const getAllPayments = async (req, res, next) => {
   const controllerName = 'getAllPayments';
   // Log request for debugging
-  callLog(req, person, controllerName);
+  callLog(req, actor, controllerName);
 
   let errCode = 500;
   try {
@@ -2762,7 +2541,7 @@ export const getAllPayments = async (req, res, next) => {
     ];
 
     // Log success and send response
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.json({
       confirmation: 1,
       message: 'Płatności pobrane pomyślnie.',
@@ -2774,13 +2553,13 @@ export const getAllPayments = async (req, res, next) => {
     });
   } catch (err) {
     console.error('[getAllPayments] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 export const getPaymentById = async (req, res, next) => {
   const controllerName = 'getPaymentById';
   // Log request for debugging
-  callLog(req, person, controllerName);
+  callLog(req, actor, controllerName);
 
   let errCode = 500;
   try {
@@ -2841,7 +2620,7 @@ export const getPaymentById = async (req, res, next) => {
     delete parsed.CustomerPasses;
 
     // Log success and send response
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.status(200).json({
       confirmation: 1,
       message: 'Płatność pobrana pomyślnie.',
@@ -2850,14 +2629,14 @@ export const getPaymentById = async (req, res, next) => {
     });
   } catch (err) {
     console.error('[getPaymentById] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 //@ POST
 export const postCreatePayment = async (req, res, next) => {
   const controllerName = 'postCreatePayment';
   // Log request for debugging
-  callLog(req, person, controllerName);
+  callLog(req, actor, controllerName);
 
   let errCode = 400;
   const {
@@ -3103,7 +2882,7 @@ export const postCreatePayment = async (req, res, next) => {
     });
 
     // Log success and send response
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.status(201).json({
       isNewCustomer: false,
       confirmation: 1,
@@ -3112,7 +2891,7 @@ export const postCreatePayment = async (req, res, next) => {
     });
   } catch (err) {
     console.error('[postCreatePayment] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 //@ PUT
@@ -3120,7 +2899,7 @@ export const postCreatePayment = async (req, res, next) => {
 export const deletePayment = async (req, res, next) => {
   const controllerName = 'deletePayment';
   // Log request for debugging
-  callLog(req, person, controllerName);
+  callLog(req, actor, controllerName);
 
   let errCode = 500;
   try {
@@ -3161,14 +2940,14 @@ export const deletePayment = async (req, res, next) => {
     }
 
     // Log success and send response
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.status(200).json({
       confirmation: 1,
       message: 'Płatność usunięta pomyślnie.',
     });
   } catch (err) {
     console.error('[deletePayment] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 
@@ -3177,7 +2956,7 @@ export const deletePayment = async (req, res, next) => {
 export const getAllInvoices = async (req, res, next) => {
   const controllerName = 'getAllInvoices';
   // Log request for debugging
-  callLog(req, person, controllerName);
+  callLog(req, actor, controllerName);
 
   let errCode = 500;
   try {
@@ -3219,7 +2998,7 @@ export const getAllInvoices = async (req, res, next) => {
     ];
 
     // Log success and send response
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.json({
       confirmation: 1,
       message: 'Faktury pobrane pomyślnie.',
@@ -3229,7 +3008,7 @@ export const getAllInvoices = async (req, res, next) => {
     });
   } catch (err) {
     console.error('[getAllInvoices] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 //@ POST
@@ -3241,7 +3020,7 @@ export const getAllInvoices = async (req, res, next) => {
 export const getAllParticipantsFeedback = async (req, res, next) => {
   const controllerName = 'getAllParticipantsFeedback';
   // Log request for debugging
-  callLog(req, person, controllerName);
+  callLog(req, actor, controllerName);
 
   let errCode = 500;
   try {
@@ -3285,7 +3064,7 @@ export const getAllParticipantsFeedback = async (req, res, next) => {
     ];
 
     // Log success and send response
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.json({
       confirmation: 1,
       message: 'Opinie pobrane pomyślnie',
@@ -3295,13 +3074,13 @@ export const getAllParticipantsFeedback = async (req, res, next) => {
     });
   } catch (err) {
     console.error('[getAllParticipantsFeedback] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 export const getAllParticipantsFeedbackById = async (req, res, next) => {
   const controllerName = 'getAllParticipantsFeedbackById';
   // Log request for debugging
-  callLog(req, person, controllerName);
+  callLog(req, actor, controllerName);
 
   let errCode = 500;
   try {
@@ -3340,7 +3119,7 @@ export const getAllParticipantsFeedbackById = async (req, res, next) => {
     });
 
     // Log success and send response
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.status(200).json({
       confirmation: 1,
       message: 'Opinia pobrana pomyślnie',
@@ -3350,7 +3129,7 @@ export const getAllParticipantsFeedbackById = async (req, res, next) => {
     });
   } catch (err) {
     console.error('[getAllParticipantsFeedbackById] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 //@ POST
@@ -3359,7 +3138,7 @@ export const getAllParticipantsFeedbackById = async (req, res, next) => {
 export const deleteFeedback = async (req, res, next) => {
   const controllerName = 'deleteFeedback';
   // Log request for debugging
-  callLog(req, person, controllerName);
+  callLog(req, actor, controllerName);
 
   let errCode = 500;
   try {
@@ -3376,14 +3155,14 @@ export const deleteFeedback = async (req, res, next) => {
     }
 
     // Log success and send response
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.status(200).json({
       confirmation: 1,
       message: 'Opinia usunięta pomyślnie.',
     });
   } catch (err) {
     console.error('[deleteFeedback] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 
@@ -3392,7 +3171,7 @@ export const deleteFeedback = async (req, res, next) => {
 export const getAllNewsletters = async (req, res, next) => {
   const controllerName = 'getAllNewsletters';
   // Log request for debugging
-  callLog(req, person, controllerName);
+  callLog(req, actor, controllerName);
 
   let errCode = 500;
   try {
@@ -3426,7 +3205,7 @@ export const getAllNewsletters = async (req, res, next) => {
     ];
 
     // Log success and send response
-    successLog(person, controllerName);
+    successLog(actor, controllerName);
     return res.json({
       totalKeys,
       confirmation: 1,
@@ -3435,7 +3214,7 @@ export const getAllNewsletters = async (req, res, next) => {
     });
   } catch (err) {
     console.error('[getAllNewsletters] error:', err);
-    return catchErr(person, res, errCode, err, controllerName);
+    return catchErr(actor, res, errCode, err, controllerName);
   }
 };
 export const getAllSubscribedNewsletters = (req, res, next) => {

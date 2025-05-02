@@ -35,6 +35,8 @@ export function createGetAll(
   {
     includeRelations = [],
     excludeFields = [],
+    preAction, //optional async hook before fetching
+    postAction, // optional runs after successful fetching
     mapRecord,
     columnKeys,
     sortFunction,
@@ -44,37 +46,46 @@ export function createGetAll(
 ) {
   return async (req, res, next) => {
     // Build controller name dynamically
-    const controllerName = `getAll${EntityModel.name}`;
+    const controllerName = `getAll${EntityModel.name}s`;
     // Log incoming request
     callLog(req, actorName, controllerName);
     let errorCode = 500;
     try {
-      // Prepare Sequelize query options
+      // run preAction (e.g. to fetch schedule)
+      let hookData;
+      if (typeof preAction === 'function') {
+        hookData = await preAction(req);
+      }
+
+      // set up query options
       const queryOptions = { include: includeRelations };
       if (excludeFields.length) {
         queryOptions.attributes = { exclude: excludeFields };
       }
-      // Execute database fetch
+
+      // fetch all records
       const records = await EntityModel.findAll(queryOptions);
-      // If none found, throw 404
       if (!records || records.length === 0) {
         errorCode = 404;
         throw new Error(notFoundMessage || `${EntityModel.name} not found.`);
       }
-      // Map each record to plain object
-      let formattedList = records.map(mapRecord);
-      // Optionally sort the array
+
+      // map + filter
+      let list = records
+        .map(inst => mapRecord(inst.toJSON(), hookData))
+        .filter(item => item != null); // allow mapRecord to drop items
+
+      // optional sorting
       if (typeof sortFunction === 'function') {
-        formattedList = formattedList.sort(sortFunction);
+        list = list.sort(sortFunction);
       }
-      // Log success
+
       successLog(actorName, controllerName);
-      // Return standardized response
       return res.json({
         confirmation: 1,
         message: successMessage,
         columnKeys,
-        content: formattedList,
+        content: list,
       });
     } catch (err) {
       // Central error handler
@@ -105,6 +116,8 @@ export function createGetById(
     mapRecord = instance => instance.toJSON(),
     successMessage,
     notFoundMessage,
+    attachResponse = () => ({}), // for isLoggedIn etc.
+    resultName = EntityModel.name.toLowerCase(),
   }
 ) {
   return async (req, res, next) => {
@@ -131,7 +144,8 @@ export function createGetById(
       return res.json({
         confirmation: 1,
         message: successMessage,
-        [EntityModel.name.toLowerCase()]: result,
+        ...attachResponse(req, result),
+        [resultName]: result,
       });
     } catch (err) {
       return catchErr(actorName, res, errorCode, err, controllerName);
@@ -154,7 +168,9 @@ export function createDelete(
   actorName,
   EntityModel,
   {
-    primaryKey = `${EntityModel.name.toLowerCase()}Id`,
+    primaryKeyName = `${EntityModel.name.toLowerCase()}Id`,
+    preAction, // optional hook: runs before delete
+    postAction, // optional hook: runs after successful delete
     successMessage,
     notFoundMessage,
   }
@@ -163,16 +179,30 @@ export function createDelete(
     const controllerName = `delete${EntityModel.name}`;
     callLog(req, actorName, controllerName);
     let errorCode = 500;
+
     try {
+      // run the preAction hook if provided (e.g. find entity, pull out email)
+      let hookData;
+      if (typeof preAction === 'function') {
+        hookData = await preAction(req);
+      }
+
       const id = req.params.id;
       // Perform deletion
       const deletedCount = await EntityModel.destroy({
-        where: { [primaryKey]: id },
+        where: { [primaryKeyName]: id },
       });
+
       if (!deletedCount) {
         errorCode = 404;
         throw new Error(notFoundMessage || `${EntityModel.name} not found.`);
       }
+
+      // run the postAction hook if provided (e.g. send notification)
+      if (typeof postAction === 'function') {
+        await postAction(hookData, req);
+      }
+
       successLog(actorName, controllerName);
       return res.json({ confirmation: 1, message: successMessage });
     } catch (err) {

@@ -30,7 +30,11 @@ function DetailsListUserSettings({
 
   const title = isUserAccountPage
     ? 'Preferencje:'
-    : `Ustawienia strony ${settingsData?.userId ? `(Id ${settingsData?.userPrefId}):` : '(Domyślne)'}`;
+    : `Ustawienia strony ${
+        settingsData?.userPrefId
+          ? `(Id ${settingsData?.userPrefId}):`
+          : '(Domyślne)'
+      }`;
 
   const details = [
     { label: 'Menu po lewej:', content: handedness },

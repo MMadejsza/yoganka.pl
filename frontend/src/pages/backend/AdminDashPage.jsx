@@ -347,7 +347,7 @@ function AdminPage() {
   if (data && status?.role === 'ADMIN') {
     console.log(`✅ Data: `);
     console.log(data);
-    keys = data.totalKeys || data.totalHeaders;
+    keys = data.columnKeys || data.totalKeys || data.totalHeaders;
 
     table = (
       <ModalTable
