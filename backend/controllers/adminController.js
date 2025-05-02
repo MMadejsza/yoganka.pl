@@ -2124,777 +2124,742 @@ export const deletePassDefinition = async (req, res, next) => {
 
 //! BOOKINGS_____________________________________________
 //@ GET
-export const getAllBookings = (req, res, next) => {
+export const getAllBookings = async (req, res, next) => {
   const controllerName = 'getAllBookings';
+  // Log request for debugging
   callLog(req, person, controllerName);
 
-  models.Booking.findAll({
-    include: [
-      {
-        model: models.Customer,
-        attributes: { exclude: ['userId'] },
-        include: [{ model: models.User }],
-      },
-      {
-        model: models.ScheduleRecord,
-        include: [{ model: models.Product }],
-        // attributes: { exclude: ['userId'] },
-      },
-      {
-        model: models.Payment,
-        // attributes: { exclude: ['userId'] },
-        required: false,
-      },
-      {
-        model: models.CustomerPass,
-        include: [{ model: models.PassDefinition }],
-        // attributes: { exclude: ['userId'] },
-        required: false,
-      },
-    ],
-  })
-    .then(records => {
-      if (!records) {
-        errCode = 404;
-        throw new Error('Nie znaleziono rekordów.');
-      }
-
-      // Convert for records for different names
-      const formattedRecords = records.map(record => {
-        const booking = record.toJSON();
-        const customerFullName = `${record.Customer.firstName} ${record.Customer.lastName} (${record.Customer.customerId})`;
-        const scheduleDetails = `${record.ScheduleRecord.Product.name} (${record.ScheduleRecord.date} ${record.ScheduleRecord.startTime}, sId: ${record.ScheduleRecord.scheduleId})`;
-        const payment = record.Payment
-          ? `${record.Payment?.paymentMethod} (pId:${record.Payment?.paymentId})`
-          : `${record.CustomerPass?.PassDefinition?.name} (cpId:${record.CustomerPass?.customerPassId})`;
-
-        return {
-          ...booking,
-          rowId: booking.bookingId,
-          customerFullName,
-          scheduleDetails,
-          payment,
-          createdAt: record.createdAt,
-          timestamp: record.timestamp,
-        };
-      });
-
-      const totalKeys = [
-        'bookingId',
-        'customerFullName', // full name with id
-        'scheduleDetails', // name, timing, id
-        'payment', // method with id in it if direct or pass name nad its id
-        'attendance',
-        'createdAt', // 'Utworzono'
-        'timestamp', // 'Data Akcji'
-        'performedBy',
-      ];
-
-      successLog(person, controllerName);
-      return res.json({
-        totalKeys,
-        confirmation: 1,
-        message: 'Pobrano pomyślnie',
-        content: formattedRecords.sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-        ),
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
-};
-export const getBookingById = (req, res, next) => {
-  const controllerName = 'getBookingID';
-  console.log(`\n➡️➡️➡️ admin called`, controllerName);
-
-  const PK = req.params.id;
-  models.Booking.findByPk(PK, {
-    include: [
-      {
-        model: models.Customer,
-        attributes: { exclude: ['userId'] },
-        include: [{ model: models.User }],
-      },
-      {
-        model: models.ScheduleRecord,
-        include: [{ model: models.Product }, { model: models.Booking }],
-        // attributes: { exclude: ['userId'] },
-      },
-      {
-        model: models.Payment,
-        // attributes: { exclude: ['userId'] },
-        required: false,
-      },
-      {
-        model: models.CustomerPass,
-        include: [{ model: models.PassDefinition }],
-        // attributes: { exclude: ['userId'] },
-        required: false,
-      },
-    ],
-  })
-    .then(bookingData => {
-      if (!bookingData) {
-        errCode = 404;
-        throw new Error('Nie znaleziono rezerwacji.');
-      }
-      // console.log(scheduleData);
-      let booking = bookingData.toJSON();
-      let attendance = 0;
-
-      if (
-        booking.ScheduleRecord.Bookings &&
-        booking.ScheduleRecord.Bookings.length > 0
-      ) {
-        booking.ScheduleRecord.Bookings.forEach(b => {
-          if (b.attendance == 1 || b.attendance == true) attendance += 1;
-        });
-      }
-      let bookingFormatted = {
-        ...booking,
-        ScheduleRecord: {
-          ...booking.ScheduleRecord,
-          attendance: attendance,
+  let errCode = 500;
+  try {
+    // Fetch all bookings with related data
+    const records = await models.Booking.findAll({
+      include: [
+        {
+          model: models.Customer,
+          attributes: { exclude: ['userId'] },
+          include: [{ model: models.User }],
         },
-      };
+        {
+          model: models.ScheduleRecord,
+          include: [{ model: models.Product }],
+        },
+        { model: models.Payment, required: false },
+        {
+          model: models.CustomerPass,
+          include: [{ model: models.PassDefinition }],
+          required: false,
+        },
+      ],
+    });
 
-      successLog(person, controllerName);
-      return res.status(200).json({
-        confirmation: 1,
-        message: 'Rezerwacja pobrana pomyślnie',
-        booking: bookingFormatted,
-        user: req.user,
+    // If no records found, throw 404
+    if (!records || records.length === 0) {
+      errCode = 404;
+      throw new Error('Nie znaleziono rekordów.');
+    }
+
+    // Format each booking for frontend
+    const formattedRecords = records.map(record => {
+      const booking = record.toJSON();
+      const customerFullName = `${record.Customer.firstName} ${record.Customer.lastName} (${record.Customer.customerId})`;
+      const scheduleDetails = `${record.ScheduleRecord.Product.name} (${record.ScheduleRecord.date} ${record.ScheduleRecord.startTime}, sId: ${record.ScheduleRecord.scheduleId})`;
+      const payment = record.Payment
+        ? `${record.Payment.paymentMethod} (pId:${record.Payment.paymentId})`
+        : `${record.CustomerPass?.PassDefinition?.name} (cpId:${record.CustomerPass?.customerPassId})`;
+
+      return {
+        ...booking,
+        rowId: booking.bookingId,
+        customerFullName,
+        scheduleDetails,
+        payment,
+        createdAt: record.createdAt,
+        timestamp: record.timestamp,
+      };
+    });
+
+    // Define table columns
+    const totalKeys = [
+      'bookingId',
+      'customerFullName',
+      'scheduleDetails',
+      'payment',
+      'attendance',
+      'createdAt',
+      'timestamp',
+      'performedBy',
+    ];
+
+    // Log success and send response
+    successLog(person, controllerName);
+    return res.json({
+      totalKeys,
+      confirmation: 1,
+      message: 'Pobrano pomyślnie',
+      content: formattedRecords.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      ),
+    });
+  } catch (err) {
+    console.error('[getAllBookings] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
+};
+export const getBookingById = async (req, res, next) => {
+  const controllerName = 'getBookingID';
+  // Log request for debugging
+  console.log(`➡️➡️➡️ admin called`, controllerName);
+
+  let errCode = 500;
+  try {
+    const PK = req.params.id;
+    // Fetch the booking with related data
+    const bookingData = await models.Booking.findByPk(PK, {
+      include: [
+        {
+          model: models.Customer,
+          attributes: { exclude: ['userId'] },
+          include: [{ model: models.User }],
+        },
+        {
+          model: models.ScheduleRecord,
+          include: [{ model: models.Product }, { model: models.Booking }],
+        },
+        { model: models.Payment, required: false },
+        {
+          model: models.CustomerPass,
+          include: [{ model: models.PassDefinition }],
+          required: false,
+        },
+      ],
+    });
+
+    // If not found, throw 404
+    if (!bookingData) {
+      errCode = 404;
+      throw new Error('Nie znaleziono rezerwacji.');
+    }
+
+    // Convert to plain object
+    const booking = bookingData.toJSON();
+
+    // Calculate attendance count
+    let attendance = 0;
+    if (
+      booking.ScheduleRecord.Bookings &&
+      booking.ScheduleRecord.Bookings.length > 0
+    ) {
+      booking.ScheduleRecord.Bookings.forEach(b => {
+        if (b.attendance == 1 || b.attendance === true) {
+          attendance += 1;
+        }
       });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+    }
+
+    // Attach attendance to schedule
+    const bookingFormatted = {
+      ...booking,
+      ScheduleRecord: {
+        ...booking.ScheduleRecord,
+        attendance,
+      },
+    };
+
+    // Log success and send response
+    successLog(person, controllerName);
+    return res.status(200).json({
+      confirmation: 1,
+      message: 'Rezerwacja pobrana pomyślnie',
+      booking: bookingFormatted,
+      user: req.user,
+    });
+  } catch (err) {
+    console.error('[getBookingById] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
 //@ POST
-export const postCreateBookingWithPass = (req, res, next) => {
+export const postCreateBookingWithPass = async (req, res, next) => {
   const controllerName = 'postCreateBookingWithPass';
+  // Log request for debugging
   callLog(req, person, controllerName);
-  const { scheduleId } = req.params;
-  const { customerId, customerPassId } = req.body;
-  console.log(req.body);
-  console.log(scheduleId);
+
+  let errCode = 500; // default error code
+
   try {
+    const { scheduleId } = req.params;
+    const { customerId, customerPassId } = req.body;
+
+    // Validate required inputs
     isEmptyInput(customerId, '"Numer uczestnika"');
     isEmptyInput(scheduleId, '"Numer terminu"');
     isEmptyInput(customerPassId, '"Numer karnetu uczestnika"');
-  } catch (err) {
-    return catchErr(person, res, errCode, err, controllerName);
-  }
-  const wantsNotifications = req.user?.UserPrefSetting
-    ? req.user?.UserPrefSetting?.notifications
-    : true;
 
-  let currentCustomerPass, currentScheduleRecord;
+    // Determine if user wants notifications
+    const wantsNotifications = req.user?.UserPrefSetting
+      ? req.user.UserPrefSetting.notifications
+      : true;
 
-  // Load customer with passes
-  return db
-    .transaction(t => {
-      return models.CustomerPass.findOne({
+    let currentCustomerPass;
+    let currentScheduleRecord;
+
+    // Run booking logic inside a transaction
+    const newBooking = await db.transaction(async t => {
+      //Load the customer's pass definition
+      const customerPass = await models.CustomerPass.findOne({
         where: { customerId, customerPassId },
         include: [{ model: models.PassDefinition }],
         transaction: t,
-      })
-        .then(customerPass => {
-          if (!customerPass)
-            throw new Error('Nie znaleziono karnetu uczestnika');
-          currentCustomerPass = customerPass;
-
-          return models.ScheduleRecord.findOne({
-            where: { scheduleId },
-            include: [{ model: models.Product }],
-            transaction: t,
-            lock: t.LOCK.UPDATE,
-          });
-        })
-        .then(scheduleRecord => {
-          if (!scheduleRecord) throw new Error('Nie znaleziono terminu');
-          currentScheduleRecord = scheduleRecord;
-
-          return models.Booking.count({
-            where: { scheduleId, attendance: true },
-            transaction: t,
-          });
-        })
-        .then(count => {
-          if (count >= currentScheduleRecord.capacity) {
-            errCode = 409;
-            throw new Error('Brak wolnych miejsc w tym terminie');
-          }
-
-          // Check if booking already exists (by customer & schedule)
-          return models.Booking.findOne({
-            where: {
-              customerId,
-              scheduleId,
-            },
-            transaction: t,
-            lock: t.LOCK.UPDATE,
-          });
-        })
-        .then(existingBooking => {
-          let validPass = null;
-
-          if (existingBooking) {
-            errCode = 409;
-            throw new Error('Użytkownik już ma rezerwację');
-          }
-
-          // Check if customer already has a valid pass for this schedule.
-          validPass = isPassValidForSchedule(
-            currentCustomerPass,
-            currentScheduleRecord
-          );
-
-          if (!validPass) {
-            throw new Error('Karnet nie jest ważny na ten termin.');
-          }
-
-          return models.Booking.create(
-            {
-              customerId,
-              scheduleId: currentScheduleRecord.scheduleId,
-              customerPassId: currentCustomerPass.customerPassId,
-              attendance: true,
-              timestamp: new Date(),
-              performedBy: 'Administrator',
-            },
-            {
-              transaction: t,
-            }
-          );
-        })
-        .then(newBooking => {
-          if (typeof currentCustomerPass.usesLeft === 'number') {
-            return currentCustomerPass
-              .update(
-                { usesLeft: currentCustomerPass.usesLeft - 1 },
-                { transaction: t }
-              )
-              .then(() => newBooking);
-          }
-          return newBooking;
-        });
-    })
-    .then(result => {
-      if (req.user.email && wantsNotifications) {
-        adminEmails.sendNewReservationMail({
-          to: req.user.email,
-          productName: currentScheduleRecord.Product.name,
-          date: currentScheduleRecord.date,
-          startTime: currentScheduleRecord.startTime,
-          location: currentScheduleRecord.location,
-          isAdmin: true,
-        });
-      }
-      successLog(person, controllerName);
-      res.status(201).json({
-        confirmation: 1,
-        message: 'Rezerwacja stworzona pomyślnie.',
-        result,
       });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+      if (!customerPass) {
+        throw new Error('Nie znaleziono karnetu uczestnika');
+      }
+      currentCustomerPass = customerPass;
+
+      //Load and lock the schedule record
+      const scheduleRecord = await models.ScheduleRecord.findOne({
+        where: { scheduleId },
+        include: [{ model: models.Product }],
+        transaction: t,
+        lock: t.LOCK.UPDATE,
+      });
+      if (!scheduleRecord) {
+        throw new Error('Nie znaleziono terminu');
+      }
+      currentScheduleRecord = scheduleRecord;
+
+      //Check capacity by counting current attendees
+      const count = await models.Booking.count({
+        where: { scheduleId, attendance: true },
+        transaction: t,
+      });
+      if (count >= scheduleRecord.capacity) {
+        errCode = 409;
+        throw new Error('Brak wolnych miejsc w tym terminie');
+      }
+
+      //Ensure the customer hasn't already booked this schedule
+      const existingBooking = await models.Booking.findOne({
+        where: { customerId, scheduleId },
+        transaction: t,
+        lock: t.LOCK.UPDATE,
+      });
+      if (existingBooking) {
+        errCode = 409;
+        throw new Error('Użytkownik już ma rezerwację');
+      }
+
+      //Validate the pass for this schedule
+      const validPass = isPassValidForSchedule(
+        currentCustomerPass,
+        currentScheduleRecord
+      );
+      if (!validPass) {
+        throw new Error('Karnet nie jest ważny na ten termin.');
+      }
+
+      //Create the booking
+      const booking = await models.Booking.create(
+        {
+          customerId,
+          scheduleId,
+          customerPassId: currentCustomerPass.customerPassId,
+          attendance: true,
+          timestamp: new Date(),
+          performedBy: 'Administrator',
+        },
+        { transaction: t }
+      );
+
+      //Decrement pass uses if applicable
+      if (typeof currentCustomerPass.usesLeft === 'number') {
+        await currentCustomerPass.update(
+          { usesLeft: currentCustomerPass.usesLeft - 1 },
+          { transaction: t }
+        );
+      }
+
+      return booking;
+    });
+
+    //Send notification email if needed
+    if (req.user.email && wantsNotifications) {
+      adminEmails.sendNewReservationMail({
+        to: req.user.email,
+        productName: currentScheduleRecord.Product.name,
+        date: currentScheduleRecord.date,
+        startTime: currentScheduleRecord.startTime,
+        location: currentScheduleRecord.location,
+        isAdmin: true,
+      });
+    }
+
+    //Log success and return response
+    successLog(person, controllerName);
+    return res.status(201).json({
+      confirmation: 1,
+      message: 'Rezerwacja stworzona pomyślnie.',
+      result: newBooking,
+    });
+  } catch (err) {
+    // Handle any errors centrally
+    console.error('[postCreateBookingWithPass] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
+
 //@ DELETE
-export const deleteBookingRecord = (req, res, next) => {
+export const deleteBookingRecord = async (req, res, next) => {
   const controllerName = 'deleteBookingRecord';
+  // Log request for debugging
   callLog(req, person, controllerName);
 
-  const { customerId, rowId } = req.body;
-  let currentScheduleRecord, customerEmail, wantsNotifications;
+  let errCode = 500;
+  try {
+    const { customerId, rowId } = req.body;
 
-  // Find booking to get info for email as well
-  models.Booking.findOne({
-    where: {
-      customerId: customerId,
-      bookingId: rowId,
-    },
-    include: [
-      {
-        model: models.ScheduleRecord,
-        required: true,
-        include: [
-          {
-            model: models.Product,
-            required: true,
-          },
-        ],
-      },
-      {
-        model: models.Customer,
-        required: true,
-        include: [
-          {
-            model: models.User,
-            attributes: ['email'],
-          },
-        ],
-      },
-    ],
-  })
-    .then(foundRecord => {
-      if (!foundRecord) {
-        // No attendance found
-        errCode = 404;
-        throw new Error('Nie znaleziono rekordu obecności w dzienniku.');
-      }
+    // Find the specific booking record with related schedule and customer data
+    const foundRecord = await models.Booking.findOne({
+      where: { customerId, bookingId: rowId },
+      include: [
+        {
+          model: models.ScheduleRecord,
+          required: true,
+          include: [{ model: models.Product, required: true }],
+        },
+        {
+          model: models.Customer,
+          required: true,
+          include: [{ model: models.User, attributes: ['email'] }],
+        },
+      ],
+    });
+    if (!foundRecord) {
+      errCode = 404;
+      throw new Error('Nie znaleziono rekordu obecności w dzienniku.');
+    }
 
-      currentScheduleRecord = foundRecord.ScheduleRecord;
-      customerEmail = foundRecord.Customer.User.email;
-      wantsNotifications = foundRecord.Customer.User.UserPrefSetting
-        ? foundRecord.Customer.User.UserPrefSetting?.notifications
-        : true;
+    // Extract data for email notification
+    const currentScheduleRecord = foundRecord.ScheduleRecord;
+    const customerEmail = foundRecord.Customer.User.email;
+    const wantsNotifications = foundRecord.Customer.User.UserPrefSetting
+      ? foundRecord.Customer.User.UserPrefSetting.notifications
+      : true;
 
-      // Return deleted number
-      return foundRecord.destroy();
-    })
-    .then(deleted => {
-      if (!deleted) {
-        errCode = 404;
-        throw new Error('Nie usunięto rekordu.');
-      }
+    // Delete the booking record
+    const deleted = await foundRecord.destroy();
+    if (!deleted) {
+      errCode = 404;
+      throw new Error('Nie usunięto rekordu.');
+    }
 
-      // Send confirmation
-      if (customerEmail && wantsNotifications) {
-        adminEmails.sendBookingDeletedMail({
-          to: customerEmail,
-          productName: currentScheduleRecord.Product.name || 'Zajęcia',
-          date: currentScheduleRecord.date,
-          startTime: currentScheduleRecord.startTime,
-          location: currentScheduleRecord.location,
-          isAdmin: true,
-        });
-      }
-
-      // Confirmation for frontend
-      successLog(person, controllerName);
-      return res.status(200).json({
-        confirmation: 1,
-        message:
-          'Rekord obecności usunięty. Rekord płatności pozostał nieruszony.',
+    // Send notification email if the user wants it
+    if (customerEmail && wantsNotifications) {
+      adminEmails.sendBookingDeletedMail({
+        to: customerEmail,
+        productName: currentScheduleRecord.Product.name || 'Zajęcia',
+        date: currentScheduleRecord.date,
+        startTime: currentScheduleRecord.startTime,
+        location: currentScheduleRecord.location,
+        isAdmin: true,
       });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+    }
+
+    // Log success and send response
+    successLog(person, controllerName);
+    return res.status(200).json({
+      confirmation: 1,
+      message:
+        'Rekord obecności usunięty. Rekord płatności pozostał nieruszony.',
+    });
+  } catch (err) {
+    console.error('[deleteBookingRecord] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
-export const deleteBooking = (req, res, next) => {
+export const deleteBooking = async (req, res, next) => {
   const controllerName = 'deleteBooking';
+  // Log request for debugging
   callLog(req, person, controllerName);
 
-  const { entityId } = req.body;
-  let currentScheduleRecord, customerEmail, wantsNotifications;
+  let errCode = 500;
+  try {
+    const { entityId } = req.body;
 
-  // Find booking to get info for email as well
-  models.Booking.findOne({
-    where: {
-      bookingId: entityId,
-    },
-    include: [
-      {
-        model: models.ScheduleRecord,
-        required: true,
-        include: [
-          {
-            model: models.Product,
-            required: true,
-          },
-        ],
-      },
-      {
-        model: models.Customer,
-        required: true,
-        include: [
-          {
-            model: models.User,
-            attributes: ['email'],
-          },
-        ],
-      },
-    ],
-  })
-    .then(foundRecord => {
-      if (!foundRecord) {
-        // No attendance found
-        errCode = 404;
-        throw new Error('Nie znaleziono rekordu obecności w dzienniku.');
-      }
+    // Find the booking with related schedule and customer data
+    const foundRecord = await models.Booking.findOne({
+      where: { bookingId: entityId },
+      include: [
+        {
+          model: models.ScheduleRecord,
+          required: true,
+          include: [{ model: models.Product, required: true }],
+        },
+        {
+          model: models.Customer,
+          required: true,
+          include: [{ model: models.User, attributes: ['email'] }],
+        },
+      ],
+    });
+    if (!foundRecord) {
+      errCode = 404;
+      throw new Error('Nie znaleziono rekordu obecności w dzienniku.');
+    }
 
-      currentScheduleRecord = foundRecord.ScheduleRecord;
-      customerEmail = foundRecord.Customer.User.email;
-      wantsNotifications = foundRecord.Customer.User.UserPrefSetting
-        ? foundRecord.Customer.User.UserPrefSetting?.notifications
-        : true;
+    // Extract data for email notification
+    const currentScheduleRecord = foundRecord.ScheduleRecord;
+    const customerEmail = foundRecord.Customer.User.email;
+    const wantsNotifications = foundRecord.Customer.User.UserPrefSetting
+      ? foundRecord.Customer.User.UserPrefSetting.notifications
+      : true;
 
-      // Return deleted number
-      return foundRecord.destroy();
-    })
-    .then(deleted => {
-      if (!deleted) {
-        errCode = 404;
-        throw new Error('Nie usunięto rekordu.');
-      }
+    // Delete the booking
+    const deleted = await foundRecord.destroy();
+    if (!deleted) {
+      errCode = 404;
+      throw new Error('Nie usunięto rekordu.');
+    }
 
-      // Send confirmation
-      if (customerEmail && wantsNotifications) {
-        adminEmails.sendBookingDeletedMail({
-          to: customerEmail,
-          productName: currentScheduleRecord.Product.name || 'Zajęcia',
-          date: currentScheduleRecord.date,
-          startTime: currentScheduleRecord.startTime,
-          location: currentScheduleRecord.location,
-          isAdmin: true,
-        });
-      }
-
-      // Confirmation for frontend
-      successLog(person, controllerName);
-      return res.status(200).json({
-        confirmation: 1,
-        message:
-          'Rekord obecności usunięty. Rekord płatności pozostał nieruszony.',
+    // Send notification email if the user wants it
+    if (customerEmail && wantsNotifications) {
+      adminEmails.sendBookingDeletedMail({
+        to: customerEmail,
+        productName: currentScheduleRecord.Product.name || 'Zajęcia',
+        date: currentScheduleRecord.date,
+        startTime: currentScheduleRecord.startTime,
+        location: currentScheduleRecord.location,
+        isAdmin: true,
       });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+    }
+
+    // Log success and send response
+    successLog(person, controllerName);
+    return res.status(200).json({
+      confirmation: 1,
+      message:
+        'Rekord obecności usunięty. Rekord płatności pozostał nieruszony.',
+    });
+  } catch (err) {
+    console.error('[deleteBooking] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
 
 //! ATTENDANCE_____________________________________________
 //@ GET
 //@ POST
 //@ PUT
-export const putEditMarkAbsent = (req, res, next) => {
+export const putEditMarkAbsent = async (req, res, next) => {
   const controllerName = 'putEditMarkAbsent';
+  // Log request for debugging
   callLog(req, person, controllerName);
 
-  const { rowId, customerId } = req.body;
-  let currentScheduleRecord, customerEmail, wantsNotifications;
+  let errCode = 500;
+  try {
+    const { rowId, customerId } = req.body;
 
-  // Find schedule
-  models.Booking.findOne({
-    where: {
-      customerId: customerId,
-      bookingId: rowId,
-    },
-    include: [
-      {
-        model: models.ScheduleRecord,
-        include: [
-          {
-            model: models.Product,
-            required: true,
-          },
-        ],
-        required: true,
-      },
-      {
-        model: models.Customer,
-        required: true,
-        include: [
-          {
-            model: models.User,
-            attributes: ['email'],
-          },
-        ],
-      },
-    ],
-  })
-    .then(foundRecord => {
-      if (!foundRecord) {
-        errCode = 404;
-        throw new Error('Nie znaleziono rekordu obecności w dzienniku.');
-      }
-      // Assign for email data
-      currentScheduleRecord = foundRecord.ScheduleRecord;
-      // Assign for email data
-      customerEmail = foundRecord.Customer.User.email;
-      wantsNotifications = foundRecord.Customer.User.UserPrefSetting
-        ? foundRecord.Customer.User.UserPrefSetting?.notifications
-        : true;
-      // Finally update attendance
-      return models.Booking.update(
+    // Load the booking with schedule and customer info
+    const foundRecord = await models.Booking.findOne({
+      where: { customerId, bookingId: rowId },
+      include: [
         {
-          attendance: 0,
-          timestamp: new Date(),
-          performedBy: person,
+          model: models.ScheduleRecord,
+          required: true,
+          include: [{ model: models.Product, required: true }],
         },
         {
-          where: {
-            customerId: foundRecord.Customer.customerId,
-            bookingId: foundRecord.bookingId,
-          },
-        }
-      );
-    })
-    .then(() => {
-      // Send confirmation email
-      if (customerEmail && wantsNotifications) {
-        adminEmails.sendAttendanceMarkedAbsentMail({
-          to: customerEmail,
-          productName: currentScheduleRecord.Product.name || '',
-          date: currentScheduleRecord.date,
-          startTime: currentScheduleRecord.startTime,
-          location: currentScheduleRecord.location,
-          isAdmin: true,
-        });
-      }
+          model: models.Customer,
+          required: true,
+          include: [{ model: models.User, attributes: ['email'] }],
+        },
+      ],
+    });
+    if (!foundRecord) {
+      errCode = 404;
+      throw new Error('Nie znaleziono rekordu obecności w dzienniku.');
+    }
 
-      successLog(person, controllerName);
-      // Send confirmation to frontend
-      return res.status(200).json({
-        confirmation: 1,
-        message: 'Uczestnik oznaczony jako nieobecny.',
-        affectedRows: 2,
+    // Prepare data for notification
+    const schedule = foundRecord.ScheduleRecord;
+    const email = foundRecord.Customer.User.email;
+    const wantsNotifications =
+      foundRecord.Customer.User.UserPrefSetting?.notifications ?? true;
+
+    // Mark as absent
+    await models.Booking.update(
+      {
+        attendance: 0,
+        timestamp: new Date(),
+        performedBy: person,
+      },
+      {
+        where: { customerId, bookingId: rowId },
+      }
+    );
+
+    // Send email if needed
+    if (email && wantsNotifications) {
+      adminEmails.sendAttendanceMarkedAbsentMail({
+        to: email,
+        productName: schedule.Product.name || '',
+        date: schedule.date,
+        startTime: schedule.startTime,
+        location: schedule.location,
+        isAdmin: true,
       });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+    }
+
+    // Respond success
+    successLog(person, controllerName);
+    return res.status(200).json({
+      confirmation: 1,
+      message: 'Uczestnik oznaczony jako nieobecny.',
+      affectedRows: 1,
+    });
+  } catch (err) {
+    console.error('[putEditMarkAbsent] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
-export const putEditMarkPresent = (req, res, next) => {
+export const putEditMarkPresent = async (req, res, next) => {
   const controllerName = 'putEditMarkPresent';
+  // Log request for debugging
   callLog(req, person, controllerName);
 
-  const { customerId, rowId } = req.body;
+  let errCode = 500;
+  try {
+    const { customerId, rowId } = req.body;
 
-  let currentScheduleRecord, customerEmail, wantsNotifications;
-
-  // Find schedule
-  return db
-    .transaction(t => {
-      return models.Booking.findOne({
-        where: {
-          customerId: customerId,
-          bookingId: rowId,
-        },
+    // Run in transaction to lock and count capacity
+    const result = await db.transaction(async t => {
+      // Load booking with related data
+      const foundRecord = await models.Booking.findOne({
+        where: { customerId, bookingId: rowId },
         include: [
           {
             model: models.ScheduleRecord,
-            include: [
-              {
-                model: models.Product,
-                required: true,
-              },
-            ],
             required: true,
+            include: [{ model: models.Product, required: true }],
           },
           {
             model: models.Customer,
             required: true,
-            include: [
-              {
-                model: models.User,
-                attributes: ['email'],
-              },
-            ],
+            include: [{ model: models.User, attributes: ['email'] }],
           },
         ],
         transaction: t,
         lock: t.LOCK.UPDATE,
-      }).then(foundRecord => {
-        if (!foundRecord) {
-          errCode = 404;
-          throw new Error('Nie znaleziono rekordu obecności w dzienniku.');
-        }
-        currentScheduleRecord = foundRecord.ScheduleRecord;
-        // check if still places left
-        return models.Booking.count({
-          where: {
-            scheduleId: currentScheduleRecord.scheduleId,
-            attendance: 1,
-          },
-          transaction: t,
-        }).then(currentAttendance => {
-          successLog(person, controllerName, 'got current attendance count');
-
-          if (currentAttendance >= currentScheduleRecord.capacity) {
-            errCode = 409;
-            throw new Error('🪷 Brak wolnych miejsc na ten termin.');
-          }
-
-          currentScheduleRecord = foundRecord.ScheduleRecord;
-          // Assign for email data
-          customerEmail = foundRecord.Customer.User.email;
-          wantsNotifications = foundRecord.Customer.User.UserPrefSetting
-            ? foundRecord.Customer.User.UserPrefSetting.notifications
-            : true;
-          // Finally update attendance
-          return models.Booking.update(
-            {
-              timestamp: new Date(),
-              attendance: 1,
-              performedBy: person,
-            },
-            {
-              where: {
-                customerId: foundRecord.Customer.customerId,
-                bookingId: foundRecord.bookingId,
-              },
-              transaction: t,
-            }
-          );
-        });
       });
-    })
-    .then(updatedRecord => {
-      // Send confirmation email
-      if (customerEmail && wantsNotifications) {
-        adminEmails.sendAttendanceReturningMail({
-          to: customerEmail,
-          productName: currentScheduleRecord?.Product.name || '',
-          date: currentScheduleRecord.date,
-          startTime: currentScheduleRecord.startTime,
-          location: currentScheduleRecord.location,
-          isAdmin: true,
-        });
+      if (!foundRecord) {
+        errCode = 404;
+        throw new Error('Nie znaleziono rekordu obecności w dzienniku.');
       }
 
-      successLog(person, controllerName);
-      const status = updatedRecord ? true : false;
-      // Send confirmation to frontend
-      return res.status(200).json({
-        confirmation: status,
-        message: 'Uczestnik oznaczony jako obecny.',
-        affectedRows: status ? 1 : 0,
+      const schedule = foundRecord.ScheduleRecord;
+      // Count current present attendees
+      const currentAttendance = await models.Booking.count({
+        where: { scheduleId: schedule.scheduleId, attendance: true },
+        transaction: t,
       });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+      if (currentAttendance >= schedule.capacity) {
+        errCode = 409;
+        throw new Error('Brak wolnych miejsc na ten termin.');
+      }
+
+      // Prepare notification data
+      const email = foundRecord.Customer.User.email;
+      const wantsNotifications =
+        foundRecord.Customer.User.UserPrefSetting?.notifications ?? true;
+
+      // Mark as present
+      await models.Booking.update(
+        {
+          attendance: 1,
+          timestamp: new Date(),
+          performedBy: person,
+        },
+        {
+          where: { customerId, bookingId: rowId },
+          transaction: t,
+        }
+      );
+
+      // Return info to outer scope
+      return { schedule, email, wantsNotifications };
+    });
+
+    // Send email if needed
+    if (result.email && result.wantsNotifications) {
+      adminEmails.sendAttendanceReturningMail({
+        to: result.email,
+        productName: result.schedule.Product.name || '',
+        date: result.schedule.date,
+        startTime: result.schedule.startTime,
+        location: result.schedule.location,
+        isAdmin: true,
+      });
+    }
+
+    // Respond success
+    successLog(person, controllerName);
+    return res.status(200).json({
+      confirmation: 1,
+      message: 'Uczestnik oznaczony jako obecny.',
+      affectedRows: 1,
+    });
+  } catch (err) {
+    console.error('[putEditMarkPresent] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
 
 //! PAYMENTS_____________________________________________
 //@ GET
-export const getAllPayments = (req, res, next) => {
+export const getAllPayments = async (req, res, next) => {
   const controllerName = 'getAllPayments';
+  // Log request for debugging
   callLog(req, person, controllerName);
 
-  // Find all schedule payment regardless relation to booking because they are non refundable
-  return models.Payment.findAll({
-    include: [
-      {
-        model: models.Customer,
-        attributes: { exclude: ['userId'] },
-      },
-      {
-        model: models.Booking,
-      },
-    ],
-  })
-    .then(records => {
-      if (!records) {
-        errCode = 404;
-        throw new Error('Nie znaleziono płatności.');
-      }
-      const formattedRecords = records.map(record => {
-        const payment = record.toJSON();
-        console.log(payment);
+  let errCode = 500;
+  try {
+    // Fetch all payments with customer and booking info
+    const records = await models.Payment.findAll({
+      include: [
+        { model: models.Customer, attributes: { exclude: ['userId'] } },
+        { model: models.Booking },
+      ],
+    });
+    // If no payments found, throw 404
+    if (!records || records.length === 0) {
+      errCode = 404;
+      throw new Error('Nie znaleziono płatności.');
+    }
 
-        const schedules = payment.Bookings?.map(b => b.ScheduleRecord);
+    // Format each payment for frontend
+    const formattedRecords = records.map(record => {
+      const payment = record.toJSON();
+      const schedules = payment.Bookings?.map(b => b.ScheduleRecord);
+      return {
+        ...payment,
+        rowId: payment.paymentId,
+        date: formatIsoDateTime(payment.date),
+        customerFullName: `${payment.Customer.firstName} ${payment.Customer.lastName} (${payment.Customer.customerId})`,
+        schedules,
+      };
+    });
 
-        return {
-          ...payment,
-          rowId: payment.paymentId,
-          date: formatIsoDateTime(payment.date),
-          customerFullName: `${payment.Customer.firstName} ${payment.Customer.firstName} (${payment.Customer.customerId})`,
-          schedules,
-        };
-      });
+    // Define table columns
+    const totalKeys = [
+      'paymentId',
+      'date',
+      'customerFullName',
+      'product',
+      'status',
+      'paymentMethod',
+      'amountPaid',
+      'performedBy',
+    ];
 
-      const totalKeys = [
-        'paymentId',
-        'date',
-        'customerFullName',
-        'product',
-        'status',
-        'paymentMethod',
-        'amountPaid',
-        'performedBy',
-      ];
-
-      successLog(person, controllerName);
-      res.json({
-        confirmation: 1,
-        message: 'Płatności pobrane pomyślnie.',
-        isLoggedIn: req.session.isLoggedIn,
-        totalKeys,
-        content: formattedRecords.sort(
-          (a, b) => new Date(b.date) - new Date(a.date)
-        ),
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+    // Log success and send response
+    successLog(person, controllerName);
+    return res.json({
+      confirmation: 1,
+      message: 'Płatności pobrane pomyślnie.',
+      isLoggedIn: req.session.isLoggedIn,
+      totalKeys,
+      content: formattedRecords.sort(
+        (a, b) => new Date(b.date) - new Date(a.date)
+      ),
+    });
+  } catch (err) {
+    console.error('[getAllPayments] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
-export const getPaymentById = (req, res, next) => {
+export const getPaymentById = async (req, res, next) => {
   const controllerName = 'getPaymentById';
+  // Log request for debugging
   callLog(req, person, controllerName);
 
-  const PK = req.params.id;
-  models.Payment.findByPk(PK, {
-    required: false,
-    include: [
-      { model: models.Customer },
-      {
-        model: models.Booking,
-        include: [
-          {
-            model: models.ScheduleRecord,
-            attributes: { exclude: ['userId'] },
-            include: [{ model: models.Product }],
-          },
-        ],
-        required: false,
-      },
-      {
-        model: models.CustomerPass,
-        include: [{ model: models.Customer }, { model: models.PassDefinition }],
-        required: false,
-      },
-    ],
-  })
-    .then(payment => {
-      if (!payment) {
-        errCode = 404;
-        throw new Error('Nie znaleziono płatności.');
-      }
+  let errCode = 500;
+  try {
+    const PK = req.params.id;
+    // Fetch payment with related data
+    const paymentRecord = await models.Payment.findByPk(PK, {
+      include: [
+        { model: models.Customer },
+        {
+          model: models.Booking,
+          required: false,
+          include: [
+            {
+              model: models.ScheduleRecord,
+              attributes: { exclude: ['userId'] },
+              include: [{ model: models.Product }],
+            },
+          ],
+        },
+        {
+          model: models.CustomerPass,
+          required: false,
+          include: [
+            { model: models.Customer },
+            { model: models.PassDefinition },
+          ],
+        },
+      ],
+    });
+    // If not found, throw 404
+    if (!paymentRecord) {
+      errCode = 404;
+      throw new Error('Nie znaleziono płatności.');
+    }
 
-      const parsedPayment = payment.toJSON();
+    const parsed = paymentRecord.toJSON();
+    // Format customer passes
+    const customerPasses =
+      parsed.CustomerPasses?.map(cp => {
+        const cust = cp.Customer;
+        const def = cp.PassDefinition;
+        return {
+          customerPassId: cp.customerPassId,
+          rowId: cp.customerPassId,
+          customerFirstName: cust.firstName,
+          customerLastName: cust.lastName,
+          customerId: cust.customerId,
+          passDefId: def.passDefId,
+          allowedProductTypes: def.allowedProductTypes,
+          passName: def.name,
+          purchaseDate: cp.purchaseDate,
+          validFrom: cp.validFrom,
+          validUntil: cp.validUntil,
+          usesLeft: cp.usesLeft,
+          status: cp.status,
+        };
+      }) || [];
+    delete parsed.CustomerPasses;
 
-      const customerPasses = parsedPayment?.CustomerPasses?.map(
-        customerPass => {
-          const cp = customerPass;
-          const customer = cp.Customer;
-
-          return {
-            customerPassId: cp.customerPassId,
-            rowId: cp.customerPassId,
-            customerFirstName: customer.firstName,
-            customerLastName: customer.lastName,
-            customerId: customer.customerId,
-            passDefId: cp.PassDefinition.passDefId,
-            allowedProductTypes: cp.PassDefinition.allowedProductTypes,
-            // customerFullName: `${customer.firstName} ${customer.lastName} (${customer.customerId})`,
-            passName: cp.PassDefinition.name,
-            purchaseDate: cp.purchaseDate,
-            validFrom: cp.validFrom,
-            validUntil: cp.validUntil,
-            usesLeft: cp.usesLeft,
-            status: cp.status,
-          };
-        }
-      );
-      delete parsedPayment.CustomerPasses;
-
-      successLog(person, controllerName);
-      return res.status(200).json({
-        confirmation: 1,
-        message: 'Płatność pobrana pomyślnie.',
-        isLoggedIn: req.session.isLoggedIn,
-        payment: { ...parsedPayment, customerPasses },
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+    // Log success and send response
+    successLog(person, controllerName);
+    return res.status(200).json({
+      confirmation: 1,
+      message: 'Płatność pobrana pomyślnie.',
+      isLoggedIn: req.session.isLoggedIn,
+      payment: { ...parsed, customerPasses },
+    });
+  } catch (err) {
+    console.error('[getPaymentById] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
 //@ POST
-export const postCreatePayment = (req, res, next) => {
+export const postCreatePayment = async (req, res, next) => {
   const controllerName = 'postCreatePayment';
+  // Log request for debugging
   callLog(req, person, controllerName);
 
+  let errCode = 400;
   const {
     customerId,
     scheduleId,
@@ -2904,405 +2869,368 @@ export const postCreatePayment = (req, res, next) => {
     paymentMethod,
   } = req.body;
 
-  errCode = 400;
-  if (isNaN(amountPaid) || Number(amountPaid) < 0) {
-    console.log('\n❌❌❌ amountPaid wrong');
-    throw new Error('amountPaid wrong');
-  }
-  if (![1, 2, 3].includes(Number(paymentMethod))) {
-    console.log('\n❌❌❌ paymentMethod wrong');
-    throw new Error('paymentMethod wrong');
-  }
-  if (!customerId) {
-    console.log('\n❌❌❌ customerId empty.');
-    throw new Error('Pole uczestnika nie może być puste.');
-  }
-  if (!amountPaid || !amountPaid.trim()) {
-    console.log('\n❌❌❌ amountPaid empty');
-    throw new Error('Pole kwoty nie może być puste.');
-  }
-  if (!paymentMethod || !paymentMethod.trim()) {
-    console.log('\n❌❌❌ paymentMethod empty');
-    throw new Error('Pole metody płatności nie może być puste.');
-  }
+  try {
+    // Validate amountPaid
+    if (isNaN(amountPaid) || Number(amountPaid) < 0) {
+      throw new Error('amountPaid wrong');
+    }
+    // Validate paymentMethod
+    const pm = Number(paymentMethod);
+    if (![1, 2, 3].includes(pm)) {
+      throw new Error('paymentMethod wrong');
+    }
+    // Ensure customerId and required fields are present
+    if (!customerId) {
+      throw new Error('Pole uczestnika nie może być puste.');
+    }
+    if (!String(amountPaid).trim()) {
+      throw new Error('Pole kwoty nie może być puste.');
+    }
+    if (!String(paymentMethod).trim()) {
+      throw new Error('Pole metody płatności nie może być puste.');
+    }
 
-  let currentCustomer, currentPassDefinition, customerEmail, wantsNotifications;
+    // Deduce human-readable payment method
+    const paymentMethodDeduced =
+      pm === 1 ? 'Gotówka (M)' : pm === 2 ? 'BLIK (M)' : 'Przelew (M)';
 
-  const paymentMethodDeduced =
-    paymentMethod == 1
-      ? 'Gotówka (M)'
-      : paymentMethod == 2
-      ? 'BLIK (M)'
-      : 'Przelew (M)';
+    // Prepare shared variables for email
+    let currentCustomer,
+      currentPassDefinition,
+      customerEmail,
+      wantsNotifications;
 
-  return db
-    .transaction(t => {
-      return models.Customer.findByPk(customerId, {
+    // Run all DB operations in a transaction
+    const result = await db.transaction(async t => {
+      // Load customer with passes and user
+      currentCustomer = await models.Customer.findByPk(customerId, {
         include: [
-          {
-            model: models.CustomerPass,
-            include: [models.PassDefinition],
-          },
-          {
-            model: models.User,
-          },
+          { model: models.CustomerPass, include: [models.PassDefinition] },
+          { model: models.User },
         ],
         transaction: t,
-      }).then(customer => {
-        if (!customer) throw new Error('Nie znaleziono klienta');
-        successLog(person, controllerName, 'customer found');
-        currentCustomer = customer;
-        customerEmail = customer.User?.email;
-        wantsNotifications = customer.User.UserPrefSetting
-          ? customer.User.UserPrefSetting.notifications
-          : true;
+      });
+      if (!currentCustomer) {
+        errCode = 404;
+        throw new Error('Nie znaleziono klienta');
+      }
+      // Prepare email info
+      customerEmail = currentCustomer.User.email;
+      wantsNotifications = currentCustomer.User.UserPrefSetting
+        ? currentCustomer.User.UserPrefSetting.notifications
+        : true;
 
-        // If passDefinitionId is provided, then the payment should be for a pass.
-        if (passDefId) {
-          // Check if customer already has that pass
-          return models.CustomerPass.findOne({
-            where: {
-              customerId: customer.customerId,
-              passDefId: passDefId,
-              status: 1,
-              validUntil: { [Op.gt]: passStartDate },
-            },
-            transaction: t,
-            lock: t.LOCK.UPDATE,
-          })
-            .then(existingPass => {
-              if (existingPass) {
-                throw new Error(
-                  'Nie można zapłacić 2x za ten sam karnet, który jest nadal aktywny. Wybierz datę startową nowego karnetu, po zakończeniu poprzedniego.'
-                );
-              }
-              successLog(person, controllerName, 'customerPass NOT found');
-
-              // Fetch definition
-              return models.PassDefinition.findByPk(passDefId, {
-                transaction: t,
-              });
-            })
-            .then(definition => {
-              if (definition)
-                successLog(person, controllerName, 'passDefinition found');
-
-              currentPassDefinition = definition;
-              if (currentPassDefinition.price < amountPaid)
-                throw new Error('Kwota nie może być większa niż żądana cena.');
-
-              const amountDueCalculated =
-                parseFloat(definition.price) - parseFloat(amountPaid);
-              const statusDeduced = amountDueCalculated <= 0 ? 1 : 0;
-
-              // Create Payment for the pass purchase.
-              return models.Payment.create(
-                {
-                  customerId: currentCustomer.customerId,
-                  date: new Date(),
-                  product: `${definition.name} (dId: ${definition.passDefId})`,
-                  status: statusDeduced,
-                  amountPaid,
-                  amountDue: amountDueCalculated,
-                  paymentMethod: paymentMethodDeduced,
-                  paymentStatus: 1,
-                  performedBy: 'Administrator',
-                },
-                { transaction: t }
-              );
-            })
-            .then(payment => {
-              if (payment)
-                successLog(person, controllerName, 'payment created');
-              // ! MAIL WITH PAYMENT CONFIRMATION
-
-              const purchaseDate = new Date(),
-                validityDays = currentPassDefinition.validityDays;
-              let calcExpiryDate = calcPassExpiryDate(validityDays);
-
-              return models.CustomerPass.create(
-                {
-                  customerId: currentCustomer.customerId,
-                  paymentId: payment.paymentId,
-                  passDefId: currentPassDefinition.passDefId,
-                  purchaseDate,
-                  validFrom: passStartDate,
-                  validUntil: calcExpiryDate,
-                  usesLeft: currentPassDefinition.usesTotal,
-                  status: 1,
-                },
-                {
-                  transaction: t,
-                }
-              ).then(customerPass => {
-                if (customerPass)
-                  successLog(person, controllerName, 'customerPass created');
-                console.log(
-                  `currentPassDefinition.allowedProductTypes`,
-                  currentPassDefinition.allowedProductTypes
-                );
-                if (customerEmail) {
-                  adminEmails.sendNewPassPurchasedMail({
-                    to: customerEmail,
-                    productName: currentPassDefinition.name,
-                    productPrice: currentPassDefinition.price,
-                    purchaseDate: customerPass.purchaseDate,
-                    validFrom: customerPass.validFrom,
-                    validUntil: customerPass.validUntil,
-                    allowedProductTypes: JSON.parse(
-                      currentPassDefinition.allowedProductTypes
-                    ),
-                    usesTotal: currentPassDefinition.usesTotal,
-                    description: currentPassDefinition.description,
-                    isAdmin: true,
-                  });
-                }
-                return { payment, customerPass };
-              });
-            });
-        } else {
-          // Check if this booking wasn't paid already
-          return (
-            models.Booking.findOne({
-              where: {
-                customerId: currentCustomer.customerId,
-                scheduleId: scheduleId,
-              },
-              transaction: t,
-              lock: t.LOCK.UPDATE,
-            })
-              .then(existingBooking => {
-                if (existingBooking) {
-                  throw new Error('Rezerwacja dla tego terminu już istnieje.');
-                }
-                successLog(person, controllerName, 'existingBooking NOT found');
-
-                return models.ScheduleRecord.findOne({
-                  where: { scheduleId },
-                  include: [{ model: models.Product }],
-                  transaction: t,
-                  lock: t.LOCK.UPDATE,
-                });
-              })
-              // If fresh booking request
-              .then(scheduleRecord => {
-                if (!scheduleRecord) {
-                  errCode = 404;
-                  throw new Error('Nie znaleziono terminu');
-                }
-                successLog(person, controllerName, 'scheduleRecord found');
-
-                // Check if any spots left
-                return models.Booking.count({
-                  where: {
-                    scheduleId: scheduleRecord.scheduleId,
-                    attendance: 1,
-                  },
-                  transaction: t,
-                  lock: t.LOCK.UPDATE,
-                })
-                  .then(currentAttendance => {
-                    successLog(
-                      person,
-                      controllerName,
-                      'got current attendance count'
-                    );
-
-                    if (currentAttendance >= scheduleRecord.capacity) {
-                      errCode = 409;
-                      throw new Error('🪷 Brak wolnych miejsc na ten termin.');
-                    }
-
-                    const amountDueCalculated =
-                      parseFloat(scheduleRecord.Product.price) -
-                      parseFloat(amountPaid);
-                    const statusDeduced = amountDueCalculated <= 0 ? 1 : 0;
-
-                    if (scheduleRecord.Product.price < amountPaid)
-                      throw new Error(
-                        'Kwota nie może być większa niż żądana cena.'
-                      );
-                    // No pass purchase: create a direct payment and booking.
-                    return models.Payment.create(
-                      {
-                        customerId: currentCustomer.customerId,
-                        date: new Date(),
-                        product: `${scheduleRecord.Product.name} (sId: ${scheduleRecord.scheduleId})`,
-                        status: statusDeduced,
-                        amountPaid: amountPaid,
-                        amountDue: amountDueCalculated,
-                        paymentMethod: paymentMethodDeduced,
-                        paymentStatus: 1,
-                        performedBy: 'Administrator',
-                      },
-                      {
-                        transaction: t,
-                      }
-                    );
-                  })
-                  .then(payment => {
-                    if (payment)
-                      successLog(person, controllerName, 'Payment created');
-                    // ! MAIL WITH PAYMENT CONFIRMATION
-                    return models.Booking.create(
-                      {
-                        customerId: currentCustomer.customerId,
-                        scheduleId: scheduleRecord.scheduleId,
-                        paymentId: payment.paymentId,
-                        timestamp: new Date(),
-                        attendance: true,
-                        performedBy: 'Administrator',
-                      },
-                      {
-                        transaction: t,
-                      }
-                    ).then(booking => {
-                      if (booking)
-                        successLog(person, controllerName, 'Booking created');
-                      if (customerEmail && wantsNotifications) {
-                        adminEmails.sendNewReservationMail({
-                          to: customerEmail,
-                          productName: scheduleRecord.Product.name,
-                          date: scheduleRecord.date,
-                          startTime: scheduleRecord.startTime,
-                          location: scheduleRecord.location,
-                          isAdmin: true,
-                        });
-                      }
-                      return { payment, booking };
-                    });
-                  });
-              })
+      if (passDefId) {
+        // -------------------------
+        //# PASS PURCHASE BRANCH
+        // -------------------------
+        // Prevent double-purchase of an active pass
+        const existingPass = await models.CustomerPass.findOne({
+          where: {
+            customerId,
+            passDefId,
+            status: 1,
+            validUntil: { [Op.gt]: passStartDate },
+          },
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+        if (existingPass) {
+          throw new Error(
+            'Nie można zapłacić 2x za ten sam karnet, który jest nadal aktywny. Wybierz datę startową nowego karnetu, po zakończeniu poprzedniego.'
           );
         }
-      });
-    })
-    .then(result => {
-      successLog(person, controllerName);
-      res.status(201).json({
-        isNewCustomer: false,
-        confirmation: 1,
-        message: 'Płatność zarejestrowana pomyślnie.',
-        result,
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+        // Load pass definition
+        currentPassDefinition = await models.PassDefinition.findByPk(
+          passDefId,
+          {
+            transaction: t,
+          }
+        );
+        if (!currentPassDefinition) {
+          errCode = 404;
+          throw new Error('Nie znaleziono definicji karnetu.');
+        }
+        // Validate paid amount
+        if (parseFloat(currentPassDefinition.price) < parseFloat(amountPaid)) {
+          throw new Error('Kwota nie może być większa niż żądana cena.');
+        }
+        const amountDueCalculated =
+          parseFloat(currentPassDefinition.price) - parseFloat(amountPaid);
+        const statusDeduced = amountDueCalculated <= 0 ? 1 : 0;
+
+        // Create payment record
+        const payment = await models.Payment.create(
+          {
+            customerId,
+            date: new Date(),
+            product: `${currentPassDefinition.name} (dId: ${currentPassDefinition.passDefId})`,
+            status: statusDeduced,
+            amountPaid,
+            amountDue: amountDueCalculated,
+            paymentMethod: paymentMethodDeduced,
+            paymentStatus: 1,
+            performedBy: 'Administrator',
+          },
+          { transaction: t }
+        );
+
+        // Create customer-pass link
+        const purchaseDate = new Date();
+        const calcExpiryDate = calcPassExpiryDate(
+          currentPassDefinition.validityDays
+        );
+        const customerPass = await models.CustomerPass.create(
+          {
+            customerId,
+            paymentId: payment.paymentId,
+            passDefId: currentPassDefinition.passDefId,
+            purchaseDate,
+            validFrom: passStartDate,
+            validUntil: calcExpiryDate,
+            usesLeft: currentPassDefinition.usesTotal,
+            status: 1,
+          },
+          { transaction: t }
+        );
+
+        // Send purchase email if needed
+        if (customerEmail && wantsNotifications) {
+          adminEmails.sendNewPassPurchasedMail({
+            to: customerEmail,
+            productName: currentPassDefinition.name,
+            productPrice: currentPassDefinition.price,
+            purchaseDate: customerPass.purchaseDate,
+            validFrom: customerPass.validFrom,
+            validUntil: customerPass.validUntil,
+            allowedProductTypes: JSON.parse(
+              currentPassDefinition.allowedProductTypes
+            ),
+            usesTotal: currentPassDefinition.usesTotal,
+            description: currentPassDefinition.description,
+            isAdmin: true,
+          });
+        }
+
+        return { payment, customerPass };
+      } else {
+        // -------------------------
+        //# DIRECT BOOKING & PAYMENT BRANCH
+        // -------------------------
+        // Prevent duplicate booking
+        const existingBooking = await models.Booking.findOne({
+          where: { customerId, scheduleId },
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+        if (existingBooking) {
+          throw new Error('Rezerwacja dla tego terminu już istnieje.');
+        }
+        // Load schedule and product
+        const scheduleRecord = await models.ScheduleRecord.findByPk(
+          scheduleId,
+          {
+            include: [{ model: models.Product }],
+            transaction: t,
+            lock: t.LOCK.UPDATE,
+          }
+        );
+        if (!scheduleRecord) {
+          errCode = 404;
+          throw new Error('Nie znaleziono terminu');
+        }
+        // Check capacity
+        const currentAttendance = await models.Booking.count({
+          where: { scheduleId, attendance: true },
+          transaction: t,
+          lock: t.LOCK.UPDATE,
+        });
+        if (currentAttendance >= scheduleRecord.capacity) {
+          errCode = 409;
+          throw new Error('Brak wolnych miejsc na ten termin.');
+        }
+        // Validate payment amount
+        if (parseFloat(scheduleRecord.Product.price) < parseFloat(amountPaid)) {
+          throw new Error('Kwota nie może być większa niż żądana cena.');
+        }
+        const amountDueCalculated =
+          parseFloat(scheduleRecord.Product.price) - parseFloat(amountPaid);
+        const statusDeduced = amountDueCalculated <= 0 ? 1 : 0;
+
+        // Create payment record
+        const payment = await models.Payment.create(
+          {
+            customerId,
+            date: new Date(),
+            product: `${scheduleRecord.Product.name} (sId: ${scheduleRecord.scheduleId})`,
+            status: statusDeduced,
+            amountPaid,
+            amountDue: amountDueCalculated,
+            paymentMethod: paymentMethodDeduced,
+            paymentStatus: 1,
+            performedBy: 'Administrator',
+          },
+          { transaction: t }
+        );
+
+        // Create booking record
+        const booking = await models.Booking.create(
+          {
+            customerId,
+            scheduleId: scheduleRecord.scheduleId,
+            paymentId: payment.paymentId,
+            timestamp: new Date(),
+            attendance: true,
+            performedBy: 'Administrator',
+          },
+          { transaction: t }
+        );
+
+        // Send booking email if needed
+        if (customerEmail && wantsNotifications) {
+          adminEmails.sendNewReservationMail({
+            to: customerEmail,
+            productName: scheduleRecord.Product.name,
+            date: scheduleRecord.date,
+            startTime: scheduleRecord.startTime,
+            location: scheduleRecord.location,
+            isAdmin: true,
+          });
+        }
+
+        return { payment, booking };
+      }
+    });
+
+    // Log success and send response
+    successLog(person, controllerName);
+    return res.status(201).json({
+      isNewCustomer: false,
+      confirmation: 1,
+      message: 'Płatność zarejestrowana pomyślnie.',
+      result,
+    });
+  } catch (err) {
+    console.error('[postCreatePayment] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
 //@ PUT
 //@ DELETE
-export const deletePayment = (req, res, next) => {
+export const deletePayment = async (req, res, next) => {
   const controllerName = 'deletePayment';
+  // Log request for debugging
   callLog(req, person, controllerName);
 
-  const id = req.params.id;
+  let errCode = 500;
+  try {
+    const id = req.params.id;
 
-  // First - find the targeted booking with attached customer and user for email
-  return models.Payment.findOne({
-    where: { paymentId: id },
-    include: [
-      {
-        model: models.Customer,
-        include: [{ model: models.User, attributes: ['email'] }],
-      },
-    ],
-  })
-    .then(payment => {
-      if (!payment) {
-        errCode = 404;
-        throw new Error('\n❌ Nie znaleziono płatności.');
-      }
+    // Load the payment to get customer email
+    const payment = await models.Payment.findOne({
+      where: { paymentId: id },
+      include: [
+        {
+          model: models.Customer,
+          include: [{ model: models.User, attributes: ['email'] }],
+        },
+      ],
+    });
+    if (!payment) {
+      errCode = 404;
+      throw new Error('Nie znaleziono płatności.');
+    }
 
-      // Assign email
-      const customerEmail = payment.Customer?.User?.email;
-
-      // Send email before deletion
-      if (customerEmail) {
-        adminEmails.sendPaymentCancelledMail({
-          to: customerEmail,
-          paymentId: payment.paymentId,
-          isAdmin: true,
-        });
-      }
-
-      // Now delete
-      return models.Payment.destroy({
-        where: { paymentId: id },
+    // Send cancellation email if customer email exists
+    const customerEmail = payment.Customer?.User?.email;
+    if (customerEmail) {
+      await adminEmails.sendPaymentCancelledMail({
+        to: customerEmail,
+        paymentId: payment.paymentId,
+        isAdmin: true,
       });
-    })
-    .then(deletedCount => {
-      if (!deletedCount) {
-        errCode = 500;
-        throw new Error('\n❌ Wystąpił problem przy usuwaniu płatności.');
-      }
+    }
 
-      successLog(person, controllerName);
-      return res.status(200).json({
-        confirmation: 1,
-        message: 'Płatność usunięta pomyślnie.',
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+    // Delete the payment record
+    const deletedCount = await models.Payment.destroy({
+      where: { paymentId: id },
+    });
+    if (!deletedCount) {
+      errCode = 500;
+      throw new Error('Wystąpił problem przy usuwaniu płatności.');
+    }
+
+    // Log success and send response
+    successLog(person, controllerName);
+    return res.status(200).json({
+      confirmation: 1,
+      message: 'Płatność usunięta pomyślnie.',
+    });
+  } catch (err) {
+    console.error('[deletePayment] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
 
 //! INVOICES_____________________________________________
 //@ GET
-export const getAllInvoices = (req, res, next) => {
+export const getAllInvoices = async (req, res, next) => {
   const controllerName = 'getAllInvoices';
+  // Log request for debugging
   callLog(req, person, controllerName);
 
-  models.Invoice.findAll({
-    include: [
-      {
-        model: models.Payment,
-        include: [
-          {
-            model: models.Customer, // from Payment
-          },
-        ],
-      },
-    ],
-    attributes: {
-      exclude: ['product'], // Deleting substituted ones
-    },
-  })
-    .then(records => {
-      if (!records) {
-        errCode = 404;
-        throw new Error('Nie znaleziono faktur.');
-      }
-      // Convert for records
-      const formattedRecords = records.map(record => {
-        const invoice = record.toJSON();
+  let errCode = 500;
+  try {
+    // Fetch all invoices with related payment and customer data
+    const records = await models.Invoice.findAll({
+      include: [
+        {
+          model: models.Payment,
+          include: [{ model: models.Customer }],
+        },
+      ],
+      attributes: { exclude: ['product'] },
+    });
+    if (!records || records.length === 0) {
+      errCode = 404;
+      throw new Error('Nie znaleziono faktur.');
+    }
 
-        return {
-          ...invoice,
-          rowid: invoice.invoiceId,
-          invoiceDate: formatIsoDateTime(invoice.invoiceDate),
-          customerFullName: `${invoice.Payment.Customer.firstName} ${invoice.Payment.Customer.lastName}`,
-        };
-      });
+    // Format each invoice for frontend
+    const formattedRecords = records.map(record => {
+      const invoice = record.toJSON();
+      return {
+        ...invoice,
+        rowId: invoice.invoiceId,
+        invoiceDate: formatIsoDateTime(invoice.invoiceDate),
+        customerFullName: `${invoice.Payment.Customer.firstName} ${invoice.Payment.Customer.lastName}`,
+      };
+    });
 
-      const totalKeys = [
-        'invoiceId',
-        'paymentId',
-        'invoiceDate',
-        'customerFullName',
-        'dueDate',
-        'paymentStatus',
-        'totalAmount',
-      ];
+    // Define table columns
+    const totalKeys = [
+      'invoiceId',
+      'paymentId',
+      'invoiceDate',
+      'customerFullName',
+      'dueDate',
+      'paymentStatus',
+      'totalAmount',
+    ];
 
-      // ✅ Return response to frontend
-      successLog(person, controllerName);
-      res.json({
-        confirmation: 1,
-        message: 'Faktury pobrane pomyślnie.',
-        isLoggedIn: req.session.isLoggedIn,
-        totalKeys, // To render
-        content: formattedRecords, // With new names
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+    // Log success and send response
+    successLog(person, controllerName);
+    return res.json({
+      confirmation: 1,
+      message: 'Faktury pobrane pomyślnie.',
+      isLoggedIn: req.session.isLoggedIn,
+      totalKeys,
+      content: formattedRecords,
+    });
+  } catch (err) {
+    console.error('[getAllInvoices] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
 //@ POST
 //@ PUT
@@ -3310,201 +3238,205 @@ export const getAllInvoices = (req, res, next) => {
 
 //! FEEDBACK_____________________________________________
 //@ GET
-export const getAllParticipantsFeedback = (req, res, next) => {
+export const getAllParticipantsFeedback = async (req, res, next) => {
   const controllerName = 'getAllParticipantsFeedback';
+  // Log request for debugging
   callLog(req, person, controllerName);
 
-  models.Feedback.findAll({
-    include: [
-      {
-        model: models.Customer,
-      },
-      {
-        model: models.ScheduleRecord, //  ScheduleRecord
-        include: [
-          {
-            model: models.Product, // Product through ScheduleRecord
-            attributes: ['name'],
-          },
-        ],
-      },
-    ],
-    attributes: {
-      exclude: ['product'], // Deleting substituted ones
-    },
-  })
-    .then(records => {
-      if (!records) {
-        errCode = 404;
-        throw new Error('Nie znaleziono opinii.');
-      }
-
-      const formattedRecords = records.map(record => {
-        const feedback = record.toJSON();
-
-        return {
-          ...feedback,
-          rowid: feedback.feedbackId,
-          submissionDate: formatIsoDateTime(feedback.submissionDate),
-          customerFullName: `${feedback.Customer.firstName} ${feedback.Customer.lastName} (${feedback.Customer.customerId})`,
-          schedule: `
-          ${feedback.ScheduleRecord.Product.name}
-          ${feedback.ScheduleRecord.date} | ${feedback.ScheduleRecord.startTime}`,
-        };
-      });
-
-      const totalKeys = [
-        'feedbackId',
-        'submissionDate',
-        'delay',
-        'schedule',
-        'rating',
-        'content',
-        'customerFullName',
-      ];
-
-      // ✅ Return response to frontend
-      successLog(person, controllerName);
-      res.json({
-        confirmation: 1,
-        message: 'Opinie pobrane pomyślnie',
-        isLoggedIn: req.session.isLoggedIn,
-        totalKeys,
-        content: formattedRecords, // With new names
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
-};
-export const getAllParticipantsFeedbackById = (req, res, next) => {
-  console.log(`\n➡️ admin called getAllParticipantsFeedbackById`);
-
-  const PK = req.params.id;
-  models.Feedback.findByPk(PK, {
-    include: [
-      {
-        model: models.Customer,
-        attributes: { exclude: [] },
-      },
-      {
-        model: models.ScheduleRecord,
-        attributes: { exclude: ['productId'] },
-        include: [
-          {
-            model: models.Product,
-            attributes: { exclude: [] },
-          },
-        ],
-      },
-    ],
-    attributes: { exclude: ['customerId', 'scheduleId'] },
-  })
-    .then(review => {
-      if (!review) {
-        errCode = 404;
-        throw new Error('Nie znaleziono opinii.');
-      }
-      const customerId = review.Customer.customerId;
-
-      return models.Feedback.findAll({
-        where: {
-          customerId: customerId,
-          // op from sequelize means not equal
-          feedbackId: { [Op.ne]: PK },
+  let errCode = 500;
+  try {
+    // Fetch all feedbacks with customer and schedule->product
+    const records = await models.Feedback.findAll({
+      include: [
+        { model: models.Customer },
+        {
+          model: models.ScheduleRecord,
+          include: [{ model: models.Product, attributes: ['name'] }],
         },
-        include: [
-          {
-            model: models.ScheduleRecord,
-            attributes: { exclude: ['productId'] },
-            include: [
-              {
-                model: models.Product,
-                attributes: { exclude: [] },
-              },
-            ],
-          },
-        ],
-        attributes: { exclude: ['customerId', 'scheduleId'] },
-      }).then(otherReviews => {
-        successLog(person, controllerName);
-        return res.status(200).json({
-          confirmation: 1,
-          message: 'Opinia pobrana pomyślnie',
-          isLoggedIn: req.session.isLoggedIn,
-          review,
-          otherReviews,
-        });
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+      ],
+      attributes: { exclude: ['product'] },
+    });
+    if (!records || records.length === 0) {
+      errCode = 404;
+      throw new Error('Nie znaleziono opinii.');
+    }
+
+    // Format each feedback for frontend
+    const formattedRecords = records.map(record => {
+      const feedback = record.toJSON();
+      return {
+        ...feedback,
+        rowId: feedback.feedbackId,
+        submissionDate: formatIsoDateTime(feedback.submissionDate),
+        customerFullName: `${feedback.Customer.firstName} ${feedback.Customer.lastName} (${feedback.Customer.customerId})`,
+        schedule: `${feedback.ScheduleRecord.Product.name} ${feedback.ScheduleRecord.date} | ${feedback.ScheduleRecord.startTime}`,
+      };
+    });
+
+    // Define table columns
+    const totalKeys = [
+      'feedbackId',
+      'submissionDate',
+      'delay',
+      'schedule',
+      'rating',
+      'content',
+      'customerFullName',
+    ];
+
+    // Log success and send response
+    successLog(person, controllerName);
+    return res.json({
+      confirmation: 1,
+      message: 'Opinie pobrane pomyślnie',
+      isLoggedIn: req.session.isLoggedIn,
+      totalKeys,
+      content: formattedRecords,
+    });
+  } catch (err) {
+    console.error('[getAllParticipantsFeedback] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
+};
+export const getAllParticipantsFeedbackById = async (req, res, next) => {
+  const controllerName = 'getAllParticipantsFeedbackById';
+  // Log request for debugging
+  callLog(req, person, controllerName);
+
+  let errCode = 500;
+  try {
+    const PK = req.params.id;
+    // Fetch the requested feedback with its customer and schedule->product
+    const review = await models.Feedback.findByPk(PK, {
+      include: [
+        { model: models.Customer },
+        {
+          model: models.ScheduleRecord,
+          attributes: { exclude: ['productId'] },
+          include: [{ model: models.Product }],
+        },
+      ],
+      attributes: { exclude: ['customerId', 'scheduleId'] },
+    });
+    if (!review) {
+      errCode = 404;
+      throw new Error('Nie znaleziono opinii.');
+    }
+
+    // Fetch other reviews by same customer, excluding this one
+    const otherReviews = await models.Feedback.findAll({
+      where: {
+        customerId: review.Customer.customerId,
+        feedbackId: { [Op.ne]: PK },
+      },
+      include: [
+        {
+          model: models.ScheduleRecord,
+          attributes: { exclude: ['productId'] },
+          include: [{ model: models.Product }],
+        },
+      ],
+      attributes: { exclude: ['customerId', 'scheduleId'] },
+    });
+
+    // Log success and send response
+    successLog(person, controllerName);
+    return res.status(200).json({
+      confirmation: 1,
+      message: 'Opinia pobrana pomyślnie',
+      isLoggedIn: req.session.isLoggedIn,
+      review,
+      otherReviews,
+    });
+  } catch (err) {
+    console.error('[getAllParticipantsFeedbackById] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
 //@ POST
 //@ PUT
 //@ DELETE
-export const deleteFeedback = (req, res, next) => {
+export const deleteFeedback = async (req, res, next) => {
   const controllerName = 'deleteFeedback';
+  // Log request for debugging
   callLog(req, person, controllerName);
 
-  const id = req.params.id;
-  models.Feedback.destroy({
-    where: {
-      feedbackId: id,
-    },
-  })
-    .then(deletedCount => {
-      if (!deletedCount) {
-        errCode = 404;
-        throw new Error('Nie usunięto opinii.');
-      }
-      successLog(person, controllerName);
-      return res
-        .status(200)
-        .json({ confirmation: 1, message: 'Opinia usunięta pomyślnie.' });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+  let errCode = 500;
+  try {
+    const id = req.params.id;
+
+    // Delete the feedback by its ID
+    const deletedCount = await models.Feedback.destroy({
+      where: { feedbackId: id },
+    });
+    // If nothing was deleted, treat as not found
+    if (!deletedCount) {
+      errCode = 404;
+      throw new Error('Nie usunięto opinii.');
+    }
+
+    // Log success and send response
+    successLog(person, controllerName);
+    return res.status(200).json({
+      confirmation: 1,
+      message: 'Opinia usunięta pomyślnie.',
+    });
+  } catch (err) {
+    console.error('[deleteFeedback] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
 
 //! NEWSLETTERS_____________________________________________
 //@ GET
-export const getAllNewsletters = (req, res, next) => {
+export const getAllNewsletters = async (req, res, next) => {
   const controllerName = 'getAllNewsletters';
+  // Log request for debugging
   callLog(req, person, controllerName);
 
-  models.Newsletter.findAll()
-    .then(records => {
-      if (!records) {
-        errCode = 404;
-        throw new Error('Nie znaleziono rekordów.');
-      }
+  let errCode = 500;
+  try {
+    // Fetch all newsletter records
+    const records = await models.Newsletter.findAll();
+    // If none found, throw 404
+    if (!records || records.length === 0) {
+      errCode = 404;
+      throw new Error('Nie znaleziono rekordów.');
+    }
 
-      const formattedRecords = records.map(record => {
-        const newsletter = record.toJSON();
+    // Format each newsletter for frontend
+    const formattedRecords = records.map(record => {
+      const newsletter = record.toJSON();
+      return {
+        ...newsletter,
+        rowId: newsletter.newsletterId,
+        creationDate: formatIsoDateTime(newsletter.creationDate),
+        sendDate: formatIsoDateTime(newsletter.sendDate),
+      };
+    });
 
-        return {
-          ...newsletter,
-          rowId: newsletter.newsletterId,
-          creationDate: formatIsoDateTime(newsletter.creationDate),
-          sendDate: formatIsoDateTime(newsletter.sendDate),
-        };
-      });
+    // Define table columns
+    const totalKeys = [
+      'newsletterId',
+      'status',
+      'creationDate',
+      'sendDate',
+      'title',
+      'content',
+    ];
 
-      const totalKeys = [
-        'newsletterId',
-        'status',
-        'creationDate',
-        'sendDate',
-        'title',
-        'content',
-      ];
-
-      successLog(person, controllerName);
-      return res.json({
-        totalKeys,
-        confirmation: 1,
-        message: 'Pobrano pomyślnie',
-        content: formattedRecords, //.sort((a, b) => new Date(b.Data) - new Date(a.Data)),
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+    // Log success and send response
+    successLog(person, controllerName);
+    return res.json({
+      totalKeys,
+      confirmation: 1,
+      message: 'Pobrano pomyślnie',
+      content: formattedRecords,
+    });
+  } catch (err) {
+    console.error('[getAllNewsletters] error:', err);
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
 export const getAllSubscribedNewsletters = (req, res, next) => {
   //
