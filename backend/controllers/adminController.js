@@ -332,7 +332,7 @@ export const getAllCustomersWithEligiblePasses = createGetAll(
       },
     ],
 
-    // first load the schedule + its product.type
+    // first load the schedule + its product.type sorted in the factory as hookData
     preAction: async req => {
       const sched = await models.ScheduleRecord.findByPk(
         req.params.scheduleId,
@@ -351,7 +351,7 @@ export const getAllCustomersWithEligiblePasses = createGetAll(
       return sched.toJSON();
     },
 
-    // filter and attach eligiblePasses exactly as before
+    // filter and attach eligiblePasses exactly as before (schedule=hookData)
     mapRecord: (customerInstance, schedule) => {
       const customer = customerInstance.toJSON();
       const allPasses = Array.isArray(customer.CustomerPasses)
