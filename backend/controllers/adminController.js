@@ -12,6 +12,7 @@ import {
 } from '../utils/controllersUtils.js';
 import {
   createDelete,
+  createDeleteBooking,
   createGetAll,
   createGetById,
 } from '../utils/crudFactory.js';
@@ -1143,141 +1144,91 @@ export const deleteSchedule = createDelete(actor, models.ScheduleRecord, {
 
 //! PRODUCTS_____________________________________________
 //@ GET
-export const getAllProducts = async (req, res, next) => {
-  const controllerName = 'getAllProducts';
-  // Log request for debugging
-  callLog(req, actor, controllerName);
+export const getAllProducts = createGetAll(actor, models.Product, {
+  includeRelations: [],
+  // convert each plain object and add rowId + format startDate
+  mapRecord: product => ({
+    ...product,
+    // Add rowId for table rows
+    rowId: product.productId,
+    // Format startDate for display
+    startDate: formatIsoDateTime(product.startDate),
+  }),
 
-  let errCode = 500; // default error code
+  // table headers / keys
+  columnKeys: [
+    'productId',
+    'type',
+    'name',
+    'location',
+    'duration',
+    'price',
+    'startDate',
+    'status',
+  ],
 
-  try {
-    // Fetch all product records
-    const records = await models.Product.findAll();
-
-    // If no records found, throw 404
-    if (!records || records.length === 0) {
-      errCode = 404;
-      throw new Error('Nie znaleziono rekordów.');
-    }
-
-    // Convert each record to plain object and format startDate
-    const formattedRecords = records.map(record => {
-      const product = record.toJSON();
-      return {
-        ...product,
-        // Add rowId for table rows
-        rowId: product.productId,
-        // Format startDate for display
-        startDate: formatIsoDateTime(product.startDate),
-      };
-    });
-
-    // Define table headers / keys
-    const totalKeys = [
-      'productId',
-      'type',
-      'name',
-      'location',
-      'duration',
-      'price',
-      'startDate',
-      'status',
-    ];
-
-    // Log success and send response
-    successLog(actor, controllerName);
-    return res.json({
-      totalKeys,
-      confirmation: 1,
-      message: 'Pobrano pomyślnie',
-      content: formattedRecords,
-    });
-  } catch (err) {
-    // Log error then handle centrally
-    console.error('[getAllProducts] error:', err);
-    return catchErr(actor, res, errCode, err, controllerName);
-  }
-};
-export const getProductById = async (req, res, next) => {
-  const controllerName = 'getProductById';
-  // Log request for debugging
-  callLog(req, actor, controllerName);
-
-  let errCode = 500; // default error code
-  try {
-    const PK = req.params.id;
-
-    // Fetch product and related records
-    const product = await models.Product.findByPk(PK, {
+  // messages
+  successMessage: 'Pobrano pomyślnie.',
+  notFoundMessage: 'Nie znaleziono rekordów.',
+});
+export const getProductById = createGetById(actor, models.Product, {
+  includeRelations: [
+    {
+      model: models.ScheduleRecord,
+      required: false,
+      attributes: { exclude: ['productId'] },
       include: [
         {
-          model: models.ScheduleRecord,
+          model: models.Booking,
           required: false,
-          attributes: { exclude: ['productId'] },
+          attributes: { exclude: ['customerId'] },
           include: [
             {
-              model: models.Booking,
+              model: models.Customer,
+              attributes: { exclude: ['userId'] },
+            },
+            {
+              model: models.Payment,
               required: false,
-              attributes: { exclude: ['customerId'] },
+              attributes: { exclude: ['product'] },
               include: [
                 {
                   model: models.Customer,
                   attributes: { exclude: ['userId'] },
-                },
-                {
-                  model: models.Payment,
-                  required: false,
-                  attributes: { exclude: ['product'] },
-                  include: [
-                    {
-                      model: models.Customer,
-                      attributes: { exclude: ['userId'] },
-                    },
-                  ],
-                },
-                {
-                  model: models.CustomerPass,
-                  required: false,
-                  include: [{ model: models.PassDefinition }],
                 },
               ],
             },
             {
-              model: models.Feedback,
+              model: models.CustomerPass,
               required: false,
-              attributes: { exclude: ['customerId'] },
-              include: [
-                {
-                  model: models.Customer,
-                  attributes: { exclude: ['userId'] },
-                },
-              ],
+              include: [{ model: models.PassDefinition }],
+            },
+          ],
+        },
+        {
+          model: models.Feedback,
+          required: false,
+          attributes: { exclude: ['customerId'] },
+          include: [
+            {
+              model: models.Customer,
+              attributes: { exclude: ['userId'] },
             },
           ],
         },
       ],
-    });
+    },
+  ],
 
-    // If not found, throw 404
-    if (!product) {
-      errCode = 404;
-      throw new Error('Nie znaleziono produktu.');
-    }
+  // message on success / not found
+  successMessage: 'Produkt pobrany pomyślnie.',
+  notFoundMessage: 'Nie znaleziono produktu.',
 
-    // Log success and send the product object
-    successLog(actor, controllerName);
-    return res.status(200).json({
-      confirmation: 1,
-      message: 'Produkt pobrany pomyślnie.',
-      isLoggedIn: req.session.isLoggedIn,
-      product,
-    });
-  } catch (err) {
-    // Handle errors centrally
-    console.error('[getProductById] error:', err);
-    return catchErr(actor, res, errCode, err, controllerName);
-  }
-};
+  // include the login flag at top level
+  attachResponse: req => ({
+    isLoggedIn: req.session.isLoggedIn,
+  }),
+});
 //@ POST
 export const postCreateProduct = async (req, res, next) => {
   const controllerName = 'postCreateProduct';
@@ -1400,118 +1351,62 @@ export const putEditProduct = async (req, res, next) => {
   }
 };
 //@ DELETE
-export const deleteProduct = async (req, res, next) => {
-  const controllerName = 'deleteProduct';
-  callLog(req, actor, controllerName);
-  let errCode = 500;
-
-  try {
-    const id = req.params.id;
-
-    // Delete product by ID
-    const deletedCount = await models.Product.destroy({
-      where: { productId: id },
-    });
-
-    if (!deletedCount) {
-      errCode = 404;
-      throw new Error('Nie usunięto zajęć.');
-    }
-
-    // Log success and respond
-    successLog(actor, controllerName);
-    return res.status(200).json({
-      confirmation: 1,
-      message: 'Produkt usunięty pomyślnie.',
-    });
-  } catch (err) {
-    console.error('[deleteProduct] error:', err);
-    return catchErr(actor, res, errCode, err, controllerName);
-  }
-};
+export const deleteProduct = createDelete(actor, models.Product, {
+  // message when deletion succeeds
+  successMessage: 'Produkt usunięty pomyślnie.',
+  // message when no record was deleted (404)
+  notFoundMessage: 'Nie usunięto zajęć.',
+});
 
 //! PASSES_______________________________________________
 //@ GET
-export const getAllPasses = async (req, res, next) => {
-  const controllerName = 'getAllPasses';
-  // Log request for debugging
-  callLog(req, actor, controllerName);
+export const getAllPasses = createGetAll(actor, models.PassDefinition, {
+  includeRelations: [],
 
-  let errCode = 500;
-  try {
-    //Fetch all pass definitions
-    const records = await models.PassDefinition.findAll();
-    if (!records || records.length === 0) {
-      errCode = 404;
-      throw new Error('Nie znaleziono rekordów.');
-    }
+  //transform each PassDefinition for the frontend
+  mapRecord: passDef => ({
+    ...passDef,
+    rowId: passDef.passDefId,
+    usesTotal: passDef.usesTotal || '-',
+    validityDays: passDef.validityDays ? `${passDef.validityDays} dni` : '-',
+    price: `${passDef.price} zł`,
+    allowedProductTypes: JSON.parse(passDef.allowedProductTypes).join(', '),
+  }),
 
-    //Format each pass definition for frontend
-    const formattedRecords = records.map(record => {
-      const passDef = record.toJSON();
-      return {
-        ...passDef,
-        rowId: passDef.passDefId,
-        usesTotal: passDef.usesTotal || '-',
-        validityDays: passDef.validityDays
-          ? `${passDef.validityDays} dni`
-          : '-',
-        price: `${passDef.price} zł`,
-        allowedProductTypes: JSON.parse(passDef.allowedProductTypes).join(', '),
-      };
+  //after we have the list of definitions, also fetch & format all CustomerPasses
+  postAction: async (req, list) => {
+    list.sort((a, b) => a.passDefId - b.passDefId);
+    const cps = await models.CustomerPass.findAll({
+      include: [
+        {
+          model: models.Customer,
+          attributes: ['customerId', 'firstName', 'lastName'],
+        },
+        { model: models.PassDefinition, attributes: ['passDefId', 'name'] },
+      ],
     });
 
-    //Sort definitions by ID
-    const sortedRecords = formattedRecords.sort(
-      (a, b) => a.passDefId - b.passDefId
-    );
-
-    //Define table columns
-    const totalKeys = [
-      'passDefId',
-      'name',
-      'description',
-      'passType',
-      'usesTotal',
-      'validityDays',
-      'allowedProductTypes',
-      'price',
-    ];
-
-    //Fetch all customer passes with related models
-    const cp = await models.CustomerPass.findAll({
-      include: [{ model: models.Customer }, { model: models.PassDefinition }],
-    });
-
-    //Format customer passes for frontend
-    const formattedCustomerPasses = cp
-      .map(customerPass => {
-        const { Customer: customer, PassDefinition } = customerPass;
+    const formattedCustomerPasses = cps
+      .map(cp => {
+        const { Customer: c, PassDefinition: pd } = cp;
         return {
-          customerPassId: customerPass.customerPassId,
-          rowId: customerPass.customerPassId,
-          customerFirstName: customer.firstName,
-          customerLastName: customer.lastName,
-          customerId: customer.customerId,
-          passName: PassDefinition.name,
-          passDefId: PassDefinition.passDefId,
-          allowedProductTypes: PassDefinition.allowedProductTypes,
-          purchaseDate: customerPass.purchaseDate,
-          validFrom: customerPass.validFrom,
-          validUntil: customerPass.validUntil,
-          usesLeft: customerPass.usesLeft,
-          status: customerPass.status,
+          customerPassId: cp.customerPassId,
+          rowId: cp.customerPassId,
+          customerFullName: `${c.firstName} ${c.lastName}`,
+          customerId: cp.Customer.customerId,
+          passName: pd.name,
+          passDefId: pd.passDefId,
+          purchaseDate: cp.purchaseDate,
+          validFrom: cp.validFrom,
+          validUntil: cp.validUntil,
+          usesLeft: cp.usesLeft,
+          status: cp.status,
         };
       })
       .sort((a, b) => new Date(b.purchaseDate) - new Date(a.purchaseDate));
 
-    //Send response
-    successLog(actor, controllerName);
-    return res.json({
-      totalKeys,
-      confirmation: 1,
-      message: 'Pobrano pomyślnie',
-      content: sortedRecords,
+    //stash on req so attachResponse can pick it up
+    req.passExtras = {
       formattedCustomerPasses,
       customerPassesKeys: [
         'customerPassId',
@@ -1523,36 +1418,37 @@ export const getAllPasses = async (req, res, next) => {
         'usesLeft',
         'status',
       ],
-    });
-  } catch (err) {
-    console.error('[getAllPasses] error:', err);
-    return catchErr(actor, res, errCode, err, controllerName);
-  }
-};
+    };
+  },
 
-export const getPassById = async (req, res, next) => {
-  const controllerName = 'getPassById';
-  // Log request for debugging
-  console.log(`➡️➡️➡️ ${actor} called`, controllerName);
+  //include the extras (pick them up) alongside the standard payload
+  attachResponse: req => req.passExtras || {},
 
-  let errCode = 500;
-  try {
-    const PK = req.params.id;
+  //columns for pass definitions
+  columnKeys: [
+    'passDefId',
+    'name',
+    'description',
+    'passType',
+    'usesTotal',
+    'validityDays',
+    'allowedProductTypes',
+    'price',
+  ],
 
-    //Fetch pass definition with its customer passes and payments
-    const passData = await models.PassDefinition.findByPk(PK, {
-      include: [
-        {
-          model: models.CustomerPass,
-          include: [{ model: models.Customer }, { model: models.Payment }],
-        },
-      ],
-    });
+  successMessage: 'Pobrano pomyślnie.',
+  notFoundMessage: 'Nie znaleziono rekordów.',
+});
+export const getPassById = createGetById(actor, models.PassDefinition, {
+  //Fetch pass definition with its customer passes and payments
+  includeRelations: [
+    {
+      model: models.CustomerPass,
+      include: [{ model: models.Customer }, { model: models.Payment }],
+    },
+  ],
 
-    if (!passData) {
-      errCode = 404;
-      throw new Error('Nie znaleziono definicji karnetu.');
-    }
+  mapRecord: passData => {
     const passDef = passData.toJSON();
 
     //Extract and format payments
@@ -1584,12 +1480,9 @@ export const getPassById = async (req, res, next) => {
     });
 
     //Prepare final passDefinition object
-    const passDefinition = {
+    delete passDef.CustomerPasses;
+    return {
       ...passDef,
-      CustomerPasses: null,
-    };
-    const passDefFormatted = {
-      ...passDefinition,
       payments,
       paymentsKeys: [
         'paymentId',
@@ -1609,42 +1502,21 @@ export const getPassById = async (req, res, next) => {
         'status',
       ],
     };
+  },
 
-    //Return response
-    successLog(actor, controllerName);
-    return res.status(200).json({
-      confirmation: 1,
-      message: 'Definicja karnetu pobrana pomyślnie',
-      passDefinition: passDefFormatted,
-    });
-  } catch (err) {
-    console.error('[getPassById] error:', err);
-    return catchErr(actor, res, errCode, err, controllerName);
-  }
-};
+  resultName: 'passDefinition',
+  successMessage: 'Definicja karnetu pobrana pomyślnie',
+  notFoundMessage: 'Nie znaleziono definicji karnetu.',
+});
+export const getCustomerPassById = createGetById(actor, models.CustomerPass, {
+  // Fetch specific customer pass with its definition and payment
+  includeRelations: [
+    { model: models.PassDefinition },
+    { model: models.Payment },
+  ],
 
-export const getCustomerPassById = async (req, res, next) => {
-  const controllerName = 'getCustomerPassById';
-  // Log request for debugging
-  console.log(`➡️➡️➡️ ${actor} called`, controllerName);
-
-  let errCode = 500;
-  try {
-    const passId = req.params.id;
-
-    //Fetch specific customer pass with definition and payment
-    const cpData = await models.CustomerPass.findOne({
-      where: { customerPassId: passId },
-      include: [{ model: models.PassDefinition }, { model: models.Payment }],
-    });
-
-    if (!cpData) {
-      errCode = 404;
-      throw new Error('Nie znaleziono definicji karnetu.');
-    }
-    const cp = cpData.toJSON();
-
-    //Format payment
+  mapRecord: cp => {
+    // Format payment
     const payment = {
       paymentId: cp.Payment.paymentId,
       date: formatIsoDateTime(cp.Payment.date),
@@ -1653,7 +1525,7 @@ export const getCustomerPassById = async (req, res, next) => {
       status: cp.Payment.status,
     };
 
-    //Format pass definition fields
+    // Format pass definition fields
     const passDefinition = {
       passDefId: cp.PassDefinition.passDefId,
       name: cp.PassDefinition.name,
@@ -1666,8 +1538,8 @@ export const getCustomerPassById = async (req, res, next) => {
       status: cp.PassDefinition.status,
     };
 
-    //Build final customerPass object
-    const formattedCustomerPass = {
+    // Build final customerPass object
+    return {
       rowId: cp.customerPassId,
       customerPassId: cp.customerPassId,
       purchaseDate: cp.purchaseDate,
@@ -1678,19 +1550,13 @@ export const getCustomerPassById = async (req, res, next) => {
       payment,
       passDefinition,
     };
+  },
 
-    //Return response
-    successLog(actor, controllerName);
-    return res.status(200).json({
-      confirmation: 1,
-      message: 'Definicja karnetu pobrana pomyślnie',
-      customerPass: formattedCustomerPass,
-    });
-  } catch (err) {
-    console.error('[getCustomerPassById] error:', err);
-    return catchErr(actor, res, errCode, err, controllerName);
-  }
-};
+  // return under “customerPass” key
+  resultName: 'customerPass',
+  successMessage: 'Definicja karnetu pobrana pomyślnie',
+  notFoundMessage: 'Nie znaleziono definicji karnetu.',
+});
 //@ POST
 //@ POST
 export const postCreatePassDefinition = async (req, res, next) => {
@@ -1761,189 +1627,102 @@ export const postCreatePassDefinition = async (req, res, next) => {
 };
 //@ PUT
 //@ DELETE
-export const deleteCustomerPass = async (req, res, next) => {
-  const controllerName = 'deleteCustomerPass';
-  // Log request for debugging
-  callLog(req, actor, controllerName);
-
-  let errCode = 500; // default error code
-  try {
-    const id = req.params.id;
-    // Delete the customer pass by ID
-    const deletedCount = await models.CustomerPass.destroy({
-      where: { customerPassId: id },
-    });
-
-    // If nothing was deleted, throw 404
-    if (!deletedCount) {
-      errCode = 404;
-      throw new Error('Nie usunięto karnetu uczestnika.');
-    }
-
-    // Log success and send response
-    successLog(actor, controllerName);
-    return res.status(200).json({
-      confirmation: 1,
-      message: 'Karnet uczestnika usunięty pomyślnie.',
-    });
-  } catch (err) {
-    // Log error then handle it centrally
-    console.error('[deleteCustomerPass] error:', err);
-    return catchErr(actor, res, errCode, err, controllerName);
-  }
-};
-export const deletePassDefinition = async (req, res, next) => {
-  const controllerName = 'deletePassDefinition';
-  // Log request for debugging
-  callLog(req, actor, controllerName);
-
-  let errCode = 500; // default error code
-  try {
-    const id = req.params.id;
-    // Delete the pass definition by ID
-    const deletedCount = await models.PassDefinition.destroy({
-      where: { passDefId: id },
-    });
-
-    // If nothing was deleted, throw 404
-    if (!deletedCount) {
-      errCode = 404;
-      throw new Error('Nie usunięto definicji karnetu.');
-    }
-
-    // Log success and send response
-    successLog(actor, controllerName);
-    return res.status(200).json({
-      confirmation: 1,
-      message: 'Definicja karnetu usunięta pomyślnie.',
-    });
-  } catch (err) {
-    // Log error then handle it centrally
-    console.error('[deletePassDefinition] error:', err);
-    return catchErr(actor, res, errCode, err, controllerName);
-  }
-};
+export const deleteCustomerPass = createDelete(actor, models.CustomerPass, {
+  successMessage: 'Karnet uczestnika usunięty pomyślnie.',
+  notFoundMessage: 'Nie usunięto karnetu uczestnika.',
+});
+export const deletePassDefinition = createDelete(actor, models.PassDefinition, {
+  primaryKeyName: 'passDefId',
+  successMessage: 'Definicja karnetu usunięta pomyślnie.',
+  notFoundMessage: 'Nie usunięto definicji karnetu.',
+});
 
 //! BOOKINGS_____________________________________________
 //@ GET
-export const getAllBookings = async (req, res, next) => {
-  const controllerName = 'getAllBookings';
-  // Log request for debugging
-  callLog(req, actor, controllerName);
+export const getAllBookings = createGetAll(actor, models.Booking, {
+  includeRelations: [
+    {
+      model: models.Customer,
+      attributes: { exclude: ['userId'] },
+      include: [{ model: models.User }],
+    },
+    {
+      model: models.ScheduleRecord,
+      include: [{ model: models.Product }],
+    },
+    { model: models.Payment, required: false },
+    {
+      model: models.CustomerPass,
+      required: false,
+      include: [{ model: models.PassDefinition }],
+    },
+  ],
 
-  let errCode = 500;
-  try {
-    // Fetch all bookings with related data
-    const records = await models.Booking.findAll({
-      include: [
-        {
-          model: models.Customer,
-          attributes: { exclude: ['userId'] },
-          include: [{ model: models.User }],
-        },
-        {
-          model: models.ScheduleRecord,
-          include: [{ model: models.Product }],
-        },
-        { model: models.Payment, required: false },
-        {
-          model: models.CustomerPass,
-          include: [{ model: models.PassDefinition }],
-          required: false,
-        },
-      ],
-    });
+  mapRecord: booking => {
+    // Format customer full name
+    const customerFullName = `${booking.Customer.firstName} ${booking.Customer.lastName} (${booking.Customer.customerId})`;
 
-    // If no records found, throw 404
-    if (!records || records.length === 0) {
-      errCode = 404;
-      throw new Error('Nie znaleziono rekordów.');
-    }
+    // Format schedule details
+    const sched = booking.ScheduleRecord;
+    const scheduleDetails = `${sched.Product.name} (${sched.date} ${sched.startTime}, sId: ${sched.scheduleId})`;
 
-    // Format each booking for frontend
-    const formattedRecords = records.map(record => {
-      const booking = record.toJSON();
-      const customerFullName = `${record.Customer.firstName} ${record.Customer.lastName} (${record.Customer.customerId})`;
-      const scheduleDetails = `${record.ScheduleRecord.Product.name} (${record.ScheduleRecord.date} ${record.ScheduleRecord.startTime}, sId: ${record.ScheduleRecord.scheduleId})`;
-      const payment = record.Payment
-        ? `${record.Payment.paymentMethod} (pId:${record.Payment.paymentId})`
-        : `${record.CustomerPass?.PassDefinition?.name} (cpId:${record.CustomerPass?.customerPassId})`;
+    // Format payment or customer pass
+    const payment = booking.Payment
+      ? `${booking.Payment.paymentMethod} (pId:${booking.Payment.paymentId})`
+      : `${booking.CustomerPass?.PassDefinition?.name} (cpId:${booking.CustomerPass?.customerPassId})`;
 
-      return {
-        ...booking,
-        rowId: booking.bookingId,
-        customerFullName,
-        scheduleDetails,
-        payment,
-        createdAt: record.createdAt,
-        timestamp: record.timestamp,
-      };
-    });
+    return {
+      ...booking,
+      rowId: booking.bookingId,
+      customerFullName,
+      scheduleDetails,
+      payment,
+      createdAt: booking.createdAt,
+      timestamp: booking.timestamp,
+    };
+  },
 
-    // Define table columns
-    const totalKeys = [
-      'bookingId',
-      'customerFullName',
-      'scheduleDetails',
-      'payment',
-      'attendance',
-      'createdAt',
-      'timestamp',
-      'performedBy',
-    ];
+  postAction: (_req, list) => {
+    // sort by createdAt descending
+    list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  },
 
-    // Log success and send response
-    successLog(actor, controllerName);
-    return res.json({
-      totalKeys,
-      confirmation: 1,
-      message: 'Pobrano pomyślnie',
-      content: formattedRecords.sort(
-        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-      ),
-    });
-  } catch (err) {
-    console.error('[getAllBookings] error:', err);
-    return catchErr(actor, res, errCode, err, controllerName);
-  }
-};
-export const getBookingById = async (req, res, next) => {
-  const controllerName = 'getBookingID';
-  // Log request for debugging
-  console.log(`➡️➡️➡️ admin called`, controllerName);
+  columnKeys: [
+    'bookingId',
+    'customerFullName',
+    'scheduleDetails',
+    'payment',
+    'attendance',
+    'createdAt',
+    'timestamp',
+    'performedBy',
+  ],
+  successMessage: 'Pobrano pomyślnie',
+  notFoundMessage: 'Nie znaleziono rekordów.',
+});
+export const getBookingById = createGetById(actor, models.Booking, {
+  // Fetch the booking with related data
+  includeRelations: [
+    {
+      model: models.Customer,
+      attributes: { exclude: ['userId'] },
+      include: [{ model: models.User }],
+    },
+    {
+      model: models.ScheduleRecord,
+      include: [{ model: models.Product }, { model: models.Booking }],
+    },
+    { model: models.Payment, required: false },
+    {
+      model: models.CustomerPass,
+      required: false,
+      include: [{ model: models.PassDefinition }],
+    },
+  ],
 
-  let errCode = 500;
-  try {
-    const PK = req.params.id;
-    // Fetch the booking with related data
-    const bookingData = await models.Booking.findByPk(PK, {
-      include: [
-        {
-          model: models.Customer,
-          attributes: { exclude: ['userId'] },
-          include: [{ model: models.User }],
-        },
-        {
-          model: models.ScheduleRecord,
-          include: [{ model: models.Product }, { model: models.Booking }],
-        },
-        { model: models.Payment, required: false },
-        {
-          model: models.CustomerPass,
-          include: [{ model: models.PassDefinition }],
-          required: false,
-        },
-      ],
-    });
-
-    // If not found, throw 404
-    if (!bookingData) {
-      errCode = 404;
-      throw new Error('Nie znaleziono rezerwacji.');
-    }
-
+  mapRecord: bookingInstance => {
     // Convert to plain object
-    const booking = bookingData.toJSON();
+    const booking = bookingInstance.toJSON();
 
     // Calculate attendance count
     let attendance = 0;
@@ -1952,34 +1731,26 @@ export const getBookingById = async (req, res, next) => {
       booking.ScheduleRecord.Bookings.length > 0
     ) {
       booking.ScheduleRecord.Bookings.forEach(b => {
-        if (b.attendance == 1 || b.attendance === true) {
+        if (b.attendance === true || b.attendance === 1) {
           attendance += 1;
         }
       });
     }
 
     // Attach attendance to schedule
-    const bookingFormatted = {
+    return {
       ...booking,
       ScheduleRecord: {
         ...booking.ScheduleRecord,
         attendance,
       },
     };
+  },
 
-    // Log success and send response
-    successLog(actor, controllerName);
-    return res.status(200).json({
-      confirmation: 1,
-      message: 'Rezerwacja pobrana pomyślnie',
-      booking: bookingFormatted,
-      user: req.user,
-    });
-  } catch (err) {
-    console.error('[getBookingById] error:', err);
-    return catchErr(actor, res, errCode, err, controllerName);
-  }
-};
+  attachResponse: req => ({ user: req.user }),
+  successMessage: 'Rezerwacja pobrana pomyślnie',
+  notFoundMessage: 'Nie znaleziono rezerwacji.',
+});
 //@ POST
 export const postCreateBookingWithPass = async (req, res, next) => {
   const controllerName = 'postCreateBookingWithPass';
@@ -2109,144 +1880,21 @@ export const postCreateBookingWithPass = async (req, res, next) => {
     return catchErr(actor, res, errCode, err, controllerName);
   }
 };
-
 //@ DELETE
-export const deleteBookingRecord = async (req, res, next) => {
-  const controllerName = 'deleteBookingRecord';
-  // Log request for debugging
-  callLog(req, actor, controllerName);
-
-  let errCode = 500;
-  try {
-    const { customerId, rowId } = req.body;
-
-    // Find the specific booking record with related schedule and customer data
-    const foundRecord = await models.Booking.findOne({
-      where: { customerId, bookingId: rowId },
-      include: [
-        {
-          model: models.ScheduleRecord,
-          required: true,
-          include: [{ model: models.Product, required: true }],
-        },
-        {
-          model: models.Customer,
-          required: true,
-          include: [{ model: models.User, attributes: ['email'] }],
-        },
-      ],
-    });
-    if (!foundRecord) {
-      errCode = 404;
-      throw new Error('Nie znaleziono rekordu obecności w dzienniku.');
-    }
-
-    // Extract data for email notification
-    const currentScheduleRecord = foundRecord.ScheduleRecord;
-    const customerEmail = foundRecord.Customer.User.email;
-    const wantsNotifications = foundRecord.Customer.User.UserPrefSetting
-      ? foundRecord.Customer.User.UserPrefSetting.notifications
-      : true;
-
-    // Delete the booking record
-    const deleted = await foundRecord.destroy();
-    if (!deleted) {
-      errCode = 404;
-      throw new Error('Nie usunięto rekordu.');
-    }
-
-    // Send notification email if the user wants it
-    if (customerEmail && wantsNotifications) {
-      adminEmails.sendBookingDeletedMail({
-        to: customerEmail,
-        productName: currentScheduleRecord.Product.name || 'Zajęcia',
-        date: currentScheduleRecord.date,
-        startTime: currentScheduleRecord.startTime,
-        location: currentScheduleRecord.location,
-        isAdmin: true,
-      });
-    }
-
-    // Log success and send response
-    successLog(actor, controllerName);
-    return res.status(200).json({
-      confirmation: 1,
-      message:
-        'Rekord obecności usunięty. Rekord płatności pozostał nieruszony.',
-    });
-  } catch (err) {
-    console.error('[deleteBookingRecord] error:', err);
-    return catchErr(actor, res, errCode, err, controllerName);
-  }
-};
-export const deleteBooking = async (req, res, next) => {
-  const controllerName = 'deleteBooking';
-  // Log request for debugging
-  callLog(req, actor, controllerName);
-
-  let errCode = 500;
-  try {
-    const { entityId } = req.body;
-
-    // Find the booking with related schedule and customer data
-    const foundRecord = await models.Booking.findOne({
-      where: { bookingId: entityId },
-      include: [
-        {
-          model: models.ScheduleRecord,
-          required: true,
-          include: [{ model: models.Product, required: true }],
-        },
-        {
-          model: models.Customer,
-          required: true,
-          include: [{ model: models.User, attributes: ['email'] }],
-        },
-      ],
-    });
-    if (!foundRecord) {
-      errCode = 404;
-      throw new Error('Nie znaleziono rekordu obecności w dzienniku.');
-    }
-
-    // Extract data for email notification
-    const currentScheduleRecord = foundRecord.ScheduleRecord;
-    const customerEmail = foundRecord.Customer.User.email;
-    const wantsNotifications = foundRecord.Customer.User.UserPrefSetting
-      ? foundRecord.Customer.User.UserPrefSetting.notifications
-      : true;
-
-    // Delete the booking
-    const deleted = await foundRecord.destroy();
-    if (!deleted) {
-      errCode = 404;
-      throw new Error('Nie usunięto rekordu.');
-    }
-
-    // Send notification email if the user wants it
-    if (customerEmail && wantsNotifications) {
-      adminEmails.sendBookingDeletedMail({
-        to: customerEmail,
-        productName: currentScheduleRecord.Product.name || 'Zajęcia',
-        date: currentScheduleRecord.date,
-        startTime: currentScheduleRecord.startTime,
-        location: currentScheduleRecord.location,
-        isAdmin: true,
-      });
-    }
-
-    // Log success and send response
-    successLog(actor, controllerName);
-    return res.status(200).json({
-      confirmation: 1,
-      message:
-        'Rekord obecności usunięty. Rekord płatności pozostał nieruszony.',
-    });
-  } catch (err) {
-    console.error('[deleteBooking] error:', err);
-    return catchErr(actor, res, errCode, err, controllerName);
-  }
-};
+export const deleteBookingRecord = createDeleteBooking(
+  actor,
+  'deleteBookingRecord',
+  req => ({
+    //thats' 'whereFn'
+    customerId: req.body.customerId,
+    bookingId: req.body.rowId,
+  })
+);
+export const deleteBooking = createDeleteBooking(
+  actor,
+  'deleteBooking',
+  req => ({ bookingId: req.body.entityId }) //thats' 'whereFn'
+);
 
 //! ATTENDANCE_____________________________________________
 //@ GET
