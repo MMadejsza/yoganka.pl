@@ -1,64 +1,64 @@
 @use 'sass:map';
-@use '_global_variables-templates' as var;
+@use './utils/' as *;
 
 .top-image-header {
-	grid-area: header;
-	height: 100svh;
-	background-image: url(/imgs/header/480_header_portrait.jpg);
-	background-attachment: fixed;
-	background-repeat: no-repeat;
-	background-size: cover;
-	background-position: top left;
-	overflow: hidden;
+  grid-area: header;
+  height: 100svh;
+  background-image: url(/imgs/header/480_header_portrait.jpg);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: top left;
+  overflow: hidden;
 
-	display: grid;
-	grid-template-columns: repeat(5, minmax(auto, 1fr));
-	grid-template-rows: 6rem repeat(8, 1fr) 8rem;
-	grid-template-areas:
-		'. . . . .'
-		'title title title title title'
-		'. . logo logo logo'
-		'. . logo logo logo'
-		'. . . . .'
-		'. . . . .'
-		'. . . . .'
-		'. . . . .'
-		'. . . . .'
-		'. . . . .'
-		'. . . . .'
-		'motto motto motto motto motto';
-	transition: map.get(var.$behavior, base-transition);
+  display: grid;
+  grid-template-columns: repeat(5, minmax(auto, 1fr));
+  grid-template-rows: 6rem repeat(8, 1fr) 8rem;
+  grid-template-areas:
+    '. . . . .'
+    'title title title title title'
+    '. . logo logo logo'
+    '. . logo logo logo'
+    '. . . . .'
+    '. . . . .'
+    '. . . . .'
+    '. . . . .'
+    '. . . . .'
+    '. . . . .'
+    '. . . . .'
+    'motto motto motto motto motto';
+  transition: map.get($behavior, base-transition);
 
-	@supports (-webkit-touch-callout: none) and (not (hover: hover)) {
-		//for ios
-		background-attachment: scroll;
-	}
+  @supports (-webkit-touch-callout: none) and (not (hover: hover)) {
+    //for ios
+    background-attachment: scroll;
+  }
 
-	&__header {
-		grid-area: title;
-		position: relative;
-		padding: 0.5rem 1rem;
-		text-align: center;
-	}
+  &__header {
+    grid-area: title;
+    position: relative;
+    padding: 0.5rem 1rem;
+    text-align: center;
+  }
 }
 
 .logo-writing__logo-file {
-	position: absolute;
-	left: 50%;
-	max-width: 60vw;
-	transform: translateX(-50%);
+  position: absolute;
+  left: 50%;
+  max-width: 60vw;
+  transform: translateX(-50%);
 }
 .motto {
-	grid-area: motto;
-	font-size: 1.7rem;
-	letter-spacing: 1px;
-	font-weight: 400;
-	text-transform: uppercase;
+  grid-area: motto;
+  font-size: 1.7rem;
+  letter-spacing: 1px;
+  font-weight: 400;
+  text-transform: uppercase;
 
-	line-height: 8rem;
-	color: map.get(var.$colors, tile-title);
+  line-height: 8rem;
+  color: map.get($colors, tile-title);
 
-	background-color: map.get(var.$colors, base);
-	box-shadow: map.get(var.$shadows, transitive-box-shadow);
-	overflow: visible;
+  background-color: map.get($colors, base);
+  box-shadow: map.get($shadows, transitive-box-shadow);
+  overflow: visible;
 }

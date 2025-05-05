@@ -62,6 +62,6 @@ body:
   - type: textarea
     id: notes
     attributes:
-      label: 📂 Additional Notes that may help
+      label: 📂 Additional notes that may help
       description: Who noticed it? Add any additional notes that may help to track the problem down, screenshots links, or examples to clarify the task requirements. 
       placeholder: "Optional" 

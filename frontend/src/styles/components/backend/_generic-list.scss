@@ -1,0 +1,316 @@
+@use 'sass:map';
+@use '../../utils/' as *;
+
+$generic-list-vertical-padding: 2rem;
+form.generic-details {
+  margin: 0 auto;
+}
+.generic-details {
+  width: 85%;
+
+  padding: $generic-list-vertical-padding 2rem;
+  @include flex(column, flex-start, center);
+  //   flex-wrap: wrap;
+  gap: 1.5rem;
+
+  &__title {
+    text-decoration: none;
+    @include flex(row, center, center, $gap: 2rem);
+    color: map.get($colors, tile-title);
+
+    &--login-page {
+      margin-bottom: 2rem;
+      font-size: 2.5rem;
+      transition: map.get($behavior, base-transition);
+    }
+  }
+
+  &__list {
+    align-self: center;
+    width: 100%;
+    min-width: 200px;
+    @include flex(column);
+    align-items: center !important;
+    gap: 1rem;
+  }
+
+  &__item {
+    width: 100%;
+    @include flex(row, space-between, space-evenly);
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem 2rem !important;
+
+    &--in-title {
+      justify-content: center;
+    }
+
+    &.danger {
+      color: #c62828;
+    }
+  }
+
+  &__label {
+    font-weight: 500;
+    max-width: 48%;
+  }
+
+  &__content {
+    width: max-content;
+    color: map.get($colors, generic-list-content);
+    @include flex(row, flex-end, center);
+
+    &--notes {
+      justify-content: center;
+    }
+
+    &.danger {
+      color: inherit;
+    }
+  }
+
+  & .modal__user-action {
+    margin-top: 1rem;
+    @include flex($justify: center, $gap: 2rem);
+    flex-flow: row wrap;
+
+    .modal__btn {
+      padding: 0.2rem 2rem;
+
+      &--small,
+      &--secondary {
+        height: auto;
+        line-height: 150%;
+      }
+    }
+
+    &--login-page {
+      padding: 0;
+      gap: 2rem;
+
+      .modal__btn {
+        height: 4.4rem;
+        width: 100%;
+
+        &--small,
+        &--secondary {
+          height: 3.5rem;
+          min-height: 3rem;
+        }
+      }
+    }
+  }
+}
+
+.generic-component-wrapper,
+.generic-outer-wrapper {
+  width: 100%;
+  padding-bottom: $generic-list-vertical-padding;
+  @include flex(row, center, space-evenly);
+  flex-wrap: wrap;
+  gap: 1.5rem;
+
+  .modal__user-action {
+    gap: 3rem;
+  }
+
+  .modal__btn {
+    // margin: 0 $generic-list-vertical-padding;
+    padding: 0 $generic-list-vertical-padding;
+    flex-basis: auto;
+  }
+}
+.generic-component-wrapper {
+  @include flex(column, flex-start, center);
+  align-content: center;
+}
+
+.dimmed {
+  opacity: 0.6;
+  text-shadow: none;
+  &:hover {
+    text-shadow: none;
+  }
+  &:not(.form-action-btn) {
+    color: rgba(map.get($colors, accent-bcg), 0.5);
+  }
+}
+
+@include respond-to(mobile-xs) {
+  .generic-details {
+    &__list {
+      min-width: 300px;
+
+      &--login-page {
+        min-width: auto;
+      }
+    }
+
+    &__label {
+      max-width: 65%;
+    }
+  }
+}
+
+@include respond-to(mobile-m) {
+  .generic-outer-wrapper {
+    padding: 1.5rem;
+
+    &
+      > *:not(
+        :has(.generic-details--payment-view),
+        .generic-details--payment-view
+      ) {
+      flex-basis: 48%;
+
+      &:nth-last-child(1):nth-child(odd) {
+        flex-basis: 65%;
+      }
+
+      &.generic-details--customer-first-purchase {
+        flex-basis: 80%;
+      }
+    }
+  }
+
+  .generic-component-wrapper:has(.generic-details--product-view) {
+    flex-basis: 85%;
+  }
+
+  .generic-details {
+    padding: $generic-list-vertical-padding 0rem;
+
+    &--customer-account-stats {
+      // width: 65%;
+      margin: 0 auto;
+    }
+
+    &__list {
+      min-width: 300px;
+      align-self: center !important;
+    }
+
+    &__label {
+      max-width: 70%;
+    }
+
+    &--product-view {
+      flex-basis: 85%;
+    }
+  }
+}
+
+@include respond-to(mobile-mh) {
+  .generic-outer-wrapper {
+    & > :nth-child(-n + 1):last-child:not(.generic-details--payment-view) {
+      flex-basis: 100%;
+    }
+  }
+  .generic-component-wrapper:has(.generic-details--product-view) {
+    flex-basis: 45%;
+  }
+
+  .generic-details {
+    &--product-view {
+      flex-basis: 45%;
+    }
+
+    &__list--customer-account-stats {
+      // width: 45%;
+    }
+  }
+}
+
+@include respond-to(mobile-l) {
+  .generic-outer-wrapper {
+    &:has(.generic-details--product-view) {
+      gap: 4rem;
+    }
+
+    &
+      > *:not(
+        .generic-details--customer-first-purchase,
+        .generic-details--payment-view,
+        .generic-details--product-view,
+        :has(.generic-details--product-view)
+      ),
+    &
+      > *:nth-last-child(1):nth-child(odd):not(
+        .generic-details--payment-view,
+        .generic-details--product-view,
+        :has(.generic-details--product-view)
+      ) {
+      flex-basis: 31%;
+      flex-wrap: nowrap;
+    }
+  }
+
+  .generic-details {
+    &--customer-first-purchase {
+      flex-basis: 50%;
+    }
+
+    &--login-page {
+      width: 70%;
+    }
+
+    &__list {
+      width: 40%;
+
+      &--login-page,
+      &--customer-first-purchase {
+        width: 100%;
+      }
+    }
+
+    &__list--product-view {
+      width: 100%;
+    }
+
+    & .modal__user-action--login-page {
+      .modal__btn {
+        &--small,
+        &--secondary {
+          flex-basis: 100%;
+          font-size: 1.5rem;
+        }
+
+        &[type='submit'] {
+          flex-basis: 100%;
+          font-size: 2rem;
+        }
+      }
+    }
+  }
+}
+
+@include respond-to(desktop-xs) {
+  .generic-outer-wrapper {
+    gap: 2rem;
+  }
+
+  .generic-details {
+    &__list {
+      width: 90%;
+
+      &--login-page {
+        width: 100%;
+      }
+    }
+
+    &--customer-account-stats {
+      margin: 0 auto;
+      width: 65%;
+      flex-basis: 65% !important;
+    }
+  }
+}
+
+@include respond-to(desktop-m) {
+  .generic-details {
+    &--customer-account-stats {
+      width: 45%;
+      flex-basis: 45% !important;
+    }
+  }
+}

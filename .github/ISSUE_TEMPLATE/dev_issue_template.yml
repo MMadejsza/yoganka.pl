@@ -38,7 +38,7 @@ body:
   - type: textarea
     id: notes
     attributes:
-      label: 🗒️ Checklist/Additional Notes
+      label: 🗒️ Checklist/Additional notes
       description: Any other notes or context that may help.
       placeholder: "Optional additional notes."
         

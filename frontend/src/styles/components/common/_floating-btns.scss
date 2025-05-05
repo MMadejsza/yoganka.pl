@@ -1,0 +1,168 @@
+@use 'sass:map';
+@use 'sass:color';
+@use '../../utils/' as *;
+
+.pop-ups {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1rem;
+  left: auto;
+  z-index: 15;
+  @include flex(column, center, center, 1.5rem);
+
+  transition: map.get($behavior, base-transition);
+
+  &--left {
+    right: auto;
+    left: 1rem;
+  }
+
+  &__single {
+    position: relative;
+    display: block;
+    width: 6rem;
+    max-width: 100px;
+    height: 6rem;
+    max-height: 100px;
+    margin: 0;
+    padding: 0;
+
+    text-decoration: none;
+    color: map.get($colors, accent-text);
+
+    border-radius: 50%;
+    background-color: rgba(map.get($colors, accent-bcg), 0.7);
+    box-shadow: map.get($shadows, active-text-icons-shadow);
+    transition: map.get($behavior, base-transition);
+
+    &:hover {
+      transform: translateY(-25%) scale(1.15);
+      box-shadow: map.get($shadows, active-box-shadow);
+    }
+
+    &--cookies:focus .pop-ups__icon,
+    &--cookies:active .pop-ups__icon {
+      line-height: 6rem;
+    }
+
+    &--cookies:focus .pop-ups__body,
+    &--cookies:active .pop-ups__body {
+      right: 0%;
+      left: auto;
+      background-color: rgba(map.get($colors, accent-bcg), 0.95);
+      opacity: 1;
+
+      &--left {
+        right: auto;
+        left: 0%;
+      }
+    }
+  }
+
+  &__body--msg {
+    display: block;
+
+    &-left {
+      order: 2;
+    }
+  }
+
+  &__icon {
+    line-height: 6rem;
+    font-size: 4rem;
+
+    &--left {
+      order: 1;
+    }
+  }
+
+  &__body {
+    @include flex(row, center, center, 2rem);
+    position: absolute;
+    top: 0;
+    right: -110%;
+    left: auto;
+    width: max-content;
+    padding-left: 1rem;
+
+    font-size: 1.5rem;
+
+    border-radius: 50px;
+    box-shadow: map.get($shadows, active-box-shadow);
+    transition: map.get($behavior, base-transition);
+    opacity: 0;
+
+    &--left {
+      right: auto;
+      left: -110%;
+
+      padding-left: 0rem;
+      padding-right: 1rem;
+    }
+  }
+
+  // to bump up specificity
+  &__icon--body-close {
+    font-size: 3rem;
+    line-height: 7rem;
+    margin-right: 2rem;
+    color: map.get($colors, accent-text);
+
+    &-left {
+      margin-left: 2rem;
+      margin-right: 0rem;
+    }
+  }
+}
+
+@include respond-to(mobile-xs) {
+  .pop-ups {
+    bottom: 1.5rem;
+    right: 1.5rem;
+    gap: 1rem;
+
+    &--left {
+      right: auto;
+      left: 1.5rem;
+    }
+  }
+}
+
+@include respond-to(mobile-m) {
+  .pop-ups {
+    gap: 1.5rem;
+
+    &__single {
+      width: 6.6rem;
+      height: 6.6rem;
+    }
+    &__body {
+      height: 6.6rem;
+    }
+    &__icon {
+      line-height: 6.6rem;
+    }
+  }
+}
+@include respond-to(mobile-mh) {
+  .pop-ups {
+    right: 2rem;
+    gap: 1.8rem;
+
+    &--left {
+      right: auto;
+      left: 2rem;
+    }
+
+    &__single {
+      width: 7rem;
+      height: 7rem;
+    }
+    &__body {
+      height: 7rem;
+    }
+    &__icon {
+      line-height: 7rem;
+    }
+  }
+}

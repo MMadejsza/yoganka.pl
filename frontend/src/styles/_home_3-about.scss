@@ -1,95 +1,95 @@
 @use 'sass:map';
-@use '_global_variables-templates' as var;
-@use '_global_mixins-keyframes' as mixin;
+@use './utils/' as *;
+
 //! ABOUT
 .about {
-	grid-area: about;
-	font-size: 2rem;
+  grid-area: about;
+  font-size: 2rem;
 
-	display: grid;
-	grid-template-columns: minmax(300px, 1fr);
-	grid-template-areas:
-		'header'
-		'portrait'
-		'content';
-	place-items: center;
-	gap: 2rem;
+  display: grid;
+  grid-template-columns: minmax(300px, 1fr);
+  grid-template-areas:
+    'header'
+    'portrait'
+    'content';
+  place-items: center;
+  gap: 2rem;
 
-	&__header {
-		grid-area: header;
-	}
+  &__header {
+    grid-area: header;
+  }
 
-	&__img-container {
-		grid-area: portrait;
-		position: relative;
-		width: 90%;
-		max-width: 70%;
+  &__img-container {
+    grid-area: portrait;
+    position: relative;
+    width: 90%;
+    max-width: 70%;
 
-		background-color: transparent;
-		border-radius: map.get(var.$sizes, border-radius);
-		box-shadow: map.get(var.$shadows, box-shadow);
-		overflow: hidden;
-	}
+    background-color: transparent;
+    border-radius: map.get($sizes, border-radius);
+    box-shadow: map.get($shadows, box-shadow);
+    overflow: hidden;
+  }
 
-	&__img--portrait {
-		width: 100%;
-		max-width: 640px;
-	}
+  &__img--portrait {
+    width: 100%;
+    max-width: 640px;
+  }
 
-	&__certificates {
-		position: absolute;
-		bottom: 0;
-		right: 0;
-		min-width: 70%;
-		height: 12%;
-		padding: 0 0.5rem;
+  &__certificates {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    min-width: 70%;
+    height: 12%;
+    padding: 0 0.5rem;
 
-		background-color: map.get(var.$colors, base);
-		border-top-left-radius: map.get(var.$sizes, border-radius);
-		border-bottom-right-radius: map.get(var.$sizes, border-radius);
-		overflow: hidden;
+    background-color: map.get($colors, base);
+    border-top-left-radius: map.get($sizes, border-radius);
+    border-bottom-right-radius: map.get($sizes, border-radius);
+    overflow: hidden;
 
-		@include mixin.flex($justify: right, $gap: 1rem);
-	}
+    @include flex($justify: right, $gap: 1rem);
+  }
 
-	&__certificates {
-		img {
-			max-height: 100%;
-			filter: grayscale(1);
-		}
-	}
+  &__certificates {
+    img {
+      max-height: 100%;
+      filter: grayscale(1);
+    }
+  }
 
-	&__bio--description {
-		grid-area: article;
-	}
+  &__bio--description {
+    grid-area: article;
+  }
 
-	&__bio--description,
-	&__bio--content,
-	&__bio--heading,
-	&__bio--signature {
-		white-space: pre-line;
-	}
+  &__bio--description,
+  &__bio--content,
+  &__bio--heading,
+  &__bio--signature {
+    white-space: pre-line;
+  }
 
-	&__bio--content {
-		grid-area: content;
-		padding: 1rem;
+  &__bio--content {
+    grid-area: content;
+    padding: 1rem;
 
-		@include mixin.flex(column, center, center, 1.5rem);
-	}
+    @include flex(column, center, center, 1.5rem);
+  }
 
-	&__bio--heading {
-		grid-area: h2;
-		font-size: 4rem;
-		font-weight: 500;
-		text-transform: uppercase;
-	}
+  &__bio--heading {
+    grid-area: h2;
+    font-size: 4rem;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
 
-	&__bio--signature {
-		align-self: flex-end;
-		margin-right: 1rem;
+  &__bio--signature {
+    align-self: flex-end;
+    margin-right: 1rem;
 
-		font-family: map.get(var.$typo, signature);
-		font-size: 3rem;
-	}
+    font-family: map.get($typo, signature);
+    font-size: 3rem;
+  }
 }
 //! ABOUT  END

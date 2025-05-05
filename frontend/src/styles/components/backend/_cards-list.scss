@@ -1,0 +1,272 @@
+@use '../../utils/' as *;
+@use 'sass:color';
+@use 'sass:map';
+
+:root {
+  --cards-gap: 2rem;
+  --card-gap: calc(0.25 * var(--cards-gap));
+  --card-dates-gap: calc(0.4 * var(--cards-gap));
+  --card-font-base: 1rem;
+  --font-title: calc(1.6 * var(--card-font-base));
+  --font-desc: calc(1.5 * var(--card-font-base));
+  --font-secondary: calc(1.4 * var(--card-font-base));
+  --card-icon: calc(2 * var(--card-font-base));
+  --card-action-btn-width: 48px;
+  --card-action-btn-pos-horizontal: 3%;
+  --card-action-btn-pos-vertical: calc(
+    2 * var(--card-action-btn-pos-horizontal)
+  );
+  --card-action-btn-icon: calc(3 * var(--card-font-base));
+}
+
+$card-width: 100%;
+$circle-height: calc($card-width);
+$title-margin: 1rem;
+$safety-padding: 0.4rem;
+$dimmed-color: map.get($colors, tile-text-muted);
+$heavily-dimmed-color: map.get($colors, nav-muted);
+
+.cards-container {
+  width: 100%;
+  padding: 1.5rem;
+  margin-bottom: 7rem;
+
+  @include flex(column, center);
+  gap: var(--cards-gap);
+
+  .card {
+    position: relative;
+    width: 100%;
+    padding: 1.5rem;
+    display: grid;
+    grid-template-columns: 12.5% 12.5% 1fr 12.5% 12.5%;
+    grid-template-rows: auto auto 1fr 1fr auto;
+    grid-template-areas:
+      'square square modifier modifier modifier . . . id'
+      'square square name name name name name name name '
+      'square square desc desc desc desc desc desc desc'
+      'square square desc desc desc desc desc desc desc '
+      'square square footer footer footer footer footer footer footer';
+    line-height: 2rem;
+    background-color: rgba(map.get($colors, tile), 0.8);
+    border-radius: map.get($sizes, border-radius);
+    box-shadow: map.get($shadows, box-shadow);
+    transition: map.get($behavior, base-transition);
+    // overflow: visible;
+
+    // place-self: center;
+
+    > * {
+      @include flex(row, flex-start, center);
+      flex-wrap: wrap;
+      gap: var(--card-gap);
+      padding: $safety-padding;
+      margin: 0;
+    }
+
+    &:nth-child(2n) {
+      background-color: rgba(map.get($colors, nav), 0.5);
+    }
+
+    &--active {
+      cursor: pointer;
+      box-shadow: map.get($shadows, tile-shadow);
+      border: none;
+
+      &:hover {
+        transform: scale(1.05) translateY(0.5rem);
+      }
+    }
+
+    .nav__icon {
+      color: map.get($colors, accent-bcg);
+      font-size: var(--card-icon);
+
+      &--secondary {
+        color: map.get($colors, nav-muted);
+      }
+    }
+
+    &__single-content {
+      &--secondary {
+        font-size: var(--font-secondary);
+        color: $heavily-dimmed-color;
+      }
+    }
+
+    &__square {
+      grid-area: square;
+      // width: $card-width;
+      min-width: 120px;
+      height: 100%;
+      font-weight: 500;
+      color: $heavily-dimmed-color;
+      place-self: center;
+
+      @include flex(column, center, center);
+      gap: var(--card-dates-gap);
+
+      > * {
+        width: 100%;
+      }
+
+      &--top {
+        font-size: calc(0.9 * var(--font-title));
+        color: $dimmed-color;
+      }
+
+      &--middle {
+        font-size: calc(2 * var(--font-title));
+        color: map.get($colors, accent-bcg);
+        .nav__icon {
+          font-size: calc(2 * var(--font-title));
+        }
+      }
+
+      &--bottom {
+        font-size: calc(0.7 * var(--font-title));
+      }
+    }
+
+    &__modifier {
+      grid-area: modifier;
+      font-weight: 500;
+      color: $heavily-dimmed-color;
+      font-size: var(--font-secondary);
+    }
+
+    &__id {
+      grid-area: id;
+      color: $heavily-dimmed-color;
+      font-size: var(--font-secondary);
+    }
+
+    &__title {
+      grid-area: name;
+      margin-top: $title-margin;
+      font-weight: bold;
+      font-size: var(--font-title);
+    }
+
+    &__circle {
+      position: absolute;
+      right: var(--card-action-btn-pos-horizontal);
+      bottom: var(--card-action-btn-pos-vertical);
+
+      font-size: var(--font-desc);
+      margin: 0 auto;
+      width: var(--card-action-btn-width);
+      aspect-ratio: 1 / 1;
+      border-radius: 50%;
+
+      justify-content: center;
+      place-self: center;
+      display: grid;
+      place-items: center;
+
+      transition: map.get($behavior, base-transition);
+
+      .nav__icon {
+        font-size: var(--card-action-btn-icon);
+        text-shadow: none;
+      }
+
+      &--active {
+        box-shadow: map.get($shadows, box-shadow);
+
+        .nav__icon {
+          text-shadow: map.get($shadows, text-shadow);
+        }
+
+        &:hover {
+          box-shadow: map.get($shadows, tile-shadow);
+          transform: translate(1%, 3%);
+        }
+      }
+    }
+
+    &__desc {
+      // align-items: flex-start;
+      grid-area: desc;
+      text-align: left;
+      font-size: var(--font-desc);
+      color: $dimmed-color;
+    }
+
+    &__footer {
+      grid-area: footer;
+      margin-top: $title-margin;
+      color: map.get($colors, $dimmed-color);
+      font-size: var(--font-secondary);
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &.booked {
+      background-color: color.adjust(green, $lightness: 80%);
+      opacity: 0.6;
+    }
+
+    &.full,
+    &.archived {
+      background-color: map.get($colors, nav);
+      opacity: 0.25;
+    }
+  }
+}
+
+@include respond-to(mobile-xs) {
+  :root {
+    --cards-gap: 3rem;
+    --card-font-base: 1.2rem;
+    --card-action-btn-width: 56px;
+  }
+  .cards-container {
+    padding: 1.5rem;
+
+    .card {
+      padding: 0.5rem;
+    }
+  }
+}
+
+@media (min-width: 385px) {
+  .cards-container {
+    padding: 1.5rem;
+
+    .card {
+      padding: 1.5rem;
+    }
+  }
+}
+
+@include respond-to(mobile-s) {
+  :root {
+    --card-action-btn-width: 76px;
+    --card-action-btn-pos-horizontal: 3.5%;
+  }
+}
+
+@include respond-to(mobile-m) {
+  :root {
+    --cards-gap: 4rem;
+    --card-font-base: 1.3rem;
+    --card-action-btn-width: 96px;
+    --card-action-btn-pos-vertical: calc(
+      3 * var(--card-action-btn-pos-horizontal)
+    );
+  }
+}
+
+@include respond-to(mobile-mh) {
+  :root {
+    --card-gap: calc(0.3 * var(--cards-gap));
+    --card-dates-gap: calc(0.8 * var(--cards-gap));
+    --card-font-base: 1.5rem;
+    --card-action-btn-pos-vertical: calc(
+      3 * var(--card-action-btn-pos-horizontal)
+    );
+  }
+}

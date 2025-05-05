@@ -1,162 +1,153 @@
 @use 'sass:map';
 @use 'sass:color';
-@use '_global_variables-templates' as var;
-@use '_global_mixins-keyframes' as mixin;
+@use './utils/' as *;
 
 %action-btn {
-	@include mixin.flex(row, center, center);
-	flex-wrap: wrap;
-	gap: 1rem;
-	width: 95%;
-	min-height: 48px;
-	padding: 0rem 1rem;
+  @include flex(row, center, center);
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 95%;
+  min-height: 48px;
+  padding: 0rem 1rem;
 
-	font-size: 1.8rem;
-	line-height: 48px;
-	font-weight: bold;
-	text-transform: uppercase;
-	text-decoration: none;
-	color: map.get(var.$colors, accent-text);
+  font-size: 1.8rem;
+  line-height: 48px;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: map.get($colors, accent-text);
 
-	cursor: pointer;
-	background-color: map.get(var.$colors, accent-bcg);
-	border-radius: map.get(var.$sizes, border-radius);
-	box-shadow: map.get(var.$shadows, active-text-icons-shadow);
-	overflow: hidden;
-	transition: map.get(var.$behavior, base-transition);
+  cursor: pointer;
+  background-color: map.get($colors, accent-bcg);
+  border-radius: map.get($sizes, border-radius);
+  box-shadow: map.get($shadows, active-text-icons-shadow);
+  overflow: hidden;
+  transition: map.get($behavior, base-transition);
 }
 
 .clickable {
-	box-shadow: map.get(var.$shadows, tile-shadow);
-	position: relative;
+  box-shadow: map.get($shadows, tile-shadow);
+  position: relative;
 
-	&:not(.offer-type__more.clickable):after {
-		content: ' ';
-		position: absolute;
-		bottom: 0;
-		left: 0;
-		width: 100%;
-		height: 10%;
-		padding-bottom: 0.5rem;
+  &:not(.offer-type__more.clickable):after {
+    content: ' ';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 10%;
+    padding-bottom: 0.5rem;
 
-		font-size: 1rem;
-		letter-spacing: 1px;
-		color: map.get(var.$colors, tile-text-muted);
-		background: linear-gradient(
-			to bottom,
-			transparent,
-			color.scale(map.get(var.$colors, tile), $lightness: -13%)
-		);
+    font-size: 1rem;
+    letter-spacing: 1px;
+    color: map.get($colors, tile-text-muted);
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      color.scale(map.get($colors, tile), $lightness: -13%)
+    );
 
-		display: flex;
-		justify-content: center;
-		align-items: flex-end;
-	}
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+  }
 }
 //! TILE
 .offer-type {
-	.tile {
-		min-height: 472px;
-	}
+  .tile {
+    min-height: 472px;
+  }
 }
 .tile {
-	position: relative;
-	display: flex;
+  position: relative;
+  display: flex;
 
-	flex-direction: column;
-	flex-basis: 90%;
-	gap: 2rem;
+  flex-direction: column;
+  flex-basis: 90%;
+  gap: 2rem;
 
-	padding: 2.5rem 1rem;
-	background-color: map.get(var.$colors, tile);
-	border-radius: map.get(var.$sizes, border-radius);
-	box-shadow: map.get(var.$shadows, box-shadow);
-	overflow: hidden;
-	transition: map.get(var.$behavior, base-transition);
+  padding: 2.5rem 1rem;
+  background-color: map.get($colors, tile);
+  border-radius: map.get($sizes, border-radius);
+  box-shadow: map.get($shadows, box-shadow);
+  overflow: hidden;
+  transition: map.get($behavior, base-transition);
 
-	&.clickable {
-		box-shadow: map.get(var.$shadows, tile-shadow);
-	}
+  &.clickable {
+    box-shadow: map.get($shadows, tile-shadow);
+  }
 
-	&--classes {
-		.tile__title {
-			// height: 100%;
-		}
-		.tile__desc {
-			height: 100%;
-		}
-	}
+  &--classes {
+    .tile__title {
+      height: 100%;
+    }
+  }
 
-	&__img {
-		place-self: center;
-		max-width: 80%;
-		aspect-ratio: 1/1;
-		margin-bottom: 1.5rem;
-		border-radius: map.get(var.$sizes, border-radius);
+  &__img {
+    place-self: center;
+    max-width: 80%;
+    aspect-ratio: 1/1;
+    margin-bottom: 1.5rem;
+    border-radius: map.get($sizes, border-radius);
 
-		&--event-modal {
-			max-width: 50%;
-		}
+    &--event-modal {
+      max-width: 50%;
+    }
 
-		&--modal-slider {
-			place-self: center;
+    &--modal-slider {
+      place-self: center;
 
-			max-width: 95%;
-			max-height: 45vh;
-			margin: 0;
-			aspect-ratio: auto;
-		}
-	}
+      max-width: 95%;
+      max-height: 45vh;
+      margin: 0;
+      aspect-ratio: auto;
+    }
+  }
 
-	&__title,
-	&__date {
-		font-size: 2.2rem;
-		font-weight: 500;
-		white-space: pre-line;
-		letter-spacing: 1px;
-		color: map.get(var.$colors, tile-title);
-	}
+  &__title,
+  &__date {
+    font-size: 2.2rem;
+    font-weight: 500;
+    white-space: pre-line;
+    letter-spacing: 1px;
+    color: map.get($colors, tile-title);
+  }
 
-	&__date {
-		color: map.get(var.$colors, tile-text);
-	}
+  &__date {
+    color: map.get($colors, tile-text);
+  }
 
-	&__location {
-		font-size: 1.9rem;
-		font-weight: 400;
-		white-space: pre-line;
-		color: map.get(var.$colors, tile-text-muted);
-	}
+  &__location {
+    font-size: 1.9rem;
+    font-weight: 400;
+    white-space: pre-line;
+    color: map.get($colors, tile-text-muted);
+  }
 
-	&__desc {
-		font-size: 1.9rem;
-		white-space: pre-line;
-		font-family: 'EB Garamond', serif;
-		color: map.get(var.$colors, tile-text-muted);
-	}
+  &__desc {
+    font-size: 1.9rem;
+    white-space: pre-line;
+    color: map.get($colors, tile-text-muted);
+  }
 
-	&__btn {
-		@extend %action-btn;
-	}
+  &__btn {
+    @extend %action-btn;
+  }
 }
 //! TILE END
 @supports (-webkit-grid: auto) {
-  .offer-type {
-  
-	.tile {
-		/* flex layout inside each tile to equalise height */
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-    min-height: auto !important; /* enforce a sensible minimum */
+  .tile {
+    /* flex layout inside each tile to equalise height */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 250px; /* enforce a sensible minimum */
+  }
 
-	  &__img {
-		/* force images to cover their container */
-		width: 100%;
-		height: auto;
-		object-fit: cover;
-	  }
-	  }
-	
+  .tile__img {
+    /* force images to cover their container */
+    width: 100%;
+    height: auto;
+    object-fit: cover;
   }
-  }
+}

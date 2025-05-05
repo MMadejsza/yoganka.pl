@@ -11,5 +11,16 @@
 @forward '_home_5-certificates';
 @forward '_home_6-partners';
 @forward '_home_7-footer';
-@forward '_home_pop-ups';
+@forward './components/common/_floating-btns';
+@forward './components/frontend/_nav';
+@forward './components/frontend/_nav-burger';
+@forward './components/backend/_tabs-list';
+@forward './components/backend/_generic-list';
+@forward './components/backend/_feedback-box';
+@forward './components/backend/_input';
+@forward './components/backend/_login-form';
+@forward './components/backend/_wrapper-form';
+@forward './components/backend/_modal-table';
+@forward './components/backend/_cards-list';
+@forward './components/backend/_side-nav';
 @forward '_home_media';

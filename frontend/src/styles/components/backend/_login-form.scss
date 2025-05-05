@@ -1,0 +1,43 @@
+@use 'sass:map';
+@use '../../utils/' as *;
+
+.login-box {
+  grid-column: 1/-1;
+  place-self: center;
+  width: 50vw;
+  min-width: 300px;
+  max-width: 550px;
+  min-height: 400px;
+  margin: 8rem 0;
+  padding: 2%;
+  border-radius: map.get($sizes, border-radius);
+  background-color: rgba(map.get($colors, nav), 0.5);
+  box-shadow: map.get($shadows, tile-shadow);
+
+  @include flex(column, space-evenly, center);
+  gap: 2.5rem;
+
+  button {
+    &:nth-of-type(1) {
+      margin-top: 2rem;
+    }
+  }
+}
+
+@include respond-to(mobile-sh) {
+  .login-box {
+    width: auto;
+  }
+}
+
+@include respond-to(mobile-m) {
+  .login-box {
+    padding: 2.5rem 4rem;
+  }
+}
+
+@include respond-to(mobile-l) {
+  .login-box {
+    margin: 15rem 0;
+  }
+}

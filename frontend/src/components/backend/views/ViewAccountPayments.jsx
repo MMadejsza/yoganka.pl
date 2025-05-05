@@ -1,0 +1,96 @@
+import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { statsCalculatorForCustomer } from '../../../utils/statistics/statsCalculatorForCustomer.js';
+import CardsList from '../../common/CardsList.jsx';
+import ModalTable from '../ModalTable.jsx';
+import ViewsController from '../ViewsController.jsx';
+import WrapperModalTable from '../WrapperModalTable.jsx';
+
+function ViewAccountPayments({ data }) {
+  // console.clear();
+  console.log(
+    `📝 
+        ViewAccountPayments object from backend:`,
+    data
+  );
+
+  let content, customerStats;
+  if (data.customer) customerStats = statsCalculatorForCustomer(data.customer);
+  content = customerStats?.payments.sort(
+    (a, b) => new Date(b.date) - new Date(a.date)
+  );
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const background = {
+    pathname: location.pathname,
+    search: location.search,
+    hash: location.hash,
+  };
+  const handleOpenModal = row => {
+    const recordId = row.paymentId;
+    setIsModalOpen(true);
+    navigate(`${location.pathname}/${recordId}`, { state: { background } });
+  };
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    navigate('/konto/platnosci');
+  };
+
+  const tableInside = (
+    <ModalTable
+      headers={[
+        'Id',
+        'Data',
+        'Produkt (Nr)',
+        'Kwota całkowita',
+        'Metoda płatności',
+        'Status płatności',
+      ]}
+      keys={[
+        'paymentId',
+        'date',
+        'product',
+        'amountPaid',
+        'paymentMethod',
+        'paymentStatus',
+      ]}
+      content={content}
+      active={true}
+      onOpen={handleOpenModal}
+    />
+  );
+
+  const cards = (
+    <CardsList content={content} active={true} onOpen={handleOpenModal} />
+  );
+
+  const table = (
+    <WrapperModalTable
+      content={content}
+      title={'Historia płatności'}
+      noContentMsg={'płatności'}
+    >
+      {/* {tableInside} */}
+      {cards}
+    </WrapperModalTable>
+  );
+
+  return (
+    <>
+      {table}
+      {isModalOpen && (
+        <ViewsController
+          modifier='payment'
+          visited={isModalOpen}
+          onClose={handleCloseModal}
+          userAccountPage={true}
+        />
+      )}
+    </>
+  );
+}
+
+export default ViewAccountPayments;

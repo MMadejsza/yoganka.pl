@@ -1,0 +1,49 @@
+@use 'sass:map';
+@use 'sass:color';
+@use 'sass:math';
+@use './utils/' as *;
+
+.wrapper:has(.admin-console) {
+  grid-template-rows: auto auto 1fr auto;
+  grid-template-areas:
+    'table table table table table'
+    'table table table table table'
+    'space space space space space'
+    'footer footer footer footer footer';
+  // overflow: hidden;
+}
+
+.admin-console {
+  grid-area: table;
+  grid-column: 1 /-1;
+  max-height: 100%;
+
+  grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+  grid-template-rows: auto auto auto auto auto 1fr auto;
+}
+
+body:has(.admin-console) {
+  .modal.visible {
+    width: 98vw;
+    max-width: 1200px;
+    overflow: auto;
+  }
+}
+
+@media (min-width: 1025px) or (min-width: 1400px) {
+  .admin-intro {
+    margin-top: 11rem;
+
+    &__header {
+      width: 100%;
+      padding: 1rem;
+      text-shadow: map.get($shadows, active-text-icons-shadow);
+      background-color: rgba(map.get($colors, base), 0.75);
+    }
+  }
+
+  %hover {
+    color: map.get($colors, accent-bcg);
+    text-shadow: map.get($shadows, active-text-icons-shadow);
+  }
+}
