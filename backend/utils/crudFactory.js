@@ -35,6 +35,7 @@ export function createGetAll(
   {
     includeRelations = [],
     excludeFields = [],
+    where,
     preAction, //optional async hook before fetching
     postAction, // optional runs after successful fetching
     mapRecord,
@@ -62,12 +63,17 @@ export function createGetAll(
       if (excludeFields.length) {
         queryOptions.attributes = { exclude: excludeFields };
       }
+      if (where) {
+        // function returning object or object
+        queryOptions.where =
+          typeof where === 'function' ? where(hookData, req) : where;
+      }
 
       // fetch all records
       const records = await EntityModel.findAll(queryOptions);
       if (!records || records.length === 0) {
         errorCode = 404;
-        throw new Error(notFoundMessage || `${EntityModel.name} not found.`);
+        throw new Error(notFoundMessage || `${EntityModel.name}s not found.`);
       }
 
       // map + filter
@@ -114,6 +120,7 @@ export function createGetById(
     includeRelations = [],
     excludeFields = [],
     mapRecord = instance => instance.toJSON(),
+    postAction,
     successMessage,
     notFoundMessage,
     attachResponse = () => ({}), // for isLoggedIn etc.
@@ -138,7 +145,12 @@ export function createGetById(
         throw new Error(notFoundMessage || `${EntityModel.name} not found.`);
       }
       // Apply mapping
-      const result = mapRecord(record);
+      const result = await mapRecord(record);
+
+      if (typeof postAction === 'function') {
+        await postAction(req, result);
+      }
+
       successLog(actorName, controllerName);
       // Return entity under its lowercase name
       return res.json({
