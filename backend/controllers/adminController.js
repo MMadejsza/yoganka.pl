@@ -306,7 +306,7 @@ export const getAllCustomers = createGetAll(actor, models.Customer, {
     'loyalty',
     'notes',
   ],
-  successMessage: 'Customers loaded successfully.',
+  successMessage: 'Uczestnicy pobrani pomyślnie.',
 });
 export const getAllCustomersWithEligiblePasses = createGetAll(
   actor,
@@ -735,142 +735,92 @@ export const deleteCustomer = createDelete(actor, models.Customer, {
 
 //! SCHEDULES_____________________________________________
 //@ GET
-export const getAllSchedules = async (req, res, next) => {
-  const controllerName = 'getAllSchedules';
-  // Log request for debugging
-  callLog(req, actor, controllerName);
+export const getAllSchedules = createGetAll(actor, models.ScheduleRecord, {
+  includeRelations: [
+    {
+      model: models.Product,
+      required: false,
+      // only need type, name, price for display
+      attributes: ['type', 'name', 'price'],
+    },
+    {
+      model: models.Booking,
+      required: false,
+      // only need attendance to count active bookings
+      attributes: ['attendance'],
+    },
+  ], // no extra joins
+  excludeFields: ['productId'], // hide foreign key
+  mapRecord: rec => {
+    // turn Sequelize instance into plain JS object
+    const sched = rec.get({ plain: true });
 
-  let errCode = 500; // default error code
-
-  try {
-    // Fetch schedules, exclude productId, include only needed fields
-    const records = await models.ScheduleRecord.findAll({
-      attributes: { exclude: ['productId'] },
-      include: [
-        {
-          model: models.Product,
-          required: false,
-          // only need type, name, price for display
-          attributes: ['type', 'name', 'price'],
-        },
-        {
-          model: models.Booking,
-          required: false,
-          // only need attendance to count active bookings
-          attributes: ['attendance'],
-        },
-      ],
-    });
-
-    // If no schedules found, throw 404
-    if (!records || records.length === 0) {
-      errCode = 404;
-      throw new Error('Nie znaleziono terminów.');
-    }
-
-    // Transform each schedule to plain object and add computed fields
-    const formattedRecords = records.map(rec => {
-      // turn Sequelize instance into plain JS object
-      const sched = rec.get({ plain: true });
-
-      // count active bookings (attendance true/1)
-      const activeBookings = (sched.Bookings || []).filter(
-        b => b.attendance === true || b.attendance === 1
-      );
-      sched.attendance = `${activeBookings.length}/${sched.capacity}`;
-      // add weekday name
-      sched.day = getWeekDay(sched.date);
-      // add rowId for row key
-      sched.rowId = sched.scheduleId;
-      // flatten product details
-      sched.productType = sched.Product?.type;
-      sched.productName = sched.Product?.name;
-      sched.productPrice = sched.Product?.price;
-      // we don't need the Bookings or Product objects any more
-      delete sched.Bookings;
-      delete sched.Product;
-      return sched;
-    });
-
-    // Define columns for front end table
-    const totalKeys = [
-      'scheduleId',
-      'attendance',
-      'date',
-      'day',
-      'startTime',
-      'location',
-      'productType',
-      'productName',
-      'productPrice',
-    ];
-
-    // Log success and send response
-    successLog(actor, controllerName);
-    return res.json({
-      confirmation: 1,
-      message: 'Terminy pobrane pomyślnie.',
-      totalKeys,
-      // sort by date descending
-      content: formattedRecords.sort(
-        (a, b) => new Date(b.date) - new Date(a.date)
-      ),
-    });
-  } catch (err) {
-    // Print error then central handler
-    console.error('[getAllSchedules] error:', err);
-    return catchErr(actor, res, errCode, err, controllerName);
-  }
-};
-export const getScheduleById = async (req, res, next) => {
-  const controllerName = 'getScheduleById';
-  // Log that admin called this endpoint
-  console.log(`➡️➡️➡️ admin called`, controllerName);
-
-  let errCode = 500;
-  try {
-    const PK = req.params.id;
+    // count active bookings (attendance true/1)
+    const activeBookings = (sched.Bookings || []).filter(
+      b => b.attendance === true || b.attendance === 1
+    );
+    sched.attendance = `${activeBookings.length}/${sched.capacity}`;
+    // add weekday name
+    sched.day = getWeekDay(sched.date);
+    // add rowId for row key
+    sched.rowId = sched.scheduleId;
+    // flatten product details
+    sched.productType = sched.Product?.type;
+    sched.productName = sched.Product?.name;
+    sched.productPrice = sched.Product?.price;
+    // we don't need the Bookings or Product objects any more
+    delete sched.Bookings;
+    delete sched.Product;
+    return sched;
+  },
+  columnKeys: [
+    'scheduleId',
+    'attendance',
+    'date',
+    'day',
+    'startTime',
+    'location',
+    'productType',
+    'productName',
+    'productPrice',
+  ],
+  successMessage: 'Terminy pobrane pomyślnie.',
+  notFoundMessage: 'Nie znaleziono terminów.',
+});
+export const getScheduleById = createGetById(actor, models.ScheduleRecord, {
+  includeRelations: [
     // Fetch the schedule record with related models
-    const scheduleData = await models.ScheduleRecord.findByPk(PK, {
+    { model: models.Product, required: true },
+    {
+      model: models.Booking,
+      required: false,
       include: [
-        { model: models.Product, required: true },
+        { model: models.Customer, attributes: { exclude: ['userId'] } },
+        { model: models.Payment, required: false },
         {
-          model: models.Booking,
+          model: models.CustomerPass,
           required: false,
           include: [
-            { model: models.Customer, attributes: { exclude: ['userId'] } },
-            { model: models.Payment, required: false },
             {
-              model: models.CustomerPass,
-              required: false,
-              include: [
-                {
-                  model: models.PassDefinition,
-                  attributes: { exclude: ['userId'] },
-                },
-              ],
+              model: models.PassDefinition,
+              attributes: { exclude: ['userId'] },
             },
           ],
         },
-        {
-          model: models.Feedback,
-          required: false,
-          include: [
-            { model: models.Customer, attributes: { exclude: ['userId'] } },
-          ],
-          attributes: { exclude: ['customerId'] },
-        },
       ],
-    });
-
-    // If not found, throw an error
-    if (!scheduleData) {
-      errCode = 404;
-      throw new Error('Nie znaleziono terminu.');
-    }
-
+    },
+    {
+      model: models.Feedback,
+      required: false,
+      include: [
+        { model: models.Customer, attributes: { exclude: ['userId'] } },
+      ],
+      attributes: { exclude: ['customerId'] },
+    },
+  ],
+  mapRecord: scheduleData => {
     // Convert the Sequelize instance to a plain JS object
-    let schedule = scheduleData.toJSON();
+    const schedule = scheduleData.toJSON();
 
     // Initialize attendance counts
     schedule.attendance = 0;
@@ -878,30 +828,33 @@ export const getScheduleById = async (req, res, next) => {
     let cancelledRecords = [];
 
     // Split bookings into attended vs cancelled
-    if (schedule.Bookings && schedule.Bookings.length > 0) {
-      schedule.Bookings.forEach(b => {
-        // Mark attended
-        if (b.attendance == 1 || b.attendance === true) {
-          attendedRecords.push({ ...b, rowId: b.bookingId });
-        }
+    (schedule.Bookings || []).forEach(b => {
+      // Mark attended
+      const rec = { ...b, rowId: b.bookingId };
+      if (b.attendance === true || b.attendance === 1) {
+        attendedRecords.push(rec);
+      } else {
         // Mark cancelled
-        if (b.attendance == 0 || b.attendance === false) {
-          cancelledRecords.push({ ...b, rowId: b.bookingId });
-        }
-      });
-      // Set attendance count and full flag
-      schedule.attendance = attendedRecords.length;
-      schedule.full = attendedRecords.length >= schedule.capacity;
-    }
+        cancelledRecords.push(rec);
+      }
+    });
+
+    // Set attendance count and full flag
+    schedule.attendance = attendedRecords.length;
+    schedule.full = schedule.attendance >= schedule.capacity;
 
     // Determine if the schedule is already completed
     const scheduleDateTime = new Date(
       `${schedule.date}T${schedule.startTime}:00`
     );
     schedule.isCompleted = scheduleDateTime <= new Date();
+
     schedule.attendedRecords = attendedRecords;
     schedule.cancelledRecords = cancelledRecords;
 
+    return schedule;
+  },
+  postAction: async (_req, schedule) => {
     // Fetch any standalone payments related to this schedule
     const paymentsList = await models.Payment.findAll({
       where: {
@@ -922,64 +875,47 @@ export const getScheduleById = async (req, res, next) => {
         customerFullName: `${p.Customer.firstName} ${p.Customer.lastName} (${p.Customer.customerId})`,
       };
     });
+  },
+  successMessage: 'Termin pobrany pomyślnie',
+  notFoundMessage: 'Nie znaleziono terminu.',
+  resultName: 'schedule',
+  attachResponse: (req, result) => ({
+    user: req.user,
+  }),
+});
 
-    // Log success and send the JSON response
-    successLog(actor, controllerName);
-    return res.status(200).json({
-      confirmation: 1,
-      message: 'Termin pobrany pomyślnie',
-      schedule,
-      user: req.user,
-    });
-  } catch (err) {
-    // In case of error, handle centrally
-    console.error('[getScheduleById] error:', err);
-    return catchErr(actor, res, errCode, err, controllerName);
-  }
-};
 // Controller for NewPaymentForm Selects
-export const getProductSchedules = async (req, res, next) => {
-  // Controller for NewPaymentForm Selects
-  const controllerName = 'getProductSchedulesById';
-  // Log that admin called this endpoint
-  console.log(`➡️➡️➡️ admin called`, controllerName);
-
-  let errCode = 500;
-  try {
+export const getProductSchedules = createGetAll(actor, models.ScheduleRecord, {
+  // grab productId and all scheduleIds already booked by this customer before fetching schedules
+  preAction: async req => {
     const productId = req.params.pId;
     const customerId = req.params.cId;
 
-    // Get all schedules for the chosen product
-    const foundSchedules = await models.ScheduleRecord.findAll({
-      where: { productId },
-    });
-
-    // Get all bookings made by this customer
-    const bookedByCustomerSchedules = await models.Booking.findAll({
+    // fetch only scheduleId field to minimize data transfer
+    const bookings = await models.Booking.findAll({
       where: { customerId },
+      attributes: ['scheduleId'],
     });
 
-    // Exclude schedules the customer has already booked
-    const filteredSchedules = foundSchedules.filter(
-      schedule =>
-        !bookedByCustomerSchedules.some(
-          bs => bs.scheduleId == schedule.scheduleId
-        )
-    );
+    // return both productId and the booked IDs for mapRecord
+    return {
+      productId,
+      bookedScheduleIds: bookings.map(b => b.scheduleId),
+    };
+  },
 
-    // Log success and return the filtered list
-    successLog(actor, controllerName);
-    return res.status(200).json({
-      confirmation: 1,
-      message: 'Terminy pobrane pomyślnie.',
-      content: filteredSchedules,
-    });
-  } catch (err) {
-    // Handle errors centrally
-    console.error('[getProductSchedules] error:', err);
-    return catchErr(actor, res, errCode, err, controllerName);
-  }
-};
+  where: ({ productId }) => ({ productId }),
+
+  // we filter out any schedules that aren’t for our product or that the customer already has booked
+  mapRecord: (schedule, { bookedScheduleIds }) => {
+    // skip schedules already booked by this customer
+    if (bookedScheduleIds.includes(schedule.scheduleId)) return null;
+    // keep the schedule otherwise
+    return schedule;
+  },
+  successMessage: 'Terminy pobrane pomyślnie.',
+  notFoundMessage: 'Nie znaleziono terminów.',
+});
 
 export const getBookings = (req, res, next) => {};
 //@ POST
