@@ -1,8 +1,8 @@
 // utils/crudFactory.js
 // Generic CRUD controller factories for maximum modularity
-
+import * as models from '../models/_index.js';
+import { sendBookingDeletedMail } from '../utils/mails/templates/adminOnlyActions/_adminEmails.js';
 import { callLog, catchErr, successLog } from './debuggingUtils.js';
-
 /**
  * Factory for "Get All" controllers.
  * Creates an async handler to load all records of a model,
@@ -38,6 +38,7 @@ export function createGetAll(
     where,
     preAction, //optional async hook before fetching
     postAction, // optional runs after successful fetching
+    attachResponse = () => ({}),
     mapRecord,
     columnKeys,
     sortFunction,
@@ -81,6 +82,10 @@ export function createGetAll(
         .map(inst => mapRecord(inst.toJSON(), hookData))
         .filter(item => item != null); // allow mapRecord to drop items
 
+      if (typeof postAction === 'function') {
+        await postAction(req, list, hookData);
+      }
+
       // optional sorting
       if (typeof sortFunction === 'function') {
         list = list.sort(sortFunction);
@@ -90,6 +95,7 @@ export function createGetAll(
       return res.json({
         confirmation: 1,
         message: successMessage,
+        ...attachResponse(req, list),
         columnKeys,
         content: list,
       });
@@ -181,6 +187,7 @@ export function createDelete(
   EntityModel,
   {
     primaryKeyName = `${EntityModel.name.toLowerCase()}Id`,
+    where,
     preAction, // optional hook: runs before delete
     postAction, // optional hook: runs after successful delete
     successMessage,
@@ -201,9 +208,12 @@ export function createDelete(
 
       const id = req.params.id;
       // Perform deletion
-      const deletedCount = await EntityModel.destroy({
-        where: { [primaryKeyName]: id },
-      });
+      const condition = where
+        ? typeof where === 'function'
+          ? where(req, hookData)
+          : where
+        : { [primaryKeyName]: id };
+      const deletedCount = await EntityModel.destroy({ where: condition });
 
       if (!deletedCount) {
         errorCode = 404;
@@ -225,4 +235,71 @@ export function createDelete(
       return catchErr(actorName, res, errorCode, err, controllerName);
     }
   };
+}
+export function createDeleteBooking(actorName, controllerName, whereFn) {
+  return createDelete(actorName, models.Booking, {
+    preAction: async req => {
+      // Log request for debugging
+      callLog(req, actorName, controllerName);
+      let errCode = 500; // default error code
+      const criteria = whereFn(req);
+
+      // Find the booking with related schedule and customer data
+      const foundRecord = await models.Booking.findOne({
+        where: criteria,
+        include: [
+          {
+            model: models.ScheduleRecord,
+            required: true,
+            include: [{ model: models.Product, required: true }],
+          },
+          {
+            model: models.Customer,
+            required: true,
+            include: [{ model: models.User, attributes: ['email'] }],
+          },
+        ],
+      });
+      if (!foundRecord) {
+        errCode = 404;
+        const err = new Error('Nie znaleziono rekordu obecności w dzienniku.');
+        err.status = 404;
+        throw err;
+      }
+
+      // Extract data for email notification
+      const currentScheduleRecord = foundRecord.ScheduleRecord;
+      const customerEmail = foundRecord.Customer.User.email;
+      const wantsNotifications = foundRecord.Customer.User.UserPrefSetting
+        ? foundRecord.Customer.User.UserPrefSetting.notifications
+        : true;
+
+      return { currentScheduleRecord, customerEmail, wantsNotifications };
+    },
+
+    // Delete the booking
+    where: whereFn,
+
+    // Send notification email if the user wants it
+    postAction: async ({
+      currentScheduleRecord,
+      customerEmail,
+      wantsNotifications,
+    }) => {
+      if (customerEmail && wantsNotifications) {
+        sendBookingDeletedMail({
+          to: customerEmail,
+          productName: currentScheduleRecord.Product.name || 'Zajęcia',
+          date: currentScheduleRecord.date,
+          startTime: currentScheduleRecord.startTime,
+          location: currentScheduleRecord.location,
+          isAdmin: true,
+        });
+      }
+    },
+
+    successMessage:
+      'Rekord obecności usunięty. Rekord płatności pozostał nieruszony.',
+    notFoundMessage: 'Nie usunięto rekordu obecności w dzienniku.',
+  });
 }
