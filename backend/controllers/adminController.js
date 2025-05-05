@@ -751,10 +751,7 @@ export const getAllSchedules = createGetAll(actor, models.ScheduleRecord, {
     },
   ], // no extra joins
   excludeFields: ['productId'], // hide foreign key
-  mapRecord: rec => {
-    // turn Sequelize instance into plain JS object
-    const sched = rec.get({ plain: true });
-
+  mapRecord: sched => {
     // count active bookings (attendance true/1)
     const activeBookings = (sched.Bookings || []).filter(
       b => b.attendance === true || b.attendance === 1
@@ -1080,28 +1077,30 @@ export const putEditSchedule = async (req, res, next) => {
   }
 };
 //@ DELETE
-export const deleteSchedule = async (req, res, next) => {
-  const controllerName = 'deleteSchedule';
-  // Log request for debugging
-  callLog(req, actor, controllerName);
+export const deleteSchedule = createDelete(actor, models.ScheduleRecord, {
+  // primary key field in ScheduleRecord is scheduleId
+  primaryKeyName: 'scheduleId',
 
-  let errCode = 500; // default error code
-  const id = req.params.id;
-  console.log(`${controllerName} deleting id: `, id);
+  // preAction runs all the checks and logs with emojis
+  preAction: async req => {
+    const controllerName = 'deleteSchedule';
+    // Log that admin called this endpoint
+    console.log(`➡️➡️➡️ admin called`, controllerName);
 
-  try {
+    const id = req.params.id;
+    console.log(`${controllerName} deleting id:`, id);
+
     // Find the schedule record by ID
     const foundSchedule = await models.ScheduleRecord.findOne({
       where: { scheduleId: id },
     });
-
-    // If not found, throw 404
     if (!foundSchedule) {
-      errCode = 404;
       console.log(
         `❌❌❌ Error Admin ${controllerName} Schedule to delete not found.`
       );
-      throw new Error('Nie znaleziono terminu do usunięcia.');
+      const err = new Error('Nie znaleziono terminu do usunięcia.');
+      err.status = 404;
+      throw err;
     }
 
     // If the schedule is in the past, block deletion
@@ -1109,50 +1108,38 @@ export const deleteSchedule = async (req, res, next) => {
       `${foundSchedule.date}T${foundSchedule.startTime}:00`
     );
     if (scheduleDateTime < new Date()) {
-      errCode = 400;
       console.log(
         `❌❌❌ Error Admin ${controllerName} Schedule is passed - can't be deleted.`
       );
-      throw new Error(
+      const err = new Error(
         'Nie można usunąć terminu który już minął. Posiada też wartość historyczną dla statystyk.'
       );
+      err.status = 400;
+      throw err;
     }
 
     // Check if any bookings exist for this schedule
-    const foundRecord = await models.Booking.findOne({
+    const hasBooking = await models.Booking.findOne({
       where: { scheduleId: id },
     });
-    if (foundRecord) {
-      errCode = 409;
+    if (hasBooking) {
       console.log(
         `❌❌❌ Error Admin ${controllerName} Schedule is booked - can't be deleted.`
       );
-      throw new Error(
+      const err = new Error(
         'Nie można usunąć terminu, który posiada rekordy obecności (obecny/anulowany). Najpierw USUŃ rekordy obecności w konkretnym terminie.'
       );
+      err.status = 409;
+      throw err;
     }
 
-    // Delete the schedule
-    const deletedCount = await foundSchedule.destroy();
-    // If destroy() returns falsy, treat as not deleted
-    if (!deletedCount) {
-      errCode = 404;
-      console.log(`❌❌❌ Error Admin ${controllerName} Schedule not deleted.`);
-      throw new Error('Nie usunięto terminu.');
-    }
+    // If we get here, deletion is permitted
+  },
 
-    // Log success and send response
-    successLog(actor, controllerName);
-    return res.status(200).json({
-      confirmation: 1,
-      message: 'Termin usunięty pomyślnie.',
-    });
-  } catch (err) {
-    // Handle errors centrally
-    console.error('[deleteSchedule] error:', err);
-    return catchErr(actor, res, errCode, err, controllerName);
-  }
-};
+  // Message on successful deletion
+  successMessage: 'Termin usunięty pomyślnie.',
+  notFoundMessage: 'Nie znaleziono terminu do usunięcia.',
+});
 
 //! PRODUCTS_____________________________________________
 //@ GET
