@@ -218,6 +218,10 @@ export function createDelete(
       successLog(actorName, controllerName);
       return res.json({ confirmation: 1, message: successMessage });
     } catch (err) {
+      // respect err.status if set in preAction
+      if (err.status && Number.isInteger(err.status)) {
+        errorCode = err.status;
+      }
       return catchErr(actorName, res, errorCode, err, controllerName);
     }
   };
