@@ -440,245 +440,237 @@ export const postSignup = async (req, res, next) => {
 };
 
 //! PASSWORD___________________________________________________
-//@ GET
-// To check if users in-url given password is valid
-export const getPasswordToken = (req, res, next) => {
+export const getPasswordToken = async (req, res, next) => {
   const controllerName = 'getPasswordToken';
   callLog(req, person, controllerName);
-  const token = req.params.token;
+  let errCode = 500;
 
-  if (!token) {
-    errCode = 400;
-    throw Error(msgs.incompleteToken);
-  }
-  if (token.length !== 64) {
-    errCode = 400;
-    throw Error(msgs.invalidTokenMessage);
-  }
+  try {
+    // extract token from URL params
+    const token = req.params.token;
+    if (!token) {
+      errCode = 400;
+      throw new Error(msgs.incompleteToken);
+    }
+    if (token.length !== 64) {
+      errCode = 400;
+      throw new Error(msgs.invalidTokenMessage);
+    }
 
-  models.VerificationToken.findOne({
-    where: {
-      token: token,
-      type: 'password',
-      expirationDate: { [Op.gt]: new Date() }, // Validation
-      used: false,
-    },
-    include: [
-      {
-        model: models.User,
-        required: true, // If there will be no user assigned - error = extra validation
+    // look up a valid, unused password-reset token
+    const validTokenRecord = await models.VerificationToken.findOne({
+      where: {
+        token,
+        type: 'password',
+        expirationDate: { [Op.gt]: new Date() },
+        used: false,
       },
-    ],
-  })
-    .then(validTokenRecord => {
-      if (!validTokenRecord) {
-        errCode = 400;
-        console.log('\n❌❌❌ Wrong token');
-        throw Error(msgs.invalidTokenMessage);
-      }
-      successLog(person, controllerName);
+      include: [{ model: models.User, required: true }],
+    });
 
-      return res.status(200).json({
-        confirmation: 1,
-        userId: validTokenRecord.userId,
-        message: msgs.validTokenMessage,
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
+    // if no record found, treat as invalid
+    if (!validTokenRecord) {
+      errCode = 400;
+      console.log('❌ Wrong or expired password token');
+      throw new Error(msgs.invalidTokenMessage);
+    }
+
+    // successful lookup
+    successLog(person, controllerName);
+    return res.status(200).json({
+      confirmation: 1,
+      userId: validTokenRecord.userId,
+      message: msgs.validTokenMessage,
+    });
+  } catch (err) {
+    // central error handling
+    return catchErr(person, res, errCode, err, controllerName);
+  }
 };
 //@ POST
-export const postResetPassword = (req, res, next) => {
+export const postResetPassword = async (req, res, next) => {
   const controllerName = 'postResetPassword';
-
-  crypto.randomBytes(32, (err, buffer) => {
-    if (err) {
-      catchErr(person, res, errCode, err, controllerName);
-    }
-    // buffer is in hex format
-    const token = buffer.toString('hex');
-
-    models.User.findOne({ where: { email: req.body.email } })
-      .then(user => {
-        if (!user) {
-          errCode = 404;
-          console.log("\n❌❌❌ User doesn't exist");
-          throw new Error(msgs.userNotFound);
-        }
-
-        return models.VerificationToken.create({
-          userId: user.userId,
-          type: 'password',
-          token: token,
-          expirationDate: new Date(Date.now() + 3600000), // 1 hour
-        }).then(() => user);
-      })
-      .then(user => {
-        sendResetPassRequestMail({ to: req.body.email, token: token });
-
-        return res.status(200).json({
-          type: 'reset',
-          code: 200,
-          confirmation: 1,
-          message: msgs.passwordResetLinkSent,
-        });
-      })
-      .catch(err =>
-        catchErr(person, res, errCode, err, controllerName, {
-          type: 'reset',
-          code: 404,
-        })
-      );
-  });
-
   callLog(req, person, controllerName);
-  successLog(person, controllerName);
+  let errCode = 500;
+
+  try {
+    // generate a secure random token (synchronously)
+    const token = crypto.randomBytes(32).toString('hex');
+
+    // look up the user by email
+    const user = await models.User.findOne({
+      where: { email: req.body.email },
+    });
+    if (!user) {
+      errCode = 404;
+      console.log("\n❌❌❌ User doesn't exist");
+      throw new Error(msgs.userNotFound);
+    }
+
+    // create a password reset token that expires in 1 hour
+    await models.VerificationToken.create({
+      userId: user.userId,
+      type: 'password',
+      token,
+      expirationDate: new Date(Date.now() + 60 * 60 * 1000), // 1 hour
+      used: false,
+    });
+
+    // send the reset link email
+    sendResetPassRequestMail({ to: req.body.email, token });
+
+    // respond with success
+    return res.status(200).json({
+      type: 'reset',
+      code: 200,
+      confirmation: 1,
+      message: msgs.passwordResetLinkSent,
+    });
+  } catch (err) {
+    // handle errors centrally
+    return catchErr(person, res, errCode, err, controllerName, {
+      type: 'reset',
+      code: errCode || 404,
+    });
+  }
 };
-export const postResendActivation = (req, res, next) => {
+export const postResendActivation = async (req, res, next) => {
   const controllerName = 'postResendActivation';
   callLog(req, person, controllerName);
-  const { email } = req.body;
-  let targetUser;
+  let errCode = 500;
 
-  models.User.findOne({ where: { email } })
-    .then(user => {
-      if (!user) {
-        errCode = 404;
-        throw new Error(msgs.userNotFound);
-      }
-      targetUser = user;
+  try {
+    const { email } = req.body;
 
-      // if already verified - neutral status + return
-      if (user.emailVerified) {
-        successLog(person, controllerName);
-        res.status(200).json({
-          type: 'resendVerifyEmail',
-          code: 200,
-          confirmation: 0,
-          message: msgs.emailAlreadyVerified,
-        });
-        return null; //  end of chain
-      }
+    // find user by email
+    const user = await models.User.findOne({ where: { email } });
+    if (!user) {
+      errCode = 404;
+      throw new Error(msgs.userNotFound);
+    }
 
-      // Deactivate all the previous tokens
-      return models.VerificationToken.update(
-        { used: true },
-        {
-          where: {
-            userId: user.userId,
-            type: 'email',
-            used: false,
-          },
-        }
-      ).then(() => user);
-    })
-    .then(user => {
-      // if user is null it means that res has been send - nothing more to do
-      if (!user) return null;
-
-      // generate token
-      const token = crypto.randomBytes(32).toString('hex');
-      const expiration = new Date(Date.now() + 1000 * 60 * 60 * 24); // 24h
-      return models.VerificationToken.create({
-        userId: targetUser.userId,
-        type: 'email',
-        token,
-        expirationDate: expiration,
-      }).then(() => token);
-    })
-    .then(token => {
-      if (!token) return null;
-
-      // send an email with this token
-      sendSignupConfirmationMail({
-        to: targetUser.email,
-        token,
-      });
-
-      successLog(person, controllerName);
-      res.status(200).json({
+    // if the account is already verified, return a neutral status
+    if (user.emailVerified) {
+      successLog(person, controllerName, 'already verified');
+      return res.status(200).json({
         type: 'resendVerifyEmail',
         code: 200,
-        confirmation: 1,
-        message: msgs.emailVerifiedSent,
+        confirmation: 0,
+        message: msgs.emailAlreadyVerified,
       });
-    })
-    .catch(err => {
-      // if (user === null) catch doesn't do anything either
-      if (res.headersSent) return;
-      catchErr(person, res, errCode, err, controllerName, {
-        type: 'resendVerifyEmail',
-        code: errCode || 500,
-      });
+    }
+
+    // mark all previous email tokens as used
+    await models.VerificationToken.update(
+      { used: true },
+      {
+        where: {
+          userId: user.userId,
+          type: 'email',
+          used: false,
+        },
+      }
+    );
+
+    // generate a new activation token and save it
+    const token = crypto.randomBytes(32).toString('hex');
+    const expiration = new Date(Date.now() + 1000 * 60 * 60 * 24); // 24h
+    await models.VerificationToken.create({
+      userId: user.userId,
+      type: 'email',
+      token,
+      expirationDate: expiration,
     });
+
+    // send the activation email
+    sendSignupConfirmationMail({ to: email, token });
+
+    successLog(person, controllerName, 'activation resent');
+    return res.status(200).json({
+      type: 'resendVerifyEmail',
+      code: 200,
+      confirmation: 1,
+      message: msgs.emailVerifiedSent,
+    });
+  } catch (err) {
+    if (res.headersSent) return;
+    return catchErr(person, res, errCode, err, controllerName, {
+      type: 'resendVerifyEmail',
+      code: errCode || 500,
+    });
+  }
 };
 //@ PUT
-export const putEditPassword = (req, res, next) => {
+export const putEditPassword = async (req, res, next) => {
   const controllerName = 'putEditPassword';
   callLog(req, person, controllerName);
-  const token = req.params.token;
-  const { password, confirmedPassword, userId } = req.body;
+  let errCode = 500;
 
-  if (password !== confirmedPassword) {
-    errCode = 400;
-    throw new Error(msgs.passwordsNotMatching);
-  }
-  let verToken;
-  // Find the token for this user
-  models.VerificationToken.findOne({
-    where: {
-      token: token,
-      type: 'password',
-      expirationDate: { [Op.gt]: new Date() }, // Token must be up-to-date
-    },
-    include: [
-      {
-        model: models.User,
-        required: true,
-        where: { userId: userId }, // additional safety check
+  try {
+    // extract token and new passwords from request
+    const token = req.params.token;
+    const { password, confirmedPassword, userId } = req.body;
+
+    // ensure the two passwords match
+    if (password !== confirmedPassword) {
+      errCode = 400;
+      throw new Error(msgs.passwordsNotMatching);
+    }
+
+    // look up a valid, unused password-reset token for this user
+    const verToken = await models.VerificationToken.findOne({
+      where: {
+        token,
+        type: 'password',
+        expirationDate: { [Op.gt]: new Date() },
+        used: false,
       },
-    ],
-  })
-    .then(validTokenRecord => {
-      console.log(
-        'Token from DB:',
-        validTokenRecord ? validTokenRecord.token : 'No token found'
-      );
-      if (!validTokenRecord) {
-        console.log('\n❌❌❌ Wrong token');
-        errCode = 400;
-        throw new Error(msgs.sessionExpired);
-      }
+      include: [
+        {
+          model: models.User,
+          required: true,
+          where: { userId },
+        },
+      ],
+    });
 
-      verToken = validTokenRecord;
-      // Hash the new password
-      return bcrypt.hash(password, 12).then(hashedPassword => {
-        if (!hashedPassword) throw new Error(msgs.passwordEncryptionError);
+    // if token not found or expired, abort
+    if (!verToken) {
+      errCode = 400;
+      console.log('\n❌❌❌ Wrong token');
+      throw new Error(msgs.sessionExpired);
+    }
 
-        verToken.User.passwordHash = hashedPassword;
-        // Save the updated user password
-        return verToken.User.save();
+    // hash the new password
+    const hashed = await bcrypt.hash(password, 12);
+    if (!hashed) throw new Error(msgs.passwordEncryptionError);
+
+    // save the new password
+    verToken.User.passwordHash = hashed;
+    await verToken.User.save();
+
+    // log the successful update
+    successLog(person, controllerName);
+
+    // respond to client immediately
+    res.status(200).json({
+      type: 'new-password',
+      code: 200,
+      confirmation: 1,
+      message: msgs.passwordUpdated,
+    });
+
+    // after a short delay, mark this token as used
+    setTimeout(() => {
+      verToken.update({ used: true }).catch(err => {
+        console.log('Failed to mark token as used:', err);
       });
-    })
-    .then(userSaved => {
-      successLog(person, controllerName);
-      // Najpierw wyślij odpowiedź do klienta:
-      res.status(200).json({
-        type: 'new-password',
-        code: 200,
-        confirmation: 1,
-        message: msgs.passwordUpdated,
-      });
-
-      setTimeout(() => {
-        verTokenRecord.update({ used: true }).catch(err => {
-          console.log('Nie udało się oznaczyć tokena jako used:', err);
-        });
-      }, 5000);
-    })
-    .catch(err =>
-      catchErr(person, res, errCode, err, controllerName, {
-        type: 'editPassword',
-        code: 404,
-      })
-    );
+    }, 5000);
+  } catch (err) {
+    // central error handler
+    return catchErr(person, res, errCode, err, controllerName, {
+      type: 'editPassword',
+      code: errCode || 404,
+    });
+  }
 };
