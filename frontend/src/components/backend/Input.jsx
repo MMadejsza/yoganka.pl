@@ -80,6 +80,11 @@ function Input({
       );
     }
   } else if (props.type == 'select') {
+    const optionsArr = options.map((option, index) => (
+      <option key={index} value={option.value}>
+        {option.label}
+      </option>
+    ));
     input = (
       <select
         id={id}
@@ -88,11 +93,13 @@ function Input({
         value={value}
         className={selectClass}
       >
-        {options.map((option, index) => (
-          <option key={index} value={option.value}>
-            {option.label}
-          </option>
-        ))}
+        {optionsArr.length > 0
+          ? optionsArr
+          : [
+              <option key={0} value={null}>
+                Brak
+              </option>,
+            ]}
       </select>
     );
   } else if (props.type == 'textarea') {
