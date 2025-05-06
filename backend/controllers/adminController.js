@@ -2066,143 +2066,95 @@ export const putEditMarkPresent = async (req, res, next) => {
 
 //! PAYMENTS_____________________________________________
 //@ GET
-export const getAllPayments = async (req, res, next) => {
-  const controllerName = 'getAllPayments';
-  // Log request for debugging
-  callLog(req, actor, controllerName);
-
-  let errCode = 500;
-  try {
-    // Fetch all payments with customer and booking info
-    const records = await models.Payment.findAll({
-      include: [
-        { model: models.Customer, attributes: { exclude: ['userId'] } },
-        { model: models.Booking },
-      ],
-    });
-    // If no payments found, throw 404
-    if (!records || records.length === 0) {
-      errCode = 404;
-      throw new Error('Nie znaleziono płatności.');
-    }
-
+export const getAllPayments = createGetAll(actor, models.Payment, {
+  // Log request for debugging (handled by factory)
+  includeRelations: [
+    { model: models.Customer, attributes: { exclude: ['userId'] } },
+    { model: models.Booking },
+  ],
+  mapRecord: payment => {
     // Format each payment for frontend
-    const formattedRecords = records.map(record => {
-      const payment = record.toJSON();
-      const schedules = payment.Bookings?.map(b => b.ScheduleRecord);
+    const { Bookings, ...rest } = payment;
+    const schedules = Bookings?.map(b => b.ScheduleRecord);
+    return {
+      ...rest,
+      rowId: rest.paymentId,
+      date: formatIsoDateTime(rest.date),
+      customerFullName: `${rest.Customer.firstName} ${rest.Customer.lastName} (${rest.Customer.customerId})`,
+      schedules,
+    };
+  },
+  // sort by date descending
+  sortFunction: (a, b) => new Date(b.date) - new Date(a.date),
+  columnKeys: [
+    'paymentId',
+    'date',
+    'customerFullName',
+    'product',
+    'status',
+    'paymentMethod',
+    'amountPaid',
+    'performedBy',
+  ],
+  attachResponse: req => ({
+    // include login flag
+    isLoggedIn: req.session.isLoggedIn,
+  }),
+  successMessage: 'Płatności pobrane pomyślnie.',
+  notFoundMessage: 'Nie znaleziono płatności.',
+});
+export const getPaymentById = createGetById(actor, models.Payment, {
+  // Log request for debugging (handled by factory)
+  includeRelations: [
+    { model: models.Customer },
+    {
+      model: models.Booking,
+      required: false,
+      include: [
+        {
+          model: models.ScheduleRecord,
+          attributes: { exclude: ['userId'] },
+          include: [{ model: models.Product }],
+        },
+      ],
+    },
+    {
+      model: models.CustomerPass,
+      required: false,
+      include: [{ model: models.Customer }, { model: models.PassDefinition }],
+    },
+  ],
+  mapRecord: paymentRecord => {
+    // Format customer passes
+    const customerPasses = (paymentRecord.CustomerPasses || []).map(cp => {
+      const { Customer: cust, PassDefinition: def } = cp;
       return {
-        ...payment,
-        rowId: payment.paymentId,
-        date: formatIsoDateTime(payment.date),
-        customerFullName: `${payment.Customer.firstName} ${payment.Customer.lastName} (${payment.Customer.customerId})`,
-        schedules,
+        customerPassId: cp.customerPassId,
+        rowId: cp.customerPassId,
+        customerFirstName: cust.firstName,
+        customerLastName: cust.lastName,
+        customerId: cust.customerId,
+        passDefId: def.passDefId,
+        allowedProductTypes: def.allowedProductTypes,
+        passName: def.name,
+        purchaseDate: cp.purchaseDate,
+        validFrom: cp.validFrom,
+        validUntil: cp.validUntil,
+        usesLeft: cp.usesLeft,
+        status: cp.status,
       };
     });
-
-    // Define table columns
-    const totalKeys = [
-      'paymentId',
-      'date',
-      'customerFullName',
-      'product',
-      'status',
-      'paymentMethod',
-      'amountPaid',
-      'performedBy',
-    ];
-
-    // Log success and send response
-    successLog(actor, controllerName);
-    return res.json({
-      confirmation: 1,
-      message: 'Płatności pobrane pomyślnie.',
-      isLoggedIn: req.session.isLoggedIn,
-      totalKeys,
-      content: formattedRecords.sort(
-        (a, b) => new Date(b.date) - new Date(a.date)
-      ),
-    });
-  } catch (err) {
-    console.error('[getAllPayments] error:', err);
-    return catchErr(actor, res, errCode, err, controllerName);
-  }
-};
-export const getPaymentById = async (req, res, next) => {
-  const controllerName = 'getPaymentById';
-  // Log request for debugging
-  callLog(req, actor, controllerName);
-
-  let errCode = 500;
-  try {
-    const PK = req.params.id;
-    // Fetch payment with related data
-    const paymentRecord = await models.Payment.findByPk(PK, {
-      include: [
-        { model: models.Customer },
-        {
-          model: models.Booking,
-          required: false,
-          include: [
-            {
-              model: models.ScheduleRecord,
-              attributes: { exclude: ['userId'] },
-              include: [{ model: models.Product }],
-            },
-          ],
-        },
-        {
-          model: models.CustomerPass,
-          required: false,
-          include: [
-            { model: models.Customer },
-            { model: models.PassDefinition },
-          ],
-        },
-      ],
-    });
-    // If not found, throw 404
-    if (!paymentRecord) {
-      errCode = 404;
-      throw new Error('Nie znaleziono płatności.');
-    }
-
-    const parsed = paymentRecord.toJSON();
-    // Format customer passes
-    const customerPasses =
-      parsed.CustomerPasses?.map(cp => {
-        const cust = cp.Customer;
-        const def = cp.PassDefinition;
-        return {
-          customerPassId: cp.customerPassId,
-          rowId: cp.customerPassId,
-          customerFirstName: cust.firstName,
-          customerLastName: cust.lastName,
-          customerId: cust.customerId,
-          passDefId: def.passDefId,
-          allowedProductTypes: def.allowedProductTypes,
-          passName: def.name,
-          purchaseDate: cp.purchaseDate,
-          validFrom: cp.validFrom,
-          validUntil: cp.validUntil,
-          usesLeft: cp.usesLeft,
-          status: cp.status,
-        };
-      }) || [];
-    delete parsed.CustomerPasses;
-
-    // Log success and send response
-    successLog(actor, controllerName);
-    return res.status(200).json({
-      confirmation: 1,
-      message: 'Płatność pobrana pomyślnie.',
-      isLoggedIn: req.session.isLoggedIn,
-      payment: { ...parsed, customerPasses },
-    });
-  } catch (err) {
-    console.error('[getPaymentById] error:', err);
-    return catchErr(actor, res, errCode, err, controllerName);
-  }
-};
+    delete paymentRecord.CustomerPasses;
+    // return under "payment" key with formatted customerPasses
+    return { ...paymentRecord, customerPasses };
+  },
+  // include login flag
+  attachResponse: req => ({
+    isLoggedIn: req.session.isLoggedIn,
+  }),
+  successMessage: 'Płatność pobrana pomyślnie.',
+  notFoundMessage: 'Nie znaleziono płatności.',
+});
 //@ POST
 export const postCreatePayment = async (req, res, next) => {
   const controllerName = 'postCreatePayment';
@@ -2467,13 +2419,8 @@ export const postCreatePayment = async (req, res, next) => {
 };
 //@ PUT
 //@ DELETE
-export const deletePayment = async (req, res, next) => {
-  const controllerName = 'deletePayment';
-  // Log request for debugging
-  callLog(req, actor, controllerName);
-
-  let errCode = 500;
-  try {
+export const deletePayment = createDelete(actor, models.Payment, {
+  preAction: async req => {
     const id = req.params.id;
 
     // Load the payment to get customer email
@@ -2487,307 +2434,186 @@ export const deletePayment = async (req, res, next) => {
       ],
     });
     if (!payment) {
-      errCode = 404;
-      throw new Error('Nie znaleziono płatności.');
+      const err = new Error('Nie znaleziono płatności.');
+      err.status = 404;
+      throw err;
     }
 
-    // Send cancellation email if customer email exists
-    const customerEmail = payment.Customer?.User?.email;
+    // pass to postAction email and paymentId
+    return {
+      customerEmail: payment.Customer?.User?.email,
+      paymentId: id,
+    };
+  },
+
+  // where for delete
+  where: req => ({ paymentId: req.params.id }),
+
+  // Send cancellation email if customer email exists
+  postAction: async ({ customerEmail, paymentId }) => {
     if (customerEmail) {
       await adminEmails.sendPaymentCancelledMail({
         to: customerEmail,
-        paymentId: payment.paymentId,
+        paymentId,
         isAdmin: true,
       });
     }
-
-    // Delete the payment record
-    const deletedCount = await models.Payment.destroy({
-      where: { paymentId: id },
-    });
-    if (!deletedCount) {
-      errCode = 500;
-      throw new Error('Wystąpił problem przy usuwaniu płatności.');
-    }
-
-    // Log success and send response
-    successLog(actor, controllerName);
-    return res.status(200).json({
-      confirmation: 1,
-      message: 'Płatność usunięta pomyślnie.',
-    });
-  } catch (err) {
-    console.error('[deletePayment] error:', err);
-    return catchErr(actor, res, errCode, err, controllerName);
-  }
-};
+  },
+  successMessage: 'Płatność usunięta pomyślnie.',
+  notFoundMessage: 'Nie znaleziono płatności.',
+});
 
 //! INVOICES_____________________________________________
 //@ GET
-export const getAllInvoices = async (req, res, next) => {
-  const controllerName = 'getAllInvoices';
-  // Log request for debugging
-  callLog(req, actor, controllerName);
-
-  let errCode = 500;
-  try {
-    // Fetch all invoices with related payment and customer data
-    const records = await models.Invoice.findAll({
-      include: [
-        {
-          model: models.Payment,
-          include: [{ model: models.Customer }],
-        },
-      ],
-      attributes: { exclude: ['product'] },
-    });
-    if (!records || records.length === 0) {
-      errCode = 404;
-      throw new Error('Nie znaleziono faktur.');
-    }
-
-    // Format each invoice for frontend
-    const formattedRecords = records.map(record => {
-      const invoice = record.toJSON();
-      return {
-        ...invoice,
-        rowId: invoice.invoiceId,
-        invoiceDate: formatIsoDateTime(invoice.invoiceDate),
-        customerFullName: `${invoice.Payment.Customer.firstName} ${invoice.Payment.Customer.lastName}`,
-      };
-    });
-
-    // Define table columns
-    const totalKeys = [
-      'invoiceId',
-      'paymentId',
-      'invoiceDate',
-      'customerFullName',
-      'dueDate',
-      'paymentStatus',
-      'totalAmount',
-    ];
-
-    // Log success and send response
-    successLog(actor, controllerName);
-    return res.json({
-      confirmation: 1,
-      message: 'Faktury pobrane pomyślnie.',
-      isLoggedIn: req.session.isLoggedIn,
-      totalKeys,
-      content: formattedRecords,
-    });
-  } catch (err) {
-    console.error('[getAllInvoices] error:', err);
-    return catchErr(actor, res, errCode, err, controllerName);
-  }
-};
+export const getAllInvoices = createGetAll(actor, models.Invoice, {
+  includeRelations: [
+    {
+      model: models.Payment,
+      include: [{ model: models.Customer }],
+    },
+  ],
+  excludeFields: ['product'],
+  mapRecord: invoice => ({
+    ...invoice,
+    rowId: invoice.invoiceId,
+    invoiceDate: formatIsoDateTime(invoice.invoiceDate),
+    customerFullName: `${invoice.Payment.Customer.firstName} ${invoice.Payment.Customer.lastName}`,
+  }),
+  columnKeys: [
+    'invoiceId',
+    'paymentId',
+    'invoiceDate',
+    'customerFullName',
+    'dueDate',
+    'paymentStatus',
+    'totalAmount',
+  ],
+  attachResponse: req => ({
+    isLoggedIn: req.session.isLoggedIn,
+  }),
+  successMessage: 'Faktury pobrane pomyślnie.',
+  notFoundMessage: 'Nie znaleziono faktur.',
+});
 //@ POST
 //@ PUT
 //@ DELETE
 
 //! FEEDBACK_____________________________________________
 //@ GET
-export const getAllParticipantsFeedback = async (req, res, next) => {
-  const controllerName = 'getAllParticipantsFeedback';
-  // Log request for debugging
-  callLog(req, actor, controllerName);
+export const getAllParticipantsFeedback = createGetAll(actor, models.Feedback, {
+  includeRelations: [
+    { model: models.Customer },
+    {
+      model: models.ScheduleRecord,
+      include: [{ model: models.Product, attributes: ['name'] }],
+    },
+  ],
+  excludeFields: ['product'],
+  mapRecord: feedback => {
+    return {
+      ...feedback,
+      rowId: feedback.feedbackId,
+      submissionDate: formatIsoDateTime(feedback.submissionDate),
+      customerFullName: `${feedback.Customer.firstName} ${feedback.Customer.lastName} (${feedback.Customer.customerId})`,
+      schedule: `${feedback.ScheduleRecord.Product.name} ${feedback.ScheduleRecord.date} | ${feedback.ScheduleRecord.startTime}`,
+    };
+  },
+  columnKeys: [
+    'feedbackId',
+    'submissionDate',
+    'delay',
+    'schedule',
+    'rating',
+    'content',
+    'customerFullName',
+  ],
+  attachResponse: req => ({
+    isLoggedIn: req.session.isLoggedIn,
+  }),
+  successMessage: 'Opinie pobrane pomyślnie',
+  notFoundMessage: 'Nie znaleziono opinii.',
+});
+export const getAllParticipantsFeedbackById = createGetById(
+  actor,
+  models.Feedback,
+  {
+    // Log request for debugging (handled by factory)
+    includeRelations: [
+      { model: models.Customer },
+      {
+        model: models.ScheduleRecord,
+        attributes: { exclude: ['productId'] },
+        include: [{ model: models.Product }],
+      },
+    ],
+    excludeFields: ['customerId', 'scheduleId'],
 
-  let errCode = 500;
-  try {
-    // Fetch all feedbacks with customer and schedule->product
-    const records = await models.Feedback.findAll({
-      include: [
-        { model: models.Customer },
-        {
-          model: models.ScheduleRecord,
-          include: [{ model: models.Product, attributes: ['name'] }],
-        },
-      ],
-      attributes: { exclude: ['product'] },
-    });
-    if (!records || records.length === 0) {
-      errCode = 404;
-      throw new Error('Nie znaleziono opinii.');
-    }
-
-    // Format each feedback for frontend
-    const formattedRecords = records.map(record => {
-      const feedback = record.toJSON();
-      return {
-        ...feedback,
-        rowId: feedback.feedbackId,
-        submissionDate: formatIsoDateTime(feedback.submissionDate),
-        customerFullName: `${feedback.Customer.firstName} ${feedback.Customer.lastName} (${feedback.Customer.customerId})`,
-        schedule: `${feedback.ScheduleRecord.Product.name} ${feedback.ScheduleRecord.date} | ${feedback.ScheduleRecord.startTime}`,
-      };
-    });
-
-    // Define table columns
-    const totalKeys = [
-      'feedbackId',
-      'submissionDate',
-      'delay',
-      'schedule',
-      'rating',
-      'content',
-      'customerFullName',
-    ];
-
-    // Log success and send response
-    successLog(actor, controllerName);
-    return res.json({
-      confirmation: 1,
-      message: 'Opinie pobrane pomyślnie',
-      isLoggedIn: req.session.isLoggedIn,
-      totalKeys,
-      content: formattedRecords,
-    });
-  } catch (err) {
-    console.error('[getAllParticipantsFeedback] error:', err);
-    return catchErr(actor, res, errCode, err, controllerName);
-  }
-};
-export const getAllParticipantsFeedbackById = async (req, res, next) => {
-  const controllerName = 'getAllParticipantsFeedbackById';
-  // Log request for debugging
-  callLog(req, actor, controllerName);
-
-  let errCode = 500;
-  try {
-    const PK = req.params.id;
-    // Fetch the requested feedback with its customer and schedule->product
-    const review = await models.Feedback.findByPk(PK, {
-      include: [
-        { model: models.Customer },
-        {
-          model: models.ScheduleRecord,
-          attributes: { exclude: ['productId'] },
-          include: [{ model: models.Product }],
-        },
-      ],
-      attributes: { exclude: ['customerId', 'scheduleId'] },
-    });
-    if (!review) {
-      errCode = 404;
-      throw new Error('Nie znaleziono opinii.');
-    }
+    // Fetch the requested review with its customer and schedule->product
+    mapRecord: review => review,
 
     // Fetch other reviews by same customer, excluding this one
-    const otherReviews = await models.Feedback.findAll({
-      where: {
-        customerId: review.Customer.customerId,
-        feedbackId: { [Op.ne]: PK },
-      },
-      include: [
-        {
-          model: models.ScheduleRecord,
-          attributes: { exclude: ['productId'] },
-          include: [{ model: models.Product }],
+    postAction: async (req, review) => {
+      const otherReviews = await models.Feedback.findAll({
+        where: {
+          customerId: review.Customer.customerId,
+          feedbackId: { [Op.ne]: review.feedbackId },
         },
-      ],
-      attributes: { exclude: ['customerId', 'scheduleId'] },
-    });
+        include: [
+          {
+            model: models.ScheduleRecord,
+            attributes: { exclude: ['productId'] },
+            include: [{ model: models.Product }],
+          },
+        ],
+        attributes: { exclude: ['customerId', 'scheduleId'] },
+      });
+      req.otherReviews = otherReviews.map(o => o.toJSON());
+    },
 
-    // Log success and send response
-    successLog(actor, controllerName);
-    return res.status(200).json({
-      confirmation: 1,
-      message: 'Opinia pobrana pomyślnie',
+    // include login flag and otherReviews in response
+    attachResponse: req => ({
       isLoggedIn: req.session.isLoggedIn,
-      review,
-      otherReviews,
-    });
-  } catch (err) {
-    console.error('[getAllParticipantsFeedbackById] error:', err);
-    return catchErr(actor, res, errCode, err, controllerName);
+      otherReviews: req.otherReviews,
+    }),
+    resultName: 'review',
+    successMessage: 'Opinia pobrana pomyślnie',
+    notFoundMessage: 'Nie znaleziono opinii.',
   }
-};
+);
 //@ POST
 //@ PUT
 //@ DELETE
-export const deleteFeedback = async (req, res, next) => {
-  const controllerName = 'deleteFeedback';
-  // Log request for debugging
-  callLog(req, actor, controllerName);
-
-  let errCode = 500;
-  try {
-    const id = req.params.id;
-
-    // Delete the feedback by its ID
-    const deletedCount = await models.Feedback.destroy({
-      where: { feedbackId: id },
-    });
-    // If nothing was deleted, treat as not found
-    if (!deletedCount) {
-      errCode = 404;
-      throw new Error('Nie usunięto opinii.');
-    }
-
-    // Log success and send response
-    successLog(actor, controllerName);
-    return res.status(200).json({
-      confirmation: 1,
-      message: 'Opinia usunięta pomyślnie.',
-    });
-  } catch (err) {
-    console.error('[deleteFeedback] error:', err);
-    return catchErr(actor, res, errCode, err, controllerName);
-  }
-};
+export const deleteFeedback = createDelete(actor, models.Feedback, {
+  // Delete the feedback by its ID (factory uses feedbackId = req.params.id)
+  successMessage: 'Opinia usunięta pomyślnie.',
+  notFoundMessage: 'Nie usunięto opinii.',
+});
 
 //! NEWSLETTERS_____________________________________________
 //@ GET
-export const getAllNewsletters = async (req, res, next) => {
-  const controllerName = 'getAllNewsletters';
-  // Log request for debugging
-  callLog(req, actor, controllerName);
+export const getAllNewsletters = createGetAll(actor, models.Newsletter, {
+  includeRelations: [], // no extra joins
+  excludeFields: [], // hide no fields
 
-  let errCode = 500;
-  try {
-    // Fetch all newsletter records
-    const records = await models.Newsletter.findAll();
-    // If none found, throw 404
-    if (!records || records.length === 0) {
-      errCode = 404;
-      throw new Error('Nie znaleziono rekordów.');
-    }
+  // Format each newsletter for frontend
+  mapRecord: newsletter => ({
+    ...newsletter,
+    rowId: newsletter.newsletterId,
+    creationDate: formatIsoDateTime(newsletter.creationDate),
+    sendDate: formatIsoDateTime(newsletter.sendDate),
+  }),
 
-    // Format each newsletter for frontend
-    const formattedRecords = records.map(record => {
-      const newsletter = record.toJSON();
-      return {
-        ...newsletter,
-        rowId: newsletter.newsletterId,
-        creationDate: formatIsoDateTime(newsletter.creationDate),
-        sendDate: formatIsoDateTime(newsletter.sendDate),
-      };
-    });
-
-    // Define table columns
-    const totalKeys = [
-      'newsletterId',
-      'status',
-      'creationDate',
-      'sendDate',
-      'title',
-      'content',
-    ];
-
-    // Log success and send response
-    successLog(actor, controllerName);
-    return res.json({
-      totalKeys,
-      confirmation: 1,
-      message: 'Pobrano pomyślnie',
-      content: formattedRecords,
-    });
-  } catch (err) {
-    console.error('[getAllNewsletters] error:', err);
-    return catchErr(actor, res, errCode, err, controllerName);
-  }
-};
+  columnKeys: [
+    'newsletterId',
+    'status',
+    'creationDate',
+    'sendDate',
+    'title',
+    'content',
+  ],
+  successMessage: 'Pobrano pomyślnie',
+  notFoundMessage: 'Nie znaleziono rekordów.',
+});
 export const getAllSubscribedNewsletters = (req, res, next) => {
   //
 };
