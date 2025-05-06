@@ -82,14 +82,12 @@ export const getUserById = createGetById(actor, models.User, {
     },
   ],
   excludeFields: ['passwordHash'],
-  mapRecord: instance => {
-    const user = instance.toJSON();
+  mapRecord: user => {
     delete user.passwordHash;
     return user;
   },
   successMessage: 'Konto pobrane pomyślnie.',
 });
-//! NO FACTORY USED
 export const getUserSettings = async (req, res, next) => {
   const controllerName = 'getUserSettings';
   // Log request for debugging
@@ -353,8 +351,7 @@ export const getAllCustomersWithEligiblePasses = createGetAll(
     },
 
     // filter and attach eligiblePasses exactly as before (schedule=hookData)
-    mapRecord: (customerInstance, schedule) => {
-      const customer = customerInstance.toJSON();
+    mapRecord: (customer, schedule) => {
       const allPasses = Array.isArray(customer.CustomerPasses)
         ? customer.CustomerPasses
         : [];
@@ -470,11 +467,7 @@ export const getCustomerById = createGetById(actor, models.Customer, {
     },
   ],
 
-  // after fetching, convert instance to JSON and adjust output
-  mapRecord: (instance, req) => {
-    // convert Sequelize object to plain JS
-    const customer = instance.toJSON();
-
+  mapRecord: (customer, req) => {
     // for each pass, add human-readable passName
     customer.CustomerPasses = (customer.CustomerPasses || []).map(cp => ({
       ...cp,
@@ -816,10 +809,7 @@ export const getScheduleById = createGetById(actor, models.ScheduleRecord, {
       attributes: { exclude: ['customerId'] },
     },
   ],
-  mapRecord: scheduleData => {
-    // Convert the Sequelize instance to a plain JS object
-    const schedule = scheduleData.toJSON();
-
+  mapRecord: schedule => {
     // Initialize attendance counts
     schedule.attendance = 0;
     let attendedRecords = [];
@@ -1220,6 +1210,8 @@ export const getProductById = createGetById(actor, models.Product, {
     },
   ],
 
+  mapRecord: product => product,
+
   // message on success / not found
   successMessage: 'Produkt pobrany pomyślnie.',
   notFoundMessage: 'Nie znaleziono produktu.',
@@ -1393,6 +1385,8 @@ export const getAllPasses = createGetAll(actor, models.PassDefinition, {
           customerPassId: cp.customerPassId,
           rowId: cp.customerPassId,
           customerFullName: `${c.firstName} ${c.lastName}`,
+          customerFirstName: c.firstName,
+          customerLastName: c.lastName,
           customerId: cp.Customer.customerId,
           passName: pd.name,
           passDefId: pd.passDefId,
@@ -1404,6 +1398,7 @@ export const getAllPasses = createGetAll(actor, models.PassDefinition, {
         };
       })
       .sort((a, b) => new Date(b.purchaseDate) - new Date(a.purchaseDate));
+    console.log(formattedCustomerPasses);
 
     //stash on req so attachResponse can pick it up
     req.passExtras = {
@@ -1448,9 +1443,7 @@ export const getPassById = createGetById(actor, models.PassDefinition, {
     },
   ],
 
-  mapRecord: passData => {
-    const passDef = passData.toJSON();
-
+  mapRecord: passDef => {
     //Extract and format payments
     const payments = passDef.CustomerPasses.map(cp => {
       const { Customer, Payment } = cp;
@@ -1720,10 +1713,7 @@ export const getBookingById = createGetById(actor, models.Booking, {
     },
   ],
 
-  mapRecord: bookingInstance => {
-    // Convert to plain object
-    const booking = bookingInstance.toJSON();
-
+  mapRecord: booking => {
     // Calculate attendance count
     let attendance = 0;
     if (
@@ -1785,6 +1775,7 @@ export const postCreateBookingWithPass = async (req, res, next) => {
         transaction: t,
       });
       if (!customerPass) {
+        errCode = 404;
         throw new Error('Nie znaleziono karnetu uczestnika');
       }
       currentCustomerPass = customerPass;
@@ -1797,6 +1788,7 @@ export const postCreateBookingWithPass = async (req, res, next) => {
         lock: t.LOCK.UPDATE,
       });
       if (!scheduleRecord) {
+        errCode = 404;
         throw new Error('Nie znaleziono terminu');
       }
       currentScheduleRecord = scheduleRecord;
@@ -1828,6 +1820,7 @@ export const postCreateBookingWithPass = async (req, res, next) => {
         currentScheduleRecord
       );
       if (!validPass) {
+        errCode = 400;
         throw new Error('Karnet nie jest ważny na ten termin.');
       }
 
