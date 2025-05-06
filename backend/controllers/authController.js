@@ -19,335 +19,424 @@ const person = 'User';
 
 //! STATUS_____________________________________________________
 //@ GET
-export const getStatus = (req, res, next) => {
+// export const getStatus = (req, res, next) => {
+//   const controllerName = 'getStatus';
+//   callLog(req, 'User', controllerName);
+
+//   const isLoggedIn = res.locals.isLoggedIn || false;
+//   const role = res.locals.role;
+//   const token = res.locals.csrfToken;
+
+//   // If user is logged in, fetch full user with preferences + passes
+//   if (isLoggedIn && req.user?.userId) {
+//     models.User.findByPk(req.user.userId, {
+//       include: [
+//         {
+//           model: models.UserPrefSetting,
+//           required: false,
+//           attributes: {
+//             exclude: ['userId', 'user_id'], // deleting
+//           },
+//         },
+//         {
+//           model: models.Customer,
+//           required: false,
+//           include: [
+//             {
+//               model: models.CustomerPass,
+//               required: false,
+//               include: [
+//                 {
+//                   model: models.PassDefinition,
+//                   required: false,
+//                 },
+//               ],
+//             },
+//           ],
+//         },
+//       ],
+//     })
+//       .then(user => {
+//         if (!user) {
+//           console.warn('⚠️ No user found in getStatus.');
+//           return res.status(200).json({
+//             isLoggedIn: false,
+//             role,
+//             token,
+//             user: null,
+//           });
+//         }
+
+//         // Prepare safe user object for frontend - as much as they only need and nothing more
+//         const safeUser = {
+//           userId: user.userId,
+//           role: user.role,
+//           emailVerified: user.emailVerified,
+//           UserPrefSetting: user.UserPrefSetting || null,
+//           Customer: user.Customer
+//             ? {
+//                 customerId: user.Customer.customerId,
+//                 firstName: user.Customer.firstName,
+//                 lastName: user.Customer.lastName,
+//                 customerFullName: `${user.Customer.firstName} ${user.Customer.lastName} (Id: ${user.Customer.customerId})`,
+//                 dob: user.Customer.dob,
+//                 phone: user.Customer.phone,
+
+//                 // Add passes summary for frontend use
+//                 CustomerPasses:
+//                   user.Customer.CustomerPasses?.map(pass => ({
+//                     customerPassId: pass.customerPassId,
+//                     purchaseDate: pass.purchaseDate,
+//                     validFrom: pass.validFrom,
+//                     validUntil: pass.validUntil,
+//                     usesLeft: pass.usesLeft,
+//                     status: pass.status,
+//                     PassDefinition: {
+//                       passDefId: pass.PassDefinition.passDefId,
+//                       name: pass.PassDefinition.name,
+//                       passType: pass.PassDefinition.passType,
+//                       usesTotal: pass.PassDefinition.usesTotal,
+//                       validityDays: pass.PassDefinition.validityDays,
+//                       allowedProductTypes:
+//                         pass.PassDefinition.allowedProductTypes,
+//                       price: pass.PassDefinition.price,
+//                     },
+//                   })) || [],
+//               }
+//             : null,
+//         };
+
+//         successLog('User', controllerName);
+//         return res.status(200).json({
+//           isLoggedIn,
+//           role,
+//           token,
+//           user: safeUser, // RETURN full safeUser
+//         });
+//       })
+//       .catch(err => {
+//         console.error('❌ Error in getStatus:', err);
+//         return res.status(500).json({
+//           confirmation: 0,
+//           message: msgs.userStatusError,
+//         });
+//       });
+//   } else {
+//     // Not logged in – return basic info
+//     successLog(person, controllerName, 'unauthenticated');
+//     return res.status(200).json({
+//       isLoggedIn,
+//       role,
+//       token,
+//       user: null,
+//     });
+//   }
+// };
+export const getStatus = async (req, res, next) => {
   const controllerName = 'getStatus';
   callLog(req, 'User', controllerName);
+  let errCode = 500;
 
-  const isLoggedIn = res.locals.isLoggedIn || false;
-  const role = res.locals.role;
-  const token = res.locals.csrfToken;
+  try {
+    const isLoggedIn = res.locals.isLoggedIn || false;
+    const role = res.locals.role;
+    const token = res.locals.csrfToken;
 
-  // If user is logged in, fetch full user with preferences + passes
-  if (isLoggedIn && req.user?.userId) {
-    models.User.findByPk(req.user.userId, {
-      include: [
-        {
-          model: models.UserPrefSetting,
-          required: false,
-          attributes: {
-            exclude: ['userId', 'user_id'], // deleting
+    if (isLoggedIn && req.user?.userId) {
+      const user = await models.User.findByPk(req.user.userId, {
+        include: [
+          {
+            model: models.UserPrefSetting,
+            required: false,
+            attributes: { exclude: ['userId', 'user_id'] },
           },
-        },
-        {
-          model: models.Customer,
-          required: false,
-          include: [
-            {
-              model: models.CustomerPass,
-              required: false,
-              include: [
-                {
-                  model: models.PassDefinition,
-                  required: false,
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    })
-      .then(user => {
-        if (!user) {
-          console.warn('⚠️ No user found in getStatus.');
-          return res.status(200).json({
-            isLoggedIn: false,
-            role,
-            token,
-            user: null,
-          });
-        }
-
-        // Prepare safe user object for frontend - as much as they only need and nothing more
-        const safeUser = {
-          userId: user.userId,
-          role: user.role,
-          emailVerified: user.emailVerified,
-          UserPrefSetting: user.UserPrefSetting || null,
-          Customer: user.Customer
-            ? {
-                customerId: user.Customer.customerId,
-                firstName: user.Customer.firstName,
-                lastName: user.Customer.lastName,
-                customerFullName: `${user.Customer.firstName} ${user.Customer.lastName} (Id: ${user.Customer.customerId})`,
-                dob: user.Customer.dob,
-                phone: user.Customer.phone,
-
-                // Add passes summary for frontend use
-                CustomerPasses:
-                  user.Customer.CustomerPasses?.map(pass => ({
-                    customerPassId: pass.customerPassId,
-                    purchaseDate: pass.purchaseDate,
-                    validFrom: pass.validFrom,
-                    validUntil: pass.validUntil,
-                    usesLeft: pass.usesLeft,
-                    status: pass.status,
-                    PassDefinition: {
-                      passDefId: pass.PassDefinition.passDefId,
-                      name: pass.PassDefinition.name,
-                      passType: pass.PassDefinition.passType,
-                      usesTotal: pass.PassDefinition.usesTotal,
-                      validityDays: pass.PassDefinition.validityDays,
-                      allowedProductTypes:
-                        pass.PassDefinition.allowedProductTypes,
-                      price: pass.PassDefinition.price,
-                    },
-                  })) || [],
-              }
-            : null,
-        };
-
-        successLog('User', controllerName);
-        return res.status(200).json({
-          isLoggedIn,
-          role,
-          token,
-          user: safeUser, // RETURN full safeUser
-        });
-      })
-      .catch(err => {
-        console.error('❌ Error in getStatus:', err);
-        return res.status(500).json({
-          confirmation: 0,
-          message: msgs.userStatusError,
-        });
+          {
+            model: models.Customer,
+            required: false,
+            include: [
+              {
+                model: models.CustomerPass,
+                required: false,
+                include: [{ model: models.PassDefinition, required: false }],
+              },
+            ],
+          },
+        ],
       });
-  } else {
-    // Not logged in – return basic info
-    successLog(person, controllerName, 'unauthenticated');
-    return res.status(200).json({
-      isLoggedIn,
-      role,
-      token,
-      user: null,
-    });
+
+      if (!user) {
+        console.warn('⚠️ No user found in getStatus.');
+        return res
+          .status(200)
+          .json({ isLoggedIn: false, role, token, user: null });
+      }
+
+      // Prepare safe user object for frontend - as much as they only need and nothing more
+      const safeUser = {
+        userId: user.userId,
+        role: user.role,
+        emailVerified: user.emailVerified,
+        UserPrefSetting: user.UserPrefSetting || null,
+        Customer: user.Customer
+          ? {
+              customerId: user.Customer.customerId,
+              firstName: user.Customer.firstName,
+              lastName: user.Customer.lastName,
+              customerFullName: `${user.Customer.firstName} ${user.Customer.lastName} (Id: ${user.Customer.customerId})`,
+              dob: user.Customer.dob,
+              phone: user.Customer.phone,
+              // Add passes summary for frontend use
+              CustomerPasses:
+                user.Customer.CustomerPasses?.map(pass => ({
+                  customerPassId: pass.customerPassId,
+                  purchaseDate: pass.purchaseDate,
+                  validFrom: pass.validFrom,
+                  validUntil: pass.validUntil,
+                  usesLeft: pass.usesLeft,
+                  status: pass.status,
+                  PassDefinition: {
+                    passDefId: pass.PassDefinition.passDefId,
+                    name: pass.PassDefinition.name,
+                    passType: pass.PassDefinition.passType,
+                    usesTotal: pass.PassDefinition.usesTotal,
+                    validityDays: pass.PassDefinition.validityDays,
+                    allowedProductTypes:
+                      pass.PassDefinition.allowedProductTypes,
+                    price: pass.PassDefinition.price,
+                  },
+                })) || [],
+            }
+          : null,
+      };
+
+      successLog('User', controllerName);
+      return res.status(200).json({ isLoggedIn, role, token, user: safeUser });
+    }
+
+    // not logged in
+    successLog('User', controllerName, 'unauthenticated');
+    return res.status(200).json({ isLoggedIn, role, token, user: null });
+  } catch (err) {
+    console.error('❌ Error in getStatus:', err);
+    console.error('[getStatus] error:', err);
+    return catchErr('User', res, errCode, err, controllerName);
   }
 };
 
 //! LOG IN / OUT_______________________________________________
 //@ POST
-export const postLogin = (req, res, next) => {
+export const postLogin = async (req, res, next) => {
   const controllerName = 'postLogin';
   callLog(req, person, controllerName);
+  let errCode = 500;
 
-  const { email, password, date } = req.body;
+  try {
+    // lookup user by email
+    const { email, password, date } = req.body;
+    const user = await models.User.findOne({ where: { email } });
+    if (!user) {
+      errCode = 404;
+      console.log("\n❌❌❌ User doesn't exist");
+      throw new Error(msgs.userNotFound);
+    }
 
-  models.User.findOne({ where: { email } })
-    .then(user => {
-      if (!user) {
-        errCode = 404;
-        console.log("\n❌❌❌ User doesn't exist");
-        throw new Error(msgs.userNotFound);
-      }
+    // ensure email is verified
+    if (user.emailVerified === false) {
+      errCode = 403;
+      console.log('\n⛔ Konto nieaktywne – brak potwierdzenia maila');
+      throw new Error(msgs.emailNotYetVerified);
+    }
 
-      if (user.emailVerified === false) {
-        errCode = 403;
-        console.log('\n⛔ Konto nieaktywne – brak potwierdzenia maila');
-        throw new Error(msgs.emailNotYetVerified);
-      }
+    // update last login timestamp
+    await user.update({ lastLoginDate: date });
 
-      user.update({ lastLoginDate: date });
-      return user;
-    })
-    .then(fetchedUser => {
-      if (!fetchedUser) return;
-      successLog(person, controllerName, 'fetched');
+    // regardless match or mismatch catch takes only if something is wrong with bcrypt itself. otherwise it goes to the next block with promise as boolean
+    // compare password hashes
+    const match = await bcrypt.compare(password, user.passwordHash);
+    if (!match) {
+      errCode = 400;
+      console.log('\n❌❌❌ Password incorrect');
+      throw new Error(msgs.wrongPassword);
+    }
+    successLog(person, controllerName, 'pass match as well');
 
-      // regardless match or mismatch catch takes only if something is wrong with bcrypt itself. otherwise it goes to the next block with promise as boolean
-      return bcrypt
-        .compare(password, fetchedUser.passwordHash)
-        .then(doMatch => {
-          if (!doMatch) {
-            errCode = 400;
-            console.log('\n❌❌❌ Password incorrect');
-            throw new Error(msgs.wrongPassword);
-          }
+    // regenerate the session first so we get a brand‑new session ID
+    req.session.regenerate(err => {
+      if (err) return next(err);
 
-          successLog(person, controllerName, 'pass match as well');
-          // regenerate the session first so we get a brand‑new session ID
-          req.session.regenerate(err => {
-            if (err) return next(err);
+      // write login state into new session
+      req.session.isLoggedIn = true;
+      req.session.user = user;
+      req.session.role = user.role.toUpperCase();
 
-            // now it’s safe to write into the new session
-            req.session.isLoggedIn = true;
-            req.session.user = fetchedUser;
-            req.session.role = fetchedUser.role.toUpperCase();
-
-            // save the session, and only after that send the JSON response
-            req.session.save(err => {
-              if (err) return next(err);
-              return res.status(200).json({
-                type: 'login',
-                code: 200,
-                confirmation: 1,
-                message: msgs.userLoggedIn,
-              });
-            });
-          });
+      // save the session, and only after that send the JSON response
+      req.session.save(err => {
+        if (err) return next(err);
+        return res.status(200).json({
+          type: 'login',
+          code: 200,
+          confirmation: 1,
+          message: msgs.userLoggedIn,
         });
-    })
-    .catch(err =>
-      catchErr(person, res, errCode, err, controllerName, {
-        type: 'signup',
-        code: 404,
-      })
-    );
+      });
+    });
+  } catch (err) {
+    return catchErr(person, res, errCode, err, controllerName, {
+      type: 'signup',
+      code: errCode || 500,
+    });
+  }
 };
 export const postLogout = (req, res, next) => {
   const controllerName = 'postLogout';
   callLog(req, person, controllerName);
-  successLog(person, controllerName);
+
+  // clear server-side session
   req.session.destroy(err => {
-    console.log('postLogout');
     if (err) {
+      // if something goes wrong destroying the session, pass to error handler
       return next(err);
     }
+
+    // remove the session cookie from client
     res.clearCookie('session_CID');
-    res.json({ success: true });
+
+    // log out success and send response
+    successLog(person, controllerName, 'session destroyed');
+    return res.status(200).json({ success: true });
   });
 };
 
 //! SIGN UP____________________________________________________
 //@ GET
-export const getEmailToken = (req, res, next) => {
+export const getEmailToken = async (req, res, next) => {
   const controllerName = 'getEmailToken';
   callLog(req, person, controllerName);
-  const token = req.params.token;
+  let errCode = 500;
 
-  if (!token) {
-    errCode = 400;
-    throw new Error(msgs.invalidTokenMessage);
-  }
+  try {
+    // extract token from URL
+    const token = req.params.token;
+    if (!token || token.length !== 64) {
+      errCode = 400;
+      throw new Error(msgs.invalidTokenMessage);
+    }
 
-  if (token.length !== 64) {
-    errCode = 400;
-    throw new Error(msgs.invalidTokenMessage);
-  }
-
-  models.VerificationToken.findOne({
-    where: {
-      token: token,
-      type: 'email',
-      expirationDate: { [Op.gt]: new Date() }, // Validation if still active
-      used: false,
-    },
-    include: [
-      {
-        model: models.User, // to assign the status for linked account
-        required: true,
+    // look up a still-active, unused email-verification token
+    const validTokenRecord = await models.VerificationToken.findOne({
+      where: {
+        token,
+        type: 'email',
+        expirationDate: { [Op.gt]: new Date() },
+        used: false,
       },
-    ],
-  })
-    .then(validTokenRecord => {
-      if (!validTokenRecord) {
-        errCode = 400;
-        console.log('\n❌ Nieprawidłowy lub wygasły token weryfikacyjny.');
-        throw new Error(msgs.invalidTokenMessage);
-      }
+      include: [{ model: models.User, required: true }],
+    });
 
-      // To change the status of the linked account
-      const user = validTokenRecord.User;
-      user.emailVerified = true;
-      validTokenRecord.used = true;
+    // if no such token, bail out
+    if (!validTokenRecord) {
+      errCode = 400;
+      console.log('❌ Invalid or expired verification token.');
+      throw new Error(msgs.invalidTokenMessage);
+    }
 
-      // save both records
-      return Promise.all([user.save(), validTokenRecord.save()]);
-    })
-    .then(() => {
-      successLog(person, controllerName);
+    // mark user as verified
+    const user = validTokenRecord.User;
+    user.emailVerified = true;
+    // and mark the token as used
+    validTokenRecord.used = true;
 
-      return res.status(200).json({
-        confirmation: 1,
-        message: msgs.accountActivated,
-      });
-    })
-    .catch(err =>
-      catchErr(person, res, errCode, err, controllerName, {
-        type: 'verifyEmail',
-        code: 400,
-      })
-    );
+    // save both changes in parallel: user and token updates
+    // Promise.all waits until all passed promises resolve (or any rejects)
+    await Promise.all([
+      user.save(), // save the updated user record
+      validTokenRecord.save(), // save the updated token record
+    ]);
+
+    // send back success
+    successLog(person, controllerName);
+    return res.status(200).json({
+      confirmation: 1,
+      message: msgs.accountActivated,
+    });
+  } catch (err) {
+    // central error handling
+    return catchErr(person, res, errCode, err, controllerName, {
+      type: 'verifyEmail',
+      code: 400,
+    });
+  }
 };
 //@ POST
-export const postSignup = (req, res, next) => {
+export const postSignup = async (req, res, next) => {
   const controllerName = 'postSignup';
   callLog(req, person, controllerName);
+  let errCode = 500;
 
-  const { email, password, confirmedPassword, date } = req.body;
+  try {
+    // extract signup payload
+    const { email, password, confirmedPassword, date } = req.body;
 
-  if (password !== confirmedPassword) {
-    errCode = 400;
-    throw new Error(msgs.passwordsNotMatching);
+    // ensure passwords match
+    if (password !== confirmedPassword) {
+      errCode = 400;
+      throw new Error(msgs.passwordsNotMatching);
+    }
+
+    // check for existing account
+    const existingUser = await models.User.findOne({ where: { email } });
+    if (existingUser) {
+      errCode = 303;
+      throw new Error(msgs.userAlreadyExists);
+    }
+
+    // hash the password
+    const passwordHash = await bcrypt.hash(password, 12);
+    successLog(person, controllerName, 'password hashed');
+
+    // create the new user (inactive)
+    const newUser = await models.User.create({
+      registrationDate: date,
+      passwordHash: passwordHash,
+      lastLoginDate: date,
+      email: email,
+      role: 'user',
+      profilePictureSrcSetJson: null,
+    });
+    successLog(person, controllerName, 'user created');
+
+    // generate email verification token
+    const emailVerificationToken = crypto.randomBytes(32).toString('hex');
+    const expirationDate = new Date(Date.now() + 1000 * 60 * 60 * 24); // 24 hours
+
+    // insert token into database
+    await models.VerificationToken.create({
+      userId: newUser.userId,
+      type: 'email',
+      token: emailVerificationToken,
+      expirationDate: expirationDate,
+    });
+
+    // send activation email
+    sendSignupConfirmationMail({
+      to: email,
+      token: emailVerificationToken,
+    });
+
+    // respond to client
+    return res.status(200).json({
+      type: 'signup',
+      code: 200,
+      confirmation: 1,
+      message: msgs.registrationSuccess,
+    });
+  } catch (err) {
+    // central error handling
+    return catchErr(person, res, errCode, err, controllerName, {
+      type: 'signup',
+      code: errCode,
+    });
   }
-
-  models.User.findOne({ where: { email } })
-    .then(user => {
-      if (user) {
-        errCode = 303;
-        throw new Error(msgs.userAlreadyExists);
-      }
-
-      // it returns the promise
-      return bcrypt
-        .hash(password, 12)
-        .then(passwordHashed => {
-          successLog(person, controllerName, 'hashed');
-
-          // create inactive account first
-          return models.User.create({
-            registrationDate: date,
-            passwordHash: passwordHashed,
-            lastLoginDate: date,
-            email: email,
-            role: 'user',
-            profilePictureSrcSetJson: null,
-          });
-        })
-        .then(newUser => {
-          successLog(person, controllerName);
-
-          // Set token and it expiry threshold
-          const emailVerificationToken = crypto.randomBytes(32).toString('hex');
-          const tokenExpiration = Date.now() + 1000 * 60 * 60 * 24; // 24 hrs
-
-          // Insert token into db
-          return models.VerificationToken.create({
-            userId: newUser.userId,
-            type: 'email',
-            token: emailVerificationToken,
-            expirationDate: new Date(tokenExpiration),
-          }).then(() => ({ newUser, emailVerificationToken }));
-        })
-        .then(({ newUser, emailVerificationToken }) => {
-          // Send activation email with token
-          sendSignupConfirmationMail({
-            to: email,
-            token: emailVerificationToken,
-          });
-
-          return res.status(200).json({
-            type: 'signup',
-            code: 200,
-            confirmation: 1,
-            message: msgs.registrationSuccess,
-          });
-        });
-    })
-    .catch(err =>
-      catchErr(person, res, errCode, err, controllerName, {
-        type: 'signup',
-        code: 303,
-      })
-    );
 };
 
 //! PASSWORD___________________________________________________
