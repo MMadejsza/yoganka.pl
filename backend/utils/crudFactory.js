@@ -150,8 +150,9 @@ export function createGetById(
         errorCode = 404;
         throw new Error(notFoundMessage || `${EntityModel.name} not found.`);
       }
+
       // Apply mapping
-      const result = await mapRecord(record);
+      const result = await mapRecord(record.toJSON());
 
       if (typeof postAction === 'function') {
         await postAction(req, result);
