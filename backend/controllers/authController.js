@@ -397,7 +397,6 @@ export const getPasswordToken = (req, res, next) => {
     })
     .catch(err => catchErr(person, res, errCode, err, controllerName));
 };
-
 //@ POST
 export const postResetPassword = (req, res, next) => {
   const controllerName = 'postResetPassword';
@@ -523,7 +522,7 @@ export const postResendActivation = (req, res, next) => {
       });
     });
 };
-
+//@ PUT
 export const putEditPassword = (req, res, next) => {
   const controllerName = 'putEditPassword';
   callLog(req, person, controllerName);

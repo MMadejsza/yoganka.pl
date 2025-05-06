@@ -464,9 +464,13 @@
     padding: 1.5rem 2.5rem;
     &__btn {
       width: max-content;
-      flex-basis: 35%;
+
       height: 4.5rem;
       line-height: 4.5rem;
+    }
+
+    &:not(.generic-component-wrapper) {
+      flex-basis: 35%;
     }
   }
   .modal-checklist {

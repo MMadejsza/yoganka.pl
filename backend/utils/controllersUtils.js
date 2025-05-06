@@ -239,6 +239,7 @@ export const pickTheBestPassForSchedule = (customerPasses, schedule) => {
     ...sortedPasses.map(cp => cp.PassDefinition.name)
   );
   // Return the best pass, which is at the start of the sorted array.
+
   return { bestPass: sortedPasses[0], allSorted: sortedPasses };
 };
 
