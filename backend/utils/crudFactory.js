@@ -126,11 +126,11 @@ export function createGetById(
     includeRelations = [],
     excludeFields = [],
     where = {},
-    mapRecord = instance => instance.toJSON(),
+    mapRecord = (instance, req) => instance,
     postAction,
     successMessage,
     notFoundMessage,
-    attachResponse = () => ({}), // for isLoggedIn etc.
+    attachResponse = req => ({}), // for isLoggedIn etc.
     resultName = EntityModel.name.toLowerCase(),
     notFoundStatus = 404,
   }
@@ -175,7 +175,7 @@ export function createGetById(
       }
 
       // Apply mapping
-      const result = await mapRecord(record.toJSON());
+      const result = await mapRecord(record.toJSON(), req);
 
       if (typeof postAction === 'function') {
         await postAction(req, result);
