@@ -125,12 +125,14 @@ export function createGetById(
   {
     includeRelations = [],
     excludeFields = [],
+    where = {},
     mapRecord = instance => instance.toJSON(),
     postAction,
     successMessage,
     notFoundMessage,
     attachResponse = () => ({}), // for isLoggedIn etc.
     resultName = EntityModel.name.toLowerCase(),
+    notFoundStatus = 404,
   }
 ) {
   return async (req, res, next) => {
@@ -140,14 +142,35 @@ export function createGetById(
     try {
       // Determine ID: URL param or logged-in user
       const id = req.params.id || req.user?.userId;
+
       const queryOptions = { include: includeRelations };
       if (excludeFields.length) {
         queryOptions.attributes = { exclude: excludeFields };
       }
       // Fetch single record
-      const record = await EntityModel.findByPk(id, queryOptions);
+      const extraWhere = typeof where === 'function' ? where(req) : where;
+      let record;
+      if (extraWhere && Object.keys(extraWhere).length > 0) {
+        // findOne with PK + extraWhere
+        record = await EntityModel.findOne({
+          where: { [EntityModel.primaryKeyAttribute]: id, ...extraWhere },
+          ...queryOptions,
+        });
+      } else {
+        // simple findByPk
+        record = await EntityModel.findByPk(id, queryOptions);
+      }
+
       if (!record) {
-        errorCode = 404;
+        if (notFoundStatus === 200) {
+          successLog(actorName, controllerName);
+          return res.status(200).json({
+            confirmation: 1,
+            message: notFoundMessage,
+            [resultName]: null,
+          });
+        }
+        errorCode = notFoundStatus;
         throw new Error(notFoundMessage || `${EntityModel.name} not found.`);
       }
 
