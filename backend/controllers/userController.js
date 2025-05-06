@@ -1,6 +1,7 @@
 import { Op, Sequelize, col, fn } from 'sequelize';
 import * as models from '../models/_index.js';
 import { areSettingsChanged } from '../utils/controllersUtils.js';
+import { createGetById } from '../utils/crudFactory.js';
 import { getWeekDay } from '../utils/dateTimeUtils.js';
 import {
   callLog,
@@ -192,31 +193,12 @@ export const getAccount = (req, res, next) => {
       .catch(err => catchErr(person, res, errCode, err, controllerName));
   }
 };
-export const getSettings = (req, res, next) => {
-  const controllerName = 'getSettings';
-  callLog(req, person, controllerName);
-  const PK = req.user.UserPrefSetting?.userPrefId;
-
-  models.UserPrefSetting.findByPk(PK)
-    .then(preferences => {
-      if (!preferences) {
-        errCode = 404;
-        successLog(person, controllerName, 'default');
-        return res.status(200).json({
-          confirmation: 1,
-          message: msgs.defaultSettingsLoaded,
-          preferences,
-        });
-      }
-      successLog(person, controllerName, 'custom');
-      return res.status(200).json({
-        confirmation: 1,
-        message: msgs.settingsLoaded,
-        preferences,
-      });
-    })
-    .catch(err => catchErr(person, res, errCode, err, controllerName));
-};
+export const getSettings = createGetById(person, models.UserPrefSetting, {
+  notFoundStatus: 200,
+  successMessage: 'Ustawienia pobrane',
+  notFoundMessage: 'Domyślne ustawienia',
+  resultName: 'preferences',
+});
 //@ PUT
 export const putEditSettings = (req, res, next) => {
   const controllerName = 'putEditSettings';

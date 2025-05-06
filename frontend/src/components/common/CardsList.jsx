@@ -268,12 +268,15 @@ function CardsList({
         year = isPLDate ? dateParts[2] : dateParts[0];
         monthName = monthMap[month] || '';
       }
+      let type;
+      // console.log('row.productType', row.productType);
 
       const typePart = row.productType?.slice(1).toLowerCase();
-      const type = row.productType[0] + typePart;
+      type = row.productType[0] + typePart;
+
       return {
         isActive,
-        cardTypeModifier: type || '',
+        cardTypeModifier: type,
         cardId: row.rowId || '',
         cardCircle: quickActionBtn || '',
         cardTitle: row.productName || row.product || '',
