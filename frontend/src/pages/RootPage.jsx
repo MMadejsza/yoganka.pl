@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import FloatingBtns from '../components/common/FloatingBtns.jsx';
+import FloatingBtns from '../components/backend/FloatingBtns.jsx';
 import Footer from '../components/frontend/Footer.jsx';
 import Burger from '../components/frontend/navigation/Burger.jsx';
 import Nav from '../components/frontend/navigation/Nav.jsx';

@@ -7,8 +7,8 @@ import {
   pickCustomerSymbol,
 } from '../../utils/cardsAndTableUtils.jsx';
 import { formatIsoDateTime, getWeekDay } from '../../utils/dateTime.js';
-import { hasValidPassFn } from '../../utils/userCustomerUtils';
-import SymbolOrIcon from './SymbolOrIcon.jsx';
+import { hasValidPassFn } from '../../utils/userCustomerUtils.js';
+import SymbolOrIcon from '../common/SymbolOrIcon.jsx';
 
 function CardsList({
   content,
@@ -90,12 +90,20 @@ function CardsList({
         year = '-',
         monthName = '-';
 
-      const typePart = JSON.parse(row.allowedProductTypes)
-        .map(type => {
-          const clean = type.trim().toLowerCase();
-          return clean.charAt(0).toUpperCase() + clean.slice(1);
-        })
-        .join(', ');
+      let allowedTypes = '';
+      if (row.allowedProductTypes) {
+        try {
+          allowedTypes = JSON.parse(row.allowedProductTypes)
+            .map(type => {
+              const clean = type.trim().toLowerCase();
+              return clean.charAt(0).toUpperCase() + clean.slice(1);
+            })
+            .join(', ');
+        } catch (e) {
+          console.error('❌ Błąd parsowania allowedProductTypes:', e);
+          allowedTypes = '';
+        }
+      }
 
       if (expiryDate) {
         const dateParts = expiryDate.slice(0, 10).split('-'); // [2025, 04, 19]
@@ -106,7 +114,7 @@ function CardsList({
         monthName = monthMap[month] || '';
       }
 
-      const isTimeType = row.passType.toUpperCase() == 'TIME';
+      const isTimeType = row.passType?.toUpperCase() == 'TIME';
       const chosenSquareTop = isTimeType ? getWeekDay(expiryDate) : `Sesje`;
       const chosenSquareMiddle = isTimeType ? day : row.usesLeft;
       const chosenSquareBottom = isTimeType
@@ -122,7 +130,7 @@ function CardsList({
       return {
         // isActive,
         cardId: row.rowId || '',
-        cardTypeModifier: typePart || '',
+        cardTypeModifier: allowedTypes || '',
         cardCircle: ``,
         cardTitle: `${row.passName}`,
         squareTop: chosenSquareTop,
@@ -268,11 +276,10 @@ function CardsList({
         year = isPLDate ? dateParts[2] : dateParts[0];
         monthName = monthMap[month] || '';
       }
-      let type;
-      // console.log('row.productType', row.productType);
 
-      const typePart = row.productType?.slice(1).toLowerCase();
-      type = row.productType[0] + typePart;
+      let type = row.productType ?? '';
+      const typePart = type.slice(1).toLowerCase();
+      type = (type[0] || '') + typePart;
 
       return {
         isActive,

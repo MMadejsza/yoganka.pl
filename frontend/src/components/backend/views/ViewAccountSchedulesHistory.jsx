@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import { statsCalculatorForCustomer } from '../../../utils/statistics/statsCalculatorForCustomer.js';
-import CardsList from '../../common/CardsList.jsx';
+import CardsList from '../../backend/CardsList.jsx';
 import ModalTable from '../ModalTable.jsx';
 import WrapperModalTable from '../WrapperModalTable.jsx';
 import DetailsListCustomerStats from './lists/DetailsListCustomerStats.jsx';

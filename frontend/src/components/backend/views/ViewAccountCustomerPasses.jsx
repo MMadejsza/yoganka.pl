@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import CardsList from '../../common/CardsList.jsx';
+import CardsList from '../../backend/CardsList.jsx';
 import ViewsController from '../ViewsController.jsx';
 import WrapperModalTable from '../WrapperModalTable.jsx';
 import TableCustomerPasses from './tables/TableCustomerPasses.jsx';

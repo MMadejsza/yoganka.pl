@@ -1,10 +1,10 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useMatch, useNavigate } from 'react-router-dom';
+import CardsList from '../../components/backend/CardsList.jsx';
 import ModalTable from '../../components/backend/ModalTable.jsx';
 import TabsList from '../../components/backend/TabsList.jsx';
 import ViewsController from '../../components/backend/ViewsController.jsx';
-import CardsList from '../../components/common/CardsList.jsx';
 import Section from '../../components/frontend/Section.jsx';
 import { useAuthStatus } from '../../hooks/useAuthStatus.js';
 import { formatIsoDateTime } from '../../utils/dateTime.js';
