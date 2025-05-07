@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useMatch, useNavigate } from 'react-router-dom';
-import CardsList from '../../components/backend/CardsList.jsx';
+import CardsList from '../../components/backend/cards/CardsList.jsx';
 import ModalTable from '../../components/backend/ModalTable.jsx';
 import TabsList from '../../components/backend/TabsList.jsx';
 import ViewsController from '../../components/backend/ViewsController.jsx';

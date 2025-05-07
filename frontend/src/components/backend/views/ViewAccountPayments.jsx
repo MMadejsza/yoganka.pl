@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { statsCalculatorForCustomer } from '../../../utils/statistics/statsCalculatorForCustomer.js';
-import CardsList from '../../backend/CardsList.jsx';
+import CardsList from '../../backend/cards/CardsList.jsx';
 import ModalTable from '../ModalTable.jsx';
 import ViewsController from '../ViewsController.jsx';
 import WrapperModalTable from '../WrapperModalTable.jsx';

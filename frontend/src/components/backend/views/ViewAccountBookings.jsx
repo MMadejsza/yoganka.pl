@@ -1,5 +1,5 @@
 import { formatIsoDateTime } from '../../../utils/dateTime.js';
-import CardsList from '../../backend/CardsList.jsx';
+import CardsList from '../../backend/cards/CardsList.jsx';
 import ModalTable from '../ModalTable.jsx';
 import WrapperModalTable from '../WrapperModalTable.jsx';
 
