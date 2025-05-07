@@ -4,10 +4,12 @@ import { successLog } from './debuggingUtils.js';
 import * as msgs from './resMessagesUtils.js';
 // util pass validation
 export const isPassValidForSchedule = (pass, schedule) => {
-  console.log(
-    '[isPassValidForSchedule] Checking pass:',
-    pass.PassDefinition.name
-  );
+  const logsTurnedOn = false;
+  if (logsTurnedOn)
+    console.log(
+      '[isPassValidForSchedule] Checking pass:',
+      pass.PassDefinition.name
+    );
 
   // 1. Is defined?
   if (!pass.PassDefinition) {
@@ -15,39 +17,44 @@ export const isPassValidForSchedule = (pass, schedule) => {
     return false;
   }
   const passDef = pass.PassDefinition;
-  // console.log('[isPassValidForSchedule] Found PassDefinition:', passDef);
+  if (logsTurnedOn)
+    console.log('[isPassValidForSchedule] Found PassDefinition:', passDef);
 
   // 2. Is active?
   if (Number(pass.status) !== 1) {
-    console.log(
-      '[isPassValidForSchedule] Pass status is not ACTIVE (1):',
-      pass.status
-    );
+    if (logsTurnedOn)
+      console.log(
+        '[isPassValidForSchedule] Pass status is not ACTIVE (1):',
+        pass.status
+      );
     return false;
   }
-  console.log('[isPassValidForSchedule] Pass is ACTIVE(1).');
+  if (logsTurnedOn) console.log('[isPassValidForSchedule] Pass is ACTIVE(1).');
 
   // 6. Is count type
   const passType = passDef.passType.toUpperCase();
   if ((passType === 'COUNT' || passType === 'MIXED') && pass.usesLeft <= 0) {
-    console.log(
-      '[isPassValidForSchedule] Count pass with no uses left:',
-      pass.usesLeft
-    );
+    if (logsTurnedOn)
+      console.log(
+        '[isPassValidForSchedule] Count pass with no uses left:',
+        pass.usesLeft
+      );
     return false;
   }
 
   // 3. Is matching requested schedule?
   if (!schedule.Product || !schedule.Product.type) {
-    console.log(
-      '[isPassValidForSchedule] Schedule Product or Product.type is missing.'
-    );
+    if (logsTurnedOn)
+      console.log(
+        '[isPassValidForSchedule] Schedule Product or Product.type is missing.'
+      );
     return false;
   }
   if (!passDef.allowedProductTypes) {
-    console.log(
-      '[isPassValidForSchedule] allowedProductTypes is missing in PassDefinition.'
-    );
+    if (logsTurnedOn)
+      console.log(
+        '[isPassValidForSchedule] allowedProductTypes is missing in PassDefinition.'
+      );
     return false;
   }
 
@@ -70,62 +77,72 @@ export const isPassValidForSchedule = (pass, schedule) => {
   } else if (Array.isArray(passDef.allowedProductTypes)) {
     allowedTypes = passDef.allowedProductTypes;
   } else {
-    console.log(
-      '[isPassValidForSchedule] allowedProductTypes is in an unsupported format.'
-    );
+    if (logsTurnedOn)
+      console.log(
+        '[isPassValidForSchedule] allowedProductTypes is in an unsupported format.'
+      );
     return false;
   }
   allowedTypes = allowedTypes.map(type => type.trim().toUpperCase());
-  console.log('[isPassValidForSchedule] Allowed types:', allowedTypes);
+  if (logsTurnedOn)
+    console.log('[isPassValidForSchedule] Allowed types:', allowedTypes);
 
   if (!allowedTypes.includes(schedule.Product.type.trim().toUpperCase())) {
-    console.log(
-      "[isPassValidForSchedule] Schedule's product type not included in allowed types:",
-      schedule.Product.type
-    );
+    if (logsTurnedOn)
+      console.log(
+        "[isPassValidForSchedule] Schedule's product type not included in allowed types:",
+        schedule.Product.type
+      );
     return false;
   }
 
   // 4. Is expired for schedule?
-  console.log('[isPassValidForSchedule] Raw schedule.date:', schedule.date);
+  if (logsTurnedOn)
+    console.log('[isPassValidForSchedule] Raw schedule.date:', schedule.date);
   let isoDate;
   if (schedule.date.includes('.')) {
     const dateParts = schedule.date.split('.');
     if (dateParts.length !== 3) {
-      console.log(
-        '[isPassValidForSchedule] Date format is invalid:',
-        schedule.date
-      );
+      if (logsTurnedOn)
+        console.log(
+          '[isPassValidForSchedule] Date format is invalid:',
+          schedule.date
+        );
       return false;
     }
     isoDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
   } else {
     isoDate = schedule.date; // Zakładamy, że data jest już w ISO
   }
-  console.log('[isPassValidForSchedule] Converted ISO date:', isoDate);
+  if (logsTurnedOn)
+    console.log('[isPassValidForSchedule] Converted ISO date:', isoDate);
   // >> MODYFIKACJA
   const scheduledDateTime = new Date(`${isoDate}T${schedule.startTime}`);
-  console.log(
-    '[isPassValidForSchedule] Scheduled date/time:',
-    scheduledDateTime
-  );
-  if (pass.validUntil && scheduledDateTime > new Date(pass.validUntil)) {
+  if (logsTurnedOn)
     console.log(
-      '[isPassValidForSchedule] Pass is expired for schedule. validUntil:',
-      pass.validUntil
+      '[isPassValidForSchedule] Scheduled date/time:',
+      scheduledDateTime
     );
+  if (pass.validUntil && scheduledDateTime > new Date(pass.validUntil)) {
+    if (logsTurnedOn)
+      console.log(
+        '[isPassValidForSchedule] Pass is expired for schedule. validUntil:',
+        pass.validUntil
+      );
     return false;
   }
   // 5. Is not started for schedule?
   if (pass.validFrom && scheduledDateTime < new Date(pass.validFrom)) {
-    console.log(
-      '[isPassValidForSchedule] Pass has not started yet. validFrom:',
-      pass.validFrom
-    );
+    if (logsTurnedOn)
+      console.log(
+        '[isPassValidForSchedule] Pass has not started yet. validFrom:',
+        pass.validFrom
+      );
     return false;
   }
 
-  console.log('[isPassValidForSchedule] Pass is valid for schedule.');
+  if (logsTurnedOn)
+    console.log('[isPassValidForSchedule] Pass is valid for schedule.');
   // All good - valid
   return pass;
 };
@@ -142,20 +159,23 @@ export const isPassValidForSchedule = (pass, schedule) => {
 // If they have the same expiration or no expiration, the one with fewer remaining uses is chosen.
 //
 export const pickTheBestPassForSchedule = (customerPasses, schedule) => {
-  // console.log(
-  //   '[pickTheBestPassForSchedule] Customer passes:',
-  //   ...customerPasses.map(cp => cp.PassDefinition.name)
-  // );
+  const logsTurnedOn = false;
+  if (logsTurnedOn)
+    console.log(
+      '[pickTheBestPassForSchedule] Customer passes:',
+      ...customerPasses.map(cp => cp.PassDefinition.name)
+    );
   // Filter passes that are valid for this schedule using our utility function.
   let validPasses;
   if (!customerPasses || customerPasses.length == 0) return;
   validPasses = customerPasses?.filter(pass =>
     isPassValidForSchedule(pass, schedule)
   );
-  // console.log(
-  //   '[pickTheBestPassForSchedule] Valid passes:',
-  //   ...validPasses.map(cp => cp.PassDefinition.name)
-  // );
+  if (logsTurnedOn)
+    console.log(
+      '[pickTheBestPassForSchedule] Valid passes:',
+      ...validPasses.map(cp => cp.PassDefinition.name)
+    );
   if (validPasses.length === 0) {
     console.log('[pickTheBestPassForSchedule] No valid passes found.');
     return null;
@@ -177,11 +197,12 @@ export const pickTheBestPassForSchedule = (customerPasses, schedule) => {
   const sortedPasses = validPasses.sort((a, b) => {
     const priorityA = getPriority(a);
     const priorityB = getPriority(b);
-    // console.log(
-    //   '[pickTheBestPassForSchedule] Comparing passes, priorities:',
-    //   priorityA,
-    //   priorityB
-    // );
+    if (logsTurnedOn)
+      console.log(
+        '[pickTheBestPassForSchedule] Comparing passes, priorities:',
+        priorityA,
+        priorityB
+      );
 
     // If priorities are different, sort by them.
     if (priorityA !== priorityB) return priorityA - priorityB;
@@ -192,43 +213,48 @@ export const pickTheBestPassForSchedule = (customerPasses, schedule) => {
       if (a.validUntil && b.validUntil) {
         const diff = new Date(a.validUntil) - new Date(b.validUntil);
         if (diff !== 0) {
-          // console.log(
-          //   '[pickTheBestPassForSchedule] Both count passes have expiration dates. Difference:',
-          //   diff
-          // );
+          if (logsTurnedOn)
+            console.log(
+              '[pickTheBestPassForSchedule] Both count passes have expiration dates. Difference:',
+              diff
+            );
           return diff;
         }
       }
       // If only one has an expiration date, that one wins.
       if (a.validUntil && !b.validUntil) {
-        // console.log(
-        //   '[pickTheBestPassForSchedule] Only first pass has validUntil. Picking first.'
-        // );
+        if (logsTurnedOn)
+          console.log(
+            '[pickTheBestPassForSchedule] Only first pass has validUntil. Picking first.'
+          );
         return -1;
       }
       if (!a.validUntil && b.validUntil) {
-        // console.log(
-        //   '[pickTheBestPassForSchedule] Only second pass has validUntil. Picking second.'
-        // );
+        if (logsTurnedOn)
+          console.log(
+            '[pickTheBestPassForSchedule] Only second pass has validUntil. Picking second.'
+          );
         return 1;
       }
       // If both don't have an expiration date or dates are equal,
       // choose the one with fewer uses left.
-      // console.log(
-      //   '[pickTheBestPassForSchedule] Both count passes have same expiration status. Comparing usesLeft:',
-      //   a.usesLeft,
-      //   b.usesLeft
-      // );
+      if (logsTurnedOn)
+        console.log(
+          '[pickTheBestPassForSchedule] Both count passes have same expiration status. Comparing usesLeft:',
+          a.usesLeft,
+          b.usesLeft
+        );
       return a.usesLeft - b.usesLeft;
     }
 
     // For time or mixed passes, if both have an expiration date, pick the one expiring earlier.
     if (a.validUntil && b.validUntil) {
       const diff = new Date(a.validUntil) - new Date(b.validUntil);
-      // console.log(
-      //   '[pickTheBestPassForSchedule] Comparing expiration of time/mixed passes. Difference:',
-      //   diff
-      // );
+      if (logsTurnedOn)
+        console.log(
+          '[pickTheBestPassForSchedule] Comparing expiration of time/mixed passes. Difference:',
+          diff
+        );
       return diff;
     }
     return 0; // No further differences found.
