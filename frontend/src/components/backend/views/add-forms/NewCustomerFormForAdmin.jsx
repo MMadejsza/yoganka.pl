@@ -28,9 +28,11 @@ function NewCustomerFormForAdmin() {
     // only when location.pathname is set extra beyond admin panel:
   });
 
-  const usersOptionsList = usersList?.content?.sort(
-    (a, b) => new Date(b.registrationDate) - new Date(a.registrationDate)
-  );
+  const usersOptionsList = usersList?.content
+    ?.sort(
+      (a, b) => new Date(b.registrationDate) - new Date(a.registrationDate)
+    )
+    .filter(u => u.role.toUpperCase() === 'USER');
   console.log('usersOptionsList: ', usersOptionsList);
 
   const {
