@@ -26,6 +26,7 @@ export default function CardWrapper(props) {
     flags,
     props.status,
     props.onQuickAction,
+    props.onQuickActionSymbol,
     props.adminActions
   );
 

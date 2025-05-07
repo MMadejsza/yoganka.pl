@@ -1,6 +1,7 @@
 import {
   formatAttendance,
   formatPaymentStatus,
+  onRowBtnClick,
 } from '../../../utils/cardsAndTableUtils.jsx';
 import SymbolOrIcon from '../../common/SymbolOrIcon.jsx';
 // Presentational component: renders a card based on props.content and flags.
@@ -59,12 +60,14 @@ export default function Card({
 
   if (quickActionSymbol) {
     //Quick-action button
+    // console.log('quickActionSymbol IS', quickActionSymbol);
     circleContent = (
       <div className='action-btns'>
         <button
           key={idx}
           className='form-action-btn symbol-only-btn symbol-only-btn--submit'
-          onClick={e =>
+          onClick={e => {
+            e.stopPropagation();
             onRowBtnClick(
               row,
               isArchived,
@@ -76,8 +79,8 @@ export default function Card({
               status.role === 'CUSTOMER',
               status.role === 'ADMIN',
               e
-            )
-          }
+            );
+          }}
         >
           <SymbolOrIcon specifier={quickActionSymbol} />
         </button>

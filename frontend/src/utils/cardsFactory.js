@@ -190,7 +190,8 @@ export function getScheduleContent(
     typeIcon: 'category',
     descriptionIcon: 'schedule',
     footerIcon: 'location_on',
-    quickActionMethod: onQuickAction[0]?.method,
+    quickActionMethod,
+    quickActionSymbol,
   };
 }
 
