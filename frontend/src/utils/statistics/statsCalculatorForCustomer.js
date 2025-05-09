@@ -3,9 +3,13 @@ import { durationToSeconds, secondsToDuration } from './statsUtils.js';
 
 //@ stats calculation
 export const statsCalculatorForCustomer = customer => {
-  console.log(`❗❗❗ statsCalculatorForCustomer customer`, customer);
-  // console.log(`statsCalculatorForCustomer passed customer`, customer);
-  const today = new Date().toISOString().split('T')[0];
+  const logsTurnedOn = false;
+
+  if (logsTurnedOn)
+    console.log.log(`❗❗❗ statsCalculatorForCustomer customer`, customer);
+  if (logsTurnedOn)
+    console.log.log(`statsCalculatorForCustomer passed customer`, customer);
+  const now = new Date();
   const attendedScheduleRecords = [];
   const totalPayments = [];
   const invoices = [];
@@ -21,7 +25,7 @@ export const statsCalculatorForCustomer = customer => {
     totalEventsAmount +
     totalClassesAmount +
     totalOnlineAmount;
-  // console.log(customer.Payments);
+  if (logsTurnedOn) console.log.log(customer.Payments);
   for (let payment of customer.Payments) {
     totalRevenue += parseFloat(payment.amountPaid);
 
@@ -50,7 +54,7 @@ export const statsCalculatorForCustomer = customer => {
     booking => booking.attendance == 0 || booking.attendance == false
   );
   for (let booking of attendedBookings) {
-    // console.group(`schedule: ${schedule}`);
+    if (logsTurnedOn) console.log.group(`schedule: ${schedule}`);
     const { ScheduleRecord: schedule } = booking;
 
     attendedScheduleRecords.push({
@@ -64,22 +68,30 @@ export const statsCalculatorForCustomer = customer => {
     });
 
     const productType = schedule.Product.type.toUpperCase();
-    // console.log(`scheduleDate >= today ${scheduleDate} ${today}`);
-    if (schedule.date <= today) {
+    const sessionDateTime = new Date(
+      `${schedule.date}T${schedule.startTime || '00:00:00'}`
+    );
+    if (logsTurnedOn)
+      console.log.log(`sessionDateTime <= now ${sessionDateTime} ${now}`);
+    if (sessionDateTime <= now) {
       totalSchedulesAmount += 1;
       if (productType === 'ONLINE' || productType === 'CLASS') {
         totalOnlineAmount += 1;
-        // console.log(`totalOnlineAmount: ${totalOnlineAmount}`);
+        if (logsTurnedOn)
+          console.log.log(`totalOnlineAmount: ${totalOnlineAmount}`);
       } else if (productType === 'EVENT') {
         totalEventsAmount += 1;
-        // console.log(`totalEventsAmount: ${totalEventsAmount}`);
+        if (logsTurnedOn)
+          console.log.log(`totalEventsAmount: ${totalEventsAmount}`);
       } else if (productType === 'CAMP') {
         totalCampsAmount += 1;
-        // console.log(`totalCampsAmount: ${totalCampsAmount}`);
+        if (logsTurnedOn)
+          console.log.log(`totalCampsAmount: ${totalCampsAmount}`);
       }
       totalTimeInSeconds += durationToSeconds(schedule.Product.duration);
-      // console.log(`totalTimeInSeconds: ${totalTimeInSeconds}`);
-      // console.groupEnd();
+      if (logsTurnedOn)
+        console.log.log(`totalTimeInSeconds: ${totalTimeInSeconds}`);
+      if (logsTurnedOn) console.log.groupEnd();
     }
 
     if (schedule.Feedbacks && schedule.Feedbacks.length > 0) {
