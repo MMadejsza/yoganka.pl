@@ -26,6 +26,9 @@ export const catchErr = (
     `\n❌❌❌ Error ${person} ${controllerName}`,
     err?.message || err
   );
+  if (res.headersSent) {
+    return;
+  }
   return res?.status(errCode).json({
     confirmation: -1,
     message: err.message,

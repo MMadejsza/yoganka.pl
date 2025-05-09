@@ -342,6 +342,9 @@ export const getAllSchedules = async (req, res, next) => {
       content: formattedRecords,
     });
   } catch (err) {
+    if (res.headersSent) {
+      return;
+    }
     return catchErr(person, res, errCode, err, controllerName);
   }
 };

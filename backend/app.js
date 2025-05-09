@@ -42,22 +42,24 @@ app.use(loadUserFromSession);
 app.use(setLocals);
 
 // Define route groups for different parts of the application:
-app.use(`/login-pass`, authRoutes);
-app.use(`/admin-console`, isAuth, adminRoutes);
-app.use(`/customer`, customerRoutes);
-app.use(`/`, userRoutes);
+app.use(`/api/login-pass`, authRoutes);
+app.use(`/api/admin-console`, isAuth, adminRoutes);
+app.use(`/api/customer`, customerRoutes);
+app.use(`/api/`, userRoutes);
 
 // Central error handling middleware.
 // This catches errors from previous middleware/routes, logs the stack trace, and sends a JSON error response with an appropriate status code.
 app.use((err, req, res, next) => {
   console.error(err.stack);
+  if (res.headersSent) return;
   res
     .status(err.status || 500)
-    .send({ message: err.message || 'Internal Server Error' });
+    .json({ message: err.message || 'Internal Server Error' });
 });
 
 // Handle 404 errors when no route matches the request.
-app.use((req, res) => {
+app.use((req, res, next) => {
+  if (res.headersSent) return next();
   res.status(404).send(`<h1>Page not found</h1>`);
 });
 

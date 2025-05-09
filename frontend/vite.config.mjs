@@ -44,7 +44,7 @@ export default defineConfig({
         target: 'http://localhost:3000', // (Express)
         changeOrigin: true,
         secure: false,
-        rewrite: path => path.replace(/^\/api/, ''), // delete `/api` from URL
+        // rewrite: path => path.replace(/^\/api/, ''), // delete `/api` from URL
       },
     },
   },
