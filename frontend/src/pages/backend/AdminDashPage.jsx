@@ -58,11 +58,11 @@ const sideNavTabs = [
   //   symbol: 'contact_mail',
   //   link: '/admin-console/show-all-newsletters',
   // },
-  {
-    name: `Opinie`,
-    symbol: 'rate_review',
-    link: '/admin-console/show-all-participants-feedback',
-  },
+  // {
+  //   name: `Opinie`,
+  //   symbol: 'rate_review',
+  //   link: '/admin-console/show-all-participants-feedback',
+  // },
 ];
 
 const allowedPaths = sideNavTabs.map(tab => tab.link);
