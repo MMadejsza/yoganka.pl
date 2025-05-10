@@ -171,7 +171,7 @@ export const getAccount = async (req, res, next) => {
   }
 };
 export const getSettings = createGetById(person, models.UserPrefSetting, {
-  where: req => ({ userPrefId: req.user.UserPrefSetting?.userPrefId }),
+  where: req => ({ userId: req.user.userId }),
   notFoundStatus: 200,
   resultName: 'preferences',
   successMessage: msgs.settingsLoaded,
