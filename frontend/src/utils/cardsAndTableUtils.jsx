@@ -28,6 +28,7 @@ export function onRowBtnClick(
   isAdmin,
   e
 ) {
+  const wasAlreadyBookedInThePast = row?.wasUserReserved;
   const isUserGoing = row?.isUserGoing ?? false;
   const isArchived = archived ?? false;
   const isLoggedIn = status?.isLoggedIn === true;
@@ -40,7 +41,13 @@ export function onRowBtnClick(
   console.log('🔥 CLICK!');
   console.log({ isUserGoing, isLoggedIn, isArchived, isAuthorized, hasPass });
 
-  if (!isUserGoing && isLoggedIn && !isArchived && isAuthorized && hasPass) {
+  if (
+    !isUserGoing &&
+    isLoggedIn &&
+    !isArchived &&
+    isAuthorized &&
+    (hasPass || wasAlreadyBookedInThePast)
+  ) {
     if (e?.stopPropagation) e.stopPropagation();
     method({
       customerDetails: '',

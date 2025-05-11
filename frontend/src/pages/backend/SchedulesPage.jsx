@@ -127,7 +127,6 @@ function SchedulePage() {
     setIsModalOpen(true);
     navigate(`${location.pathname}/${id}`, { state: { background } });
   };
-
   const handleCloseModal = () => {
     setIsModalOpen(false);
     reset(); // resets mutation state and flags
