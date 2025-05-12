@@ -32,7 +32,7 @@ export async function fetchItem(callPath, { signal }, minRightsPrefix) {
   console.log('✅✅ minRightsPrefix ', minRightsPrefix);
   console.log('✅ final fetchPath ', `/api${minRightsPrefix || ''}${callPath}`);
 
-  const response = await fetch(`/api${minRightsPrefix || ''}${callPath}`, {
+  const response = await fetch(`/api/${minRightsPrefix || ''}${callPath}`, {
     signal,
     cache: 'no-store',
   });

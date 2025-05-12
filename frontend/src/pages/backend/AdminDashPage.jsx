@@ -81,7 +81,7 @@ function AdminPage() {
 
   const query =
     location.pathname == '/admin-console/show-all-customer-passes'
-      ? 'admin-console/show-all-passes'
+      ? '/admin-console/show-all-passes'
       : location.pathname;
   const { data, isError, error } = useQuery({
     // as id for later caching received data to not send the same request again where location.pathname is key
