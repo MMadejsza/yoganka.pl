@@ -353,14 +353,14 @@ export const CAMPS_DATA = [
 		id: `CA04`,
 		name: `Summer ZenNature Camp - Joga | Biżuteria z kamieni | Relaks`,
 		type: `camp`,
-		date: `2025-06-28`,
+		date: `2025-06-27`,
 		link: `camp-summer-zennature`,
 		fileName: `camp_zennature`,
 		imgPath: `${htmlToImgsPath}/offer/camps/camp_zennature/front`,
 		galleryPath: `${htmlToImgsPath}/offer/camps/camp_zennature/gallery`,
 		gallerySize: 9,
 		eventType: ``,
-		extraClass: `long`,
+		extraClass: ``,
 		front: {
 			// title: `Summer ZenNature\u00A0Camp
 			// Joga |\u00A0Biżuteria z\u00A0kamieni
@@ -368,7 +368,7 @@ export const CAMPS_DATA = [
 			title: `Summer ZenNature
 			Joga | SUP joga 
 			Biżuteria z\u00A0kamieni`,
-			dates: [`27-30.06.2025`],
+			dates: [`27-29.06.2025`],
 			location: `Warmia`,
 			desc: ``,
 			btnsContent: [],
@@ -382,8 +382,7 @@ export const CAMPS_DATA = [
 				area: `Wipsowo`,
 				accommodation: `Wipsowo 44`,
 				capacity: ``,
-				price: `1670zł do 24.04  
-				1800zł od 25.04`,
+				price: `1333 zł`,
 				travel: ``,
 			},
 
@@ -393,37 +392,26 @@ export const CAMPS_DATA = [
 					{
 						'day': 'Piątek:',
 						'16:00': 'Możliwość przyjazdu, zenNature, błogi\u00A0relaks',
-						'18:00': 'Kolacja',
-						'20:00': `Zen Yoga`,
-						'21:30': `Ciepło ogniska`,
+						'18:00': 'Obfita kolacja',
+						'19:00': `Relaks przy tworzeniu naszyjników`,
 					},
 					{
 						'day': 'Sobota:',
-						'08:30': 'Sunrise yoga',
-						'09:45': 'Niespieszne śniadanie',
-						'11:00': `Zen nature: bose spacery, drzemki w\u00A0hamakach, kąpiele`,
-						'14:00': `Spotkanie przy stole - obiad`,
-						'17:00': `Mindfulness`,
-						'18:00': `Spotkanie przy stole:\u00A0kolacja`,
-						'20:00': `Sunset yoga`,
-					},
-					{
-						'day': 'Niedziela:',
 						'08:00': 'Medytacja w widokiem na las',
 						'08:30': 'Sunrise yoga',
 						'09:30': 'Niespieszne śniadanie',
-						'11:30': `Naszyjniki z kamieni`,
 						'14:00': `Spotkanie przy stole - obiad`,
-						'15:30': `Czas wolny: spa w kurniku, spacery, kąpiele`,
+						'15:30': `SUP`,
 						'18:00': `Spotkanie przy stole:\u00A0kolacja`,
-						'20:00': `Sunset yoga nidra +\u00A0yin`,
-						'21:30': `Ruska bania dla\u00A0chętnych (dodatkowo\u00A0płatna)`,
+						'20:00': `Sunset yoga nidra + yin`,
+						'21:30': `Ruska bania`,
 					},
 					{
-						'day': 'Poniedziałek:',
-						'08:00': 'Joga na\u00A0pożegnanie',
+						'day': 'Niedziela:',
+						'08:00': 'Joga na pożegnanie',
 						'09:30': 'Niespieszne śniadanie',
-						'12:00': 'Wymeldowanie i\u00A0powrót do\u00A0domu',
+						'12:00': `Wymeldowanie i powrót do domu`,
+						
 					},
 				],
 			},
@@ -435,18 +423,18 @@ export const CAMPS_DATA = [
 						`2h Warsztatu biżuterii`,
 						`3 noce`,
 						`3x dziennie pełne wyżywienie`,
-						// `Malowanie w plenerze`,
 						`SUP joga`,
 						`Medytacja oraz sesja mindfulness`,
+						`Ruska bania`,
 					],
 				},
-				optional: {
-					title: `Poszerz zen menu:`,
-					list: [
-						`Ruska bania 600zł/grupa (min. 12\u00A0osób)`,
-						`Rytuał spa w\u00A0kurniku 160zł/osoba`,
-					],
-				},
+				// optional: {
+				// 	title: `Poszerz zen menu:`,
+				// 	list: [
+				// 		`Ruska bania 600zł/grupa (min. 12\u00A0osób)`,
+				// 		`Rytuał spa w\u00A0kurniku 160zł/osoba`,
+				// 	],
+				// },
 				freeTime: {
 					title: `W czasie wolnym:`,
 					//(note: statuses are free/optional/available for different icons)
