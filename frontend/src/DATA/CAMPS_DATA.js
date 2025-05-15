@@ -31,8 +31,7 @@ export const CAMPS_DATA = [
 				title: ``,
 				area: `Karpaty`,
 				accommodation: `Poziomkowa Górka`,
-				price: `2550zł do 30.05
-				2800zł od 1.06 `,
+				price: `2550 zł`,
 			},
 
 			plan: {
