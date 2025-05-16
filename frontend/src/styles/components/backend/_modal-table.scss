@@ -1,0 +1,117 @@
+@use '../../utils/' as *;
+@use 'sass:color';
+@use 'sass:map';
+
+.modal-table {
+  width: 100%;
+  margin: 3rem 0rem 5rem;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 1.5rem;
+
+  // * span{
+  //   display: none;
+  // }
+
+  &__title {
+    font-size: 2.2rem;
+    margin-bottom: 3rem;
+  }
+
+  &__headers {
+    margin-bottom: 1rem;
+    font-size: 1.7rem;
+    border-bottom: 2px solid black;
+    background-color: rgba(map.get($colors, nav), 1);
+    box-shadow: map.get($shadows, box-shadow);
+    border-top-left-radius: map.get($sizes, border-radius);
+    border-top-right-radius: map.get($sizes, border-radius);
+  }
+
+  &__single-header {
+    transition: map.get($behavior, base-transition);
+    padding: 1rem;
+  }
+
+  &__single-header:first-child {
+    border-top-left-radius: map.get($sizes, border-radius);
+  }
+
+  &__single-header:last-child {
+    border-top-right-radius: map.get($sizes, border-radius);
+  }
+
+  &__cells {
+    transition: map.get($behavior, base-transition);
+
+    &:nth-child(2n) {
+      background-color: color.adjust(map.get($colors, nav), $lightness: 15%);
+    }
+
+    &.active:hover {
+      cursor: pointer;
+      position: relative;
+      z-index: 3;
+      opacity: 1;
+      transform: scale(1.05) translateY(0.5rem);
+      box-shadow: map.get($shadows, tile-shadow);
+      border-radius: map.get($sizes, border-radius);
+
+      .modal-table__single-cell:first-child {
+        border-top-left-radius: map.get($sizes, border-radius);
+        border-bottom-left-radius: map.get($sizes, border-radius);
+      }
+
+      .modal-table__single-cell:last-child {
+        border-top-right-radius: map.get($sizes, border-radius);
+        border-bottom-right-radius: map.get($sizes, border-radius);
+      }
+    }
+
+    &:first-child {
+      padding-top: 2rem;
+    }
+
+    &.booked {
+      background-color: color.adjust(green, $lightness: 80%);
+      opacity: 0.6;
+    }
+
+    &.booked span {
+      color: green;
+    }
+
+    &.full,
+    &.archived {
+      background-color: map.get($colors, nav);
+      opacity: 0.25;
+
+      & span {
+        color: inherit;
+      }
+    }
+  }
+
+  &__single-cell {
+    width: min-content;
+    padding: 1rem;
+    transition: map.get($behavior, base-transition);
+    white-space: preserve;
+  }
+
+  &__no-table-note {
+    font-size: 2rem;
+    margin-bottom: 5rem;
+  }
+}
+
+@include respond-to(mobile-l) {
+  .modal-table {
+    margin: 3rem 0.5rem 5rem;
+
+    & .hash {
+      max-width: 100px;
+      overflow: hidden;
+    }
+  }
+}

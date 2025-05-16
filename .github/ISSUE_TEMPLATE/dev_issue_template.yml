@@ -1,0 +1,46 @@
+name: Dev Task / Issue Template
+description: Template for reporting tasks or bugs for development purposes.
+title: "-"
+projects: ["MMadejsza/Yoganka.pl_Workflow"]
+assignees: MMadejsza
+body:
+  - type: input
+    id: date
+    attributes:
+      label: 📅 Deadline
+      placeholder: "DD-MM-YYYY"
+    validations:
+      required: true
+      
+  - type: textarea
+    id: task_summary
+    attributes:
+      label: 📝 Task Summary
+      description: Brief Summary.
+      placeholder: "A short description of the task/issue."
+    validations:
+      required: true 
+      
+  - type: checkboxes
+    id: checklist   
+    attributes:
+      label: ✅ Template Checklist
+      description: Make sure please (or leave blank). 
+      options:
+        - label: Labeled in projects?
+          required: true
+        - label: Prioritized in projects?
+          required: true
+        - label: Scaled in projects?
+        - label: Milestone assigned?
+        - label: Files provided?
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: 🗒️ Checklist/Additional notes
+      description: Any other notes or context that may help.
+      placeholder: "Optional additional notes."
+        
+
+      

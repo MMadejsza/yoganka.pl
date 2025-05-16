@@ -1,0 +1,67 @@
+name: Bug Report
+description: Bug Report template for BodyHealing
+title: "[Bug - short name]"
+labels: [yoganka, bug]
+projects: ["MMadejsza/Yoganka.pl_Workflow"]
+assignees: MMadejsza
+body:
+  - type: textarea
+    id: desc
+    attributes:
+      label: 📝 Bug Description
+      description: Clearly define WHAT the problem is and WHEN it occurs.
+      placeholder: "As specific as you can."
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: 📱 Mobile/Tablet/Desktop?
+      multiple: true
+      options:
+        - 📱 Mobile
+        - 📱 Mobile horizontal
+        - 📔 Tablet
+        - 📔 Tablet horizontal
+        - 💻 Desktop
+      default: 0
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: 🎯 What browsers are you seeing the problem on?
+      multiple: true
+      options:
+        - Chrome
+        - Safari
+        - Firefox
+        - Microsoft Edge
+      default: 0
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 📆 How urgent is it?
+      description: For example, it's important strategically like for upcoming events or it's just "Would be nice to have"?
+      options:
+        - 💥 ASAP
+        - ☝️ 1-2 weeks
+        - 🕐 Non-specified in time
+    validations:
+      required: true
+  - type: dropdown
+    id: files
+    attributes:
+      label: 📷 Have you uploaded all necessary media/files to Google Drive?
+      description: Upload all needed to repair the bug, files. To PROPERLY named directory in Google Disk (nothing new to our previous workflow). For example event photos, proper partner's logo files, named-with-date template to update content etc. OR following the form is enough.
+      options:
+        - 💪 Yes
+        - 👎 No
+        - ❔ Not needed/Idk if needed
+        - ☝️ Partially - not organized
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: 📂 Additional notes that may help
+      description: Who noticed it? Add any additional notes that may help to track the problem down, screenshots links, or examples to clarify the task requirements. 
+      placeholder: "Optional" 

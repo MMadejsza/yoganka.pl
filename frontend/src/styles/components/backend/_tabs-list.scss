@@ -1,0 +1,120 @@
+@use 'sass:map';
+@use 'sass:color';
+@use '../../utils/' as *;
+
+.tabs-list {
+  margin: 4rem 1rem;
+  color: map.get($colors, tile-title);
+
+  @include flex(row, center);
+  flex-wrap: wrap;
+  gap: 2rem 1.5rem;
+
+  &__item {
+    padding: 0.2rem 0.5rem;
+    border-radius: map.get($sizes, border-radius);
+    background-color: rgba(map.get($colors, nav), 0.3);
+    box-shadow: map.get($shadows, tile-shadow);
+
+    @include flex(row, center);
+
+    &--admin {
+      min-height: 48px;
+      flex-basis: 100%;
+    }
+  }
+
+  &__link {
+    line-height: 3.5rem;
+    font-size: 2.2rem;
+
+    .tabs-list__icon {
+      margin-right: 0.1rem;
+      font-size: 2.5rem;
+    }
+  }
+}
+
+@include respond-to(mobile-xs) {
+  .tabs-list {
+    &__item {
+      &--admin {
+        flex-basis: 47%;
+      }
+    }
+  }
+}
+
+@include respond-to(mobile-m) {
+  .tabs-list {
+    margin: 3rem 1rem;
+    gap: 2.1rem 1.9rem;
+
+    &__item {
+      &--admin {
+        flex-basis: auto;
+      }
+    }
+
+    &__link {
+      .tabs-list__icon {
+        margin-right: 0.8rem;
+      }
+    }
+  }
+}
+
+@include respond-to(mobile-mh) {
+  .tabs-list {
+    margin: 3rem 1.2rem 7rem;
+    gap: 2.5rem 2.5rem;
+
+    &__link {
+      .tabs-list__icon {
+        margin-right: 1.2rem;
+      }
+    }
+  }
+}
+
+@include respond-to(mobile-l) {
+  .tabs-list {
+    margin: 3rem 0rem 6rem;
+    gap: 3rem 3.5rem;
+
+    &__item {
+      padding: 0.2rem 2.5rem;
+    }
+
+    &__link {
+      font-size: 1.8rem;
+    }
+  }
+}
+
+@include respond-to(desktop-xs) {
+  .tabs-list {
+    &__link {
+      font-size: 2.2rem;
+    }
+  }
+}
+
+@include respond-to(desktop-s) {
+  .tabs-list {
+    &--admin {
+      display: none;
+    }
+  }
+}
+
+@include respond-to(desktop-m) {
+  .tabs-list {
+    margin: 3.5rem 0rem 7.5rem;
+    gap: 3rem 4.5rem;
+
+    &__item {
+      padding: 0.5rem 3.5rem;
+    }
+  }
+}

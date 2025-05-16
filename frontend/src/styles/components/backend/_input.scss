@@ -1,0 +1,270 @@
+@use '../../utils/' as *;
+@use 'sass:map';
+
+// =========================
+// GLOBAL FORM RESET
+// =========================
+
+input,
+select,
+textarea {
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: none;
+  font: inherit;
+  color: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  box-sizing: border-box;
+  font-size: 1.7rem;
+}
+
+// Restore native appearance where needed
+input[type='date'],
+input[type='time'],
+input[type='datetime-local'],
+input[type='month'],
+input[type='week'],
+input[type='number'],
+input[type='color'],
+select {
+  appearance: auto;
+  -webkit-appearance: auto;
+  -moz-appearance: auto;
+  overflow: visible;
+  cursor: pointer;
+  display: block !important;
+}
+
+// Checkbox & radio reset
+input[type='checkbox'],
+input[type='radio'] {
+  appearance: auto;
+  -webkit-appearance: auto;
+  -moz-appearance: auto;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  width: auto;
+  height: auto;
+  flex-basis: auto;
+}
+
+// Disabled inputs
+input:disabled,
+select:disabled,
+textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+// Placeholder styling
+input::placeholder,
+textarea::placeholder {
+  color: map.get($colors, muted-text) or #999;
+  opacity: 1; // Firefox fix
+}
+
+// =========================
+// INPUT DEFAULT STYLES
+// =========================
+
+.input-pair {
+  width: 70%;
+  @include flex(column, space-evenly, flex-start);
+  gap: 0.5rem;
+
+  label {
+    font-size: 1.8rem;
+  }
+
+  &--checkbox {
+    line-height: 4rem;
+    @include flex(row, center, center);
+    gap: 2rem;
+  }
+}
+
+.radio-group,
+.checkbox-group {
+  @include flex(row, space-evenly);
+  gap: 2.5rem;
+
+  .input-pair,
+  .generic-details__item {
+    @include flex(row, space-evenly, center);
+    flex-wrap: nowrap;
+    gap: 1rem !important;
+  }
+}
+
+// Shared styles for form controls
+input,
+select,
+textarea,
+input.generic-details-content,
+select.generic-details-content,
+textarea.generic-details-content {
+  width: 100%;
+  padding: 0.5rem 1.5rem;
+  flex-basis: 100%;
+  font-family: 'EB Garamond', serif;
+  line-height: 3rem;
+  text-align: left;
+  justify-content: flex-start !important;
+  color: map.get($colors, tile-text) !important;
+  border-radius: map.get($sizes, border-radius);
+  background-color: rgba(map.get($colors, base), 1);
+  border: 1px solid rgba(map.get($colors, accent-bcg), 0.2);
+  box-shadow: map.get($shadows, box-shadow);
+  transition: map.get($behavior, base-transition);
+  outline: none;
+}
+
+// Input hover/focus/disabled states
+input {
+  &:hover:not([disabled]),
+  &:focus:not([type='checkbox']) {
+    box-shadow: map.get($shadows, active-box-shadow);
+  }
+
+  &[disabled] {
+    opacity: 0;
+  }
+
+  &[type='checkbox'] {
+    cursor: pointer;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0.1rem;
+    font-size: 2.5rem;
+    @include flex(row, center, center);
+
+    &.generic-details__content--settings {
+      flex-basis: auto;
+    }
+  }
+}
+
+// Select inside settings
+select.generic-details__content--settings {
+  flex-basis: 20%;
+}
+
+// =========================
+// NATIVE INPUT FIXES (DATE/TIME/NUMBER)
+// =========================
+
+// This rule overrides the parent's flex styling to prevent Chrome from pushing the input to the right.
+// We use "all: unset" to remove any inherited flex properties, then reapply our desired styles.
+// Adding "margin-right: auto" forces the input to align to the left.
+.generic-details__content input[type='date'],
+.generic-details__content input[type='time'],
+.generic-details__content input[type='datetime-local'],
+.generic-details__content input[type='number'] {
+  all: unset;
+  appearance: auto;
+  -moz-appearance: auto;
+  -webkit-appearance: auto;
+
+  display: inline-block;
+  width: 100%;
+  padding: 0.5rem 1.5rem;
+  font-family: 'EB Garamond', serif;
+  line-height: 3rem;
+  background-color: map.get($colors, base);
+  color: map.get($colors, tile-text);
+  border-radius: map.get($sizes, border-radius);
+  border: 1px solid rgba(map.get($colors, accent-bcg), 0.2);
+  box-shadow: map.get($shadows, box-shadow);
+  box-sizing: border-box;
+  transition: map.get($behavior, base-transition);
+
+  margin: 0;
+  margin-right: auto !important; // Force alignment to the left
+}
+
+.validation-msgs-list {
+  margin-top: 1.5rem;
+  line-height: 150%;
+  font-size: 1.5rem;
+  text-align: left;
+  @include flex(column);
+  opacity: 0.6;
+
+  span {
+    &:last-of-type {
+      align-self: flex-start;
+    }
+    font-size: 1.8rem;
+  }
+
+  &__msg {
+    @include flex(row, flex-start, center);
+    gap: 1rem;
+
+    &--error {
+      color: #e25822;
+    }
+    &--valid {
+      color: green;
+    }
+  }
+}
+
+@include respond-to(mobile-mh) {
+  .generic-details--table-form {
+    .generic-details__list--table-form {
+      width: 100%;
+      flex-direction: row;
+      justify-content: space-evenly;
+      gap: 1.3rem;
+    }
+
+    .generic-details__item--table-form {
+      //   gap: 0.5rem !important;
+      width: min-content;
+    }
+
+    .generic-details__label--table-form {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    input.generic-details__content--table-form,
+    select.generic-details__content--table-form {
+      padding: 0.2rem 2rem;
+      line-height: 4rem;
+      height: 4rem;
+      font-size: 1.8rem;
+      //   max-width: 175x;
+    }
+  }
+
+  .validation-msgs-list {
+    font-size: 1.8rem;
+  }
+}
+
+@include respond-to(desktop-s) {
+  .generic-details--table-form {
+    .generic-details__list--table-form {
+      justify-content: center;
+      gap: 2.5rem;
+    }
+
+    .generic-details__item--table-form {
+      max-width: 200px;
+      flex-basis: 10%;
+    }
+
+    input.generic-details__content--table-form,
+    select.generic-details__content--table-form {
+      padding: 0.2rem 2.2rem;
+      max-width: 200px;
+    }
+  }
+}
