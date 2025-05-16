@@ -38,7 +38,7 @@ vite.lock
 .env
 .env.local
 .env.*.local
-
+sql.env
 # PM2 (process manager) logs (if used)
 .pids
 logs/
