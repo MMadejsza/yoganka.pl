@@ -1,32 +1,37 @@
+import connectPgSimple from 'connect-pg-simple';
 import 'dotenv/config';
-import MySQLStoreFactory from 'express-mysql-session';
 import session from 'express-session';
+import pkg from 'pg';
 
-//! not sequelize?
-const options = {
-  host: process.env.SQLSTORE_HOST,
-  port: Number(process.env.SQLSTORE_PORT),
-  user: process.env.SQLSTORE_USER,
-  password: process.env.SQLSTORE_PASS,
-  database: process.env.SQLSTORE_DB,
-  createDatabaseTable: true,
-};
+const { Pool } = pkg;
+const PgSession = connectPgSimple(session);
 
-const MySQLStore = MySQLStoreFactory(session);
-const sessionStore = new MySQLStore(options);
+// this creates a separate connection pool just for session storage
+// it's not connected to your Sequelize setup
+const pgPool = new Pool({
+  host: process.env.DB_HOST,
+  port: Number(process.env.DB_PORT),
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
+  ssl: false, // set to true when using https in production (e.g. Render)
+});
 
-// secret is used for signing the hash, resave:false - session will not be saved on every request, saveUninitialized: false - that it won't be saved if nothing is stored in this session
+// here we initialize express-session with connect-pg-simple as the store
+// it will save sessions in the "session" table in your PostgreSQL database
 export const setSession = session({
-  key: 'session_CID',
-  // ! to change
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  store: sessionStore,
+  store: new PgSession({
+    pool: pgPool,
+    tableName: 'session', // this is the default name, but you can change it
+    createTableIfMissing: true, // this creates the table automatically if it doesn't exist
+  }),
+  secret: process.env.SESSION_SECRET, // used to sign the session cookie
+  resave: false, // don't save the session if nothing changed
+  saveUninitialized: false, // don't save new sessions unless something was added
   cookie: {
-    maxAge: 86400000, // 1 day in milliseconds
-    // httpOnly: true,
-    // secure: false,
-    // sameSite: 'lax'
+    maxAge: 86400000, // session cookie valid for 1 day
+    sameSite: 'lax', // helps with csrf protection, still allows form submits
+    httpOnly: true, // prevents client-side js from reading the cookie
+    secure: false, // set to true when using https (important for production)
   },
 });

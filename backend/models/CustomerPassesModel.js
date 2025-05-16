@@ -60,7 +60,7 @@ const CustomerPass = sequelizeDb.define(
       field: 'uses_left',
     },
     status: {
-      type: DataTypes.TINYINT(1),
+      type: DataTypes.SMALLINT(1),
       allowNull: true,
       field: 'status', //1/0/-1
     },

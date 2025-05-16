@@ -27,7 +27,7 @@ const Product = sequelizeDb.define(
       field: 'location',
     },
     duration: {
-      type: DataTypes.TIME, //  HH:MM:SS
+      type: DataTypes.INTEGER,
       allowNull: false,
       field: 'duration',
     },
@@ -42,7 +42,7 @@ const Product = sequelizeDb.define(
       field: 'start_date',
     },
     status: {
-      type: DataTypes.TINYINT(1),
+      type: DataTypes.SMALLINT(1),
       allowNull: true,
       field: 'status',
     },

@@ -318,11 +318,21 @@ export const postSignup = async (req, res, next) => {
       message: msgs.registrationSuccess,
     });
   } catch (err) {
-    // central error handling
-    return catchErr(person, res, errCode, err, controllerName, {
+    console.error(
+      '❌ Sequelize Validation Error:',
+      JSON.stringify(err.errors ?? err, null, 2)
+    );
+    return res.status(500).json({
+      confirmation: -1,
+      code: 500,
       type: 'signup',
-      code: errCode,
+      message: err.message,
     });
+    // central error handling
+    // return catchErr(person, res, errCode, err, controllerName, {
+    //   type: 'signup',
+    //   code: errCode,
+    // });
   }
 };
 

@@ -22,7 +22,7 @@ export const SubscribedNewsletter = sequelizeDb.define(
       field: 'subscription_date',
     },
     subscriptionStatus: {
-      type: DataTypes.TINYINT(1),
+      type: DataTypes.SMALLINT(1),
       allowNull: false,
       field: 'subscription_status',
     },

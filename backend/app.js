@@ -64,7 +64,7 @@ app.use((req, res, next) => {
 });
 
 // Synchronize database models (with alter:true to adjust tables as needed) and then start the server on port 3000.
-db.sync().then(() => {
+db.sync({ alter: true }).then(() => {
   app.listen(3000, () =>
     console.log('🚀🚀🚀🚀🚀 Backend works on http://localhost:3000 🚀🚀🚀🚀🚀')
   );

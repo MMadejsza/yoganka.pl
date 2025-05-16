@@ -25,7 +25,7 @@ const ScheduleRecord = sequelizeDb.define(
       field: 'date',
     },
     startTime: {
-      type: DataTypes.STRING(5),
+      type: DataTypes.TIME,
       allowNull: false,
       field: 'start_time',
     },

@@ -11,7 +11,7 @@ const Newsletter = sequelizeDb.define(
       field: 'newsletter_id',
     },
     status: {
-      type: DataTypes.TINYINT(1),
+      type: DataTypes.SMALLINT(1),
       allowNull: false,
       field: 'status',
     },
