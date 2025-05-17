@@ -54,9 +54,9 @@ function SchedulePage() {
             ? `${passDef.validityDays} dni`
             : '-',
           price: `${passDef.price} zł`,
-          allowedProductTypes: JSON.parse(passDef.allowedProductTypes).join(
-            ', '
-          ),
+          allowedProductTypes: Array.isArray(passDef.allowedProductTypes)
+            ? passDef.allowedProductTypes.join(', ')
+            : JSON.parse(passDef.allowedProductTypes).join(', '),
         }))
         .sort((a, b) => {
           const aKey = a.passType.toLowerCase();
