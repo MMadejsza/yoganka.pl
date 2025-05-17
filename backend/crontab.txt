@@ -1,0 +1,2 @@
+# Run backup every day at 02:00 AM (server time)
+0 2 * * * /usr/src/app/pg_backup.sh >> /var/log/cron.log 2>&1
