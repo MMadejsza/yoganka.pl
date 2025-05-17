@@ -1932,7 +1932,7 @@ export const putEditMarkAbsent = async (req, res, next) => {
     // Mark as absent
     await models.Booking.update(
       {
-        attendance: 0,
+        attendance: false,
         timestamp: new Date(),
         performedBy: actor,
       },
@@ -2018,7 +2018,7 @@ export const putEditMarkPresent = async (req, res, next) => {
       // Mark as present
       await models.Booking.update(
         {
-          attendance: 1,
+          attendance: true,
           timestamp: new Date(),
           performedBy: actor,
         },

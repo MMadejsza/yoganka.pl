@@ -462,7 +462,7 @@ export const postCreateBookSchedule = async (req, res, next) => {
       // fetch and lock the ScheduleRecord
       const scheduleRecord = await models.ScheduleRecord.findOne({
         where: { scheduleId: req.body.scheduleId },
-        include: [{ model: models.Product }],
+        include: [{ model: models.Product, required: true }],
         transaction: t,
         lock: t.LOCK.UPDATE,
       });
@@ -483,11 +483,15 @@ export const postCreateBookSchedule = async (req, res, next) => {
       }
 
       // count current attendees
-      const currentAttendance = await models.Booking.count({
-        where: { scheduleId: req.body.scheduleId, attendance: 1 },
+      const attendees = await models.Booking.findAll({
+        where: {
+          scheduleId: req.body.scheduleId,
+          attendance: true,
+        },
         transaction: t,
         lock: t.LOCK.UPDATE,
       });
+      const currentAttendance = attendees.length;
       successLog(person, controllerName, 'got attendance');
 
       // check capacity
