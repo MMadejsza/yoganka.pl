@@ -26,9 +26,10 @@ export const calculateAgeMedian = agesArray => {
   // If even
   return (sortedAges[midIndex - 1] + sortedAges[midIndex]) / 2;
 };
-export function durationToSeconds(durationStr) {
-  const [hours, minutes, seconds] = durationStr.split(':').map(Number);
-  return hours * 3600 + minutes * 60 + seconds;
+export function durationToSeconds(durationStrInMinutes) {
+  // const [hours, minutes, seconds] = durationStr.split(':').map(Number);
+  // return hours * 3600 + minutes * 60 + seconds;
+  return durationStrInMinutes * 60;
 }
 export function secondsToDuration(totalSeconds, limiter) {
   let days;
