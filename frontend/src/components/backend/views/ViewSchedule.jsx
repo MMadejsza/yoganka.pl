@@ -1,7 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { pickTheBestPassForSchedule } from '../../../../../backend/utils/controllersUtils.js';
 import SymbolOrIcon from '../../../components/common/SymbolOrIcon.jsx';
 import { useAuthStatus } from '../../../hooks/useAuthStatus.js';
 import { useFeedback } from '../../../hooks/useFeedback.js';
@@ -9,7 +8,10 @@ import { useInput } from '../../../hooks/useInput.js';
 import { formatAllowedTypes } from '../../../utils/cardsAndTableUtils.jsx';
 import { mutateOnEdit, queryClient } from '../../../utils/http.js';
 import { statsCalculatorForSchedule } from '../../../utils/statistics/statsCalculatorForSchedule.js';
-import { hasValidPassFn } from '../../../utils/userCustomerUtils.js';
+import {
+  hasValidPassFn,
+  pickTheBestPassForSchedule,
+} from '../../../utils/userCustomerUtils.js';
 import Input from '../../backend/Input.jsx';
 import FeedbackBox from '../FeedbackBox.jsx';
 import NewCustomerFormForUser from './add-forms/NewCustomerFormForUser.jsx';

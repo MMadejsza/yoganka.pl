@@ -1,5 +1,5 @@
 import { QueryClient } from '@tanstack/react-query';
-import * as msgs from '../../../backend/utils/resMessagesUtils';
+import * as msgs from './resMessagesUtils';
 export const queryClient = new QueryClient();
 
 // Util function for managing behavior of fetch for http requests

@@ -1,7 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import * as msgs from '../../../../backend/utils/resMessagesUtils.js';
 import { useAuthStatus } from '../../hooks/useAuthStatus.js';
 import { useFeedback } from '../../hooks/useFeedback.js';
 import { useInput } from '../../hooks/useInput.js';
@@ -10,6 +9,7 @@ import {
   mutateOnNewPassword,
   queryClient,
 } from '../../utils/http.js';
+import * as msgs from '../../utils/resMessagesUtils.js';
 import {
   emailValidations,
   getConfirmedPasswordValidations,
