@@ -6,6 +6,7 @@ import SymbolOrIcon from '../../../components/common/SymbolOrIcon.jsx';
 import { useAuthStatus } from '../../../hooks/useAuthStatus.js';
 import { useFeedback } from '../../../hooks/useFeedback.js';
 import { useInput } from '../../../hooks/useInput.js';
+import { formatAllowedTypes } from '../../../utils/cardsAndTableUtils.jsx';
 import { mutateOnEdit, queryClient } from '../../../utils/http.js';
 import { statsCalculatorForSchedule } from '../../../utils/statistics/statsCalculatorForSchedule.js';
 import { hasValidPassFn } from '../../../utils/userCustomerUtils.js';
@@ -92,7 +93,7 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
   const bestPassesFormatted = bestPasses?.map(p => {
     const fDate = p.validUntil ? p.validUntil.slice(0, 10) : '';
     const fTypes = p.PassDefinition.allowedProductTypes
-      ? JSON.parse(p.PassDefinition.allowedProductTypes).join(', ')
+      ? formatAllowedTypes(p.PassDefinition.allowedProductTypes)
       : '';
     const expiryDate = fDate ? `Do: ${fDate},` : '';
     const usesLeft = p.usesLeft ? `Pozostałe wejścia: ${p.usesLeft},` : '';

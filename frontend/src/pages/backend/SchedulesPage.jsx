@@ -7,6 +7,7 @@ import TabsList from '../../components/backend/TabsList.jsx';
 import ViewsController from '../../components/backend/ViewsController.jsx';
 import Section from '../../components/frontend/Section.jsx';
 import { useAuthStatus } from '../../hooks/useAuthStatus.js';
+import { formatAllowedTypes } from '../../utils/cardsAndTableUtils.jsx';
 import { formatIsoDateTime } from '../../utils/dateTime.js';
 import { fetchData, mutateOnCreate, queryClient } from '../../utils/http.js';
 
@@ -54,9 +55,9 @@ function SchedulePage() {
             ? `${passDef.validityDays} dni`
             : '-',
           price: `${passDef.price} zł`,
-          allowedProductTypes: Array.isArray(passDef.allowedProductTypes)
-            ? passDef.allowedProductTypes.join(', ')
-            : JSON.parse(passDef.allowedProductTypes).join(', '),
+          allowedProductTypes: passDef.allowedProductTypes
+            ? formatAllowedTypes(passDef.allowedProductTypes)
+            : '',
         }))
         .sort((a, b) => {
           const aKey = a.passType.toLowerCase();

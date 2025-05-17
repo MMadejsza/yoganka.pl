@@ -1,3 +1,4 @@
+import { formatAllowedTypes } from '../../../../utils/cardsAndTableUtils.jsx';
 import { formatIsoDateTime } from '../../../../utils/dateTime.js';
 import ModalTable from '../../ModalTable.jsx';
 import WrapperModalTable from '../../WrapperModalTable.jsx';
@@ -39,18 +40,7 @@ function TableCustomerPasses({
         '-1': 'Wygasły',
       };
 
-      let allowedProductTypes = '';
-      try {
-        const parsed = JSON.parse(cp.allowedProductTypes);
-        allowedProductTypes = Array.isArray(parsed) ? parsed.join(', ') : '';
-      } catch (e) {
-        console.log(
-          'Błąd parsowania allowedProductTypes:',
-          cp.allowedProductTypes,
-          e
-        );
-        allowedProductTypes = '';
-      }
+      let allowedProductTypes = formatAllowedTypes(cp.allowedProductTypes);
 
       return {
         ...cp,

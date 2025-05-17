@@ -1,3 +1,4 @@
+import { formatAllowedTypes } from './cardsAndTableUtils.jsx';
 import { parsePLDateAtEndOfDay } from './dateTime';
 import { queryClient } from './http.js';
 
@@ -22,63 +23,62 @@ export const applyFontSize = fontsize => {
 };
 
 export const hasValidPassFn = (status, row) => {
-  if (!status?.user?.Customer?.CustomerPasses) return false;
-  return status.user?.Customer?.CustomerPasses?.some(currentCustomerPass => {
-    // Parsujemy allowedProductTypes i przekształcamy wszystko do uppercase
-    let allowedTypeArr = [];
-    try {
-      allowedTypeArr = JSON.parse(
-        currentCustomerPass.PassDefinition.allowedProductTypes
-      );
-    } catch (e) {
-      allowedTypeArr = currentCustomerPass.PassDefinition.allowedProductTypes
-        .split(',')
-        .map(s => s.trim());
-    }
-    allowedTypeArr = allowedTypeArr.map(type => type.toUpperCase());
+  const debugLogsTurnedOn = false;
 
-    // Porównujemy typ produktu, również do uppercase
+  // If there are no customer passes, just return false
+  if (!status?.user?.Customer?.CustomerPasses) return false;
+
+  return status.user?.Customer?.CustomerPasses?.some(currentCustomerPass => {
+    // Parse allowedProductTypes and make sure it's an array
+    let allowedTypeArr = currentCustomerPass.PassDefinition.allowedProductTypes;
+
+    allowedTypeArr = formatAllowedTypes(allowedTypeArr, '', true);
+
+    // Make sure each product type is uppercase for comparison
     const productType = row.Product?.type
       ? row.Product.type.trim().toUpperCase()
       : '';
     const isAllowedType = allowedTypeArr.some(
-      allowedType => allowedType === productType
+      allowedType => allowedType.toUpperCase() === productType
     );
 
-    // Parsujemy datę harmonogramu przy użyciu funkcji parsePLDateAtEndOfDay
-    const parsedDate = parsePLDateAtEndOfDay(row.date); // Upewnij się, że ta funkcja działa poprawnie
+    // Parse the schedule date (date from row)
+    const parsedDate = parsePLDateAtEndOfDay(row.date); // This should return a valid date string
     if (!parsedDate || isNaN(new Date(parsedDate))) {
-      // console.log('hasValidPassFn: parsedDate error', row.date, parsedDate);
+      if (debugLogsTurnedOn)
+        console.log('hasValidPassFn: parsedDate error', row.date, parsedDate);
       return false;
     }
 
     const scheduleDate = new Date(parsedDate);
-    // Używamy operatorów >= i <= (możesz dostosować, jeśli chcesz mieć margines)
+
+    // Check if the pass is still valid at this time
     const isExpiredAtTheTime =
       scheduleDate > new Date(currentCustomerPass.validUntil);
     const isStartedAtTheTime =
       scheduleDate >= new Date(currentCustomerPass.validFrom);
 
+    // If pass is COUNT or MIXED, we need to check entries left
     const passType = currentCustomerPass.PassDefinition.passType.toUpperCase();
     const hasEntriesLeft =
       passType === 'COUNT' || passType === 'MIXED'
         ? currentCustomerPass.usesLeft > 0
-          ? true
-          : false
         : true;
 
-    // Log dla debugowania
-    // console.log('[hasValidPassFn]', {
-    //   productType,
-    //   allowedTypeArr,
-    //   scheduleDate,
-    //   validUntil: currentCustomerPass.validUntil,
-    //   validFrom: currentCustomerPass.validFrom,
-    //   isExpiredAtTheTime,
-    //   isStartedAtTheTime,
-    //   hasEntriesLeft,
-    // });
+    // Debug logs if needed
+    if (debugLogsTurnedOn)
+      console.log('[hasValidPassFn]', {
+        productType,
+        allowedTypeArr,
+        scheduleDate,
+        validUntil: currentCustomerPass.validUntil,
+        validFrom: currentCustomerPass.validFrom,
+        isExpiredAtTheTime,
+        isStartedAtTheTime,
+        hasEntriesLeft,
+      });
 
+    // All conditions must be met for the pass to be considered valid
     return (
       isAllowedType &&
       !isExpiredAtTheTime &&

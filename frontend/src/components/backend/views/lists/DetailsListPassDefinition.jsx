@@ -1,3 +1,4 @@
+import { formatAllowedTypes } from '../../../../utils//cardsAndTableUtils.jsx';
 import GenericList from '../../../common/GenericList.jsx';
 
 function DetailsListPassDefinition({
@@ -47,7 +48,7 @@ function DetailsListPassDefinition({
     details.push({
       label: 'Obejmuje:',
       content: passDefinition.allowedProductTypes
-        ? JSON.parse(passDefinition.allowedProductTypes).join(', ')
+        ? formatAllowedTypes(passDefinition.allowedProductTypes)
         : null,
     });
 

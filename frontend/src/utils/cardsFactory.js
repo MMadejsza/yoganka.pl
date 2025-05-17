@@ -1,4 +1,5 @@
 import {
+  formatAllowedTypes,
   formatAttendance,
   formatPaymentStatus,
   pickCustomerSymbol,
@@ -17,25 +18,6 @@ function parseDateParts(dateStr) {
     [year, month, day] = raw.split('-');
   }
   return { day, month, year, monthName: monthMap[month] || '-' };
-}
-
-//Format JSON list of allowed product types into a human-readable string.
-function formatAllowedTypes(rawStr) {
-  if (!rawStr) return '';
-  let items;
-  try {
-    const parsed = JSON.parse(rawStr);
-    // ensure it's an array
-    items = Array.isArray(parsed) ? parsed : rawStr.split(',');
-  } catch {
-    // not valid JSON, split on commas
-    items = rawStr.split(',');
-  }
-  return items
-    .map(t => t.trim())
-    .filter(Boolean)
-    .map(t => t[0].toUpperCase() + t.slice(1).toLowerCase())
-    .join(', ');
 }
 
 //Build props object for a Payments card.
