@@ -5,9 +5,9 @@ services:
     image: postgres:15 # Use the latest stable PostgreSQL image
     restart: always # Restart container if it crashes
     environment:
-      POSTGRES_DB: yoganka # Database name
-      POSTGRES_USER: postgres # Default user
-      POSTGRES_PASSWORD: admin1 # Default password
+      POSTGRES_DB: ${DB_NAME} # Database name
+      POSTGRES_USER: ${DB_USER} # Default user
+      POSTGRES_PASSWORD: ${DB_PASS} # Default password
     ports:
       - '5432:5432' # Map local port 5432 to container's port 5432
     volumes:
@@ -15,17 +15,11 @@ services:
       - ./db-backups:/backups # Folder to store database backups
 
   backend:
-    build: . # Build from current directory (Dockerfile)
+    build: ./backend/app   # Build from current directory (Dockerfile)
     ports:
-      - '3000:3000' # Expose backend port
-    environment: # Environment variables for backend connection to DB
-      DB_NAME: yoganka
-      DB_USER: postgres
-      DB_PASS: admin1
-      DB_DIALECT: postgres
-      DB_HOST: db # Hostname of the DB container
-      DB_PORT: 5432
-      SESSION_SECRET: my secret
+      - '3000:3000' # Expose backend port     
+    env_file: # Environment variables for backend connection to DB
+      - .env.local
     depends_on:
       - db # Wait for the db service before starting
     volumes:

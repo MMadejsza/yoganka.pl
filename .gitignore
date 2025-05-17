@@ -38,6 +38,7 @@ vite.lock
 
 # Environment files
 .env
+.env.*
 .env.local
 .env.*.local
 sql.env
