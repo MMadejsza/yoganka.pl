@@ -1,4 +1,6 @@
 .gitignore
+*.zip
+
 # Ignore node dependencies
 node_modules/
 

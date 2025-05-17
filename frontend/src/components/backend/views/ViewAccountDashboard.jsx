@@ -52,12 +52,12 @@ function ViewAccountDashboard({ data, queryStatus }) {
     contentUpcoming = content
       .filter(
         schedule =>
-          new Date(`${schedule.date}T${schedule.startTime}:00.000Z`) >= today
+          new Date(`${schedule.date}T${schedule.startTime}.000Z`) >= today
       )
       .sort(
         (a, b) =>
-          new Date(`${a.date}T${a.startTime}:00.000Z`) -
-          new Date(`${b.date}T${b.startTime}:00.000Z`)
+          new Date(`${a.date}T${a.startTime}.000Z`) -
+          new Date(`${b.date}T${b.startTime}.000Z`)
       );
     console.log('contentUpcoming', contentUpcoming);
   }

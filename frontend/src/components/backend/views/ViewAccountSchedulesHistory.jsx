@@ -18,14 +18,14 @@ function ViewAccountSchedulesHistory({ data }) {
   content = customerStats?.attendedSchedules
     .filter(record => {
       const scheduleDateTime = new Date(
-        `${record.date}T${record.startTime}:00.000Z`
+        `${record.date}T${record.startTime}.000Z`
       );
       return scheduleDateTime < new Date();
     })
     .sort(
       (a, b) =>
-        new Date(`${b.date}T${b.startTime}:00.000Z`) -
-        new Date(`${a.date}T${a.startTime}:00.000Z`)
+        new Date(`${b.date}T${b.startTime}.000Z`) -
+        new Date(`${a.date}T${a.startTime}.000Z`)
     );
 
   const stats = data.customer ? (
