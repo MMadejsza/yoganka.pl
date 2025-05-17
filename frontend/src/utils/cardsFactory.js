@@ -166,9 +166,11 @@ export function getScheduleContent(
     quickActionMethod = onQuickAction[0].method;
   }
 
-  const [hh = '0', mm = '0'] = row.productDuration?.split(':') || [];
-  const hours = String(Number(hh));
-  const mins = String(Number(mm));
+  const hh = Math.floor(row.productDuration / 60) || '0';
+  const mm = Math.floor(row.productDuration % 60) || '0';
+  // const [hh = '0', mm = '0'] = row.productDuration?.split(':') || [];
+  // const hours = String(Number(hh));
+  // const mins = String(Number(mm));
   const rawType = row.productType || '';
   const typeFinal = (rawType[0] || '') + rawType.slice(1).toLowerCase();
 
@@ -183,8 +185,7 @@ export function getScheduleContent(
     squareMiddleIcon: '',
     squareBottom: `${monthName} ${year}`,
     description: row.startTime || '',
-    dimmedDescription:
-      mins !== '0' ? ` (${hours}h ${mins}min)` : ` (${hours}h)`,
+    dimmedDescription: mm !== '0' ? ` (${hh}h ${mm}min)` : ` (${hh}h)`,
     cardFooter: row.location || '',
     titleIcon: 'self_improvement',
     typeIcon: 'category',
