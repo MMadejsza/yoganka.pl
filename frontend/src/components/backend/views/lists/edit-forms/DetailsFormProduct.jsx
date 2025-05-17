@@ -48,8 +48,7 @@ function DetailsFormProduct({ productData }) {
   const dateDefault = productData?.startDate || formatIsoDateTime(new Date());
   const locationDefault = productData?.location || ' ';
   const timeString = productData?.duration;
-  const [hours, minutes, seconds] = timeString.split(':').map(Number);
-  const totalHours = hours + minutes / 60 + seconds / 3600;
+  const totalHours = timeString / 60;
   const durationDefault = totalHours || 1;
   const priceDefault = productData?.price || 500.0;
   const statusDefault = productData?.status || 1;
@@ -159,9 +158,7 @@ function DetailsFormProduct({ productData }) {
     const fd = new FormData(e.target);
     const formDataObj = Object.fromEntries(fd.entries());
     const givenHoursToMinutes = formDataObj.duration * 60;
-    const newDuration = `${Math.floor(givenHoursToMinutes / 60)}:${String(
-      givenHoursToMinutes % 60
-    ).padStart(2, '0')}:00`;
+    const newDuration = String(givenHoursToMinutes);
     formDataObj.duration = newDuration;
     formDataObj.price = parseFloat(formDataObj.price).toFixed(2);
     console.log('sent data:', JSON.stringify(formDataObj));

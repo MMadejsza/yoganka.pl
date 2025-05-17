@@ -12,6 +12,7 @@ import {
 import * as msgs from '../utils/resMessagesUtils.js';
 let errCode = errorCode;
 const person = 'User';
+const debugLogsGloballyTurnedOff = true;
 
 //! USER_____________________________________________
 //@ GET
@@ -30,7 +31,8 @@ export const getAccount = async (req, res, next) => {
     // if user has no Customer record, return just the user object
     if (!req.user.Customer) {
       const user = req.user;
-      console.log('\n✅✅✅ getAccount user fetched');
+      if (!debugLogsGloballyTurnedOff)
+        console.log('\n✅✅✅ getAccount user fetched');
       successLog(person, controllerName, 'user-only');
       return res.status(200).json({
         confirmation: 1,
@@ -159,7 +161,8 @@ export const getAccount = async (req, res, next) => {
     customer.formattedBookings = formattedBookings;
 
     // return the assembled response
-    console.log('\n✅✅✅ showAccount customer fetched');
+    if (!debugLogsGloballyTurnedOff)
+      console.log('\n✅✅✅ showAccount customer fetched');
     successLog(person, controllerName, 'customer fetched');
     return res.status(200).json({
       customer,

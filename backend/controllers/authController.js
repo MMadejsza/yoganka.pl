@@ -16,6 +16,7 @@ import {
 import * as msgs from '../utils/resMessagesUtils.js';
 let errCode = errorCode;
 const person = 'User';
+const debugLogsGloballyTurnedOff = true;
 
 //! STATUS_____________________________________________________
 //@ GET
@@ -123,14 +124,16 @@ export const postLogin = async (req, res, next) => {
     const user = await models.User.findOne({ where: { email } });
     if (!user) {
       errCode = 404;
-      console.log("\n❌❌❌ User doesn't exist");
+      if (!debugLogsGloballyTurnedOff)
+        console.log("\n❌❌❌ User doesn't exist");
       throw new Error(msgs.userNotFound);
     }
 
     // ensure email is verified
     if (user.emailVerified === false) {
       errCode = 403;
-      console.log('\n⛔ Konto nieaktywne – brak potwierdzenia maila');
+      if (!debugLogsGloballyTurnedOff)
+        console.log('\n⛔ Konto nieaktywne – brak potwierdzenia maila');
       throw new Error(msgs.emailNotYetVerified);
     }
 
@@ -142,7 +145,8 @@ export const postLogin = async (req, res, next) => {
     const match = await bcrypt.compare(password, user.passwordHash);
     if (!match) {
       errCode = 400;
-      console.log('\n❌❌❌ Password incorrect');
+      if (!debugLogsGloballyTurnedOff)
+        console.log('\n❌❌❌ Password incorrect');
       throw new Error(msgs.wrongPassword);
     }
     successLog(person, controllerName, 'pass match as well');
@@ -223,7 +227,8 @@ export const getEmailToken = async (req, res, next) => {
     // if no such token, bail out
     if (!validTokenRecord) {
       errCode = 400;
-      console.log('❌ Invalid or expired verification token.');
+      if (!debugLogsGloballyTurnedOff)
+        console.log('❌ Invalid or expired verification token.');
       throw new Error(msgs.invalidTokenMessage);
     }
 
@@ -362,7 +367,8 @@ export const getPasswordToken = async (req, res, next) => {
     // if no record found, treat as invalid
     if (!validTokenRecord) {
       errCode = 400;
-      console.log('❌ Wrong or expired password token');
+      if (!debugLogsGloballyTurnedOff)
+        console.log('❌ Wrong or expired password token');
       throw new Error(msgs.invalidTokenMessage);
     }
 
@@ -394,7 +400,8 @@ export const postResetPassword = async (req, res, next) => {
     });
     if (!user) {
       errCode = 404;
-      console.log("\n❌❌❌ User doesn't exist");
+      if (!debugLogsGloballyTurnedOff)
+        console.log("\n❌❌❌ User doesn't exist");
       throw new Error(msgs.userNotFound);
     }
 
@@ -528,7 +535,7 @@ export const putEditPassword = async (req, res, next) => {
     // if token not found or expired, abort
     if (!verToken) {
       errCode = 400;
-      console.log('\n❌❌❌ Wrong token');
+      if (!debugLogsGloballyTurnedOff) console.log('\n❌❌❌ Wrong token');
       throw new Error(msgs.sessionExpired);
     }
 
@@ -554,7 +561,8 @@ export const putEditPassword = async (req, res, next) => {
     // after a short delay, mark this token as used
     setTimeout(() => {
       verToken.update({ used: true }).catch(err => {
-        console.log('Failed to mark token as used:', err);
+        if (!debugLogsGloballyTurnedOff)
+          console.log('Failed to mark token as used:', err);
       });
     }, 5000);
   } catch (err) {

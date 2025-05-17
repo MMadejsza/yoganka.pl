@@ -21,6 +21,7 @@ import * as customerEmails from '../utils/mails/templates/customerActions/_custo
 import * as msgs from '../utils/resMessagesUtils.js';
 let errCode = errorCode;
 const person = 'Customer';
+const debugLogsGloballyTurnedOff = true;
 
 //! CUSTOMERS_____________________________________________
 //@ GET
@@ -37,7 +38,7 @@ export const putEditCustomerDetails = async (req, res, next) => {
   const controllerName = 'putEditCustomerDetails';
   callLog(req, person, controllerName);
   try {
-    console.log(req.body);
+    if (!debugLogsGloballyTurnedOff) console.log(req.body);
     const customer = req.user.Customer;
     const customerId = customer.customerId;
     const { phone: newPhone, cMethod: newContactMethod } = req.body;
@@ -134,9 +135,10 @@ export const postCreateBuyPass = async (req, res, next) => {
     //If user has no Customer record yet, validate input and create one
     if (!req.user.Customer) {
       const cDetails = req.body.customerDetails;
-      console.log(
-        '❗❗❗User is not the customer, creation of the record Customer...'
-      );
+      if (!debugLogsGloballyTurnedOff)
+        console.log(
+          '❗❗❗User is not the customer, creation of the record Customer...'
+        );
       errCode = 400;
 
       try {
@@ -154,12 +156,14 @@ export const postCreateBuyPass = async (req, res, next) => {
 
         // validate adult
         if (!isAdult(cDetails.dob)) {
-          console.log('\n❌❌❌ Customer below 18');
+          if (!debugLogsGloballyTurnedOff)
+            console.log('\n❌❌❌ Customer below 18');
           throw new Error(msgs.notAnAdult);
         }
         // validate pass start date
         if (!isAdult(req.body.validFrom)) {
-          console.log('\n❌❌❌ No pass start date specified');
+          if (!debugLogsGloballyTurnedOff)
+            console.log('\n❌❌❌ No pass start date specified');
           throw new Error(msgs.noPassStartDate);
         }
       } catch (err) {
@@ -356,8 +360,8 @@ export const postCreateBuyPass = async (req, res, next) => {
 export const postCreateBookSchedule = async (req, res, next) => {
   const controllerName = 'postCreateBookSchedule';
   callLog(req, person, controllerName);
-  console.log(`req.body`, req.body);
-  console.log(`req.user`, req.user);
+  if (!debugLogsGloballyTurnedOff) console.log(`req.body`, req.body);
+  if (!debugLogsGloballyTurnedOff) console.log(`req.user`, req.user);
 
   let errCode = 500;
   let currentCustomer;
@@ -372,9 +376,10 @@ export const postCreateBookSchedule = async (req, res, next) => {
     // If the user is not yet a Customer, validate and create one
     if (!req.user.Customer) {
       const cDetails = req.body.customerDetails;
-      console.log(
-        '❗❗❗User is not the customer, creation of the record Customer...'
-      );
+      if (!debugLogsGloballyTurnedOff)
+        console.log(
+          '❗❗❗User is not the customer, creation of the record Customer...'
+        );
 
       // set error code for validation errors
       errCode = 400;
@@ -387,7 +392,8 @@ export const postCreateBookSchedule = async (req, res, next) => {
         isEmptyInput(cDetails.dob, 'data urodzenia', msgs.noBirthDate);
         isEmptyInput(cDetails.phone, 'telefon', msgs.noPhonePicked);
         if (!isAdult(cDetails.dob)) {
-          console.log('\n❌❌❌ Customer below 18');
+          if (!debugLogsGloballyTurnedOff)
+            console.log('\n❌❌❌ Customer below 18');
           throw new Error(msgs.notAnAdult);
         }
       } catch (err) {
@@ -532,7 +538,7 @@ export const postCreateBookSchedule = async (req, res, next) => {
         // determine if a valid pass is available
         const chosenCustomerPassId = req.body.chosenCustomerPassId;
         const numericId = Number(chosenCustomerPassId);
-        // console.log('❗❗❗ chosenCustomerPassId: ', chosenCustomerPassId);
+        // if(!debugLogsGloballyTurnedOff) console.log('❗❗❗ chosenCustomerPassId: ', chosenCustomerPassId);
 
         let validPass = null;
         if (
@@ -553,9 +559,11 @@ export const postCreateBookSchedule = async (req, res, next) => {
                 currentCustomer.CustomerPasses,
                 currentScheduleRecord
               )?.bestPass || false;
-            console.log(' else validPass =', validPass);
+            if (!debugLogsGloballyTurnedOff)
+              console.log(' else validPass =', validPass);
           }
-          console.log('❗❗❗ valid pass: ', validPass.PassDefinition.name);
+          if (!debugLogsGloballyTurnedOff)
+            console.log('❗❗❗ valid pass: ', validPass.PassDefinition.name);
         }
 
         if (validPass) {

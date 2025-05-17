@@ -65,7 +65,7 @@ const Booking = sequelizeDb.define(
       field: 'created_at',
     },
     performedBy: {
-      type: DataTypes.STRING(10),
+      type: DataTypes.STRING(13),
       allowNull: false,
       defaultValue: 'Customer',
       field: 'performed_by',

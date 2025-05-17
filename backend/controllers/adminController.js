@@ -6,7 +6,7 @@ import {
   areCustomerDetailsChanged,
   areSettingsChanged,
   calcPassExpiryDate,
-  convertDurationToTime,
+  formatAllowedTypes,
   isEmptyInput,
   isPassValidForSchedule,
 } from '../utils/controllersUtils.js';
@@ -32,6 +32,7 @@ import * as adminEmails from '../utils/mails/templates/adminOnlyActions/_adminEm
 
 let errCode = errorCode;
 const actor = 'Admin';
+const debugLogsGloballyTurnedOff = true;
 
 //! USERS_____________________________________________
 //@ GET
@@ -187,8 +188,8 @@ export const putEditUserSettings = async (req, res, next) => {
   const userId = req.params.id;
   let errCode = 500; // default error code
 
-  console.log(`❗❗❗`, req.body);
-  console.log(`❗❗❗`, req.params.id);
+  if (!debugLogsGloballyTurnedOff) console.log(`❗❗❗`, req.body);
+  if (!debugLogsGloballyTurnedOff) console.log(`❗❗❗`, req.params.id);
 
   try {
     // Check if userId param is provided
@@ -544,7 +545,8 @@ export const postCreateCustomer = async (req, res, next) => {
     // Check age
     if (!isAdult(dob)) {
       errCode = 400;
-      console.log('\n❌❌❌ Customer below 18');
+      if (!debugLogsGloballyTurnedOff)
+        console.log('\n❌❌❌ Customer below 18');
       throw new Error('Uczestnik musi być pełnoletni.');
     }
 
@@ -650,7 +652,8 @@ export const putEditCustomerDetails = async (req, res, next) => {
       notes === newNotes
     ) {
       // Nothing changed
-      console.log('\n❓❓❓ Admin Customer no change');
+      if (!debugLogsGloballyTurnedOff)
+        console.log('\n❓❓❓ Admin Customer no change');
       return res.status(200).json({
         confirmation: 0,
         message: 'Brak zmian',
@@ -1027,7 +1030,8 @@ export const putEditSchedule = async (req, res, next) => {
     );
     if (originalDateTime < new Date()) {
       errCode = 400;
-      console.log('\n❓❓❓ Admin schedule is past - not to edit');
+      if (!debugLogsGloballyTurnedOff)
+        console.log('\n❓❓❓ Admin schedule is past - not to edit');
       throw new Error('Nie można edytować minionego terminu.');
     }
 
@@ -1039,7 +1043,8 @@ export const putEditSchedule = async (req, res, next) => {
       schedule.location === newLocation
     ) {
       // Nothing changed, return early
-      console.log('\n❓❓❓ Admin schedule no change');
+      if (!debugLogsGloballyTurnedOff)
+        console.log('\n❓❓❓ Admin schedule no change');
       return res.status(200).json({ confirmation: 0, message: 'Brak zmian' });
     }
 
@@ -1076,19 +1081,22 @@ export const deleteSchedule = createDelete(actor, models.ScheduleRecord, {
   preAction: async req => {
     const controllerName = 'deleteSchedule';
     // Log that admin called this endpoint
-    console.log(`➡️➡️➡️ admin called`, controllerName);
+    if (!debugLogsGloballyTurnedOff)
+      console.log(`➡️➡️➡️ admin called`, controllerName);
 
     const id = req.params.id;
-    console.log(`${controllerName} deleting id:`, id);
+    if (!debugLogsGloballyTurnedOff)
+      console.log(`${controllerName} deleting id:`, id);
 
     // Find the schedule record by ID
     const foundSchedule = await models.ScheduleRecord.findOne({
       where: { scheduleId: id },
     });
     if (!foundSchedule) {
-      console.log(
-        `❌❌❌ Error Admin ${controllerName} Schedule to delete not found.`
-      );
+      if (!debugLogsGloballyTurnedOff)
+        console.log(
+          `❌❌❌ Error Admin ${controllerName} Schedule to delete not found.`
+        );
       const err = new Error('Nie znaleziono terminu do usunięcia.');
       err.status = 404;
       throw err;
@@ -1099,9 +1107,10 @@ export const deleteSchedule = createDelete(actor, models.ScheduleRecord, {
       `${foundSchedule.date}T${foundSchedule.startTime}:00`
     );
     if (scheduleDateTime < new Date()) {
-      console.log(
-        `❌❌❌ Error Admin ${controllerName} Schedule is passed - can't be deleted.`
-      );
+      if (!debugLogsGloballyTurnedOff)
+        console.log(
+          `❌❌❌ Error Admin ${controllerName} Schedule is passed - can't be deleted.`
+        );
       const err = new Error(
         'Nie można usunąć terminu który już minął. Posiada też wartość historyczną dla statystyk.'
       );
@@ -1114,9 +1123,10 @@ export const deleteSchedule = createDelete(actor, models.ScheduleRecord, {
       where: { scheduleId: id },
     });
     if (hasBooking) {
-      console.log(
-        `❌❌❌ Error Admin ${controllerName} Schedule is booked - can't be deleted.`
-      );
+      if (!debugLogsGloballyTurnedOff)
+        console.log(
+          `❌❌❌ Error Admin ${controllerName} Schedule is booked - can't be deleted.`
+        );
       const err = new Error(
         'Nie można usunąć terminu, który posiada rekordy obecności (obecny/anulowany). Najpierw USUŃ rekordy obecności w konkretnym terminie.'
       );
@@ -1243,7 +1253,7 @@ export const postCreateProduct = async (req, res, next) => {
       name,
       type: productType,
       location,
-      duration: convertDurationToTime(duration),
+      duration: duration * 60,
       price,
       startDate,
       status: Number(status) || 1,
@@ -1277,7 +1287,7 @@ export const putEditProduct = async (req, res, next) => {
       price: newPrice,
       status: newStatus,
     } = req.body;
-    console.log('❗❗❗ req.body ', req.body);
+    if (!debugLogsGloballyTurnedOff) console.log('❗❗❗ req.body ', req.body);
     // Check for missing inputs
     if (
       !newType?.trim() ||
@@ -1288,7 +1298,8 @@ export const putEditProduct = async (req, res, next) => {
       !newStatus?.trim()
     ) {
       errCode = 400;
-      console.log('\n❌❌❌ Error putEditProduct:', 'No enough data');
+      if (!debugLogsGloballyTurnedOff)
+        console.log('\n❌❌❌ Error putEditProduct:', 'No enough data');
       throw new Error('Nie podano wszystkich danych.');
     }
 
@@ -1310,7 +1321,8 @@ export const putEditProduct = async (req, res, next) => {
       String(product.status) === newStatus
     ) {
       // Nothing changed
-      console.log('\n❓❓❓ Admin Product no change');
+      if (!debugLogsGloballyTurnedOff)
+        console.log('\n❓❓❓ Admin Product no change');
       return res.status(200).json({
         confirmation: 0,
         message: 'Brak zmian',
@@ -1362,7 +1374,7 @@ export const getAllPasses = createGetAll(actor, models.PassDefinition, {
     usesTotal: passDef.usesTotal || '-',
     validityDays: passDef.validityDays ? `${passDef.validityDays} dni` : '-',
     price: `${passDef.price} zł`,
-    allowedProductTypes: JSON.parse(passDef.allowedProductTypes).join(', '),
+    allowedProductTypes: formatAllowedTypes(passDef.allowedProductTypes),
   }),
 
   //after we have the list of definitions, also fetch & format all CustomerPasses
@@ -1398,7 +1410,7 @@ export const getAllPasses = createGetAll(actor, models.PassDefinition, {
         };
       })
       .sort((a, b) => new Date(b.purchaseDate) - new Date(a.purchaseDate));
-    console.log(formattedCustomerPasses);
+    if (!debugLogsGloballyTurnedOff) console.log(formattedCustomerPasses);
 
     //stash on req so attachResponse can pick it up
     req.passExtras = {
@@ -1582,7 +1594,8 @@ export const postCreatePassDefinition = async (req, res, next) => {
       (!count || !String(count).trim()) &&
       (!validityDays || !String(validityDays).trim())
     ) {
-      console.log('\n❌❌❌ count and validityDays field empty');
+      if (!debugLogsGloballyTurnedOff)
+        console.log('\n❌❌❌ count and validityDays field empty');
       throw new Error(
         'Karnet musi posiadać co najmniej 1 z wartości: ważność lub ilość wejść.'
       );
@@ -1771,7 +1784,7 @@ export const postCreateBookingWithPass = async (req, res, next) => {
       //Load the customer's pass definition
       const customerPass = await models.CustomerPass.findOne({
         where: { customerId, customerPassId },
-        include: [{ model: models.PassDefinition }],
+        include: [{ model: models.PassDefinition, required: true }],
         transaction: t,
       });
       if (!customerPass) {
@@ -1783,7 +1796,7 @@ export const postCreateBookingWithPass = async (req, res, next) => {
       //Load and lock the schedule record
       const scheduleRecord = await models.ScheduleRecord.findOne({
         where: { scheduleId },
-        include: [{ model: models.Product }],
+        include: [{ model: models.Product, required: true }],
         transaction: t,
         lock: t.LOCK.UPDATE,
       });
@@ -1794,10 +1807,11 @@ export const postCreateBookingWithPass = async (req, res, next) => {
       currentScheduleRecord = scheduleRecord;
 
       //Check capacity by counting current attendees
-      const count = await models.Booking.count({
+      const bookingForCount = await models.Booking.findAll({
         where: { scheduleId, attendance: true },
         transaction: t,
       });
+      let count = bookingForCount.length;
       if (count >= scheduleRecord.capacity) {
         errCode = 409;
         throw new Error('Brak wolnych miejsc w tym terminie');
@@ -1988,7 +2002,9 @@ export const putEditMarkPresent = async (req, res, next) => {
           {
             model: models.Customer,
             required: true,
-            include: [{ model: models.User, attributes: ['email'] }],
+            include: [
+              { model: models.User, required: true, attributes: ['email'] },
+            ],
           },
         ],
         transaction: t,
@@ -2001,10 +2017,11 @@ export const putEditMarkPresent = async (req, res, next) => {
 
       const schedule = foundRecord.ScheduleRecord;
       // Count current present attendees
-      const currentAttendance = await models.Booking.count({
+      let attendees = await models.Booking.findAll({
         where: { scheduleId: schedule.scheduleId, attendance: true },
         transaction: t,
       });
+      const currentAttendance = attendees.length;
       if (currentAttendance >= schedule.capacity) {
         errCode = 409;
         throw new Error('Brak wolnych miejsc na ten termin.');
@@ -2298,9 +2315,7 @@ export const postCreatePayment = async (req, res, next) => {
             purchaseDate: customerPass.purchaseDate,
             validFrom: customerPass.validFrom,
             validUntil: customerPass.validUntil,
-            allowedProductTypes: JSON.parse(
-              currentPassDefinition.allowedProductTypes
-            ),
+            allowedProductTypes: currentPassDefinition.allowedProductTypes,
             usesTotal: currentPassDefinition.usesTotal,
             description: currentPassDefinition.description,
             isAdmin: true,
@@ -2325,7 +2340,7 @@ export const postCreatePayment = async (req, res, next) => {
         const scheduleRecord = await models.ScheduleRecord.findByPk(
           scheduleId,
           {
-            include: [{ model: models.Product }],
+            include: [{ model: models.Product, required: true }],
             transaction: t,
             lock: t.LOCK.UPDATE,
           }
@@ -2335,11 +2350,12 @@ export const postCreatePayment = async (req, res, next) => {
           throw new Error('Nie znaleziono terminu');
         }
         // Check capacity
-        const currentAttendance = await models.Booking.count({
+        const attendees = await models.Booking.findAll({
           where: { scheduleId, attendance: true },
           transaction: t,
           lock: t.LOCK.UPDATE,
         });
+        const currentAttendance = attendees.length;
         if (currentAttendance >= scheduleRecord.capacity) {
           errCode = 409;
           throw new Error('Brak wolnych miejsc na ten termin.');

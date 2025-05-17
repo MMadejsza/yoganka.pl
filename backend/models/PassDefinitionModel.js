@@ -22,7 +22,7 @@ const PassDefinition = sequelizeDb.define(
       field: 'description',
     },
     passType: {
-      type: DataTypes.ENUM('count', 'time', 'mixed'),
+      type: DataTypes.STRING(16),
       allowNull: false,
       field: 'pass_type',
     },
