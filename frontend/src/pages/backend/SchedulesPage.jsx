@@ -263,6 +263,10 @@ function SchedulePage() {
     }
 
     title = isPassDefinitions ? 'Nasze karnety' : `Najbliższa Yoga`;
+    let noContentMsg = isPassDefinitions
+      ? '🕊️ Nowe karnety już wkrótce – wszystko w swoim czasie. 🕊️'
+      : `🌿 Harmonogram dojrzewa – spotkajmy się wkrótce na żywo. 🌿`;
+    let noContentParagraph = <h1 className='tile__title'>{noContentMsg}</h1>;
 
     return (
       <div className='admin-console'>
@@ -275,7 +279,7 @@ function SchedulePage() {
           disableAutoActive={true}
         />
         {/* {table} */}
-        {cardsList}
+        {data.content?.length > 0 ? cardsList : noContentParagraph}
         {isModalOpen && viewFrame}
       </div>
     );

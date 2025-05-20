@@ -72,7 +72,7 @@ export function createGetAll(
 
       // fetch all records
       const records = await EntityModel.findAll(queryOptions);
-      if (!records || records.length === 0) {
+      if (!records) {
         errorCode = 404;
         throw new Error(notFoundMessage || `${EntityModel.name}s not found.`);
       }
