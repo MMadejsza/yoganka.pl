@@ -61,3 +61,6 @@ logs/
 
 # TypeScript build info files (if using TypeScript)
 *.tsbuildinfo
+
+#scripts
+shutdown-docekr.ps1
