@@ -5,7 +5,8 @@ FROM node:20
 WORKDIR /usr/src/app
 
 # Copy the dependency definition files
-COPY package*.json ./
+COPY ./app/package*.json ./
+COPY app/ .
 
 # Install all npm dependencies listed in package.json
 RUN npm install
@@ -19,7 +20,8 @@ COPY cron-entrypoint.sh /usr/local/bin/cron-entrypoint.sh
 COPY crontab.txt /etc/cron.d/yoganka-cron
 
 # Make scripts executable and load crontab
-RUN chmod +x /usr/src/app/pg_backup.sh /usr/local/bin/cron-entrypoint.sh && \
+RUN apt-get update && apt-get install -y cron && \
+    chmod +x /usr/src/app/pg_backup.sh /usr/local/bin/cron-entrypoint.sh && \
     crontab /etc/cron.d/yoganka-cron
 
 # Open the port where the backend app will run

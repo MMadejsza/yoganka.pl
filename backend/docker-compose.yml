@@ -9,13 +9,17 @@ services:
       POSTGRES_USER: ${DB_USER} # Default user
       POSTGRES_PASSWORD: ${DB_PASS} # Default password
     ports:
-      - '5432:5432' # Map local port 5432 to container's port 5432
+      - '5433:5432' # ⚠️ Local PostgreSQL is already running on port 5432 (on the host machine/laptop).
+                    # This container's PostgreSQL must be exposed on a different port to avoid conflicts.
+                    # So we map host port 5433 → to container's internal PostgreSQL port 5432.
+                    # Use 'localhost:5433' in pgAdmin/DBeaver to connect to this Dockerized database.
+                    # Do NOT change the container's internal port — PostgreSQL always listens on 5432 inside.
     volumes:
       - postgres_data:/var/lib/postgresql/data # Persistent volume for DB data
       - ./db-backups:/backups # Folder to store database backups
 
   backend:
-    build: ./backend/app   # Build from current directory (Dockerfile)
+    build: .   # Build from current directory (Dockerfile)
     ports:
       - '3000:3000' # Expose backend port     
     env_file: # Environment variables for backend connection to DB
@@ -23,7 +27,8 @@ services:
     depends_on:
       - db # Wait for the db service before starting
     volumes:
-      - .:/usr/src/app # Mount local folder into container (useful in dev)
+      - ./app:/usr/src/app # Mount local folder into container (useful in dev)
+      - /usr/src/app/node_modules
     command: npm start # Start backend using npm
 
 volumes:
