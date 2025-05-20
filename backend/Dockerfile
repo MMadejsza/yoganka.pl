@@ -6,13 +6,14 @@ WORKDIR /usr/src/app
 
 # Copy the dependency definition files
 COPY ./app/package*.json ./
-COPY app/ .
+
 
 # Install all npm dependencies listed in package.json
+ENV NODE_ENV=development
 RUN npm install
 
 # Copy the entire application code into the container
-COPY . .
+COPY app/ .
 
 # Add backup and cron configuration files to the container
 COPY pg_backup.sh /usr/src/app/pg_backup.sh
@@ -29,4 +30,5 @@ EXPOSE 3000
 
 # Start cron and then run the app
 ENTRYPOINT ["cron-entrypoint.sh"]
-CMD ["npm", "start"]
+RUN npm install -g nodemon
+CMD ["nodemon", "app.js"]

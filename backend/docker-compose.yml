@@ -21,7 +21,9 @@ services:
   backend:
     build: .   # Build from current directory (Dockerfile)
     ports:
-      - '3000:3000' # Expose backend port     
+      - '3000:3000' # Expose backend port
+    environment:
+      - NODE_ENV=development    
     env_file: # Environment variables for backend connection to DB
       - .env.local
     depends_on:
@@ -29,7 +31,9 @@ services:
     volumes:
       - ./app:/usr/src/app # Mount local folder into container (useful in dev)
       - /usr/src/app/node_modules
-    command: npm start # Start backend using npm
+    command: npm run dev # Start backend using nodemon
 
 volumes:
   postgres_data: # Declare named volume for PostgreSQL data
+  
+
