@@ -1,6 +1,7 @@
 import { formatAllowedTypes } from './cardsAndTableUtils.jsx';
 import { parsePLDateAtEndOfDay } from './dateTime';
 import { queryClient } from './http.js';
+let debugLogsGloballyTurnedOff = true;
 
 export const applyFontSize = fontsize => {
   if (!fontsize) return;
