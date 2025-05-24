@@ -20,6 +20,11 @@ services:
       - db                              # Start DB first
     volumes:
       - ./backend/app:/usr/src/app      # Mount code into container
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     command: npm start                  # Start backend normally
 
   # NGINX reverse proxy container

@@ -5,7 +5,14 @@ import { defineConfig } from 'vite';
 // import viteImagemin from 'vite-plugin-imagemin';
 import autoprefixer from 'autoprefixer';
 import cssnano from 'cssnano';
+import dotenv from 'dotenv';
 import postcssDiscardComments from 'postcss-discard-comments';
+dotenv.config({ path: '.env.local' });
+
+console.log(
+  '🔥 VITE_BACKEND_URL (after dotenv) =',
+  process.env.VITE_BACKEND_URL
+);
 
 export default defineConfig({
   plugins: [
@@ -41,10 +48,9 @@ export default defineConfig({
     },
     proxy: {
       '/api': {
-        target: 'http://localhost:3000', // (Express)
+        target: process.env.VITE_BACKEND_URL || 'http://localhost:3000',
         changeOrigin: true,
         secure: false,
-        // rewrite: path => path.replace(/^\/api/, ''), // delete `/api` from URL
       },
     },
   },

@@ -4,10 +4,8 @@ services:
   db:
     image: postgres:15 # Use the latest stable PostgreSQL image
     restart: always # Restart container if it crashes
-    environment:
-      POSTGRES_DB: ${DB_NAME} # Database name
-      POSTGRES_USER: ${DB_USER} # Default user
-      POSTGRES_PASSWORD: ${DB_PASS} # Default password
+    env_file: # Environment variables for backend connection to DB
+      - .env.local
     ports:
       - '5433:5432' # ⚠️ Local PostgreSQL is already running on port 5432 (on the host machine/laptop).
                     # This container's PostgreSQL must be exposed on a different port to avoid conflicts.
@@ -31,6 +29,11 @@ services:
     volumes:
       - ./app:/usr/src/app # Mount local folder into container (useful in dev)
       - /usr/src/app/node_modules
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     command: npm run dev # Start backend using nodemon
 
 volumes:

@@ -13,6 +13,7 @@
     "@material/web": "^2.2.0",
     "@shopify/polaris-icons": "^9.3.0",
     "@tanstack/react-query": "^5.66.0",
+    "dotenv": "^16.5.0",
     "frontend": "file:",
     "js-cookie": "^3.0.5",
     "react": "^18.3.1",

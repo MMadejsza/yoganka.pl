@@ -19,7 +19,7 @@ function Tile({ data, today, clickable }) {
     data.link
   }`;
 
-  if (isPast && data.modal) data.modal.glance.price = '-';
+  if (isPast && data.modal?.glance) data.modal.glance.price = '-';
 
   // Custom hook for handling modal behavior
   const { isOpen, isVisible, isClosing, openModal, closeModal } =
