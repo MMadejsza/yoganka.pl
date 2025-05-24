@@ -14,7 +14,72 @@ yarn-error.log*
 pnpm-debug.log*
 
 # System temporary files
+.DS_Store.gitignore
+*.zip
+
+# Ignore node dependencies
+node_modules/
+
+# Ignore Vite build directory
+dist/
+www/
+www-before_bundler_(old)/
+
+# Logs and error reports
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# System temporary files
 .DS_Store
+Thumbs.db
+
+# IDE-specific settings
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.cli
+
+# ESLint cache
+.eslintcache
+
+# Vite cache files
+.cache/
+.vite/
+vite.lock
+
+# Environment files
+.env
+.env.*
+.env.local
+.env.*.local
+sql.env
+
+# db backups
+*.backup
+
+# PM2 (process manager) logs (if used)
+.pids
+logs/
+
+# Build output for frontend and backend
+/frontend/dist
+/backend/dist
+/backend/public
+
+# Temporary files
+*.tmp
+*.log
+
+# TypeScript build info files (if using TypeScript)
+*.tsbuildinfo
+
+#scripts
+shutdown-docekr.ps1
 Thumbs.db
 
 # IDE-specific settings
