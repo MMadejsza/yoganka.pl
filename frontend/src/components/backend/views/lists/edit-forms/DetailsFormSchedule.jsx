@@ -5,6 +5,7 @@ import { useInput } from '../../../../../hooks/useInput.js';
 import { formatIsoDateTime } from '../../../../../utils/dateTime.js';
 import { mutateOnEdit, queryClient } from '../../../../../utils/http.js';
 import * as val from '../../../../../utils/validation.js';
+// import Loader from '../../../../common/Loader.jsx';
 import WrapperForm from '../../../../backend/WrapperForm.jsx';
 import FeedbackBox from '../../../FeedbackBox.jsx';
 import Input from '../../../Input.jsx';
@@ -100,7 +101,19 @@ function DetailsFormSchedule({ scheduleData }) {
     hasError: startTimeHasError,
   } = useInput(startTimeDefault);
 
-  // if (isProductLoading) return <div>Ładowanie...</div>;
+  const {
+    value: setAttendanceViewValue,
+    handleChange: handleSetAttendanceViewChange,
+    handleFocus: handleSetAttendanceViewFocus,
+    handleBlur: handleSetAttendanceViewBlur,
+    handleReset: handleSetAttendanceViewReset,
+    didEdit: setAttendanceViewDidEdit,
+    isFocused: setAttendanceViewIsFocused,
+    validationResults: setAttendanceViewValidationResults,
+    hasError: setAttendanceViewHasError,
+  } = useInput('0');
+
+  // if (isProductLoading) return <Loader label={'Ładowanie'} />;
   // if (isProductError) return <div>Błąd ładowania ustawień.</div>;
   // console.log(data);
 
@@ -113,6 +126,7 @@ function DetailsFormSchedule({ scheduleData }) {
     handleStartTimeReset();
     handleLocationReset();
     editScheduleDataReset();
+    handleSetAttendanceViewReset();
   };
 
   // Submit handling
@@ -124,7 +138,8 @@ function DetailsFormSchedule({ scheduleData }) {
       capacityHasError ||
       dateHasError ||
       locationHasError ||
-      startTimeHasError
+      startTimeHasError ||
+      setAttendanceViewHasError
     ) {
       return;
     }
@@ -214,6 +229,7 @@ function DetailsFormSchedule({ scheduleData }) {
         id='location'
         name='location'
         label='Miejsce:'
+        placeholder='Miejsce'
         value={locationValue}
         onFocus={handleLocationFocus}
         onBlur={handleLocationBlur}
@@ -221,7 +237,29 @@ function DetailsFormSchedule({ scheduleData }) {
         validationResults={locationValidationResults}
         didEdit={locationDidEdit}
         isFocused={locationIsFocused}
-      />{' '}
+      />
+      <Input
+        embedded={true}
+        formType={formType}
+        type='select'
+        options={[
+          { label: 'Pełna Frekwencja', value: 2 },
+          { label: 'Tylko liczba os.', value: 1 },
+          { label: 'Tylko pojemność', value: 0 },
+          { label: 'Brak', value: -1 },
+        ]}
+        id='attendanceViewMode'
+        name='attendanceViewMode'
+        label='Widok osób:'
+        value={setAttendanceViewValue}
+        required
+        onFocus={handleSetAttendanceViewFocus}
+        onBlur={handleSetAttendanceViewBlur}
+        onChange={handleSetAttendanceViewChange}
+        validationResults={setAttendanceViewValidationResults}
+        didEdit={setAttendanceViewDidEdit}
+        isFocused={setAttendanceViewIsFocused}
+      />
       {feedback.status !== undefined && (
         <FeedbackBox
           onCloseFeedback={resetFeedback}

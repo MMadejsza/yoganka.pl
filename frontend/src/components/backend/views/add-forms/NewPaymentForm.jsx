@@ -15,6 +15,7 @@ import FeedbackBox from '../../FeedbackBox.jsx';
 import Input from '../../Input.jsx';
 
 function NewPaymentForm() {
+  const debugLogsTurnedOn = false;
   const { feedback, updateFeedback, resetFeedback } = useFeedback();
   const { data: status } = useAuthStatus();
 
@@ -40,7 +41,7 @@ function NewPaymentForm() {
     isFocused: customerIsFocused,
     validationResults: customerValidationResults,
     hasError: customerHasError,
-  } = useInput(1);
+  } = useInput('');
 
   const {
     value: transactionTypeValue,
@@ -163,8 +164,8 @@ function NewPaymentForm() {
     const latestExpiryDate = customerTheSamePasses.sort(
       (a, b) => new Date(b.validUntil) - new Date(a.validUntil)
     )[0].validUntil;
-    console.log(customerTheSamePasses);
-    console.log(latestExpiryDate);
+    if (debugLogsTurnedOn) console.log(customerTheSamePasses);
+    if (debugLogsTurnedOn) console.log(latestExpiryDate);
 
     const nextDay = new Date(latestExpiryDate);
     nextDay.setDate(nextDay.getDate() + 1);
@@ -191,8 +192,9 @@ function NewPaymentForm() {
       });
     }
   }, [passValue, newPassSuggestedDate]);
-  console.log('newPassSuggestedDate:', newPassSuggestedDate);
-  console.log('StartDateValue:', StartDateValue);
+  if (debugLogsTurnedOn)
+    console.log('newPassSuggestedDate:', newPassSuggestedDate);
+  if (debugLogsTurnedOn) console.log('StartDateValue:', StartDateValue);
   const {
     value: scheduleValue,
     handleChange: handleScheduleChange,
@@ -251,7 +253,7 @@ function NewPaymentForm() {
       : passHasError);
   const handleSubmit = async e => {
     e.preventDefault(); // No reloading
-    console.log('Submit triggered');
+    if (debugLogsTurnedOn) console.log('Submit triggered');
 
     if (areErrors) {
       return;
@@ -279,7 +281,7 @@ function NewPaymentForm() {
       });
       return;
     }
-    console.log('Submit passed errors');
+    if (debugLogsTurnedOn) console.log('Submit passed errors');
 
     const fd = new FormData(e.target);
     const formDataObj = Object.fromEntries(fd.entries());
@@ -298,13 +300,13 @@ function NewPaymentForm() {
         pass => pass.passDefId.toString() === formDataObj.passDefId
       );
       if (selectedPass) {
-        console.log('selectedPass', selectedPass);
+        if (debugLogsTurnedOn) console.log('selectedPass', selectedPass);
         formDataObj.passName = `${selectedPass.name} (Id: ${selectedPass.passDefId}) na ~${selectedPass.validityDays}`;
         formDataObj.passPrice = selectedPass.price;
       }
     }
 
-    console.log('sent data:', formDataObj);
+    if (debugLogsTurnedOn) console.log('sent data:', formDataObj);
     createPayment(formDataObj);
     if (feedback.confirmation == 1) handleReset();
   };

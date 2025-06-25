@@ -37,6 +37,7 @@ body {
     'header header header header header '
     'about about about about about'
     'offer offer offer offer offer'
+    'reviews reviews reviews reviews reviews'
     'cert cert cert cert cert'
     'partners partners partners partners partners'
     'space space space space space'
@@ -78,6 +79,11 @@ button {
 .blur {
   backdrop-filter: blur(10px);
 }
+
+section.book-classes {
+  grid-column: 1/-1;
+}
+
 .section-header {
   grid: 1 / -1;
   padding: 1rem 0.5rem;
@@ -86,6 +92,9 @@ button {
   line-height: 6rem;
   text-transform: uppercase;
   color: map.get($colors, tile-title);
+  max-width: 100%;
+  overflow: hidden;
+  word-wrap: break-word;
 }
 
 span.click-suggestion {
@@ -104,6 +113,7 @@ span.click-suggestion {
   margin-bottom: 5rem;
 }
 .wrapper > section:not(:first-of-type),
+.wrapper > main > section:not(:first-of-type),
 .modal__modal-body > section:not(:first-of-type),
 footer {
   padding: 0 var(--section-padding-y) 2rem;
@@ -116,6 +126,14 @@ footer {
   place-self: center;
   margin: 2rem auto;
   text-align: center;
+}
+
+section.classes-page ~ .galery {
+  grid-area: offer;
+  margin-top: 4rem;
+}
+section > .modal-checklist__list--classes-page {
+  padding: 0 2rem;
 }
 
 //! COMMON BLOCKS END

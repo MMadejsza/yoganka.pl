@@ -1,30 +1,28 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useEffect, useMemo, useState } from 'react';
-import { useLocation, useMatch, useNavigate } from 'react-router-dom';
+import { useMemo } from 'react';
+import { Helmet } from 'react-helmet';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import CardsList from '../../components/backend/cards/CardsList.jsx';
 import ModalTable from '../../components/backend/ModalTable.jsx';
 import TabsList from '../../components/backend/TabsList.jsx';
 import ViewsController from '../../components/backend/ViewsController.jsx';
 import Section from '../../components/frontend/Section.jsx';
-import { useAuthStatus } from '../../hooks/useAuthStatus.js';
+import { useHandleStripeRedirect } from '../../hooks/useHandleStripeRedirect.js';
+import { formatAllowedTypes } from '../../utils/cardsAndTableUtils.jsx';
 import { formatIsoDateTime } from '../../utils/dateTime.js';
 import { fetchData, mutateOnCreate, queryClient } from '../../utils/http.js';
+const logsGloballyOn = false;
 
 function SchedulePage() {
   const navigate = useNavigate();
   const location = useLocation(); // fetch current path
 
   const isPassDefinitions = location.pathname.startsWith('/grafik/karnety');
-  const scheduleModalMatch = !!useMatch('/grafik/:id') && !isPassDefinitions;
-  const passModalMatch = !!useMatch('/grafik/karnety/:id');
-  const shouldOpenModal = scheduleModalMatch || passModalMatch;
 
-  const [isModalOpen, setIsModalOpen] = useState(shouldOpenModal);
-  useEffect(() => {
-    setIsModalOpen(shouldOpenModal);
-  }, [shouldOpenModal]);
+  const { id } = useParams(); // jeśli URL to /grafik/9 lub /grafik/karnety/68
+  const isModalOpen = Boolean(id);
 
-  const { data: status } = useAuthStatus();
+  const status = useHandleStripeRedirect();
 
   const query = isPassDefinitions ? '/grafik/karnety' : '/grafik';
   const { data, isError, error } = useQuery({
@@ -54,9 +52,9 @@ function SchedulePage() {
             ? `${passDef.validityDays} dni`
             : '-',
           price: `${passDef.price} zł`,
-          allowedProductTypes: JSON.parse(passDef.allowedProductTypes).join(
-            ', '
-          ),
+          allowedProductTypes: passDef.allowedProductTypes
+            ? formatAllowedTypes(passDef.allowedProductTypes)
+            : '',
         }))
         .sort((a, b) => {
           const aKey = a.passType.toLowerCase();
@@ -122,14 +120,13 @@ function SchedulePage() {
     search: location.search,
     hash: location.hash,
   };
+
   const handleOpenModal = row => {
-    const id = row.rowId;
-    setIsModalOpen(true);
-    navigate(`${location.pathname}/${id}`, { state: { background } });
+    navigate(`${location.pathname}/${row.rowId}`, { state: { background } });
   };
+
   const handleCloseModal = () => {
-    setIsModalOpen(false);
-    reset(); // resets mutation state and flags
+    reset(); // clear any mutation flags
     navigate(query);
   };
 
@@ -147,7 +144,6 @@ function SchedulePage() {
     viewFrame,
     title,
     productTabs,
-    contentSorted,
     headers,
     modifier,
     keys,
@@ -155,8 +151,10 @@ function SchedulePage() {
 
   if (data) {
     // console.clear();
-    console.log(`✅ Data: `);
-    console.log(data);
+    if (logsGloballyOn) {
+      console.log(`✅ Data: `);
+      console.log(data);
+    }
 
     if (isPassDefinitions) {
       modifier = 'passDef';
@@ -253,30 +251,80 @@ function SchedulePage() {
       viewFrame = (
         <ViewsController
           modifier={modifier}
-          visited={isModalOpen}
           onClose={handleCloseModal}
           paymentOps={paymentOps}
-          role={status.role}
+          role={status.user?.role}
+          modalBasePath={`${
+            isPassDefinitions ? '/grafik/karnety' : '/grafik'
+          }/${id}`}
         />
       );
     }
 
     title = isPassDefinitions ? 'Nasze karnety' : `Najbliższa Yoga`;
+    let noContentMsg = isPassDefinitions
+      ? '🌿 Nowe karnety już wkrótce - wszystko w swoim czasie. 🌿'
+      : `🌿 Harmonogram dojrzewa - spotkajmy się wkrótce na żywo. 🌿`;
+    let noContentParagraph = <h1 className='tile__title'>{noContentMsg}</h1>;
 
     return (
-      <div className='admin-console'>
-        <Section classy='admin-intro' header={title} />
-        <TabsList
-          menuSet={productTabs || []}
-          onClick={handleSwitchContent}
-          classModifier='product-tabs'
-          shouldSwitchState={true}
-          disableAutoActive={true}
-        />
-        {/* {table} */}
-        {cardsList}
-        {isModalOpen && viewFrame}
-      </div>
+      <>
+        <Helmet>
+          <html lang='pl' />
+          <title>
+            {isPassDefinitions ? 'Karnety Yoganka' : 'Grafik zajęć - Yoganka'}
+          </title>
+          <meta
+            name='description'
+            content={
+              isPassDefinitions
+                ? 'Wybierz odpowiedni karnet jogi dla siebie - dostępne opcje wejść jednorazowych, pakietów oraz online.'
+                : 'Aktualny grafik zajęć jogi prowadzonych przez Yogankę. Zarezerwuj swoje miejsce na zajęcia stacjonarne lub online.'
+            }
+          />
+          <link
+            rel='canonical'
+            href={
+              isPassDefinitions
+                ? 'https://yoganka.pl/grafik/karnety'
+                : 'https://yoganka.pl/grafik'
+            }
+          />
+          <meta name='robots' content='index, follow' />
+          <meta
+            property='og:title'
+            content={
+              isPassDefinitions ? 'Karnety - Yoganka' : 'Grafik jogi - Yoganka'
+            }
+          />
+          <meta
+            property='og:description'
+            content={
+              isPassDefinitions
+                ? 'Sprawdź dostępne karnety na zajęcia jogi Yoganka - różne typy, ceny i liczba wejść.'
+                : 'Sprawdź aktualne terminy zajęć jogi i zarezerwuj online.'
+            }
+          />
+          <meta property='og:type' content='website' />
+          <meta
+            property='og:image'
+            content='/favicon_io/apple-touch-icon.png'
+          />
+        </Helmet>
+
+        <div className='admin-console'>
+          <Section classy='admin-intro' header={title} />
+          <TabsList
+            menuSet={productTabs || []}
+            onClick={handleSwitchContent}
+            classModifier='product-tabs'
+            shouldSwitchState={true}
+            disableAutoActive={true}
+          />
+          {data.content?.length > 0 ? cardsList : noContentParagraph}
+          {viewFrame}
+        </div>
+      </>
     );
   }
 }

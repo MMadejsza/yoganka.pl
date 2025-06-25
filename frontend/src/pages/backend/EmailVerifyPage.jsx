@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
+import { Helmet } from 'react-helmet';
 import { useNavigate, useParams } from 'react-router-dom';
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
 function EmailVerifyPage() {
   const { token } = useParams();
@@ -7,7 +9,7 @@ function EmailVerifyPage() {
 
   //   after loading the page - check the token
   useEffect(() => {
-    fetch(`/api/login-pass/email-token/${token}`)
+    fetch(`${API_BASE_URL}/api/login-pass/email-token/${token}`)
       .then(res => res.json())
       .then(data => {
         if (data.confirmation === 1) {
@@ -22,11 +24,17 @@ function EmailVerifyPage() {
 
   // Msg for the meanwhile before redirection
   return (
-    <main className='login-box'>
-      <section className={'login'}>
-        <p className='form__title'>⏳ Weryfikujemy Twój adres e-mail...</p>
-      </section>
-    </main>
+    <>
+      <Helmet>
+        <meta name='robots' content='noindex, nofollow' />
+      </Helmet>
+
+      <main className='login-box'>
+        <section className={'login'}>
+          <p className='form__title'>⏳ Weryfikujemy Twój adres e-mail...</p>
+        </section>
+      </main>
+    </>
   );
 }
 

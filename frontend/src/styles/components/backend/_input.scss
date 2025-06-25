@@ -73,7 +73,8 @@ textarea::placeholder {
 // =========================
 
 .input-pair {
-  width: 70%;
+  //! width: 70%;
+  width: 100%;
   @include flex(column, space-evenly, flex-start);
   gap: 0.5rem;
 
@@ -85,6 +86,10 @@ textarea::placeholder {
     line-height: 4rem;
     @include flex(row, center, center);
     gap: 2rem;
+  }
+
+  &--payment-method {
+    // margin-bottom: 2rem;
   }
 }
 
@@ -102,9 +107,9 @@ textarea::placeholder {
 }
 
 // Shared styles for form controls
-input,
-select,
-textarea,
+input:not([class*='ql-']),
+select:not([class*='ql-']),
+textarea:not([class*='ql-']),
 input.generic-details-content,
 select.generic-details-content,
 textarea.generic-details-content {
@@ -125,7 +130,7 @@ textarea.generic-details-content {
 }
 
 // Input hover/focus/disabled states
-input {
+input:not([class*='ql-']) {
   &:hover:not([disabled]),
   &:focus:not([type='checkbox']) {
     box-shadow: map.get($shadows, active-box-shadow);
@@ -188,6 +193,7 @@ select.generic-details__content--settings {
 }
 
 .validation-msgs-list {
+  flex-basis: 100%;
   margin-top: 1.5rem;
   line-height: 150%;
   font-size: 1.5rem;
@@ -215,6 +221,10 @@ select.generic-details__content--settings {
   }
 }
 
+.quill {
+  width: 100%;
+}
+
 @include respond-to(mobile-mh) {
   .generic-details--table-form {
     .generic-details__list--table-form {
@@ -226,7 +236,9 @@ select.generic-details__content--settings {
 
     .generic-details__item--table-form {
       //   gap: 0.5rem !important;
-      width: min-content;
+      width: max-content;
+      min-width: 100px;
+      max-width: 230px;
     }
 
     .generic-details__label--table-form {
@@ -240,7 +252,6 @@ select.generic-details__content--settings {
       line-height: 4rem;
       height: 4rem;
       font-size: 1.8rem;
-      //   max-width: 175x;
     }
   }
 
@@ -252,19 +263,18 @@ select.generic-details__content--settings {
 @include respond-to(desktop-s) {
   .generic-details--table-form {
     .generic-details__list--table-form {
-      justify-content: center;
+      // justify-content: center;
       gap: 2.5rem;
     }
 
     .generic-details__item--table-form {
-      max-width: 200px;
-      flex-basis: 10%;
+      // flex-basis: 10%;
+      // min-width: 100px;
     }
 
     input.generic-details__content--table-form,
     select.generic-details__content--table-form {
       padding: 0.2rem 2.2rem;
-      max-width: 200px;
     }
   }
 }

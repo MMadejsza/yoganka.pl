@@ -5,7 +5,7 @@ function TableCustomerSchedules({ customerStats, classModifier, altTitle }) {
   // PAST and ATTENDED schedules only (stats give only attended)
   const contentPast = customerStats.attendedSchedules.filter(
     schedule =>
-      new Date(`${schedule.date}T${schedule.startTime}:00.000Z`) <= new Date()
+      new Date(`${schedule.date}T${schedule.startTime}.000Z`) <= new Date()
   );
 
   const headers = ['Id', 'Data', 'Dzień', 'Godzina', 'Lokacja', 'Typ', 'Nazwa'];

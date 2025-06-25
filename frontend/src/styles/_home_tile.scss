@@ -56,6 +56,10 @@
 .offer-type {
   .tile {
     min-height: 472px;
+
+    &--classes {
+      min-height: 272px;
+    }
   }
 }
 .tile {

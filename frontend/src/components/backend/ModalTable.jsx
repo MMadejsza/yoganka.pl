@@ -18,11 +18,12 @@ function ModalTable({
   isAdminPage,
   adminActions,
   notToArchive = false,
+  forLegalDocuments,
 }) {
   const today = new Date();
   const isLoggedIn = status?.isLoggedIn === true,
-    isCustomer = status?.role === 'CUSTOMER',
-    isAdmin = status?.role === 'ADMIN';
+    isCustomer = status?.user?.role === 'CUSTOMER',
+    isAdmin = status?.user?.role === 'ADMIN';
   const location = useLocation();
   const isAdminView = location.pathname.includes('admin-console');
   const isAccountView = location.pathname.includes('/konto');
@@ -31,28 +32,6 @@ function ModalTable({
   console.log('ModalTable headers', headers);
   console.log('ModalTable keys', keys);
   console.log('ModalTable status', status);
-
-  // const pickCellSymbol = key => {
-  //   switch (true) {
-  //     case key.includes('Id'):
-  //       return 'badge';
-  //     case key == 'date':
-  //       return 'event';
-  //     case key == 'day':
-  //       return 'calendar_view_day';
-  //     case key == 'startTime':
-  //       return 'access_time';
-  //     case key == 'productType':
-  //       return 'class';
-  //     case key == 'productName':
-  //       return 'self_improvement';
-  //     case key == 'location':
-  //       return 'location_on';
-
-  //     default:
-  //       break;
-  //   }
-  // };
 
   return (
     <table
@@ -117,41 +96,76 @@ function ModalTable({
                 if (key == '') {
                   value = (
                     <div className='action-btns'>
-                      {onQuickAction?.map((action, index) => (
-                        <button
-                          key={index}
-                          className={`form-action-btn symbol-only-btn symbol-only-btn--submit`}
-                          onClick={e => {
-                            onRowBtnClick(
-                              row,
-                              isArchived,
-                              action.method,
-                              status,
-                              isAdminView,
-                              isUserPassesView,
-                              isAccountView,
-                              isCustomer,
-                              isAdmin,
-                              e
-                            );
-                          }}
-                        >
-                          {getSymbol(
-                            row,
-                            hasValidPass,
-                            isArchived,
-                            action,
-                            isUserPassesView,
-                            isAdminPage,
-                            adminActions,
-                            isLoggedIn,
-                            isCustomer,
-                            isAdmin
-                          )}
-                        </button>
-                      ))}
+                      {onQuickAction?.map((action, index) => {
+                        const deducedSymbol = getSymbol(
+                          row,
+                          hasValidPass,
+                          isArchived,
+                          action,
+                          isUserPassesView,
+                          isAdminPage,
+                          adminActions,
+                          isLoggedIn,
+                          isCustomer,
+                          isAdmin
+                        );
+
+                        // avoid not logic action - frontend validation
+                        if (row.bookingId) {
+                          if (row.attendance && action.symbol == 'person_add')
+                            return;
+                          if (
+                            !row.attendance &&
+                            action.symbol == 'person_remove'
+                          )
+                            return;
+                          if (
+                            new Date(
+                              `${row.ScheduleRecord.date}T${row.ScheduleRecord.startTime}`
+                            ) < new Date()
+                          )
+                            return;
+                        }
+
+                        return (
+                          <button
+                            key={index}
+                            className={`form-action-btn symbol-only-btn symbol-only-btn--submit`}
+                            onClick={e => {
+                              onRowBtnClick(
+                                row,
+                                isArchived,
+                                action.method,
+                                status,
+                                isAdminView,
+                                isUserPassesView,
+                                isAccountView,
+                                isCustomer,
+                                isAdmin,
+                                e
+                              );
+                            }}
+                          >
+                            {deducedSymbol}
+                          </button>
+                        );
+                      })}
                     </div>
                   );
+                }
+                if (forLegalDocuments) {
+                  if (key == 'content') {
+                    value = (
+                      <div className='cell-content-wrapper'>{row.content}</div>
+                    );
+                  }
+                  if (key.includes('Id')) {
+                    value = (
+                      <div className='cell-content-wrapper--id'>
+                        {row.rowId}
+                      </div>
+                    );
+                  }
                 }
                 const keyClass = key.includes('Id') ? 'rowId' : key;
                 return (

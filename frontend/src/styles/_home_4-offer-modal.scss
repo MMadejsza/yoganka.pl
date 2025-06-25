@@ -5,11 +5,11 @@
 %action-btn {
   @include flex(row, center, center);
   font-family: 'EB Garamond', serif;
-  flex-wrap: wrap;
+  //! flex-wrap: wrap;
   gap: 1rem;
   width: 95%;
   min-height: 48px;
-  padding: 0rem 1rem;
+  padding: 0rem 2rem;
 
   font-size: 1.8rem;
   line-height: 48px;
@@ -24,6 +24,11 @@
   box-shadow: map.get($shadows, active-text-icons-shadow);
   overflow: hidden;
   transition: map.get($behavior, base-transition);
+
+  &:hover {
+    transform: translate(1%, 5%) scale(1.01);
+    box-shadow: map.get($shadows, active-box-shadow);
+  }
 }
 
 .past {
@@ -43,6 +48,10 @@
     // to let interact with the element (not pseudo one)
     pointer-events: none;
   }
+}
+section.b2b-benefits.classes-page + section.offer {
+  grid-template-areas: 'zajecia zajecia';
+  margin-bottom: 2rem;
 }
 .offer {
   grid-area: offer;
@@ -106,11 +115,13 @@
         0.5
       );
       border-radius: 25px;
-      box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
-        rgba(0, 0, 0, 0.22) 0px 15px 12px,
-        rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
-        rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
-        rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+      box-shadow: map.get($shadows, box-shadow);
+      // box-shadow: map.get($shadows, tile-shadow);
+      // box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+      //   rgba(0, 0, 0, 0.22) 0px 15px 12px,
+      //   rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+      //   rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
+      //   rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
       font-size: 2.5rem;
       font-size: 2.2rem;
       font-weight: 500;
@@ -268,6 +279,13 @@
     }
   }
 
+  &__desc {
+    &--classes-page {
+      margin-top: 5rem;
+      width: 100%;
+    }
+  }
+
   &__full-desc {
     grid-column: 1 / -1;
     padding: 2rem 0;
@@ -280,7 +298,9 @@
     }
   }
 
-  &__title {
+  &__title,
+  &__main-title,
+  &__attention-note {
     margin-bottom: 1.5rem;
     font-size: 2.5rem;
 
@@ -294,15 +314,25 @@
       text-decoration: underline;
     }
 
+    &--classes-page-day,
+    &--view,
+    &--status {
+      color: map.get($colors, tile-title);
+    }
+
     &--view {
       font-size: 3rem;
-      color: map.get($colors, tile-title);
     }
 
     &--status {
       font-size: 2.5rem;
-      color: map.get($colors, tile-title);
     }
+  }
+
+  &__main-title {
+    grid-column: 1/-1;
+    margin-top: 3rem;
+    white-space: pre-line;
   }
 
   &__user-action {
@@ -347,7 +377,7 @@
     }
 
     &.book {
-      flex-basis: 65%;
+      // flex-basis: 65%;
       // margin-top: 3rem;
     }
 
@@ -384,3 +414,10 @@
   }
 }
 //! OFFER END
+@include respond-to(desktop-xs) {
+  .modal {
+    &__user-action:not(.modal__user-action--login-page) {
+      width: 70%;
+    }
+  }
+}

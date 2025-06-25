@@ -18,19 +18,55 @@ $sizes: (
   border-radius: 25px,
   section-padding-y: 1rem,
 );
+// $colors: (
+//   base: #fff8f4, // standardowe bazowe tło
+//   base-text: #1e1b18, // standardowy tekst
+//   tile: #f5ece5, // karta produktu - tło
+//   // tile-title: #4d3410,
+//   tile-title: #805346, // tytuły (headers) kart produktów, wszystkie headers podstron, część headers w modal'u produktu (szczegółach karty produktu)
+//   // tile-title: #825445,
+//   tile-text: #1e1b18, // GŁÓWNY tekst w modal'u produktu (szczegółach karty produktu)
+//   tile-text-muted: #4e453b, // POBOCZNY tekst w modal'u produktu (szczegółach karty produktu)
+//   accent-bcg: #1c7993, // CTA's, ikony, symbole,
+//   accent-text: #ffffff, // tekst CTA's, wyszczególnionych elementów z kolorem tła #accent-bcg
+//   nav: #f6e0c8, // nawigacja, stopka
+// );
+// Teoria analogiczna :
 $colors: (
-  base: #fff8f4,
-  base-text: #1e1b18,
-  tile: #f5ece5,
-  // tile-title: #4d3410,
-  tile-title: #805346,
-  // tile-title: #825445,
-  tile-text: #1e1b18,
-  tile-text-muted: #4e453b,
-  accent-bcg: #1c7993,
+  base: #fdf9fb,
+  base-text: #2d1f28,
+  tile: #f6ecf7,
+  tile-title: #8c6fa9,
+  tile-text: #3a2e3e,
+  tile-text-muted: #6e5a71,
+  accent-bcg: #6c8cbf,
   accent-text: #ffffff,
-  nav: #f6e0c8,
+  nav: #f5e6e7,
 );
+// Psychologia kolorów:
+// $colors: (
+//   base: #fbf9f6,
+//   base-text: #2f2e2c,
+//   tile: #e9e7e1,
+//   tile-title: #8e80aa,
+//   tile-text: #3f3e3c,
+//   tile-text-muted: #706f6a,
+//   accent-bcg: #9db7a1,
+//   accent-text: #ffffff,
+//   nav: #e7dcd2,
+// );
+// // na schemacie split-complementary:
+// $colors: (
+//   base: #fdfafc,
+//   base-text: #2a212b,
+//   tile: #f3eef3,
+//   tile-title: #a285b8,
+//   tile-text: #443a47,
+//   tile-text-muted: #776579,
+//   accent-bcg: #b0d4c1,
+//   accent-text: #ffffff,
+//   nav: #f2dee6,
+// );
 
 $active-box-shadow: (
   rgba(0, 0, 0, 0.3) 0px 19px 38px,
@@ -89,7 +125,8 @@ $typo: (
     'bh',
   ),
   // font-by-yoganka: 'Caveat', cursive,
-  font-by-yoganka: (
+  font-by-yoganka:
+    (
       'by Yoganka',
       Helvetica,
     ),

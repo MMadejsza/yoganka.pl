@@ -104,6 +104,7 @@ export const TYPES = [
     text: 'Tygodniowe/miesięczne spersonalizowane programy wellbeingowe, które\u00A0mogą obejmować jogę, mindfulness i\u00A0techniki relaksacyjne',
   },
 ];
+
 export const BENEFITS = {
   listType: 'included',
   list: [
@@ -112,6 +113,7 @@ export const BENEFITS = {
     `Employer branding -\u00A0pokazujesz, że\u00A0dbasz o\u00A0zespół`,
   ],
 };
+
 export const BTNS = {
   btnsContent: [
     {

@@ -1,9 +1,5 @@
 import { useState } from 'react';
-import { getWeekDay } from '../../../../utils/dateTime.js';
-import {
-  durationToSeconds,
-  secondsToDuration,
-} from '../../../../utils/statistics/statsUtils.js';
+import { formatDuration, getWeekDay } from '../../../../utils/dateTime.js';
 import ToggleEditButton from '../../../backend/ToggleEditButton.jsx';
 import GenericList from '../../../common/GenericList.jsx';
 import DetailsFormProduct from './edit-forms/DetailsFormProduct.jsx';
@@ -14,13 +10,11 @@ function DetailsListProduct({ data, placement, userAccessed, classModifier }) {
   //     product object from backend:`,
   // 	data,
   // );
-  const isProductView = placement == 'productView',
-    product = data,
-    totalSeconds = durationToSeconds(product.duration),
-    splitDuration = secondsToDuration(totalSeconds),
-    formattedDuration = `${splitDuration.days != '00' ? splitDuration.days + ' dni' : ''} ${
-      splitDuration.hours != '00' ? splitDuration.hours + ' godzin' : ''
-    } ${splitDuration.minutes != '00' ? splitDuration.minutes + ' minut' : ''}`;
+  const isProductView = placement == 'productView';
+  const product = data;
+  const formattedDuration = formatDuration(product);
+  const isCamp = product?.type.toUpperCase() === 'CAMP';
+  const isEvent = product?.type.toUpperCase() === 'Event';
 
   const [isEditing, setIsEditing] = useState(false);
   const handleStartEditing = () => setIsEditing(true);
@@ -32,17 +26,17 @@ function DetailsListProduct({ data, placement, userAccessed, classModifier }) {
   } else if (placement != 'scheduleView') {
     details.push(
       {
-        label:
-          product.type === 'Camp' || product.type === 'Event'
-            ? 'Data:'
-            : 'Wdrożono:',
+        label: isCamp || isEvent ? 'Data:' : 'Wdrożono:',
         content: `${product.startDate} (${getWeekDay(product.startDate)})`,
       },
       { label: 'Lokacja:', content: product.location },
       { label: 'Czas trwania:', content: formattedDuration }
     );
   }
-  details.push({ label: 'Zadatek:', content: `${product.price} zł` });
+  details.push({
+    label: `${isCamp ? 'Zadatek:' : 'Cena:'}`,
+    content: `${product.price} zł`,
+  });
 
   let content = isEditing ? (
     <DetailsFormProduct productData={data} />

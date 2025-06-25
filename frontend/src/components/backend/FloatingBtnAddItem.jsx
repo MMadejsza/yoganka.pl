@@ -1,8 +1,8 @@
-import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import SymbolOrIcon from '../common/SymbolOrIcon.jsx';
 import NewCustomerFormForAdmin from './views/add-forms/NewCustomerFormForAdmin.jsx';
+import NewLegalDocumentForm from './views/add-forms/NewLegalDocumentForm.jsx';
 import NewPassDefinitionForm from './views/add-forms/NewPassDefinitionForm.jsx';
 import NewPaymentForm from './views/add-forms/NewPaymentForm.jsx';
 import NewProductForm from './views/add-forms/NewProductForm.jsx';
@@ -25,19 +25,6 @@ function FloatingBtnAddItem({}) {
   const shouldAllowCreation = !noCreateOptionPages.some(lockedPath =>
     location.pathname.includes(lockedPath)
   );
-
-  // const isModalPath = location.pathname.includes('add-user');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleOpenModal = link => {
-    setIsModalOpen(true);
-    navigate(`/admin-console/${link}`, { state: { background: location } });
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    navigate(location.state?.background?.pathname, { replace: true });
-  };
 
   const pickDestination = location => {
     let destination, destComponent;
@@ -72,9 +59,31 @@ function FloatingBtnAddItem({}) {
         destination = 'show-all-passes/add-pass-definition';
         destComponent = <NewPassDefinitionForm />;
         break;
+      case path.includes('show-all-tos-versions'):
+        destination = 'show-all-tos-versions/add-tos-version';
+        destComponent = <NewLegalDocumentForm docType='tos' />;
+        break;
+      case path.includes('show-all-gdpr-versions'):
+        destination = 'show-all-gdpr-versions/add-gdpr-version';
+        destComponent = <NewLegalDocumentForm docType='gdpr' />;
+        break;
     }
     return { dest: destination, comp: destComponent };
   };
+  const picked = pickDestination(location);
+
+  const handleOpenModal = link => {
+    navigate(`/admin-console/${link}`, { state: { background: location } });
+  };
+
+  const handleCloseModal = () => {
+    const base = `/admin-console/${picked.dest}`;
+    const parent = base.split('/').slice(0, -1).join('/');
+
+    navigate(parent, { replace: true });
+  };
+  const fullModalPath = `/admin-console/${picked.dest}`;
+  const isOnModalPath = location.pathname.includes(picked.dest);
 
   return (
     <>
@@ -82,18 +91,21 @@ function FloatingBtnAddItem({}) {
         <button
           onClick={e => {
             e.preventDefault();
-            handleOpenModal(pickDestination(location).dest);
+            handleOpenModal(picked.dest);
           }}
           className={`form-action-btn symbol-only-btn symbol-only-btn--floating`}
         >
           <SymbolOrIcon specifier={'add_circle'} />
         </button>
       )}
-      {isModalOpen && (
-        <WrapperModal visited={isModalOpen} onClose={handleCloseModal}>
-          {pickDestination(location).comp}
-        </WrapperModal>
-      )}
+
+      <WrapperModal
+        visited={isOnModalPath}
+        basePath={fullModalPath}
+        onClose={handleCloseModal}
+      >
+        {picked.comp}
+      </WrapperModal>
     </>
   );
 }

@@ -49,6 +49,7 @@ function ViewCustomer({ data }) {
             settingsData={user.UserPrefSetting}
             customerAccessed={customerAccessed}
             adminAccessed={adminAccessed}
+            userId={user.userId}
           />
         )}
 

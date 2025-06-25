@@ -5,10 +5,10 @@ import Section from './Section.jsx';
 const todayRaw = new Date();
 const today = todayRaw.toISOString().split('T')[0]; // "YYYY-MM-DD"
 
-function OfferSection({ products }) {
+function OfferSection({ products, extraClass }) {
   const leadingClass = 'offer';
   return (
-    <Section classy={leadingClass}>
+    <Section classy={`${leadingClass} ${extraClass}`}>
       {products.map(product => (
         <Offer
           key={product.id}

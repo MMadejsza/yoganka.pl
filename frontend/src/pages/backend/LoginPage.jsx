@@ -4,8 +4,9 @@ function LoginPage() {
   return (
     <>
       <Helmet>
-        <title>Yoganka - Zaloguj się</title>
-        <link rel='canonical' href='https://yoganka.pl/zaloguj-sie' />
+        <html lang='pl' />
+        <title>Zaloguj się – Yoganka</title>
+        <meta name='robots' content='noindex, nofollow' />
       </Helmet>
       <LoginFrom />
     </>

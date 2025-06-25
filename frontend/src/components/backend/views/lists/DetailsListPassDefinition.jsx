@@ -1,3 +1,4 @@
+import { formatAllowedTypes } from '../../../../utils//cardsAndTableUtils.jsx';
 import GenericList from '../../../common/GenericList.jsx';
 
 function DetailsListPassDefinition({
@@ -20,13 +21,14 @@ function DetailsListPassDefinition({
     0: 'Zawieszony',
     '-1': 'Wygasły',
   };
-  const title = userAccountPage ? 'Rodzaj karnetu' : 'Typ karnetu';
+  const title = userAccountPage ? '' : 'Typ karnetu';
   const passStatus = Number(passDefinition.status);
 
   const details = [
     {
       label: 'Numer:',
       content: passDefinition.passDefId,
+      extraClass: 'dimmed',
     },
   ];
   if (!isPassPurchaseView)
@@ -43,20 +45,20 @@ function DetailsListPassDefinition({
 
   details.push({ label: 'Cena:', content: `${passDefinition.price} zł` });
 
-  if (!isPassPurchaseView)
-    details.push({
-      label: 'Obejmuje:',
-      content: passDefinition.allowedProductTypes
-        ? JSON.parse(passDefinition.allowedProductTypes).join(', ')
-        : null,
-    });
-
   if (passDefinition.validityDays) {
     details.push({
       label: 'Ważny przez:',
       content: `${passDefinition.validityDays} dni`,
     });
   }
+
+  if (isPassPurchaseView)
+    details.push({
+      label: 'Obejmuje zajęcia:',
+      content: passDefinition.allowedProductTypes
+        ? formatAllowedTypes(passDefinition.allowedProductTypes)
+        : null,
+    });
 
   if (passDefinition.usesTotal && !isPassPurchaseView) {
     details.push({

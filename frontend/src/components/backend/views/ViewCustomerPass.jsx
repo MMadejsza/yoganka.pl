@@ -1,4 +1,5 @@
 import SymbolOrIcon from '../../../components/common/SymbolOrIcon.jsx';
+import { useHandleStripeRedirect } from '../../../hooks/useHandleStripeRedirect.js';
 import GenericListTagLi from '../../common/GenericListTagLi.jsx';
 import DetailsListCustomerPass from './lists/DetailsListCustomerPass.jsx';
 import DetailsListPassDefinition from './lists/DetailsListPassDefinition.jsx';
@@ -9,6 +10,7 @@ function ViewCustomerPass({ data, userAccountPage }) {
 
   const { customerPass } = data;
   const passName = `${customerPass.passDefinition.name}`;
+  const status = useHandleStripeRedirect();
 
   return (
     <>

@@ -170,7 +170,7 @@ function Input({
           ? `generic-details__item ${
               classModifier ? `generic-details__item--${classModifier}` : ''
             } modal-checklist__li`
-          : 'input-pair'
+          : `input-pair ${classModifier ? `input-pair--${classModifier}` : ''}`
       } ${props.type == 'tel' ? 'phone' : ''}`}
     >
       <label
@@ -191,36 +191,43 @@ function Input({
       {/* After editing */}
       {!isLogin &&
         validationResults &&
-        (Array.isArray(value) ? isEmpty : isFocused || didEdit) && (
+        (props.type === 'checkbox'
+          ? didEdit
+          : Array.isArray(value)
+          ? isEmpty
+          : isFocused || didEdit) && (
           <ul className='validation-msgs-list'>
-            {validationResults?.map((result, index) => (
-              // List all the rules and messages
-              <li
-                key={index}
-                className={
-                  // assign proper class
-                  (Array.isArray(value) ? value.length === 0 : !value)
-                    ? 'validation-msgs-list__msg validation-msgs-list__msg--help'
-                    : result.valid
-                    ? 'validation-msgs-list__msg validation-msgs-list__msg--valid'
-                    : 'validation-msgs-list__msg validation-msgs-list__msg--error'
-                }
-              >
-                {/* Assign proper symbol */}
-                {
-                  <>
-                    <span className='material-symbols-rounded'>
-                      {isEmpty
-                        ? 'help'
+            {validationResults?.map(
+              (result, index) =>
+                result.message && (
+                  // List all the rules and messages
+                  <li
+                    key={index}
+                    className={
+                      // assign proper class
+                      (Array.isArray(value) ? value.length === 0 : !value)
+                        ? 'validation-msgs-list__msg validation-msgs-list__msg--help'
                         : result.valid
-                        ? 'check_circle'
-                        : 'error'}
-                    </span>
-                    {result.message}
-                  </>
-                }
-              </li>
-            ))}
+                        ? 'validation-msgs-list__msg validation-msgs-list__msg--valid'
+                        : 'validation-msgs-list__msg validation-msgs-list__msg--error'
+                    }
+                  >
+                    {/* Assign proper symbol */}
+                    {
+                      <>
+                        <span className='material-symbols-rounded'>
+                          {isEmpty
+                            ? 'help'
+                            : result.valid
+                            ? 'check_circle'
+                            : 'error'}
+                        </span>
+                        {result.message}
+                      </>
+                    }
+                  </li>
+                )
+            )}
           </ul>
         )}
     </div>

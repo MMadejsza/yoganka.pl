@@ -18,7 +18,7 @@ function GlideContainer({
   const totalPhotosNumber = slides => {
     let counter = 0;
     slides.forEach(camp => {
-      counter += camp.pastGallerySize;
+      counter += camp.pastGallerySize ?? 0;
     });
     return counter;
   };
@@ -90,8 +90,8 @@ function GlideContainer({
       type == 'allPhotos'
         ? totalPhotosNumber(slides)
         : ['tile', 'review', 'partner'].includes(type)
-          ? slides.length
-          : slides.size;
+        ? slides.length
+        : slides.size;
 
     return Array.from({ length: counter }).map((_, index) => (
       <button

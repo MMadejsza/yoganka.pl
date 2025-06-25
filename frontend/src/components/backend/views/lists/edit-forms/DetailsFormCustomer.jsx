@@ -10,6 +10,7 @@ import {
 } from '../../../../../utils/http.js';
 import { phoneValidations } from '../../../../../utils/validation.js';
 import WrapperForm from '../../../../backend/WrapperForm.jsx';
+import Loader from '../../../../common/Loader.jsx';
 import FeedbackBox from '../../../FeedbackBox.jsx';
 import Input from '../../../Input.jsx';
 
@@ -53,7 +54,7 @@ function DetailsFormCustomer({
   });
 
   const dynamicMutationAddress = customerAccessed
-    ? '/api/customer' + '/edit-customer-data'
+    ? `/api/customer` + '/edit-customer-data'
     : adminAccessed
     ? `/api/admin-console` + `/edit-customer-data/${customerData.customerId}`
     : null;
@@ -136,7 +137,7 @@ function DetailsFormCustomer({
     hasError: notesHasError,
   } = useInput(notesDefault);
 
-  if (isCustomerLoading) return <div>Ładowanie...</div>;
+  if (isCustomerLoading) return <Loader label={'Ładowanie'} />;
 
   // Reset all te inputs
   const handleReset = () => {

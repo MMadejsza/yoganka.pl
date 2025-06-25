@@ -6,26 +6,26 @@ import WrapperModalTable from '../WrapperModalTable.jsx';
 import DetailsListCustomerStats from './lists/DetailsListCustomerStats.jsx';
 
 function ViewAccountSchedulesHistory({ data }) {
-  const location = useLocation();
   // console.clear();
   console.log(
     `📝 
-        ViewAccountSchedulesHistory object from backend:`,
+    ViewAccountSchedulesHistory object from backend:`,
     data
   );
+  const location = useLocation();
   let content, customerStats;
   if (data.customer) customerStats = statsCalculatorForCustomer(data.customer);
   content = customerStats?.attendedSchedules
     .filter(record => {
       const scheduleDateTime = new Date(
-        `${record.date}T${record.startTime}:00.000Z`
+        `${record.date}T${record.startTime}.000Z`
       );
       return scheduleDateTime < new Date();
     })
     .sort(
       (a, b) =>
-        new Date(`${b.date}T${b.startTime}:00.000Z`) -
-        new Date(`${a.date}T${a.startTime}:00.000Z`)
+        new Date(`${b.date}T${b.startTime}.000Z`) -
+        new Date(`${a.date}T${a.startTime}.000Z`)
     );
 
   const stats = data.customer ? (

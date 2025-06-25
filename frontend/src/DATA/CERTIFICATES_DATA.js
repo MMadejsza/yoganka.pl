@@ -6,6 +6,12 @@ export const CERTIFICATES_DATA = [
     themes: ['Vinyasa', 'Hatha'],
   },
   {
+    name: 'Sup Yoga teacher training',
+    instructor: 'ReAlign Yoga',
+    duration: '25h',
+    themes: [],
+  },
+  {
     name: 'Instruktor Hatha\u00A0Jogi',
     instructor: 'prof. Szopa',
     duration: '150h',

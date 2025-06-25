@@ -8,6 +8,7 @@ function DetailsListUserSettings({
   isUserAccountPage,
   customerAccessed,
   adminAccessed,
+  userId,
 }) {
   const hasPrefs = !!settingsData;
   const handedness = hasPrefs
@@ -55,6 +56,7 @@ function DetailsListUserSettings({
       customerAccessed={customerAccessed}
       adminAccessed={adminAccessed}
       classModifier='settings'
+      userId={userId}
     />
   ) : (
     <GenericList title={title} details={details} classModifier='settings' />

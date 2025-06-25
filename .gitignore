@@ -1,30 +1,20 @@
 .gitignore
-# Ignore node dependencies
-node_modules/
-
-# Ignore Vite build directory
-dist/
-www/
-www-before_bundler_(old)/
-
-# Logs and error reports
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-
-# System temporary files
-.DS_Store.gitignore
 *.zip
 
 # Ignore node dependencies
 node_modules/
+_createAdmin.js
 
 # Ignore Vite build directory
 dist/
 www/
+www-demo/
+www-prod/
+_1.DEV_materials - Not on Github/
+_2.FYP_materials - Not on Github/
 www-before_bundler_(old)/
-
+yoganka
+demo
 # Logs and error reports
 npm-debug.log*
 yarn-debug.log*
@@ -80,42 +70,3 @@ logs/
 
 #scripts
 shutdown-docekr.ps1
-Thumbs.db
-
-# IDE-specific settings
-.vscode/
-.idea/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.cli
-
-# ESLint cache
-.eslintcache
-
-# Vite cache files
-.cache/
-.vite/
-vite.lock
-
-# Environment files
-.env
-.env.local
-.env.*.local
-
-# PM2 (process manager) logs (if used)
-.pids
-logs/
-
-# Build output for frontend and backend
-/frontend/dist
-/backend/dist
-/backend/public
-
-# Temporary files
-*.tmp
-*.log
-
-# TypeScript build info files (if using TypeScript)
-*.tsbuildinfo

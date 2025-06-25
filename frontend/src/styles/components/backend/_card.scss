@@ -91,6 +91,7 @@ $heavily-dimmed-color: map.get($colors, nav-muted);
       &--secondary {
         font-size: var(--font-secondary);
         color: $heavily-dimmed-color;
+        // width: min-content;
       }
     }
 
@@ -185,19 +186,41 @@ $heavily-dimmed-color: map.get($colors, nav-muted);
       }
     }
 
-    &__desc {
+    &__desc,
+    &__footer {
       // align-items: flex-start;
       grid-area: desc;
       text-align: left;
       font-size: var(--font-desc);
       color: $dimmed-color;
+
+      flex-wrap: nowrap;
+
+      .nav__icon {
+        align-self: flex-start;
+      }
+
+      .card__single-content {
+        display: flex;
+        flex-flow: row wrap;
+        &--secondary {
+          flex-basis: 100%;
+        }
+      }
     }
 
     &__footer {
       grid-area: footer;
       margin-top: $title-margin;
-      color: map.get($colors, $dimmed-color);
-      font-size: var(--font-secondary);
+      // color: map.get($colors, $dimmed-color);
+      // font-size: var(--font-secondary);
+
+      // flex-wrap: nowrap;
+
+      .card__single-content {
+        // flex-basis: 100%;
+        // text-align: left;
+      }
     }
 
     &:last-child {

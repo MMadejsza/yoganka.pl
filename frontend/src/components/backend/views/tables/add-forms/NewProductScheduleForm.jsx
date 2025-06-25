@@ -4,7 +4,6 @@ import { useAuthStatus } from '../../../../../hooks/useAuthStatus.js';
 import { useFeedback } from '../../../../../hooks/useFeedback.js';
 import { useInput } from '../../../../../hooks/useInput.js';
 import { mutateOnCreate, queryClient } from '../../../../../utils/http.js';
-import * as val from '../../../../../utils/validation.js';
 import WrapperForm from '../../../../backend/WrapperForm.jsx';
 import FeedbackBox from '../../../FeedbackBox.jsx';
 import Input from '../../../Input.jsx';
@@ -90,7 +89,7 @@ function NewProductScheduleForm({ defaultDataObj }) {
     handleReset: handleLocationReset,
     didEdit: locationDidEdit,
     isFocused: locationIsFocused,
-    validationResults: locationValidationResults,
+    validationResults: locationInTableValidationsResults,
     hasError: locationHasError,
   } = useInput(defaultDataObj?.location || '');
   const {
@@ -103,7 +102,7 @@ function NewProductScheduleForm({ defaultDataObj }) {
     isFocused: capacityIsFocused,
     validationResults: capacityValidationResults,
     hasError: capacityHasError,
-  } = useInput('', val.capacityValidations);
+  } = useInput('');
 
   // Reset all te inputs
   const handleReset = () => {
@@ -229,6 +228,7 @@ function NewProductScheduleForm({ defaultDataObj }) {
         type='time'
         id='startTime'
         name='startTime'
+        min='00:00'
         label=''
         value={timeValue}
         required
@@ -247,14 +247,15 @@ function NewProductScheduleForm({ defaultDataObj }) {
         id='location'
         name='location'
         label=''
-        placeholder='(Widoczna!)'
+        placeholder='Miejsce'
+        maxLength='25'
         value={locationValue}
         onFocus={handleLocationFocus}
         onBlur={handleLocationBlur}
         onChange={handleLocationChange}
         autoComplete='off'
         required
-        validationResults={locationValidationResults}
+        validationResults={locationInTableValidationsResults}
         didEdit={locationDidEdit}
         classModifier={'table-form'}
         isFocused={locationIsFocused}

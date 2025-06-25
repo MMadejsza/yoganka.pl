@@ -1,8 +1,9 @@
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAuthStatus } from '../../../../hooks/useAuthStatus.js';
 import { useFeedback } from '../../../../hooks/useFeedback.js';
+import { handleContactCustomer } from '../../../../utils/cardsAndTableUtils.jsx';
 import {
   mutateOnDelete,
   mutateOnEdit,
@@ -15,10 +16,11 @@ import WrapperModalTable from '../../WrapperModalTable.jsx';
 import NewBookingForm from './add-forms/NewBookingForm.jsx';
 
 function TableAttendance({ allBookings, isAdminPage, shouldToggleFrom }) {
-  // console.log('\n✅✅✅DetailsTableAttendance:');
+  console.log('\n✅✅✅DetailsTableAttendance:', allBookings);
   let attendedBookingsArray = allBookings.attendedBookings;
   let cancelledBookingsArray = allBookings.cancelledBookings;
   let params = useParams();
+  let navigate = useNavigate();
 
   const [isFormVisible, setIsFormVisible] = useState();
   const [deleteWarningTriggered, setDeleteWarningTriggered] = useState(false);
@@ -61,6 +63,36 @@ function TableAttendance({ allBookings, isAdminPage, shouldToggleFrom }) {
     isPending: markPresentIsPending,
     isError: markPresentIsError,
     error: markPresentError,
+  } = useMutation({
+    mutationFn: formDataObj => {
+      setDeleteWarningTriggered(false);
+      return mutateOnEdit(
+        status,
+        formDataObj,
+        `/api/admin-console/edit-mark-present`
+      );
+    },
+
+    onSuccess: res => {
+      queryClient.invalidateQueries([
+        `/admin-console/show-all-schedules/${params.id}`,
+      ]);
+      console.log('res', res);
+
+      // updating feedback
+      updateFeedback(res);
+    },
+    onError: err => {
+      // updating feedback
+      updateFeedback(err);
+    },
+  });
+
+  const {
+    mutate: emailUser,
+    isPending: emailUSerIsPending,
+    isError: emailUSerIsError,
+    error: emailUSerError,
   } = useMutation({
     mutationFn: formDataObj => {
       setDeleteWarningTriggered(false);
@@ -136,6 +168,11 @@ function TableAttendance({ allBookings, isAdminPage, shouldToggleFrom }) {
     }
   };
 
+  const handleContact = (type, tableObj) => {
+    reset();
+    handleContactCustomer(type, tableObj);
+  };
+
   const handleCloseFeedback = () => {
     resetFeedback();
     setDeleteWarningTriggered(false);
@@ -151,7 +188,7 @@ function TableAttendance({ allBookings, isAdminPage, shouldToggleFrom }) {
     'Metoda rezerwacji',
     'Data zapisania',
     'Uczestnik',
-    '',
+    'Akcje',
   ];
 
   const shouldShowForm = !(
@@ -203,7 +240,17 @@ function TableAttendance({ allBookings, isAdminPage, shouldToggleFrom }) {
         active={false}
         isAdminPage={isAdminPage}
         adminActions={true}
-        onQuickAction={[{ symbol: 'person_remove', method: markAbsent }]}
+        onQuickAction={[
+          {
+            icon: 'fa-brands fa-whatsapp',
+            method: tableObj => handleContact('text', tableObj),
+          },
+          {
+            symbol: 'mail',
+            method: tableObj => handleContact('mail', tableObj),
+          },
+          { symbol: 'person_remove', method: markAbsent },
+        ]}
         status={status}
       />
     </WrapperModalTable>
@@ -233,7 +280,15 @@ function TableAttendance({ allBookings, isAdminPage, shouldToggleFrom }) {
         adminActions={true}
         onQuickAction={[
           { extraClass: 'dimmed', symbol: 'delete', method: handleDelete },
-          { symbol: 'restore', method: markPresent },
+          {
+            icon: 'fa-brands fa-whatsapp',
+            method: tableObj => handleContact('text', tableObj),
+          },
+          {
+            symbol: 'mail',
+            method: tableObj => handleContact('mail', tableObj),
+          },
+          { symbol: 'person_add', method: markPresent },
         ]}
         status={status}
       />

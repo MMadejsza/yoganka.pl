@@ -1,14 +1,14 @@
+import Cookies from 'js-cookie';
 import { useInput } from '../../../../hooks/useInput.js';
 import * as val from '../../../../utils/validation.js';
 import WrapperForm from '../../../backend/WrapperForm.jsx';
 import Input from '../../Input.jsx';
-import Cookies from 'js-cookie';
 
 function NewCustomerFormForUser({ onSave }) {
   // get eventually abandoned previously data
   const cookieData = Cookies.get('newCustomerFormData');
   const defaults = cookieData ? JSON.parse(cookieData) : {};
-  
+
   // using custom hook with extracting and reassigning its 'return' for particular inputs and assign validation methods from imported utils. Every inout has its won state now
   const {
     value: firstNameValue,
@@ -20,7 +20,7 @@ function NewCustomerFormForUser({ onSave }) {
     isFocused: firstNameIsFocused,
     validationResults: firstNameValidationResults,
     hasError: firstNameHasError,
-  } = useInput(defaults.fname ||'', val.firstNameValidations);
+  } = useInput(defaults.firstName || '', val.firstNameValidations);
   const {
     value: lastNameValue,
     handleChange: handleLastNameChange,
@@ -31,7 +31,7 @@ function NewCustomerFormForUser({ onSave }) {
     isFocused: lastNameIsFocused,
     validationResults: lastNameValidationResults,
     hasError: lastNameHasError,
-  } = useInput(defaults.lname ||'', val.lastNameValidations);
+  } = useInput(defaults.lastName || '', val.lastNameValidations);
   const {
     value: DoBValue,
     handleChange: handleDoBChange,
@@ -42,7 +42,7 @@ function NewCustomerFormForUser({ onSave }) {
     isFocused: DoBIsFocused,
     validationResults: DoBValidationResults,
     hasError: DoBHasError,
-  } = useInput(defaults.dob ||'', val.dobValidations);
+  } = useInput(defaults.dob || '', val.dobValidations);
   const {
     value: phoneValue,
     handleChange: handlePhoneChange,
@@ -75,7 +75,7 @@ function NewCustomerFormForUser({ onSave }) {
     isFocused: referralSourceIsFocused,
     validationResults: referralSourceValidationResults,
     hasError: referralSourceHasError,
-  } = useInput(defaults.rSource ||'');
+  } = useInput(defaults.rSource || '');
   const {
     value: notesValue,
     handleChange: handleNotesChange,
@@ -86,7 +86,13 @@ function NewCustomerFormForUser({ onSave }) {
     isFocused: notesIsFocused,
     validationResults: notesValidationResults,
     hasError: notesHasError,
-  } = useInput(defaults.notes ||'', val.notesValidations);
+  } = useInput(defaults.notes || '', val.notesValidations);
+  const gdprControl = useInput(false, [
+    {
+      rule: v => v === true,
+      message: 'Musisz zaakceptować politykę prywatności.',
+    },
+  ]);
 
   // Reset all te inputs
   const handleReset = () => {
@@ -97,6 +103,7 @@ function NewCustomerFormForUser({ onSave }) {
     handleCMethodReset();
     handleReferralSourceReset();
     handleNotesReset();
+    gdprControl.handleReset;
   };
 
   // Submit handling
@@ -111,29 +118,32 @@ function NewCustomerFormForUser({ onSave }) {
       lastNameHasError ||
       DoBHasError ||
       referralSourceHasError ||
-      notesHasError
+      notesHasError ||
+      gdprControl.hasError
     ) {
       return;
     }
     console.log('Submit passed errors');
 
-
     const details = {
       isFirstTimeBuyer: false,
       cType: 'Indywidualny',
-      fname: firstNameValue,
-      lname: lastNameValue,
+      firstName: firstNameValue,
+      lastName: lastNameValue,
       dob: DoBValue,
       phone: phoneValue,
       cMethod: cMethodValue,
       rSource: referralSourceValue,
       notes: notesValue,
-    }
+    };
 
     Cookies.set('newCustomerFormData', JSON.stringify(details), {
       expires: 3,
-      path: '/grafik'
+      path: '/grafik',
     });
+
+    // don't save in cookie gdpr checkbox - pass it now
+    details.gdpr = gdprControl.value;
 
     // passing given details to sabe as a customer in state of ViewSchedule
     onSave(details);
@@ -148,18 +158,9 @@ function NewCustomerFormForUser({ onSave }) {
     title: '',
     actionTitle: 'Zapisz',
   };
-  
+
   // Extract values only
   const { formType, title, actionTitle } = formLabels;
-  const areErrors = [
-    lastNameHasError,
-    firstNameHasError,
-    DoBHasError,
-    phoneHasError,
-  ].some(error => error);
-  const areEmpty = [firstNameValue, lastNameValue, DoBValue, phoneValue].some(
-    value => value.trim() === ''
-  );
 
   const content = (
     <WrapperForm
@@ -308,6 +309,36 @@ function NewCustomerFormForUser({ onSave }) {
           isFocused={notesIsFocused}
         />
       )}
+      <Input
+        required
+        embedded={true}
+        formType={'policy'}
+        type='checkbox'
+        id='gdpr'
+        name='gdpr'
+        label={
+          <>
+            Akceptuję{' '}
+            <a
+              href='/polityka-firmy/rodo'
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              politykę prywatności
+            </a>{' '}
+            *
+          </>
+        }
+        value={gdprControl.value}
+        checked={gdprControl.value}
+        onFocus={gdprControl.handleFocus}
+        onBlur={gdprControl.handleBlur}
+        onChange={gdprControl.handleChange}
+        validationResults={gdprControl.validationResults}
+        didEdit={gdprControl.didEdit}
+        isFocused={gdprControl.isFocused}
+        classModifier={'gdpr'}
+      />
     </WrapperForm>
   );
 

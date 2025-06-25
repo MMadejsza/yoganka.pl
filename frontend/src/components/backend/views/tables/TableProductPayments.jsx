@@ -11,9 +11,9 @@ function TableProductPayments({ type, payments, isAdminPage }) {
     type === 'Camp' || type === 'Event'
       ? 'Płatności bezpośrednie'
       : type === 'passDef'
-        ? 'Płatności'
-        : 'Wszystkie płatności bezpośrednie - bezzwrotne';
-  const headers = ['Id', 'Data', 'Uczestnik', 'Zadatek', 'Metoda płatności'];
+      ? 'Płatności'
+      : 'Wszystkie płatności bezpośrednie - bezzwrotne';
+  const headers = ['Id', 'Data', 'Uczestnik', 'Cena', 'Metoda płatności'];
   const keys = [
     'paymentId',
     'date',

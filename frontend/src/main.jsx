@@ -1,4 +1,6 @@
 import ReactDOM from 'react-dom/client';
+import 'react-quill/dist/quill.core.css';
+import 'react-quill/dist/quill.snow.css';
 import App from './App.jsx';
 import '/src/styles/main.scss';
 

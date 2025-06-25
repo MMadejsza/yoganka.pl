@@ -1,9 +1,15 @@
 import {
+  formatAllowedTypes,
   formatAttendance,
   formatPaymentStatus,
   pickCustomerSymbol,
 } from './cardsAndTableUtils.jsx';
-import { formatIsoDateTime, getWeekDay, monthMap } from './dateTime.js';
+import {
+  formatDuration,
+  formatIsoDateTime,
+  getWeekDay,
+  monthMap,
+} from './dateTime.js';
 import { hasValidPassFn } from './userCustomerUtils.js';
 
 // Parse a date string 'YYYY-MM-DD' or 'DD.MM.YYYY' into day/month/year and monthName.
@@ -17,25 +23,6 @@ function parseDateParts(dateStr) {
     [year, month, day] = raw.split('-');
   }
   return { day, month, year, monthName: monthMap[month] || '-' };
-}
-
-//Format JSON list of allowed product types into a human-readable string.
-function formatAllowedTypes(rawStr) {
-  if (!rawStr) return '';
-  let items;
-  try {
-    const parsed = JSON.parse(rawStr);
-    // ensure it's an array
-    items = Array.isArray(parsed) ? parsed : rawStr.split(',');
-  } catch {
-    // not valid JSON, split on commas
-    items = rawStr.split(',');
-  }
-  return items
-    .map(t => t.trim())
-    .filter(Boolean)
-    .map(t => t[0].toUpperCase() + t.slice(1).toLowerCase())
-    .join(', ');
 }
 
 //Build props object for a Payments card.
@@ -53,7 +40,7 @@ export function getPaymentContent(row) {
     squareMiddleIcon: 'attach_money',
     squareBottom: '',
     description: `${row.amountPaid} zł`,
-    dimmedDescription: ` - ${formatIsoDateTime(row.cardDate)}`,
+    dimmedDescription: `${formatIsoDateTime(row.cardDate)}`,
     cardFooter: '',
     titleIcon: 'inventory',
     typeIcon: 'credit_card',
@@ -67,6 +54,12 @@ export function getCustomerPassContent(row) {
   const { day, monthName, year } = parseDateParts(row.validUntil);
   const allowed = formatAllowedTypes(row.allowedProductTypes);
   const isTimeType = row.passType?.toUpperCase() === 'TIME';
+  const formattedDate = (specifier, isOnlyDate) =>
+    specifier == 'from'
+      ? formatIsoDateTime(row.validFrom, isOnlyDate)
+      : formatIsoDateTime(row.validUntil, isOnlyDate);
+  const formattedFrom = formattedDate('from', false);
+  const formattedUntil = formattedDate('until', false);
 
   return {
     isActive: false,
@@ -86,9 +79,16 @@ export function getCustomerPassContent(row) {
             ? 'Zawieszony'
             : 'Karnet wygasł'
         })`,
-    description: formatIsoDateTime(row.validFrom, false),
-    dimmedDescription: ' - (Data rozpoczęcia)',
-    cardFooter: formatIsoDateTime(row.validUntil, false),
+    description: formattedDate('from', true),
+    dimmedDescription: `Data rozpoczęcia (${formattedFrom.slice(
+      12,
+      formattedFrom.length - 1
+    )})`,
+    cardFooter: formattedDate('until', true),
+    dimmedCardFooter: `(${formattedUntil.slice(
+      12,
+      formattedUntil.length - 1
+    )})`,
     titleIcon: 'card_membership',
     typeIcon: 'category',
     descriptionIcon: 'event_available',
@@ -100,6 +100,7 @@ export function getCustomerPassContent(row) {
 export function getBookingContent(row) {
   const { day, monthName, year } = parseDateParts(row.scheduleDate);
   const wasEdited = row.cardCreatedAt !== row.cardTimestamp;
+  const formattedFullDate = formatIsoDateTime(row.cardCreatedAt, false);
 
   return {
     isActive: false,
@@ -111,10 +112,18 @@ export function getBookingContent(row) {
     squareMiddle: day,
     squareMiddleIcon: '',
     squareBottom: `${monthName} ${year}`,
-    description: formatIsoDateTime(row.cardCreatedAt, false),
-    dimmedDescription: ` (data${wasEdited ? ' 1.' : ' '}rezerwacji)`,
+    description: formatIsoDateTime(row.cardCreatedAt, true),
+    dimmedDescription: `data${
+      wasEdited ? ' 1.' : ' '
+    }rezerwacji (${formattedFullDate.slice(12, formattedFullDate.length - 1)})`,
     cardFooter: wasEdited
-      ? `Edytowano: ${formatIsoDateTime(row.cardTimestamp, false)}`
+      ? `${formatIsoDateTime(row.cardTimestamp, true)}`
+      : '',
+    dimmedCardFooter: wasEdited
+      ? `data edycji (${formattedFullDate.slice(
+          12,
+          formattedFullDate.length - 1
+        )})`
       : '',
     titleIcon: 'self_improvement',
     typeIcon: 'credit_card',
@@ -159,18 +168,23 @@ export function getScheduleContent(
       isAdminView,
       adminActions,
       status?.isLoggedIn,
-      status?.role === 'CUSTOMER',
-      status?.role === 'ADMIN'
+      status?.user?.role === 'CUSTOMER',
+      status?.user?.role === 'ADMIN'
     );
     isActive = ['restore', 'calendar_add_on'].includes(quickActionSymbol);
     quickActionMethod = onQuickAction[0].method;
   }
 
-  const [hh = '0', mm = '0'] = row.productDuration?.split(':') || [];
-  const hours = String(Number(hh));
-  const mins = String(Number(mm));
+  const hh = Math.floor(row.productDuration / 60) || '0';
+  const mm = Math.floor(row.productDuration % 60) || '0';
+  // const [hh = '0', mm = '0'] = row.productDuration?.split(':') || [];
+  // const hours = String(Number(hh));
+  // const mins = String(Number(mm));
   const rawType = row.productType || '';
   const typeFinal = (rawType[0] || '') + rawType.slice(1).toLowerCase();
+
+  const product = row.Product;
+  const formattedDuration = formatDuration(product);
 
   return {
     isActive,
@@ -182,9 +196,8 @@ export function getScheduleContent(
     squareMiddle: day,
     squareMiddleIcon: '',
     squareBottom: `${monthName} ${year}`,
-    description: row.startTime || '',
-    dimmedDescription:
-      mins !== '0' ? ` (${hours}h ${mins}min)` : ` (${hours}h)`,
+    description: row.startTime.slice(0, 5) || '',
+    dimmedDescription: `(${formattedDuration})`,
     cardFooter: row.location || '',
     titleIcon: 'self_improvement',
     typeIcon: 'category',

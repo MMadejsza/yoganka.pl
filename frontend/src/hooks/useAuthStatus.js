@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchStatus } from '../utils/http';
 
-export function useAuthStatus() {
+export function useAuthStatus(params = {}) {
   return useQuery({
-    queryKey: ['authStatus'],
-    queryFn: fetchStatus,
-    // staleTime: 1000 * 60 * 5, //  5 mins
+    queryKey: ['authStatus', params.payment, params.sessionId],
+    queryFn: () => fetchStatus(params),
+    staleTime: 0,
   });
 }

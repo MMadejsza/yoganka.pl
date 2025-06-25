@@ -3,6 +3,8 @@ import SymbolOrIcon from './SymbolOrIcon.jsx';
 function GenericListTagLi({ extraClass, objectPair, classModifier, isNotes }) {
   const { label, content, status = null, symbol = null } = objectPair;
 
+  let liContent = objectPair.content;
+
   return content ? (
     <li
       className={`generic-details__item ${
@@ -28,7 +30,7 @@ function GenericListTagLi({ extraClass, objectPair, classModifier, isNotes }) {
           objectPair.status === 0 ? 'dimmed' : ''
         } ${extraClass ?? ''}`}
       >
-        {objectPair.content}
+        {liContent}
       </p>
     </li>
   ) : null;

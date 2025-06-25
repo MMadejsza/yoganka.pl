@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { statsCalculatorForCustomer } from '../../../utils/statistics/statsCalculatorForCustomer.js';
 import CardsList from '../../backend/cards/CardsList.jsx';
@@ -22,7 +21,6 @@ function ViewAccountPayments({ data }) {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const background = {
     pathname: location.pathname,
@@ -31,11 +29,9 @@ function ViewAccountPayments({ data }) {
   };
   const handleOpenModal = row => {
     const recordId = row.paymentId;
-    setIsModalOpen(true);
     navigate(`${location.pathname}/${recordId}`, { state: { background } });
   };
   const handleCloseModal = () => {
-    setIsModalOpen(false);
     navigate('/konto/platnosci');
   };
 
@@ -73,7 +69,6 @@ function ViewAccountPayments({ data }) {
       title={'Historia płatności'}
       noContentMsg={'płatności'}
     >
-      {/* {tableInside} */}
       {cards}
     </WrapperModalTable>
   );
@@ -81,14 +76,13 @@ function ViewAccountPayments({ data }) {
   return (
     <>
       {table}
-      {isModalOpen && (
-        <ViewsController
-          modifier='payment'
-          visited={isModalOpen}
-          onClose={handleCloseModal}
-          userAccountPage={true}
-        />
-      )}
+      (
+      <ViewsController
+        modifier='payment'
+        onClose={handleCloseModal}
+        userAccountPage={true}
+      />
+      )
     </>
   );
 }

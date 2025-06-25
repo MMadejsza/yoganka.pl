@@ -30,7 +30,9 @@ export const whatsAppTemplate = () => {
   const phoneNumber = '48792891607';
   const msgContact = `Hej! Piszę do Ciebie z yoganka.pl :)\n\nTu [imię] [Nazwisko]`;
 
-  const linkContact = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(msgContact)}`;
+  const linkContact = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
+    msgContact
+  )}`;
 
   return linkContact;
 };
@@ -55,4 +57,18 @@ export const renderJointGalery = (campsArr, isMobile) => {
 
   // console.log(allPhotos.length);
   return allPhotos;
+};
+export const renderGivenGalery = (givenGalleryData, isMobile) => {
+  const { pastGalleryPath, fileName } = givenGalleryData;
+  return Array.from({ length: givenGalleryData.pastGallerySize }).map(
+    (_, index) => (
+      <PhotoSlide
+        key={`${index}${fileName}`}
+        photoNo={index + 1}
+        slideData={{ pastGalleryPath, fileName: fileName }}
+        isMobile={isMobile}
+        past={true}
+      />
+    )
+  );
 };

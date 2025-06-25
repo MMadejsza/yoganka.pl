@@ -1,5 +1,9 @@
-import { formatIsoDateTime, getWeekDay } from '../dateTime.js';
-import { durationToSeconds, secondsToDuration } from './statsUtils.js';
+import {
+  durationToSeconds,
+  formatIsoDateTime,
+  getWeekDay,
+  secondsToDuration,
+} from '../dateTime.js';
 
 //@ stats calculation
 export const statsCalculatorForCustomer = customer => {
@@ -149,7 +153,9 @@ export const statsCalculatorForCustomer = customer => {
         camps: totalCampsAmount,
       },
     },
-    totalHours: `${splitDuration.hours}:${splitDuration.minutes}`,
+    totalHours: `${splitDuration.hours}:${String(
+      splitDuration.minutes
+    ).padStart(2, '0')}`,
   };
 
   console.log(`❗❗❗ statsCalculatorForCustomer stats`, stats);

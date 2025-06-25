@@ -5,7 +5,7 @@ import DetailsListUserSettings from './lists/DetailsListUserSettings.jsx';
 
 function ViewUser({ data, isUserAccountPage }) {
   const location = useLocation();
-  const customerAccessed = location.pathname.includes('ustawienia');
+  const customerAccessed = location.pathname.endsWith('konto');
   console.log('customerAccessed', customerAccessed);
   const adminAccessed = location.pathname.includes('admin-console');
   console.log('adminAccessed', adminAccessed);
@@ -52,6 +52,7 @@ function ViewUser({ data, isUserAccountPage }) {
           isUserAccountPage={isUserAccountPage}
           customerAccessed={customerAccessed}
           adminAccessed={adminAccessed}
+          userId={user.userId}
         />
 
         {customer && (

@@ -1473,6 +1473,16 @@ export const locationValidations = [
     message: 'Max 25 znaków - krótkie, rozpoznawcze bez szczegółów.',
   },
 ];
+export const locationInTableValidations = [
+  {
+    rule: value => value.trim() !== '',
+    message: '',
+  },
+  {
+    rule: value => value.length <= 25,
+    message: '',
+  },
+];
 //@ PRODUCT NAME RULESET
 export const productNameValidations = [
   {
@@ -1525,8 +1535,8 @@ export const priceValidations = [
     message: 'Cena może mieć maksymalnie 2 miejsca po przecinku.',
   },
   {
-    rule: value => Number(value) >= 0,
-    message: 'Cena nie może być mniejsza niż 0.',
+    rule: value => Number(value) >= 2,
+    message: 'Cena nie może być mniejsza niż 2zł.',
   },
 ];
 //@ CHECKBOXES RULESET
@@ -1534,5 +1544,27 @@ export const allowedTypesValidations = [
   {
     rule: value => Array.isArray(value) && value.length > 0,
     message: 'Wybierz przynajmniej jeden typ.',
+  },
+];
+//@ Soonest pass start date RULESET
+export const passStartDateValidations = minDateString => [
+  {
+    rule: value => value.trim() !== '',
+    message: 'Data rozpoczęcia nie może być pusta',
+  },
+  {
+    rule: value => {
+      const inputDate = new Date(value);
+      return !isNaN(inputDate.getTime());
+    },
+    message: 'Niepoprawny format daty',
+  },
+  {
+    rule: value => {
+      const inputDate = new Date(value);
+      const minDate = new Date(minDateString);
+      return inputDate >= minDate;
+    },
+    message: `Data rozpoczęcia nie może być wcześniejsza niż ${minDateString}`,
   },
 ];

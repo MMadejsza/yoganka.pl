@@ -37,14 +37,14 @@ export function useSwipe(
       if (!side && startX >= windowWidth * (1 - edgePercent)) {
         //if  swipe LEFT beyond threshold, trigger open
         if (startX - currentX > threshold) {
-          onOpen();
+          typeof onOpen === 'function' && onOpen();
         }
       }
       // If drawer on LEFT edge
       if (side && startX <= windowWidth * edgePercent) {
         // if swipe RIGHT beyond threshold, trigger open
         if (currentX - startX > threshold) {
-          onOpen();
+          typeof onOpen === 'function' && onOpen();
         }
       }
       // Close drawer on opposite swipe beyond threshold
@@ -52,7 +52,7 @@ export function useSwipe(
         (!side && delta > threshold) || // on right, swipe right to close
         (side && -delta > threshold) // on left, swipe left to close
       ) {
-        onClose();
+        typeof onClose === 'function' && onClose();
       }
     }
 

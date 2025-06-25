@@ -1,16 +1,25 @@
 import { useMutation } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { pickTheBestPassForSchedule } from '../../../../../backend/utils/controllersUtils.js';
 import SymbolOrIcon from '../../../components/common/SymbolOrIcon.jsx';
 import { useAuthStatus } from '../../../hooks/useAuthStatus.js';
 import { useFeedback } from '../../../hooks/useFeedback.js';
 import { useInput } from '../../../hooks/useInput.js';
-import { mutateOnEdit, queryClient } from '../../../utils/http.js';
+import { formatAllowedTypes } from '../../../utils/cardsAndTableUtils.jsx';
+import {
+  mutateOnCreate,
+  mutateOnEdit,
+  queryClient,
+} from '../../../utils/http.js';
 import { statsCalculatorForSchedule } from '../../../utils/statistics/statsCalculatorForSchedule.js';
-import { hasValidPassFn } from '../../../utils/userCustomerUtils.js';
+import {
+  hasValidPassFn,
+  pickTheBestPassForSchedule,
+} from '../../../utils/userCustomerUtils.js';
 import Input from '../../backend/Input.jsx';
 import FeedbackBox from '../FeedbackBox.jsx';
+import StripeForm from '../StripeForm.jsx';
 import NewCustomerFormForUser from './add-forms/NewCustomerFormForUser.jsx';
 import DetailsListProduct from './lists/DetailsListProduct.jsx';
 import DetailsListSchedule from './lists/DetailsListSchedule.jsx';
@@ -19,24 +28,41 @@ import TableAttendance from './tables/TableAttendance.jsx';
 import TableProductPayments from './tables/TableProductPayments.jsx';
 import TableProductReviews from './tables/TableProductReviews.jsx';
 
+const logsGloballyOn = true;
+
 function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
-  // console.clear();
-  console.log(
-    `📝
-	    Schedule object from backend:`,
-    data
-  );
   const location = useLocation();
   const navigate = useNavigate();
   const userAccountPage = location.pathname.includes('konto');
   const { schedule } = data;
   const { scheduleId } = schedule;
   const { Product: product } = schedule;
-
+  const [isPaying, setIsPaying] = useState(false);
+  const [clientSecret, setClientSecret] = useState('');
   const { data: status } = useAuthStatus();
-  console.log(`status`, status);
+  const { isLoggedIn } = status;
   const hasValidPass = hasValidPassFn(status, schedule);
-  // console.log(`ViewSchedule hasValidPass`, hasValidPass);
+  const [newCustomerDetails, setNewCustomerDetails] = useState({
+    isFirstTimeBuyer: status.user?.role.toUpperCase() == 'USER',
+  });
+  const [isFillingTheForm, setIsFillingTheForm] = useState(false);
+  const [bookingCancelled, setBookingCancelled] = useState(false);
+  const userAccessed = status.user?.role != 'ADMIN';
+  let scheduleStats = null;
+
+  if (!userAccessed && isAdminPanel)
+    scheduleStats = statsCalculatorForSchedule(product, schedule);
+  if (logsGloballyOn) {
+    console.log(
+      `📝
+	    Schedule object from backend:`,
+      data
+    );
+    console.log(`status.user?.role`, status.user?.role);
+    console.log(`newCustomerDetails: `, newCustomerDetails);
+    console.log(`status`, status);
+    // console.log(`ViewSchedule hasValidPass`, hasValidPass);
+  }
 
   const { feedback, updateFeedback, resetFeedback } = useFeedback({
     getRedirectTarget: result =>
@@ -45,6 +71,14 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
         : null,
     onClose: onClose,
   });
+
+  // CLEANUP: kill timer if modal unmounts (like after forward/back or close)
+  useEffect(() => {
+    if (feedback.status === -1) {
+      setClientSecret(''); // delete old secret
+      setIsPaying(false); // hide stripe form
+    }
+  }, [feedback.status]);
 
   const { mutate: cancel } = useMutation({
     mutationFn: formDataObj =>
@@ -64,27 +98,13 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
     },
   });
 
-  // console.log(`status.role`, status.role);
-  const [newCustomerDetails, setNewCustomerDetails] = useState({
-    isFirstTimeBuyer: status.role == 'USER',
-  });
-  // console.log(`newCustomerDetails: `, newCustomerDetails);
-  const [isFillingTheForm, setIsFillingTheForm] = useState(false);
-  const [bookingCancelled, setBookingCancelled] = useState(false);
-
-  const { isLoggedIn } = status;
-  const userAccessed = status.role != 'ADMIN';
-  let scheduleStats = null;
-  if (!userAccessed && isAdminPanel)
-    scheduleStats = statsCalculatorForSchedule(product, schedule);
-
   const handleCancellation = () => {
     cancel();
     setBookingCancelled(true);
   };
 
   const paymentSelectOptions = [
-    { label: 'Płatność bezpośrednia (bramka płatnicza)', value: 'gateway' },
+    { label: 'Płatność bezpośrednia', value: 'gateway' },
   ];
   const bestPasses =
     pickTheBestPassForSchedule(status.user?.Customer?.CustomerPasses, schedule)
@@ -92,7 +112,7 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
   const bestPassesFormatted = bestPasses?.map(p => {
     const fDate = p.validUntil ? p.validUntil.slice(0, 10) : '';
     const fTypes = p.PassDefinition.allowedProductTypes
-      ? JSON.parse(p.PassDefinition.allowedProductTypes).join(', ')
+      ? formatAllowedTypes(p.PassDefinition.allowedProductTypes)
       : '';
     const expiryDate = fDate ? `Do: ${fDate},` : '';
     const usesLeft = p.usesLeft ? `Pozostałe wejścia: ${p.usesLeft},` : '';
@@ -117,24 +137,79 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
     hasError: paymentMethodHasError,
   } = useInput(paymentSelectOptions[0].value);
 
+  const tosControl = useInput(false, [
+    { rule: v => v === true, message: 'Musisz zaakceptować regulamin' },
+  ]);
+
   const handleFormSave = details => {
     setNewCustomerDetails(details);
     setIsFillingTheForm(false);
   };
 
+  const metadata = useMemo(
+    () => ({
+      type: 'booking',
+      userId: status?.user?.userId,
+      scheduleId: schedule.scheduleId,
+      chosenCustomerPassId: paymentMethodValue,
+      customerDetails: JSON.stringify(newCustomerDetails),
+      tosAccepted: tosControl.value,
+    }),
+    [
+      status.user?.userId,
+      schedule.scheduleId,
+      newCustomerDetails, // or better: list its individual fields
+      tosControl.value,
+    ]
+  );
+
+  const createPaymentIntent = useMutation({
+    mutationFn: () =>
+      mutateOnCreate(status, { metadata }, `/api/stripe/create-payment-intent`),
+    onSuccess: data => {
+      setClientSecret(data.clientSecret);
+      // dopiero teraz włącz prawdziwy formularz
+      setIsPaying(true);
+    },
+    onError: err => {
+      updateFeedback({
+        confirmation: -1,
+        message:
+          err.message || '❌ Coś poszło nie tak. Spróbuj ponownie później.',
+      });
+      setIsPaying(false);
+    },
+  });
+
+  const handleReturn = () => {
+    setIsPaying(false);
+  };
+
   // Wrapper for paymentOps.onBook, updating feedback
   const handleBooking = async () => {
+    // if stripe form is visible:
+    if (isPaying) {
+      handleReturn();
+    }
+
+    if (paymentMethodValue === 'gateway' && !schedule.wasUserReserved) {
+      resetFeedback();
+      createPaymentIntent.mutate();
+      return;
+    }
+
+    // Standard booking logic (no Stripe)
     try {
       const res = await paymentOps.booking.onBook({
         customerDetails: newCustomerDetails || null,
         scheduleId: schedule.scheduleId,
         product: product.name,
         status: 1,
-        amountPaid: product.price,
+        paymentStatus: 1,
+        amountPaid: 0,
         amountDue: 0,
         chosenCustomerPassId: paymentMethodValue,
-        paymentMethod: 'Credit Card',
-        paymentStatus: 1,
+        paymentMethod: `Pass (Nr: ${paymentMethodValue})`,
       });
       updateFeedback(res);
       if (res.confirmation == 1) {
@@ -164,7 +239,6 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
     !shouldShowCancelBtn &&
     !isArchived &&
     !schedule.isUserGoing &&
-    // !paymentOps?.booking?.isError &&
     !isFillingTheForm &&
     !isAdminPanel &&
     !bookingCancelled;
@@ -175,13 +249,15 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
   const paymentBtn = isLoggedIn ? (
     <button
       onClick={
-        !shouldDisableBookBtn
+        !shouldDisableBookBtn || !createPaymentIntent.isLoading
           ? newCustomerDetails.isFirstTimeBuyer
             ? () => setIsFillingTheForm(true)
             : handleBooking
           : null
       }
-      className={`book modal__btn ${shouldDisableBookBtn && 'disabled'}`}
+      className={`book modal__btn ${
+        (shouldDisableBookBtn || createPaymentIntent.isLoading) && 'disabled'
+      }`}
     >
       <SymbolOrIcon
         specifier={
@@ -191,6 +267,8 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
             ? 'restore'
             : newCustomerDetails.isFirstTimeBuyer
             ? 'edit'
+            : isPaying
+            ? 'cycle'
             : 'shopping_bag'
         }
       />
@@ -202,9 +280,11 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
         ? 'Wróć na zajęcia'
         : newCustomerDetails.isFirstTimeBuyer
         ? 'Uzupełnij dane osobowe'
-        : hasValidPass
-        ? 'Rezerwuję'
-        : 'Kupuję'}
+        : !isPaying
+        ? hasValidPass && paymentMethodValue != 'gateway'
+          ? 'Rezerwuję'
+          : 'Kupuję'
+        : 'Odśwież'}
     </button>
   ) : (
     // dynamic redirection back to schedule when logged in, in Login form useFeedback
@@ -213,45 +293,127 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
       className='book modal__btn'
     >
       <SymbolOrIcon specifier={'login'} />
-      Zaloguj się w celu rezerwacji
+      Zaloguj się
     </button>
   );
 
   const feedbackBox =
     feedback.status !== undefined ? (
       <FeedbackBox
+        onCloseFeedback={resetFeedback}
         warnings={feedback.warnings}
         status={feedback.status}
         successMsg={feedback.message}
         isPending={false}
         error={feedback.status === -1 ? { message: feedback.message } : null}
         size='small'
-        onCloseFeedback={resetFeedback}
       />
     ) : null;
 
-  const passSelect = (
-    <Input
-      embedded={false}
-      formType={'login'}
-      type='select'
-      options={paymentSelectOptions}
-      id='paymentMethod'
-      name='paymentMethod'
-      label='Metoda płatności (domyślnie najkorzystniejszy karnet)'
-      value={paymentMethodValue}
-      required
-      onFocus={handlePaymentMethodFocus}
-      onBlur={handlePaymentMethodBlur}
-      onChange={handlePaymentMethodChange}
-      validationResults={paymentMethodValidationResults}
-      didEdit={paymentMethodDidEdit}
-      isFocused={paymentMethodIsFocused}
-    />
+  const prePaymentForm = (
+    <>
+      {paymentSelectOptions.length > 1 && (
+        <Input
+          embedded={false}
+          formType={'login'}
+          type='select'
+          options={paymentSelectOptions}
+          id='paymentMethod'
+          name='paymentMethod'
+          label='Metoda płatności'
+          value={paymentMethodValue}
+          required
+          onFocus={handlePaymentMethodFocus}
+          onBlur={handlePaymentMethodBlur}
+          onChange={handlePaymentMethodChange}
+          validationResults={paymentMethodValidationResults}
+          didEdit={paymentMethodDidEdit}
+          isFocused={paymentMethodIsFocused}
+          classModifier={'payment-method'}
+        />
+      )}
+      {paymentMethodValue == 'gateway' && (
+        <Input
+          required
+          embedded={true}
+          formType={'policy'}
+          type='checkbox'
+          id='tos'
+          name='tos'
+          label={
+            <>
+              Akceptuję{' '}
+              <a
+                href='/polityka-firmy/regulamin'
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                regulamin
+              </a>{' '}
+              *
+            </>
+          }
+          value={tosControl.value}
+          checked={tosControl.value}
+          onFocus={tosControl.handleFocus}
+          onBlur={tosControl.handleBlur}
+          onChange={tosControl.handleChange}
+          validationResults={tosControl.validationResults}
+          didEdit={tosControl.didEdit}
+          isFocused={tosControl.isFocused}
+          classModifier={'tos'}
+        />
+      )}
+    </>
   );
 
   return (
     <>
+      <Helmet>
+        <html lang='pl' />
+        <title>{`${product.name} – Zajęcia Yoganka`}</title>
+        <link
+          rel='canonical'
+          href={`https://yoganka.pl${window.location.pathname}`}
+        />
+        <meta
+          name='robots'
+          content={
+            isAdminPanel || window.location.pathname.includes('/konto')
+              ? 'noindex, follow'
+              : 'index, follow'
+          }
+        />
+
+        {/* Open Graph */}
+        <meta
+          property='og:title'
+          content={`${product.name} – Zajęcia Yoganka`}
+        />
+        <meta
+          property='og:description'
+          content={product.description || `${product.name} – szczegóły zajęć`}
+        />
+        <meta
+          property='og:url'
+          content={`https://yoganka.pl${window.location.pathname}`}
+        />
+        <meta property='og:type' content='event' />
+        <meta property='og:image' content='/favicon_io/apple-touch-icon.png' />
+
+        {/* Twitter */}
+        <meta name='twitter:card' content='summary_large_image' />
+        <meta
+          name='twitter:title'
+          content={`${product.name} – Zajęcia Yoganka`}
+        />
+        <meta
+          name='twitter:description'
+          content={product.description || `${product.name} – szczegóły zajęć`}
+        />
+        <meta name='twitter:image' content='/favicon_io/apple-touch-icon.png' />
+      </Helmet>
+
       {userAccessed ? (
         <>
           <h1 className='modal__title modal__title--view'>{`${product.name}`}</h1>
@@ -301,7 +463,7 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
             type={product.type}
             status={status}
             isAdminPage={isAdminPanel}
-            shouldToggleFrom={true}
+            shouldToggleFrom={!schedule.full}
           />
           <TableProductPayments
             payments={scheduleStats.totalPayments}
@@ -320,17 +482,30 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
         {shouldShowBookBtn &&
           !shouldShowCancelBtn &&
           !schedule.wasUserReserved &&
-          passSelect}
-        {shouldShowBookBtn && !shouldShowCancelBtn && paymentBtn}
+          feedback.status != 1 &&
+          prePaymentForm}
         {shouldShowCancelBtn && (
           <button
             onClick={handleCancellation}
             className='book modal__btn modal__btn--cancel'
           >
             <SymbolOrIcon specifier={'sentiment_dissatisfied'} />
-            Daj znać, że nie przyjdziesz...
+            Rezygnuję...
           </button>
         )}
+
+        {isPaying && !shouldShowFeedback && (
+          <StripeForm
+            status={status}
+            clientSecret={clientSecret}
+            onClose={onClose}
+            updateFeedback={updateFeedback}
+            resetFeedback={resetFeedback}
+            type='booking'
+            tosControl={tosControl}
+          />
+        )}
+        {shouldShowBookBtn && !shouldShowCancelBtn && paymentBtn}
       </footer>
     </>
   );

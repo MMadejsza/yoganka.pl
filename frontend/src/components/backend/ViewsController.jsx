@@ -1,21 +1,24 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import SymbolOrIcon from '../../components/common/SymbolOrIcon.jsx';
 import { useAuthStatus } from '../../hooks/useAuthStatus.js';
 import { useFeedback } from '../../hooks/useFeedback.js';
 import { fetchItem, mutateOnDelete, queryClient } from '../../utils/http.js';
+import Loader from '../common/Loader.jsx';
 import FeedbackBox from './FeedbackBox.jsx';
 import WrapperModal from './WrapperModal.jsx';
-import ViewBooking from './views/ViewBooking.jsx';
-import ViewCustomer from './views/ViewCustomer.jsx';
-import ViewCustomerPass from './views/ViewCustomerPass.jsx';
-import ViewPassDefinition from './views/ViewPassDefinition.jsx';
-import ViewPayment from './views/ViewPayment.jsx';
-import ViewProduct from './views/ViewProduct.jsx';
-import ViewReview from './views/ViewReview.jsx';
-import ViewSchedule from './views/ViewSchedule.jsx';
-import ViewUser from './views/ViewUser.jsx';
+const ViewBooking = lazy(() => import('./views/ViewBooking.jsx'));
+const ViewCustomer = lazy(() => import('./views/ViewCustomer.jsx'));
+const ViewCustomerPass = lazy(() => import('./views/ViewCustomerPass.jsx'));
+const ViewPassDefinition = lazy(() => import('./views/ViewPassDefinition.jsx'));
+const ViewPayment = lazy(() => import('./views/ViewPayment.jsx'));
+const ViewProduct = lazy(() => import('./views/ViewProduct.jsx'));
+const ViewReview = lazy(() => import('./views/ViewReview.jsx'));
+const ViewSchedule = lazy(() => import('./views/ViewSchedule.jsx'));
+const ViewUser = lazy(() => import('./views/ViewUser.jsx'));
+
+const debugLogsTurnedOn = false;
 
 function ViewsController({
   modifier,
@@ -25,6 +28,7 @@ function ViewsController({
   userAccountPage,
   customer,
   role,
+  modalBasePath,
 }) {
   const customerRoutes = [
     'konto/platnosci',
@@ -46,10 +50,12 @@ function ViewsController({
   const minRightsPrefix = role == 'ADMIN' ? '' : '';
   const noFetchPaths = ['statystyki', 'zajecia', 'platnosci', 'faktury'];
 
-  console.log('ViewsController callPath: ', callPath);
-  console.log('ViewsController isCustomerQuery: ', isCustomerQuery);
-  console.log('ViewsController: modifier =', modifier);
-  console.log('✅ role', role);
+  if (debugLogsTurnedOn) console.log('ViewsController callPath: ', callPath);
+  if (debugLogsTurnedOn)
+    console.log('ViewsController isCustomerQuery: ', isCustomerQuery);
+  if (debugLogsTurnedOn) console.log('ViewsController: modifier =', modifier);
+  if (debugLogsTurnedOn) console.log('✅ role', role);
+  const isValidId = params.id && /^\d+$/.test(params.id);
 
   // const [editingState, setEditingState] = useState(false);
   const [deleteWarningTriggered, setDeleteWarningTriggered] = useState(false);
@@ -60,11 +66,11 @@ function ViewsController({
       fetchItem(callPath, { signal }, isCustomerQuery || minRightsPrefix),
     staleTime: 0,
     refetchOnMount: true,
-    enabled: !!params.id || location.pathname.includes('ustawienia'),
+    enabled: !!isValidId || location.pathname.includes('ustawienia'),
   });
 
   if (data) {
-    console.log('ViewsController data: ', data);
+    if (debugLogsTurnedOn) console.log('ViewsController data: ', data);
   }
   const effectiveData = noFetchPaths.some(pathPart =>
     location.pathname.split('/').pop().includes(pathPart)
@@ -75,17 +81,20 @@ function ViewsController({
   const { data: status } = useAuthStatus();
 
   const resolveModifier = () => {
-    console.log('resolveModifier data:', data);
-    console.log('resolveModifier modifier:', modifier);
+    if (debugLogsTurnedOn) console.log('resolveModifier data:', data);
+    if (debugLogsTurnedOn) console.log('resolveModifier modifier:', modifier);
+
+    const wrapInSuspense = component => (
+      <Suspense fallback={<Loader label={'Ładowanie'} />}>{component}</Suspense>
+    );
+
     let controller = {};
     switch (modifier) {
       case 'user':
-        controller.recordDisplay = (
+        controller.recordDisplay = wrapInSuspense(
           <ViewUser
             data={data}
-            isUserAccountPage={
-              location.pathname.includes('ustawienia') ?? false
-            }
+            isUserAccountPage={location.pathname.includes('konto') ?? false}
           />
         );
         controller.deleteBtnTitle = 'Konto';
@@ -103,7 +112,7 @@ function ViewsController({
         // controller.recordEditor = <UserForm />;
         return controller;
       case 'customer':
-        controller.recordDisplay = <ViewCustomer data={data} />;
+        controller.recordDisplay = wrapInSuspense(<ViewCustomer data={data} />);
         controller.recordEditor = '';
         controller.deleteBtnTitle = 'Profil Uczestnika';
         controller.deleteQuery = `delete-customer/${data.customer.customerId}`;
@@ -117,7 +126,7 @@ function ViewsController({
         ];
         return controller;
       case 'product':
-        controller.recordDisplay = (
+        controller.recordDisplay = wrapInSuspense(
           <ViewProduct data={data} isAdminPanel={isAdminPanel} />
         );
         controller.recordEditor = '';
@@ -131,7 +140,7 @@ function ViewsController({
         ];
         return controller;
       case 'schedule':
-        controller.recordDisplay = (
+        controller.recordDisplay = wrapInSuspense(
           <ViewSchedule
             data={data}
             paymentOps={paymentOps}
@@ -152,7 +161,7 @@ function ViewsController({
         ];
         return controller;
       case 'payment':
-        controller.recordDisplay = (
+        controller.recordDisplay = wrapInSuspense(
           <ViewPayment
             data={data}
             isUserAccountPage={userAccountPage}
@@ -175,7 +184,7 @@ function ViewsController({
         ];
         return controller;
       case 'review':
-        controller.recordDisplay = (
+        controller.recordDisplay = wrapInSuspense(
           <ViewReview data={customer} onClose={onClose} isModalOpen={visited} />
         );
         controller.recordEditor = '';
@@ -186,7 +195,7 @@ function ViewsController({
         controller.warnings = '';
         return controller;
       case 'booking':
-        controller.recordDisplay = (
+        controller.recordDisplay = wrapInSuspense(
           <ViewBooking data={data} onClose={onClose} isModalOpen={visited} />
         );
         controller.recordEditor = '';
@@ -200,7 +209,7 @@ function ViewsController({
         ];
         return controller;
       case 'passDef':
-        controller.recordDisplay = (
+        controller.recordDisplay = wrapInSuspense(
           <ViewPassDefinition
             data={data}
             onClose={onClose}
@@ -225,7 +234,7 @@ function ViewsController({
         ];
         return controller;
       case 'customerPass':
-        controller.recordDisplay = (
+        controller.recordDisplay = wrapInSuspense(
           <ViewCustomerPass
             data={data}
             onClose={onClose}
@@ -263,12 +272,12 @@ function ViewsController({
     if (error.code == 401) {
       navigate('/login');
     } else {
-      console.log(error, error.code, error.message);
+      if (debugLogsTurnedOn) console.log(error, error.code, error.message);
       dataDisplay = 'Error in UserDetails fetch...';
     }
   }
 
-  console.log(`ViewsController customer: `, customer);
+  if (debugLogsTurnedOn) console.log(`ViewsController customer: `, customer);
   let deleteTitle;
   if (effectiveData) {
     const {
@@ -360,37 +369,41 @@ function ViewsController({
     resetFeedback();
     setDeleteWarningTriggered(false);
   };
+  const modalPath = modalBasePath ?? location.pathname;
 
   return (
-    <WrapperModal
-      visited={visited}
-      onClose={onClose}
-      onCloseFeedback={handleCloseFeedback}
-    >
-      {!deleteWarningTriggered
-        ? dataDisplay
-        : (feedback.status != undefined || deleteWarningTriggered) && (
-            <FeedbackBox
-              onCloseFeedback={handleCloseFeedback}
-              warnings={feedback.warnings}
-              status={feedback.status}
-              successMsg={feedback.message}
-              isPending={isDeletePending}
-              isError={isDeleteError}
-              error={deleteError ? { message: deleteError.message } : null}
-              size='small'
-            />
+    params.id && (
+      <WrapperModal
+        visited={true}
+        onClose={onClose}
+        basePath={modalPath}
+        onCloseFeedback={handleCloseFeedback}
+      >
+        {!deleteWarningTriggered
+          ? dataDisplay
+          : (feedback.status != undefined || deleteWarningTriggered) && (
+              <FeedbackBox
+                onCloseFeedback={handleCloseFeedback}
+                warnings={feedback.warnings}
+                status={feedback.status}
+                successMsg={feedback.message}
+                isPending={isDeletePending}
+                isError={isDeleteError}
+                error={deleteError ? { message: deleteError.message } : null}
+                size='small'
+              />
+            )}
+        <footer className='modal__user-action'>
+          {isAdminPanel && (
+            <>
+              {actionBtn(handleDelete, 'danger', 'delete_forever')}
+              {deleteWarningTriggered &&
+                actionBtn(handleCancelDelete, 'success', 'undo')}
+            </>
           )}
-      <footer className='modal__user-action'>
-        {isAdminPanel && (
-          <>
-            {actionBtn(handleDelete, 'danger', 'delete_forever')}
-            {deleteWarningTriggered &&
-              actionBtn(handleCancelDelete, 'success', 'undo')}
-          </>
-        )}
-      </footer>
-    </WrapperModal>
+        </footer>
+      </WrapperModal>
+    )
   );
 }
 

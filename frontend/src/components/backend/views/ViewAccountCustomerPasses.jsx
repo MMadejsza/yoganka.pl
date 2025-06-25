@@ -1,5 +1,5 @@
-import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useHandleStripeRedirect } from '../../../hooks/useHandleStripeRedirect.js';
 import CardsList from '../../backend/cards/CardsList.jsx';
 import ViewsController from '../ViewsController.jsx';
 import WrapperModalTable from '../WrapperModalTable.jsx';
@@ -7,6 +7,11 @@ import TableCustomerPasses from './tables/TableCustomerPasses.jsx';
 
 function ViewAccountCustomerPasses({ data }) {
   console.log('ViewAccountCustomerPasses data', data);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  useHandleStripeRedirect();
+
   let cp;
   if (data.customer)
     cp = data.customer.customerPasses.sort((a, b) => {
@@ -24,10 +29,6 @@ function ViewAccountCustomerPasses({ data }) {
       return timeA - timeB;
     });
 
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   const background = {
     pathname: location.pathname,
     search: location.search,
@@ -36,12 +37,11 @@ function ViewAccountCustomerPasses({ data }) {
 
   const handleOpenModal = row => {
     const recordId = row.rowId;
-    setIsModalOpen(true);
-    navigate(`${location.pathname}/${recordId}`, { state: { background } });
+    const modalPath = `${location.pathname}/${recordId}`;
+    navigate(modalPath, { state: { background } });
   };
 
   const handleCloseModal = () => {
-    setIsModalOpen(false);
     navigate('/konto/karnety');
   };
 
@@ -79,14 +79,13 @@ function ViewAccountCustomerPasses({ data }) {
     <>
       {/* {table} */}
       {cards}
-      {isModalOpen && (
-        <ViewsController
-          modifier='customerPass'
-          visited={isModalOpen}
-          onClose={handleCloseModal}
-          userAccountPage={true}
-        />
-      )}
+
+      <ViewsController
+        modifier='customerPass'
+        onClose={handleCloseModal}
+        userAccountPage={true}
+        customer={data.customer}
+      />
     </>
   );
 }

@@ -6,7 +6,8 @@ form.generic-details {
   margin: 0 auto;
 }
 .generic-details {
-  width: 85%;
+  //! width: 85%;
+  width: 95%;
 
   padding: $generic-list-vertical-padding 2rem;
   @include flex(column, flex-start, center);
@@ -41,6 +42,16 @@ form.generic-details {
     flex-wrap: wrap;
     gap: 1rem 2rem !important;
 
+    &--tos,
+    &--gdpr {
+      margin: 2rem 0;
+      justify-content: flex-start;
+
+      input {
+        order: -1;
+      }
+    }
+
     &--in-title {
       justify-content: center;
     }
@@ -52,13 +63,23 @@ form.generic-details {
 
   &__label {
     font-weight: 500;
-    max-width: 48%;
+    //! max-width: 48%;
+
+    &--tos,
+    &--gdpr {
+      font-size: 1.8rem;
+    }
   }
 
   &__content {
     width: max-content;
     color: map.get($colors, generic-list-content);
     @include flex(row, flex-end, center);
+
+    &--tos,
+    &--gdpr {
+      flex-basis: auto !important;
+    }
 
     &--notes {
       justify-content: center;
@@ -211,6 +232,11 @@ form.generic-details {
   }
 
   .generic-details {
+    &__label {
+      font-weight: 500;
+      max-width: 48%;
+    }
+
     &--product-view {
       flex-basis: 45%;
     }
@@ -290,27 +316,22 @@ form.generic-details {
   }
 
   .generic-details {
-    &__list {
-      width: 90%;
-
-      &--login-page {
-        width: 100%;
+    &__item {
+      &--tos,
+      &--gdpr {
+        // flex-basis: 100%;
+        margin: 0 auto;
       }
     }
 
-    &--customer-account-stats {
-      margin: 0 auto;
-      width: 65%;
-      flex-basis: 65% !important;
+    &__list {
+      &--customer-account-stats {
+        width: 65% !important;
+        // flex-basis: 45% !important;
+      }
     }
   }
 }
 
 @include respond-to(desktop-m) {
-  .generic-details {
-    &--customer-account-stats {
-      width: 45%;
-      flex-basis: 45% !important;
-    }
-  }
 }

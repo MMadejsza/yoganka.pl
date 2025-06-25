@@ -2,18 +2,19 @@
 @use 'sass:map';
 
 .feedback-box {
-  width: 80%;
-  flex-basis: 80%;
+  position: relative;
+  width: 95%;
+  flex-basis: 95%;
   min-height: 8vh;
   margin: 3rem auto;
   padding: 1.5rem;
   text-align: center;
-  font-size: 2rem;
+  font-size: 1.8rem;
   border-radius: map.get($sizes, border-radius);
   box-shadow: map.get($shadows, box-shadow);
   @include flex(row, center, center);
   flex-wrap: wrap;
-  gap: 1.5rem;
+  gap: 2.5rem;
 
   &--error {
     color: #c62828;
@@ -35,6 +36,30 @@
   &__warning {
     flex-basis: 100%;
   }
+
+  &__close-btn {
+    position: relative;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.7rem !important;
+    color: inherit;
+    transition: map.get($behavior, base-transition);
+    z-index: 9;
+
+    flex-basis: 100%;
+    @include flex(row, flex-end, center, 1rem);
+
+    &:hover {
+      cursor: pointer;
+      transform: scale(1.01) translateY(0.1rem);
+      text-shadow: map.get($shadows, active-text-icons-shadow);
+      text-shadow: $active-box-shadow;
+    }
+
+    .feedback-box__x {
+      font-weight: bold;
+    }
+  }
 }
 
 .generic-details {
@@ -43,5 +68,17 @@
     min-height: auto;
     margin: 1rem 0;
     padding: 1rem;
+  }
+}
+
+@include respond-to(desktop-xs) {
+  .feedback-box {
+    width: 80%;
+    flex-basis: 80%;
+
+    &__close-btn {
+      top: 0.5rem;
+      right: 1rem;
+    }
   }
 }

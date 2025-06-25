@@ -1,18 +1,18 @@
-import { TYPES } from '../../../DATA/B2B_DATA.js';
+import SymbolOrIcon from '../../common/SymbolOrIcon.jsx';
 import Section from '../Section.jsx';
 
-function B2BBenefitsSection() {
+function B2BBenefitsSection({ list, title }) {
   const classy = 'camps-benefits__';
   const mediaQuery = window.matchMedia('(max-width: 1025px)');
   const isMobile = mediaQuery.matches;
   return (
     <Section
-      classy='camps-benefits'
-      header='ZORGANIZUJĘ JAKO:'
+      classy='turning-tiles camps-benefits'
+      header={title}
       iSpecific={true}
     >
       <main className='camps-benefits__bullets-container b2b-types'>
-        {TYPES.map((benefit, index) => {
+        {list.map((benefit, index) => {
           return (
             <div
               className={`${classy}bullet-container types__bullet-container`}
@@ -20,15 +20,17 @@ function B2BBenefitsSection() {
               key={index}
             >
               {isMobile && (
-                <span className='material-symbols-rounded click-suggestion'>
-                  web_traffic
-                </span>
+                <SymbolOrIcon
+                  specifier={'web_traffic'}
+                  extraClass={`click-suggestion`}
+                />
               )}
               <article key={benefit.title} className={`${classy}bullet`}>
                 <aside className={`${classy}symbol-container`}>
-                  <span className={`material-symbols-rounded ${classy}symbol`}>
-                    {benefit.symbol}
-                  </span>
+                  <SymbolOrIcon
+                    specifier={benefit.symbol}
+                    extraClass={`${classy}symbol`}
+                  />
                 </aside>
                 <header className={`${classy}bullet-header`}>
                   {benefit.title}

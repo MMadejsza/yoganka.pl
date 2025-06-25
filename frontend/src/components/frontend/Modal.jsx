@@ -9,7 +9,9 @@ import ModalList from './ModalList.jsx';
 
 function Modal({ tile, singleImg, onClose, today, isVisible, isClosing }) {
   const { type, modal, gallerySize, galleryPath, fileName, extraClass } = tile;
-  let isUpToDate = tile.date > today;
+  let isUpToDate =
+    modal.title === 'Sup Yoga' ||
+    new Date(tile.date).getTime() > new Date().getTime();
   let isCamp = type === 'camp';
   let isEvent = type === 'event';
 
@@ -76,11 +78,21 @@ function Modal({ tile, singleImg, onClose, today, isVisible, isClosing }) {
   );
 
   const eventOnlyContent = isEvent && (
-    <ModalList
-      extraClass='event'
-      listType={modal.program.listType}
-      data={modal.program}
-    />
+    <>
+      {modal.glance && (
+        <header className={`modal__header modal__full-desc--long-text`}>
+          <CampGlance glance={modal.glance} />
+        </header>
+      )}
+
+      {modal.program.list.length > 0 && (
+        <ModalList
+          extraClass='event'
+          listType={modal.program.listType}
+          data={modal.program}
+        />
+      )}
+    </>
   );
 
   const campOnlyContent = isCamp && (
@@ -191,6 +203,22 @@ function Modal({ tile, singleImg, onClose, today, isVisible, isClosing }) {
         />
         <meta property='og:url' content={helmetContent.link} />
         <meta property='og:type' content='website' />
+        <meta
+          property='og:image'
+          content={`https://yoganka.pl/imgs/offer/${
+            type === 'camp' ? 'camps' : 'events'
+          }/${fileName}/front/480_${fileName}_0.jpg`}
+        />
+
+        <meta name='twitter:card' content='summary_large_image' />
+        <meta name='twitter:title' content={helmetContent.title} />
+        <meta name='twitter:description' content={helmetContent.desc} />
+        <meta
+          name='twitter:image'
+          content={`https://yoganka.pl/imgs/offer/${
+            type === 'camp' ? 'camps' : 'events'
+          }/${fileName}/front/480_${fileName}_0.jpg`}
+        />
         {/* END For social media links */}
         <link rel='canonical' href={helmetContent.canonicalTag} />
       </Helmet>
@@ -220,6 +248,8 @@ function Modal({ tile, singleImg, onClose, today, isVisible, isClosing }) {
           className='modal__modal-body modal__modal-body--offer '
           onClick={e => e.stopPropagation()}
         >
+          {modal.title && <h3 className='modal__main-title '>{modal.title}</h3>}
+
           {galleryContent}
           {/* ${modal.fullDesc.length > 375 ? 'modal__full-desc--long-text' : ''} */}
 

@@ -35,13 +35,12 @@ export default function Card({
     footerIcon,
     quickActionSymbol,
     quickActionMethod,
+    dimmedCardFooter,
   } = content;
 
   const isArchived =
     new Date(
-      `${row.date?.split('.').reverse().join('-')}T${
-        row.startTime || '00:00:00'
-      }`
+      `${row.date?.split('.').reverse().join('-')}T${row.startTime || '00:00'}`
     ) < new Date();
 
   // Build CSS classes array
@@ -76,8 +75,8 @@ export default function Card({
               flags.isAdminView,
               flags.isAvailablePassesView,
               flags.isAccountView,
-              status.role === 'CUSTOMER',
-              status.role === 'ADMIN',
+              status.user?.role === 'CUSTOMER',
+              status.user?.role === 'ADMIN',
               e
             );
           }}
@@ -136,7 +135,12 @@ export default function Card({
       </div>
       <div className='card__footer'>
         {footerIcon && <SymbolOrIcon specifier={footerIcon} />}
-        <span className='card__single-content'>{cardFooter}</span>
+        <span className='card__single-content'>
+          {cardFooter}
+          <span className='card__single-content--secondary'>
+            {dimmedCardFooter}
+          </span>
+        </span>
       </div>
     </div>
   );

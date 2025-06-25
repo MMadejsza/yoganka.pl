@@ -3,6 +3,133 @@ const htmlToImgsPath = `/imgs`;
 
 export const EVENTS_DATA = [
   {
+    id: `E06`,
+    name: `Yoga piknik i malowanie ceramiki`,
+    type: `event`,
+    date: `2025-07-21`,
+    link: `yoga-piknik-i-malowanie-ceramiki`,
+    fileName: `yoga_piknik_i_malowanie_ceramiki`,
+    imgPath: `${htmlToImgsPath}/offer/events/yoga_piknik/front`,
+    galleryPath: `${htmlToImgsPath}/offer/events/yoga_piknik/gallery`,
+    gallerySize: 0,
+    order: 3,
+    eventType: `fixed`,
+    extraClass: `event`,
+    front: {
+      title: `Yoga piknik i\u00A0malowanie ceramiki`,
+      dates: ['II połowa lipca'],
+      location: 'Park Reagana',
+      desc: `W PRZYGOTOWANIU...`,
+      btnsContent: [],
+    },
+    modal: {
+      title: `Yoga piknik i\u00A0malowanie ceramiki`,
+      fullDescTitle: `O spotkaniu:`,
+      fullDesc: `W przygotowaniu`,
+      program: {
+        listType: 'excluded',
+        title: `W programie:`,
+        list: [
+          'Praktyka jogi',
+          'Malowanie ceramiki',
+          'Piknik, rozmowy, celebracja',
+        ],
+      },
+      btnsContent: [
+        {
+          action: 'classic',
+          text: `WhatsApp`,
+          title: `Wiadomość WhatsApp`,
+          link: whatsAppTemplate(),
+          icon: 'fa-brands fa-whatsapp',
+        },
+        // {
+        //   action: 'link',
+        //   title: `Grafik Yoganka`,
+        //   text: `Sprawdź grafik!`,
+        //   symbol: 'calendar_month',
+        //   navLink: `/grafik`,
+        // },
+      ],
+      formLink: ``,
+      note: `Szczegóły już wkrótce!`,
+      // questionTemplate(subject) {
+      // 	return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
+      // },
+      glance: {
+        // area: `Park Reagana`,
+        // price: `220zł`,
+      },
+      plan: {},
+      included: {},
+      excluded: {},
+      optional: {},
+      freeTime: {},
+    },
+  },
+  {
+    id: `E05`,
+    name: `Yoga pod chmurką`,
+    type: `event`,
+    date: new Date(new Date().setDate(new Date().getDate() + 1)),
+    link: `yoga-pod-chmurka`,
+    fileName: `yoga_pod_chmurka`,
+    imgPath: `${htmlToImgsPath}/offer/events/yoga_pod_chmurka/front`,
+    galleryPath: `${htmlToImgsPath}/offer/events/yoga_pod_chmurka/gallery`,
+    gallerySize: 0,
+    order: 1,
+    eventType: `repetitive`,
+    extraClass: `event`,
+    front: {
+      title: `Yoga pod\u00A0chmurką`,
+      dates: [`Czerwiec-Wrzesień`],
+      location: 'Park lub plaża (Gdańsk)',
+      desc: `To doskonała alternatywa dla wyjazdów weekendowych, kiedy nie możesz sobie na nie pozwolić...`,
+      btnsContent: [],
+    },
+    modal: {
+      title: `Yoga pod\u00A0chmurką`,
+      fullDescTitle: `O spotkaniu:`,
+      fullDesc: `Joga w\u00A0plenerze. 60\u00A0min praktyki w\u00A0stylu vinyasa flow. Organizowana okazjonalnie przy\u00A0dobrej pogodzie. Sprawdź grafik celem uzyskania szczegółów o\u00A0zbliżających się\u00A0zajęciach pod\u00A0chmurką (miejsce,\u00A0data). Na\u00A0każde spotkanie obowiązują zapisy oraz \u00A0przedpłata. Sprawdź regulamin.`,
+
+      program: {
+        listType: 'excluded',
+        title: `W programie:`,
+        list: [],
+      },
+      btnsContent: [
+        {
+          action: 'classic',
+          text: `WhatsApp`,
+          title: `Wiadomość WhatsApp`,
+          link: whatsAppTemplate(),
+          icon: 'fa-brands fa-whatsapp',
+        },
+        {
+          action: 'link',
+          title: `Grafik Yoganka`,
+          text: `Sprawdź grafik!`,
+          symbol: 'calendar_month',
+          navLink: `/grafik`,
+        },
+      ],
+      formLink: ``,
+      note: `Rezerwacje w grafiku`,
+      // questionTemplate(subject) {
+      // 	return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
+      // },
+      glance: {
+        area: `Park lub plaża (Gdańsk)`,
+        price: `30zł`,
+      },
+      plan: {},
+      included: {},
+      excluded: {},
+      optional: {},
+      freeTime: {},
+    },
+  },
+  {
     id: `E01`,
     name: `Śniadanie z Yogą`,
     type: `event`,
@@ -12,7 +139,7 @@ export const EVENTS_DATA = [
     imgPath: `${htmlToImgsPath}/offer/events/sniadanie_z_yoga/front`,
     galleryPath: `${htmlToImgsPath}/offer/events/sniadanie_z_yoga/front`,
     gallerySize: 0,
-    eventType: `fixed`,
+    eventType: `repetitive`,
     extraClass: `event`,
     front: {
       title: `Śniadanie z\u00A0Yogą`,
@@ -22,6 +149,7 @@ export const EVENTS_DATA = [
       btnsContent: [],
     },
     modal: {
+      title: `Śniadanie z\u00A0Yogą`,
       fullDescTitle: `O spotkaniu:`,
       fullDesc: `
 			Rozpocznij swój dzień od\u00A0harmonijnego połączenia ruchu i\u00A0smaku! Podczas naszego wydarzenia Śniadanie z\u00A0jogą czeka\u00A0Cię poranna sesja jogi, która\u00A0rozbudzi Twoje ciało, wyciszy umysł i\u00A0napełni energią (slow\u00A0flow\u00A0joga). Po praktyce zapraszamy na\u00A0zdrowe, pyszne śniadanie w\u00A0przyjaznej atmosferze – idealne, by\u00A0zjeść wspólnie, porozmawiać i\u00A0cieszyć\u00A0się dobrym początkiem dnia.
@@ -53,11 +181,11 @@ export const EVENTS_DATA = [
           icon: 'fa-brands fa-whatsapp',
         },
         {
-          action: 'classic',
-          title: `Formularz Feetsy w osobnej zakładce`,
-          text: `Zapisz się w Feetsy`,
-          symbol: 'edit',
-          link: `https://app.fitssey.com/yoganka/backoffice.v4/schedule`,
+          action: 'link',
+          title: `Grafik Yoganka`,
+          text: `Sprawdź grafik!`,
+          symbol: 'calendar_month',
+          navLink: `/grafik`,
         },
       ],
       formLink: `mailto:kontakt@yoganka.pl?&body=Hej! Piszę do Ciebie z yoganka.pl`,
@@ -94,6 +222,8 @@ export const EVENTS_DATA = [
       btnsContent: [],
     },
     modal: {
+      title: `Yoga\u00A0&\u00A0Sound
+		Moon\u00A0Ceremony`,
       fullDescTitle: `O spotkaniu:`,
       fullDesc: `Takiego wydarzenia w\u00A0Trójmieście nie\u00A0było. Dźwięki mis\u00A0i\u00A0gongów tworzą kojącą atmosferę, pomagając w\u00A0głębszym relaksie i medytacji. Pod rozgwieżdżonym niebem, wśród szumu fal, każda asana staje się bardziej intymna i\u00A0energetyzująca. Bliskość natury i\u00A0moc pełni księżyca dodają praktyce niezwykłej mocy uzdrawiającej. To idealna okazja, by odprężyć ciało, wyciszyć umysł i\u00A0połączyć się z\u00A0otaczającą cię przyrodą.`,
       program: {
@@ -115,20 +245,9 @@ export const EVENTS_DATA = [
           link: whatsAppTemplate(),
           icon: 'fa-brands fa-whatsapp',
         },
-        // {
-        // 	action: 'classic',
-        // title: `Formularz Google w osobnej zakładce`,
-
-        // 	text: `Wypełnij formularz`,
-        // symbol:`edit`,
-        // 	link: `https://forms.gle/kYN6VpfP3aV1b9yB8`,
-        // },
       ],
       formLink: `https://forms.gle/kYN6VpfP3aV1b9yB8`,
       note: ``,
-      // questionTemplate(subject) {
-      // 	return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
-      // },
       glance: {},
       plan: {},
       included: {},
@@ -141,22 +260,25 @@ export const EVENTS_DATA = [
     id: `E04`,
     name: `Sup Yoga`,
     type: `event`,
-    date: `2025-05-22`,
+    date: new Date(new Date().setDate(new Date().getDate() + 1)),
     fileName: `sup`,
     link: `sup-yoga`,
     imgPath: `${htmlToImgsPath}/offer/events/sup/front`,
     galleryPath: `${htmlToImgsPath}/offer/events/sup/front`,
     gallerySize: 0,
+    order: 1,
     eventType: `repetitive`,
     extraClass: `event`,
     front: {
       title: `Sup Yoga`,
-      dates: [`Latem`],
-      location: `Zatoka Gdańska /\u00A0Jezioro Wysockie`,
+      dates: [`Lipiec-Sierpień`],
+      location: `Gdańsk, SUPer\u00A0Strefa
+      wejście nr 54`,
       desc: `Praktyka jogi na\u00A0wodzie, czyli prawdziwe zen\u00A0nature`,
       btnsContent: [],
     },
     modal: {
+      title: `Sup Yoga`,
       fullDescTitle: `O zajęciach:`,
       fullDesc: `Zapraszam do\u00A0wodnego studia jogi. Zamieniamy matę na\u00A0deskę SUP. Poprawisz balans, wzmocnisz mięśnie posturalne. Otwarta przestrzeń z\u00A0nieskończonym oknem na\u00A0naturę stanowi doskonałą propozycję na\u00A0ciepłe dni. Czy jest coś wspanialszego od\u00A0jogi na\u00A0powietrzu? Promienie słońca, letni podmuch wiatru i\u00A0szum drzew dopełnią Twoją praktykę.`,
       program: {
@@ -172,6 +294,13 @@ export const EVENTS_DATA = [
           link: whatsAppTemplate(),
           icon: 'fa-brands fa-whatsapp',
         },
+        {
+          action: 'classic',
+          title: `Formularz Feetsy w osobnej zakładce`,
+          text: `Zapisz się w Feetsy`,
+          symbol: 'edit',
+          link: `https://app.fitssey.com/SUPerstrefa/frontoffice`,
+        },
       ],
     },
     formLink: ``,
@@ -185,7 +314,9 @@ export const EVENTS_DATA = [
     excluded: {},
     optional: {},
     freeTime: {},
-  }, // {
+  },
+  // #region
+  // {
   // 	id: `E01`,
   // 	name: `Yoga\u00A0&\u00A0Breakfast`,
   // 	type: `event`,
@@ -305,14 +436,29 @@ export const EVENTS_DATA = [
   // 		freeTime: {},
   // 	},
   // },
+  // #endregion
 ].sort((x, y) => {
-  // sort by type: "fixed" before "repetitive"
-  if (x.eventType === 'fixed' && y.eventType !== 'fixed') {
-    return -1; // x (fixed) before y (repetitive)
-  } else if (x.eventType !== 'fixed' && y.eventType === 'fixed') {
-    return 1; // y (fixed) before x (repetitive)
-  }
+  const now = new Date();
+  const xDate = new Date(x.date);
+  const yDate = new Date(y.date);
 
-  // By date
-  return new Date(x.date) - new Date(y.date); // ascending
+  const xIsPast = xDate < now;
+  const yIsPast = yDate < now;
+
+  // 1. Past events go below future ones
+  if (xIsPast && !yIsPast) return 1;
+  if (!xIsPast && yIsPast) return -1;
+
+  // 2. Within each group: sort by manual order (lower number = higher priority)
+  const xOrder = x.order ?? 9999; // fallback for undefined
+  const yOrder = y.order ?? 9999;
+
+  if (xOrder !== yOrder) return xOrder - yOrder;
+
+  // 3. Within same order: fixed events come before repetitive ones
+  if (x.eventType === 'fixed' && y.eventType !== 'fixed') return -1;
+  if (x.eventType !== 'fixed' && y.eventType === 'fixed') return 1;
+
+  // 4. As final fallback: sort by date (ascending)
+  return xDate - yDate;
 });

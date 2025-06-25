@@ -1,3 +1,32 @@
+export function durationToSeconds(durationStrInMinutes = 0) {
+  // const [hours, minutes, seconds] = durationStr.split(':').map(Number);
+  // return hours * 3600 + minutes * 60 + seconds;
+  return durationStrInMinutes * 60;
+}
+export function secondsToDuration(totalSeconds, limiter) {
+  let days;
+  if (limiter != 'hours') {
+    days = Math.floor(totalSeconds / (24 * 3600));
+    totalSeconds %= 24 * 3600;
+  }
+  const hours = Math.floor(totalSeconds / 3600);
+  totalSeconds %= 3600;
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+
+  // Leading zeros
+  const dd = String(days); //.padStart(2, '0');
+  const hh = String(hours); //.padStart(2, '0');
+  const mm = String(minutes); //.padStart(2, '0');
+  const ss = String(seconds); //.padStart(2, '0');
+
+  if (limiter == 'hours') {
+    return { hours: hh, minutes: mm, seconds: ss };
+  }
+
+  return { days: dd, hours: hh, minutes: mm, seconds: ss };
+}
+
 export const monthMap = {
   '01': 'Styczeń',
   '02': 'Luty',
@@ -62,7 +91,7 @@ export const formatIsoDateTime = (dateInput, onlyDate = false) => {
     formattedTime = normalized.toLocaleTimeString('pl-PL', {
       hour: '2-digit',
       minute: '2-digit',
-      second: '2-digit',
+      // second: '2-digit',
       hour12: false,
     });
   }
@@ -92,4 +121,20 @@ export const parsePLDateAtEndOfDay = dateString => {
   }
   // console.log(`parsePLDateAtEndOfDay`, parsePLDateAtEndOfDay);
   return parsePLDateAtEndOfDay;
+};
+
+export const formatDuration = product => {
+  const totalSeconds = durationToSeconds(product.duration);
+  const splitDuration = secondsToDuration(totalSeconds);
+
+  const areDays = splitDuration.days != '00' && splitDuration.days != 0;
+  const areHours = splitDuration.hours != '00' && splitDuration.hours != 0;
+  const areMinutes =
+    splitDuration.minutes != '00' && splitDuration.minutes != 0;
+
+  const formattedDuration = `${areDays ? splitDuration.days + ' dni' : ''} ${
+    areHours ? splitDuration.hours + ' h' : ''
+  } ${areMinutes ? splitDuration.minutes + ' m' : ''}`;
+
+  return formattedDuration;
 };

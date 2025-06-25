@@ -1,10 +1,18 @@
+import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
 import SymbolOrIcon from '../common/SymbolOrIcon';
 
-function FloatingBtnMailerLite() {
+function FloatingBtnMailerLite({ cookieId }) {
+  const cookieKey = `floating_cookie_closed_${cookieId}`;
+
+  const [wasClosed, setWasClosed] = useState(false);
   const [isNewsletterScriptReady, setIsNewsletterScriptReady] = useState(false);
 
   useEffect(() => {
+    if (Cookies.get(cookieKey) === 'true') {
+      setWasClosed(true);
+    }
+
     // check if script is already inserted (if other components used it)
     const existingScript = document.querySelector(
       'script[src="https://assets.mailerlite.com/js/universal.js"]'
@@ -47,7 +55,7 @@ function FloatingBtnMailerLite() {
       window.ml('account', '1112086');
       setIsNewsletterScriptReady(true);
     }
-  }, []);
+  }, [cookieKey]);
 
   function handleClickNewsletter(e) {
     e.preventDefault();
@@ -57,12 +65,16 @@ function FloatingBtnMailerLite() {
       // update state to hide initial button (conditional rendering)
       setTimeout(() => {
         setIsNewsletterScriptReady(false);
+        setWasClosed(true);
+        Cookies.set(cookieKey, 'true', { expires: 365 });
       }, 800);
       // debugging
     } else {
       console.error('MailerLite function (ml) is not available.');
     }
   }
+
+  if (wasClosed) return null;
 
   const mailerLiteCookie = isNewsletterScriptReady && (
     <a

@@ -21,19 +21,56 @@ $sizes: (
 $tile-text-muted-base: #4e453b;
 $colors: (
   base: #fff8f4,
+  // standardowe bazowe tło
   base-text: #1e1b18,
+  // standardowy tekst
   tile: #f5ece5,
+  // karta produktu - tło
   // tile-title: #4d3410,
   tile-title: #805346,
+  // tytuły (headers) kart produktów, wszystkie headers podstron, część headers w modal'u produktu (szczegółach karty produktu)
   // tile-title: #825445,
   tile-text: #1e1b18,
+  // GŁÓWNY tekst w modal'u produktu (szczegółach karty produktu)
   tile-text-muted: $tile-text-muted-base,
+  // POBOCZNY tekst w modal'u produktu (szczegółach karty produktu)
   accent-bcg: #1c7993,
+  // CTA's, ikony, symbole,
   accent-text: #ffffff,
+  // tekst CTA's, wyszczególnionych elementów z kolorem tła #accent-bcg
   nav: #f6e0c8,
+  // nawigacja, stopka
   nav-muted: rgba($tile-text-muted-base, 0.5),
   generic-list-content: #6c757d,
 );
+
+// na schemacie split-complementary:
+// $tile-text-muted-base: #5a4a42; // cieplejszy muted tekst, ciemny kakao
+
+// $colors: (
+//   base: #f3f1fa,
+//   // delikatna lawenda jako tło bazowe
+//   base-text: #4b3e3e,
+//   // elegancki ciepły brąz
+//   tile: #ffffff,
+//   // jasne karty (biały, kontrastowy do lawendy)
+//   tile-title: #6e4a3a,
+//   // głęboki cynamonowy brąz, cieplejszy niż #805346
+//   tile-text: #4b3e3e,
+//   // spójny główny tekst
+//   tile-text-muted: $tile-text-muted-base,
+//   // ciemny beż/kakao
+//   accent-bcg: #5a9898,
+//   // przygaszony turkus – nie neonowy
+//   accent-text: #ffffff,
+//   // biały tekst na CTA
+//   nav: #e2d2c2,
+//   // cieplejszy, neutralny beż do lawendy
+//   nav-muted: rgba(#5a4a42, 0.5),
+//   // muted nawigacyjny tekst
+//   generic-list-content: #837b76,
+//   // neutralny ciepły szarobeż
+// );
 
 $active-box-shadow: (
   rgba(0, 0, 0, 0.3) 0px 19px 38px,
@@ -61,16 +98,22 @@ $shadows: (
     $active-box-shadow,
   ),
   tile-shadow: (
-    $active-box-shadow,
+    // $active-box-shadow,
     rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
     rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
-    rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset,
+    rgba(10, 37, 64, 0.2) 0px -2px 6px 0px inset,
+    // rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+    // rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
+    // rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset,,,,,,,,,,,,,,,,,,,,,,,,
   ),
   tile-shadow-reverse: (
-    $active-box-shadow-reverse,
+    // $active-box-shadow-reverse,
     rgba(50, 50, 93, 0.25) 0px -50px 100px -20px,
     rgba(0, 0, 0, 0.3) 0px -30px 60px -30px,
     rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset,
+    // rgba(50, 50, 93, 0.25) 0px -50px 100px -20px,
+    // rgba(0, 0, 0, 0.3) 0px -30px 60px -30px,
+    // rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset,,,,,,,,,,,,,,,,,,,,,,,,
   ),
   box-shadow: (
     2px 8px 10px rgba(149, 157, 165, 0.2),
@@ -92,7 +135,8 @@ $typo: (
     'bh',
   ),
   // font-by-yoganka: 'Caveat', cursive,
-  font-by-yoganka: (
+  font-by-yoganka:
+    (
       'by Yoganka',
       Helvetica,
     ),

@@ -1,3 +1,5 @@
+import { memo } from 'react';
+
 function SymbolOrIcon({
   type = 'SYMBOL',
   specifier,
@@ -31,4 +33,4 @@ function SymbolOrIcon({
   return content;
 }
 
-export default SymbolOrIcon;
+export default memo(SymbolOrIcon);

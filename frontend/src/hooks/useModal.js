@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export function useModal(initialOpen = false) {
   const [isOpen, setIsOpen] = useState(initialOpen);
   const [isVisible, setIsVisible] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
+  const closeTimeoutRef = useRef(null);
 
   // delay visibility for animation
   useEffect(() => {
@@ -33,11 +34,19 @@ export function useModal(initialOpen = false) {
   // Closing function which after timeout will trigger passed onclose function (callback) to remove from dom
   const closeModal = useCallback(callback => {
     setIsClosing(true);
-    setTimeout(() => {
+    closeTimeoutRef.current = setTimeout(() => {
       setIsOpen(false);
       setIsClosing(false);
       if (callback) callback();
     }, 400); // the same as css duration
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (closeTimeoutRef.current) {
+        clearTimeout(closeTimeoutRef.current);
+      }
+    };
   }, []);
 
   return {

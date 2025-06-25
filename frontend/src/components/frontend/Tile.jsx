@@ -6,7 +6,7 @@ import ImgDynamic from './imgsRelated/ImgDynamic.jsx';
 import Modal from './Modal.jsx';
 
 function Tile({ data, today, clickable }) {
-  const isPast = data.date < today;
+  const isPast = data.front.title != 'Sup Yoga' && data.date < today;
   const classes = data.type === 'class';
   const conditionalClasses = [
     'tile',
@@ -15,11 +15,11 @@ function Tile({ data, today, clickable }) {
     isPast ? 'past' : '',
     data.extraClass ? `tile--${data.extraClass}` : '',
   ].join(' ');
-  const modalPath = `/${data.type === 'camp' ? 'wyjazdy' : 'wydarzenia'}/${
-    data.link
-  }`;
+  const modalPath =
+    data.explicitLink ??
+    `/${data.type === 'camp' ? 'wyjazdy' : 'wydarzenia'}/${data.link}`;
 
-  if (isPast && data.modal) data.modal.glance.price = '-';
+  if (isPast && data.modal?.glance) data.modal.glance.price = '-';
 
   // Custom hook for handling modal behavior
   const { isOpen, isVisible, isClosing, openModal, closeModal } =
@@ -28,6 +28,12 @@ function Tile({ data, today, clickable }) {
   // Function for clicking the tile
   const handleOpenModal = () => {
     if (clickable) {
+      if (classes) {
+        // classes page
+        setTimeout(() => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 20);
+      }
       openModal();
     }
   };

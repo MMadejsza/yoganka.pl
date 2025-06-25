@@ -53,7 +53,13 @@ function ViewAccountBookings({ data }) {
     />
   );
 
-  const cards = <CardsList content={formattedContent} active={false} />;
+  const cards = (
+    <CardsList
+      content={formattedContent}
+      active={false}
+      explicitType={'booking'}
+    />
+  );
 
   const table = (
     <WrapperModalTable

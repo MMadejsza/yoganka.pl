@@ -90,11 +90,11 @@
       grid-column: 1 /-1;
     }
   }
-  .modal-checklist {
-    &__list {
-      align-self: self-start;
-    }
-  }
+  // .modal-checklist {
+  //   &__list {
+  //     align-self: self-start;
+  //   }
+  // }
   .partners {
     &__gallery-slide {
       &::before {
@@ -220,6 +220,17 @@
       }
     }
 
+    &__desc--classes-page.modal__desc--long {
+      grid-template-areas:
+        'h h'
+        'd1 d2'
+        'd1p d2p'
+        'd3 d4'
+        'd3p d4p'
+        'd5 d5'
+        'd5p d5p';
+    }
+
     &__paragraph {
       grid-column: 1 /-1;
     }
@@ -242,10 +253,18 @@
       &--day:nth-of-type(4) {
         grid-area: d4;
       }
+      &--day:nth-of-type(5) {
+        grid-area: d5;
+      }
     }
 
     &__list {
       justify-content: flex-start;
+
+      &--classes-page {
+        place-items: center;
+        text-align: center;
+      }
 
       &:nth-of-type(1) {
         grid-area: d1p;
@@ -259,10 +278,21 @@
       &:nth-of-type(4) {
         grid-area: d4p;
       }
+      &:nth-of-type(5) {
+        grid-area: d5p;
+        place-self: center;
+      }
     }
 
     &__user-action {
       gap: 3rem;
+    }
+
+    &__li {
+      &--classes-page {
+        place-items: center;
+        text-align: center;
+      }
     }
   }
   .modal-checklist {
@@ -345,7 +375,7 @@
     &__header {
       place-self: center;
       grid-column: 1 / 4;
-      grid-row: 2;
+      grid-row: 3;
     }
 
     &__full-desc {
@@ -386,6 +416,7 @@
       'header header header header header'
       'about about about about about'
       'offer offer offer offer offer'
+      'reviews reviews reviews reviews reviews'
       'cert cert cert cert cert'
       'partners partners partners partners partners'
       'space space space space space'
@@ -414,14 +445,28 @@
     margin-bottom: 3rem;
     max-width: 1000px;
 
+    &.classes-page {
+      justify-content: center;
+      gap: 3rem 4rem;
+    }
+
     @include flex(row, space-around, center);
     flex-wrap: wrap;
     &__header {
       display: none;
+
+      &--classes-page {
+        display: block;
+        flex-basis: 100%;
+      }
     }
 
     &__bio--content {
       max-width: 50%;
+
+      &--classes-page {
+        max-width: 30%;
+      }
     }
 
     &__bio--heading,
@@ -436,6 +481,12 @@
       order: 2;
       width: 35%;
       min-height: 525px;
+
+      &--classes-page {
+        order: 0;
+        width: 20%;
+        min-height: 300px;
+      }
     }
   }
   .offer {
@@ -459,6 +510,13 @@
       }
     }
   }
+  section.b2b-benefits.classes-page + section.offer {
+    grid-template-columns:
+      minmax(100px, 150px) minmax(150px, 1fr) minmax(150px, 1fr)
+      minmax(100px, 151px);
+    grid-template-areas: '. zajecia zajecia .';
+    margin-top: 4rem;
+  }
   .modal {
     max-width: 900px;
     padding: 1.5rem 2.5rem;
@@ -476,8 +534,19 @@
   .modal-checklist {
     padding: 0 1rem;
     flex-basis: auto;
+
     &--event {
       max-width: 75%;
+    }
+  }
+
+  .wrapper.b2b {
+    & > .b2b-benefits.classes-page {
+      justify-content: center;
+
+      & > .modal-checklist__list--classes-page {
+        width: max-content !important;
+      }
     }
   }
 
@@ -530,6 +599,10 @@
     max-width: 1200px;
   }
 
+  .about.classes-page {
+    margin-bottom: 6rem;
+  }
+
   .main-nav-container {
     .nav__list {
       margin-left: 4rem;
@@ -540,6 +613,10 @@
   .about {
     &__img-container {
       width: 31%;
+
+      &--classes-page {
+        width: 20%;
+      }
     }
   }
   .offer {
@@ -552,6 +629,20 @@
   .modal {
     max-width: 1200px;
     padding: 1.5rem 4rem;
+
+    &__desc--classes-page.modal__desc--long {
+      grid-template-areas:
+        'h h h h'
+        'd1 d2 d3 d4'
+        'd1p d2p d3p d4p'
+        'd5 d5 d5 d5'
+        'd5p d5p d5p d5p ';
+    }
+    &__title--classes-page-day {
+      &:nth-of-type(5) {
+        margin-top: 3rem;
+      }
+    }
   }
   .partners {
     &__gallery-slide {

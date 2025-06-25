@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { useLocation, useMatch, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { statsCalculatorForCustomer } from '../../../utils/statistics/statsCalculatorForCustomer.js';
 import CardsList from '../../backend/cards/CardsList.jsx';
 import ModalTable from '../ModalTable.jsx';
@@ -7,11 +6,13 @@ import ViewsController from '../ViewsController.jsx';
 import WrapperModalTable from '../WrapperModalTable.jsx';
 
 function ViewAccountDashboard({ data, queryStatus }) {
+  // console.clear();
+  console.log(`✅ Data: `);
+  console.log(data);
+
   const today = new Date();
   const navigate = useNavigate();
   const location = useLocation(); // fetch current path
-  const match = useMatch('/konto/grafik/:id');
-  const [isModalOpen, setIsModalOpen] = useState(match);
 
   const background = {
     pathname: location.pathname,
@@ -20,18 +21,12 @@ function ViewAccountDashboard({ data, queryStatus }) {
   };
 
   const handleOpenScheduleModal = row => {
-    setIsModalOpen(true);
     navigate(`grafik/${row.scheduleId}`, { state: { background } });
   };
 
   const handleCloseModal = () => {
-    setIsModalOpen(false);
-    navigate('/konto');
+    navigate('/rezerwacje');
   };
-
-  // console.clear();
-  console.log(`✅ Data: `);
-  console.log(data);
 
   let name, customer, customerStats, statsBlock, contentUpcoming;
   const headers = [
@@ -52,24 +47,24 @@ function ViewAccountDashboard({ data, queryStatus }) {
     contentUpcoming = content
       .filter(
         schedule =>
-          new Date(`${schedule.date}T${schedule.startTime}:00.000Z`) >= today
+          new Date(`${schedule.date}T${schedule.startTime}.000Z`) >= today
       )
       .sort(
         (a, b) =>
-          new Date(`${a.date}T${a.startTime}:00.000Z`) -
-          new Date(`${b.date}T${b.startTime}:00.000Z`)
+          new Date(`${a.date}T${a.startTime}.000Z`) -
+          new Date(`${b.date}T${b.startTime}.000Z`)
       );
     console.log('contentUpcoming', contentUpcoming);
   }
 
   if (queryStatus.isError) {
-    console.log(queryStatus.error.code);
+    console.log(queryStatus?.error?.code);
     if (error.code == 401) {
       navigate('/login');
-      console.log(queryStatus.error.message);
+      console.log(queryStatus?.error?.message);
     } else {
       window.alert(
-        queryStatus.error.info?.message ||
+        queryStatus?.error.info?.message ||
           'Błąd serwera - pobieranie danych uczestnika przerwane'
       );
     }
@@ -81,6 +76,7 @@ function ViewAccountDashboard({ data, queryStatus }) {
       active={true}
       onOpen={handleOpenScheduleModal}
       notToArchive={true}
+      explicitType={'schedule'}
     />
   );
   const tableInside = (
@@ -116,15 +112,13 @@ function ViewAccountDashboard({ data, queryStatus }) {
     <>
       {statsBlock}
       {table}
-      {isModalOpen && (
-        <ViewsController
-          modifier='schedule'
-          visited={isModalOpen}
-          onClose={handleCloseModal}
-          userAccountPage={true}
-          customer={customer}
-        />
-      )}
+
+      <ViewsController
+        modifier='schedule'
+        onClose={handleCloseModal}
+        userAccountPage={true}
+        customer={customer}
+      />
     </>
   );
 }

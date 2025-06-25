@@ -1,15 +1,29 @@
 import { useQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { Suspense, lazy, useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { useLocation } from 'react-router-dom';
 import TabsList from '../../components/backend/TabsList.jsx';
-import ViewAccountBookings from '../../components/backend/views/ViewAccountBookings.jsx';
-import ViewAccountCustomerPasses from '../../components/backend/views/ViewAccountCustomerPasses.jsx';
-import ViewAccountDashboard from '../../components/backend/views/ViewAccountDashboard.jsx';
-import ViewAccountPayments from '../../components/backend/views/ViewAccountPayments.jsx';
-import ViewAccountSchedulesHistory from '../../components/backend/views/ViewAccountSchedulesHistory.jsx';
-import ViewUser from '../../components/backend/views/ViewUser.jsx';
+import Loader from '../../components/common/Loader.jsx';
 import Section from '../../components/frontend/Section.jsx';
-import { fetchItem } from '../../utils/http.js';
+import { fetchItem, queryClient } from '../../utils/http.js';
+const ViewAccountBookings = lazy(() =>
+  import('../../components/backend/views/ViewAccountBookings.jsx')
+);
+const ViewAccountCustomerPasses = lazy(() =>
+  import('../../components/backend/views/ViewAccountCustomerPasses.jsx')
+);
+const ViewAccountDashboard = lazy(() =>
+  import('../../components/backend/views/ViewAccountDashboard.jsx')
+);
+const ViewAccountPayments = lazy(() =>
+  import('../../components/backend/views/ViewAccountPayments.jsx')
+);
+const ViewAccountSchedulesHistory = lazy(() =>
+  import('../../components/backend/views/ViewAccountSchedulesHistory.jsx')
+);
+const ViewUser = lazy(() =>
+  import('../../components/backend/views/ViewUser.jsx')
+);
 
 const menuSet = [
   // {
@@ -23,15 +37,15 @@ const menuSet = [
     link: '/konto',
   },
   {
-    name: 'Odbyte zajęcia',
-    symbol: 'history',
-    link: 'zajecia',
-    limitedTo: 'customer',
-  },
-  {
     name: 'Wszystkie rezerwacje',
     symbol: 'event_available',
     link: 'rezerwacje',
+    limitedTo: 'customer',
+  },
+  {
+    name: 'Odbyte zajęcia',
+    symbol: 'history',
+    link: 'zajecia',
     limitedTo: 'customer',
   },
   {
@@ -51,11 +65,11 @@ const menuSet = [
   // 	symbol: 'receipt_long',
   // 	link: 'faktury',
   // },
-  {
-    name: 'Ustawienia',
-    symbol: 'settings',
-    link: 'ustawienia',
-  },
+  // {
+  //   name: 'Ustawienia',
+  //   symbol: 'settings',
+  //   link: 'ustawienia',
+  // },
 ];
 
 function AccountPage() {
@@ -69,6 +83,12 @@ function AccountPage() {
     setIsChosenContent(accountTab);
   }, [accountTab]);
 
+  useEffect(() => {
+    if (location.search.includes('payment=success')) {
+      queryClient.invalidateQueries(['authStatus']);
+    }
+  }, []);
+
   const { data, isError, error } = useQuery({
     queryKey: ['account'],
     queryFn: ({ signal }) => fetchItem('/show-account', { signal }),
@@ -81,6 +101,14 @@ function AccountPage() {
 
   if (data) {
     console.log('AccountPage data: ', data);
+
+    // Loading component based on url
+    const wrap = element => (
+      <Suspense fallback={<Loader label={'Ładowanie...'} />}>
+        {element}
+      </Suspense>
+    );
+
     if (data.customer) {
       customer = data.customer;
       name = `${customer.firstName} ${customer.lastName}`;
@@ -93,42 +121,66 @@ function AccountPage() {
 
     switch (true) {
       case isChosenContent.includes('zajecia'):
-        content = (
+        content = wrap(
           <ViewAccountSchedulesHistory data={data} isUserAccountPage={true} />
         );
         break;
+      case isChosenContent.includes('/konto/grafik/'): // just to handle opening modal after reshuffling the components. this one must be rendered to open modal
+        content = wrap(
+          <ViewAccountDashboard data={data} queryStatus={{ isError, error }} />
+        );
+        break;
       case isChosenContent.includes('rezerwacje'):
-        content = <ViewAccountBookings data={data} isUserAccountPage={true} />;
+        content = wrap(
+          <>
+            <ViewAccountDashboard
+              data={data}
+              queryStatus={{ isError: isError, error: error }}
+            />
+            <ViewAccountBookings data={data} isUserAccountPage={true} />
+          </>
+        );
         break;
       case isChosenContent.includes('karnety'):
-        content = (
+        content = wrap(
           <ViewAccountCustomerPasses data={data} isUserAccountPage={true} />
         );
         break;
       case isChosenContent.includes('platnosci'):
-        content = <ViewAccountPayments data={data} isUserAccountPage={true} />;
+        content = wrap(
+          <ViewAccountPayments data={data} isUserAccountPage={true} />
+        );
         break;
-      case isChosenContent.includes('ustawienia'):
-        content = <ViewUser data={data} isUserAccountPage={true} />;
-        break;
+      // case isChosenContent.includes('ustawienia'):
+      //   content = wrap(<ViewUser data={data} isUserAccountPage={true} />);
+      //   break;
 
       default:
-        content = (
-          <ViewAccountDashboard
-            data={data}
-            queryStatus={{ isError: isError, error: error }}
-          />
-        );
+        // content = wrap(
+        //   <ViewAccountDashboard
+        //     data={data}
+        //     queryStatus={{ isError: isError, error: error }}
+        //   />
+        // );
+        content = wrap(<ViewUser data={data} isUserAccountPage={true} />);
         break;
     }
   }
 
   return (
-    <div className='admin-console'>
-      <Section classy='admin-intro' header={name} />
-      {userTabs}
-      {content}
-    </div>
+    <>
+      <Helmet>
+        <html lang='pl' />
+        <title>Panel użytkownika - Yoganka</title>
+        <meta name='robots' content='noindex, nofollow' />
+      </Helmet>
+
+      <div className='admin-console'>
+        <Section classy='admin-intro' header={name} />
+        {userTabs}
+        {content}
+      </div>
+    </>
   );
 }
 

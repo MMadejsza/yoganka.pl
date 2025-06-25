@@ -49,4 +49,9 @@ export const PARTNERS_DATA = [
     'https://booksy.com/pl-pl/8140_sauny-limitless-by-autopay_zdrowie_21554_sopot?do=invite&_branch_match_id=1382291669560731710&utm_medium=profile_share_from_profile&_branch_referrer=H4sIAAAAAAAAA8soKSkottLXT07J0UvKz88urtRLzs%2FVTywNycwxcC7z9EuyrytKTUstKsrMS49PKsovL04tsnXOKMrPTQUAfJOWiTwAAAA%3D#ba_s=seo',
     'partners_logo_limitless_500x500.png'
   ),
+  generatePartner(
+    'SuperStrefa',
+    'https://superstrefa.pl/',
+    'super-strefa-logo.svg'
+  ),
 ];

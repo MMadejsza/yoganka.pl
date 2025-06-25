@@ -1,10 +1,9 @@
-import { formatIsoDateTime } from '../dateTime.js';
 import {
-  calculateAge,
-  calculateAgeMedian,
   durationToSeconds,
+  formatIsoDateTime,
   secondsToDuration,
-} from './statsUtils.js';
+} from '../dateTime.js';
+import { calculateAge, calculateAgeMedian } from './statsUtils.js';
 
 //@ stats calculation
 export const statsCalculatorForProduct = (product, schedules) => {
@@ -162,8 +161,11 @@ export const statsCalculatorForProduct = (product, schedules) => {
 
   // Globalne wyliczenia
   const splitDuration = secondsToDuration(totalTimeInSeconds);
-  const formattedDuration =
-    `${splitDuration.days !== '00' ? splitDuration.days + ' dni' : ''} ${splitDuration.hours !== '00' ? splitDuration.hours + ' godzin' : ''} ${splitDuration.minutes !== '00' ? splitDuration.minutes + ' minut' : ''}`.trim();
+  const formattedDuration = `${
+    splitDuration.days !== '00' ? splitDuration.days + ' dni' : ''
+  } ${splitDuration.hours !== '00' ? splitDuration.hours + ' godzin' : ''} ${
+    splitDuration.minutes !== '00' ? splitDuration.minutes + ' minut' : ''
+  }`.trim();
 
   const avgFeedbackScore =
     feedbackCount > 0 ? sumFeedbackRating / feedbackCount : 0;

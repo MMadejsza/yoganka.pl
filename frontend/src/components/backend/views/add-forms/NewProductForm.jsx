@@ -108,6 +108,17 @@ function NewProductForm() {
     validationResults: statusValidationResults,
     hasError: statusHasError,
   } = useInput('Aktywny');
+  const {
+    value: defAttendanceViewValue,
+    handleChange: handleDefAttendanceViewChange,
+    handleFocus: handleDefAttendanceViewFocus,
+    handleBlur: handleDefAttendanceViewBlur,
+    handleReset: handleDefAttendanceViewReset,
+    didEdit: defAttendanceViewDidEdit,
+    isFocused: defAttendanceViewIsFocused,
+    validationResults: defAttendanceViewValidationResults,
+    hasError: defAttendanceViewHasError,
+  } = useInput('1');
 
   // Reset all te inputs
   const handleReset = () => {
@@ -120,6 +131,7 @@ function NewProductForm() {
     handleStartDateReset();
     handlePriceReset();
     handleStatusReset();
+    handleDefAttendanceViewReset();
   };
 
   // Submit handling
@@ -134,7 +146,8 @@ function NewProductForm() {
       durationHasError ||
       StartDateHasError ||
       nameHasError ||
-      productTypeHasError
+      productTypeHasError ||
+      defAttendanceViewHasError
     ) {
       return;
     }
@@ -265,7 +278,8 @@ function NewProductForm() {
         type='decimal'
         id='price'
         name='price'
-        label='Zadatek: *'
+        min={2}
+        label='Cena: *'
         value={priceValue}
         placeholder='Widoczny dla uczestników'
         required
@@ -296,7 +310,29 @@ function NewProductForm() {
         validationResults={statusValidationResults}
         didEdit={statusDidEdit}
         isFocused={statusIsFocused}
-      />{' '}
+      />
+      <Input
+        embedded={true}
+        formType={formType}
+        type='select'
+        options={[
+          { label: 'Pełna Frekwencja', value: 2 },
+          { label: 'Tylko liczba os.', value: 1 },
+          { label: 'Tylko pojemność', value: 0 },
+          { label: 'Brak', value: -1 },
+        ]}
+        id='defaultAttendanceViewMode'
+        name='defaultAttendanceViewMode'
+        label='Domyślny w. os.:'
+        value={defAttendanceViewValue}
+        required
+        onFocus={handleDefAttendanceViewFocus}
+        onBlur={handleDefAttendanceViewBlur}
+        onChange={handleDefAttendanceViewChange}
+        validationResults={defAttendanceViewValidationResults}
+        didEdit={defAttendanceViewDidEdit}
+        isFocused={defAttendanceViewIsFocused}
+      />
       {feedback.status !== undefined && (
         <FeedbackBox
           onCloseFeedback={resetFeedback}

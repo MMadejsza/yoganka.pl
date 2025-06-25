@@ -26,33 +26,7 @@ export const calculateAgeMedian = agesArray => {
   // If even
   return (sortedAges[midIndex - 1] + sortedAges[midIndex]) / 2;
 };
-export function durationToSeconds(durationStr) {
-  const [hours, minutes, seconds] = durationStr.split(':').map(Number);
-  return hours * 3600 + minutes * 60 + seconds;
-}
-export function secondsToDuration(totalSeconds, limiter) {
-  let days;
-  if (limiter != 'hours') {
-    days = Math.floor(totalSeconds / (24 * 3600));
-    totalSeconds %= 24 * 3600;
-  }
-  const hours = Math.floor(totalSeconds / 3600);
-  totalSeconds %= 3600;
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
 
-  // Leading zeros
-  const dd = String(days); //.padStart(2, '0');
-  const hh = String(hours); //.padStart(2, '0');
-  const mm = String(minutes); //.padStart(2, '0');
-  const ss = String(seconds); //.padStart(2, '0');
-
-  if (limiter == 'hours') {
-    return { hours: hh, minutes: mm, seconds: ss };
-  }
-
-  return { days: dd, hours: hh, minutes: mm, seconds: ss };
-}
 export const calculateMode = agesArray => {
   const frequency = {};
   let maxFreq = 0;

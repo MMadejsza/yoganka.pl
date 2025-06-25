@@ -192,6 +192,7 @@ function NewCustomerFormForAdmin() {
     const fd = new FormData(e.target);
     const formDataObj = Object.fromEntries(fd.entries());
     console.log('sent data:', formDataObj);
+
     createCustomer(formDataObj);
     if (feedback.confirmation == 1) handleReset();
   };

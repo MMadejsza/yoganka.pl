@@ -38,20 +38,40 @@
     grid-area: cert;
     margin: 0 auto;
   }
+
+  .camps-benefits + .b2b-benefits {
+    &.classes-page {
+      margin-top: 16rem;
+    }
+  }
   .b2b-benefits {
     margin-top: 2rem;
     margin-bottom: 0rem;
     grid-column: 1/-1;
+
+    @include flex(column, center, center);
+
     &__header {
       margin-bottom: 2rem;
     }
+
     .modal-checklist {
       @include flex(column, center, center);
+      &--classes-page {
+        align-items: center;
+      }
     }
+
     .modal-checklist__list {
       width: 95%;
       align-items: center;
       gap: 3rem;
+
+      &--classes-page {
+        align-items: flex-start;
+        width: max-content;
+        max-width: 100%;
+      }
     }
     .modal-checklist__li {
       font-size: 2.5rem;
@@ -80,10 +100,15 @@
       gap: 0 2rem;
     }
     .modal__btn {
+      margin-top: 2rem;
+
       &:first-of-type {
         margin-top: 3.5rem;
       }
-      margin-top: 2rem;
+    }
+
+    .modal__user-action--classes-page .modal__btn {
+      margin: 0;
     }
   }
 
@@ -129,8 +154,10 @@
     }
     .b2b-benefits {
       .modal-checklist__list {
-        width: 85%;
-        align-self: auto;
+        &:not(.modal-checklist__list--classes-page) {
+          width: 85%;
+          align-self: auto;
+        }
       }
     }
     .camps-benefits__bullet {
@@ -149,12 +176,6 @@
     .camps-benefits__bullet-p {
       font-size: 1.7rem;
     }
-    .b2b-benefits {
-      .modal-checklist__list {
-        width: 85%;
-        align-self: auto;
-      }
-    }
     .b2b-price {
       &__content {
         font-size: 2.4rem;
@@ -167,6 +188,14 @@
           margin-top: 4.5rem;
         }
         margin-top: 2.5rem;
+      }
+
+      .modal__user-action--classes-page .modal__btn {
+        margin: 0;
+      }
+
+      .modal__user-action--classes-page {
+        margin-top: 3.5rem;
       }
     }
   }
@@ -183,7 +212,7 @@
       font-size: 2rem;
     }
     .b2b-benefits {
-      .modal-checklist__list {
+      .modal-checklist__list:not(.modal-checklist__list--classes-page) {
         width: 100%;
       }
     }

@@ -7,12 +7,13 @@ import DetailsListPayment from './lists/DetailsListPayment.jsx';
 import DetailsListSchedule from './lists/DetailsListSchedule.jsx';
 
 function ViewBooking({ data }) {
-  console.log('ViewBooking data', data);
   const { booking } = data;
   const customer = booking.Customer || null;
   const { ScheduleRecord: schedule } = booking;
   const { Product: product } = schedule;
   const type = product.type;
+
+  console.log('ViewBooking data', data);
   console.clear();
   console.log(type);
   console.log(

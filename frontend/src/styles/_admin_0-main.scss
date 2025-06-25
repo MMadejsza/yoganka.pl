@@ -20,6 +20,19 @@
 
   grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
   grid-template-rows: auto auto auto auto auto 1fr auto;
+
+  .modal-table {
+    table-layout: auto;
+    max-width: 100%;
+    td {
+      max-width: 700px;
+    }
+    .cell-content-wrapper {
+      max-height: 200px;
+      max-width: 100%;
+      overflow: hidden;
+    }
+  }
 }
 
 body:has(.admin-console) {
@@ -28,6 +41,10 @@ body:has(.admin-console) {
     max-width: 1200px;
     overflow: auto;
   }
+}
+
+.admin-intro {
+  margin-top: 8rem;
 }
 
 @media (min-width: 1025px) or (min-width: 1400px) {

@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useSwipe } from '../../../hooks/useSwipe';
 import { mutateOnLoginOrSignup, queryClient } from '../../../utils/http.js';
-import { smoothScrollInto } from '../../../utils/utils.jsx';
 import SymbolOrIcon from '../../common/SymbolOrIcon';
 import Logo from '../../frontend/Logo.jsx';
 
+const logsGloballyOn = true;
 const menuSet = [
   {
     name: 'Wyjazdy',
@@ -17,17 +17,10 @@ const menuSet = [
     name: 'Wydarzenia',
     symbol: 'event ', // Bell symbolizes mindfulness and yoga-related events
     // link: '/wydarzenia',
-    link: '/',
-    scroll: '#wydarzenia',
-    action: smoothScrollInto, //to delete
+    link: '/wydarzenia',
+    // scroll: '#wydarzenia',
+    // action: smoothScrollInto, //to delete
   },
-  // {
-  // 	name: 'Certyfikaty',
-  // 	symbol: 'verified', // Badge reflects achievements and certificates in a subtle way
-  // 	link: '/',
-  // 	scroll: '.certificates',
-  // 	action: smoothScrollInto,
-  // },
   {
     name: 'Grafik',
     symbol: 'calendar_month', // Light and informal symbol for easy communication
@@ -38,13 +31,11 @@ const menuSet = [
     symbol: 'home_work',
     link: '/yoga-dla-firm',
   },
-  {
-    name: 'Zajęcia',
-    symbol: 'self_improvement', // Lotus flower symbolizes yoga, harmony, and relaxation
-    link: '/',
-    scroll: '#zajecia',
-    action: smoothScrollInto,
-  },
+  // {
+  //   name: 'Zajęcia',
+  //   symbol: 'self_improvement', // Lotus flower symbolizes yoga, harmony, and relaxation
+  //   link: '/zajecia',
+  // },
 ];
 const menuSideSet = [
   {
@@ -63,7 +54,7 @@ const menuSideSet = [
     name: 'Zaloguj',
     symbol: 'login',
     link: '/login',
-    text: 'Zaloguj',
+    text: 'Zaloguj się',
   },
   {
     auth: true,
@@ -87,6 +78,10 @@ const menuSideSet = [
 ];
 
 function Nav({ side, status, setIsNavOpen }) {
+  if (!status) {
+    // it's still loading - you can render a spinner or return null immediately
+    return null;
+  }
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -97,10 +92,10 @@ function Nav({ side, status, setIsNavOpen }) {
     { edgePercent: 0.35, thresholdPercent: 0.1 }
   );
 
-  console.log('nav data', status);
+  if (logsGloballyOn) console.log('nav data', status);
   const logoutMutation = useMutation({
     mutationFn: formDataObj =>
-      mutateOnLoginOrSignup(status, formDataObj, '/api/login-pass/logout'),
+      mutateOnLoginOrSignup(status, formDataObj, `/api/login-pass/logout`),
 
     onSuccess: () => {
       // Invalidate query to reload layout
@@ -147,7 +142,7 @@ function Nav({ side, status, setIsNavOpen }) {
         if (li.name === 'Zaloguj') {
           return null;
         }
-        if (li.name === 'Admin Panel' && status.role != 'ADMIN') {
+        if (li.name === 'Admin Panel' && status.user?.role != 'ADMIN') {
           return null;
         }
 

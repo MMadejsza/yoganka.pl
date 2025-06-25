@@ -10,8 +10,8 @@ function FloatingBtns({ side, children }) {
     <div className={`pop-ups${!side ? ` pop-ups--left` : ''}`} tabIndex='0'>
       {!isAdminPanel && (
         <>
-          <FloatingBtnMailerLite />
-          <FloatingBtnCookie side={side} />
+          <FloatingBtnMailerLite cookieId={'newsletter-info'} />
+          <FloatingBtnCookie side={side} cookieId={'cookies-info'} />
         </>
       )}
       {children}

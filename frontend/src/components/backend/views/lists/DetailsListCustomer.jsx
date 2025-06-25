@@ -21,8 +21,14 @@ function DetailsListCustomer({
   const title = isUserAccountPage
     ? `Dane kontaktowe:`
     : `Uczestnik (Id ${customerData.customerId}):`;
+  const gdprContent = customerData.GdprVersion
+    ? `${customerData.GdprVersion?.version} (${customerData.GdprVersion?.gdprId})`
+    : undefined;
 
-  const details = [{ label: 'Numer telefonu:', content: customerData.phone }];
+  const details = [
+    { label: 'RODO (Id):', content: gdprContent },
+    { label: 'Numer telefonu:', content: customerData.phone },
+  ];
   if (!isUserAccountPage) {
     details.push(
       { label: 'Typ:', content: customerData.customerType },

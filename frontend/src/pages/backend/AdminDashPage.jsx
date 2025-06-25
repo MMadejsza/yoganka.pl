@@ -1,6 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { useLocation, useMatch, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
+import { useLocation, useNavigate } from 'react-router-dom';
 import FloatingBtnAddItem from '../../components/backend/FloatingBtnAddItem.jsx';
 import FloatingBtns from '../../components/backend/FloatingBtns.jsx';
 import ModalTable from '../../components/backend/ModalTable.jsx';
@@ -8,9 +9,16 @@ import SideNav from '../../components/backend/navigation/SideNav.jsx';
 import TabsList from '../../components/backend/TabsList.jsx';
 import TableCustomerPasses from '../../components/backend/views/tables/TableCustomerPasses.jsx';
 import ViewsController from '../../components/backend/ViewsController.jsx';
+import WrapperModalTable from '../../components/backend/WrapperModalTable.jsx';
 import Section from '../../components/frontend/Section.jsx';
-import { formatIsoDateTime } from '../../utils/dateTime.js';
-import { fetchData, fetchStatus } from '../../utils/http.js';
+import { handleContactCustomer } from '../../utils/cardsAndTableUtils.jsx';
+import { formatDuration, formatIsoDateTime } from '../../utils/dateTime.js';
+import {
+  fetchData,
+  fetchStatus,
+  mutateOnEdit,
+  queryClient,
+} from '../../utils/http.js';
 
 const sideNavTabs = [
   {
@@ -48,6 +56,11 @@ const sideNavTabs = [
     symbol: 'card_membership',
     link: '/admin-console/show-all-passes',
   },
+  {
+    name: `Dokumenty`,
+    symbol: 'gavel',
+    link: '/admin-console/show-all-tos-versions',
+  },
   // {
   //   name: `Faktury`,
   //   symbol: 'receipt_long',
@@ -66,17 +79,23 @@ const sideNavTabs = [
 ];
 
 const allowedPaths = sideNavTabs.map(tab => tab.link);
-allowedPaths.push('/admin-console/show-all-customer-passes');
+allowedPaths.push(
+  '/admin-console/show-all-customer-passes',
+  '/admin-console/show-all-gdpr-versions'
+);
 function AdminPage() {
   const navigate = useNavigate();
   const location = useLocation(); // fetch current path
 
   const isAdminPage = location.pathname.includes('admin-console') ?? false;
-  const isInactiveTable = ['invoices', 'newsletters', 'feedback'].some(path =>
-    location.pathname.includes(path)
-  );
-  const modalMatch = useMatch('/admin-console/show-all-users/:id');
-  const [isModalOpen, setIsModalOpen] = useState(modalMatch);
+  const isInactiveTable = [
+    'invoices',
+    'newsletters',
+    'feedback',
+    'gdpr',
+    'tos',
+  ].some(path => location.pathname.includes(path));
+
   const [isMenuSide, setIsMenuSide] = useState(false);
 
   const query =
@@ -102,6 +121,58 @@ function AdminPage() {
     cache: 'no-store',
   });
 
+  const {
+    mutate: markAbsent,
+    isPending: markAbsentIsPending,
+    isError: markAbsentIsError,
+    error: markAbsentError,
+  } = useMutation({
+    mutationFn: formDataObj => {
+      return mutateOnEdit(
+        status,
+        formDataObj,
+        `/api/admin-console/edit-mark-absent`
+      );
+    },
+
+    onSuccess: res => {
+      queryClient.invalidateQueries(['data', query]);
+      console.log('res', res);
+
+      updateFeedback(res);
+    },
+    onError: err => {
+      updateFeedback(err);
+    },
+  });
+
+  const {
+    mutate: markPresent,
+    isPending: markPresentIsPending,
+    isError: markPresentIsError,
+    error: markPresentError,
+  } = useMutation({
+    mutationFn: formDataObj => {
+      return mutateOnEdit(
+        status,
+        formDataObj,
+        `/api/admin-console/edit-mark-present`
+      );
+    },
+
+    onSuccess: res => {
+      queryClient.invalidateQueries(['data', query]);
+      console.log('res', res);
+
+      // updating feedback
+      updateFeedback(res);
+    },
+    onError: err => {
+      // updating feedback
+      updateFeedback(err);
+    },
+  });
+
   useEffect(() => {
     if (status) {
       setIsMenuSide(status?.user?.UserPrefSetting?.handedness);
@@ -116,15 +187,17 @@ function AdminPage() {
 
   const handleOpenModal = row => {
     const recordId = row.rowId;
-    setIsModalOpen(true);
     navigate(`${location.pathname}/${recordId}`, {
       state: { background: location },
     });
   };
 
   const handleCloseModal = () => {
-    setIsModalOpen(false);
     navigate(location.state?.background?.pathname || '/', { replace: true });
+  };
+
+  const handleContact = (type, tableObj) => {
+    handleContactCustomer(type, tableObj);
   };
 
   let table,
@@ -132,7 +205,8 @@ function AdminPage() {
     content = data?.content,
     headers,
     title,
-    subTabs;
+    subTabs,
+    onQuickActions = [];
   const pickModifier = path => {
     let modifier;
     switch (true) {
@@ -146,7 +220,13 @@ function AdminPage() {
           'Zarejestrowano',
           'Uprawnienia',
           'Preferencje',
+          'Akcje',
         ];
+        onQuickActions.push({
+          symbol: 'mail',
+          method: tableObj => handleContact('mail', tableObj),
+        });
+
         return modifier;
       case path.includes('show-all-customers'):
         modifier = 'customer';
@@ -161,7 +241,19 @@ function AdminPage() {
           'Źródło polecenia	',
           'Lojalność',
           'Uwagi',
+          'RODO',
+          'Akcje',
         ];
+        onQuickActions.push(
+          {
+            icon: 'fa-brands fa-whatsapp',
+            method: tableObj => handleContact('text', tableObj),
+          },
+          {
+            symbol: 'mail',
+            method: tableObj => handleContact('mail', tableObj),
+          }
+        );
         return modifier;
       case path.includes('show-all-products'):
         const statusMap = {
@@ -185,7 +277,7 @@ function AdminPage() {
           'Nazwa',
           'Miejsce',
           'Czas trwania',
-          'Zadatek',
+          'Cena',
           'Data rozpoczęcia',
           'Status',
         ];
@@ -194,15 +286,15 @@ function AdminPage() {
         modifier = 'schedule';
         title = 'Wszystkie terminy';
         headers = [
-          'Id',
-          'Obecność',
           'Data',
           'Dzień',
           'Godzina',
           'Miejsce',
           'Typ',
           'Zajęcia',
-          'Zadatek',
+          'Cena',
+          'Obecność',
+          'Id',
         ];
         return modifier;
       case path.includes('show-all-payments'):
@@ -229,6 +321,7 @@ function AdminPage() {
           'Metoda',
           'Kwota',
           'Wykonał',
+          'Regulamin',
         ];
         return modifier;
       case path.includes('show-all-participants-feedback'):
@@ -278,7 +371,15 @@ function AdminPage() {
           'Utworzono',
           'Data akcji',
           'Wykonał',
+          'Akcje',
         ];
+        onQuickActions.push(
+          { symbol: 'person_remove', method: markAbsent },
+          {
+            symbol: 'person_add',
+            method: markPresent,
+          }
+        );
         return modifier;
       case path.includes('show-all-passes'):
         modifier = 'passDef';
@@ -313,6 +414,31 @@ function AdminPage() {
           },
         ];
         return modifier;
+      case path.includes('show-all-tos-versions'):
+        modifier = 'tos';
+        title = 'Wszystkie wersje regulaminów';
+
+        subTabs = [
+          {
+            name: 'RODO',
+            symbol: 'copyright',
+            link: '/admin-console/show-all-gdpr-versions',
+          },
+        ];
+        headers = ['Id', 'Wersja', 'Data utworzenia', 'Treść'];
+        return modifier;
+      case path.includes('show-all-gdpr-versions'):
+        modifier = 'gdpr';
+        title = 'Wszystkie wersje RODO';
+        subTabs = [
+          {
+            name: 'Regulaminy',
+            symbol: 'contract_edit',
+            link: '/admin-console/show-all-tos-versions',
+          },
+        ];
+        headers = ['Id', 'Wersja', 'Data utworzenia', 'Treść'];
+        return modifier;
       case path.includes('show-all-newsletters'):
         modifier = 'newsletter';
         title = 'Wszystkie newslettery';
@@ -344,76 +470,103 @@ function AdminPage() {
       window.alert(error.info?.message || 'Failed to fetch');
     }
   }
-  if (data && status?.role === 'ADMIN') {
+  if (data && status?.user?.role === 'ADMIN') {
     console.log(`✅ Data: `);
     console.log(data);
     keys = data.columnKeys || data.totalKeys || data.totalHeaders;
 
+    const formattedContent = content.map(row => {
+      const formattedDuration = formatDuration(row);
+      const newRow = { ...row };
+      if (row.duration) newRow.duration = formattedDuration;
+      return newRow;
+    });
+
     table = (
-      <ModalTable
-        classModifier='admin-view'
-        headers={headers}
-        keys={keys}
-        content={content}
-        active={!isInactiveTable}
-        onOpen={handleOpenModal}
-        status={status}
-        isAdminPage={isAdminPage}
-      />
+      <WrapperModalTable content={content} title={''} noContentMsg={'rekordów'}>
+        <ModalTable
+          classModifier='admin-view'
+          headers={headers}
+          keys={keys}
+          content={formattedContent}
+          active={!isInactiveTable}
+          onOpen={handleOpenModal}
+          status={status}
+          isAdminPage={isAdminPage}
+          adminActions={true}
+          forLegalDocuments={
+            location.pathname.includes('tos') ||
+            location.pathname.includes('gdpr')
+          }
+          onQuickAction={onQuickActions}
+        />
+      </WrapperModalTable>
     );
     if (location.pathname == '/admin-console/show-all-customer-passes') {
       keys = data.customerPassesKeys;
       content = data.formattedCustomerPasses;
 
       table = (
-        <TableCustomerPasses
-          customerPasses={content}
-          isActive={!isInactiveTable}
-          onOpen={handleOpenModal}
-          shouldShowCustomerName={true}
-          shouldShowPassName={true}
-          shouldShowAllowedProductTypes={false}
-          isAdminDash={true}
-        />
+        <WrapperModalTable
+          content={content}
+          title={''}
+          noContentMsg={'rekordów'}
+        >
+          <TableCustomerPasses
+            customerPasses={content}
+            isActive={!isInactiveTable}
+            onOpen={handleOpenModal}
+            shouldShowCustomerName={true}
+            shouldShowPassName={true}
+            shouldShowAllowedProductTypes={false}
+            isAdminDash={true}
+          />
+        </WrapperModalTable>
       );
     }
   }
 
   return (
-    <div className='admin-console'>
-      {status.role === 'ADMIN' && (
-        <>
-          <Section classy='admin-intro' header={`Admin Panel`}></Section>
-          <SideNav menuSet={sideNavTabs} />
-          {adminTabs}
+    <>
+      <Helmet>
+        <meta name='robots' content='noindex, nofollow' />
+      </Helmet>
 
-          <h1 className='modal__title modal__title--view'>{title}</h1>
-          {subTabs && (
-            <TabsList
-              menuSet={subTabs}
-              onClick={handleSwitchContent}
-              classModifier='admin-subTabs'
-              shouldSwitchState={true}
-              disableAutoActive={true}
-            />
-          )}
-          {table}
-          {isModalOpen && (
+      <div className='admin-console'>
+        {status.user?.role === 'ADMIN' && (
+          <>
+            <Section classy='admin-intro' header={`Admin Panel`}></Section>
+            <SideNav menuSet={sideNavTabs} />
+            {adminTabs}
+            <h1 className='modal__title modal__title--view'>{title}</h1>
+            {subTabs && (
+              <TabsList
+                menuSet={subTabs}
+                onClick={handleSwitchContent}
+                classModifier='admin-subTabs'
+                shouldSwitchState={true}
+                disableAutoActive={true}
+                linkEnd='/admin-console/show-all-users'
+              />
+            )}
+            {table}
+
             <ViewsController
               modifier={pickedModifier}
-              visited={isModalOpen}
               onClose={handleCloseModal}
               userAccountPage={false}
+              modalBasePath={location.pathname}
             />
-          )}
-          {
-            <FloatingBtns side={isMenuSide}>
-              <FloatingBtnAddItem />
-            </FloatingBtns>
-          }
-        </>
-      )}
-    </div>
+
+            {
+              <FloatingBtns side={isMenuSide}>
+                <FloatingBtnAddItem />
+              </FloatingBtns>
+            }
+          </>
+        )}
+      </div>
+    </>
   );
 }
 

@@ -1,4 +1,7 @@
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
+import Loader from '../common/Loader.jsx';
+import SymbolOrIcon from '../common/SymbolOrIcon';
+const logsGloballyOn = true;
 
 function FeedbackBox({
   warnings,
@@ -10,8 +13,16 @@ function FeedbackBox({
   onCloseFeedback,
   counter,
 }) {
+  if (logsGloballyOn)
+    console.log('🧩🧩🧩 FeedbackBox props:', {
+      status,
+      successMsg,
+      error,
+      warnings,
+    });
   // Initialize countdown timer with 3 seconds
   const [countdown, setCountdown] = useState(3);
+  const counterOn = status === 1; //|| status === 0
 
   // reset counter if at every feedback reset
   useEffect(() => {
@@ -22,7 +33,7 @@ function FeedbackBox({
 
   // Start the countdown when the status is success (status === 1) and not pending
   useEffect(() => {
-    if (!isPending && (status === 1 || status === 0)) {
+    if (!isPending && counterOn) {
       const intervalId = setInterval(() => {
         setCountdown(prev => {
           // counter reaches 1 - stop further counting
@@ -62,7 +73,7 @@ function FeedbackBox({
   let statusMsg;
 
   if (isPending) {
-    statusMsg = 'Wysyłanie...';
+    statusMsg = <Loader label={'Wysyłanie...'} />;
   } else if (status === 1) {
     statusMsg = successMsg || 'Zmiany zatwierdzone';
     // Auto navigation handled in useFeedback hook, so here we just show the message
@@ -98,14 +109,14 @@ function FeedbackBox({
           if (onCloseFeedback) onCloseFeedback();
         }}
       >
-        {(status === 1 || status === 0 || counter) && !isPending && 'X '}
-        {(status === 1 || status === 0) && !isPending
-          ? `(${countdown} s...)`
-          : ''}
+        <span className='feedback-box__counter'>
+          {counterOn && !isPending ? `(${countdown} s...)` : ''}
+        </span>
+        <SymbolOrIcon specifier={`close`} extraClass={'feedback-box__x'} />
       </button>
       {statusMsg}
     </div>
   );
 }
 
-export default FeedbackBox;
+export default memo(FeedbackBox);

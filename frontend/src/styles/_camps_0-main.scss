@@ -21,6 +21,11 @@
     //for ios
     background-attachment: scroll;
   }
+
+  &.no-bcg-pic {
+    gap: 5rem;
+  }
+
   &.camps {
     background-image: url(/imgs/320_wyjazdy-bcg.jpg);
   }
@@ -41,9 +46,21 @@
     font-size: 1.7rem;
     background-color: rgba(map.get($colors, base), 1);
     box-shadow: map.get($shadows, transitive-box-shadow);
+
+    .no-bcg-pic & {
+      margin-bottom: 0rem;
+    }
   }
   .about__bio--description {
     text-align: center;
+  }
+}
+.camps-intro.no-bcg-pic + section.offer {
+  grid-area: about;
+  grid-column: 1/-1;
+  margin-top: 2rem;
+  .offer-type {
+    grid-column: 1/-1;
   }
 }
 .camps-benefits {
@@ -104,8 +121,7 @@
     background-color: map.get($colors, base);
     border-radius: map.get($sizes, border-radius);
     box-shadow: map.get($shadows, tile-shadow);
-    transition:
-      transform $rotation-timing ease-in-out,
+    transition: transform $rotation-timing ease-in-out,
       box-shadow $rotation-timing ease-in-out,
       opacity $opacity-timing ease-in-out;
 
@@ -154,8 +170,7 @@
     padding: 2rem;
     text-align: center;
     opacity: 0;
-    transition:
-      transform $rotation-timing ease-in-out,
+    transition: transform $rotation-timing ease-in-out,
       opacity $opacity-timing ease-in-out;
     transition-delay: $opacity-delay-end;
 
@@ -184,7 +199,8 @@
   }
 }
 
-.camps-benefits + section.offer {
+.camps-benefits + section.offer,
+.camps-intro.no-bcg-pic + section.offer {
   margin-top: 6rem;
   grid-gap: 0rem;
   @include flex(row, center, center);
@@ -210,6 +226,9 @@
   grid-area: cert;
   overflow: hidden;
 
+  &.homepage {
+    grid-area: reviews;
+  }
   .glide__track {
     height: 70vh;
     max-height: 450px;
@@ -245,6 +264,18 @@
   overflow: hidden;
   grid-column: 1 /-1;
 }
+
+main {
+  grid-column: 1/-1;
+}
+
+main .turning-tiles {
+  // zaje are not in grid but in mail - difference in outcome
+  > header {
+    margin-top: 10rem;
+  }
+}
+
 @media (min-width: 360px) {
   .camps-intro {
     &.camps {
@@ -296,6 +327,7 @@
     }
   }
 }
+
 @media (min-width: 480px) {
   .camps-intro {
     &.camps {
@@ -350,7 +382,8 @@
       font-size: 2.2rem;
     }
   }
-  .camps-benefits + section.offer {
+  .camps-benefits + section.offer,
+  .camps-intro.no-bcg-pic + section.offer {
     .tile {
       flex-basis: 45%;
     }
@@ -382,7 +415,8 @@
       font-size: 2.8rem;
     }
   }
-  .camps-benefits + section.offer {
+  .camps-benefits + section.offer,
+  .camps-intro.no-bcg-pic + section.offer {
     .tile {
       flex-basis: 30%;
     }

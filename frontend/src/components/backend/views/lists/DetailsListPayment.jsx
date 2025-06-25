@@ -16,8 +16,17 @@ function DetailsListPayment({ paymentData, userAccountPage }) {
 
   const title = userAccountPage ? 'Szczegoły płatności' : 'Szczegoły płatności'; //temp
 
+  const tosContent = payment.TosVersion
+    ? `${payment.TosVersion.version} (${payment.TosVersion.tosId})`
+    : undefined;
+  const stripeContent = payment.stripeSessionId
+    ? `${payment.stripeSessionId}`
+    : undefined;
+
   const details = [
     { label: 'Numer:', content: payment.paymentId },
+    { label: 'Sesja Stripe:', content: stripeContent },
+    { label: 'Regulamin (Id):', content: tosContent },
     { label: 'Data:', content: formatIsoDateTime(payment.date) },
     { label: 'Kwota:', content: `${payment.amountPaid} zł` },
     { label: 'Metoda płatności:', content: payment.paymentMethod },

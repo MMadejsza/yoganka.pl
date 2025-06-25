@@ -24,13 +24,16 @@ export const CAMPS_DATA = [
       btnsContent: [],
     },
     modal: {
+      title: `Peak Yoga Camp
+			Joga |\u00A0Glina |\u00A0Góry`,
       fullDescTitle: ``,
-      fullDesc: `Wakacje z\u00A0jogą, czyli aż\u00A06 dni wytchnienia w\u00A0górskim raju. Poziomkowa Górka to miejsce, gdzie natura spotyka\u00A0się z\u00A0harmonią ciała i\u00A0ducha. Poranki z\u00A0widokiem na\u00A0szczyty,  kojące górskie powietrze, joga, medytacja, piesze wędrówki sprawią, że\u00A0to będzie wyjątkowy czas. To moment tylko dla\u00A0Ciebie – na\u00A0oddech, zwolnienie tempa i\u00A0odnalezienie równowagi w magicznej atmosferze górskiego spokoju. Harmonogram jest poglądowy, stałą częścią dnia będą posiłki i\u00A0sesje jogi. W czasie wolnym piesze wędrówki, lokalne wycieczki wg. uznania. Wieczory to czas na\u00A0regenerację i\u00A0odpoczynek np. w\u00A0saunie. Warsztat ceramiczny w\u00A0przygotowaniu, odbędzie\u00A0się w\u00A0wybrany\u00A0dzień.`,
+      fullDesc: `Poranki z\u00A0widokiem na\u00A0szczyty,  kojące górskie powietrze, joga, medytacja, piesze wędrówki sprawią, że\u00A0to\u00A0będzie wyjątkowy czas. To moment tylko dla\u00A0Ciebie – na\u00A0oddech, zwolnienie tempa i\u00A0odnalezienie równowagi w\u00A0magicznej atmosferze górskiego spokoju. Harmonogram jest poglądowy, stałą częścią dnia będą posiłki i\u00A0sesje jogi. W\u00A0czasie wolnym piesze wędrówki, lokalne wycieczki wg.\u00A0uznania. Wieczory to\u00A0czas na\u00A0regenerację i\u00A0odpoczynek np.\u00A0w\u00A0saunie. Warsztat motania lalek oraz warsztat ceramiczny, odbędą\u00A0się w\u00A0wybrany dzień. 
+			Opcja na\u00A03 lub\u00A04 dni do\u00A0indywidualnego ustalenia.`,
       glance: {
         title: ``,
         area: `Karpaty`,
         accommodation: `Poziomkowa Górka`,
-        price: `3011zł*`,
+        price: `2550 zł`,
       },
 
       plan: {
@@ -69,32 +72,33 @@ export const CAMPS_DATA = [
           title: `Cena zawiera:`,
           list: [
             `11h jogi`,
-            `3h medytacji`,
-            `2h mindfulness`,
+            `1h medytacji`,
+            `1h mindfulness`,
             `Warsztat kreatywny`,
+            `Warsztat motania lalek`,
             `3 pyszne posiłki dziennie`,
             `5 noclegów`,
           ],
         },
-        optional: {
-          title: `Poszerz slow menu:`,
-          list: [`Masaże`, `Sauna`, `Jacuzzi`],
-        },
-        freeTime: {
-          title: `W czasie wolnym:`,
-          //(note: statuses are free/optional/available for different icons)
-          list: [
-            { status: `free`, activity: `Górskie wędrówki` },
-            { status: `free`, activity: `Zwiedzanie okolic` },
-            {
-              status: `free`,
-              activity: `Wycieczki (np. skansen w\u00A0Laskowej, nad\u00A0jezioro)`,
-            },
-            { status: `free`, activity: `Relaks` },
-            { status: `optional`, activity: `Sauna` },
-            { status: `optional`, activity: `Jacuzzi` },
-          ],
-        },
+        // optional: {
+        // 	title: `Poszerz slow menu:`,
+        // 	list: [`Masaże`, `Sauna`, `Jacuzzi`],
+        // },
+        // freeTime: {
+        // 	title: `W czasie wolnym:`,
+        // 	//(note: statuses are free/optional/available for different icons)
+        // 	list: [
+        // 		{status: `free`, activity: `Górskie wędrówki`},
+        // 		{status: `free`, activity: `Zwiedzanie okolic`},
+        // 		{
+        // 			status: `free`,
+        // 			activity: `Wycieczki (np. skansen w\u00A0Laskowej, nad\u00A0jezioro)`,
+        // 		},
+        // 		{status: `free`, activity: `Relaks`},
+        // 		{status: `optional`, activity: `Sauna`},
+        // 		{status: `optional`, activity: `Jacuzzi`},
+        // 	],
+        // },
       },
       note: `Gotowa na wakacje z jogą?`,
       btnsContent: [
@@ -105,16 +109,16 @@ export const CAMPS_DATA = [
           link: whatsAppTemplate(),
           icon: 'fa-brands fa-whatsapp',
         },
-        {
-          action: 'classic',
-          title: `Formularz Google w osobnej zakładce`,
-          // text: `Wypełnij formularz`,
-          text: `Rezerwuj`,
-          // symbol: `edit`,
-          symbol: `shopping_bag`,
-          // link: `https://forms.gle/fX2Dx8KJaBhQFEGh9`,
-          navLink: `/grafik/83`,
-        },
+        // {
+        //   action: 'classic',
+        //   title: `Formularz Google w osobnej zakładce`,
+        //   // text: `Wypełnij formularz`,
+        //   text: `Rezerwuj`,
+        //   // symbol: `edit`,
+        //   symbol: `shopping_bag`,
+        //   // link: `https://forms.gle/fX2Dx8KJaBhQFEGh9`,
+        //   navLink: `/grafik/83`,
+        // },
       ],
       // questionTemplate(subject) {
       // 	return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
@@ -135,22 +139,25 @@ export const CAMPS_DATA = [
     eventType: ``,
     extraClass: ``,
     front: {
-      title: `Energia liczb i\u00A0moc\u00A0jogi  
-					Joga |\u00A0Numerologia
-					|\u00A0Aromaterapia`,
+      title: `Joga | Numerologia 
+			| Aromaterapia |
+			Jesień na\u00A0Mazurach`,
       dates: [`24-26.10.2025`],
       location: `Mazury`,
-      desc: ``,
+      desc: `Maty od partnera Miś Yoga!`,
       btnsContent: [],
     },
     modal: {
+      title: `Energia liczb i\u00A0moc\u00A0jogi  
+					Joga |\u00A0Numerologia
+					|\u00A0Aromaterapia`,
       fullDescTitle: ``,
       fullDesc: `Wyjątkowa propozycja na jesienny weekend i\u00A0ostatni warsztat w\u00A02025\u00A0roku. Wybieramy się na Mazury, gdzie zaszyjemy się w przytulnej przestrzeni GROM otoczeni lasem. Będziemy odpuszczać wszystko co nie\u00A0służy dzięki jodze, zagłębiać\u00A0się w\u00A0tajniki numerologii oraz odprężymy\u00A0się przy tworzeniu wosków/świec sojowych. Jesienne wieczory poświęcimy na odpoczynek.`,
       glance: {
         title: ``,
         area: `Grom`,
         accommodation: `Przestrzeń GROM`,
-        price: `1444zł`,
+        price: `1499zł`,
       },
 
       plan: {
@@ -192,19 +199,27 @@ export const CAMPS_DATA = [
             `2h warsztatów aromaterapii`,
             `3 pyszne posiłki dziennie`,
             `2 noclegi`,
-            `Sauna`,
+            // `Sauna`,
             `Upominek`,
           ],
         },
-        freeTime: {
-          title: `W czasie wolnym:`,
-          //(note: statuses are free/optional/available for different icons)
+        optional: {
+          title: `Dodatkowo płatne:`,
           list: [
-            { status: `free`, activity: `Leśne spacery` },
-            { status: `free`, activity: `Pogaduchy` },
-            { status: `free`, activity: `Relaks` },
+            // `Masaże`,
+            `Sauna`,
+            // `Jacuzzi`
           ],
         },
+        // freeTime: {
+        // 	title: `W czasie wolnym:`,
+        // 	//(note: statuses are free/optional/available for different icons)
+        // 	list: [
+        // 		{status: `free`, activity: `Leśne spacery`},
+        // 		{status: `free`, activity: `Pogaduchy`},
+        // 		{status: `free`, activity: `Relaks`},
+        // 	],
+        // },
       },
       note: `Gotowa na jesienne otulenie?`,
       btnsContent: [
@@ -215,14 +230,14 @@ export const CAMPS_DATA = [
           link: whatsAppTemplate(),
           icon: 'fa-brands fa-whatsapp',
         },
-        {
-          action: 'classic',
-          title: `Formularz Google w osobnej zakładce`,
+        // {
+        //   action: 'classic',
+        //   title: `Formularz Google w osobnej zakładce`,
 
-          text: `Rezerwuj`,
-          symbol: `shopping_bag`,
-          navLink: `/grafik/84`,
-        },
+        //   text: `Rezerwuj`,
+        //   symbol: `shopping_bag`,
+        //   navLink: `/grafik/84`,
+        // },
       ],
       // questionTemplate(subject) {
       // 	return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
@@ -251,6 +266,8 @@ export const CAMPS_DATA = [
       btnsContent: [],
     },
     modal: {
+      title: `Wellness\u00A0Yoga\u00A0Camp
+			Joga |\u00A0SPA |\u00A0Ajurweda`,
       fullDescTitle: ``,
       fullDesc: `Joga w\u00A0agroturystyce z\u00A0profesjonalnymi zabiegami spa to\u00A0doskonała propozycja na\u00A0wiosenne przebudzenie oraz\u00A0odprężenie. Rojst słynie z\u00A0leczniczej borowiny, której nie\u00A0omieszkamy wypróbować. Warsztaty ajurwedy będą dopełnieniem weekendu,  pokazując Ci możliwości harmonijnego życia. Położenie ośrodka sprzyja rowerowym wycieczkom, gdyż\u00A0nieopodal rozciąga\u00A0się malowniczka ścieżka GreenVelo!`,
       glance: {
@@ -326,19 +343,19 @@ export const CAMPS_DATA = [
           link: whatsAppTemplate(),
           icon: 'fa-brands fa-whatsapp',
         },
-        {
-          action: 'classic',
-          title: `Formularz Google w osobnej zakładce`,
+        // {
+        //   action: 'classic',
+        //   title: `Formularz Google w osobnej zakładce`,
 
-          // text: `Wypełnij formularz`,
-          // symbol: `edit`,
-          // link: `https://forms.gle/fX2Dx8KJaBhQFEGh9`,
-          text: `Rezerwuj`,
-          // symbol: `edit`,
-          symbol: `shopping_bag`,
-          // link: `https://forms.gle/fX2Dx8KJaBhQFEGh9`,
-          navLink: `/grafik/41`,
-        },
+        //   // text: `Wypełnij formularz`,
+        //   // symbol: `edit`,
+        //   // link: `https://forms.gle/fX2Dx8KJaBhQFEGh9`,
+        //   text: `Rezerwuj`,
+        //   // symbol: `edit`,
+        //   symbol: `shopping_bag`,
+        //   // link: `https://forms.gle/fX2Dx8KJaBhQFEGh9`,
+        //   navLink: `/grafik/41`,
+        // },
       ],
       // questionTemplate(subject) {
       // 	return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
@@ -350,32 +367,35 @@ export const CAMPS_DATA = [
     id: `CA04`,
     name: `Summer ZenNature Camp - Joga | Biżuteria z kamieni | Relaks`,
     type: `camp`,
-    date: `2025-06-28`,
+    date: `2025-06-27`,
     link: `camp-summer-zennature`,
     fileName: `camp_zennature`,
     imgPath: `${htmlToImgsPath}/offer/camps/camp_zennature/front`,
     galleryPath: `${htmlToImgsPath}/offer/camps/camp_zennature/gallery`,
     gallerySize: 9,
     eventType: ``,
-    extraClass: `long`,
+    extraClass: ``,
     front: {
-      title: `Summer ZenNature\u00A0Camp
-			Joga |\u00A0Biżuteria z\u00A0kamieni |\u00A0Relaks`,
-      dates: [`27-30.06.2025`],
+      title: `Summer ZenNature
+			Joga | SUP joga 
+			Biżuteria z\u00A0kamieni`,
+      dates: [`27-29.06.2025`],
       location: `Warmia`,
       desc: ``,
       btnsContent: [],
     },
     modal: {
+      title: `Summer ZenNature\u00A0Camp
+			Joga |\u00A0Biżuteria z\u00A0kamieni |\u00A0Relaks`,
       fullDescTitle: ``,
-      fullDesc: `Zanurzysz\u00A0się w\u00A0letnim błogostanie, gdzie czas zwalnia, oddech\u00A0się wydłuża, a\u00A0ciało i\u00A0dusza odnajdują pełną harmonię. W samym sercu mazurskiej natury, w\u00A0miejscu pulsującym spokojem, czeka\u00A0na Ciebie wyjątkowa przestrzeń relaksu i\u00A0odnowy. Tak można opisać błogie Wipsowo 44. Te cztery dni to czas obfity w\u00A0jogę w\u00A0rytmie natury na drewnianym tarasie z\u00A0lasem w\u00A0tle, kojące rytuały ziołowe w\u00A0pa w\u00A0kurniku, kąpiele w\u00A0jeziorze, spacery na\u00A0boso i\u00A0drzemki w\u00A0hamakach. Dopełnieniem będzie warsztat tworzenia biżuterii z\u00A0kamieni naturalnych ze\u00A0Studiem Cudo. Bez wahania musisz tego doświadczyć! 
-			Plan godzinowy może ulec zmianie, codziennie rano i\u00A0wieczorem sesja jogi, pranayama, dużo czasu wolnego na regenerację. Wrócisz wypoczęta i\u00A0personalizowanym naszyjnikiem!`,
+      fullDesc: `W\u00A0samym sercu mazurskiej natury, w\u00A0miejscu pulsującym spokojem, czeka na\u00A0Ciebie wyjątkowa przestrzeń relaksu i\u00A0odnowy. Tak\u00A0można opisać błogie Wipsowo\u00A044. To czas obfity w\u00A0jogę w\u00A0rytmie natury na\u00A0drewnianym tarasie z\u00A0lasem w\u00A0tle, kąpiele w\u00A0jeziorze, spacery na\u00A0boso i\u00A0drzemki w\u00A0hamakach. Dopełnieniem będzie warsztat tworzenia biżuterii z\u00A0kamieni naturalnych ze\u00A0Studiem\u00A0Cudo oraz SUP\u00A0JOGA. Bez wahania musisz tego doświadczyć! Maty od\u00A0partnera Miś\u00A0Yoga.
+			Plan godzinowy jest poglądowy. Joga na\u00A0supach odbędzie się pod\u00A0prognozę pogody w\u00A0wybrany dzień. W momencie wpisu obowiązuje przedpłata 570zł.`,
       glance: {
         title: ``,
         area: `Wipsowo`,
         accommodation: `Wipsowo 44`,
         capacity: ``,
-        price: `2222zł`,
+        price: `1333 zł`,
         travel: ``,
       },
 
@@ -385,37 +405,25 @@ export const CAMPS_DATA = [
           {
             day: 'Piątek:',
             '16:00': 'Możliwość przyjazdu, zenNature, błogi\u00A0relaks',
-            '18:00': 'Kolacja',
-            '20:00': `Zen Yoga`,
-            '21:30': `Ciepło ogniska`,
+            '18:00': 'Obfita kolacja',
+            '19:00': `Relaks przy tworzeniu naszyjników`,
           },
           {
             day: 'Sobota:',
-            '08:30': 'Sunrise yoga',
-            '09:45': 'Niespieszne śniadanie',
-            '11:00': `Zen nature: bose spacery, malowanie, drzemki w\u00A0hamakach, kąpiele`,
-            '14:00': `Spotkanie przy stole - obiad`,
-            '17:00': `Mindfulness`,
-            '18:00': `Spotkanie przy stole:\u00A0kolacja`,
-            '20:00': `Sunset yoga`,
-          },
-          {
-            day: 'Niedziela:',
             '08:00': 'Medytacja w widokiem na las',
             '08:30': 'Sunrise yoga',
             '09:30': 'Niespieszne śniadanie',
-            '11:30': `Naszyjniki z kamieni`,
             '14:00': `Spotkanie przy stole - obiad`,
-            '15:30': `Czas wolny: spa w kurniku, malowanie, spacery, kąpiele`,
+            '15:30': `SUP`,
             '18:00': `Spotkanie przy stole:\u00A0kolacja`,
-            '20:00': `Sunset yoga nidra +\u00A0yin`,
-            '21:30': `Ruska bania dla\u00A0chętnych (dodatkowo\u00A0płatna)`,
+            '20:00': `Sunset yoga nidra + yin`,
+            '21:30': `Ruska bania`,
           },
           {
-            day: 'Poniedziałek:',
-            '08:00': 'Joga na\u00A0pożegnanie',
+            day: 'Niedziela:',
+            '08:00': 'Joga na pożegnanie',
             '09:30': 'Niespieszne śniadanie',
-            '12:00': 'Wymeldowanie i\u00A0powrót do\u00A0domu',
+            '12:00': `Wymeldowanie i powrót do domu`,
           },
         ],
       },
@@ -427,17 +435,18 @@ export const CAMPS_DATA = [
             `2h Warsztatu biżuterii`,
             `3 noce`,
             `3x dziennie pełne wyżywienie`,
-            `Malowanie w plenerze`,
+            `SUP joga`,
             `Medytacja oraz sesja mindfulness`,
+            `Ruska bania`,
           ],
         },
-        optional: {
-          title: `Poszerz zen menu:`,
-          list: [
-            `Ruska bania 600zł/grupa (min. 12\u00A0osób)`,
-            `Rytuał spa w\u00A0kurniku 160zł/osoba`,
-          ],
-        },
+        // optional: {
+        // 	title: `Poszerz zen menu:`,
+        // 	list: [
+        // 		`Ruska bania 600zł/grupa (min. 12\u00A0osób)`,
+        // 		`Rytuał spa w\u00A0kurniku 160zł/osoba`,
+        // 	],
+        // },
         freeTime: {
           title: `W czasie wolnym:`,
           //(note: statuses are free/optional/available for different icons)
@@ -450,8 +459,8 @@ export const CAMPS_DATA = [
               status: `free`,
               activity: `Chodzenie bosko, spanie w\u00A0hamakach`,
             },
-            { status: `free`, activity: `Malowanie w\u00A0plenerze` },
-            { status: `free`, activity: `SUP` },
+            // {status: `free`, activity: `Malowanie w\u00A0plenerze`},
+            { status: `free`, activity: `SUP joga` },
             {
               status: `free`,
               activity: `Ruska bania/spa rytuał samoobsługowy`,
@@ -468,19 +477,19 @@ export const CAMPS_DATA = [
           link: whatsAppTemplate(),
           icon: 'fa-brands fa-whatsapp',
         },
-        {
-          action: 'classic',
-          title: `Formularz Google w osobnej zakładce`,
+        // {
+        //   action: 'classic',
+        //   title: `Formularz Google w osobnej zakładce`,
 
-          // text: `Wypełnij formularz`,
-          text: `Rezerwuj`,
-          // symbol: `edit`,
-          symbol: `shopping_bag`,
-          // link: `https://forms.gle/fX2Dx8KJaBhQFEGh9`,
-          navLink: `/grafik/42`,
-          // symbol: `edit`,
-          // link: `https://forms.gle/KL6LU2pXRGn4SmXw6`,
-        },
+        //   // text: `Wypełnij formularz`,
+        //   text: `Rezerwuj`,
+        //   // symbol: `edit`,
+        //   symbol: `shopping_bag`,
+        //   // link: `https://forms.gle/fX2Dx8KJaBhQFEGh9`,
+        //   navLink: `/grafik/42`,
+        //   // symbol: `edit`,
+        //   // link: `https://forms.gle/KL6LU2pXRGn4SmXw6`,
+        // },
       ],
       formLink: `https://forms.gle/recTtsdmUdY71wwv5`,
       questionTemplate(subject) {
@@ -511,6 +520,9 @@ export const CAMPS_DATA = [
       btnsContent: [],
     },
     modal: {
+      title: `Kobieca Harmonia
+					Joga | Astrologia
+					| Ecstatic Dance`,
       fullDescTitle: ``,
       fullDesc: `Zanurz się w\u00A0wyjątkowy kobiecy weekend na\u00A0Warmii, gdzie zrelaksujesz ciało, umysł i\u00A0duszę. Czekają na\u00A0Ciebie codzienne praktyki jogi i\u00A0medytacji w\u00A0kameralnym gronie, w\u00A0otoczeniu malowniczej przyrody. Rozpieszczą Cię zdrowe, wegetariańskie posiłki przygotowane z\u00A0lokalnych składników. Południa spędzimy na\u00A0astrologicznych odkryciach, wspólnie eksplorując kobiecą energię Wenus. A\u00A0wieczorem podczas ecstatic dance wyzwolisz swoją wolność.
 
@@ -634,6 +646,9 @@ export const CAMPS_DATA = [
       btnsContent: [],
     },
     modal: {
+      title: `Kojenie Zmysłów
+	       Joga | Aromaterapia
+		   | SPA | SkinCare`,
       fullDescTitle: ``,
       fullDesc: `Zabieram\u00A0Cię do\u00A0urokliwego domku, otulonego drewnem, gdzie schowamy\u00A0się w\u00A0ulubionych skarpetach, ciepłych swetrach i\u00A0ukoimy nasze zmysły. Nie\u00A0zabraknie jesiennej klasyki, czyli odpoczynku przy\u00A0kominku z\u00A0kubkiem aromatycznego naparu.`,
       glance: {
@@ -758,6 +773,9 @@ export const CAMPS_DATA = [
     },
 
     modal: {
+      title: `Comfy slow weekend
+	       Joga | Malowanie | SPA
+		   | Misy\u00A0i\u00A0gongi`,
       fullDescTitle: '',
       fullDesc: `Siostrzana energia, otulający zapach jesieni, atmosfera zrozumienia. Ten retreat to coś\u00A0więcej niż odpoczynek, to\u00A04-dniowa podróż do\u00A0siebie. Jeśli marzysz o takim wyjeździe, ale nie\u00A0masz z\u00A0kim pojechać, to\u00A0chcę Cię\u00A0uspokoić, że\u00A0poznasz na\u00A0miejscu fantastyczne kobiety. Oferuję szeroki wachlarz wspólnych zajęć.`,
       glance: {

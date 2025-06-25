@@ -3,33 +3,33 @@ import ImgDynamic from '../../imgsRelated/ImgDynamic.jsx';
 function PhotoSlide({ slideData, photoNo, isMobile, past }) {
   const imgPaths = [
     {
-      path: `${past == true ? slideData.pastGalleryPath : slideData.galleryPath}/480_${
-        slideData.fileName
-      }_${photoNo}.jpg`,
+      path: `${
+        past == true ? slideData.pastGalleryPath : slideData.galleryPath
+      }/480_${slideData.fileName}_${photoNo}.jpg`,
       size: '480w',
     },
     {
-      path: `${past == true ? slideData.pastGalleryPath : slideData.galleryPath}/768_${
-        slideData.fileName
-      }_${photoNo}.jpg`,
+      path: `${
+        past == true ? slideData.pastGalleryPath : slideData.galleryPath
+      }/768_${slideData.fileName}_${photoNo}.jpg`,
       size: '768w',
     },
     {
-      path: `${past == true ? slideData.pastGalleryPath : slideData.galleryPath}/1024_${
-        slideData.fileName
-      }_${photoNo}.jpg`,
+      path: `${
+        past == true ? slideData.pastGalleryPath : slideData.galleryPath
+      }/1024_${slideData.fileName}_${photoNo}.jpg`,
       size: '1024w',
     },
     {
-      path: `${past == true ? slideData.pastGalleryPath : slideData.galleryPath}/1400_${
-        slideData.fileName
-      }_${photoNo}.jpg`,
+      path: `${
+        past == true ? slideData.pastGalleryPath : slideData.galleryPath
+      }/1400_${slideData.fileName}_${photoNo}.jpg`,
       size: '1400w',
     },
     {
-      path: `${past == true ? slideData.pastGalleryPath : slideData.galleryPath}/1600_${
-        slideData.fileName
-      }_${photoNo}.jpg`,
+      path: `${
+        past == true ? slideData.pastGalleryPath : slideData.galleryPath
+      }/1600_${slideData.fileName}_${photoNo}.jpg`,
       size: '1600w',
     },
   ];
@@ -45,7 +45,7 @@ function PhotoSlide({ slideData, photoNo, isMobile, past }) {
 			(max-width: 1200px) 80vw,
 			1200px
 				`}
-      alt='Galeria Wyjazdu'
+      alt='Zdjęcie galerii'
     />
   );
 

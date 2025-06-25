@@ -10,6 +10,7 @@ export default function CardsList({
   isAdminPage,
   adminActions,
   notToArchive,
+  explicitType,
 }) {
   return (
     <div className='cards-container'>
@@ -25,6 +26,7 @@ export default function CardsList({
           isAdminPage={isAdminPage}
           adminActions={adminActions}
           notToArchive={notToArchive}
+          explicitType={explicitType}
         />
       ))}
     </div>

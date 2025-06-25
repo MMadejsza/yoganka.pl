@@ -56,13 +56,13 @@
     display: flex;
     justify-content: center;
   }
-  &__bullets {
+  .glide__bullets {
     width: max-content;
     max-width: 95%;
     @include flex(row, center);
     flex-wrap: wrap;
     gap: 1rem 0;
-    bottom: 0;
+    bottom: 0.5rem;
     padding: 0.5rem;
     border-radius: 50px;
     background-color: rgba(map.get($colors, nav), 0.7);

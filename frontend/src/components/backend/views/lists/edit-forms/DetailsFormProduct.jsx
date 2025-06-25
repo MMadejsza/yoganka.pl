@@ -40,7 +40,7 @@ function DetailsFormProduct({ productData }) {
     },
     onError: err => {
       // updating feedback
-      updateFeedback(res);
+      updateFeedback(err);
     },
   });
   // Fallback to feed custom hooks when data isn't available
@@ -48,11 +48,12 @@ function DetailsFormProduct({ productData }) {
   const dateDefault = productData?.startDate || formatIsoDateTime(new Date());
   const locationDefault = productData?.location || ' ';
   const timeString = productData?.duration;
-  const [hours, minutes, seconds] = timeString.split(':').map(Number);
-  const totalHours = hours + minutes / 60 + seconds / 3600;
+  const totalHours = timeString / 60;
   const durationDefault = totalHours || 1;
   const priceDefault = productData?.price || 500.0;
   const statusDefault = productData?.status || 1;
+  const defAttendanceViewValueDefault =
+    productData?.defaultAttendanceViewMode || 1;
 
   // using custom hook with extracting and reassigning its 'return' for particular inputs and assign validation methods from imported utils. Every inout has its won state now
   const {
@@ -114,6 +115,17 @@ function DetailsFormProduct({ productData }) {
     validationResults: priceValidationResults,
     hasError: priceHasError,
   } = useInput(priceDefault, val.priceValidations);
+  const {
+    value: defAttendanceViewValue,
+    handleChange: handleDefAttendanceViewChange,
+    handleFocus: handleDefAttendanceViewFocus,
+    handleBlur: handleDefAttendanceViewBlur,
+    handleReset: handleDefAttendanceViewReset,
+    didEdit: defAttendanceViewDidEdit,
+    isFocused: defAttendanceViewIsFocused,
+    validationResults: defAttendanceViewValidationResults,
+    hasError: defAttendanceViewHasError,
+  } = useInput(defAttendanceViewValueDefault);
 
   const {
     value: statusValue,
@@ -137,6 +149,7 @@ function DetailsFormProduct({ productData }) {
     handleDurationReset();
     handlePriceReset();
     handleStatusReset();
+    handleDefAttendanceViewReset();
   };
 
   // Submit handling
@@ -150,7 +163,8 @@ function DetailsFormProduct({ productData }) {
       locationHasError ||
       durationHasError ||
       priceHasError ||
-      statusHasError
+      statusHasError ||
+      defAttendanceViewHasError
     ) {
       return;
     }
@@ -159,9 +173,7 @@ function DetailsFormProduct({ productData }) {
     const fd = new FormData(e.target);
     const formDataObj = Object.fromEntries(fd.entries());
     const givenHoursToMinutes = formDataObj.duration * 60;
-    const newDuration = `${Math.floor(givenHoursToMinutes / 60)}:${String(
-      givenHoursToMinutes % 60
-    ).padStart(2, '0')}:00`;
+    const newDuration = String(givenHoursToMinutes);
     formDataObj.duration = newDuration;
     formDataObj.price = parseFloat(formDataObj.price).toFixed(2);
     console.log('sent data:', JSON.stringify(formDataObj));
@@ -265,7 +277,7 @@ function DetailsFormProduct({ productData }) {
         type='decimal'
         id='price'
         name='price'
-        label='Zadatek:'
+        label='Cena:'
         placeholder='zł'
         value={priceValue}
         onFocus={handlePriceFocus}
@@ -295,7 +307,29 @@ function DetailsFormProduct({ productData }) {
         validationResults={statusValidationResults}
         didEdit={statusDidEdit}
         isFocused={statusIsFocused}
-      />{' '}
+      />
+      <Input
+        embedded={true}
+        formType={formType}
+        type='select'
+        options={[
+          { label: 'Pełna Frekwencja', value: '2' },
+          { label: 'Tylko liczba os.', value: '1' },
+          { label: 'Tylko pojemność', value: '0' },
+          { label: 'Brak', value: '-1' },
+        ]}
+        id='defaultAttendanceViewMode'
+        name='defaultAttendanceViewMode'
+        label='Domyślny w. os.:'
+        value={defAttendanceViewValue}
+        required
+        onFocus={handleDefAttendanceViewFocus}
+        onBlur={handleDefAttendanceViewBlur}
+        onChange={handleDefAttendanceViewChange}
+        validationResults={defAttendanceViewValidationResults}
+        didEdit={defAttendanceViewDidEdit}
+        isFocused={defAttendanceViewIsFocused}
+      />
       {feedback.status !== undefined && (
         <FeedbackBox
           onCloseFeedback={resetFeedback}

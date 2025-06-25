@@ -1,0 +1,39 @@
+@use 'sass:map';
+@use 'sass:color';
+@use 'sass:math';
+@use './utils/' as *;
+
+.wrapper:has(.doc) {
+  grid-template-rows: auto auto 1fr auto;
+  grid-template-areas:
+    'header header header header header'
+    'docPage docPage docPage docPage docPage'
+    'space space space space space'
+    'footer footer footer footer footer';
+  // overflow: hidden;
+}
+
+.docs-header {
+  grid-area: header;
+  margin-top: 6rem;
+
+  article {
+    margin-bottom: 2.5rem;
+    width: auto;
+  }
+}
+
+.doc {
+  grid-area: docPage;
+  grid-column: 1 /-1;
+
+  &__title {
+    margin-bottom: 1rem;
+  }
+}
+
+@include respond-to(desktop-xs) {
+  .docs-header {
+    margin-top: 14rem;
+  }
+}

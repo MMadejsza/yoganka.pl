@@ -10,7 +10,9 @@ import { applyFontSize } from '../utils/userCustomerUtils.js';
 function RootPage() {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isMenuSide, setIsMenuSide] = useState(false);
-  const { data: status } = useAuthStatus();
+  const {
+    data: status = { isLoggedIn: false, role: null, token: null, user: null },
+  } = useAuthStatus();
 
   useEffect(() => {
     if (status) {

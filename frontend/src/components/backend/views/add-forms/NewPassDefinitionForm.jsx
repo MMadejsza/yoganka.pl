@@ -13,6 +13,8 @@ import FeedbackBox from '../../FeedbackBox.jsx';
 import Input from '../../Input.jsx';
 import WrapperForm from '../../WrapperForm.jsx';
 
+const debugLogsTurnedOn = false;
+
 function NewPassDefinitionForm() {
   const { feedback, updateFeedback, resetFeedback } = useFeedback();
   const { data: status } = useAuthStatus();
@@ -62,7 +64,9 @@ function NewPassDefinitionForm() {
       }
     }
   }
-  console.log(productsList);
+  if (debugLogsTurnedOn) {
+    console.log(productsList);
+  }
   // using custom hook with extracting and reassigning its 'return' for particular inputs and assign validation methods from imported utils. Every inout has its won state now
   const {
     value: nameValue,

@@ -1,15 +1,15 @@
-import { renderJointGalery } from '../../../utils/utils.jsx';
+import { renderGivenGalery, renderJointGalery } from '../../../utils/utils.jsx';
 import Section from '../Section.jsx';
 import GlideContainer from '../glide/GlideContainer.jsx';
 
-function CampsGalerySection({ camps, isMobile }) {
+function CampsGalerySection({ givenGalleryData = {}, camps, isMobile, title }) {
   const leadingClass = 'galery';
   const todayRaw = new Date();
   const today = todayRaw.toISOString().split('T')[0];
-  const retroCamps = camps.filter(camp => camp.date < today);
+  const retroCamps = camps?.filter(camp => camp.date < today);
   return (
     <>
-      <Section classy={leadingClass} header='Jak to wyglądało?'>
+      <Section classy={leadingClass} header={title || 'Jak to wyglądało?'}>
         {isMobile ? (
           <GlideContainer
             glideConfig={{
@@ -24,12 +24,14 @@ function CampsGalerySection({ camps, isMobile }) {
               1024: { perView: 1 },
             }}
             type='allPhotos'
-            slides={retroCamps}
+            slides={givenGalleryData.length > 0 ? givenGalleryData : retroCamps}
             leadingClass={leadingClass}
           />
         ) : (
           <main className={`${leadingClass}__container`}>
-            {renderJointGalery(camps)}
+            {givenGalleryData.path
+              ? renderGivenGalery(givenGalleryData)
+              : renderJointGalery(camps)}
           </main>
         )}
       </Section>

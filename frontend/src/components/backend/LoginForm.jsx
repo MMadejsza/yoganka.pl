@@ -1,7 +1,11 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import * as msgs from '../../../../backend/utils/resMessagesUtils.js';
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom';
 import { useAuthStatus } from '../../hooks/useAuthStatus.js';
 import { useFeedback } from '../../hooks/useFeedback.js';
 import { useInput } from '../../hooks/useInput.js';
@@ -10,18 +14,23 @@ import {
   mutateOnNewPassword,
   queryClient,
 } from '../../utils/http.js';
+import * as msgs from '../../utils/resMessagesUtils.js';
 import {
   emailValidations,
   getConfirmedPasswordValidations,
   passwordValidations,
 } from '../../utils/validation.js';
 import WrapperForm from '../backend/WrapperForm.jsx';
+import Loader from '../common/Loader.jsx';
 import FeedbackBox from './FeedbackBox.jsx';
 import Input from './Input.jsx';
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
 function LoginFrom() {
   const params = useParams();
+  const location = useLocation();
   const navigate = useNavigate();
+  const redirectAfterLogin = location.state?.from || '/konto';
   const [searchParams] = useSearchParams();
   const verified = searchParams.get('verified');
   const redirectParam = searchParams.get('redirect');
@@ -30,6 +39,16 @@ function LoginFrom() {
   const [resetPassword, setResetPassword] = useState(false);
   const [feedbackUpdated, setFeedbackUpdated] = useState(false); //to flag confirmation message after account activation and stop useEffect from constant checking
   const [resetCompleted, setResetCompleted] = useState(false);
+  const [requiresGdpr, setRequiresGdpr] = useState(false);
+  const [latestGdprVersion, setLatestGdprVersion] = useState(null);
+
+  useEffect(() => {
+    // student english: when status says GDPR is needed, show GDPR form
+    if (status?.needsGdpr) {
+      setRequiresGdpr(true);
+      setLatestGdprVersion(status.latestGdprVersion);
+    }
+  }, [status?.needsGdpr, status?.latestGdprVersion]);
 
   // call back to avoid overwriting at each render and infinite loop with confirmation of activating email
   const handleClose = () => {
@@ -51,7 +70,7 @@ function LoginFrom() {
           return '/';
         }
         if (result.type === 'login') {
-          return redirectParam ? redirectParam : '/'; // after login go back to given site in param or main page
+          return redirectParam || location.state?.from || '/konto'; // after login go back to given site in param or main page
         }
       }
       // if error
@@ -60,13 +79,14 @@ function LoginFrom() {
     onClose: handleClose,
   });
 
+  // CLEANUP: kill timer if modal unmounts (like after forward/back or close)
   useEffect(() => {
-    // console.log(
-    //   'Feedback effect: verified =',
-    //   verified,
-    //   'feedbackUpdated =',
-    //   feedbackUpdated
-    // );
+    return () => {
+      resetFeedback(); // clean timer to avoid redirecting when modal gone
+    };
+  }, []);
+
+  useEffect(() => {
     if (!feedbackUpdated && (verified === '1' || verified === '0')) {
       if (verified === '1') {
         updateFeedback({
@@ -94,7 +114,7 @@ function LoginFrom() {
     queryKey: [`edit-passwordToken`, params.token],
     queryFn: async () => {
       const res = await fetch(
-        `/api/login-pass/password-token/${params.token}`,
+        `${API_BASE_URL}/api/login-pass/password-token/${params.token}`,
         {
           credentials: 'include',
         }
@@ -119,6 +139,12 @@ function LoginFrom() {
 
     onSuccess: res => {
       queryClient.invalidateQueries(['authStatus']);
+      if (res.type === 'requiresGdpr') {
+        setLatestGdprVersion(res.latestGdprVersion);
+        setRequiresGdpr(true);
+        updateFeedback(res);
+        return;
+      }
       updateFeedback(res);
       if (res.type == 'new-password') {
         setResetCompleted(true);
@@ -191,14 +217,21 @@ function LoginFrom() {
     hasError: confirmedPasswordHasError,
   } = useInput('', getConfirmedPasswordValidations(passwordValue));
 
+  const gdprControl = useInput(false, [
+    {
+      rule: v => v === true,
+      message: 'Musisz zaakceptować politykę prywatności.',
+    },
+  ]);
+
   const resendActivationMutation = useMutation({
     mutationFn: () =>
-      fetch('/api/login-pass/resend-activation', {
+      fetch(`${API_BASE_URL}/api/login-pass/resend-activation`, {
         method: 'POST',
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'X-CSRF-Token': status.token,
+          'CSRF-Token': status.token,
         },
         body: JSON.stringify({ email: emailValue }),
       }).then(r => r.json()),
@@ -207,11 +240,43 @@ function LoginFrom() {
     onError: err => updateFeedback(err),
   });
 
+  const acceptGdprMutation = useMutation({
+    mutationFn: () =>
+      fetch(`${API_BASE_URL}/api/customer/accept-gdpr`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'CSRF-Token': status.token,
+        },
+      }).then(r => r.json()),
+
+    onSuccess: res => {
+      queryClient.invalidateQueries(['authStatus']);
+      updateFeedback(res);
+      if (res.confirmation === 1) {
+        navigate(redirectAfterLogin, { replace: true });
+      }
+    },
+    onError: err => updateFeedback(err),
+  });
+
+  const logoutMutation = useMutation({
+    mutationFn: formDataObj =>
+      mutateOnLoginOrSignup(status, formDataObj, `/api/login-pass/logout`),
+
+    onSuccess: () => {
+      // Invalidate query to reload layout
+      queryClient.invalidateQueries(['authStatus']);
+      navigate('/');
+    },
+  });
+
   if (isStatusLoading || !status?.token) {
-    return <p>Ładowanie formularza logowania...</p>;
+    return <Loader label={'Ładowanie'} />;
   }
   if (params.token && isTokenLoading) {
-    return <p>Weryfikacja tokenu...</p>;
+    return <Loader label={'Weryfikacja tokenu...'} />;
   }
 
   // Decide if http request is Get or Post
@@ -243,6 +308,7 @@ function LoginFrom() {
   // Submit handling
   const handleSubmit = async e => {
     e.preventDefault(); // No reloading
+
     console.log('Submit triggered');
     if (!status?.token) {
       console.warn(
@@ -250,9 +316,22 @@ function LoginFrom() {
       );
       return;
     }
+    //  Check HTML5 validity for activation link (all logic needs to be fixed)
+    if (!e.target.checkValidity()) {
+      e.target.reportValidity();
+      return;
+    }
+
+    // Find out which button triggered submit for activation link
+    const action = e.nativeEvent.submitter?.value;
+
+    //  If it's resend - make resend Activation mutation for activation link
+    if (action === 'resend') {
+      resendActivationMutation.mutate({ email: emailValue });
+      return;
+    }
 
     resetFeedback();
-
     if (params.token) {
       if (confirmedPasswordHasError || passwordHasError) return;
     } else if (resetPassword) {
@@ -349,10 +428,24 @@ function LoginFrom() {
     >
       {switchTitle}
     </button>,
+    <button
+      className='modal__btn modal__btn--small modal__btn--secondary'
+      name='action'
+      value='resend'
+      disabled={resendActivationMutation.isLoading}
+      // onClick={() => resendActivationMutation.mutate()}
+      size='small'
+    >
+      {resendActivationMutation.isLoading ? (
+        <Loader />
+      ) : (
+        'ponów link aktywacyjny'
+      )}
+    </button>,
   ];
 
   if (isPending || isNewPasswordPending) {
-    content = 'Wysyłanie...';
+    content = <Loader label={'Wysyłanie...'} />;
   } else
     content = (
       // <section className={formType}>
@@ -452,23 +545,68 @@ function LoginFrom() {
       // </section>
     );
 
+  if (requiresGdpr) {
+    return (
+      <main className='login-box'>
+        <WrapperForm
+          title={`Akceptacja RODO (wersja ${latestGdprVersion})`}
+          onSubmit={e => {
+            e.preventDefault();
+            if (gdprControl.value) acceptGdprMutation.mutate();
+            else logoutMutation.mutate();
+          }}
+          submitLabel='Akceptuję'
+          resetLabel='Anuluj'
+          classModifier='login-page'
+        >
+          <Input
+            embedded
+            formType='policy'
+            type='checkbox'
+            id='gdpr'
+            name='gdpr'
+            label={
+              <>
+                Akceptuję{' '}
+                <a
+                  href='/polityka-firmy/rodo'
+                  target='_blank'
+                  rel='noopener noreferrer'
+                >
+                  politykę prywatności
+                </a>{' '}
+                *
+              </>
+            }
+            value={gdprControl.value}
+            checked={gdprControl.value}
+            onFocus={gdprControl.handleFocus}
+            onBlur={gdprControl.handleBlur}
+            onChange={gdprControl.handleChange}
+            validationResults={gdprControl.validationResults}
+            didEdit={gdprControl.didEdit}
+            isFocused={gdprControl.isFocused}
+            classModifier={'gdpr'}
+          />
+          {acceptGdprMutation.isError && (
+            <FeedbackBox
+              status={-1}
+              isPending={acceptGdprMutation.isLoading}
+              error={acceptGdprMutation.error}
+              successMsg=''
+              warnings={null}
+              size='small'
+              onCloseFeedback={() => {}}
+            />
+          )}
+        </WrapperForm>
+      </main>
+    );
+  }
+
   return (
     <>
-      <main className='login-box'>
-        {content}
-        {
-          <button
-            className='modal__btn modal__btn--small modal__btn--secondary'
-            disabled={resendActivationMutation.isLoading}
-            onClick={() => resendActivationMutation.mutate()}
-            size='small'
-          >
-            {resendActivationMutation.isLoading
-              ? 'Wysyłanie…'
-              : 'Wyślij ponownie mail aktywacyjny'}
-          </button>
-        }
-      </main>
+      <main className='login-box'>{content}</main>
     </>
   );
 }

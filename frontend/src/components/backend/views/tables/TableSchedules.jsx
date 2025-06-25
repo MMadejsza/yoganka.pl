@@ -91,7 +91,7 @@ function TableSchedules({ data, scheduleRecords, placement, status }) {
       'Dzień',
       'Godzina',
       'Lokacja',
-      'Zadatek',
+      'Cena',
     ];
     keys = [
       'scheduleId',

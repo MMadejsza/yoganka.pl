@@ -9,14 +9,17 @@ import {
   queryClient,
 } from '../../../../../utils/http.js';
 import WrapperForm from '../../../../backend/WrapperForm.jsx';
+import Loader from '../../../../common/Loader.jsx';
 import FeedbackBox from '../../../FeedbackBox.jsx';
 import Input from '../../../Input.jsx';
+
 function DetailsFormUserSettings({
   title,
   settingsData,
   customerAccessed,
   adminAccessed,
   classModifier,
+  userId,
 }) {
   const params = useParams();
   const { feedback, updateFeedback, resetFeedback } = useFeedback();
@@ -26,7 +29,7 @@ function DetailsFormUserSettings({
   const queryKey = customerAccessed
     ? ['formFilling', 'userSettings']
     : adminAccessed
-    ? ['formFilling', 'userSettings', settingsData?.userPrefId || params.id]
+    ? ['formFilling', 'userSettings', userId || params.id]
     : null;
 
   const dynamicFetchAddress = customerAccessed
@@ -45,9 +48,9 @@ function DetailsFormUserSettings({
   console.log(data);
 
   const dynamicMutationAddress = customerAccessed
-    ? '/api/edit-user-settings'
+    ? `/api/edit-user-settings`
     : adminAccessed
-    ? `/api/admin-console/edit-user-settings/${params.id}`
+    ? `/api/admin-console/edit-user-settings/${userId || params.id}`
     : null;
   console.log('dynamicMutationAddress', dynamicMutationAddress);
 
@@ -84,7 +87,7 @@ function DetailsFormUserSettings({
   const preferences = data?.preferences || {
     handedness: false,
     fontSize: 'M',
-    notifications: false,
+    notifications: true,
     animation: false,
     theme: false,
   };
@@ -150,7 +153,7 @@ function DetailsFormUserSettings({
     hasError: themeHasError,
   } = useInput(!!preferences.theme);
 
-  if (isFormLoading) return <div>Ładowanie...</div>;
+  if (isFormLoading) return <Loader label={'Ładowanie'} />;
 
   // Reset all te inputs
   const handleReset = () => {
@@ -179,8 +182,14 @@ function DetailsFormUserSettings({
     }
     console.log('Submit passed errors');
 
-    const fd = new FormData(e.target);
-    const formDataObj = Object.fromEntries(fd.entries());
+    // custom formData OBj to not pass to backend "on" from checkboxes
+    const formDataObj = {
+      handedness: handednessValue,
+      notifications: notificationsValue,
+      font: fontValue,
+      animation: animationsValue,
+      theme: themeValue,
+    };
     console.log('sent data:', formDataObj);
     editUserSettings(formDataObj);
     if (feedback.confirmation == 1) handleReset();
