@@ -16,24 +16,26 @@ export const CAMPS_DATA = [
     eventType: ``,
     extraClass: `long`,
     front: {
-      title: `Peak Yoga Camp
-			Joga |\u00A0Glina |\u00A0Góry`,
+      title: `Miękki Relaks w\u00A0Górach`,
+      // title: `Peak Yoga Camp
+      // Joga |\u00A0Glina |\u00A0Góry`,
       dates: [`05-10.08.2025`],
       location: `Beskid Wyspowy`,
       desc: ``,
       btnsContent: [],
     },
     modal: {
-      title: `Peak Yoga Camp
-			Joga |\u00A0Glina |\u00A0Góry`,
+      title: `Miękki Relaks w\u00A0Górach`,
+      // title: `Peak Yoga Camp
+      // Joga |\u00A0Glina |\u00A0Góry`,
       fullDescTitle: ``,
-      fullDesc: `Poranki z\u00A0widokiem na\u00A0szczyty,  kojące górskie powietrze, joga, medytacja, piesze wędrówki sprawią, że\u00A0to\u00A0będzie wyjątkowy czas. To moment tylko dla\u00A0Ciebie – na\u00A0oddech, zwolnienie tempa i\u00A0odnalezienie równowagi w\u00A0magicznej atmosferze górskiego spokoju. Harmonogram jest poglądowy, stałą częścią dnia będą posiłki i\u00A0sesje jogi. W\u00A0czasie wolnym piesze wędrówki, lokalne wycieczki wg.\u00A0uznania. Wieczory to\u00A0czas na\u00A0regenerację i\u00A0odpoczynek np.\u00A0w\u00A0saunie. Warsztat motania lalek oraz warsztat ceramiczny, odbędą\u00A0się w\u00A0wybrany dzień. 
-			Opcja na\u00A03 lub\u00A04 dni do\u00A0indywidualnego ustalenia.`,
+      fullDesc: `Poranki z\u00A0widokiem na\u00A0szczyty,  kojące górskie powietrze, joga, medytacja, piesze wędrówki sprawią, że\u00A0to\u00A0będzie wyjątkowy czas. To moment tylko dla\u00A0Ciebie – na\u00A0oddech, zwolnienie tempa i\u00A0odnalezienie równowagi w\u00A0magicznej atmosferze górskiego spokoju. Harmonogram jest poglądowy, stałą częścią dnia będą posiłki i\u00A0sesje jogi. W\u00A0czasie wolnym piesze wędrówki, lokalne wycieczki wg.\u00A0uznania. Wieczory to\u00A0czas na\u00A0regenerację i\u00A0odpoczynek np.\u00A0w\u00A0saunie. Warsztaty rozwojowe: motania lalek oraz\u00A0malowanie intuicyjne lub\u00A0warsztat\u00A0ceramiczny (w\u00A0zależności od\u00A0dostępności).
+      Opcja na 4\u00A0dni do\u00A0indywidualnego ustalenia.`,
       glance: {
         title: ``,
-        area: `Karpaty`,
+        area: `Beskid Wyspowy`,
         accommodation: `Poziomkowa Górka`,
-        price: `2550 zł`,
+        price: `2555 zł`,
       },
 
       plan: {
