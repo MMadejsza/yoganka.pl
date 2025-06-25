@@ -18,7 +18,7 @@ export const CAMPS_DATA = [
     front: {
       title: `Miękki Relaks w\u00A0Górach`,
       // title: `Peak Yoga Camp
-      // Joga |\u00A0Glina |\u00A0Góry`,
+      // Joga |\u00A0Glina |\u00A0Góry`,,
       dates: [`05-10.08.2025`],
       location: `Beskid Wyspowy`,
       desc: ``,
@@ -111,16 +111,16 @@ export const CAMPS_DATA = [
           link: whatsAppTemplate(),
           icon: 'fa-brands fa-whatsapp',
         },
-        // {
-        //   action: 'classic',
-        //   title: `Formularz Google w osobnej zakładce`,
-        //   // text: `Wypełnij formularz`,
-        //   text: `Rezerwuj`,
-        //   // symbol: `edit`,
-        //   symbol: `shopping_bag`,
-        //   // link: `https://forms.gle/fX2Dx8KJaBhQFEGh9`,
-        //   navLink: `/grafik/83`,
-        // },
+        {
+          action: 'classic',
+          title: `Formularz Google w osobnej zakładce`,
+          // text: `Wypełnij formularz`,
+          text: `Rezerwuj`,
+          // symbol: `edit`,
+          symbol: `shopping_bag`,
+          // link: `https://forms.gle/fX2Dx8KJaBhQFEGh9`,
+          navLink: `/grafik/3`,
+        },
       ],
       // questionTemplate(subject) {
       // 	return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;

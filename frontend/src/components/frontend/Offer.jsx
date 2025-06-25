@@ -6,7 +6,7 @@ function Offer({ id, specifier, header, data, today, limit, moreLink }) {
   const modifier = specifier ? `offer-type--${specifier}` : '';
   const products = limit ? data.slice(0, limit) : data;
   // const nonClickableTypes = ['class', 'b2b'];
-  const nonClickableTypes = ['b2b'];
+  const nonClickableTypes = ['b2b', 'class'];
   return (
     <article id={id} className={`${classy} ${modifier}`}>
       <header className={`${classy}__header`}>{header}</header>

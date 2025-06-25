@@ -421,7 +421,7 @@ function LoginFrom() {
     resetPassBtn,
 
     <button
-      key={2}
+      key={`1-${switchTitle}`}
       type='button'
       className='modal__btn modal__btn--secondary'
       onClick={switchToSignupOrLogin}
@@ -429,6 +429,7 @@ function LoginFrom() {
       {switchTitle}
     </button>,
     <button
+      key={`2-${switchTitle}`}
       className='modal__btn modal__btn--small modal__btn--secondary'
       name='action'
       value='resend'

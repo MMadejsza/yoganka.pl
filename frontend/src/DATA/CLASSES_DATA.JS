@@ -1,5 +1,6 @@
 const imgGroupPath = `/imgs/offer/regular/individual_and_group/front`;
 const imgOnlinePath = `/imgs/offer/regular/online/front`;
+import { whatsAppTemplate } from '../utils/utils.jsx';
 const imgPassesPath = `/imgs/offer/prices`;
 // const imgB2BPath = `/imgs/offer/regular/commercial/front`;
 
@@ -51,10 +52,10 @@ export const CLASSES_DATA = [
       btnsContent: [
         {
           action: 'classic',
-          // symbol: 'exit_to_app',
-          symbol: 'calendar_month',
-          text: `Grafik`,
-          link: 'https://app.fitssey.com/yoganka/frontoffice',
+          icon: 'fa-brands fa-whatsapp',
+          text: `WhatsApp`,
+          link: whatsAppTemplate(),
+          title: `Wiadomość WhatsApp`,
         },
       ],
     },
