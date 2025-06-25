@@ -113,7 +113,8 @@ export const CAMPS_DATA = [
         },
         {
           action: 'classic',
-          title: `Formularz Google w osobnej zakładce`,
+          // title: `Formularz Google w osobnej zakładce`,
+          title: `Rezerwuj w grafiku yoganka`,
           // text: `Wypełnij formularz`,
           text: `Rezerwuj`,
           // symbol: `edit`,
@@ -232,14 +233,13 @@ export const CAMPS_DATA = [
           link: whatsAppTemplate(),
           icon: 'fa-brands fa-whatsapp',
         },
-        // {
-        //   action: 'classic',
-        //   title: `Formularz Google w osobnej zakładce`,
-
-        //   text: `Rezerwuj`,
-        //   symbol: `shopping_bag`,
-        //   navLink: `/grafik/84`,
-        // },
+        {
+          action: 'classic',
+          title: `Rezerwuj w grafiku yoganka`,
+          text: `Rezerwuj`,
+          symbol: `shopping_bag`,
+          navLink: `/grafik/4`,
+        },
       ],
       // questionTemplate(subject) {
       // 	return `Hej! Piszę do Ciebie z yoganka.pl :), Mam pytanie odnośnie "${subject}"\n\nTu [imię] [Nazwisko]`;
