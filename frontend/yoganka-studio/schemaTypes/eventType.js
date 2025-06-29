@@ -1,10 +1,6 @@
 // schemas/EventType.js
-const singleLineMaxLength = 22
-const singleLineMaxLengthError = `Maks 1 linijka - znaków: ${singleLineMaxLength} `
-const doubleLineMaxLength = 45
-const doubleLineMaxLengthError = `Maks 2 linijki -  znaków: ${doubleLineMaxLength}`
-
-const urlMaxLength = 96
+import {singleLine, doubleLine, tripleLine, urlMaxLength} from '../utils/validations'
+import {defaultBtnsSet} from '../utils/elements'
 
 export default {
   name: 'event',
@@ -29,7 +25,7 @@ export default {
       title: 'Link (URL)',
       type: 'slug',
       description: 'Tylko końcówka, bez "/", np. "yoga-piknik-i-malowanie-ceramiki"',
-      options: {source: 'name', maxLength: 96},
+      options: {source: 'name', maxLength: urlMaxLength},
       validation: (Rule) =>
         Rule.required().custom((slugObj) =>
           slugObj?.current && !slugObj.current.includes('/')
@@ -76,6 +72,12 @@ export default {
       type: 'array',
       of: [{type: 'image', options: {hotspot: true}}],
     },
+    {
+      name: 'pastGallery',
+      title: 'Jak było - galeria zdjęć',
+      type: 'array',
+      of: [{type: 'image', options: {hotspot: true}}],
+    },
 
     // --- Front (kafelek)
     {
@@ -91,7 +93,8 @@ export default {
             Windows: przytrzymaj Alt i na klawiaturze numerycznej wpisz 0160, puść Alt → wstawi się spacja nierozdzielająca (NBSP).
             macOS: naciśnij Option + Spacja → wstawi się NBSP.`,
           initialValue: (document) => document.name || '',
-          validation: (Rule) => Rule.required().max(68).error('Max 68 znaków'),
+          validation: (Rule) =>
+            Rule.required().max(tripleLine.maxLength).error(tripleLine.errorMsg),
         },
         {
           name: 'dates',
@@ -103,7 +106,7 @@ export default {
           name: 'location',
           title: 'Lokalizacja',
           type: 'string',
-          validation: (Rule) => Rule.max(doubleLineMaxLength).error(doubleLineMaxLengthError),
+          validation: (Rule) => Rule.max(doubleLine.maxLength).error(doubleLine.errorMsg),
         },
         {
           name: 'desc',
@@ -117,63 +120,7 @@ export default {
           name: 'btnsContent',
           title: 'Przyciski frontu',
           type: 'array',
-          of: [
-            {
-              type: 'object',
-              fields: [
-                {
-                  name: 'action',
-                  title: 'Typ przycisku',
-                  type: 'string',
-                  options: {
-                    list: [
-                      {title: 'WhatsApp', value: 'whatsapp'},
-                      {title: 'Grafik', value: 'grafik'},
-                      {title: 'Zewnętrzny link', value: 'external'},
-                    ],
-                  },
-                },
-                {
-                  name: 'text',
-                  title: 'Tekst przycisku',
-                  type: 'string',
-                  hidden: ({parent}) => parent.action !== 'external',
-                  validation: (Rule) =>
-                    Rule.custom((val, ctx) => {
-                      if (ctx.parent.action === 'external') {
-                        return val ? true : 'Wprowadź tekst przycisku'
-                      }
-                      return true
-                    }),
-                },
-                {
-                  name: 'title',
-                  title: 'Podpowiedź przy najechaniu (tooltip)',
-                  description: `Ma wartość UX - niech będzie faktycznie wskazówką dla przycisku. np. "Napisz do mnie na WhatsApp'ie":`,
-                  type: 'string',
-                  validation: (Rule) => Rule.required(),
-                },
-                {
-                  name: 'url',
-                  title: 'URL lub numer telefonu',
-                  type: 'string',
-                  description: `W przypadku URL grafiku - podaj np. "/grafik/3" - ze "/"`,
-                  initialValue: '48792891607',
-                  validation: (Rule) =>
-                    Rule.custom((val, ctx) => {
-                      const act = ctx.parent.action
-                      if (act === 'whatsapp') {
-                        return /^\d+$/.test(val) || 'Numer telefonu musi być cyframi bez + i spacji'
-                      }
-                      if (act === 'external') {
-                        return val ? true : 'URL jest wymagany'
-                      }
-                      return true
-                    }),
-                },
-              ],
-            },
-          ],
+          of: [defaultBtnsSet],
         },
       ],
     },
@@ -195,7 +142,7 @@ export default {
           name: 'glanceTitle',
           title: 'Tytuł "szybkie info" - bullet-listy',
           type: 'string',
-          validation: (Rule) => Rule.max(singleLineMaxLength).error(singleLineMaxLengthError),
+          validation: (Rule) => Rule.max(singleLine.maxLength).error(singleLine.errorMsg),
         },
         {
           name: 'glance',
@@ -238,7 +185,7 @@ export default {
           title: 'Nagłówek sekcji programu',
           type: 'string',
           description: 'Tytuł sekcji programu',
-          validation: (Rule) => Rule.max(singleLineMaxLength).error(doubleLineMaxLengthError),
+          validation: (Rule) => Rule.max(singleLine.maxLength).error(doubleLine.errorMsg),
         },
         {
           name: 'program',
@@ -260,7 +207,7 @@ export default {
               name: 'title',
               title: 'Nagłówek konkretnego programu',
               type: 'string',
-              validation: (Rule) => Rule.max(singleLineMaxLength).error(singleLineMaxLengthError),
+              validation: (Rule) => Rule.max(singleLine.maxLength).error(singleLine.errorMsg),
             },
             {
               name: 'list',
@@ -279,63 +226,7 @@ export default {
           name: 'btnsContent',
           title: 'Przyciski modala',
           type: 'array',
-          of: [
-            {
-              type: 'object',
-              fields: [
-                {
-                  name: 'action',
-                  title: 'Typ przycisku',
-                  type: 'string',
-                  options: {
-                    list: [
-                      {title: 'WhatsApp', value: 'whatsapp'},
-                      {title: 'Grafik', value: 'grafik'},
-                      {title: 'Zewnętrzny link', value: 'external'},
-                    ],
-                  },
-                },
-                {
-                  name: 'text',
-                  title: 'Tekst przycisku',
-                  type: 'string',
-                  hidden: ({parent}) => parent.action !== 'external',
-                  validation: (Rule) =>
-                    Rule.custom((value, context) => {
-                      if (context.parent.action === 'external') {
-                        return !!value || 'Wprowadź tekst przycisku'
-                      }
-                      return true
-                    }),
-                },
-                {
-                  name: 'title',
-                  title: 'Podpowiedź przy najechaniu (tooltip)',
-                  type: 'string',
-                  description: `Ma wartość UX - niech będzie faktycznie wskazówką dla przycisku. np. "Napisz do mnie na WhatsApp'ie":`,
-                  validation: (Rule) => Rule.required(),
-                },
-                {
-                  name: 'url',
-                  title: 'URL lub numer telefonu',
-                  type: 'string',
-                  description: `W przypadku URL grafiku - podaj np. "/grafik/3" - ze "/"`,
-                  initialValue: '48792891607',
-                  validation: (Rule) =>
-                    Rule.custom((value, context) => {
-                      const action = context.parent.action
-                      if (action === 'whatsapp') {
-                        return /^\d+$/.test(value) || 'Numer telefonu musi być cyframi bez znaku +'
-                      }
-                      if (action === 'external') {
-                        return Rule.required().validate(value) || 'URL jest wymagany'
-                      }
-                      return true
-                    }),
-                },
-              ],
-            },
-          ],
+          of: [defaultBtnsSet],
         },
       ],
     },

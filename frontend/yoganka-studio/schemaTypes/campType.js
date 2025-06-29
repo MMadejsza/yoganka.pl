@@ -1,11 +1,7 @@
 // schemas/CampType.js
 // Sanity schema for Yoga Camps, reflecting CAMPS_DATA.js with Polish titles and predefined options
-
-const singleLineMaxLength = 22
-const singleLineMaxLengthError = `Maks 1 linijka - znaków: ${singleLineMaxLength} `
-const doubleLineMaxLength = 45
-const doubleLineMaxLengthError = `Maks 2 linijki -  znaków: ${doubleLineMaxLength}`
-const urlMaxLength = 96
+import {singleLine, doubleLine, tripleLine, urlMaxLength} from '../utils/validations'
+import {defaultBtnsSet} from '../utils/elements'
 
 export default {
   name: 'camp',
@@ -55,6 +51,12 @@ export default {
       of: [{type: 'image', options: {hotspot: true}}],
     },
     {
+      name: 'pastGallery',
+      title: 'Jak było - galeria zdjęć',
+      type: 'array',
+      of: [{type: 'image', options: {hotspot: true}}],
+    },
+    {
       name: 'front',
       title: 'Dane kafla (front)',
       type: 'object',
@@ -68,14 +70,14 @@ export default {
             macOS: naciśnij Option + Spacja → wstawi się NBSP.`,
           initialValue: (document) => document.name || '',
           validation: (Rule) =>
-            Rule.required().max(68).error('Tytuł może mieć maksymalnie 68 znaków'),
+            Rule.required().max(tripleLine.maxLength).error(tripleLine.errorMsg),
         },
         {name: 'dates', title: 'Daty (np. 05-10.08)', type: 'array', of: [{type: 'string'}]},
         {
           name: 'location',
           title: 'Lokalizacja',
           type: 'string',
-          validation: (Rule) => Rule.max(doubleLineMaxLength).error(doubleLineMaxLengthError),
+          validation: (Rule) => Rule.max(doubleLine.maxLength).error(doubleLine.errorMsg),
         },
         {
           name: 'desc',
@@ -89,66 +91,7 @@ export default {
           name: 'btnsContent',
           title: 'Przyciski kafla',
           type: 'array',
-          of: [
-            {
-              type: 'object',
-              fields: [
-                {
-                  name: 'action',
-                  title: 'Typ przycisku',
-                  type: 'string',
-                  options: {
-                    list: [
-                      {title: 'WhatsApp', value: 'whatsapp'},
-                      {title: 'Grafik', value: 'grafik'},
-                      {title: 'Zewnętrzny link', value: 'external'},
-                    ],
-                  },
-                },
-                {
-                  name: 'text',
-                  title: 'Tekst przycisku',
-                  type: 'string',
-                  hidden: ({parent}) => parent.action !== 'external',
-                  validation: (Rule) =>
-                    Rule.custom((value, context) => {
-                      if (context.parent.action === 'external') {
-                        return !!value || 'Wprowadź tekst przycisku'
-                      }
-                      return true
-                    }),
-                },
-                {
-                  name: 'title',
-                  title: 'Podpowiedź przy najechaniu (tooltip)',
-                  type: 'string',
-                  description: `Ma wartość UX - niech będzie faktycznie wskazówką dla przycisku. np. "Napisz do mnie na WhatsApp'ie":`,
-                  type: 'string',
-                  validation: (Rule) => Rule.required(),
-                },
-                {
-                  name: 'url',
-                  title: 'URL lub numer telefonu',
-                  type: 'string',
-                  initialValue: '48792891607',
-                  validation: (Rule) =>
-                    Rule.custom((value, context) => {
-                      const action = context.parent.action
-                      if (action === 'whatsapp') {
-                        return (
-                          /^\d+$/.test(value) ||
-                          'Numer telefonu musi być cyframi bez znaku + i bez spacji'
-                        )
-                      }
-                      if (action === 'external') {
-                        return Rule.required().validate(value) || 'URL jest wymagany'
-                      }
-                      return true
-                    }),
-                },
-              ],
-            },
-          ],
+          of: [defaultBtnsSet],
         },
       ],
     },
@@ -168,8 +111,7 @@ export default {
           name: 'glanceTitle',
           title: 'Tytuł bullet-listy',
           type: 'string',
-          validation: (Rule) =>
-            Rule.max(singleLineMaxLength).error('Maks 1 linijka - singleLineMaxLength znaki'),
+          validation: (Rule) => Rule.max(singleLine.maxLength).error(singleLine.errorMsg),
         },
         {
           name: 'glance',
@@ -212,8 +154,7 @@ export default {
           title: 'Nagłówek planu wyjazdu',
           type: 'string',
           description: 'Tytuł sekcji planu wyjazdu',
-          validation: (Rule) =>
-            Rule.max(doubleLineMaxLength).error('Maks 2 linijki - doubleLineMaxLength znaków'),
+          validation: (Rule) => Rule.max(doubleLine.maxLength).error(doubleLine.errorMsg),
         },
         {
           name: 'plan',
@@ -285,8 +226,7 @@ export default {
               name: 'includedTitle',
               title: 'Nagłówek sekcji "W cenie"',
               type: 'string',
-              validation: (Rule) =>
-                Rule.max(singleLineMaxLength).error('Maks 1 linijka - singleLineMaxLength znaki'),
+              validation: (Rule) => Rule.max(singleLine.maxLength).error(singleLine.errorMsg),
             },
             {
               name: 'included',
@@ -298,8 +238,7 @@ export default {
               name: 'optionalTitle',
               title: 'Nagłówek sekcji "Opcjonalnie płatne"',
               type: 'string',
-              validation: (Rule) =>
-                Rule.max(singleLineMaxLength).error('Maks 1 linijka - singleLineMaxLength znaki'),
+              validation: (Rule) => Rule.max(singleLine.maxLength).error(singleLine.errorMsg),
             },
             {
               name: 'optional',
@@ -311,8 +250,7 @@ export default {
               name: 'freeTimeTitle',
               title: 'Nagłówek sekcji "Czas wolny"',
               type: 'string',
-              validation: (Rule) =>
-                Rule.max(singleLineMaxLength).error('Maks 1 linijka - singleLineMaxLength znaki'),
+              validation: (Rule) => Rule.max(singleLine.maxLength).error(singleLine.errorMsg),
             },
             {
               name: 'freeTime',
@@ -345,64 +283,7 @@ export default {
           name: 'btnsContent',
           title: 'Przyciski modala',
           type: 'array',
-          of: [
-            {
-              type: 'object',
-              fields: [
-                {
-                  name: 'action',
-                  title: 'Typ przycisku',
-                  type: 'string',
-                  options: {
-                    list: [
-                      {title: 'WhatsApp', value: 'whatsapp'},
-                      {title: 'Grafik', value: 'grafik'},
-                      {title: 'Zewnętrzny link', value: 'external'},
-                    ],
-                  },
-                },
-                {
-                  name: 'text',
-                  title: 'Tekst przycisku',
-                  type: 'string',
-                  hidden: ({parent}) => parent.action !== 'external',
-                  validation: (Rule) =>
-                    Rule.custom((value, context) => {
-                      if (context.parent.action === 'external') {
-                        return !!value || 'Wprowadź tekst przycisku'
-                      }
-                      return true
-                    }),
-                },
-                {
-                  name: 'title',
-                  title: 'Podpowiedź przy najechaniu (tooltip)',
-                  type: 'string',
-                  description: `Ma wartość UX - niech będzie faktycznie wskazówką dla przycisku. np. "Napisz do mnie na WhatsApp'ie":`,
-                  type: 'string',
-                  validation: (Rule) => Rule.required(),
-                },
-                {
-                  name: 'url',
-                  title: 'URL lub numer telefonu',
-                  type: 'string',
-                  description: `W przypadku URL grafiku - podaj np. "/grafik/3" - ze "/"`,
-                  initialValue: '48792891607',
-                  validation: (Rule) =>
-                    Rule.custom((value, context) => {
-                      const action = context.parent.action
-                      if (action === 'whatsapp') {
-                        return /^\d+$/.test(value) || 'Numer telefonu musi być cyframi bez znaku +'
-                      }
-                      if (action === 'external') {
-                        return Rule.required().validate(value) || 'URL jest wymagany'
-                      }
-                      return true
-                    }),
-                },
-              ],
-            },
-          ],
+          of: [defaultBtnsSet],
         },
       ],
     },
