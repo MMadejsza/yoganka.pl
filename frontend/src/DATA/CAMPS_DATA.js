@@ -65,7 +65,7 @@ export const CAMPS_DATA = [
             day: '*Uwagi*',
             '*': 'Przedstawione informacje są poglądowe',
             '**': 'Godziny mogą ulec zmianie',
-            '***': `W przygotowaniu warsztat kreatywny `,
+            '***': `W przygotowaniu warsztat kreatywny`,
           },
         ],
       },
