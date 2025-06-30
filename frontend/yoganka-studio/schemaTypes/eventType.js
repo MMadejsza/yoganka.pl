@@ -194,8 +194,9 @@ export default {
           fields: [
             {
               name: 'listType',
-              title: 'Typ listy - różnica w ikonach',
+              title: 'Typ listy',
               type: 'string',
+              description: `Różnica tylko w ikonach`,
               options: {
                 list: [
                   {title: 'Uwzględnione', value: 'included'},
@@ -211,7 +212,7 @@ export default {
             },
             {
               name: 'list',
-              title: 'Punkty programu',
+              title: 'Lista punktów',
               type: 'array',
               of: [{type: 'string'}],
             },

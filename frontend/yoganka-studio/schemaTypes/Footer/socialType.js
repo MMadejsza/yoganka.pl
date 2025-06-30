@@ -10,7 +10,7 @@ const iconMap = {
 
 export default {
   name: 'social',
-  title: 'Kanał społecznościowy',
+  title: 'STOPKA - Social media',
   type: 'document',
   fields: [
     {
