@@ -1,6 +1,6 @@
 import { useModalByURL } from '../../hooks/useModalByURL.js';
 import Buttons from './Buttons.jsx';
-import ImgDynamic from './imgsRelated/ImgDynamic.jsx';
+import SanityImage from './imgsRelated/SanityImage.jsx';
 import Modal from './Modal.jsx';
 
 function Tile({ data, today, clickable }) {
@@ -47,15 +47,21 @@ function Tile({ data, today, clickable }) {
     { path: `${data.imgPath}/480_${data.fileName}_0.jpg`, size: '600w' },
   ];
   const renderSingleImg = (
-    <ImgDynamic
-      classy={`tile__img`}
-      srcSet={imgPaths}
-      sizes={`
-					(max-width: 640px) 320px,
-					(max-width: 768px) 480px,
-					480px
-					`}
-      alt={data.name}
+    // <ImgDynamic
+    //   classy={`tile__img`}
+    //   srcSet={imgPaths}
+    //   sizes={`
+    // 			(max-width: 640px) 320px,
+    // 			(max-width: 768px) 480px,
+    // 			480px
+    // 			`}
+    //   alt={data.name}
+    // />
+    <SanityImage
+      image={data.mainImage}
+      variant='front'
+      alt={data.front.title}
+      className='tile__img'
     />
   );
 

@@ -61,6 +61,12 @@ img {
   display: block;
   max-width: 100%;
 }
+picture {
+  display: 'block';
+  width: '100%';
+  height: 'auto';
+  max-width: 80%;
+}
 a {
   color: inherit;
   cursor: pointer;

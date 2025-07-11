@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
+import Loader from '../../components/common/Loader.jsx';
 import Benefits from '../../components/frontend/b2b/B2BBenefits.jsx';
 import B2BOptionsSection from '../../components/frontend/b2b/B2BBenefitsSection.jsx';
 import B2BIntroSection from '../../components/frontend/b2b/B2BIntroSection.jsx';
@@ -47,18 +48,22 @@ function B2BPage() {
   });
 
   // console.log(TYPES);
-  // console.log(OFFER);
+  console.log(OFFER);
   // console.log(BENEFITS);
-  console.log(PRICE_LIST);
+  // console.log(PRICE_LIST);
   let products = null;
 
+  if (
+    introLoading ||
+    offerLoading ||
+    typesLoading ||
+    benefitsLoading ||
+    priceListLoading
+  ) {
+    return <Loader label={'Ładowanie'} />;
+  }
+
   if (OFFER) {
-    OFFER.list[0].imgPath = `/imgs/b2b/offer/joga/front`;
-    OFFER.list[0].fileName = `joga`;
-    OFFER.list[1].imgPath = `/imgs/b2b/offer/mindfulness/front`;
-    OFFER.list[1].fileName = `mindfulness`;
-    OFFER.list[2].imgPath = `/imgs/b2b/offer/relaksacyjna/front`;
-    OFFER.list[2].fileName = `relaksacyjna`;
     products = [
       {
         id: 'b2b_offer',
