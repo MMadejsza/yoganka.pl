@@ -10,8 +10,13 @@ function B2BIntroSection({ content }) {
       key={location.pathname}
     >
       <article className='about__bio--content camps-intro__welcome-desc b2b-intro'>
-        {content.list.map(pContent => (
-          <p className='about__bio--description'>{pContent}</p>
+        {content.list.map((pContent, index) => (
+          <p
+            key={`${content.list._id}-${index}`}
+            className='about__bio--description'
+          >
+            {pContent}
+          </p>
         ))}
       </article>
     </Section>

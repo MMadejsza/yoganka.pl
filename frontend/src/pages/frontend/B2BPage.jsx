@@ -73,7 +73,7 @@ function B2BPage() {
         <meta property='og:type' content='website' />
         <meta property='og:image' content='/favicon_io/apple-touch-icon.png' />
       </Helmet>
-      <B2BIntroSection content={INTRO} />
+      {INTRO && <B2BIntroSection content={INTRO} />}
       {/* <B2BOptionsSection title={'ZORGANIZUJĘ JAKO:'} list={TYPES} /> */}
       {/* <OfferSection products={products} /> */}
       {/* <Benefits title={`BENEFITY DLA\u00A0FIRMY`} /> */}
