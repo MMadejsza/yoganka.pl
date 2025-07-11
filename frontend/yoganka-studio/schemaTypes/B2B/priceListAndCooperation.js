@@ -17,8 +17,15 @@ export default {
     },
     {
       name: 'desc',
-      title: 'Treść sekcji',
-      type: 'text',
+      title: `Lista akapitów sekcji`,
+      description: `Dodaj akapit osobno - pojawia sie mała przerwa między nimi.`,
+      type: 'array',
+      of: [
+        {
+          type: 'text',
+        },
+      ],
+      validation: (Rule) => Rule.required().min(1).error('Dodaj przynajmniej jeden akapit'),
     },
     {
       name: 'btnsContent',
