@@ -11,6 +11,7 @@ import offerSectionType from './B2B/offerSectionType'
 import offerTypesSectionType from './B2B/offerTypesSectionType'
 import benefitsList from './B2B/benefitsList'
 import priceListAndCooperation from './B2B/priceListAndCooperation'
+import intro from './B2B/intro'
 
 export const schemaTypes = [
   campType,
@@ -25,4 +26,5 @@ export const schemaTypes = [
   offerTypesSectionType,
   benefitsList,
   priceListAndCooperation,
+  intro,
 ]

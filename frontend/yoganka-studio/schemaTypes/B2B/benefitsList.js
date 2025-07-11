@@ -30,26 +30,27 @@ export default {
     {
       name: 'list',
       title: `Lista benefit'ów dla firm`,
-      description: `Lista punktowana`,
+      description: `Dodaj każdy punkt jako osobny wiersz`,
       type: 'array',
       of: [
         {
-          type: 'object',
-          fields: [
-            {
-              name: 'list',
-              title: 'Lista punktów',
-              type: 'array',
-              of: [{type: 'string'}],
-            },
-          ],
+          type: 'string',
         },
       ],
+      validation: (Rule) => Rule.required().min(1).error('Dodaj przynajmniej jeden benefit'),
     },
   ],
   preview: {
     select: {
       title: `sectionTitle`,
+      list: 'list',
+    },
+    prepare({title, list}) {
+      const count = list.length
+      return {
+        title,
+        subtitle: `Wpisano: ${count}`,
+      }
     },
   },
 }

@@ -1,13 +1,10 @@
+import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
-import Benefits from '../../components/frontend/b2b/B2BBenefits.jsx';
-import B2BOptionsSection from '../../components/frontend/b2b/B2BBenefitsSection.jsx';
 import B2BIntroSection from '../../components/frontend/b2b/B2BIntroSection.jsx';
-import PriceList from '../../components/frontend/b2b/PriceList.jsx';
-import OfferSection from '../../components/frontend/OfferSection.jsx';
-import { BTNS, OFFER, TYPES } from '../../DATA/B2B_DATA.js';
+import { client } from '../../utils/sanityClient.js';
+// import { BTNS, OFFER, TYPES } from '../../DATA/B2B_DATA.js';
 
-const products = [{ id: 'b2b_offer', header: `oferta`, data: OFFER, limit: 0 }];
 function B2BPage() {
   // const mediaQuery = window.matchMedia('(max-width: 1025px)');
   // const isMobile = mediaQuery.matches;
@@ -24,6 +21,32 @@ function B2BPage() {
     };
   }, []);
 
+  const { data: INTRO, isLoading: introLoading } = useQuery({
+    queryKey: ['b2bIntro'],
+    queryFn: () => client.fetch(`*[_type == "b2bIntro"][0]`),
+  });
+  const { data: OFFER, isLoading: offerLoading } = useQuery({
+    queryKey: ['b2bOffer'],
+    queryFn: () => client.fetch(`*[_type == "b2bOffer"][0]`),
+  });
+  const { data: TYPES, isLoading: typesLoading } = useQuery({
+    queryKey: ['b2bOfferTypes'],
+    queryFn: () => client.fetch(`*[_type == "b2bOfferTypes"][0]`),
+  });
+  const { data: BENEFITS, isLoading: benefitsLoading } = useQuery({
+    queryKey: ['b2bBenefits'],
+    queryFn: () => client.fetch(`*[_type == "b2bBenefits"][0]`),
+  });
+  const { data: PRICE_LIST, isLoading: priceListLoading } = useQuery({
+    queryKey: ['b2bPriceList'],
+    queryFn: () => client.fetch(`*[_type == "b2bPriceListAndCooperation"][0]`),
+  });
+
+  console.log(INTRO, OFFER, TYPES, BENEFITS, PRICE_LIST);
+
+  const products = [
+    { id: 'b2b_offer', header: `oferta`, data: OFFER, limit: 0 },
+  ];
   return (
     <>
       <Helmet>
@@ -50,11 +73,11 @@ function B2BPage() {
         <meta property='og:type' content='website' />
         <meta property='og:image' content='/favicon_io/apple-touch-icon.png' />
       </Helmet>
-      <B2BIntroSection />
-      <B2BOptionsSection title={'ZORGANIZUJĘ JAKO:'} list={TYPES} />
-      <OfferSection products={products} />
-      <Benefits title={`BENEFITY DLA\u00A0FIRMY`} />
-      <PriceList
+      <B2BIntroSection content={INTRO} />
+      {/* <B2BOptionsSection title={'ZORGANIZUJĘ JAKO:'} list={TYPES} /> */}
+      {/* <OfferSection products={products} /> */}
+      {/* <Benefits title={`BENEFITY DLA\u00A0FIRMY`} /> */}
+      {/* <PriceList
         title={`Cennik i\u00A0współpraca`}
         btns={BTNS}
         desc={[
@@ -64,7 +87,7 @@ function B2BPage() {
           dla\u00A0Twojego zespołu.`,
         ]}
         modifier={'classes-page'}
-      />
+      /> */}
     </>
   );
 }

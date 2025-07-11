@@ -82,6 +82,11 @@ export default {
               type: 'text',
             },
           ],
+          preview: {
+            select: {
+              title: `front.title`,
+            },
+          },
         },
       ],
     },

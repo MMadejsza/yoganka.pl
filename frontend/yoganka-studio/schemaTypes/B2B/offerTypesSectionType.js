@@ -45,7 +45,7 @@ export default {
               description: `Szczegółowy opis na tyle (po obrocie)`,
               rows: 4,
               validation: (Rule) =>
-                Rule.required().max(175).warning(`Za długi opis. maks 175 znaków.`),
+                Rule.required().max(265).warning(`Za długi opis. maks 265 znaków.`),
             },
           ],
         },
