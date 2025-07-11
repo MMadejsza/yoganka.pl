@@ -96,8 +96,8 @@ function B2BPage() {
         <meta property='og:image' content='/favicon_io/apple-touch-icon.png' />
       </Helmet>
       {INTRO && <B2BIntroSection content={INTRO} />}
-      {OFFER && <OfferSection products={products} />}
       {TYPES && <B2BOptionsSection content={TYPES} />}
+      {OFFER && <OfferSection products={products} />}
       {BENEFITS && <Benefits content={BENEFITS} />}
       {PRICE_LIST && (
         <PriceList content={PRICE_LIST} modifier={'classes-page'} />
