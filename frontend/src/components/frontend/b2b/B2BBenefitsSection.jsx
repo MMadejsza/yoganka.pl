@@ -1,23 +1,23 @@
 import SymbolOrIcon from '../../common/SymbolOrIcon.jsx';
 import Section from '../Section.jsx';
 
-function B2BBenefitsSection({ list, title }) {
+function B2BBenefitsSection({ content }) {
   const classy = 'camps-benefits__';
   const mediaQuery = window.matchMedia('(max-width: 1025px)');
   const isMobile = mediaQuery.matches;
   return (
     <Section
       classy='turning-tiles camps-benefits'
-      header={title}
+      header={content.sectionTitle}
       iSpecific={true}
     >
       <main className='camps-benefits__bullets-container b2b-types'>
-        {list.map((benefit, index) => {
+        {content.list.map((benefit, index) => {
           return (
             <div
               className={`${classy}bullet-container types__bullet-container`}
               tabIndex='0'
-              key={index}
+              key={`${content._id}-${index}`}
             >
               {isMobile && (
                 <SymbolOrIcon

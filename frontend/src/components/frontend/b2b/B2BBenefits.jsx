@@ -1,4 +1,4 @@
-import { BENEFITS } from '../../../DATA/B2B_DATA.js';
+// import { BENEFITS } from '../../../DATA/B2B_DATA.js';
 import SymbolOrIcon from '../../common/SymbolOrIcon';
 import Section from '../../frontend/Section.jsx';
 
