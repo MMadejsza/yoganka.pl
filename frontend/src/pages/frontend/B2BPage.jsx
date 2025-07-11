@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet';
 import Benefits from '../../components/frontend/b2b/B2BBenefits.jsx';
 import B2BOptionsSection from '../../components/frontend/b2b/B2BBenefitsSection.jsx';
 import B2BIntroSection from '../../components/frontend/b2b/B2BIntroSection.jsx';
+import OfferSection from '../../components/frontend/OfferSection.jsx';
 import { client } from '../../utils/sanityClient.js';
 // import { BTNS, OFFER, TYPES } from '../../DATA/B2B_DATA.js';
 
@@ -45,13 +46,28 @@ function B2BPage() {
   });
 
   // console.log(TYPES);
-  // console.log(OFFER);
-  console.log(BENEFITS);
+  console.log(OFFER);
+  // console.log(BENEFITS);
   // console.log(PRICE_LIST);
+  let products = null;
 
-  const products = [
-    { id: 'b2b_offer', header: `oferta`, data: OFFER, limit: 0 },
-  ];
+  if (OFFER) {
+    OFFER.list[0].imgPath = `/imgs/b2b/offer/joga/front`;
+    OFFER.list[0].fileName = `joga`;
+    OFFER.list[1].imgPath = `/imgs/b2b/offer/mindfulness/front`;
+    OFFER.list[1].fileName = `mindfulness`;
+    OFFER.list[2].imgPath = `/imgs/b2b/offer/relaksacyjna/front`;
+    OFFER.list[2].fileName = `relaksacyjna`;
+    products = [
+      {
+        id: 'b2b_offer',
+        header: OFFER.sectionTitle,
+        data: OFFER.list,
+        limit: 0,
+      },
+    ];
+  }
+
   return (
     <>
       <Helmet>
@@ -79,7 +95,7 @@ function B2BPage() {
         <meta property='og:image' content='/favicon_io/apple-touch-icon.png' />
       </Helmet>
       {INTRO && <B2BIntroSection content={INTRO} />}
-      {/* <OfferSection products={products} /> */}
+      {OFFER && <OfferSection products={products} />}
       {TYPES && <B2BOptionsSection content={TYPES} />}
       {BENEFITS && <Benefits content={BENEFITS} />}
       {/* <PriceList

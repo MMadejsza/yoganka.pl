@@ -10,11 +10,13 @@ function Tile({ data, today, clickable }) {
   const classes = data.type === 'class';
   const conditionalClasses = [
     'tile',
-    clickable ? 'clickable' : '',
-    classes ? 'tile--classes' : '',
-    isPast ? 'past' : '',
-    data.extraClass ? `tile--${data.extraClass}` : '',
-  ].join(' ');
+    clickable ? 'clickable' : null,
+    classes ? 'tile--classes' : null,
+    isPast ? 'past' : null,
+    data.extraClass ? `tile--${data.extraClass}` : null,
+  ]
+    .join(' ')
+    .trim();
   const modalPath =
     data.explicitLink ??
     `/${data.type === 'camp' ? 'wyjazdy' : 'wydarzenia'}/${data.link}`;
@@ -60,14 +62,14 @@ function Tile({ data, today, clickable }) {
   );
 
   // Dates rendering definition
-  const renderDates = data.front.dates.map((date, index) => (
+  const renderDates = data.front.dates?.map((date, index) => (
     <h3 className='tile__date' key={index}>
       {date}
     </h3>
   ));
 
   // Btns rendering definition
-  const renderBtns = data.front.btnsContent.map((btn, index) => {
+  const renderBtns = data.front.btnsContent?.map((btn, index) => {
     // Chose if material design symbol or icon
 
     // If btn supposes to redirect to different page - use Link (no reloading)
@@ -116,7 +118,7 @@ function Tile({ data, today, clickable }) {
 
       <h3 className='tile__title'>{data.front.title}</h3>
 
-      {data.front.dates.length > 0 && renderDates}
+      {data.front.dates?.length > 0 && renderDates}
 
       {data.front.location && (
         <h4 className='tile__location'>{data.front.location}</h4>
