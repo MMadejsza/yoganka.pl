@@ -1,0 +1,80 @@
+import { Link } from 'react-router-dom';
+import SymbolOrIcon from '../common/SymbolOrIcon';
+
+function Buttons({ list }) {
+  const btnsList = list.map((btn, index) => {
+    const isIconOrSymbol = btn.icon || btn.symbol;
+    let formattedLink;
+    let internalLink = false;
+
+    switch (btn.action) {
+      case 'mail':
+        formattedLink = `mailto:${btn.link}`;
+        btn.symbol = 'mail';
+        btn.text = 'wyślij maila';
+        break;
+      case 'phone':
+        formattedLink = `tel:${btn.link}`;
+        btn.symbol = 'phone';
+        btn.text = 'zadzwoń';
+        break;
+      case 'whatsapp':
+        formattedLink = `https://wa.me/${btn.link}`;
+        btn.icon = 'fa-brands fa-whatsapp';
+        btn.text = 'whatsapp';
+        break;
+      case 'grafik':
+        internalLink = true;
+        formattedLink = btn.link;
+        break;
+
+      default:
+        formattedLink = btn.link;
+        break;
+    }
+
+    if (internalLink) {
+      return (
+        <Link
+          key={index + btn.title}
+          to={formattedLink}
+          onClick={() => {
+            window.scrollTo(0, 0);
+          }}
+          title={btn.title}
+          className={`tile__btn tile__btn--${modifier}`}
+        >
+          {isIconOrSymbol ? (
+            <SymbolOrIcon
+              type={btn.icon ? 'ICON' : 'SYMBOL'}
+              specifier={btn.icon ?? btn.symbol}
+            />
+          ) : null}
+          {btn.text}
+        </Link>
+      );
+      // } else if (isNotMobile && btn.symbol == 'phone') {
+      //   return null;
+    } else {
+      return (
+        <a
+          key={index + btn.title}
+          target='_blank'
+          href={formattedLink}
+          title={btn.title}
+          className={`tile__btn modal__btn`}
+        >
+          <SymbolOrIcon
+            type={btn.icon ? 'ICON' : 'SYMBOL'}
+            specifier={btn.icon || btn.symbol}
+          />
+          {btn.text}
+        </a>
+      );
+    }
+  });
+
+  return btnsList;
+}
+
+export default Buttons;

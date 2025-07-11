@@ -120,7 +120,7 @@ export const CAMPS_DATA = [
           // symbol: `edit`,
           symbol: `shopping_bag`,
           // link: `https://forms.gle/fX2Dx8KJaBhQFEGh9`,
-          navLink: `/grafik/3`,
+          link: `/grafik/3`,
         },
       ],
       // questionTemplate(subject) {
@@ -238,7 +238,7 @@ export const CAMPS_DATA = [
           title: `Rezerwuj w grafiku yoganka`,
           text: `Rezerwuj`,
           symbol: `shopping_bag`,
-          navLink: `/grafik/4`,
+          link: `/grafik/4`,
         },
       ],
       // questionTemplate(subject) {
@@ -356,7 +356,7 @@ export const CAMPS_DATA = [
         //   // symbol: `edit`,
         //   symbol: `shopping_bag`,
         //   // link: `https://forms.gle/fX2Dx8KJaBhQFEGh9`,
-        //   navLink: `/grafik/41`,
+        //   link: `/grafik/41`,
         // },
       ],
       // questionTemplate(subject) {
@@ -488,7 +488,7 @@ export const CAMPS_DATA = [
         //   // symbol: `edit`,
         //   symbol: `shopping_bag`,
         //   // link: `https://forms.gle/fX2Dx8KJaBhQFEGh9`,
-        //   navLink: `/grafik/42`,
+        //   link: `/grafik/42`,
         //   // symbol: `edit`,
         //   // link: `https://forms.gle/KL6LU2pXRGn4SmXw6`,
         // },

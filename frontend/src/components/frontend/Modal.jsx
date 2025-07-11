@@ -1,7 +1,7 @@
 import { createPortal } from 'react-dom';
 import { Helmet } from 'react-helmet';
-import { Link } from 'react-router-dom';
 import SymbolOrIcon from '../common/SymbolOrIcon';
+import Buttons from './Buttons.jsx';
 import CampDay from './camps/CampDay.jsx';
 import GlideContainer from './glide/GlideContainer.jsx';
 import CampGlance from './ModalGlance.jsx';
@@ -124,42 +124,7 @@ function Modal({ tile, singleImg, onClose, today, isVisible, isClosing }) {
     return (
       isUpToDate && (
         <footer className='modal__user-action'>
-          {modal.btnsContent.map((btn, index) => {
-            const icon = (
-              <SymbolOrIcon
-                type={btn.icon ? 'ICON' : 'SYMBOL'}
-                specifier={btn.icon || btn.symbol}
-                style={btn.icon ? { paddingRight: '1rem' } : {}}
-              />
-            );
-
-            if (btn.link) {
-              return (
-                <a
-                  key={index}
-                  href={btn.link}
-                  target='_blank'
-                  title={btn.title}
-                  className={`modal__btn`}
-                >
-                  {icon}
-                  {btn.text}
-                </a>
-              );
-            } else if (btn.navLink) {
-              return (
-                <Link
-                  key={index}
-                  to={btn.navLink}
-                  title={btn.title}
-                  className={`modal__btn`}
-                >
-                  {icon}
-                  {btn.text}
-                </Link>
-              );
-            }
-          })}
+          <Buttons list={modal.btnsContent} />
         </footer>
       )
     );

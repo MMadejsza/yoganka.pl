@@ -1,7 +1,5 @@
-import { Link } from 'react-router-dom';
 import { useModalByURL } from '../../hooks/useModalByURL.js';
-import { smoothScrollInto } from '../../utils/utils.jsx';
-import SymbolOrIcon from '../common/SymbolOrIcon';
+import Buttons from './Buttons.jsx';
 import ImgDynamic from './imgsRelated/ImgDynamic.jsx';
 import Modal from './Modal.jsx';
 
@@ -69,45 +67,9 @@ function Tile({ data, today, clickable }) {
   ));
 
   // Btns rendering definition
-  const renderBtns = data.front.btnsContent?.map((btn, index) => {
-    // Chose if material design symbol or icon
-
-    // If btn supposes to redirect to different page - use Link (no reloading)
-    if (btn.action === 'subPage') {
-      return (
-        <Link
-          key={index}
-          to={btn.link}
-          title={btn.title}
-          className={`tile__btn tile__btn--${data.fileName}`}
-        >
-          <SymbolOrIcon
-            type={btn.icon ? 'ICON' : 'SYMBOL'}
-            specifier={btn.icon || btn.symbol}
-          />
-          {btn.text}
-        </Link>
-      );
-    } else {
-      // Case where Btn was to scroll to different section of the page (archived behavior for now)
-      return (
-        <a
-          onClick={btn.action === 'scroll' ? e => smoothScrollInto(e) : null}
-          key={index}
-          target='_blank'
-          href={btn.link}
-          title={btn.title}
-          className={`tile__btn tile__btn--${data.fileName}`}
-        >
-          <SymbolOrIcon
-            type={btn.icon ? 'ICON' : 'SYMBOL'}
-            specifier={btn.icon || btn.symbol}
-          />
-          {btn.text}
-        </a>
-      );
-    }
-  });
+  const renderBtns = data.front.btnsContent && (
+    <Buttons list={data.front.btnsContent} />
+  );
 
   return (
     <div
