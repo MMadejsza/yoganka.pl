@@ -23,6 +23,14 @@ export const defaultBtnsSet = {
       validation: (Rule) => Rule.required(),
     },
     {
+      name: 'symbol',
+      title: 'Ikona (material symbol)',
+      type: 'string',
+      hidden: ({parent}) => parent.action !== 'external',
+      description: `Nazwa ikony Material Symbols, np. "self_improvement", "park" dostępne na https://fonts.google.com/icons`,
+      validation: (Rule) => Rule.required().error(`Wybierz symbol`),
+    },
+    {
       name: 'text',
       title: 'Tekst przycisku',
       type: 'string',
@@ -73,11 +81,12 @@ export const defaultBtnsSet = {
         }),
     },
     {
-      name: 'url',
+      name: 'link',
       title: 'URL lub numer telefonu',
       type: 'string',
       description: `W przypadku URL grafiku - podaj np. "/grafik/3" - ze "/"
-      W przypadku maila - podaj adres np. "kontakt@yoganka.pl`,
+      W przypadku maila - podaj adres np. "kontakt@yoganka.pl
+      Telefon: 48792891607`,
       initialValue: '48792891607',
       validation: (Rule) =>
         Rule.custom((value, {parent}) => {
