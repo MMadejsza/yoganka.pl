@@ -31,14 +31,15 @@ function ViewClassesOnline() {
       />
       <B2BOptionsSection list={BENEFITS_TILES} title={'Dlaczego warto?'} />
       <Benefits
-        title=''
-        modifier='classes-page'
-        givenContent={[
-          `Praktyka na platformie ZOOM`,
-          `Nagrywane zajęcia dostępne do 48h\u00a0po`,
-          `Czwartki  godz. 19:00, 75min`,
-          `Wznowienie jesienią 2025`,
-        ]}
+      // title=''
+      // modifier='classes-page'
+      // list={[
+      //   `Praktyka na platformie ZOOM`,
+      //   `Nagrywane zajęcia dostępne do 48h\u00a0po`,
+      //   `Czwartki  godz. 19:00, 75min`,
+      //   `Wznowienie jesienią 2025`,
+      // ]}
+      // content={}
       />
       <OfferSection products={products} />
       <PriceList

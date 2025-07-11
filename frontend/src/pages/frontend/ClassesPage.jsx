@@ -63,15 +63,16 @@ function ClassesPage() {
         title={null}
       />
       <Benefits
-        title='Dzięki JODZE:'
-        modifier='classes-page'
-        givenContent={[
-          `Dbasz o stawy`,
-          `Wzmacniasz mięśnie`,
-          `Redukujesz ból`,
-          `Zmniejszasz napięcia w\u00a0ciele`,
-          `Koisz myśli`,
-        ]}
+      // title='Dzięki JODZE:'
+      // modifier='classes-page'
+      // list={[
+      //   `Dbasz o stawy`,
+      //   `Wzmacniasz mięśnie`,
+      //   `Redukujesz ból`,
+      //   `Zmniejszasz napięcia w\u00a0ciele`,
+      //   `Koisz myśli`,
+      // ]}
+      // content={}
       />
       <main>
         <TabsList

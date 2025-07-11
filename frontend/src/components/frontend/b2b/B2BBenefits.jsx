@@ -2,15 +2,32 @@
 import SymbolOrIcon from '../../common/SymbolOrIcon';
 import Section from '../../frontend/Section.jsx';
 
-function B2BBenefits({ title, givenContent, modifier }) {
-  const rawContent = givenContent || BENEFITS.list;
-  const content = rawContent.map((item, index) => {
+function B2BBenefits({ content, modifier }) {
+  const rawContent = content.list;
+  let symbol = null;
+  let type = null;
+
+  switch (content.listType) {
+    case 'included':
+      symbol = 'fa-solid fa-check';
+      type = 'ICON';
+      break;
+    case 'excluded':
+      symbol = 'fa-regular fa-hand-point-right';
+      type = 'ICON';
+      break;
+
+    default:
+      break;
+  }
+
+  const formattedContent = rawContent.map((item, index) => {
     // if simple list -> item == string otherwise list of objects from freeTime
     return (
       <li key={index} className='modal-checklist__li'>
         <SymbolOrIcon
-          type='ICON'
-          specifier={'fa-solid fa-check'}
+          type={type}
+          specifier={symbol}
           extraClass={'modal-checklist__icon modal__icon modal-checklist__icon'}
           aria-hidden='true'
         />
@@ -19,20 +36,18 @@ function B2BBenefits({ title, givenContent, modifier }) {
     );
   });
 
-  const dynamicClass = `modal-checklist modal-checklist--included ${
-    modifier ? `modal-checklist--${modifier}` : ''
+  const dynamicClass = `modal-checklist__list ${
+    modifier ? `modal-checklist__list--${modifier}` : ''
   }`;
 
   return (
-    <Section classy={'b2b-benefits'} header={title} modifier={modifier}>
+    <Section
+      classy={'b2b-benefits'}
+      header={content.sectionTitle}
+      modifier={modifier}
+    >
       {/* <section className={dynamicClass}> */}
-      <ul
-        className={`modal-checklist__list ${
-          modifier ? `modal-checklist__list--${modifier}` : ''
-        }`}
-      >
-        {content}
-      </ul>
+      <ul className={dynamicClass}>{formattedContent}</ul>
       {/* </section> */}
     </Section>
   );

@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
+import Benefits from '../../components/frontend/b2b/B2BBenefits.jsx';
 import B2BOptionsSection from '../../components/frontend/b2b/B2BBenefitsSection.jsx';
 import B2BIntroSection from '../../components/frontend/b2b/B2BIntroSection.jsx';
 import { client } from '../../utils/sanityClient.js';
@@ -43,10 +44,10 @@ function B2BPage() {
     queryFn: () => client.fetch(`*[_type == "b2bPriceListAndCooperation"][0]`),
   });
 
-  console.log(TYPES);
-  console.log(OFFER);
-  console.log(BENEFITS, PRICE_LIST);
-  console.log(PRICE_LIST);
+  // console.log(TYPES);
+  // console.log(OFFER);
+  console.log(BENEFITS);
+  // console.log(PRICE_LIST);
 
   const products = [
     { id: 'b2b_offer', header: `oferta`, data: OFFER, limit: 0 },
@@ -80,7 +81,7 @@ function B2BPage() {
       {INTRO && <B2BIntroSection content={INTRO} />}
       {/* <OfferSection products={products} /> */}
       {TYPES && <B2BOptionsSection content={TYPES} />}
-      {/* <Benefits title={`BENEFITY DLA\u00A0FIRMY`} /> */}
+      {BENEFITS && <Benefits content={BENEFITS} />}
       {/* <PriceList
         title={`Cennik i\u00A0współpraca`}
         btns={BTNS}
