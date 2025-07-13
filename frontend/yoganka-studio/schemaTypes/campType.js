@@ -45,18 +45,6 @@ export default {
       options: {hotspot: true},
     },
     {
-      name: 'gallery',
-      title: 'Galeria zdjęć',
-      type: 'array',
-      of: [{type: 'image', options: {hotspot: true}}],
-    },
-    {
-      name: 'pastGallery',
-      title: 'Jak było - galeria zdjęć',
-      type: 'array',
-      of: [{type: 'image', options: {hotspot: true}}],
-    },
-    {
       name: 'front',
       title: 'Dane kafla (front)',
       type: 'object',
@@ -72,7 +60,12 @@ export default {
           validation: (Rule) =>
             Rule.required().max(tripleLine.maxLength).error(tripleLine.errorMsg),
         },
-        {name: 'dates', title: 'Daty (np. 05-10.08)', type: 'array', of: [{type: 'string'}]},
+        {
+          name: 'dates',
+          title: 'Daty (np. 05-10.08) - wizualnie',
+          type: 'array',
+          of: [{type: 'string'}],
+        },
         {
           name: 'location',
           title: 'Lokalizacja',
@@ -106,6 +99,12 @@ export default {
           type: 'string',
           initialValue: (document) => document.front?.title || '',
           validation: (Rule) => Rule.required(),
+        },
+        {
+          name: 'gallery',
+          title: 'Galeria zdjęć',
+          type: 'array',
+          of: [{type: 'image', options: {hotspot: true}}],
         },
         {
           name: 'glanceTitle',
@@ -155,6 +154,7 @@ export default {
           type: 'string',
           description: 'Tytuł sekcji planu wyjazdu',
           validation: (Rule) => Rule.max(doubleLine.maxLength).error(doubleLine.errorMsg),
+          initialValue: 'Slow menu',
         },
         {
           name: 'plan',
@@ -207,13 +207,45 @@ export default {
                     {
                       type: 'object',
                       fields: [
-                        {name: 'time', title: 'Godzina (np. 17:00)', type: 'string'},
+                        {
+                          name: 'time',
+                          title: 'Godzina (np. 17:00) lub punktator np. "*"',
+                          type: 'string',
+                        },
                         {name: 'desc', title: 'Opis aktywności', type: 'string'},
                       ],
+                      preview: {
+                        select: {
+                          time: 'time',
+                          desc: 'desc',
+                        },
+                        prepare({time, desc}) {
+                          return {
+                            title: `${time || ''} ${desc || '(brak opisu)'}`,
+                          }
+                        },
+                      },
                     },
                   ],
                 },
               ],
+              preview: {
+                select: {
+                  combo: 'comboLabel',
+                  day: 'day',
+                  content: 'entries',
+                },
+                prepare({combo, day, content}) {
+                  const title = combo || day
+
+                  const subtitle = Array.isArray(content) ? `Wpisów: ${content.length}` : ''
+
+                  return {
+                    title,
+                    subtitle,
+                  }
+                },
+              },
             },
           ],
         },
@@ -273,6 +305,18 @@ export default {
                     },
                     {name: 'activity', title: 'Aktywność', type: 'string'},
                   ],
+                  preview: {
+                    select: {
+                      status: 'status',
+                      activity: 'activity',
+                    },
+                    prepare({status, activity}) {
+                      const plStatus = status === 'included' ? '✅' : '💰'
+                      return {
+                        title: `${plStatus} ${activity || '(brak opisu)'}`,
+                      }
+                    },
+                  },
                 },
               ],
             },

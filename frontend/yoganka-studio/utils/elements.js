@@ -30,7 +30,15 @@ export const defaultBtnsSet = {
       type: 'string',
       hidden: ({parent}) => parent.action !== 'external',
       description: `Nazwa ikony Material Symbols, np. "self_improvement", "park" dostępne na https://fonts.google.com/icons`,
-      validation: (Rule) => Rule.required().error(`Wybierz symbol`),
+      validation: (Rule) => {
+        Rule.custom((value, context) => {
+          const parent = context?.parent
+          if (parent.action === 'external' && !value) {
+            return 'Wybierz symbol dla linku zewnętrznego'
+          }
+          return true
+        })
+      },
     },
     {
       name: 'text',
@@ -86,9 +94,7 @@ export const defaultBtnsSet = {
       name: 'link',
       title: 'URL lub numer telefonu',
       type: 'string',
-      description: `W przypadku URL grafiku - podaj np. "/grafik/3" - ze "/"
-      W przypadku maila - podaj adres np. "kontakt@yoganka.pl
-      Telefon: 48792891607`,
+      description: `W przypadku URL grafiku - podaj np. "/grafik/3" - ze "/" | W przypadku maila - podaj adres np."kontakt@yoganka.pl | Telefon: 48792891607. | Zewnętrzny link - pełny link`,
       initialValue: '48792891607',
       validation: (Rule) =>
         Rule.custom((value, {parent}) => {
@@ -126,6 +132,22 @@ export const defaultBtnsSet = {
         }),
     },
   ],
+  preview: {
+    select: {
+      action: 'action',
+      text: 'text',
+      title: 'title',
+      link: 'link',
+    },
+    prepare({action, text, title, link}) {
+      const textLabel = text ? `Tytuł: ${text} |` : ''
+      const actionLabel = action.toUpperCase()
+
+      return {
+        title: `${actionLabel}: ${textLabel} Podpowiedź: ${title} | Link: ${link}`,
+      }
+    },
+  },
 }
 
 export const turningTiles = {

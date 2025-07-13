@@ -2,7 +2,8 @@ import campType from './campType'
 import eventType from './eventType'
 import classType from './classType'
 
-import socialType from './Footer/socialType'
+import footerSocialType from './Footer/socialType'
+import footerBusinessDataType from './Footer/businessDataType'
 import reviewType from './Home/reviewType'
 import partnerType from './Home/partnerType'
 import certificateType from './Home/certificateType'
@@ -17,7 +18,8 @@ export const schemaTypes = [
   campType,
   eventType,
   classType,
-  socialType,
+  footerBusinessDataType,
+  footerSocialType,
   reviewType,
   partnerType,
   certificateType,

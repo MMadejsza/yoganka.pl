@@ -53,18 +53,6 @@ export default {
       type: 'image',
       options: {hotspot: true},
     },
-    {
-      name: 'gallery',
-      title: 'Galeria zdjęć',
-      type: 'array',
-      of: [{type: 'image', options: {hotspot: true}}],
-    },
-    {
-      name: 'pastGallery',
-      title: 'Jak było - galeria zdjęć',
-      type: 'array',
-      of: [{type: 'image', options: {hotspot: true}}],
-    },
     // --------------------
     // Front – kafelek
     // --------------------
@@ -138,7 +126,20 @@ export default {
           title: 'Tytuł modala',
           type: 'string',
           initialValue: (document) => document.front?.title || '',
-          validation: (Rule) => Rule.required(),
+          validation: (Rule) => {
+            Rule.custom((value, context) => {
+              if (!value && context.document.modal) {
+                return 'Tytuł okna obowiązkowy'
+              }
+              return true
+            })
+          },
+        },
+        {
+          name: 'gallery',
+          title: 'Galeria zdjęć',
+          type: 'array',
+          of: [{type: 'image', options: {hotspot: true}}],
         },
         {
           name: 'fullDesc',

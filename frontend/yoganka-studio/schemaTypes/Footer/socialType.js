@@ -31,14 +31,20 @@ export default {
     {
       name: 'link',
       title: 'Link',
-      type: 'url',
+      type: 'string',
       description: 'URL, tel: lub mailto:',
       validation: (Rule) =>
-        Rule.required()
-          .uri({
-            scheme: ['http', 'https', 'mailto', 'tel'],
-          })
-          .error('Link musi zaczynać się od http(s)://, mailto: lub tel:'),
+        Rule.required().custom((value) => {
+          if (!value) return 'Wartość jest wymagana'
+
+          // WhatsApp numer: digits only
+          if (/^\d{9,15}$/.test(value)) return true
+
+          // tel:, mailto:, http(s)://
+          if (/^(tel:|mailto:|https?:\/\/)/.test(value)) return true
+
+          return 'Wprowadź poprawny numer (cyfry), lub link zaczynający się od tel:, mailto:, https://'
+        }),
     },
     {
       name: 'title',

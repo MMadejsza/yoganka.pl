@@ -66,18 +66,6 @@ export default {
       type: 'image',
       options: {hotspot: true},
     },
-    {
-      name: 'gallery',
-      title: 'Galeria zdjęć',
-      type: 'array',
-      of: [{type: 'image', options: {hotspot: true}}],
-    },
-    {
-      name: 'pastGallery',
-      title: 'Jak było - galeria zdjęć',
-      type: 'array',
-      of: [{type: 'image', options: {hotspot: true}}],
-    },
 
     // --- Front (kafelek)
     {
@@ -137,6 +125,12 @@ export default {
           type: 'string',
           initialValue: (document) => document.front?.title || '',
           validation: (Rule) => Rule.required(),
+        },
+        {
+          name: 'gallery',
+          title: 'Galeria zdjęć',
+          type: 'array',
+          of: [{type: 'image', options: {hotspot: true}}],
         },
         {
           name: 'glanceTitle',
@@ -203,12 +197,6 @@ export default {
                   {title: 'Dodatkowo płatne', value: 'excluded'},
                 ],
               },
-            },
-            {
-              name: 'title',
-              title: 'Nagłówek konkretnego programu',
-              type: 'string',
-              validation: (Rule) => Rule.max(singleLine.maxLength).error(singleLine.errorMsg),
             },
             {
               name: 'list',
