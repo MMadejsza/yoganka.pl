@@ -8,12 +8,6 @@ export default {
   type: 'document',
   fields: [
     {
-      name: 'name',
-      title: 'Nazwa wydarzenia',
-      type: 'string',
-      validation: (Rule) => Rule.required(),
-    },
-    {
       name: 'type',
       title: 'Typ',
       type: 'string',
@@ -200,4 +194,11 @@ export default {
       ],
     },
   ],
+  preview: {
+    select: {
+      title: `front.title`,
+      subtitle: 'front.location',
+      media: 'mainImage',
+    },
+  },
 }

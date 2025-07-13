@@ -170,4 +170,10 @@ export default {
       ],
     },
   ],
+  preview: {
+    select: {
+      title: `front.title`,
+      media: 'mainImage',
+    },
+  },
 }

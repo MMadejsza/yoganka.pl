@@ -4,15 +4,18 @@ import classType from './classType'
 
 import footerSocialType from './Footer/socialType'
 import footerBusinessDataType from './Footer/businessDataType'
-import reviewType from './Home/reviewType'
-import partnerType from './Home/partnerType'
-import certificateType from './Home/certificateType'
+import HomeIntro from './Home/introType'
+import HomeAbout from './Home/aboutType'
+import HomeOfferSection from './Home/offerSectionType'
+import HomeReviewType from './Home/reviewsSectionType'
+import HomePartnerType from './Home/partnerType'
+import HomeCertificateType from './Home/certificateType'
 import campBenefitsType from './Camps/campBenefitsType'
-import offerSectionType from './B2B/offerSectionType'
-import offerTypesSectionType from './B2B/offerTypesSectionType'
-import benefitsList from './B2B/benefitsList'
-import priceListAndCooperation from './B2B/priceListAndCooperation'
-import intro from './B2B/intro'
+import B2BOfferSectionType from './B2B/offerSectionType'
+import B2BOfferTypesSectionType from './B2B/offerTypesSectionType'
+import B2BBenefitsList from './B2B/benefitsList'
+import B2BPriceListAndCooperation from './B2B/priceListAndCooperation'
+import B2BIntro from './B2B/intro'
 
 export const schemaTypes = [
   campType,
@@ -20,13 +23,16 @@ export const schemaTypes = [
   classType,
   footerBusinessDataType,
   footerSocialType,
-  reviewType,
-  partnerType,
-  certificateType,
+  HomeIntro,
+  HomeAbout,
+  HomeOfferSection,
+  HomeReviewType,
+  HomeCertificateType,
+  HomePartnerType,
   campBenefitsType,
-  offerSectionType,
-  offerTypesSectionType,
-  benefitsList,
-  priceListAndCooperation,
-  intro,
+  B2BIntro,
+  B2BOfferSectionType,
+  B2BOfferTypesSectionType,
+  B2BBenefitsList,
+  B2BPriceListAndCooperation,
 ]
