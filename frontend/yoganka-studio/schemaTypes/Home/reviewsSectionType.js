@@ -1,5 +1,5 @@
-// schemas/ReviewType.js
-import {singleLine, doubleLine} from '../../utils/validations'
+// schemas/reviewsSectionType.js
+import {singleLine, urlMaxLength} from '../../utils/validations'
 
 export default {
   name: 'review',
@@ -32,17 +32,26 @@ export default {
               name: 'productName',
               title: 'Typ produktu',
               type: 'string',
-              description: 'Dla czego jest ta recenzja',
+              description: 'Czego dotyczy recenzja',
               options: {
                 list: [
                   {title: 'Zajęcia', value: 'Zajęcia'},
                   {title: 'Wyjazdy', value: 'Wyjazdy'},
-                  {title: 'Zajęcia dla firm', value: 'Zajęcia dla firm'},
+                  {title: 'Wydarzenia', value: 'Wydarzenia'},
+                  {title: 'Zajęcia dla firm', value: 'Yoga dla firm'},
                   {title: 'Yoga & Sound', value: 'Yoga & Sound'},
                   {title: 'Ogólna', value: 'Ogólna'},
                 ],
               },
               validation: (Rule) => Rule.required().error('Wybierz typ produktu'),
+            },
+            {
+              name: 'review',
+              title: 'Treść recenzji',
+              type: 'text',
+              rows: 5,
+              description: 'Dłuższy tekst – proszę wklejać bez limitu znaków',
+              validation: (Rule) => Rule.required().error('Recenzja nie może być pusta'),
             },
             {
               name: 'link',
@@ -55,15 +64,13 @@ export default {
                   scheme: ['http', 'https'],
                 }),
             },
-            {
-              name: 'review',
-              title: 'Treść recenzji',
-              type: 'text',
-              rows: 5,
-              description: 'Dłuższy tekst – proszę wklejać bez limitu znaków',
-              validation: (Rule) => Rule.required().error('Recenzja nie może być pusta'),
-            },
           ],
+          preview: {
+            select: {
+              title: 'name',
+              subtitle: 'productName',
+            },
+          },
         },
       ],
     },
@@ -71,8 +78,6 @@ export default {
   preview: {
     select: {
       title: 'sectionTitle',
-      subtitle: 'productName',
-      media: 'photo',
     },
   },
 }

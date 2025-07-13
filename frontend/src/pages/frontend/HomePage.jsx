@@ -13,6 +13,10 @@ function HomePage() {
   const mediaQuery = window.matchMedia('(max-width: 1024px)');
   const isMobile = mediaQuery.matches;
 
+  const { data: ABOUT_SECTION_DATA, isLoading: aboutLoading } = useQuery({
+    queryKey: ['aboutData'],
+    queryFn: () => client.fetch(`*[_type == "about"]`),
+  });
   const { data: CAMPS_DATA, isLoading: campsLoading } = useQuery({
     queryKey: ['campsData'],
     queryFn: () => client.fetch(`*[_type == "camp"]`),
@@ -63,7 +67,7 @@ function HomePage() {
         id: 'wydarzenia',
         header: `Wydarzenia`,
         data: events,
-        limit: 3,
+        // limit: 3,
         moreLink: '/wydarzenia',
         specifier: 'events',
       },

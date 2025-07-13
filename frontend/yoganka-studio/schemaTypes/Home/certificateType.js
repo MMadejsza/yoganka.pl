@@ -42,13 +42,6 @@ export default {
               title: 'Czas trwania',
               type: 'string',
               description: 'Np. „200h”, „25h”; zostaw puste jeśli brak informacji',
-              validation: (Rule) =>
-                Rule.required()
-                  .max(singleLine.maxLength)
-                  .custom((val) => {
-                    if (!val) return true
-                    return /^\d+h$/.test(val) || 'Format: liczba zakończona literą „h”'
-                  }),
             },
             {
               name: 'themes',

@@ -1,14 +1,25 @@
-import { REVIEWS_DATA } from '../../../DATA/REVIEWS_DATA.js';
-import Section from '../Section.jsx';
+import { useQuery } from '@tanstack/react-query';
+import { client } from '../../../utils/sanityClient.js';
+import Loader from '../../common/Loader.jsx';
+import Section from '../../frontend/Section.jsx';
 import GlideContainer from '../glide/GlideContainer.jsx';
 
-function CampsReviewsSection({ placement }) {
+function ReviewsSection({ placement }) {
   const leadingClass = 'reviews';
+
+  const { data: REVIEWS_SECTION_DATA, isLoading: reviewsLoading } = useQuery({
+    queryKey: ['reviewData'],
+    queryFn: () => client.fetch(`*[_type == "review"]`),
+  });
+
+  if (reviewsLoading) {
+    return <Loader label={'Ładowanie'} />;
+  }
   return (
     <>
       <Section
         classy={leadingClass}
-        header='Opinie uczestników'
+        header={REVIEWS_SECTION_DATA[0].sectionTitle}
         modifier={placement}
       >
         <GlideContainer
@@ -28,7 +39,7 @@ function CampsReviewsSection({ placement }) {
             1024: { perView: 1 },
           }}
           type='review'
-          slides={REVIEWS_DATA}
+          slides={REVIEWS_SECTION_DATA[0].list}
           leadingClass={leadingClass}
         />
       </Section>
@@ -36,4 +47,4 @@ function CampsReviewsSection({ placement }) {
   );
 }
 
-export default CampsReviewsSection;
+export default ReviewsSection;

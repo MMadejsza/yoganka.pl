@@ -97,7 +97,7 @@ function Modal({ tile, onClose, isVisible, isClosing }) {
       {modal.program?.list?.length > 0 && (
         <ModalList
           extraClass='event'
-          listType={modal.program.listType}
+          listType={modal.program?.listType}
           data={modal.program}
         />
       )}
