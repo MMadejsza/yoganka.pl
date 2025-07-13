@@ -42,10 +42,10 @@ function Tile({ data, today, clickable }) {
   const handleCloseModal = closeModal;
 
   // Img paths definition
-  const imgPaths = [
-    { path: `${data.imgPath}/320_${data.fileName}_0.jpg`, size: '320w' },
-    { path: `${data.imgPath}/480_${data.fileName}_0.jpg`, size: '600w' },
-  ];
+  // const imgPaths = [
+  //   { path: `${data.imgPath}/320_${data.fileName}_0.jpg`, size: '320w' },
+  //   { path: `${data.imgPath}/480_${data.fileName}_0.jpg`, size: '600w' },
+  // ];
   const renderSingleImg = (
     // <ImgDynamic
     //   classy={`tile__img`}
