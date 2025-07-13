@@ -1,3 +1,5 @@
+import {singleLine, doubleLine} from './validations'
+
 export const defaultBtnsSet = {
   type: 'object',
   fields: [
@@ -122,6 +124,43 @@ export const defaultBtnsSet = {
           // Dla pozostałych akcji (np. grafik) nie walidujemy
           return true
         }),
+    },
+  ],
+}
+
+export const turningTiles = {
+  name: 'list',
+  title: 'Typy oferty (kafelki obrotowe)',
+  type: 'array',
+  of: [
+    {
+      type: 'object',
+      title: 'Typ oferty',
+      fields: [
+        {
+          name: 'symbol',
+          title: 'Ikona (material symbol)',
+          type: 'string',
+          description: `Nazwa ikony Material Symbols, np. "self_improvement", "park" dostępne na https://fonts.google.com/icons`,
+          validation: (Rule) => Rule.required().error(`Wybierz symbol`),
+        },
+        {
+          name: 'title',
+          title: 'Nagłówek',
+          type: 'string',
+          description: `Krótki tytuł benefit'u, max. ${doubleLine.maxLength} znaków`,
+          validation: (Rule) =>
+            Rule.required().max(doubleLine.maxLength).error(doubleLine.errorMsg),
+        },
+        {
+          name: `text`,
+          title: `Opis`,
+          type: `text`,
+          description: `Szczegółowy opis na tyle (po obrocie)`,
+          rows: 4,
+          validation: (Rule) => Rule.required().max(265).warning(`Za długi opis. maks 265 znaków.`),
+        },
+      ],
     },
   ],
 }

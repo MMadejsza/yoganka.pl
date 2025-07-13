@@ -1,6 +1,7 @@
 // schemas/offerTypesSectionType.js
 
 import {singleLine, doubleLine} from '../../utils/validations'
+import {turningTiles} from '../../utils/elements'
 
 export default {
   name: `b2bOfferTypes`,
@@ -14,43 +15,7 @@ export default {
       validation: (Rule) => Rule.max(singleLine.maxLength).error(singleLine.errorMsg),
       initialValue: (document) => document.name || '',
     },
-    {
-      name: 'list',
-      title: 'Typy oferty (kafelki obrotowe)',
-      type: 'array',
-      of: [
-        {
-          type: 'object',
-          title: 'Typ oferty',
-          fields: [
-            {
-              name: 'symbol',
-              title: 'Ikona (material symbol)',
-              type: 'string',
-              description: `Nazwa ikony Material Symbols, np. "self_improvement", "park" dostępne na https://fonts.google.com/icons`,
-              validation: (Rule) => Rule.required().error(`Wybierz symbol`),
-            },
-            {
-              name: 'title',
-              title: 'Nagłówek',
-              type: 'string',
-              description: `Krótki tytuł benefit'u, max. ${doubleLine.maxLength} znaków`,
-              validation: (Rule) =>
-                Rule.required().max(doubleLine.maxLength).error(doubleLine.errorMsg),
-            },
-            {
-              name: `text`,
-              title: `Opis`,
-              type: `text`,
-              description: `Szczegółowy opis na tyle (po obrocie)`,
-              rows: 4,
-              validation: (Rule) =>
-                Rule.required().max(265).warning(`Za długi opis. maks 265 znaków.`),
-            },
-          ],
-        },
-      ],
-    },
+    turningTiles,
   ],
   preview: {
     select: {
