@@ -1,17 +1,37 @@
+import { useQuery } from '@tanstack/react-query';
 import { Helmet } from 'react-helmet';
+import Loader from '../../components/common/Loader.jsx';
 import CampsBenefitsSection from '../../components/frontend/camps/CampsBenefitsSection.jsx';
-import CampsGalerySection from '../../components/frontend/camps/CampsGalerySection.jsx';
+// import CampsGalerySection from '../../components/frontend/camps/CampsGalerySection.jsx';
 import CampsIntoSection from '../../components/frontend/camps/CampsIntoSection.jsx';
 import ReviewsSection from '../../components/frontend/camps/ReviewsSection.jsx';
 import OfferSection from '../../components/frontend/OfferSection.jsx';
-import { CAMPS_DATA } from '../../DATA/CAMPS_DATA.js';
+import { client } from '../../utils/sanityClient.js';
 
-const products = [
-  { id: 'wyjazdy', header: `Wybierz swój wyjazd`, data: CAMPS_DATA, limit: 0 },
-];
 function CampsPage() {
-  // const mediaQuery = window.matchMedia('(max-width: 1025px)');
-  // const isMobile = mediaQuery.matches;
+  const { data: CAMPS_DATA, isLoading: campsLoading } = useQuery({
+    queryKey: ['campsData'],
+    queryFn: () => client.fetch(`*[_type == "camp"]`),
+  });
+
+  if (campsLoading) {
+    return <Loader label={'Ładowanie'} />;
+  }
+
+  let products = null;
+  const contentLoaded = CAMPS_DATA;
+  if (contentLoaded) {
+    console.log(CAMPS_DATA);
+    const camps = CAMPS_DATA.map(c => ({
+      ...c,
+      link: c.slug.current,
+      type: c._type,
+    }));
+
+    products = [
+      { id: 'wyjazdy', header: `Wybierz swój wyjazd`, data: camps, limit: 0 },
+    ];
+  }
   return (
     <>
       <Helmet>
@@ -40,9 +60,11 @@ function CampsPage() {
       </Helmet>
       <CampsIntoSection />
       <CampsBenefitsSection />
-      <OfferSection products={products} />
+      {contentLoaded && <OfferSection products={products} />}
       <ReviewsSection />
-      <CampsGalerySection camps={CAMPS_DATA} isMobile={true} />
+      {/* {contentLoaded && (
+        <CampsGalerySection camps={CAMPS_DATA} isMobile={true} />
+      )} */}
     </>
   );
 }

@@ -1,14 +1,17 @@
 function CampDay({ dayData }) {
-  const { day, ...schedule } = dayData;
+  console.log(dayData);
+  const { day, entries } = dayData;
   return (
     <>
-      <h4 className='modal__title--day'>{day}</h4>
+      <h4 className='modal__title--day'>
+        {day !== 'combo' ? day : dayData.comboLabel}
+      </h4>
       <ul className='modal__list'>
-        {Object.entries(schedule).map(([time, activity], index) => {
+        {entries.map((entry, index) => {
           return (
             <li key={index} className='modal__li'>
-              <div>{time}</div>
-              <div>{activity}</div>
+              <div>{entry.time}</div>
+              <div>{entry.activity}</div>
             </li>
           );
         })}

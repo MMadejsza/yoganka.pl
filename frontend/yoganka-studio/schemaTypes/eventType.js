@@ -1,6 +1,6 @@
 // schemas/EventType.js
 import {singleLine, doubleLine, tripleLine, urlMaxLength} from '../utils/validations'
-import {defaultBtnsSet} from '../utils/elements'
+import {defaultBtnsSet, defaultGlanceSet} from '../utils/elements'
 
 export default {
   name: 'event',
@@ -138,27 +138,7 @@ export default {
           type: 'string',
           validation: (Rule) => Rule.max(singleLine.maxLength).error(singleLine.errorMsg),
         },
-        {
-          name: 'glance',
-          title: 'Szybkie info (glance)',
-          type: 'object',
-          fields: [
-            {name: 'price', title: 'Cena', type: 'string'},
-            {name: 'area', title: 'Lokalizacja', type: 'string'},
-            {name: 'accommodation', title: 'Zakwaterowanie', type: 'string'},
-            {
-              name: 'capacity',
-              title: 'Maks. liczba osób w grupie',
-              type: 'number',
-              validation: (Rule) =>
-                Rule.custom((value) => {
-                  if (value === undefined || value === null) return true
-                  return value >= 1 || 'Podaj liczbę większą od 0'
-                }),
-            },
-            {name: 'travel', title: 'Transport', type: 'string'},
-          ],
-        },
+        defaultGlanceSet,
         {
           name: 'fullDescTitle',
           title: 'Nagłówek opisu',

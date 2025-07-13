@@ -18,7 +18,7 @@ function ModalList({ extraClass, listType, data }) {
     return icons[listType] || icons.included;
   };
 
-  const content = data.list.map((item, index) => {
+  const content = data.list?.map((item, index) => {
     // if simple list -> item == string otherwise list of objects from freeTime
     const activity = typeof item === 'string' ? item : item.activity;
     const iconClass =

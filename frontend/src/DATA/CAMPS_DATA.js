@@ -402,7 +402,7 @@ export const CAMPS_DATA = [
       },
 
       plan: {
-        title: `Poglądowe ZenNature  menu`,
+        title: `Poglądowe ZenNature menu`,
         schedule: [
           {
             day: 'Piątek:',

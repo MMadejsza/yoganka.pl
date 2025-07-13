@@ -1,35 +1,74 @@
+import { useQuery } from '@tanstack/react-query';
 import { Helmet } from 'react-helmet';
+import Loader from '../../components/common/Loader.jsx';
 import About from '../../components/frontend/About.jsx';
 import ReviewsSection from '../../components/frontend/camps/ReviewsSection.jsx';
 import Certificates from '../../components/frontend/Certificates.jsx';
 import HeaderMain from '../../components/frontend/HeaderMain.jsx';
 import OfferSection from '../../components/frontend/OfferSection.jsx';
 import Partners from '../../components/frontend/Partners.jsx';
-import { CAMPS_DATA } from '../../DATA/CAMPS_DATA.js';
-import { CLASSES_DATA } from '../../DATA/CLASSES_DATA.js';
-import { EVENTS_DATA } from '../../DATA/EVENTS_DATA.js';
+import { client } from '../../utils/sanityClient.js';
 
-const products = [
-  {
-    id: 'wyjazdy',
-    header: `Kobiece Wyjazdy z\u00a0Jogą`,
-    data: CAMPS_DATA,
-    limit: 2,
-    moreLink: '/wyjazdy',
-  },
-  { id: 'zajecia', header: `Zajęcia regularne`, data: CLASSES_DATA },
-  {
-    id: 'wydarzenia',
-    header: `Wydarzenia`,
-    data: EVENTS_DATA,
-    limit: 3,
-    moreLink: '/wydarzenia',
-    specifier: 'events',
-  },
-];
 function HomePage() {
   const mediaQuery = window.matchMedia('(max-width: 1024px)');
   const isMobile = mediaQuery.matches;
+
+  const { data: CAMPS_DATA, isLoading: campsLoading } = useQuery({
+    queryKey: ['campsData'],
+    queryFn: () => client.fetch(`*[_type == "camp"]`),
+  });
+  const { data: CLASSES_DATA, isLoading: classesLoading } = useQuery({
+    queryKey: ['classesData'],
+    queryFn: () => client.fetch(`*[_type == "class"]`),
+  });
+  const { data: EVENTS_DATA, isLoading: eventsLoading } = useQuery({
+    queryKey: ['eventsData'],
+    queryFn: () => client.fetch(`*[_type == "event"]`),
+  });
+
+  if (campsLoading || classesLoading || eventsLoading) {
+    return <Loader label={'Ładowanie'} />;
+  }
+
+  let products = null;
+  const contentLoaded = CAMPS_DATA && CLASSES_DATA && EVENTS_DATA;
+  if (contentLoaded) {
+    console.log(CAMPS_DATA);
+    const camps = CAMPS_DATA.map(c => ({
+      ...c,
+      link: c.slug.current,
+      type: c._type,
+    }));
+    const classes = CLASSES_DATA.map(c => ({
+      ...c,
+      link: c.slug.current,
+      type: c._type,
+    }));
+    const events = EVENTS_DATA.map(e => ({
+      ...e,
+      link: e.slug.current,
+      type: e._type,
+    }));
+
+    products = [
+      {
+        id: 'wyjazdy',
+        header: `Kobiece Wyjazdy z\u00a0Jogą`,
+        data: camps,
+        limit: 2,
+        moreLink: '/wyjazdy',
+      },
+      { id: 'zajecia', header: `Zajęcia regularne`, data: classes },
+      {
+        id: 'wydarzenia',
+        header: `Wydarzenia`,
+        data: events,
+        limit: 3,
+        moreLink: '/wydarzenia',
+        specifier: 'events',
+      },
+    ];
+  }
   return (
     <>
       <Helmet>
@@ -71,7 +110,7 @@ function HomePage() {
       </Helmet>
       {isMobile ? <HeaderMain /> : null}
       <About isMobile={isMobile} />
-      <OfferSection products={products} />
+      {contentLoaded && <OfferSection products={products} />}
       <ReviewsSection placement='homepage' />
       <Certificates />
       <Partners />

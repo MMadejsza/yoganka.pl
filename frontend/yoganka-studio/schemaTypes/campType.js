@@ -1,7 +1,7 @@
 // schemas/CampType.js
 // Sanity schema for Yoga Camps, reflecting CAMPS_DATA.js with Polish titles and predefined options
 import {singleLine, doubleLine, tripleLine, urlMaxLength} from '../utils/validations'
-import {defaultBtnsSet} from '../utils/elements'
+import {defaultBtnsSet, defaultGlanceSet} from '../utils/elements'
 
 export default {
   name: 'camp',
@@ -112,27 +112,7 @@ export default {
           type: 'string',
           validation: (Rule) => Rule.max(singleLine.maxLength).error(singleLine.errorMsg),
         },
-        {
-          name: 'glance',
-          title: 'Szybkie info (glance)',
-          type: 'object',
-          fields: [
-            {name: 'price', title: 'Cena', type: 'string'},
-            {name: 'area', title: 'Lokalizacja', type: 'string'},
-            {name: 'accommodation', title: 'Zakwaterowanie', type: 'string'},
-            {
-              name: 'capacity',
-              title: 'Maks. liczba osób w grupie',
-              type: 'number',
-              validation: (Rule) =>
-                Rule.custom((value) => {
-                  if (value === undefined || value === null) return true
-                  return value >= 1 || 'Podaj liczbę większą od 0'
-                }),
-            },
-            {name: 'travel', title: 'Transport', type: 'string'},
-          ],
-        },
+        defaultGlanceSet,
         {
           name: 'fullDescTitle',
           title: 'Tytuł opisu',
@@ -149,174 +129,228 @@ export default {
           validation: (Rule) => Rule.required(),
         },
         {
-          name: 'planTitle',
-          title: 'Nagłówek planu wyjazdu',
-          type: 'string',
-          description: 'Tytuł sekcji planu wyjazdu',
-          validation: (Rule) => Rule.max(doubleLine.maxLength).error(doubleLine.errorMsg),
-          initialValue: 'Slow menu',
-        },
-        {
           name: 'plan',
           title: 'Plan dnia',
-          type: 'array',
-          of: [
-            {
-              type: 'object',
-              title: 'Dzień',
-              fields: [
-                {
-                  name: 'day',
-                  title: 'Dzień tygodnia',
-                  type: 'string',
-                  options: {
-                    list: [
-                      {title: 'Poniedziałek', value: 'Poniedziałek:'},
-                      {title: 'Wtorek', value: 'Wtorek:'},
-                      {title: 'Środa', value: 'Środa:'},
-                      {title: 'Czwartek', value: 'Czwartek:'},
-                      {title: 'Piątek', value: 'Piątek:'},
-                      {title: 'Sobota', value: 'Sobota:'},
-                      {title: 'Niedziela', value: 'Niedziela:'},
-                      {title: 'Combo', value: 'combo'},
-                    ],
-                  },
-                  validation: (Rule) => Rule.required(),
-                },
-                {
-                  name: 'comboLabel',
-                  title: 'Zakres dni (np. Poniedziałek-Środa)',
-                  type: 'string',
-                  description: 'Wpisz nazwę kombinacji dni, np. „Poniedziałek–Środa”.',
-                  // pokaż to pole tylko jeśli day === 'combo'
-                  hidden: ({parent}) => parent.day !== 'combo',
-                  validation: (Rule) =>
-                    Rule.custom((value) => {
-                      // jeśli nie combo, OK
-                      if (!value && parent?.day === 'combo') {
-                        return 'Musisz podać zakres dni dla opcji Combo'
-                      }
-                      return true
-                    }),
-                },
-                {
-                  name: 'entries',
-                  title: 'Godziny i opis',
-                  type: 'array',
-                  of: [
-                    {
-                      type: 'object',
-                      fields: [
-                        {
-                          name: 'time',
-                          title: 'Godzina (np. 17:00) lub punktator np. "*"',
-                          type: 'string',
-                        },
-                        {name: 'desc', title: 'Opis aktywności', type: 'string'},
-                      ],
-                      preview: {
-                        select: {
-                          time: 'time',
-                          desc: 'desc',
-                        },
-                        prepare({time, desc}) {
-                          return {
-                            title: `${time || ''} ${desc || '(brak opisu)'}`,
-                          }
-                        },
-                      },
-                    },
-                  ],
-                },
-              ],
-              preview: {
-                select: {
-                  combo: 'comboLabel',
-                  day: 'day',
-                  content: 'entries',
-                },
-                prepare({combo, day, content}) {
-                  const title = combo || day
-
-                  const subtitle = Array.isArray(content) ? `Wpisów: ${content.length}` : ''
-
-                  return {
-                    title,
-                    subtitle,
-                  }
-                },
-              },
-            },
-          ],
-        },
-        {
-          name: 'summary',
-          title: 'Sekcja podsumowania - listy',
           type: 'object',
           fields: [
             {
-              name: 'includedTitle',
-              title: 'Nagłówek sekcji "W cenie"',
+              name: 'title',
+              title: 'Nagłówek planu',
               type: 'string',
-              validation: (Rule) => Rule.max(singleLine.maxLength).error(singleLine.errorMsg),
+              validation: (Rule) => Rule.max(doubleLine.maxLength).error(doubleLine.errorMsg),
+              initialValue: 'Slow menu:',
             },
             {
-              name: 'included',
-              title: 'Sekcja "W cenie" - elementy',
-              type: 'array',
-              of: [{type: 'string'}],
-            },
-            {
-              name: 'optionalTitle',
-              title: 'Nagłówek sekcji "Opcjonalnie płatne"',
-              type: 'string',
-              validation: (Rule) => Rule.max(singleLine.maxLength).error(singleLine.errorMsg),
-            },
-            {
-              name: 'optional',
-              title: 'Sekcja "Opcjonalnie płatne" - elementy',
-              type: 'array',
-              of: [{type: 'string'}],
-            },
-            {
-              name: 'freeTimeTitle',
-              title: 'Nagłówek sekcji "Czas wolny"',
-              type: 'string',
-              validation: (Rule) => Rule.max(singleLine.maxLength).error(singleLine.errorMsg),
-            },
-            {
-              name: 'freeTime',
-              title: 'Sekcja "Czas wolny" - aktywności',
+              name: 'schedule',
+              title: 'Dni i aktywności',
               type: 'array',
               of: [
                 {
                   type: 'object',
                   fields: [
                     {
-                      name: 'status',
-                      title: 'Status',
+                      name: 'day',
+                      title: 'Dzień tygodnia',
                       type: 'string',
                       options: {
                         list: [
-                          {title: 'W cenie', value: 'included'},
-                          {title: 'Opcjonalnie', value: 'optional'},
+                          {title: 'Poniedziałek', value: 'Poniedziałek:'},
+                          {title: 'Wtorek', value: 'Wtorek:'},
+                          {title: 'Środa', value: 'Środa:'},
+                          {title: 'Czwartek', value: 'Czwartek:'},
+                          {title: 'Piątek', value: 'Piątek:'},
+                          {title: 'Sobota', value: 'Sobota:'},
+                          {title: 'Niedziela', value: 'Niedziela:'},
+                          {title: 'Combo', value: 'combo'},
                         ],
                       },
+                      validation: (Rule) => Rule.required(),
                     },
-                    {name: 'activity', title: 'Aktywność', type: 'string'},
+                    {
+                      name: 'comboLabel',
+                      title: 'Zakres dni (np. Piątek-Niedziela)',
+                      type: 'string',
+                      hidden: ({parent}) => parent.day !== 'combo',
+                      validation: (Rule) =>
+                        Rule.custom((value) => {
+                          // jeśli nie combo, OK
+                          if (!value && parent?.day === 'combo') {
+                            return 'Musisz podać zakres dni dla opcji Combo'
+                          }
+                          return true
+                        }),
+                    },
+                    {
+                      name: 'entries',
+                      title: 'Godziny i opisy aktywności',
+                      type: 'array',
+                      of: [
+                        {
+                          type: 'object',
+                          fields: [
+                            {
+                              name: 'time',
+                              title: 'Godzina (np. 16:00)',
+                              type: 'string',
+                              validation: (Rule) => Rule.required(),
+                            },
+                            {
+                              name: 'activity',
+                              title: 'Opis aktywności',
+                              type: 'string',
+                              validation: (Rule) => Rule.required(),
+                            },
+                          ],
+                          preview: {
+                            select: {
+                              time: 'time',
+                              activity: 'activity',
+                            },
+                            prepare({time, activity}) {
+                              return {
+                                title: `${time} ${activity}`,
+                              }
+                            },
+                          },
+                        },
+                      ],
+                    },
                   ],
                   preview: {
                     select: {
-                      status: 'status',
-                      activity: 'activity',
+                      day: 'day',
+                      combo: 'comboLabel',
+                      entries: 'entries',
                     },
-                    prepare({status, activity}) {
-                      const plStatus = status === 'included' ? '✅' : '💰'
+                    prepare({day, combo, entries}) {
+                      const title = combo || day
+                      const subtitle = entries?.length
+                        ? `Aktywności: ${entries.length}`
+                        : 'Brak aktywności'
                       return {
-                        title: `${plStatus} ${activity || '(brak opisu)'}`,
+                        title,
+                        subtitle,
                       }
                     },
                   },
+                },
+              ],
+            },
+          ],
+        },
+        {
+          name: 'summary',
+          title: 'Sekcja podsumowania',
+          description: 'Różnią się tylko emotikonem',
+          type: 'object',
+          fields: [
+            {
+              name: 'included',
+              title: 'W cenie',
+              type: 'object',
+              fields: [
+                {
+                  name: 'title',
+                  title: 'Nagłówek',
+                  type: 'string',
+                  description: 'W cenie: (✔️)',
+                  initialValue: 'W cenie:',
+                },
+                {
+                  name: 'list',
+                  title: 'Lista elementów',
+                  type: 'array',
+                  of: [{type: 'string'}],
+                },
+              ],
+            },
+            {
+              name: 'excluded',
+              title: 'Dodatkowo płatne ',
+              type: 'object',
+              fields: [
+                {
+                  name: 'title',
+                  title: 'Nagłówek',
+                  type: 'string',
+                  description: 'Dodatkowo płatne: (👉)',
+                  initialValue: 'Dodatkowo płatne:',
+                },
+                {
+                  name: 'list',
+                  title: 'Lista elementów',
+                  type: 'array',
+                  of: [{type: 'string'}],
+                },
+              ],
+            },
+            {
+              name: 'optional',
+              title: 'Opcjonalne',
+              type: 'object',
+              fields: [
+                {
+                  name: 'title',
+                  title: 'Nagłówek',
+                  type: 'string',
+                  description: 'Poszerz swoje menu: (➕)',
+                  initialValue: 'Poszerz swoje menu:',
+                },
+                {
+                  name: 'list',
+                  title: 'Lista elementów',
+                  type: 'array',
+                  of: [{type: 'string'}],
+                },
+              ],
+            },
+            {
+              name: 'freeTime',
+              title: 'W czasie wolnym',
+              type: 'object',
+              fields: [
+                {
+                  name: 'title',
+                  title: 'Nagłówek',
+                  type: 'string',
+                  description: 'W czasie wolnym:',
+                  initialValue: 'W czasie wolnym:',
+                },
+                {
+                  name: 'list',
+                  title: 'Lista aktywności',
+                  type: 'array',
+                  of: [
+                    {
+                      type: 'object',
+                      fields: [
+                        {
+                          name: 'status',
+                          title: 'Status',
+                          type: 'string',
+                          options: {
+                            list: [
+                              {title: 'W cenie', value: 'free'},
+                              {title: 'Opcjonalnie', value: 'optional'},
+                            ],
+                          },
+                        },
+                        {name: 'activity', title: 'Aktywność', type: 'string'},
+                      ],
+                      preview: {
+                        select: {
+                          status: 'status',
+                          activity: 'activity',
+                        },
+                        prepare({status, activity}) {
+                          const icon = status === 'optional' ? '💰' : '✅'
+                          return {
+                            title: `${icon} ${activity || '(brak)'}`,
+                          }
+                        },
+                      },
+                    },
+                  ],
                 },
               ],
             },

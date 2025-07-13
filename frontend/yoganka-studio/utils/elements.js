@@ -44,11 +44,11 @@ export const defaultBtnsSet = {
       name: 'text',
       title: 'Tekst przycisku',
       type: 'string',
-      hidden: ({parent}) => parent.action !== 'external',
+      hidden: ({parent}) => !(parent.action === 'external' || parent.action === 'grafik'),
       validation: (Rule) =>
         Rule.custom((value, context) => {
-          if (context.parent.action === 'external') {
-            return value ? true : 'Wprowadź tekst przycisku dla linku zewnętrznego'
+          if (context.parent.action === 'external' || context.parent.action === 'grafik') {
+            return value ? true : 'Wprowadź tekst przycisku'
           }
           return true
         }),
@@ -148,6 +148,28 @@ export const defaultBtnsSet = {
       }
     },
   },
+}
+
+export const defaultGlanceSet = {
+  name: 'glance',
+  title: 'Szybkie info (glance)',
+  type: 'object',
+  fields: [
+    {name: 'price', title: 'Cena', type: 'string'},
+    {name: 'area', title: 'Lokalizacja', type: 'string'},
+    {name: 'accommodation', title: 'Zakwaterowanie', type: 'string'},
+    {
+      name: 'capacity',
+      title: 'Maks. liczba osób w grupie',
+      type: 'number',
+      validation: (Rule) =>
+        Rule.custom((value) => {
+          if (value === undefined || value === null) return true
+          return value >= 1 || 'Podaj liczbę większą od 0'
+        }),
+    },
+    {name: 'travel', title: 'Transport', type: 'string'},
+  ],
 }
 
 export const turningTiles = {

@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import SymbolOrIcon from '../common/SymbolOrIcon';
 
 function Buttons({ list }) {
+  const modifier = '';
   const btnsList = list.map((btn, index) => {
     const isIconOrSymbol = btn.icon || btn.symbol;
     let formattedLink;
@@ -25,6 +26,7 @@ function Buttons({ list }) {
         break;
       case 'grafik':
         internalLink = true;
+        btn.symbol = 'calendar_month';
         formattedLink = btn.link;
         break;
 
@@ -42,14 +44,14 @@ function Buttons({ list }) {
             window.scrollTo(0, 0);
           }}
           title={btn.title}
-          className={`tile__btn tile__btn--${modifier}`}
+          className={`tile__btn${
+            modifier ? ` tile__btn--${modifier}` : ''
+          } modal__btn`}
         >
-          {isIconOrSymbol ? (
-            <SymbolOrIcon
-              type={btn.icon ? 'ICON' : 'SYMBOL'}
-              specifier={btn.icon ?? btn.symbol}
-            />
-          ) : null}
+          <SymbolOrIcon
+            type={btn.icon ? 'ICON' : 'SYMBOL'}
+            specifier={btn.icon ?? btn.symbol}
+          />
           {btn.text}
         </Link>
       );
@@ -62,7 +64,9 @@ function Buttons({ list }) {
           target='_blank'
           href={formattedLink}
           title={btn.title}
-          className={`tile__btn modal__btn`}
+          className={`tile__btn${
+            modifier ? ` tile__btn--${modifier}` : ''
+          } modal__btn`}
         >
           <SymbolOrIcon
             type={btn.icon ? 'ICON' : 'SYMBOL'}

@@ -7,7 +7,8 @@ import GlideContainer from './glide/GlideContainer.jsx';
 import CampGlance from './ModalGlance.jsx';
 import ModalList from './ModalList.jsx';
 
-function Modal({ tile, singleImg, onClose, today, isVisible, isClosing }) {
+function Modal({ tile, singleImg, onClose, isVisible, isClosing }) {
+  console.log(`Modal tile`, tile);
   const { type, modal, gallerySize, galleryPath, fileName, extraClass } = tile;
   let isUpToDate =
     modal.title === 'Sup Yoga' ||
@@ -71,9 +72,10 @@ function Modal({ tile, singleImg, onClose, today, isVisible, isClosing }) {
 
   const renderSummaryLists = () => (
     <section className='modal__summary'>
-      {Object.entries(modal.summary).map(([listType, content], index) => (
-        <ModalList key={index} listType={listType} data={content} />
-      ))}
+      {Object.entries(modal.summary).map(([listType, content], index) => {
+        console.log(listType, content);
+        return <ModalList key={index} listType={listType} data={content} />;
+      })}
     </section>
   );
 
