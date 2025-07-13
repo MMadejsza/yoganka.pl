@@ -340,7 +340,7 @@ section.b2b-benefits.classes-page + section.offer {
     padding-bottom: 0;
     width: 100%;
 
-    @include flex($justify: center, $gap: 1rem);
+    @include flex($justify: center, $gap: 2rem);
     flex-flow: row wrap;
   }
 

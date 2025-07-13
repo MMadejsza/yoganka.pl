@@ -97,7 +97,7 @@
 
       @include flex(row, center, center);
       flex-wrap: wrap;
-      gap: 0 2rem;
+      gap: 2rem;
     }
     .modal__btn {
       margin-top: 2rem;
