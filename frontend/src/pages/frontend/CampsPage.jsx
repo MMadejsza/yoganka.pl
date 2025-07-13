@@ -9,6 +9,7 @@ import OfferSection from '../../components/frontend/OfferSection.jsx';
 import { client } from '../../utils/sanityClient.js';
 
 function CampsPage() {
+  let camps;
   const { data: CAMPS_DATA, isLoading: campsLoading } = useQuery({
     queryKey: ['campsData'],
     queryFn: () => client.fetch(`*[_type == "camp"]`),
@@ -22,7 +23,7 @@ function CampsPage() {
   const contentLoaded = CAMPS_DATA;
   if (contentLoaded) {
     // console.log(CAMPS_DATA);
-    const camps = CAMPS_DATA.map(c => ({
+    camps = CAMPS_DATA.map(c => ({
       ...c,
       link: c.slug.current,
       type: c._type,
@@ -62,9 +63,7 @@ function CampsPage() {
       <CampsBenefitsSection />
       {contentLoaded && <OfferSection products={products} />}
       <ReviewsSection />
-      {/* {contentLoaded && (
-        <CampsGalerySection camps={CAMPS_DATA} isMobile={true} />
-      )} */}
+      {/* {contentLoaded && <CampsGalerySection camps={camps} isMobile={true} />} */}
     </>
   );
 }

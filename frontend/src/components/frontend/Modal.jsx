@@ -12,8 +12,8 @@ function Modal({ tile, onClose, isVisible, isClosing }) {
   console.log(`Modal tile`, tile);
   const { type, modal, fileName } = tile;
   const gallery = modal.gallery;
-  const schedule = modal.plan.schedule;
-  const daysNumber = schedule.length;
+  const schedule = modal.plan?.schedule;
+  const daysNumber = schedule?.length;
   let isUpToDate =
     modal.title === 'Sup Yoga' ||
     new Date(tile.date).getTime() > new Date().getTime();
@@ -51,8 +51,14 @@ function Modal({ tile, onClose, isVisible, isClosing }) {
         type='photo'
         slides={gallery}
       />
-    ) : (
+    ) : gallery ? (
       <SanityImage image={gallery[0]} variant='gallery' className='tile__img' />
+    ) : (
+      <SanityImage
+        image={tile.mainImage}
+        variant='gallery'
+        className='tile__img'
+      />
     );
 
   const fullDescription = (
@@ -88,7 +94,7 @@ function Modal({ tile, onClose, isVisible, isClosing }) {
         </header>
       )}
 
-      {modal.program.list.length > 0 && (
+      {modal.program?.list?.length > 0 && (
         <ModalList
           extraClass='event'
           listType={modal.program.listType}

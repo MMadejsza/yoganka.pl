@@ -1,4 +1,4 @@
-import {singleLine, doubleLine} from './validations'
+import {doubleLine} from './validations'
 
 export const defaultBtnsSet = {
   type: 'object',
@@ -31,7 +31,7 @@ export const defaultBtnsSet = {
       hidden: ({parent}) => parent.action !== 'external',
       description: `Nazwa ikony Material Symbols, np. "self_improvement", "park" dostępne na https://fonts.google.com/icons`,
       validation: (Rule) => {
-        Rule.custom((value, context) => {
+        return Rule.custom((value, context) => {
           const parent = context?.parent
           if (parent.action === 'external' && !value) {
             return 'Wybierz symbol dla linku zewnętrznego'

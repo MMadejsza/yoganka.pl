@@ -155,13 +155,6 @@ export default {
           validation: (Rule) => Rule.required(),
         },
         {
-          name: 'programTitle',
-          title: 'Nagłówek sekcji programu',
-          type: 'string',
-          description: 'Tytuł sekcji programu',
-          validation: (Rule) => Rule.max(singleLine.maxLength).error(doubleLine.errorMsg),
-        },
-        {
           name: 'program',
           title: 'Program (lista)',
           type: 'object',
@@ -177,6 +170,13 @@ export default {
                   {title: 'Dodatkowo płatne', value: 'excluded'},
                 ],
               },
+            },
+            {
+              name: 'title',
+              title: 'Nagłówek sekcji programu',
+              type: 'string',
+              description: 'Tytuł sekcji programu',
+              validation: (Rule) => Rule.max(singleLine.maxLength).error(doubleLine.errorMsg),
             },
             {
               name: 'list',
