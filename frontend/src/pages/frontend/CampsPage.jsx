@@ -21,7 +21,7 @@ function CampsPage() {
   let products = null;
   const contentLoaded = CAMPS_DATA;
   if (contentLoaded) {
-    console.log(CAMPS_DATA);
+    // console.log(CAMPS_DATA);
     const camps = CAMPS_DATA.map(c => ({
       ...c,
       link: c.slug.current,

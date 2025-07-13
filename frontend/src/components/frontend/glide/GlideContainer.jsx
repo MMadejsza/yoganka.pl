@@ -15,13 +15,7 @@ function GlideContainer({
   type,
 }) {
   const glideRef = useRef(null);
-  const totalPhotosNumber = slides => {
-    let counter = 0;
-    slides.forEach(camp => {
-      counter += camp.pastGallerySize ?? 0;
-    });
-    return counter;
-  };
+
   useEffect(() => {
     // double checking if component is rendered
     if (glideRef.current) {
@@ -64,8 +58,8 @@ function GlideContainer({
         <SlideComponent key={index} slideData={slide} />
       ));
     } else if (SlideComponent && isPhoto) {
-      return Array.from({ length: slides.size }).map((_, index) => (
-        <SlideComponent key={index} photoNo={index + 1} slideData={slides} />
+      return slides.map((slide, index) => (
+        <SlideComponent key={index} slideData={slide} />
       ));
     } else {
       return slides.map((partner, index) => (
@@ -86,14 +80,7 @@ function GlideContainer({
     }
   };
   const renderBullets = type => {
-    const counter =
-      type == 'allPhotos'
-        ? totalPhotosNumber(slides)
-        : ['tile', 'review', 'partner'].includes(type)
-        ? slides.length
-        : slides.size;
-
-    return Array.from({ length: counter }).map((_, index) => (
+    return Array.from({ length: slides.length }).map((_, index) => (
       <button
         key={index}
         className='glide__bullet'

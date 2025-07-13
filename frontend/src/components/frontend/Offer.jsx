@@ -3,7 +3,7 @@ import { campsSort, classesSort, eventsSort } from '../../utils/sorting.js';
 import Tile from './Tile.jsx';
 
 function Offer({ id, specifier, header, data, today, limit, moreLink }) {
-  console.log('Offer data', data);
+  // console.log('Offer data', data);
 
   let classy = 'offer-type';
   const modifier = specifier ? `offer-type--${specifier}` : '';

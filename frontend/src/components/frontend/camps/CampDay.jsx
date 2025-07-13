@@ -1,5 +1,5 @@
 function CampDay({ dayData }) {
-  console.log(dayData);
+  // console.log(dayData);
   const { day, entries } = dayData;
   return (
     <>

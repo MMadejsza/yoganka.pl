@@ -54,7 +54,7 @@ export default {
           title: 'Tytuł',
           type: 'string',
           description: `Używaj twardych spacji zamiast zwykłych, żeby tekst się nie łamał nieoczekiwanie.
-            Windows: przytrzymaj Alt i na klawiaturze numerycznej wpisz 0160, puść Alt → wstawi się spacja nierozdzielająca (NBSP).
+            Windows: kopiuj spację z między a i b - > a b.
             macOS: naciśnij Option + Spacja → wstawi się NBSP.`,
           initialValue: (document) => document.name || '',
           validation: (Rule) =>
@@ -77,7 +77,7 @@ export default {
           title: 'Opis skrócony',
           type: 'text',
           description: `Używaj twardych spacji (Unicode U+00A0) zamiast zwykłych spacji, żeby tekst się nie łamał.
-            Windows: przytrzymaj Alt i na klawiaturze numerycznej wpisz 0160, puść Alt → wstawi się spacja nierozdzielająca (NBSP).
+            Windows: Windows: kopiuj spację z między a i b - > a b.
             macOS: naciśnij Option + Spacja → wstawi się NBSP.`,
         },
         {
@@ -124,7 +124,7 @@ export default {
           type: 'text',
           description: `Pełny - nie skrócony.
           Używaj twardych spacji (Unicode U+00A0) zamiast zwykłych spacji, żeby tekst się nie łamał.
-            Windows: przytrzymaj Alt i na klawiaturze numerycznej wpisz 0160, puść Alt → wstawi się spacja nierozdzielająca (NBSP).
+             Windows: Windows: kopiuj spację z między a i b - > a b.
             macOS: naciśnij Option + Spacja → wstawi się NBSP.`,
           validation: (Rule) => Rule.required(),
         },

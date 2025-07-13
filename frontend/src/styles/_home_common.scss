@@ -62,7 +62,8 @@ img {
   max-width: 100%;
 }
 picture {
-  display: 'block';
+  display: 'grid';
+  align-content: center;
   width: '100%';
   height: 'auto';
   max-width: 80%;

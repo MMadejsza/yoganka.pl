@@ -1,15 +1,19 @@
 import { createPortal } from 'react-dom';
 import { Helmet } from 'react-helmet';
 import SymbolOrIcon from '../common/SymbolOrIcon';
+import SanityImage from '../frontend/imgsRelated/SanityImage.jsx';
 import Buttons from './Buttons.jsx';
 import CampDay from './camps/CampDay.jsx';
 import GlideContainer from './glide/GlideContainer.jsx';
 import CampGlance from './ModalGlance.jsx';
 import ModalList from './ModalList.jsx';
 
-function Modal({ tile, singleImg, onClose, isVisible, isClosing }) {
+function Modal({ tile, onClose, isVisible, isClosing }) {
   console.log(`Modal tile`, tile);
-  const { type, modal, gallerySize, galleryPath, fileName, extraClass } = tile;
+  const { type, modal, fileName } = tile;
+  const gallery = modal.gallery;
+  const schedule = modal.plan.schedule;
+  const daysNumber = schedule.length;
   let isUpToDate =
     modal.title === 'Sup Yoga' ||
     new Date(tile.date).getTime() > new Date().getTime();
@@ -27,37 +31,35 @@ function Modal({ tile, singleImg, onClose, isVisible, isClosing }) {
 
   // Function rendering lists based on its structure in the DATA folder (summary:{included:{[...]}, [...]})
 
-  const galleryContent = gallerySize ? (
-    // If has gallery - not single img
-    <GlideContainer
-      placement={'comp'}
-      glideConfig={{
-        type: 'carousel',
-        focusAt: 'center',
-        perView: 2,
-        gap: 20,
-        animationDuration: 800,
-      }}
-      glideBreakpoints={{
-        // <=
-        1025: { perView: 1 },
-      }}
-      type='photo'
-      slides={{
-        galleryPath: galleryPath,
-        fileName: fileName,
-        size: gallerySize,
-      }}
-    />
-  ) : (
-    singleImg
-  );
+  console.log('gallery', gallery);
+  const galleryContent =
+    gallery && Array.isArray(gallery) && gallery.length > 1 ? (
+      // If has gallery - not single img
+      <GlideContainer
+        placement={'comp'}
+        glideConfig={{
+          type: 'carousel',
+          focusAt: 'center',
+          perView: 1,
+          gap: 20,
+          animationDuration: 800,
+        }}
+        glideBreakpoints={{
+          // <=
+          1025: { perView: 1 },
+        }}
+        type='photo'
+        slides={gallery}
+      />
+    ) : (
+      <SanityImage image={gallery[0]} variant='gallery' className='tile__img' />
+    );
 
   const fullDescription = (
     <section
       className={`modal__full-desc--${type} ${dynamicClass(
         'modal__full-desc',
-        extraClass
+        `${daysNumber > 3 ? 'long' : ''}`
       )} modal__full-desc--long-text`}
     >
       {modal?.fullDescTitle && (
@@ -73,7 +75,6 @@ function Modal({ tile, singleImg, onClose, isVisible, isClosing }) {
   const renderSummaryLists = () => (
     <section className='modal__summary'>
       {Object.entries(modal.summary).map(([listType, content], index) => {
-        console.log(listType, content);
         return <ModalList key={index} listType={listType} data={content} />;
       })}
     </section>
@@ -103,11 +104,16 @@ function Modal({ tile, singleImg, onClose, isVisible, isClosing }) {
         <CampGlance glance={modal.glance} />
       </header>
 
-      {modal.plan.schedule.length > 0 && (
-        <section className={dynamicClass('modal__desc', extraClass)}>
+      {daysNumber > 0 && (
+        <section
+          className={dynamicClass(
+            'modal__desc',
+            `${daysNumber > 3 ? 'long' : ''}`
+          )}
+        >
           <h3 className='modal__title'>{modal.plan.title}</h3>
 
-          {modal.plan.schedule.map((day, index) => (
+          {schedule.map((day, index) => (
             <CampDay key={index} dayData={day} />
           ))}
         </section>

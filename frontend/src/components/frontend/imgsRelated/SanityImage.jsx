@@ -1,6 +1,8 @@
 import { urlFor } from '../../../utils/sanityClient';
 const frontSizes = [320, 480];
-const gallerySizes = [480, 768, 1024, 1400, 1600];
+const galleryWidths = [480, 768, 1024, 1200];
+const galleryHeights = [360, 576, 768, 768];
+const imgQuality = 70;
 
 function SanityImage({ image, variant, alt = '', className = '' }) {
   if (!image || !image.asset?._ref) return null;
@@ -18,6 +20,7 @@ function SanityImage({ image, variant, alt = '', className = '' }) {
             .height(size)
             .fit('crop')
             .format('webp')
+            .quality(imgQuality)
             .url()} ${size}w`
       )
       .join(', ');
@@ -30,6 +33,7 @@ function SanityImage({ image, variant, alt = '', className = '' }) {
             .height(size)
             .fit('crop')
             .format('jpg')
+            .quality(imgQuality)
             .url()} ${size}w`
       )
       .join(', ');
@@ -46,9 +50,10 @@ function SanityImage({ image, variant, alt = '', className = '' }) {
             .height(frontSizes[0])
             .fit('crop')
             .auto('format')
+            .quality(imgQuality)
             .url()}
           srcSet={jpgSrcSet}
-          sizes={`${frontSizes[0]}px, ${frontSizes[1]}px`}
+          sizes={givenSizes}
           alt={alt || filename}
           title={filename}
           className={className}
@@ -57,22 +62,52 @@ function SanityImage({ image, variant, alt = '', className = '' }) {
       </picture>
     );
   } else {
-    const srcSet = gallerySizes
-      .map(w => `${builder.width(w).fit('max').auto('format').url()} ${w}w`)
+    const galleryBuilder = urlFor(image).ignoreImageParams();
+    const jpgSrcSet = galleryWidths
+      .map((w, i) => {
+        const h = galleryHeights[i] ?? w;
+        return `${galleryBuilder
+          .fit('max')
+          .width(w)
+          .height(h)
+          .auto('format')
+          .quality(imgQuality)
+          .url()} ${w}w`;
+      })
       .join(', ');
-    const webpSrc = builder
-      .width(gallerySizes[gallerySizes.length - 1])
-      .fit('max')
-      .format('webp')
-      .url();
+    const webpSrc = galleryWidths
+      .map((w, i) => {
+        const h = galleryHeights[i] ?? w;
+        return `${galleryBuilder
+          .fit('max')
+          .width(w)
+          .height(h)
+          .format('webp')
+          .quality(imgQuality)
+          .url()} ${w}w`;
+      })
+      .join(', ');
+
+    const maxWidth = Math.max(...galleryWidths);
+    const sizesAttr = galleryWidths
+      .map((w, i) => `(max-width:${galleryWidths[i]}px) ${galleryWidths[i]}px`)
+      .concat(`${maxWidth}px`)
+      .join(', ');
 
     return (
       <picture className={className}>
-        <source type='image/webp' srcSet={webpSrc} sizes='100vw' />
+        <source type='image/webp' srcSet={webpSrc} sizes={sizesAttr} />
+        <source type='image/jpeg' srcSet={jpgSrcSet} sizes={sizesAttr} />
         <img
-          src={builder.width(gallerySizes[0]).fit('max').auto('format').url()}
-          srcSet={srcSet}
-          sizes='(max-width:480px) 480px, (max-width:768px) 768px, (max-width:1024px) 1024px, (max-width:1400px) 1400px, 1600px'
+          src={galleryBuilder
+            .fit('max')
+            .width(galleryWidths[0])
+            .height(galleryHeights[0])
+            .auto('format')
+            .quality(imgQuality)
+            .url()}
+          srcSet={jpgSrcSet}
+          sizes={sizesAttr}
           alt={alt || filename}
           title={filename}
           loading='lazy'
