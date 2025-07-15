@@ -61,6 +61,11 @@ const sideNavTabs = [
     symbol: 'gavel',
     link: '/admin-console/show-all-tos-versions',
   },
+  {
+    name: `CMS`,
+    symbol: 'language',
+    externalLink: 'https://yogankacms.sanity.studio/',
+  },
   // {
   //   name: `Faktury`,
   //   symbol: 'receipt_long',
