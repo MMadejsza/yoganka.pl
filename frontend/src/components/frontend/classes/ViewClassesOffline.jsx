@@ -1,6 +1,5 @@
 // import { Helmet } from 'react-helmet';
 // import PriceList from '../../../components/frontend/b2b/PriceList.jsx';
-// import { OFFLINE_BTNS } from '../../../DATA/CLASSES_DATA.js';
 
 // function ViewClassesOffline() {
 //   return (

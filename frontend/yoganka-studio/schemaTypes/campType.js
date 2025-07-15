@@ -1,5 +1,4 @@
 // schemas/CampType.js
-// Sanity schema for Yoga Camps, reflecting CAMPS_DATA.js with Polish titles and predefined options
 import {singleLine, doubleLine, tripleLine, urlMaxLength} from '../utils/validations'
 import {defaultBtnsSet, defaultGlanceSet} from '../utils/elements'
 

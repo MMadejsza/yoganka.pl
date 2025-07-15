@@ -2,11 +2,7 @@
 // import Benefits from '../../../components/frontend/b2b/B2BBenefits.jsx';
 // import PriceList from '../../../components/frontend/b2b/PriceList.jsx';
 // import OfferSection from '../../../components/frontend/OfferSection.jsx';
-// import {
-//   BENEFITS_TILES,
-//   BTNS,
-//   PRICE_LIST,
-// } from '../../../DATA/CLASSES_DATA.js';
+
 // import B2BOptionsSection from '../b2b/B2BBenefitsSection.jsx';
 // import Section from '../Section.jsx';
 

@@ -29,7 +29,7 @@ function Modal({ tile, onClose, isVisible, isClosing }) {
   const dynamicClass = (baseClass, extraClass) =>
     `${baseClass} ${extraClass ? `${baseClass}--${extraClass}` : ''}`;
 
-  // Function rendering lists based on its structure in the DATA folder (summary:{included:{[...]}, [...]})
+  // Function rendering lists based on its structure in the data folder (summary:{included:{[...]}, [...]})
 
   console.log('gallery', gallery);
   const galleryContent =
