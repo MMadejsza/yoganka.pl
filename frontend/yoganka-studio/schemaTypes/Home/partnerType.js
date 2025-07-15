@@ -30,6 +30,14 @@ export default {
                 Rule.required().max(100).error('Podaj nazwę partnera (max 100 znaków)'),
             },
             {
+              name: 'alt',
+              title: 'Tekst alternatywny zdjęcia (title)',
+              type: 'string',
+              description: 'Krótki opis logo, np. „Yoga Flow Logo”',
+              initialValue: `Logo`,
+              validation: (Rule) => Rule.required().error('Podaj tekst alt dla obrazka'),
+            },
+            {
               name: 'link',
               title: 'Link do partnera',
               type: 'url',
@@ -40,24 +48,21 @@ export default {
                   .error('Podaj poprawny URL (http[s]://…)'),
             },
             {
-              name: 'logoImage',
+              name: 'logo',
               title: 'Logo partnera',
               type: 'image',
               options: {hotspot: true},
               description: 'Upload pliku PNG/SVG/JPG - najlepiej PNG lub SVG',
               validation: (Rule) => Rule.required().error('Logo jest wymagane'),
             },
-            {
-              name: 'alt',
-              title: 'Tekst alternatywny (alt)',
-              type: 'string',
-              description: 'Krótki opis logo, np. „Yoga Flow Logo”',
-              initialValue: (document) => {
-                return document.name ? `${document.name} Logo` : ''
-              },
-              validation: (Rule) => Rule.required().error('Podaj tekst alt dla obrazka'),
-            },
           ],
+          preview: {
+            select: {
+              title: 'name',
+              subtitle: 'link',
+              media: 'logoImage',
+            },
+          },
         },
       ],
     },
@@ -66,8 +71,6 @@ export default {
   preview: {
     select: {
       title: 'sectionTitle',
-      media: 'logoImage',
-      subtitle: 'link',
     },
   },
 }

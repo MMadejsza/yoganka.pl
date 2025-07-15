@@ -1,10 +1,10 @@
-// schemas/priceListAndCooperation.js
+// schemas/eventsIntro.js
 
 import {defaultIntroSet} from '../../utils/elements'
 
 export default {
-  name: `b2bIntro`,
-  title: `B2B - Intro`,
+  name: `scheduleIntro`,
+  title: `GRAFIK - Intro`,
   type: `document`,
   fields: defaultIntroSet,
   preview: {

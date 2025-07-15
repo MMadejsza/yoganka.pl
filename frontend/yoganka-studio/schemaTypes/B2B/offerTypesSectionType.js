@@ -1,7 +1,7 @@
 // schemas/offerTypesSectionType.js
 
 import {singleLine, doubleLine} from '../../utils/validations'
-import {turningTiles} from '../../utils/elements'
+import {defaultTurningTilesSet} from '../../utils/elements'
 
 export default {
   name: `b2bOfferTypes`,
@@ -15,7 +15,7 @@ export default {
       validation: (Rule) => Rule.max(singleLine.maxLength).error(singleLine.errorMsg),
       initialValue: (document) => document.name || '',
     },
-    turningTiles,
+    defaultTurningTilesSet,
   ],
   preview: {
     select: {

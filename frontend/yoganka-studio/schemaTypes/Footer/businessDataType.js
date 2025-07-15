@@ -1,8 +1,8 @@
 // schemas/businessDataType.js
-import {tripleLine} from '../../utils/validations'
+import {tripleLine, doubleLine} from '../../utils/validations'
 
 export default {
-  name: 'businessData',
+  name: 'footerBusinessData',
   title: 'STOPKA - Dane kontaktowe',
   type: 'document',
   fields: [
@@ -11,6 +11,12 @@ export default {
       title: 'Nazwa firmy',
       type: 'string',
       validation: (Rule) => Rule.max(tripleLine.maxLength).error(tripleLine.errorMsg),
+    },
+    {
+      name: 'address',
+      title: 'Adres',
+      type: 'string',
+      validation: (Rule) => Rule.max(doubleLine.maxLength).error(tripleLine.errorMsg),
     },
     {
       name: 'phone',
@@ -22,11 +28,9 @@ export default {
           if (!/^\+48\d{9}$/.test(value)) {
             return 'Numer musi mieć format +48XXXXXXXXX (dokładnie 9 cyfr po +48, bez spacji)'
           }
-
           return true
         }),
     },
-
     {
       name: 'mail',
       title: 'Email',
@@ -34,9 +38,7 @@ export default {
       validation: (Rule) =>
         Rule.custom((value) => {
           if (!value.includes('@')) 'Musi zawierać "@"'
-
           if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) 'Być w formacie jan@domena.com'
-
           return true
         }),
     },

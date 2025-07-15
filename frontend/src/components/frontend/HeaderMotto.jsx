@@ -1,7 +1,7 @@
-function Motto() {
+function Motto({ content }) {
   return (
     <div className={`motto`}>
-      <h3>YOGA | KOBIECE WYJAZDY</h3>
+      <h3>{content}</h3>
     </div>
   );
 }

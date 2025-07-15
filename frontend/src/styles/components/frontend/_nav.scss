@@ -76,7 +76,6 @@
     display: flex;
     align-items: center;
     margin: 0 2rem;
-    cursor: pointer;
 
     line-height: 6rem;
     font-size: 2.2rem;
@@ -206,6 +205,7 @@
       %hover {
         color: map.get($colors, accent-bcg);
         text-shadow: map.get($shadows, active-text-icons-shadow);
+        cursor: pointer;
       }
       &:hover {
         transform: scale(1.05) translateY(0.5rem);
@@ -271,7 +271,7 @@
 
     &__logo {
       margin-top: 0;
-      padding: 0.5rem 0;
+      padding: 0;
       min-width: auto; //reset
       max-height: 100%;
       max-width: 100%;

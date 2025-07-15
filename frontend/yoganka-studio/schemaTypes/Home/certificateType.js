@@ -52,6 +52,12 @@ export default {
               initialValue: [],
             },
           ],
+          preview: {
+            select: {
+              title: 'name',
+              subtitle: 'instructor',
+            },
+          },
         },
       ],
     },
@@ -59,7 +65,6 @@ export default {
   preview: {
     select: {
       title: 'sectionTitle',
-      subtitle: 'instructor',
     },
   },
 }

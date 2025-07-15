@@ -6,11 +6,12 @@ import CardsList from '../../components/backend/cards/CardsList.jsx';
 import ModalTable from '../../components/backend/ModalTable.jsx';
 import TabsList from '../../components/backend/TabsList.jsx';
 import ViewsController from '../../components/backend/ViewsController.jsx';
-import Section from '../../components/frontend/Section.jsx';
+import IntroSection from '../../components/frontend/IntroSection.jsx';
 import { useHandleStripeRedirect } from '../../hooks/useHandleStripeRedirect.js';
 import { formatAllowedTypes } from '../../utils/cardsAndTableUtils.jsx';
 import { formatIsoDateTime } from '../../utils/dateTime.js';
 import { fetchData, mutateOnCreate, queryClient } from '../../utils/http.js';
+import { client } from '../../utils/sanityClient.js';
 const logsGloballyOn = false;
 
 function SchedulePage() {
@@ -23,6 +24,11 @@ function SchedulePage() {
   const isModalOpen = Boolean(id);
 
   const status = useHandleStripeRedirect();
+
+  const { data: INTRO, isLoading: introLoading } = useQuery({
+    queryKey: ['scheduleIntroData'],
+    queryFn: () => client.fetch(`*[_type == "scheduleIntro"][0]`),
+  });
 
   const query = isPassDefinitions ? '/grafik/karnety' : '/grafik';
   const { data, isError, error } = useQuery({
@@ -149,7 +155,7 @@ function SchedulePage() {
     keys,
     paymentOps;
 
-  if (data) {
+  if (data && INTRO) {
     // console.clear();
     if (logsGloballyOn) {
       console.log(`✅ Data: `);
@@ -313,7 +319,11 @@ function SchedulePage() {
         </Helmet>
 
         <div className='admin-console'>
-          <Section classy='admin-intro' header={title} />
+          <IntroSection
+            modifier={`no-bcg-pic`}
+            className={`admin-intro`}
+            data={INTRO}
+          />
           <TabsList
             menuSet={productTabs || []}
             onClick={handleSwitchContent}

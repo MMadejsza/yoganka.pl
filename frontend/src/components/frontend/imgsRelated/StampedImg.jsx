@@ -1,27 +1,20 @@
-import ImgDynamic from './ImgDynamic.jsx';
+import SanityImage from './SanityImage.jsx';
 import Stamp from './Stamp.jsx';
 
-function StampedImg({
-  noStamp,
-  modifier,
-  placement,
-  imgPaths,
-  certPaths,
-  ...props
-}) {
+function StampedImg({ noStamp, modifier, placement, img, stamps }) {
+  console.log(img, stamps);
   return (
     <aside
       className={`${placement}__img-container ${
         modifier ? `${placement}__img-container--${modifier}` : ''
       }`}
     >
-      <ImgDynamic
-        classy={placement}
-        type={placement}
-        srcSet={imgPaths}
-        {...props}
+      <SanityImage
+        image={img}
+        variant='stampedImg'
+        className={`${placement}__img--portrait`}
       />
-      {!noStamp && <Stamp placement='about' paths={certPaths} />}
+      {!noStamp && <Stamp placement='about' imgsArr={stamps} />}
     </aside>
   );
 }

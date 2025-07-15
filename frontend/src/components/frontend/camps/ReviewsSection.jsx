@@ -1,25 +1,14 @@
-import { useQuery } from '@tanstack/react-query';
-import { client } from '../../../utils/sanityClient.js';
-import Loader from '../../common/Loader.jsx';
 import Section from '../../frontend/Section.jsx';
 import GlideContainer from '../glide/GlideContainer.jsx';
 
-function ReviewsSection({ placement }) {
+function ReviewsSection({ placement, data }) {
   const leadingClass = 'reviews';
 
-  const { data: REVIEWS_SECTION_DATA, isLoading: reviewsLoading } = useQuery({
-    queryKey: ['reviewData'],
-    queryFn: () => client.fetch(`*[_type == "review"]`),
-  });
-
-  if (reviewsLoading) {
-    return <Loader label={'Ładowanie'} />;
-  }
   return (
     <>
       <Section
         classy={leadingClass}
-        header={REVIEWS_SECTION_DATA[0].sectionTitle}
+        header={data[0].sectionTitle}
         modifier={placement}
       >
         <GlideContainer
@@ -39,7 +28,7 @@ function ReviewsSection({ placement }) {
             1024: { perView: 1 },
           }}
           type='review'
-          slides={REVIEWS_SECTION_DATA[0].list}
+          slides={data[0].list}
           leadingClass={leadingClass}
         />
       </Section>

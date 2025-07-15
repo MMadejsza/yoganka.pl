@@ -1,77 +1,38 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useSwipe } from '../../../hooks/useSwipe';
 import { mutateOnLoginOrSignup, queryClient } from '../../../utils/http.js';
+import { client } from '../../../utils/sanityClient.js';
 import SymbolOrIcon from '../../common/SymbolOrIcon';
 import Logo from '../../frontend/Logo.jsx';
 
 const logsGloballyOn = true;
-const menuSet = [
-  {
-    name: 'Wyjazdy',
-    symbol: 'spa', // Represents travel in nature; peaceful and connected to retreats
-    link: '/wyjazdy',
-  },
-  {
-    name: 'Wydarzenia',
-    symbol: 'event ', // Bell symbolizes mindfulness and yoga-related events
-    // link: '/wydarzenia',
-    link: '/wydarzenia',
-    // scroll: '#wydarzenia',
-    // action: smoothScrollInto, //to delete
-  },
-  {
-    name: 'Grafik',
-    symbol: 'calendar_month', // Light and informal symbol for easy communication
-    link: '/grafik',
-  },
-  {
-    name: 'Dla firm',
-    symbol: 'home_work',
-    link: '/yoga-dla-firm',
-  },
-  // {
-  //   name: 'Zajęcia',
-  //   symbol: 'self_improvement', // Lotus flower symbolizes yoga, harmony, and relaxation
-  //   link: '/zajecia',
-  // },
-];
+
 const menuSideSet = [
   {
-    name: 'Instagram',
-    icon: 'fa-brands fa-instagram',
-    link: 'https://www.instagram.com/tu_yoganka',
-  },
-  {
-    name: 'Facebook',
-    icon: 'fa-brands fa-facebook',
-    link: 'https://www.facebook.com/profile.php?id=100094192084948',
-    scroll: '#wydarzenia',
-  },
-  {
     auth: true,
-    name: 'Zaloguj',
+    label: 'Zaloguj',
     symbol: 'login',
     link: '/login',
     text: 'Zaloguj się',
   },
   {
     auth: true,
-    name: 'Konto',
+    label: 'Konto',
     symbol: 'account_circle',
     // symbol: 'person',
     link: '/konto',
   },
   {
     auth: true,
-    name: 'Admin Panel',
+    label: 'Admin Panel',
     symbol: 'shield_lock',
     link: '/admin-console/show-all-users',
   },
   {
     auth: true,
-    name: 'Wyloguj',
+    label: 'Wyloguj',
     symbol: 'logout',
     link: '/login-pass/logout',
   },
@@ -84,6 +45,15 @@ function Nav({ side, status, setIsNavOpen }) {
   }
   const navigate = useNavigate();
   const location = useLocation();
+
+  const { data: LOGO_DATA, isLoading: logoLoading } = useQuery({
+    queryKey: ['logotypesData'],
+    queryFn: () => client.fetch(`*[_type == "logotypes"]`),
+  });
+  const { data: NAV_DATA, isLoading: navTabsLoading } = useQuery({
+    queryKey: ['navsTabsData'],
+    queryFn: () => client.fetch(`*[_type == "navs"]`),
+  });
 
   useSwipe(
     side,
@@ -133,23 +103,29 @@ function Nav({ side, status, setIsNavOpen }) {
     logoutMutation.mutate();
   };
 
+  if (logoLoading || navTabsLoading) {
+    return;
+  }
+  const dataSets = [LOGO_DATA, NAV_DATA];
+  const anyEmpty = dataSets.some(data => !data || data.length === 0);
+
   const liContent = li => {
     // For restricted content
     if (li.auth) {
       // If logged In
       if (status?.isLoggedIn) {
         // Hide LogIn option
-        if (li.name === 'Zaloguj') {
+        if (li.label === 'Zaloguj') {
           return null;
         }
-        if (li.name === 'Admin Panel' && status.user?.role != 'ADMIN') {
+        if (li.label === 'Admin Panel' && status.user?.role != 'ADMIN') {
           return null;
         }
 
         // Logout turn into btn triggering fetch
-        if (li.name === 'Wyloguj') {
+        if (li.label === 'Wyloguj') {
           return (
-            <li key={li.name} className='nav__item nav__item--side'>
+            <li key={li.label} className='nav__item nav__item--side'>
               <button
                 onClick={handleLogout}
                 className='nav__link nav__link--side'
@@ -160,7 +136,7 @@ function Nav({ side, status, setIsNavOpen }) {
                   classModifier={'side'}
                   aria-hidden={li.icon ? 'true' : null}
                 />
-                {li.text ?? li.name}
+                {li.text ?? li.label}
               </button>
             </li>
           );
@@ -168,9 +144,9 @@ function Nav({ side, status, setIsNavOpen }) {
       } else {
         // If NOT logged in, both account and logout tabs are hidden
         if (
-          li.name === 'Konto' ||
-          li.name === 'Wyloguj' ||
-          li.name === 'Admin Panel'
+          li.label === 'Konto' ||
+          li.label === 'Wyloguj' ||
+          li.label === 'Admin Panel'
         ) {
           return null;
         }
@@ -178,7 +154,7 @@ function Nav({ side, status, setIsNavOpen }) {
     }
     // Rest of elements
     return (
-      <li key={li.name} className='nav__item nav__item--side'>
+      <li key={li.label} className='nav__item nav__item--side'>
         <Link
           onClick={() => {
             closeDrawer();
@@ -199,6 +175,8 @@ function Nav({ side, status, setIsNavOpen }) {
     );
   };
 
+  const sideNavItems = [...NAV_DATA[0].sideNav.list, ...menuSideSet];
+
   return (
     <nav className={`nav ${side ? 'nav--left' : ''}`}>
       <div className='main-nav-container'>
@@ -214,15 +192,16 @@ function Nav({ side, status, setIsNavOpen }) {
         >
           {({ isActive }) => (
             <Logo
-              placement='nav'
+              data={LOGO_DATA[0]}
               media={isMobile ? 'mobile' : null}
+              placement={`nav`}
               isActive={isActive}
             />
           )}
         </NavLink>
         <ul className='nav__list'>
-          {menuSet.map(li => (
-            <li key={li.name} className='nav__item'>
+          {NAV_DATA[0].mainNav.list.map(li => (
+            <li key={li.label} className='nav__item'>
               {li.action ? (
                 <a
                   onClick={e => {
@@ -237,7 +216,7 @@ function Nav({ side, status, setIsNavOpen }) {
                     type={li.icon ? 'ICON' : 'SYMBOL'}
                     specifier={li.icon || li.symbol}
                   />
-                  {li.name}
+                  {li.label}
                 </a>
               ) : (
                 <NavLink
@@ -256,7 +235,7 @@ function Nav({ side, status, setIsNavOpen }) {
                         specifier={li.symbol}
                         extraClass={isActive ? 'active' : ''}
                       />
-                      {li.name}
+                      {li.label}
                     </>
                   )}
                 </NavLink>
@@ -266,7 +245,7 @@ function Nav({ side, status, setIsNavOpen }) {
         </ul>
       </div>
       <ul className='nav__list nav__list--side'>
-        {menuSideSet.map(li => liContent(li))}
+        {sideNavItems.map(li => liContent(li))}
       </ul>
     </nav>
   );

@@ -13,6 +13,14 @@ function HomePage() {
   const mediaQuery = window.matchMedia('(max-width: 1024px)');
   const isMobile = mediaQuery.matches;
 
+  const { data: INTRO_SECTION_DATA, isLoading: introLoading } = useQuery({
+    queryKey: ['introData'],
+    queryFn: () => client.fetch(`*[_type == "intro"]`),
+  });
+  const { data: LOGO_DATA, isLoading: logoLoading } = useQuery({
+    queryKey: ['logotypesData'],
+    queryFn: () => client.fetch(`*[_type == "logotypes"]`),
+  });
   const { data: ABOUT_SECTION_DATA, isLoading: aboutLoading } = useQuery({
     queryKey: ['aboutData'],
     queryFn: () => client.fetch(`*[_type == "about"]`),
@@ -29,14 +37,48 @@ function HomePage() {
     queryKey: ['eventsData'],
     queryFn: () => client.fetch(`*[_type == "event"]`),
   });
+  const { data: REVIEWS_SECTION_DATA, isLoading: reviewsLoading } = useQuery({
+    queryKey: ['reviewData'],
+    queryFn: () => client.fetch(`*[_type == "review"]`),
+  });
+  const { data: CERTIFICATES_SECTION_DATA, isLoading: certificatesLoading } =
+    useQuery({
+      queryKey: ['certificatesData'],
+      queryFn: () => client.fetch(`*[_type == "certificates"]`),
+    });
+  const { data: PARTNERS_SECTION_DATA, isLoading: partnersLoading } = useQuery({
+    queryKey: ['partnersData'],
+    queryFn: () => client.fetch(`*[_type == "partners"]`),
+  });
 
-  if (campsLoading || classesLoading || eventsLoading) {
+  if (
+    introLoading ||
+    logoLoading ||
+    aboutLoading ||
+    campsLoading ||
+    classesLoading ||
+    eventsLoading ||
+    reviewsLoading ||
+    certificatesLoading ||
+    partnersLoading
+  ) {
     return <Loader label={'Ładowanie'} />;
   }
 
   let products = null;
-  const contentLoaded = CAMPS_DATA && CLASSES_DATA && EVENTS_DATA;
-  if (contentLoaded) {
+  const dataSets = [
+    LOGO_DATA,
+    INTRO_SECTION_DATA,
+    ABOUT_SECTION_DATA,
+    CAMPS_DATA,
+    CLASSES_DATA,
+    EVENTS_DATA,
+    REVIEWS_SECTION_DATA,
+    CERTIFICATES_SECTION_DATA,
+    PARTNERS_SECTION_DATA,
+  ];
+  const anyEmpty = dataSets.some(data => !data || data.length === 0);
+  if (!anyEmpty) {
     console.log(CAMPS_DATA);
     const camps = CAMPS_DATA.map(c => ({
       ...c,
@@ -112,12 +154,23 @@ function HomePage() {
         />
         <meta name='twitter:image' content='/favicon_io/apple-touch-icon.png' />
       </Helmet>
-      {isMobile ? <HeaderMain /> : null}
-      <About isMobile={isMobile} />
-      {contentLoaded && <OfferSection products={products} />}
-      <ReviewsSection placement='homepage' />
-      <Certificates />
-      <Partners />
+
+      {isMobile ? (
+        <HeaderMain data={INTRO_SECTION_DATA} logo={LOGO_DATA[0]} />
+      ) : null}
+      <About
+        isMobile={isMobile}
+        data={{
+          intro: INTRO_SECTION_DATA,
+          about: ABOUT_SECTION_DATA,
+          motto: INTRO_SECTION_DATA[0].motto,
+        }}
+        logo={LOGO_DATA[0]}
+      />
+      <OfferSection products={products} />
+      <ReviewsSection placement='homepage' data={REVIEWS_SECTION_DATA} />
+      <Certificates data={CERTIFICATES_SECTION_DATA} />
+      <Partners data={PARTNERS_SECTION_DATA} />
     </>
   );
 }

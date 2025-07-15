@@ -1,8 +1,15 @@
-function Stamp({ placement, paths }) {
+import SanityImage from './SanityImage.jsx';
+
+function Stamp({ placement, imgsArr }) {
   return (
     <div className={`${placement}__certificates`}>
-      {paths.map(img => (
-        <img key={img.path} src={img.path} alt={img.alt} loading='lazy' />
+      {imgsArr.map((img, index) => (
+        <SanityImage
+          key={index}
+          image={img}
+          variant='stamp'
+          className={`stamp`}
+        />
       ))}
     </div>
   );

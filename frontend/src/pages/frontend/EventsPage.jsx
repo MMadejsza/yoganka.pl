@@ -1,19 +1,31 @@
 import { useQuery } from '@tanstack/react-query';
 import { Helmet } from 'react-helmet';
 import Loader from '../../components/common/Loader.jsx';
-// import CampsGalerySection from '../../components/frontend/camps/CampsGalerySection.jsx';
-import EventsIntroSection from '../../components/frontend/events/EventsIntroSection.jsx';
+import SimpleGallery from '../../components/frontend/glide/SimpleGallery.jsx';
+import IntroSection from '../../components/frontend/IntroSection.jsx';
 import OfferSection from '../../components/frontend/OfferSection.jsx';
 import { client } from '../../utils/sanityClient.js';
 
 function EventsPage() {
   let events;
+  const { data: EVENTS_INTRO_SECTION_DATA, isLoading: eventsIntroLoading } =
+    useQuery({
+      queryKey: ['eventsIntroData'],
+      queryFn: () => client.fetch(`*[_type == "eventsIntro"]`),
+    });
   const { data: EVENTS_DATA, isLoading: eventsLoading } = useQuery({
     queryKey: ['eventsData'],
     queryFn: () => client.fetch(`*[_type == "event"]`),
   });
+  const {
+    data: EVENTS_PAST_GALLERY_SECTION_DATA,
+    isLoading: eventsPhotosLoading,
+  } = useQuery({
+    queryKey: ['eventsPhotosData'],
+    queryFn: () => client.fetch(`*[_type == "eventsPhotos"]`),
+  });
 
-  if (eventsLoading) {
+  if (eventsLoading || eventsIntroLoading || eventsPhotosLoading) {
     return <Loader label={'Ładowanie'} />;
   }
 
@@ -42,26 +54,29 @@ function EventsPage() {
         <title>Yoganka - Wydarzenia</title>
         <link rel='canonical' href='https://yoganka.pl/wydarzenia' />
       </Helmet>
-      <EventsIntroSection />
+      <IntroSection
+        modifier={`no-bcg-pic`}
+        className={`camps-intro`}
+        data={EVENTS_INTRO_SECTION_DATA[0]}
+      />
       {contentLoaded && (
         <OfferSection products={products} extraClass={'events'} />
       )}
-      {/* {contentLoaded && (
-        <CampsGalerySection
-          givenGalleryData={[
-            // like 1 camp
-            {
-              pastGalleryPath: `/imgs/offer/events/main_gallery`,
-              fileName: 'kobiece_wydarzenia_z_yoganka',
-              pastGallerySize: 11,
-              size: 11,
-            },
-          ]}
-          // camps={CAMPS_DATA}
-          isMobile={true}
-          title={'Wspomnienia poprzednich edycji:'}
-        />
-      )} */}
+      <SimpleGallery
+        givenGallery={EVENTS_PAST_GALLERY_SECTION_DATA[0].list}
+        glideConfig={{
+          type: 'carousel',
+          perView: 2,
+          focusAt: 'center',
+          gap: 20,
+          autoplay: 2200,
+          animationDuration: 800,
+        }}
+        glideBreakpoints={{
+          1024: { perView: 1 },
+        }}
+        title={EVENTS_PAST_GALLERY_SECTION_DATA[0].sectionTitle}
+      />
     </>
   );
 }

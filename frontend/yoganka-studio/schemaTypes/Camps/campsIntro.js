@@ -3,8 +3,8 @@
 import {defaultIntroSet} from '../../utils/elements'
 
 export default {
-  name: `b2bIntro`,
-  title: `B2B - Intro`,
+  name: `campsIntro`,
+  title: `CAMPY - Intro`,
   type: `document`,
   fields: defaultIntroSet,
   preview: {

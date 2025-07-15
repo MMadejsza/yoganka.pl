@@ -4,8 +4,8 @@ import { Helmet } from 'react-helmet';
 import Loader from '../../components/common/Loader.jsx';
 import Benefits from '../../components/frontend/b2b/B2BBenefits.jsx';
 import B2BOptionsSection from '../../components/frontend/b2b/B2BBenefitsSection.jsx';
-import B2BIntroSection from '../../components/frontend/b2b/B2BIntroSection.jsx';
 import PriceList from '../../components/frontend/b2b/PriceList.jsx';
+import IntroSection from '../../components/frontend/IntroSection.jsx';
 import OfferSection from '../../components/frontend/OfferSection.jsx';
 import { client } from '../../utils/sanityClient.js';
 // import { BTNS, OFFER, TYPES } from '../../DATA/B2B_DATA.js';
@@ -100,7 +100,14 @@ function B2BPage() {
         <meta property='og:type' content='website' />
         <meta property='og:image' content='/favicon_io/apple-touch-icon.png' />
       </Helmet>
-      {INTRO && <B2BIntroSection content={INTRO} />}
+      {INTRO && (
+        <IntroSection
+          modifier={`b2b`}
+          className={`camps-intro`}
+          extraClass={'b2b-intro'}
+          data={INTRO}
+        />
+      )}
       {TYPES && <B2BOptionsSection content={TYPES} />}
       {OFFER && <OfferSection products={products} />}
       {BENEFITS && <Benefits content={BENEFITS} />}

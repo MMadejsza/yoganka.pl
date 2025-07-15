@@ -2,7 +2,7 @@ import Glide from '@glidejs/glide';
 import '@glidejs/glide/dist/css/glide.core.min.css';
 import '@glidejs/glide/dist/css/glide.theme.min.css';
 import { useEffect, useRef } from 'react';
-import { renderJointGalery } from '../../../utils/utils.jsx';
+import SanityImage from '../imgsRelated/SanityImage.jsx';
 import CertificateSlide from './slides/CertificateSlide.jsx';
 import PhotoSlide from './slides/PhotoSlide.jsx';
 import ReviewSlide from './slides/ReviewSlide.jsx';
@@ -44,20 +44,17 @@ function GlideContainer({
   const isPhoto = type === 'photo';
   const isAllPhotos = type === 'allPhotos';
   const isReview = type === 'review';
+  const isPartner = type === 'partner';
 
   const renderSlides = () => {
     const SlideComponent = (() => {
       if (isTile) return CertificateSlide;
-      if (isPhoto) return PhotoSlide;
+      if (isPhoto || isAllPhotos) return PhotoSlide;
       if (isReview) return ReviewSlide;
       return null;
     })();
 
-    if (SlideComponent && (isTile || isReview)) {
-      return slides.map((slide, index) => (
-        <SlideComponent key={index} slideData={slide} />
-      ));
-    } else if (SlideComponent && isPhoto) {
+    if (SlideComponent && !isPartner) {
       return slides.map((slide, index) => (
         <SlideComponent key={index} slideData={slide} />
       ));
@@ -69,17 +66,16 @@ function GlideContainer({
           target='_blank'
           className={`partners__link`}
         >
-          <img
-            src={partner.logo}
-            loading='lazy'
-            alt={partner.alt}
-            className={`partners__image`}
+          <SanityImage
+            image={partner.logo}
+            variant='partner'
+            className='partners__image'
           />
         </a>
       ));
     }
   };
-  const renderBullets = type => {
+  const renderBullets = () => {
     return Array.from({ length: slides.length }).map((_, index) => (
       <button
         key={index}
@@ -95,13 +91,11 @@ function GlideContainer({
       ref={glideRef}
     >
       <div className='glide__track' data-glide-el='track'>
-        <ul className='glide__slides'>
-          {isAllPhotos ? renderJointGalery(slides) : renderSlides()}
-        </ul>
+        <ul className='glide__slides'>{renderSlides()}</ul>
       </div>
 
       <div className='glide__bullets' data-glide-el='controls[nav]'>
-        {renderBullets(type)}
+        {renderBullets()}
       </div>
 
       <div className='glide__arrows' data-glide-el='controls'>

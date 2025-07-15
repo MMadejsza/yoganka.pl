@@ -1,27 +1,12 @@
-import { useQuery } from '@tanstack/react-query';
-import { client } from '../../utils/sanityClient.js';
-import Loader from '../common/Loader.jsx';
 import GlideContainer from './glide/GlideContainer.jsx';
 import Section from './Section.jsx';
 
-function Certificates() {
+function Certificates({ data }) {
   const leadingClass = 'certificates';
 
-  const { data: CERTIFICATES_SECTION_DATA, isLoading: certificatesLoading } =
-    useQuery({
-      queryKey: ['certificatesData'],
-      queryFn: () => client.fetch(`*[_type == "certificates"]`),
-    });
-
-  if (certificatesLoading) {
-    return <Loader label={'Ładowanie'} />;
-  }
   return (
     <>
-      <Section
-        classy={leadingClass}
-        header={CERTIFICATES_SECTION_DATA[0].sectionTitle}
-      >
+      <Section classy={leadingClass} header={data[0].sectionTitle}>
         <GlideContainer
           glideConfig={{
             type: 'carousel',
@@ -33,7 +18,7 @@ function Certificates() {
             animationDuration: 800,
           }}
           type='tile'
-          slides={CERTIFICATES_SECTION_DATA[0].list}
+          slides={data[0].list}
           leadingClass={leadingClass}
         />
       </Section>

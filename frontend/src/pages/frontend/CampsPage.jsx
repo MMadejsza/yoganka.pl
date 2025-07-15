@@ -2,26 +2,62 @@ import { useQuery } from '@tanstack/react-query';
 import { Helmet } from 'react-helmet';
 import Loader from '../../components/common/Loader.jsx';
 import CampsBenefitsSection from '../../components/frontend/camps/CampsBenefitsSection.jsx';
-// import CampsGalerySection from '../../components/frontend/camps/CampsGalerySection.jsx';
-import CampsIntoSection from '../../components/frontend/camps/CampsIntoSection.jsx';
 import ReviewsSection from '../../components/frontend/camps/ReviewsSection.jsx';
+import SimpleGallery from '../../components/frontend/glide/SimpleGallery.jsx';
+import IntroSection from '../../components/frontend/IntroSection.jsx';
 import OfferSection from '../../components/frontend/OfferSection.jsx';
 import { client } from '../../utils/sanityClient.js';
 
 function CampsPage() {
   let camps;
+  const { data: CAMPS_INTRO_SECTION_DATA, isLoading: campsIntroLoading } =
+    useQuery({
+      queryKey: ['campsIntroData'],
+      queryFn: () => client.fetch(`*[_type == "campsIntro"]`),
+    });
   const { data: CAMPS_DATA, isLoading: campsLoading } = useQuery({
     queryKey: ['campsData'],
     queryFn: () => client.fetch(`*[_type == "camp"]`),
   });
+  const { data: CAMPS_BENEFITS_SECTION_DATA, isLoading: campsBenefitsLoading } =
+    useQuery({
+      queryKey: ['campsBenefitsData'],
+      queryFn: () => client.fetch(`*[_type == "benefits"]`),
+    });
+  const {
+    data: CAMPS_PAST_GALLERY_SECTION_DATA,
+    isLoading: campsPhotosLoading,
+  } = useQuery({
+    queryKey: ['campsPhotosData'],
+    queryFn: () => client.fetch(`*[_type == "campsPhotos"]`),
+  });
+  const { data: REVIEWS_SECTION_DATA, isLoading: reviewsLoading } = useQuery({
+    queryKey: ['reviewData'],
+    queryFn: () => client.fetch(`*[_type == "review"]`),
+  });
 
-  if (campsLoading) {
+  if (
+    campsIntroLoading ||
+    campsLoading ||
+    campsBenefitsLoading ||
+    reviewsLoading ||
+    campsPhotosLoading
+  ) {
     return <Loader label={'Ładowanie'} />;
   }
 
+  let content = null;
   let products = null;
-  const contentLoaded = CAMPS_DATA;
-  if (contentLoaded) {
+  const dataSets = [
+    CAMPS_INTRO_SECTION_DATA,
+    CAMPS_DATA,
+    CAMPS_BENEFITS_SECTION_DATA,
+    CAMPS_PAST_GALLERY_SECTION_DATA,
+    REVIEWS_SECTION_DATA,
+  ];
+  const anyEmpty = dataSets.some(data => !data || data.length === 0);
+
+  if (!anyEmpty) {
     // console.log(CAMPS_DATA);
     camps = CAMPS_DATA.map(c => ({
       ...c,
@@ -32,7 +68,36 @@ function CampsPage() {
     products = [
       { id: 'wyjazdy', header: `Wybierz swój wyjazd`, data: camps, limit: 0 },
     ];
+
+    content = (
+      <>
+        <IntroSection
+          modifier={`camps`}
+          className={`camps-intro`}
+          data={CAMPS_INTRO_SECTION_DATA[0]}
+        />
+        <CampsBenefitsSection data={CAMPS_BENEFITS_SECTION_DATA} />
+        <OfferSection products={products} />
+        <ReviewsSection data={REVIEWS_SECTION_DATA} />
+        <SimpleGallery
+          givenGallery={CAMPS_PAST_GALLERY_SECTION_DATA[0].list}
+          glideConfig={{
+            type: 'carousel',
+            perView: 2,
+            focusAt: 'center',
+            gap: 20,
+            autoplay: 2200,
+            animationDuration: 800,
+          }}
+          glideBreakpoints={{
+            1024: { perView: 1 },
+          }}
+          title={CAMPS_PAST_GALLERY_SECTION_DATA[0].sectionTitle}
+        />
+      </>
+    );
   }
+
   return (
     <>
       <Helmet>
@@ -59,11 +124,7 @@ function CampsPage() {
         <meta property='og:type' content='website' />
         <meta property='og:image' content='/favicon_io/apple-touch-icon.png' />
       </Helmet>
-      <CampsIntoSection />
-      <CampsBenefitsSection />
-      {contentLoaded && <OfferSection products={products} />}
-      <ReviewsSection />
-      {/* {contentLoaded && <CampsGalerySection camps={camps} isMobile={true} />} */}
+      {content}
     </>
   );
 }

@@ -1,21 +1,23 @@
-function Logo({ placement, media, isActive }) {
+import SanityImage from '../frontend/imgsRelated/SanityImage.jsx';
+
+function Logo({ type, data, placement, media, isActive }) {
   const file =
-    media == 'mobile'
-      ? 'logo_1.svg'
+    type == 'writtenLogo'
+      ? data.justSign.img
+      : media == 'mobile'
+      ? data.fullLogo.img
       : isActive
-        ? 'logo_2_active.png'
-        : 'logo_2.png';
-  const path = `/imgs/logo/${file}`;
+      ? data.justBody.imgActive
+      : data.justBody.img;
 
   return (
-    <div className={`${placement}__logo-container`}>
-      <img
-        className={`${placement}__logo`}
-        src={path}
-        loading='lazy'
-        alt='Logo Yoganka'
-      />
-    </div>
+    <SanityImage
+      image={file}
+      variant={type || 'logo'}
+      className={`${placement}__logo`}
+      containerClassName={`${placement}__logo-container`}
+      alt='Yoganka - Logo'
+    />
   );
 }
 

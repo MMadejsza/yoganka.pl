@@ -76,10 +76,13 @@
       background-color: map.get($colors, accent-bcg);
     }
   }
+  &--carousel {
+    z-index: 5;
+  }
   &__arrow {
     padding: 1rem 1.5rem;
     transform: translateY(calc(-50% - 3rem / 2));
-    z-index: 5;
+    z-index: 1000;
 
     font-size: 3rem;
     color: map.get($colors, accent-bcg);

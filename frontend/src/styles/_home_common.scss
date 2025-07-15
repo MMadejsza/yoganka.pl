@@ -60,13 +60,16 @@ ul {
 img {
   display: block;
   max-width: 100%;
+  .glide & {
+    max-height: 97%;
+  }
 }
 picture {
-  display: 'grid';
+  display: grid;
   align-content: center;
-  width: '100%';
-  height: 'auto';
-  max-width: 80%;
+  .tile & {
+    max-width: 80%;
+  }
 }
 a {
   color: inherit;

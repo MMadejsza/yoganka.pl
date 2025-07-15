@@ -1,4 +1,31 @@
-import {doubleLine} from './validations'
+import {doubleLine, singleLine} from './validations'
+
+export const defaultIntroSet = [
+  {
+    name: 'backgroundImage',
+    title: 'Zdjęcie w tle',
+    type: 'image',
+    options: {hotspot: true},
+  },
+  {
+    name: `sectionTitle`,
+    title: `Tytuł sekcji - na tle`,
+    type: `string`,
+    validation: (Rule) => Rule.max(singleLine.maxLength).error(singleLine.errorMsg),
+  },
+  {
+    name: 'list',
+    title: `Lista akapitów`,
+    description: `Dodaj akapit osobno - pojawia sie mała przerwa między nimi.`,
+    type: 'array',
+    of: [
+      {
+        type: 'text',
+      },
+    ],
+    // validation: (Rule) => Rule.required().min(1).error('Dodaj przynajmniej jeden akapit'),
+  },
+]
 
 export const defaultBtnsSet = {
   type: 'object',
@@ -172,7 +199,7 @@ export const defaultGlanceSet = {
   ],
 }
 
-export const turningTiles = {
+export const defaultTurningTilesSet = {
   name: 'list',
   title: 'Typy oferty (kafelki obrotowe)',
   type: 'array',
@@ -208,3 +235,22 @@ export const turningTiles = {
     },
   ],
 }
+
+export const defaultGallerySection = [
+  {
+    name: `sectionTitle`,
+    title: `Tytuł sekcji`,
+    type: `string`,
+    validation: (Rule) => Rule.max(doubleLine.maxLength).error(doubleLine.errorMsg),
+  },
+  {
+    name: 'list',
+    title: `Galeria zdjęć`,
+    type: 'array',
+    of: [
+      {
+        type: 'image',
+      },
+    ],
+  },
+]

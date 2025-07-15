@@ -1,14 +1,13 @@
-import { BENEFITS_DATA } from '../../../DATA/CAMPS_BENEFITS_DATA.js';
 import Section from '../../frontend/Section.jsx';
 
-function CampsBenefitsSection() {
+function CampsBenefitsSection({ data }) {
   const classy = 'camps-benefits__';
   const mediaQuery = window.matchMedia('(max-width: 1025px)');
   const isMobile = mediaQuery.matches;
   return (
-    <Section classy='camps-benefits' header='Co Cię czeka?'>
+    <Section classy='camps-benefits' header={data[0].sectionTitle}>
       <main className='camps-benefits__bullets-container'>
-        {BENEFITS_DATA.map((benefit, index) => {
+        {data[0].list.map((benefit, index) => {
           return (
             <div
               className={`${classy}bullet-container`}

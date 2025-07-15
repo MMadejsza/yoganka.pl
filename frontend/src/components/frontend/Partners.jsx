@@ -1,15 +1,11 @@
-import { PARTNERS_DATA } from '../../DATA/PARTNERS_DATA.js';
 import GlideContainer from './glide/GlideContainer.jsx';
 import Section from './Section.jsx';
 
-function Partners() {
+function Partners({ data }) {
   const leadingClass = 'partners';
+
   return (
-    <Section classy={leadingClass} header='Zaufali mi:'>
-      {/* <Carousel
-				classy={leadingClass}
-				items={PARTNERS_DATA}
-			/> */}
+    <Section classy={leadingClass} header={data[0].sectionTitle}>
       <GlideContainer
         glideConfig={{
           type: 'carousel',
@@ -21,7 +17,7 @@ function Partners() {
           animationDuration: 800,
         }}
         type='partner'
-        slides={PARTNERS_DATA}
+        slides={data[0].list}
         leadingClass={leadingClass}
       />
     </Section>

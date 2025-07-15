@@ -1,5 +1,6 @@
+import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
-import { SOCIALS_DATA } from '../../DATA/SOCIALS_DATA.js';
+import { client } from '../../utils/sanityClient.js';
 import BusinessDetails from './BusinessDetails.jsx';
 import DevDetails from './DevDetails.jsx';
 import Logo from './Logo.jsx';
@@ -8,11 +9,39 @@ import Socials from './Socials.jsx';
 function Footer() {
   const leadingClass = 'footer';
 
+  const { data: LOGO_DATA, isLoading: logoLoading } = useQuery({
+    queryKey: ['logotypesData'],
+    queryFn: () => client.fetch(`*[_type == "logotypes"]`),
+  });
+  const { data: BUSINESS_DATA, isLoading: businessDataLoading } = useQuery({
+    queryKey: ['footerBusinessData'],
+    queryFn: () => client.fetch(`*[_type == "footerBusinessData"]`),
+  });
+  const { data: SOCIALS_DATA, isLoading: socialsDataLoading } = useQuery({
+    queryKey: ['socialsData'],
+    queryFn: () => client.fetch(`*[_type == "social"]`),
+  });
+
+  if (logoLoading || businessDataLoading || socialsDataLoading) {
+    return;
+  }
+
+  const dataSets = [LOGO_DATA, BUSINESS_DATA, SOCIALS_DATA];
+  const anyEmpty = dataSets.some(data => !data || data.length === 0);
+  let content;
+  if (!anyEmpty) {
+    content = (
+      <>
+        <Logo type='justBody' data={LOGO_DATA[0]} placement={leadingClass} />
+        <BusinessDetails data={BUSINESS_DATA[0]} leadingClass={leadingClass} />
+        <Socials leadingClass={leadingClass} items={SOCIALS_DATA} />
+      </>
+    );
+  }
+
   return (
     <footer className={leadingClass}>
-      <Logo placement={leadingClass} />
-      <BusinessDetails leadingClass={leadingClass} />
-      <Socials leadingClass={leadingClass} items={SOCIALS_DATA} />
+      {content}
       <Link
         className={`${leadingClass}__legal`}
         onClick={() => {

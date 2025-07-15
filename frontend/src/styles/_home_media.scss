@@ -61,7 +61,7 @@
   }
 
   .about__certificates {
-    min-width: 65%;
+    // min-width: 65%;
   }
 
   .modal {
@@ -122,6 +122,11 @@
 
     &__img-container {
       max-width: 640px;
+      .about__certificates {
+        img {
+          max-height: 8rem;
+        }
+      }
     }
 
     &__bio--heading {
@@ -313,6 +318,7 @@
     &__link {
       max-width: 225px;
       max-height: 225px;
+      // padding: 0 1.5rem;
     }
   }
   .partners__link:hover {
@@ -423,11 +429,11 @@
       'footer footer footer footer footer';
   }
 
-  .logo-writing__container {
+  .logo-writing__logo-container {
     flex-basis: 100%;
     @include flex(row, center);
   }
-  .logo-writing__logo-file {
+  .logo-writing__logo {
     position: static;
     max-width: 480px;
     transform: none;
@@ -487,8 +493,15 @@
         width: 20%;
         min-height: 300px;
       }
+
+      .about__certificates {
+        img {
+          max-height: 5rem;
+        }
+      }
     }
   }
+
   .offer {
     margin-top: -3rem;
     grid-template-columns: repeat(4, minmax(150px, 1fr));
