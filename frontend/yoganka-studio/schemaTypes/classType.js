@@ -5,7 +5,7 @@ import {defaultBtnsSet} from '../utils/elements'
 
 export default {
   name: 'class',
-  title: 'Zajęcia Yogowe',
+  title: '***ZAJĘCIA YOGOWE***',
   type: 'document',
 
   initialValue: {

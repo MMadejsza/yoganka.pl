@@ -4,7 +4,7 @@ import {defaultBtnsSet, defaultGlanceSet} from '../utils/elements'
 
 export default {
   name: 'event',
-  title: 'Wydarzenie Yogowe',
+  title: '***WYDARZENIA YOGOWE***',
   type: 'document',
   fields: [
     {

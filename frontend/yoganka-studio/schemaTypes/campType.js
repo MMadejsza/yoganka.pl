@@ -4,7 +4,7 @@ import {defaultBtnsSet, defaultGlanceSet} from '../utils/elements'
 
 export default {
   name: 'camp',
-  title: 'Obóz Yogowy',
+  title: '***CAMPY YOGOWE***',
   type: 'document',
   fields: [
     {
