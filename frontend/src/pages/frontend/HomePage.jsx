@@ -44,6 +44,13 @@ function HomePage() {
     queryFn: () => client.fetch(`*[_type == "event"]`),
     ...cacheConfig,
   });
+  const { data: OFFER_SECTION_DATA, isLoading: offerSectionLoading } = useQuery(
+    {
+      queryKey: ['offerSectionData'],
+      queryFn: () => client.fetch(`*[_type == "offer"]`),
+      ...cacheConfig,
+    }
+  );
   const { data: REVIEWS_SECTION_DATA, isLoading: reviewsLoading } = useQuery({
     queryKey: ['reviewData'],
     queryFn: () => client.fetch(`*[_type == "review"]`),
@@ -68,6 +75,7 @@ function HomePage() {
     campsLoading ||
     classesLoading ||
     eventsLoading ||
+    offerSectionLoading ||
     reviewsLoading ||
     certificatesLoading ||
     partnersLoading
@@ -83,6 +91,7 @@ function HomePage() {
     CAMPS_DATA,
     CLASSES_DATA,
     EVENTS_DATA,
+    OFFER_SECTION_DATA,
     REVIEWS_SECTION_DATA,
     CERTIFICATES_SECTION_DATA,
     PARTNERS_SECTION_DATA,
@@ -109,17 +118,21 @@ function HomePage() {
     products = [
       {
         id: 'wyjazdy',
-        header: `Kobiece Wyjazdy z\u00a0Jogą`,
+        header: OFFER_SECTION_DATA[0].camps.title,
         data: camps,
         limit: 2,
         moreLink: '/wyjazdy',
       },
-      { id: 'zajecia', header: `Zajęcia regularne`, data: classes },
+      {
+        id: 'zajecia',
+        header: OFFER_SECTION_DATA[0].classes.title,
+        data: classes,
+      },
       {
         id: 'wydarzenia',
-        header: `Wydarzenia`,
+        header: OFFER_SECTION_DATA[0].events.title,
         data: events,
-        // limit: 3,
+        limit: OFFER_SECTION_DATA[0].events.limit,
         moreLink: '/wydarzenia',
         specifier: 'events',
       },
