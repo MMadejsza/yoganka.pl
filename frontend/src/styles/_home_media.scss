@@ -313,7 +313,7 @@
     }
     .glide__track {
       height: 40vh;
-      min-height: 365px;
+      max-height: 350px;
     }
     &__link {
       max-width: 225px;
