@@ -64,11 +64,10 @@ function ViewsController({
     queryKey: ['query', location.pathname],
     queryFn: ({ signal }) =>
       fetchItem(callPath, { signal }, isCustomerQuery || minRightsPrefix),
-    staleTime: 0,
     refetchOnMount: true,
     enabled: !!isValidId || location.pathname.includes('ustawienia'),
     staleTime: isCustomerQuery && 1000 * 60 * 5,
-    cacheTime: isCustomerQuery && 1000 * 60 * 15,
+    cacheTime: isCustomerQuery ? 1000 * 60 * 15 : 0,
   });
 
   if (data) {

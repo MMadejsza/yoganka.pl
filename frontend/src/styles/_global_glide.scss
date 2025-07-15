@@ -82,10 +82,10 @@
   &__arrow {
     padding: 1rem 1.5rem;
     transform: translateY(calc(-50% - 3rem / 2));
-    z-index: 1000;
+    z-index: 1000 !important;
 
     font-size: 3rem;
-    color: map.get($colors, accent-bcg);
+    color: map.get($colors, accent-bcg) !important;
     border-radius: map.get($sizes, border-radius);
 
     &--left {

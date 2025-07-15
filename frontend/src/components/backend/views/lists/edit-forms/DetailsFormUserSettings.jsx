@@ -41,7 +41,6 @@ function DetailsFormUserSettings({
   const { data, isLoading: isFormLoading } = useQuery({
     queryKey,
     queryFn: ({ signal }) => fetchItem(dynamicFetchAddress, { signal }),
-    staleTime: 0,
     refetchOnMount: true,
     enabled: customerAccessed || adminAccessed,
     staleTime: !adminAccessed ? 1000 * 60 * 5 : 0,
