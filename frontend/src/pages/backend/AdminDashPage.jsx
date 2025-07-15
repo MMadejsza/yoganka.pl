@@ -111,8 +111,6 @@ function AdminPage() {
     enabled: allowedPaths.includes(location.pathname),
     // stopping unnecessary requests when jumping tabs
     staleTime: 10000,
-    // how long tada is cached (default 5 mins)
-    // gcTime:30000
   });
 
   const { data: status, isLoading: isStatusLoading } = useQuery({

@@ -25,9 +25,11 @@ function SchedulePage() {
 
   const status = useHandleStripeRedirect();
 
+  const cacheConfig = { staleTime: 1000 * 60 * 10, cacheTime: 1000 * 60 * 15 };
   const { data: INTRO, isLoading: introLoading } = useQuery({
     queryKey: ['scheduleIntroData'],
     queryFn: () => client.fetch(`*[_type == "scheduleIntro"][0]`),
+    ...cacheConfig,
   });
 
   const query = isPassDefinitions ? '/grafik/karnety' : '/grafik';

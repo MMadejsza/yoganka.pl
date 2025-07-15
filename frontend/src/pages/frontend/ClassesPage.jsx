@@ -58,7 +58,7 @@
 //             size: 11,
 //           },
 //         ]}
-//         // camps={CAMPS_DATA}
+//         // camps={}
 //         isMobile={true}
 //         title={null}
 //       />

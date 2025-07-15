@@ -46,13 +46,16 @@ function Nav({ side, status, setIsNavOpen }) {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const cacheConfig = { staleTime: 1000 * 60 * 10, cacheTime: 1000 * 60 * 15 };
   const { data: LOGO_DATA, isLoading: logoLoading } = useQuery({
     queryKey: ['logotypesData'],
     queryFn: () => client.fetch(`*[_type == "logotypes"]`),
+    ...cacheConfig,
   });
   const { data: NAV_DATA, isLoading: navTabsLoading } = useQuery({
     queryKey: ['navsTabsData'],
     queryFn: () => client.fetch(`*[_type == "navs"]`),
+    ...cacheConfig,
   });
 
   useSwipe(
@@ -125,7 +128,7 @@ function Nav({ side, status, setIsNavOpen }) {
         // Logout turn into btn triggering fetch
         if (li.label === 'Wyloguj') {
           return (
-            <li key={li.label} className='nav__item nav__item--side'>
+            <li key={li.link} className='nav__item nav__item--side'>
               <button
                 onClick={handleLogout}
                 className='nav__link nav__link--side'
@@ -154,7 +157,7 @@ function Nav({ side, status, setIsNavOpen }) {
     }
     // Rest of elements
     return (
-      <li key={li.label} className='nav__item nav__item--side'>
+      <li key={li.link} className='nav__item nav__item--side'>
         <Link
           onClick={() => {
             closeDrawer();

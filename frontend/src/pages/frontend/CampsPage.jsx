@@ -10,19 +10,25 @@ import { client } from '../../utils/sanityClient.js';
 
 function CampsPage() {
   let camps;
+
+  const cacheConfig = { staleTime: 1000 * 60 * 10, cacheTime: 1000 * 60 * 15 };
+
   const { data: CAMPS_INTRO_SECTION_DATA, isLoading: campsIntroLoading } =
     useQuery({
       queryKey: ['campsIntroData'],
       queryFn: () => client.fetch(`*[_type == "campsIntro"]`),
+      ...cacheConfig,
     });
   const { data: CAMPS_DATA, isLoading: campsLoading } = useQuery({
     queryKey: ['campsData'],
     queryFn: () => client.fetch(`*[_type == "camp"]`),
+    ...cacheConfig,
   });
   const { data: CAMPS_BENEFITS_SECTION_DATA, isLoading: campsBenefitsLoading } =
     useQuery({
       queryKey: ['campsBenefitsData'],
       queryFn: () => client.fetch(`*[_type == "benefits"]`),
+      ...cacheConfig,
     });
   const {
     data: CAMPS_PAST_GALLERY_SECTION_DATA,
@@ -30,10 +36,12 @@ function CampsPage() {
   } = useQuery({
     queryKey: ['campsPhotosData'],
     queryFn: () => client.fetch(`*[_type == "campsPhotos"]`),
+    ...cacheConfig,
   });
   const { data: REVIEWS_SECTION_DATA, isLoading: reviewsLoading } = useQuery({
     queryKey: ['reviewData'],
     queryFn: () => client.fetch(`*[_type == "review"]`),
+    ...cacheConfig,
   });
 
   if (

@@ -67,6 +67,8 @@ function ViewsController({
     staleTime: 0,
     refetchOnMount: true,
     enabled: !!isValidId || location.pathname.includes('ustawienia'),
+    staleTime: isCustomerQuery && 1000 * 60 * 5,
+    cacheTime: isCustomerQuery && 1000 * 60 * 15,
   });
 
   if (data) {

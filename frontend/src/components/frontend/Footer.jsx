@@ -9,17 +9,21 @@ import Socials from './Socials.jsx';
 function Footer() {
   const leadingClass = 'footer';
 
+  const cacheConfig = { staleTime: 1000 * 60 * 10, cacheTime: 1000 * 60 * 15 };
   const { data: LOGO_DATA, isLoading: logoLoading } = useQuery({
     queryKey: ['logotypesData'],
     queryFn: () => client.fetch(`*[_type == "logotypes"]`),
+    ...cacheConfig,
   });
   const { data: BUSINESS_DATA, isLoading: businessDataLoading } = useQuery({
     queryKey: ['footerBusinessData'],
     queryFn: () => client.fetch(`*[_type == "footerBusinessData"]`),
+    ...cacheConfig,
   });
   const { data: SOCIALS_DATA, isLoading: socialsDataLoading } = useQuery({
     queryKey: ['socialsData'],
     queryFn: () => client.fetch(`*[_type == "social"]`),
+    ...cacheConfig,
   });
 
   if (logoLoading || businessDataLoading || socialsDataLoading) {

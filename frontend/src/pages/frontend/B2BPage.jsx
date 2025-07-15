@@ -8,11 +8,8 @@ import PriceList from '../../components/frontend/b2b/PriceList.jsx';
 import IntroSection from '../../components/frontend/IntroSection.jsx';
 import OfferSection from '../../components/frontend/OfferSection.jsx';
 import { client } from '../../utils/sanityClient.js';
-// import { BTNS, OFFER, TYPES } from '../../DATA/B2B_DATA.js';
 
 function B2BPage() {
-  // const mediaQuery = window.matchMedia('(max-width: 1025px)');
-  // const isMobile = mediaQuery.matches;
   useEffect(() => {
     const wrapper = document.body.querySelector('.wrapper');
     if (wrapper) {
@@ -26,25 +23,32 @@ function B2BPage() {
     };
   }, []);
 
+  const cacheConfig = { staleTime: 1000 * 60 * 10, cacheTime: 1000 * 60 * 15 };
+
   const { data: INTRO, isLoading: introLoading } = useQuery({
     queryKey: ['b2bIntro'],
     queryFn: () => client.fetch(`*[_type == "b2bIntro"][0]`),
+    ...cacheConfig,
   });
   const { data: OFFER, isLoading: offerLoading } = useQuery({
     queryKey: ['b2bOffer'],
     queryFn: () => client.fetch(`*[_type == "b2bOffer"][0]`),
+    ...cacheConfig,
   });
   const { data: TYPES, isLoading: typesLoading } = useQuery({
     queryKey: ['b2bOfferTypes'],
     queryFn: () => client.fetch(`*[_type == "b2bOfferTypes"][0]`),
+    ...cacheConfig,
   });
   const { data: BENEFITS, isLoading: benefitsLoading } = useQuery({
     queryKey: ['b2bBenefits'],
     queryFn: () => client.fetch(`*[_type == "b2bBenefits"][0]`),
+    ...cacheConfig,
   });
   const { data: PRICE_LIST, isLoading: priceListLoading } = useQuery({
     queryKey: ['b2bPriceList'],
     queryFn: () => client.fetch(`*[_type == "b2bPriceListAndCooperation"][0]`),
+    ...cacheConfig,
   });
 
   // console.log(TYPES);

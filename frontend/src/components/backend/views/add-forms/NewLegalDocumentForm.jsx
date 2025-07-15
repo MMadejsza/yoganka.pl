@@ -24,7 +24,6 @@ export default function NewLegalDocumentForm({ docType }) {
   const { data: currentData, isLoading: listLoading } = useQuery({
     queryKey: ['data', key],
     queryFn: () => fetchData(key),
-    staleTime: 10000,
   });
   console.log('NewLegalDocumentForm currentData', currentData);
 

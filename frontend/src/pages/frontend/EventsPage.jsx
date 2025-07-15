@@ -8,14 +8,18 @@ import { client } from '../../utils/sanityClient.js';
 
 function EventsPage() {
   let events;
+
+  const cacheConfig = { staleTime: 1000 * 60 * 10, cacheTime: 1000 * 60 * 15 };
   const { data: EVENTS_INTRO_SECTION_DATA, isLoading: eventsIntroLoading } =
     useQuery({
       queryKey: ['eventsIntroData'],
       queryFn: () => client.fetch(`*[_type == "eventsIntro"]`),
+      ...cacheConfig,
     });
   const { data: EVENTS_DATA, isLoading: eventsLoading } = useQuery({
     queryKey: ['eventsData'],
     queryFn: () => client.fetch(`*[_type == "event"]`),
+    ...cacheConfig,
   });
   const {
     data: EVENTS_PAST_GALLERY_SECTION_DATA,
@@ -23,6 +27,7 @@ function EventsPage() {
   } = useQuery({
     queryKey: ['eventsPhotosData'],
     queryFn: () => client.fetch(`*[_type == "eventsPhotos"]`),
+    ...cacheConfig,
   });
 
   if (eventsLoading || eventsIntroLoading || eventsPhotosLoading) {

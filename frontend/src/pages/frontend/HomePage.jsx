@@ -13,42 +13,52 @@ function HomePage() {
   const mediaQuery = window.matchMedia('(max-width: 1024px)');
   const isMobile = mediaQuery.matches;
 
+  const cacheConfig = { staleTime: 1000 * 60 * 10, cacheTime: 1000 * 60 * 15 };
   const { data: INTRO_SECTION_DATA, isLoading: introLoading } = useQuery({
     queryKey: ['introData'],
     queryFn: () => client.fetch(`*[_type == "intro"]`),
+    ...cacheConfig,
   });
   const { data: LOGO_DATA, isLoading: logoLoading } = useQuery({
     queryKey: ['logotypesData'],
     queryFn: () => client.fetch(`*[_type == "logotypes"]`),
+    ...cacheConfig,
   });
   const { data: ABOUT_SECTION_DATA, isLoading: aboutLoading } = useQuery({
     queryKey: ['aboutData'],
     queryFn: () => client.fetch(`*[_type == "about"]`),
+    ...cacheConfig,
   });
   const { data: CAMPS_DATA, isLoading: campsLoading } = useQuery({
     queryKey: ['campsData'],
     queryFn: () => client.fetch(`*[_type == "camp"]`),
+    ...cacheConfig,
   });
   const { data: CLASSES_DATA, isLoading: classesLoading } = useQuery({
     queryKey: ['classesData'],
     queryFn: () => client.fetch(`*[_type == "class"]`),
+    ...cacheConfig,
   });
   const { data: EVENTS_DATA, isLoading: eventsLoading } = useQuery({
     queryKey: ['eventsData'],
     queryFn: () => client.fetch(`*[_type == "event"]`),
+    ...cacheConfig,
   });
   const { data: REVIEWS_SECTION_DATA, isLoading: reviewsLoading } = useQuery({
     queryKey: ['reviewData'],
     queryFn: () => client.fetch(`*[_type == "review"]`),
+    ...cacheConfig,
   });
   const { data: CERTIFICATES_SECTION_DATA, isLoading: certificatesLoading } =
     useQuery({
       queryKey: ['certificatesData'],
       queryFn: () => client.fetch(`*[_type == "certificates"]`),
+      ...cacheConfig,
     });
   const { data: PARTNERS_SECTION_DATA, isLoading: partnersLoading } = useQuery({
     queryKey: ['partnersData'],
     queryFn: () => client.fetch(`*[_type == "partners"]`),
+    ...cacheConfig,
   });
 
   if (

@@ -89,12 +89,11 @@ function AccountPage() {
     }
   }, []);
 
+  const cacheConfig = { staleTime: 1000 * 60 * 10, cacheTime: 1000 * 60 * 15 };
   const { data, isError, error } = useQuery({
     queryKey: ['account'],
     queryFn: ({ signal }) => fetchItem('/show-account', { signal }),
-    // staleTime: 300000,
-    // refetchOnMount: false,
-    // keepPreviousData: true, // when changing state
+    ...cacheConfig,
   });
 
   let userTabs, name, content, customer;

@@ -44,6 +44,8 @@ function DetailsFormUserSettings({
     staleTime: 0,
     refetchOnMount: true,
     enabled: customerAccessed || adminAccessed,
+    staleTime: !adminAccessed ? 1000 * 60 * 5 : 0,
+    cacheTime: !adminAccessed ? 1000 * 60 * 10 : 0,
   });
   console.log(data);
 

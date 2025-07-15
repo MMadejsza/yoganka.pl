@@ -34,6 +34,8 @@ function TOSPage() {
     setIsChosenContent(accountTab);
   }, [accountTab]);
 
+  const cacheConfig = { staleTime: 1000 * 60 * 10, cacheTime: 1000 * 60 * 15 };
+
   const {
     data: latestLegalDoc,
     isLoading: isLegalDocLoading,
@@ -46,7 +48,7 @@ function TOSPage() {
       return wrapper.content; //  return only the nested content object
     },
     keepPreviousData: true,
-    staleTime: 1000 * 60 * 5,
+    ...cacheConfig,
     onError: err => {
       updateFeedback(err);
     },
