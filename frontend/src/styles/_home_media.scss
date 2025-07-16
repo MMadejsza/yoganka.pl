@@ -35,9 +35,6 @@
     font-size: calc(var(--scale) * 12px);
   }
 
-  .top-image-header {
-    background-image: url(/imgs/header/768_header_portrait.jpg);
-  }
   .motto {
     letter-spacing: 1px;
   }
@@ -111,8 +108,8 @@
   .glide-slides {
     min-height: 30vh;
   }
-  .top-image-header {
-    background-image: url(/imgs/header/1024_header_portrait.jpg);
+  .top-image-header__img {
+    object-position: top;
   }
   .motto {
     font-size: 2.5rem;

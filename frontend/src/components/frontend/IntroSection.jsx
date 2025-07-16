@@ -1,8 +1,11 @@
 import { useLocation } from 'react-router-dom';
 import Section from './Section.jsx';
+import SanityImage from './imgsRelated/SanityImage.jsx';
 
 function IntroSection({ modifier, className, extraClass, data }) {
   const location = useLocation();
+  const bgImg = data?.backgroundImage;
+  const prefix = 'top-image-header';
 
   return (
     <Section
@@ -12,6 +15,11 @@ function IntroSection({ modifier, className, extraClass, data }) {
       iSpecific={true}
       key={location.pathname}
     >
+      <SanityImage
+        image={bgImg}
+        variant='headerBackground'
+        className={`${prefix}__img`}
+      />
       {data.list?.length > 0 && (
         <article
           className={`about__bio--content ${className}__welcome-desc${

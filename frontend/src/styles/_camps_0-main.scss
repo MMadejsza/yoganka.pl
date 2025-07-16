@@ -10,12 +10,8 @@
 
   @include flex(column, space-between);
   flex-wrap: wrap;
-  gap: 55vh;
+  gap: 30vh; //!
 
-  background-attachment: fixed;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
   overflow: hidden;
   @supports (-webkit-touch-callout: none) and (not (hover: hover)) {
     //for ios
@@ -26,9 +22,6 @@
     gap: 5rem;
   }
 
-  &.camps {
-    background-image: url(/imgs/320_wyjazdy-bcg.jpg);
-  }
   &__header {
     width: 100%;
     margin-top: 7rem;
@@ -278,10 +271,6 @@ main .turning-tiles {
 
 @media (min-width: 360px) {
   .camps-intro {
-    &.camps {
-      background-image: url(/imgs/480_wyjazdy-bcg.jpg);
-    }
-
     &__welcome-desc {
       font-size: 2rem;
     }
@@ -329,12 +318,6 @@ main .turning-tiles {
 }
 
 @media (min-width: 480px) {
-  .camps-intro {
-    &.camps {
-      background-image: url(/imgs/768_wyjazdy-bcg.jpg);
-    }
-  }
-
   .camps-benefits {
     &__bullet {
       min-height: 200px;
@@ -356,9 +339,6 @@ main .turning-tiles {
 @media (min-width: 768px) {
   .camps-intro {
     background-position: 50% 25%;
-    &.camps {
-      background-image: url(/imgs/1024_wyjazdy-bcg.jpg);
-    }
     &__welcome-desc {
       padding: 2rem;
     }
@@ -436,6 +416,9 @@ main .turning-tiles {
     }
     &__welcome-desc {
       white-space: pre-line;
+    }
+    .top-image-header__img {
+      object-position: 0 25%;
     }
   }
   .camps-benefits {

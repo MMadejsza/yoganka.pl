@@ -2,6 +2,7 @@ import { urlFor } from '../../../utils/sanityClient';
 // const breakpoints = [360, 480, 640, 768, 960, 1025, 1080, 1280, 1400, 1920];
 
 const frontSizes = [320, 480];
+const headerWidths = [360, 480, 768, 1024, 1440, 1920];
 const logoSizes = [55, 100, 150, 185, 200];
 const partnersSizes = [185, 250, 360, 500];
 const galleryWidths = [480, 768, 1024, 1200];
@@ -174,6 +175,34 @@ function SanityImage({
             .url()}
           srcSet={jpgSrcSet}
           // sizes={givenSizes}
+          alt={alt || filename}
+          title={filename}
+          className={className}
+          loading='lazy'
+        />
+      </picture>
+    );
+  } else if (variant === 'headerBackground') {
+    const jpgSrcSet = headerWidths
+      .map(
+        w =>
+          `${builder.width(w).auto('format').quality(imgQuality).url()} ${w}w`
+      )
+      .join(', ');
+    const webpSrcSet = headerWidths
+      .map(
+        w =>
+          `${builder.width(w).format('webp').quality(imgQuality).url()} ${w}w`
+      )
+      .join(', ');
+
+    return (
+      <picture className={containerClassName ?? className}>
+        <source type='image/webp' srcSet={webpSrcSet} />
+        <source type='image/jpeg' srcSet={jpgSrcSet} />
+        <img
+          src={builder.width(headerWidths[0]).url()}
+          srcSet={jpgSrcSet}
           alt={alt || filename}
           title={filename}
           className={className}

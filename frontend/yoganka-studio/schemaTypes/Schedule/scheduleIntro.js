@@ -10,6 +10,7 @@ export default {
   preview: {
     select: {
       title: `sectionTitle`,
+      media: 'backgroundImage',
     },
   },
 }
