@@ -17,32 +17,41 @@ function Socials({ leadingClass, items }) {
     <div className={`${leadingClass}__socials`}>
       {items
         .sort((a, b) => a.order - b.order)
-        .map(social => (
-          <a
-            key={social.name}
-            className={`${leadingClass}__social-link`}
-            href={social.link}
-            target='_blank'
-            title={social.title}
-          >
-            <div className={`${leadingClass}__social`}>
-              <SymbolOrIcon
-                specifier={iconMap[social.name].content || ''}
-                type={iconMap[social.name].type}
-                extraClass={`${leadingClass}__social-icon`}
-              />
-              {isNotMobile && (
-                <SanityImage
-                  image={social.qrImage}
-                  variant='qr' //! dodaj ten wariant
-                  className={`${leadingClass}__qr-image`}
-                  containerClassName={`${leadingClass}__qr`}
-                  alt={social.qrAlt}
+        .map(social => {
+          const formattedLink =
+            social.name === 'whatsapp'
+              ? `https://wa.me/${social.link}`
+              : social.name === 'email'
+              ? `mailto:${social.link}`
+              : social.link;
+
+          return (
+            <a
+              key={social.name}
+              className={`${leadingClass}__social-link`}
+              href={formattedLink}
+              target='_blank'
+              title={social.title}
+            >
+              <div className={`${leadingClass}__social`}>
+                <SymbolOrIcon
+                  specifier={iconMap[social.name].content || ''}
+                  type={iconMap[social.name].type}
+                  extraClass={`${leadingClass}__social-icon`}
                 />
-              )}
-            </div>
-          </a>
-        ))}
+                {isNotMobile && (
+                  <SanityImage
+                    image={social.qrImage}
+                    variant='qr' //! dodaj ten wariant
+                    className={`${leadingClass}__qr-image`}
+                    containerClassName={`${leadingClass}__qr`}
+                    alt={social.qrAlt}
+                  />
+                )}
+              </div>
+            </a>
+          );
+        })}
     </div>
   );
 }
