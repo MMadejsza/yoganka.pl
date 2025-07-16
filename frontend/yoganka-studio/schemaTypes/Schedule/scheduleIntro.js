@@ -1,6 +1,6 @@
 // schemas/eventsIntro.js
 
-import {defaultIntroSet} from '../../utils/elements'
+import {defaultIntroSet} from '../../utils/sets'
 
 export default {
   name: `scheduleIntro`,

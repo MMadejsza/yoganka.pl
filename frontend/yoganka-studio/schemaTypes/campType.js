@@ -1,6 +1,7 @@
 // schemas/CampType.js
 import {singleLine, doubleLine, tripleLine, urlMaxLength} from '../utils/validations'
-import {defaultBtnsSet, defaultGlanceSet} from '../utils/elements'
+import {defaultBtnsSet, defaultTileFront, defaultTileModalPartially} from '../utils/sets'
+import {note, mainImage, slug, date, stringList, simpleTitle} from '../utils/components.jsx'
 
 export default {
   name: 'camp',
@@ -14,125 +15,22 @@ export default {
       hidden: true,
       initialValue: 'camp',
     },
-    {
-      name: 'slug',
-      title: 'Link (URL)',
-      type: 'slug',
-      description: `Tylko końcówka, bez "/". np. "camp-peak-yoga"`,
-      options: {source: 'name', maxLength: urlMaxLength},
-      validation: (Rule) =>
-        Rule.required().custom((text) =>
-          text.current.includes('/') ? 'Link nie może zawierać znaku "/"' : true,
-        ),
-    },
-    {
-      name: 'date',
-      title: 'Data rozpoczęcia',
-      type: 'datetime',
-      validation: (Rule) => Rule.required(),
-    },
-    {
-      name: 'mainImage',
-      title: 'Główne zdjęcie',
-      type: 'image',
-      options: {hotspot: true},
-    },
-    {
-      name: 'front',
-      title: 'Dane kafla (front)',
-      type: 'object',
-      fields: [
-        {
-          name: 'title',
-          title: 'Tytuł',
-          type: 'string',
-          description: `Używaj twardych spacji zamiast zwykłych, żeby tekst się nie łamał nieoczekiwanie.
-            Windows: kopiuj spację z między a i b - > a b.
-            macOS: naciśnij Option + Spacja → wstawi się NBSP.`,
-          initialValue: (document) => document.name || '',
-          validation: (Rule) =>
-            Rule.required().max(tripleLine.maxLength).error(tripleLine.errorMsg),
-        },
-        {
-          name: 'dates',
-          title: 'Daty (np. 05-10.08) - wizualnie',
-          type: 'array',
-          of: [{type: 'string'}],
-        },
-        {
-          name: 'location',
-          title: 'Lokalizacja',
-          type: 'string',
-          validation: (Rule) => Rule.max(doubleLine.maxLength).error(doubleLine.errorMsg),
-        },
-        {
-          name: 'desc',
-          title: 'Opis skrócony',
-          type: 'text',
-          description: `Używaj twardych spacji (Unicode U+00A0) zamiast zwykłych spacji, żeby tekst się nie łamał.
-            Windows: Windows: kopiuj spację z między a i b - > a b.
-            macOS: naciśnij Option + Spacja → wstawi się NBSP.`,
-        },
-        {
-          name: 'btnsContent',
-          title: 'Przyciski kafla',
-          type: 'array',
-          of: [defaultBtnsSet],
-        },
-      ],
-    },
+    slug,
+    date(),
+    mainImage,
+    defaultTileFront,
     {
       name: 'modal',
       title: 'Zawartość modala/okna',
       type: 'object',
       fields: [
-        {
-          name: 'title',
-          title: 'Tytuł modala/okna',
-          type: 'string',
-          initialValue: (document) => document.front?.title || '',
-          validation: (Rule) => Rule.required(),
-        },
-        {
-          name: 'gallery',
-          title: 'Galeria zdjęć',
-          type: 'array',
-          of: [{type: 'image', options: {hotspot: true}}],
-        },
-        {
-          name: 'glanceTitle',
-          title: 'Tytuł bullet-listy',
-          type: 'string',
-          validation: (Rule) => Rule.max(singleLine.maxLength).error(singleLine.errorMsg),
-        },
-        defaultGlanceSet,
-        {
-          name: 'fullDescTitle',
-          title: 'Tytuł opisu',
-          type: 'string',
-        },
-        {
-          name: 'fullDesc',
-          title: 'Treść opisu',
-          type: 'text',
-          description: `Pełny - nie skrócony.
-          Używaj twardych spacji (Unicode U+00A0) zamiast zwykłych spacji, żeby tekst się nie łamał.
-             Windows: Windows: kopiuj spację z między a i b - > a b.
-            macOS: naciśnij Option + Spacja → wstawi się NBSP.`,
-          validation: (Rule) => Rule.required(),
-        },
+        ...defaultTileModalPartially(true),
         {
           name: 'plan',
           title: 'Plan dnia',
           type: 'object',
           fields: [
-            {
-              name: 'title',
-              title: 'Nagłówek planu',
-              type: 'string',
-              validation: (Rule) => Rule.max(doubleLine.maxLength).error(doubleLine.errorMsg),
-              initialValue: 'Slow menu:',
-            },
+            simpleTitle('Slow menu:'),
             {
               name: 'schedule',
               title: 'Dni i aktywności',
@@ -239,76 +137,28 @@ export default {
           fields: [
             {
               name: 'included',
-              title: 'W cenie',
+              title: 'W cenie (✔️)',
               type: 'object',
-              fields: [
-                {
-                  name: 'title',
-                  title: 'Nagłówek',
-                  type: 'string',
-                  description: 'W cenie: (✔️)',
-                  initialValue: 'W cenie:',
-                },
-                {
-                  name: 'list',
-                  title: 'Lista elementów',
-                  type: 'array',
-                  of: [{type: 'string'}],
-                },
-              ],
+              fields: [simpleTitle(`W cenie:`), stringList()],
             },
             {
               name: 'excluded',
-              title: 'Dodatkowo płatne ',
+              title: 'Dodatkowo płatne (👉)',
               type: 'object',
-              fields: [
-                {
-                  name: 'title',
-                  title: 'Nagłówek',
-                  type: 'string',
-                  description: 'Dodatkowo płatne: (👉)',
-                  initialValue: 'Dodatkowo płatne:',
-                },
-                {
-                  name: 'list',
-                  title: 'Lista elementów',
-                  type: 'array',
-                  of: [{type: 'string'}],
-                },
-              ],
+              fields: [simpleTitle('Dodatkowo płatne:'), stringList()],
             },
             {
               name: 'optional',
-              title: 'Opcjonalne',
+              title: 'Opcjonalne (➕)',
               type: 'object',
-              fields: [
-                {
-                  name: 'title',
-                  title: 'Nagłówek',
-                  type: 'string',
-                  description: 'Poszerz swoje menu: (➕)',
-                  initialValue: 'Poszerz swoje menu:',
-                },
-                {
-                  name: 'list',
-                  title: 'Lista elementów',
-                  type: 'array',
-                  of: [{type: 'string'}],
-                },
-              ],
+              fields: [simpleTitle('Poszerz swoje menu:'), stringList()],
             },
             {
               name: 'freeTime',
               title: 'W czasie wolnym',
               type: 'object',
               fields: [
-                {
-                  name: 'title',
-                  title: 'Nagłówek',
-                  type: 'string',
-                  description: 'W czasie wolnym:',
-                  initialValue: 'W czasie wolnym:',
-                },
+                simpleTitle(`W czasie wolnym:`),
                 {
                   name: 'list',
                   title: 'Lista aktywności',
@@ -349,13 +199,8 @@ export default {
             },
           ],
         },
-        {name: 'note', title: 'Notatka', type: 'string'},
-        {
-          name: 'btnsContent',
-          title: 'Przyciski modala',
-          type: 'array',
-          of: [defaultBtnsSet],
-        },
+        note,
+        defaultBtnsSet,
       ],
     },
   ],

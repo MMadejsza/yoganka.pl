@@ -1,4 +1,5 @@
 // schemas/navType.js
+import {stringSymbol} from '../utils/components.jsx'
 
 export default {
   name: 'navs',
@@ -38,25 +39,7 @@ export default {
                   },
                   validation: (Rule) => Rule.required(),
                 },
-                {
-                  name: 'symbol',
-                  title: 'Symbol',
-                  description: (
-                    <span>
-                      Akceptuje tylko nazwy z{' '}
-                      <a
-                        href="https://fonts.google.com/icons?icon.size=24&icon.color=%23e3e3e3"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        tej listy
-                      </a>
-                      . Klikasz w ikonę i kopiujesz "Icon name"
-                    </span>
-                  ),
-                  type: 'string',
-                  validation: (Rule) => Rule.required(),
-                },
+                stringSymbol(),
               ],
               preview: {
                 select: {title: 'label', subtitle: 'symbol'},

@@ -1,7 +1,13 @@
 // schemas/offerSectionType.js
 
-import {singleLine, doubleLine} from '../../utils/validations'
-import {defaultBtnsSet} from '../../utils/elements'
+import {singleLine} from '../../utils/validations'
+import {
+  defaultTileFront,
+  defaultTileModalPartially,
+  bulletsList,
+  defaultBtnsSet,
+} from '../../utils/sets'
+import {mainImage, note} from '../../utils/components'
 
 export default {
   name: `b2bOffer`,
@@ -31,55 +37,20 @@ export default {
               hidden: true,
               initialValue: 'b2b',
             },
+            mainImage,
+            defaultTileFront,
             {
-              name: 'mainImage',
-              title: 'Główne zdjęcie',
-              type: 'image',
-              options: {hotspot: true},
+              name: 'isModal',
+              title: 'Czy ma modal?',
+              type: 'boolean',
+              initialValue: false,
             },
             {
-              name: 'front',
-              title: 'Front - dane kafla',
+              name: 'modal',
+              title: 'Zawartość modala/okna',
               type: 'object',
-              fields: [
-                {
-                  name: 'title',
-                  title: 'Tytuł na kaflu',
-                  type: 'string',
-                  validation: (Rule) =>
-                    Rule.required().max(doubleLine.maxLength).error(doubleLine.errorMsg),
-                },
-                {
-                  name: 'dates',
-                  title: 'Daty (np. 05-10.08)',
-                  type: 'array',
-                  of: [{type: 'string'}],
-                  description: `Lub inne dane - struktura kafli jest zawsze taka sama`,
-                },
-                {
-                  name: 'location',
-                  title: 'Lokalizacja',
-                  type: 'string',
-                  description: `Lub inne dane - struktura kafli jest zawsze taka sama`,
-                  validation: (Rule) => Rule.max(doubleLine.maxLength).error(doubleLine.errorMsg),
-                },
-                {
-                  name: 'desc',
-                  title: 'Opis na kaflu',
-                  type: 'text',
-                },
-                {
-                  name: 'btnsContent',
-                  title: 'Przyciski',
-                  type: 'array',
-                  of: [defaultBtnsSet],
-                },
-              ],
-            },
-            {
-              name: 'back',
-              title: 'Opis po kliknięciu (jeśli dotyczy)',
-              type: 'text',
+              hidden: ({document}) => !document.isModal,
+              fields: [...defaultTileModalPartially(true), bulletsList(), note, defaultBtnsSet],
             },
           ],
           preview: {

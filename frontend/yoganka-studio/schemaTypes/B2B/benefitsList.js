@@ -1,6 +1,7 @@
 // schemas/benefitsList.js
 
 import {singleLine} from '../../utils/validations'
+import {typesList, stringList} from '../../utils/components.jsx'
 
 export default {
   name: `b2bBenefits`,
@@ -14,31 +15,8 @@ export default {
       validation: (Rule) => Rule.max(singleLine.maxLength).error(singleLine.errorMsg),
       initialValue: (document) => document.name || '',
     },
-    {
-      name: 'listType',
-      title: 'Typ listy',
-      type: 'string',
-      description: `Różnica tylko w ikonach`,
-      options: {
-        list: [
-          {title: 'Uwzględnione', value: 'included'},
-          {title: 'Dodatkowo płatne', value: 'excluded'},
-        ],
-      },
-      initialValue: 'included',
-    },
-    {
-      name: 'list',
-      title: `Lista benefit'ów dla firm`,
-      description: `Dodaj każdy punkt jako osobny wiersz`,
-      type: 'array',
-      of: [
-        {
-          type: 'string',
-        },
-      ],
-      validation: (Rule) => Rule.required().min(1).error('Dodaj przynajmniej jeden benefit'),
-    },
+    typesList,
+    stringList(true),
   ],
   preview: {
     select: {

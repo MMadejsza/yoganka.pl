@@ -1,6 +1,7 @@
 // schemas/offerSectionType.js.js
 
 import {singleLine} from '../../utils/validations'
+import {simpleTitle} from '../../utils/components.jsx'
 
 export default {
   name: 'offer',
@@ -11,42 +12,20 @@ export default {
       name: 'camps',
       title: 'Podsekcja wyjazdów',
       type: 'object',
-      fields: [
-        {
-          name: 'title',
-          title: 'Tytuł campów',
-          type: 'string',
-          validation: (Rule) =>
-            Rule.required().max(singleLine.maxLength).error(singleLine.errorMsg),
-        },
-      ],
+      fields: [simpleTitle('', '', true)],
     },
     {
       name: 'classes',
-      title: 'Podsekcja wyjazdów',
+      title: 'Podsekcja zajęć',
       type: 'object',
-      fields: [
-        {
-          name: 'title',
-          title: 'Tytuł zajęć',
-          type: 'string',
-          validation: (Rule) =>
-            Rule.required().max(singleLine.maxLength).error(singleLine.errorMsg),
-        },
-      ],
+      fields: [simpleTitle('', '', true)],
     },
     {
       name: 'events',
-      title: 'Podsekcja wyjazdów',
+      title: 'Podsekcja wydarzeń',
       type: 'object',
       fields: [
-        {
-          name: 'title',
-          title: 'Tytuł wydarzeń',
-          type: 'string',
-          validation: (Rule) =>
-            Rule.required().max(singleLine.maxLength).error(singleLine.errorMsg),
-        },
+        simpleTitle('', '', true),
         {
           name: 'limit',
           title: 'Limit kafli',

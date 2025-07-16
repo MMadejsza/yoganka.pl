@@ -1,6 +1,6 @@
 // schemas/campsPastPhotosType.js
 
-import {defaultGallerySection} from '../../utils/elements'
+import {defaultGallerySection} from '../../utils/sets'
 
 export default {
   name: 'campsPhotos',

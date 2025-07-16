@@ -1,7 +1,7 @@
 // schemas/offerTypesSectionType.js
 
 import {singleLine, doubleLine} from '../../utils/validations'
-import {defaultTurningTilesSet} from '../../utils/elements'
+import {defaultTurningTilesSet} from '../../utils/sets'
 
 export default {
   name: `b2bOfferTypes`,

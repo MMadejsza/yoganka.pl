@@ -1,31 +1,20 @@
 // schemas/aboutType.js
 
 import {singleLine} from '../../utils/validations'
+import {simpleTitle, mainImage} from '../../utils/components.jsx'
 
 export default {
   name: 'about',
   title: 'GŁÓWNA - Bio',
   type: 'document',
   fields: [
-    {
-      name: 'title',
-      title: 'Tytuł',
-      description: `Pojawia się tylko w wersji mobile`,
-      initialValue: 'O mnie',
-      type: 'string',
-      validation: (Rule) => Rule.required().max(singleLine.maxLength).error(singleLine.errorMsg),
-    },
+    simpleTitle('O mnie', `Pojawia się tylko w wersji mobile`, true),
     {
       name: 'image',
       title: 'Zdjęcie portretowe',
       type: 'object',
       fields: [
-        {
-          name: 'portraitImage',
-          title: 'Zdjęcie główne',
-          type: 'image',
-          options: {hotspot: true},
-        },
+        mainImage,
         {
           name: 'stamped',
           title: 'Czy ma zdjęcia "znaczki/stamps"?',
@@ -71,14 +60,7 @@ export default {
       title: 'Biografia',
       type: 'object',
       fields: [
-        {
-          name: 'title',
-          title: 'Nagłówek',
-          type: 'string',
-          initialValue: 'Cześć!',
-          validation: (Rule) =>
-            Rule.required().max(singleLine.maxLength).error(singleLine.errorMsg),
-        },
+        simpleTitle('Cześć!', '', true),
         {
           name: 'paragraphs',
           title: 'Akapity',
@@ -98,7 +80,7 @@ export default {
     select: {
       title: 'title',
       subtitle: 'bio.signature',
-      media: 'image.portraitImage',
+      media: 'image.mainImage',
     },
   },
 }

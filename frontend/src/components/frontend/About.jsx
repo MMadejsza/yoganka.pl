@@ -4,7 +4,7 @@ import Section from './Section.jsx';
 import StampedImg from './imgsRelated/StampedImg.jsx';
 
 function About({ isMobile, data, logo }) {
-  console.log(data.about[0].image.portraitImage);
+  console.log(data.about[0].image.mainImage);
   return (
     <Section classy='about' header={data.about[0].sectionTitle}>
       {isMobile ? null : (
@@ -12,7 +12,7 @@ function About({ isMobile, data, logo }) {
       )}
       <StampedImg
         placement='about'
-        img={data.about[0].image.portraitImage}
+        img={data.about[0].image.mainImage}
         stamps={[data.about[0].image.stamp1, data.about[0].image.stamp2]}
       />
       <Bio

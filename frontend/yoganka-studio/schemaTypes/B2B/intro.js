@@ -1,6 +1,6 @@
 // schemas/priceListAndCooperation.js
 
-import {defaultIntroSet} from '../../utils/elements'
+import {defaultIntroSet} from '../../utils/sets'
 
 export default {
   name: `b2bIntro`,

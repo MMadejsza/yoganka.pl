@@ -1,4 +1,5 @@
 // schemas/logoType.js
+import * as components from '../utils/components.jsx'
 
 export default {
   name: 'logotypes',
@@ -10,12 +11,7 @@ export default {
       title: 'Pełne logo',
       type: 'object',
       fields: [
-        {
-          name: 'title',
-          title: 'Podpowiedź przy najechaniu (tooltip)',
-          type: 'string',
-          initialValue: 'Yoganka - Logo',
-        },
+        components.stringImgTitle('Yoganka - Logo'),
         {
           name: 'img',
           title: 'Plik Logo',
@@ -30,12 +26,7 @@ export default {
       title: 'Logo - sam kształt',
       type: 'object',
       fields: [
-        {
-          name: 'title',
-          title: 'Podpowiedź przy najechaniu (tooltip)',
-          type: 'string',
-          initialValue: 'Yoganka - Logo',
-        },
+        components.stringImgTitle('Yoganka - Logo'),
         {
           name: 'img',
           title: 'Plik Logo',
@@ -57,12 +48,7 @@ export default {
       title: 'Logo - sam napis',
       type: 'object',
       fields: [
-        {
-          name: 'title',
-          title: 'Podpowiedź przy najechaniu (tooltip)',
-          type: 'string',
-          initialValue: 'Yoganka - Logo',
-        },
+        components.stringImgTitle('Yoganka - Logo'),
         {
           name: 'img',
           title: 'Plik Logo',

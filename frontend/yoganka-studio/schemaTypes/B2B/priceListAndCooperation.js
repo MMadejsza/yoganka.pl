@@ -1,7 +1,8 @@
 // schemas/priceListAndCooperation.js
 
 import {singleLine} from '../../utils/validations'
-import {defaultBtnsSet} from '../../utils/elements'
+import * as components from '../../utils/components.jsx'
+import {defaultBtnsSet} from '../../utils/sets'
 
 export default {
   name: `b2bPriceListAndCooperation`,
@@ -13,26 +14,9 @@ export default {
       title: `Tytuł sekcji`,
       type: `string`,
       validation: (Rule) => Rule.max(singleLine.maxLength).error(singleLine.errorMsg),
-      initialValue: (document) => document.name || '',
     },
-    {
-      name: 'desc',
-      title: `Lista akapitów sekcji`,
-      description: `Dodaj akapit osobno - pojawia sie mała przerwa między nimi.`,
-      type: 'array',
-      of: [
-        {
-          type: 'text',
-        },
-      ],
-      validation: (Rule) => Rule.required().min(1).error('Dodaj przynajmniej jeden akapit'),
-    },
-    {
-      name: 'btnsContent',
-      title: 'Przyciski',
-      type: 'array',
-      of: [defaultBtnsSet],
-    },
+    components.textList(true),
+    defaultBtnsSet,
   ],
   preview: {
     select: {

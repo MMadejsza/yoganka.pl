@@ -1,12 +1,5 @@
 // schemas/socialType.js
-
-const iconMap = {
-  instagram: {iconClass: 'fa-brands fa-instagram', materialSymbol: ''},
-  facebook: {iconClass: 'fa-brands fa-facebook', materialSymbol: ''},
-  whatsapp: {iconClass: 'fa-brands fa-whatsapp', materialSymbol: ''},
-  phone: {iconClass: '', materialSymbol: 'call'},
-  email: {iconClass: '', materialSymbol: 'mail'},
-}
+import * as components from '../../utils/components.jsx'
 
 export default {
   name: 'social',
@@ -46,27 +39,7 @@ export default {
           return 'Wprowadź poprawny numer (cyfry), lub link zaczynający się od tel:, mailto:, https://'
         }),
     },
-    {
-      name: 'title',
-      title: 'Podpowiedź przy najechaniu (tooltip)',
-      type: 'string',
-      description: `Ma wartość UX - niech będzie faktycznie wskazówką dla przycisku. np. "Instagram Fanpage", "Zadzwoń"`,
-      validation: (Rule) => Rule.required(),
-    },
-    {
-      name: 'iconClass',
-      title: 'Klasa ikony (FontAwesome)',
-      type: 'string',
-      hidden: true,
-      initialValue: (document) => iconMap[document.name]?.iconClass || '',
-    },
-    {
-      name: 'materialSymbol',
-      title: 'Symbol Material',
-      type: 'string',
-      hidden: true,
-      initialValue: (document) => iconMap[document.name]?.materialSymbol || '',
-    },
+    components.stringImgTitle(),
 
     // ---- Kod QR jako asset w Sanity ----
     {
