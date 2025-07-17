@@ -68,7 +68,7 @@ function EventsPage() {
         <OfferSection products={products} extraClass={'events'} />
       )}
       <SimpleGallery
-        givenGallery={EVENTS_PAST_GALLERY_SECTION_DATA[0].list}
+        givenGallery={EVENTS_PAST_GALLERY_SECTION_DATA[0].gallery}
         glideConfig={{
           type: 'carousel',
           perView: 2,

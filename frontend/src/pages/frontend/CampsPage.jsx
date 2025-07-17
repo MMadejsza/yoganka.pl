@@ -88,7 +88,7 @@ function CampsPage() {
         <OfferSection products={products} />
         <ReviewsSection data={REVIEWS_SECTION_DATA} />
         <SimpleGallery
-          givenGallery={CAMPS_PAST_GALLERY_SECTION_DATA[0].list}
+          givenGallery={CAMPS_PAST_GALLERY_SECTION_DATA[0].gallery}
           glideConfig={{
             type: 'carousel',
             perView: 2,
