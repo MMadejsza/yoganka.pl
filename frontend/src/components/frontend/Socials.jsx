@@ -6,7 +6,7 @@ const iconMap = {
   facebook: { type: 'ICON', content: 'fa-brands fa-square-facebook' },
   whatsapp: { type: 'ICON', content: 'fab fa-whatsapp' },
   phone: { type: 'ICON', content: 'fa-solid fa-phone' },
-  email: { type: 'ICON', content: 'fa-solid fa-envelope' },
+  mail: { type: 'ICON', content: 'fa-solid fa-envelope' },
 };
 
 function Socials({ leadingClass, items }) {
@@ -21,8 +21,10 @@ function Socials({ leadingClass, items }) {
           const formattedLink =
             social.name === 'whatsapp'
               ? `https://wa.me/${social.link}`
-              : social.name === 'email'
+              : social.name === 'mail'
               ? `mailto:${social.link}`
+              : social.name === 'phone'
+              ? `tel:${social.link}`
               : social.link;
 
           return (
@@ -35,7 +37,7 @@ function Socials({ leadingClass, items }) {
             >
               <div className={`${leadingClass}__social`}>
                 <SymbolOrIcon
-                  specifier={iconMap[social.name].content || ''}
+                  specifier={iconMap[social.name]?.content || ''}
                   type={iconMap[social.name].type}
                   extraClass={`${leadingClass}__social-icon`}
                 />

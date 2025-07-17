@@ -24,10 +24,15 @@ function Buttons({ list }) {
         btn.icon = 'fa-brands fa-whatsapp';
         btn.text = 'whatsapp';
         break;
-      case 'grafik':
+      case 'schedule':
         internalLink = true;
         btn.symbol = 'calendar_month';
-        formattedLink = btn.link;
+        formattedLink = `/grafik`;
+        break;
+      case 'scheduleRecord':
+        internalLink = true;
+        btn.symbol = 'event';
+        formattedLink = `/grafik/${btn.scheduleId}`;
         break;
 
       default:

@@ -244,16 +244,8 @@ function SanityImage({
 
     return (
       <picture className={containerClassName ?? className}>
-        <source
-          type='image/webp'
-          srcSet={webpSrc}
-          // sizes={sizesAttr}
-        />
-        <source
-          type='image/jpeg'
-          srcSet={jpgSrcSet}
-          // sizes={sizesAttr}
-        />
+        <source type='image/webp' srcSet={webpSrc} sizes={sizesAttr} />
+        <source type='image/jpeg' srcSet={jpgSrcSet} sizes={sizesAttr} />
         <img
           src={galleryBuilder
             .fit('max')
@@ -263,7 +255,7 @@ function SanityImage({
             .quality(imgQuality)
             .url()}
           srcSet={jpgSrcSet}
-          // sizes={sizesAttr}
+          sizes={sizesAttr}
           alt={alt || filename}
           title={filename}
           loading='lazy'

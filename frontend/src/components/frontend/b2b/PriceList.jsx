@@ -16,7 +16,7 @@ function PriceList({ content, modifier, children = [], id }) {
   return (
     <Section classy='b2b-price' header={content.sectionTitle} id={id}>
       <article className='b2b-price__content'>
-        {content.desc.map((pContent, index) => (
+        {content.list.map((pContent, index) => (
           <p key={index} className='b2b-price__p'>
             {pContent}
           </p>
