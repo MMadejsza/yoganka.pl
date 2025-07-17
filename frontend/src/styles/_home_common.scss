@@ -9,7 +9,9 @@
   box-sizing: border-box;
   list-style: none;
 }
-
+#root {
+  display: grid;
+}
 html {
   --scale: 1; // Initial scale to be changed by user
   --section-padding-y: #{map.get($sizes, section-padding-y)};
@@ -29,6 +31,7 @@ body {
   display: grid;
 }
 .wrapper {
+  position: relative;
   display: grid;
   min-height: 100vh;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
