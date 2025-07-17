@@ -1,25 +1,14 @@
-// schemas/EventType.js
-import {singleLine, doubleLine, tripleLine, urlMaxLength} from '../utils/validations'
-import {
-  defaultBtnsSet,
-  defaultTileFront,
-  defaultTileModalPartially,
-  bulletsList,
-} from '../utils/sets'
-import {note, mainImage, slug, date} from '../utils/components.jsx'
+// schemas/eventType.js
+
+import { date, hiddenType, mainImage, slug } from '../utils/components.jsx';
+import { defaultModalSet, defaultTileFrontSet } from '../utils/sets';
 
 export default {
   name: 'event',
   title: '***WYDARZENIA YOGOWE***',
   type: 'document',
   fields: [
-    {
-      name: 'type',
-      title: 'Typ',
-      type: 'string',
-      hidden: true,
-      initialValue: 'event',
-    },
+    hiddenType('event'),
     slug,
     date(),
     {
@@ -34,27 +23,16 @@ export default {
       type: 'string',
       options: {
         list: [
-          {title: 'Jednorazowe', value: 'fixed'},
-          {title: 'Cykliczne', value: 'repetitive'},
+          { title: 'Jednorazowe', value: 'fixed' },
+          { title: 'Cykliczne', value: 'repetitive' },
         ],
       },
       initialValue: 'fixed',
       description: `Ma wpływ na automatyczne sortowanie kafli - jednorazowe mają pierwszeństwo`,
     },
-
-    // --- Obrazy
     mainImage,
-
-    // --- Front (kafelek)
-    defaultTileFront,
-
-    // --- Modal (okno szczegółów)
-    {
-      name: 'modal',
-      title: 'Zawartość modala/okna',
-      type: 'object',
-      fields: [...defaultTileModalPartially(), bulletsList(), note, defaultBtnsSet],
-    },
+    defaultTileFrontSet,
+    defaultModalSet(),
   ],
   preview: {
     select: {
@@ -63,4 +41,4 @@ export default {
       media: 'mainImage',
     },
   },
-}
+};

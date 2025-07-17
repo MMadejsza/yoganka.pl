@@ -1,6 +1,6 @@
-// schemas/priceListAndCooperation.js
+// schemas/B2b/intro.js
 
-import {defaultIntroSet} from '../../utils/sets'
+import { defaultIntroSet } from '../../utils/sets';
 
 export default {
   name: `b2bIntro`,
@@ -13,4 +13,4 @@ export default {
       media: 'backgroundImage',
     },
   },
-}
+};

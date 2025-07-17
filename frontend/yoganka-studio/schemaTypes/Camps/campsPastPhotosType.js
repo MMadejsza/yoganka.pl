@@ -1,16 +1,16 @@
-// schemas/campsPastPhotosType.js
+// schemas/Camps/campsPastPhotosType.js
 
-import {defaultGallerySection} from '../../utils/sets'
+import { defaultGallerySectionSet } from '../../utils/sets';
 
 export default {
   name: 'campsPhotos',
   title: 'CAMPY - Galeria jak było',
   type: 'document',
-  fields: defaultGallerySection,
+  fields: defaultGallerySectionSet,
 
   preview: {
     select: {
       title: 'sectionTitle',
     },
   },
-}
+};

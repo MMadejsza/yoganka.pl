@@ -28,11 +28,5 @@
     "eslint": "^9.28",
     "prettier": "^3.5",
     "typescript": "^5.8"
-  },
-  "prettier": {
-    "semi": false,
-    "printWidth": 100,
-    "bracketSpacing": false,
-    "singleQuote": true
   }
 }

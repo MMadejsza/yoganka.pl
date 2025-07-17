@@ -1,5 +1,5 @@
-// schemas/certificateType.js
-import {singleLine, doubleLine} from '../../utils/validations'
+// schemas/Home/certificateType.js
+import { doubleLine, singleLine } from '../../utils/validations';
 
 export default {
   name: 'certificates',
@@ -10,8 +10,9 @@ export default {
       name: 'sectionTitle',
       title: 'Tytuł sekcji',
       type: 'string',
-      validation: (Rule) => Rule.max(singleLine.maxLength).error(singleLine.errorMsg),
-      initialValue: (document) => document.name || '',
+      validation: Rule =>
+        Rule.max(singleLine.maxLength).error(singleLine.errorMsg),
+      initialValue: document => document.name || '',
     },
     {
       name: 'list',
@@ -25,29 +26,35 @@ export default {
               name: 'name',
               title: 'Nazwa certyfikatu',
               type: 'string',
-              description: 'Pełna nazwa, np. „RYT200” lub „Instruktor Hatha Jogi”',
-              validation: (Rule) =>
-                Rule.required().max(doubleLine.maxLength).error(doubleLine.errorMsg),
+              description:
+                'Pełna nazwa, np. „RYT200” lub „Instruktor Hatha Jogi”',
+              validation: Rule =>
+                Rule.required()
+                  .max(doubleLine.maxLength)
+                  .error(doubleLine.errorMsg),
             },
             {
               name: 'instructor',
               title: 'Instytucja / prowadzący',
               type: 'string',
               description: 'Np. „House of OM” lub „prof. Szopa”',
-              validation: (Rule) =>
-                Rule.required().max(singleLine.maxLength).error(singleLine.errorMsg),
+              validation: Rule =>
+                Rule.required()
+                  .max(singleLine.maxLength)
+                  .error(singleLine.errorMsg),
             },
             {
               name: 'duration',
               title: 'Czas trwania',
               type: 'string',
-              description: 'Np. „200h”, „25h”; zostaw puste jeśli brak informacji',
+              description:
+                'Np. „200h”, „25h”; zostaw puste jeśli brak informacji',
             },
             {
               name: 'themes',
               title: 'Tematy / moduły',
               type: 'array',
-              of: [{type: 'string'}],
+              of: [{ type: 'string' }],
               description: 'Lista głównych tematów, np. Vinyasa, Hatha',
               initialValue: [],
             },
@@ -67,4 +74,4 @@ export default {
       title: 'sectionTitle',
     },
   },
-}
+};

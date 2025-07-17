@@ -1,6 +1,6 @@
-// schemas/eventsIntro.js
+// schemas/Schedule/scheduleIntro.js
 
-import {defaultIntroSet} from '../../utils/sets'
+import { defaultIntroSet } from '../../utils/sets';
 
 export default {
   name: `scheduleIntro`,
@@ -13,4 +13,4 @@ export default {
       media: 'backgroundImage',
     },
   },
-}
+};

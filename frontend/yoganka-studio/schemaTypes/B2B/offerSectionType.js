@@ -1,26 +1,18 @@
-// schemas/offerSectionType.js
-
-import {singleLine} from '../../utils/validations'
+// schemas/B2B/offerSectionType.js
 import {
-  defaultTileFront,
-  defaultTileModalPartially,
-  bulletsList,
-  defaultBtnsSet,
-} from '../../utils/sets'
-import {mainImage, note} from '../../utils/components'
+  hiddenType,
+  isModal,
+  mainImage,
+  sectionTitle,
+} from '../../utils/components';
+import { defaultModalSet, defaultTileFrontSet } from '../../utils/sets';
 
 export default {
   name: `b2bOffer`,
   title: `B2B - Oferta`,
   type: `document`,
   fields: [
-    {
-      name: `sectionTitle`,
-      title: `Tytuł sekcji`,
-      type: `string`,
-      validation: (Rule) => Rule.max(singleLine.maxLength).error(singleLine.errorMsg),
-      initialValue: (document) => document.name || '',
-    },
+    sectionTitle,
     {
       name: 'list',
       title: `Lista produktów dla firm`,
@@ -30,28 +22,11 @@ export default {
         {
           type: 'object',
           fields: [
-            {
-              name: 'type',
-              title: 'Typ',
-              type: 'string',
-              hidden: true,
-              initialValue: 'b2b',
-            },
+            hiddenType('b2b'),
             mainImage,
-            defaultTileFront,
-            {
-              name: 'isModal',
-              title: 'Czy ma modal?',
-              type: 'boolean',
-              initialValue: false,
-            },
-            {
-              name: 'modal',
-              title: 'Zawartość modala/okna',
-              type: 'object',
-              hidden: ({document}) => !document.isModal,
-              fields: [...defaultTileModalPartially(true), bulletsList(), note, defaultBtnsSet],
-            },
+            defaultTileFrontSet,
+            isModal,
+            defaultModalSet(false, ({ parent }) => !parent.isModal),
           ],
           preview: {
             select: {
@@ -67,4 +42,4 @@ export default {
       title: `sectionTitle`,
     },
   },
-}
+};

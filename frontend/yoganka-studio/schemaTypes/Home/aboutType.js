@@ -1,7 +1,7 @@
-// schemas/aboutType.js
+// schemas/Home/aboutType.js
 
-import {singleLine} from '../../utils/validations'
-import {simpleTitle, mainImage} from '../../utils/components.jsx'
+import { mainImage, simpleTitle } from '../../utils/components.jsx';
+import { singleLine } from '../../utils/validations';
 
 export default {
   name: 'about',
@@ -26,15 +26,15 @@ export default {
           title: 'Pierwsze logo-zdjęcie "stamp"',
           description: `Pojawia się tylko w wersji mobile`,
           type: 'image',
-          hidden: ({document}) => !document.image.stamped,
-          options: {hotspot: true},
-          validation: (Rule) => {
+          hidden: ({ document }) => !document.image.stamped,
+          options: { hotspot: true },
+          validation: Rule => {
             Rule.custom((value, context) => {
               if (!value && context.document.image.stamped) {
-                return 'Albo 2x logo albo 0'
+                return 'Albo 2x logo albo 0';
               }
-              return true
-            })
+              return true;
+            });
           },
         },
         {
@@ -42,15 +42,15 @@ export default {
           title: 'Drugie logo-zdjęcie "stamp"',
           description: `Pojawia się tylko w wersji mobile`,
           type: 'image',
-          hidden: ({document}) => !document.image.stamped,
-          options: {hotspot: true},
-          validation: (Rule) => {
+          hidden: ({ document }) => !document.image.stamped,
+          options: { hotspot: true },
+          validation: Rule => {
             Rule.custom((value, context) => {
               if (!value && context.document.image.stamped) {
-                return 'Albo 2x logo albo 0'
+                return 'Albo 2x logo albo 0';
               }
-              return true
-            })
+              return true;
+            });
           },
         },
       ],
@@ -65,13 +65,14 @@ export default {
           name: 'paragraphs',
           title: 'Akapity',
           type: 'array',
-          of: [{type: 'text'}],
+          of: [{ type: 'text' }],
         },
         {
           name: 'signature',
           title: 'Podpis',
           type: 'string',
-          validation: (Rule) => Rule.max(singleLine.maxLength).error(singleLine.errorMsg),
+          validation: Rule =>
+            Rule.max(singleLine.maxLength).error(singleLine.errorMsg),
         },
       ],
     },
@@ -83,4 +84,4 @@ export default {
       media: 'image.mainImage',
     },
   },
-}
+};

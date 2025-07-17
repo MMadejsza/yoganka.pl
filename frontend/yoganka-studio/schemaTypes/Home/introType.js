@@ -1,6 +1,6 @@
-// schemas/introType.js
+// schemas/Home/introType.js
 
-import {singleLine} from '../../utils/validations'
+import { singleLine } from '../../utils/validations';
 
 export default {
   name: 'intro',
@@ -12,19 +12,20 @@ export default {
       title: 'Zdjęcie w tle',
       description: `Pojawia się tylko w wersji mobile`,
       type: 'image',
-      options: {hotspot: true},
+      options: { hotspot: true },
     },
     {
       name: 'frontLogo',
       title: 'Główne logo',
       type: 'image',
-      options: {hotspot: true},
+      options: { hotspot: true },
     },
     {
       name: 'motto',
       title: 'Motto',
       type: 'string',
-      validation: (Rule) => Rule.required().max(singleLine.maxLength).error(singleLine.errorMsg),
+      validation: Rule =>
+        Rule.required().max(singleLine.maxLength).error(singleLine.errorMsg),
     },
   ],
   preview: {
@@ -33,4 +34,4 @@ export default {
       media: 'bcgImage',
     },
   },
-}
+};

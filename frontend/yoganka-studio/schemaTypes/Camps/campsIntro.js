@@ -1,6 +1,6 @@
-// schemas/priceListAndCooperation.js
+// schemas/Camps/campsIntro.js
 
-import {defaultIntroSet} from '../../utils/sets'
+import { defaultIntroSet } from '../../utils/sets';
 
 export default {
   name: `campsIntro`,
@@ -13,4 +13,4 @@ export default {
       media: 'backgroundImage',
     },
   },
-}
+};

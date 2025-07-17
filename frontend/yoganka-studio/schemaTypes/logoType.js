@@ -1,5 +1,5 @@
 // schemas/logoType.js
-import * as components from '../utils/components.jsx'
+import * as components from '../utils/components.jsx';
 
 export default {
   name: 'logotypes',
@@ -12,13 +12,7 @@ export default {
       type: 'object',
       fields: [
         components.stringImgTitle('Yoganka - Logo'),
-        {
-          name: 'img',
-          title: 'Plik Logo',
-          type: 'image',
-          options: {hotspot: true},
-          description: 'Zuploaduj plik PNG/JPG/SVG',
-        },
+        components.logoImg(),
       ],
     },
     {
@@ -27,20 +21,8 @@ export default {
       type: 'object',
       fields: [
         components.stringImgTitle('Yoganka - Logo'),
-        {
-          name: 'img',
-          title: 'Plik Logo',
-          type: 'image',
-          options: {hotspot: true},
-          description: 'Zuploaduj plik PNG/JPG/SVG',
-        },
-        {
-          name: 'imgActive',
-          title: 'Plik Logo - wersja aktywna (kolor akcentowy)',
-          type: 'image',
-          options: {hotspot: true},
-          description: 'Zuploaduj plik PNG/JPG/SVG',
-        },
+        components.logoImg(),
+        components.logoImg('active'),
       ],
     },
     {
@@ -49,23 +31,17 @@ export default {
       type: 'object',
       fields: [
         components.stringImgTitle('Yoganka - Logo'),
-        {
-          name: 'img',
-          title: 'Plik Logo',
-          type: 'image',
-          options: {hotspot: true},
-          description: 'Zuploaduj plik PNG/JPG/SVG',
-        },
+        components.logoImg(),
       ],
     },
   ],
   preview: {
-    select: {logo: 'fullLogo.img'},
-    prepare({logo}) {
+    select: { logo: 'fullLogo.img' },
+    prepare({ logo }) {
       return {
         title: `Logotypy`,
         media: logo,
-      }
+      };
     },
   },
-}
+};

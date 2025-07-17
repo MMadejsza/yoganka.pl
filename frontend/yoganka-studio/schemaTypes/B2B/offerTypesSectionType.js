@@ -1,25 +1,16 @@
-// schemas/offerTypesSectionType.js
+// schemas/B2B/offerTypesSectionType.js
 
-import {singleLine, doubleLine} from '../../utils/validations'
-import {defaultTurningTilesSet} from '../../utils/sets'
+import { sectionTitle } from '../../utils/components.jsx';
+import { defaultTurningTilesSet } from '../../utils/sets';
 
 export default {
   name: `b2bOfferTypes`,
   title: `B2B - Typy zajęć kafle obrotowe`,
   type: `document`,
-  fields: [
-    {
-      name: `sectionTitle`,
-      title: `Tytuł sekcji`,
-      type: `string`,
-      validation: (Rule) => Rule.max(singleLine.maxLength).error(singleLine.errorMsg),
-      initialValue: (document) => document.name || '',
-    },
-    defaultTurningTilesSet,
-  ],
+  fields: [sectionTitle, defaultTurningTilesSet],
   preview: {
     select: {
       title: `sectionTitle`,
     },
   },
-}
+};

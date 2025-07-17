@@ -1,12 +1,13 @@
 // schemas/classType.js
 
 import {
-  defaultBtnsSet,
-  defaultTileFront,
-  defaultTileModalPartially,
-  bulletsList,
-} from '../utils/sets'
-import {note, mainImage, slug, date} from '../utils/components.jsx'
+  date,
+  hiddenType,
+  isModal,
+  mainImage,
+  slug,
+} from '../utils/components.jsx';
+import { defaultModalSet, defaultTileFrontSet } from '../utils/sets';
 
 export default {
   name: 'class',
@@ -24,39 +25,22 @@ export default {
       title: 'Nazwa zajęć',
       type: 'string',
       description: 'np. „Grupowe i Indywidualne” lub „Online”',
-      validation: (Rule) => Rule.required(),
+      validation: Rule => Rule.required(),
     },
-    {
-      name: 'type',
-      title: 'Typ',
-      type: 'string',
-      hidden: true,
-      initialValue: 'class',
-    },
+    hiddenType('class'),
     slug,
     date(false),
     mainImage,
     // --------------------
     // Front – kafelek
     // --------------------
-    defaultTileFront,
+    defaultTileFrontSet,
 
     // --------------------
     // Modal – szczegóły
     // --------------------
-    {
-      name: 'isModal',
-      title: 'Czy ma modal?',
-      type: 'boolean',
-      initialValue: false,
-    },
-    {
-      name: 'modal',
-      title: 'Zawartość modala/okna',
-      type: 'object',
-      hidden: ({document}) => !document.isModal,
-      fields: [...defaultTileModalPartially(true), bulletsList(), note, defaultBtnsSet],
-    },
+    isModal,
+    defaultModalSet(false, ({ document }) => !document.isModal),
   ],
   preview: {
     select: {
@@ -64,4 +48,4 @@ export default {
       media: 'mainImage',
     },
   },
-}
+};
