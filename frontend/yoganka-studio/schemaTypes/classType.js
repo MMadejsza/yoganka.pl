@@ -11,7 +11,7 @@ import { defaultModalSet, defaultTileFrontSet } from '../utils/sets';
 
 export default {
   name: 'class',
-  title: '***ZAJĘCIA YOGOWE***',
+  title: '🛒 ***ZAJĘCIA YOGOWE***',
   type: 'document',
 
   initialValue: {
@@ -22,9 +22,9 @@ export default {
   fields: [
     {
       name: 'name',
-      title: 'Nazwa zajęć',
+      title: '🟥 Nazwa zajęć',
       type: 'string',
-      description: 'np. „Grupowe i Indywidualne” lub „Online”',
+      description: '☝🏻 np. „Grupowe i Indywidualne” lub „Online”',
       validation: Rule => Rule.required(),
     },
     hiddenType('class'),

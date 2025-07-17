@@ -4,62 +4,48 @@ import * as components from '../../utils/components.jsx';
 
 export default {
   name: 'social',
-  title: 'STOPKA - Social media',
+  title: 'STOPKA - 📱 Social media',
   type: 'document',
   fields: [
     {
       name: 'name',
-      title: 'Nazwa serwisu',
+      title: ' 🔤 Nazwa serwisu',
       type: 'string',
       validation: Rule => Rule.required(),
       options: {
         list: [
-          { title: 'Instagram', value: 'instagram' },
-          { title: 'Facebook', value: 'facebook' },
-          { title: 'WhatsApp', value: 'whatsapp' },
-          { title: 'Telefon', value: 'phone' },
-          { title: 'E-mail', value: 'mail' },
+          components.btnsLinksOptions.instagram,
+          components.btnsLinksOptions.facebook,
+          components.btnsLinksOptions.whatsapp,
+          components.btnsLinksOptions.phone,
+          components.btnsLinksOptions.mail,
         ],
       },
     },
     components.link({
-      description: `W przypadku maila - podaj adres np."kontakt@yoganka.pl | Whatsapp z kierunkowym bez '+': 48792891607. |
-          Telefon z kierunkowym : +48792891607. |  Zewnętrzny link - pełny link`,
+      description: `W przypadku ☝🏻 maila - podaj adres np."kontakt@yoganka.pl | ☝🏻 Whatsapp z kierunkowym bez '+': 48792891607. |
+          ☝🏻 Telefon z kierunkowym : +48792891607. |  ☝🏻 Zewnętrzny link - pełny link`,
       isConditionalFnSet: { parentLabel: 'name' },
     }),
     components.stringImgTitle(),
-
-    // ---- Kod QR jako asset w Sanity ----
-    {
-      name: 'qrImage',
-      title: 'Obraz QR (kod)',
-      type: 'image',
-      options: { hotspot: true },
-      description: 'Zuploaduj plik PNG/JPG z kodem QR',
-    },
-    {
-      name: 'qrAlt',
-      title: 'Tekst alternatywny dla QR',
-      type: 'string',
-      description:
-        'Np. "Instagram QR Code" - widoczny tylko jesli qr się nie wyświetla prawidłowo',
-      initialValue: document => `${document.name} QR Code`,
-      validation: Rule =>
-        Rule.required().error('Potrzebny tekst alt dla obrazu QR'),
-    },
+    components.qrImage(),
+    components.qrAlt({
+      hiddenFn: undefined,
+      initialValFn: document => `${document.name} QR Code`,
+    }),
     {
       name: 'order',
-      title: 'Kolejność',
+      title: '🔢 Kolejność',
       type: 'number',
       options: {
         list: [
-          { title: '1', value: 1 },
-          { title: '2', value: 2 },
-          { title: '3', value: 3 },
-          { title: '4', value: 4 },
-          { title: '5', value: 5 },
-          { title: '6', value: 6 },
-          { title: '7', value: 7 },
+          { title: '1️⃣', value: 1 },
+          { title: '2️⃣', value: 2 },
+          { title: '3️⃣', value: 3 },
+          { title: '4️⃣', value: 4 },
+          { title: '5️⃣', value: 5 },
+          { title: '6️⃣', value: 6 },
+          { title: '7️⃣', value: 7 },
         ],
       },
     },

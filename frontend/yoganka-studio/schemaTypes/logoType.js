@@ -3,12 +3,12 @@ import * as components from '../utils/components.jsx';
 
 export default {
   name: 'logotypes',
-  title: 'LOGOTYPY',
+  title: '📷 LOGOTYPY',
   type: 'document',
   fields: [
     {
       name: 'fullLogo',
-      title: 'Pełne logo',
+      title: '📷 Pełne logo',
       type: 'object',
       fields: [
         components.stringImgTitle('Yoganka - Logo'),
@@ -17,7 +17,7 @@ export default {
     },
     {
       name: 'justBody',
-      title: 'Logo - sam kształt',
+      title: '📷 Logo - sam kształt',
       type: 'object',
       fields: [
         components.stringImgTitle('Yoganka - Logo'),
@@ -27,7 +27,7 @@ export default {
     },
     {
       name: 'justSign',
-      title: 'Logo - sam napis',
+      title: '📷 Logo - sam napis',
       type: 'object',
       fields: [
         components.stringImgTitle('Yoganka - Logo'),

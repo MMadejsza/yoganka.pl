@@ -1,16 +1,12 @@
 // schemas/Schedule/scheduleIntro.js
 
+import { defaultIntroPreview } from '../../utils/previews';
 import { defaultIntroSet } from '../../utils/sets';
 
 export default {
   name: `scheduleIntro`,
-  title: `GRAFIK - Intro`,
+  title: `GRAFIK - ▶️ Intro`,
   type: `document`,
   fields: defaultIntroSet,
-  preview: {
-    select: {
-      title: `sectionTitle`,
-      media: 'backgroundImage',
-    },
-  },
+  preview: defaultIntroPreview,
 };

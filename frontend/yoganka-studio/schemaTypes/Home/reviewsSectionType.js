@@ -4,13 +4,13 @@ import { link, sectionTitle } from '../../utils/components.jsx';
 
 export default {
   name: 'review',
-  title: 'GŁÓWNA - Recenzje',
+  title: 'GŁÓWNA - 🌟 Recenzje',
   type: 'document',
   fields: [
     sectionTitle,
     {
       name: 'list',
-      title: `Lista recenzji`,
+      title: `📝 Lista recenzji`,
       type: 'array',
       of: [
         {
@@ -18,18 +18,18 @@ export default {
           fields: [
             {
               name: 'name',
-              title: 'Imię i nazwisko',
+              title: '👤 Imię i nazwisko',
               type: 'string',
               validation: Rule =>
                 Rule.required()
                   .max(100)
-                  .error('Podaj imię i nazwisko (max 100 znaków)'),
+                  .error('⚠️ Podaj imię i nazwisko (max 100 znaków)'),
             },
             {
               name: 'productName',
-              title: 'Typ produktu',
+              title: '🧮 Typ produktu',
               type: 'string',
-              description: 'Czego dotyczy recenzja',
+              description: '☝🏻 Czego dotyczy recenzja',
               options: {
                 list: [
                   { title: 'Zajęcia', value: 'Zajęcia' },
@@ -40,16 +40,17 @@ export default {
                   { title: 'Ogólna', value: 'Ogólna' },
                 ],
               },
-              validation: Rule => Rule.required().error('Wybierz typ produktu'),
+              validation: Rule =>
+                Rule.required().error('⚠️ Wybierz typ produktu'),
             },
             {
               name: 'review',
-              title: 'Treść recenzji',
+              title: '💬 Treść recenzji',
               type: 'text',
               rows: 5,
               description: 'Dłuższy tekst – proszę wklejać bez limitu znaków',
               validation: Rule =>
-                Rule.required().error('Recenzja nie może być pusta'),
+                Rule.required().error('⚠️ Recenzja nie może być pusta'),
             },
             link({ isHeavilyRequired: false }),
           ],

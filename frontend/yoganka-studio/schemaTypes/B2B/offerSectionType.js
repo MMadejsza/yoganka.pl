@@ -9,14 +9,14 @@ import { defaultModalSet, defaultTileFrontSet } from '../../utils/sets';
 
 export default {
   name: `b2bOffer`,
-  title: `B2B - Oferta`,
+  title: `B2B - 🛒 Oferta`,
   type: `document`,
   fields: [
     sectionTitle,
     {
       name: 'list',
-      title: `Lista produktów dla firm`,
-      description: `Kafle`,
+      title: `💼 Oferta dla firm`,
+      description: `☝🏻 Kafle`,
       type: 'array',
       of: [
         {

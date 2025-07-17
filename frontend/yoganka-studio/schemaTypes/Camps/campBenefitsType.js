@@ -4,7 +4,7 @@ import { defaultTurningTilesSet } from '../../utils/sets';
 
 export default {
   name: `benefits`,
-  title: `CAMPY - Benefit'y kafle obrotowe`,
+  title: `CAMPY - ☑️ Benefit'y kafle obrotowe`,
   type: `document`,
   fields: [sectionTitle, defaultTurningTilesSet],
   preview: {

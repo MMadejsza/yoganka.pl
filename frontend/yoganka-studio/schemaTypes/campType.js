@@ -5,7 +5,7 @@ import { defaultModalSet, defaultTileFrontSet } from '../utils/sets';
 
 export default {
   name: 'camp',
-  title: '***CAMPY YOGOWE***',
+  title: '🛒 ***CAMPY YOGOWE***',
   type: 'document',
   fields: [
     hiddenType('camp'),

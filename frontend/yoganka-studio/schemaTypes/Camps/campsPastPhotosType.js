@@ -4,7 +4,7 @@ import { defaultGallerySectionSet } from '../../utils/sets';
 
 export default {
   name: 'campsPhotos',
-  title: 'CAMPY - Galeria jak było',
+  title: 'CAMPY - 📷 Galeria jak było',
   type: 'document',
   fields: defaultGallerySectionSet,
 

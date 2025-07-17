@@ -5,7 +5,7 @@ import { defaultModalSet, defaultTileFrontSet } from '../utils/sets';
 
 export default {
   name: 'event',
-  title: '***WYDARZENIA YOGOWE***',
+  title: '🛒 ***WYDARZENIA YOGOWE***',
   type: 'document',
   fields: [
     hiddenType('event'),
@@ -13,22 +13,22 @@ export default {
     date(),
     {
       name: 'order',
-      title: 'Kolejność wyświetlania',
+      title: '🔢 Kolejność wyświetlania',
       type: 'number',
-      description: `Tylko jesli ma się wyłamać z chronologicznej kolejności`,
+      description: `☝🏻 Tylko jesli ma się wyłamać z chronologicznej kolejności`,
     },
     {
       name: 'eventType',
-      title: 'Typ wydarzenia',
+      title: '🧮 Typ wydarzenia',
       type: 'string',
       options: {
         list: [
-          { title: 'Jednorazowe', value: 'fixed' },
-          { title: 'Cykliczne', value: 'repetitive' },
+          { title: '1️⃣ Jednorazowe', value: 'fixed' },
+          { title: '🔄 Cykliczne', value: 'repetitive' },
         ],
       },
       initialValue: 'fixed',
-      description: `Ma wpływ na automatyczne sortowanie kafli - jednorazowe mają pierwszeństwo`,
+      description: `⚠️ Ma wpływ na automatyczne sortowanie kafli - jednorazowe mają pierwszeństwo`,
     },
     mainImage,
     defaultTileFrontSet,

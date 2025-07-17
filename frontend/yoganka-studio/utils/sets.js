@@ -4,7 +4,7 @@ import { doubleLine, singleLine, tripleLine } from './validations';
 export const defaultIntroSet = [
   {
     name: 'backgroundImage',
-    title: 'Zdjęcie w tle',
+    title: '🌄 Zdjęcie w tle',
     type: 'image',
     options: { hotspot: true },
   },
@@ -14,7 +14,7 @@ export const defaultIntroSet = [
 
 export const defaultBtnsSet = {
   name: 'btnsContent',
-  title: 'Przyciski',
+  title: '🚀 Przyciski',
   type: 'array',
   of: [
     {
@@ -22,16 +22,16 @@ export const defaultBtnsSet = {
       fields: [
         {
           name: 'action',
-          title: 'Typ przycisku',
+          title: '🧮 Typ przycisku',
           type: 'string',
           options: {
             list: [
-              { title: 'WhatsApp', value: 'whatsapp' },
-              { title: 'Telefon', value: 'phone' },
-              { title: 'Konkretny termin', value: 'scheduleRecord' },
-              { title: 'Grafik', value: 'schedule' },
-              { title: 'Mail', value: 'mail' },
-              { title: 'Zewnętrzny link', value: 'external' },
+              components.btnsLinksOptions.whatsapp,
+              components.btnsLinksOptions.phone,
+              components.btnsLinksOptions.scheduleRecord,
+              components.btnsLinksOptions.schedule,
+              components.btnsLinksOptions.mail,
+              components.btnsLinksOptions.external,
             ],
           },
         },
@@ -39,42 +39,42 @@ export const defaultBtnsSet = {
         components.stringSymbol(({ parent }) => parent.action !== 'external'),
         {
           name: 'text',
-          title: 'Tekst przycisku',
+          title: '✏️ Tekst przycisku',
           type: 'string',
           hidden: ({ parent }) =>
             !(parent.action === 'external' || parent.action === 'schedule'),
           validation: Rule =>
             Rule.custom((value, context) => {
               if (context.parent.action === 'external') {
-                return value ? true : 'Wprowadź tekst przycisku';
+                return value ? true : '⚠️ Wprowadź tekst przycisku';
               }
               return true;
             }),
         },
         {
           name: 'emailTitle',
-          title: 'Domyślny tytuł przychodzącego maila',
+          title: '✨ Domyślny tytuł przychodzącego maila',
           type: 'string',
-          description: `Cześć użytkowników i tak zmieni ale część nie, co poprawi Ci porządek w skrzynce`,
+          description: `☝🏻 Część użytkowników i tak zmieni ale część nie, co poprawi Ci porządek w skrzynce`,
           hidden: ({ parent }) => parent.action !== 'mail',
           validation: Rule =>
             Rule.custom((value, context) => {
               if (context.parent.action === 'mail') {
-                return value ? true : 'Wprowadź domyślny tytuł maila';
+                return value ? true : '⚠️ Wprowadź domyślny tytuł maila';
               }
               return true;
             }),
         },
         {
           name: 'scheduleId',
-          title: 'ID terminu',
+          title: '🪪 ID terminu',
           type: 'number',
-          description: `🪪 Identyfikator konkretnego terminu`,
+          description: `☝🏻 Identyfikator konkretnego terminu`,
           hidden: ({ parent }) => parent.action !== 'scheduleRecord',
           validation: Rule =>
             Rule.custom((value, context) => {
               if (context.parent.action === 'scheduleRecord') {
-                return value ? true : 'Wprowadź ID';
+                return value ? true : '⚠️ Wprowadź ID';
               }
               return true;
             }),
@@ -88,30 +88,11 @@ export const defaultBtnsSet = {
           },
           isHeavilyRequired: false,
         }),
-        {
-          name: 'qrImage',
-          title: 'Obraz QR (kod)',
-          type: 'image',
-          options: { hotspot: true },
-          description: 'Zuploaduj plik PNG/JPG z kodem QR',
-          hidden: ({ parent }) => parent.action !== 'phone',
-        },
-        {
-          name: 'qrAlt',
-          title: 'Tekst alternatywny dla QR',
-          type: 'string',
-          description:
-            'Np. "Instagram QR Code" - widoczny tylko jesli qr się nie wyświetla prawidłowo',
-          hidden: ({ parent }) => parent.action !== 'phone',
-          initialValue: `Kod QR z numerem telefonu`,
-          validation: Rule =>
-            Rule.custom((value, context) => {
-              if (context.parent.action === 'phone') {
-                return !!value || 'Tekst alternatywny nie może być pusty';
-              }
-              return true;
-            }),
-        },
+        components.qrImage(({ parent }) => parent.action !== 'phone'),
+        components.qrAlt({
+          hiddenFn: undefined,
+          initialValFn: document => `${document.name} QR Code`,
+        }),
       ],
       preview: {
         select: {
@@ -135,15 +116,15 @@ export const defaultBtnsSet = {
 
 export const defaultGlanceSet = {
   name: 'glance',
-  title: 'Szybkie info (glance)',
+  title: '📌 Szybkie info',
   type: 'object',
   fields: [
-    { name: 'price', title: 'Cena', type: 'string' },
-    { name: 'area', title: 'Lokalizacja', type: 'string' },
-    { name: 'accommodation', title: 'Zakwaterowanie', type: 'string' },
+    { name: 'price', title: '💰 Cena', type: 'string' },
+    { name: 'area', title: '📍 Lokalizacja', type: 'string' },
+    { name: 'accommodation', title: '🏠 Zakwaterowanie', type: 'string' },
     {
       name: 'capacity',
-      title: 'Maks. liczba osób w grupie',
+      title: '👥 Maks. liczba osób w grupie',
       type: 'number',
       validation: Rule =>
         Rule.custom(value => {
@@ -151,38 +132,31 @@ export const defaultGlanceSet = {
           return value >= 1 || 'Podaj liczbę większą od 0';
         }),
     },
-    { name: 'travel', title: 'Transport', type: 'string' },
+    { name: 'travel', title: '🚗 Transport', type: 'string' },
   ],
 };
 
 export const defaultTurningTilesSet = {
   name: 'list',
-  title: 'Typy oferty (kafelki obrotowe)',
+  title: '🧮 Typy oferty (kafelki obrotowe)',
   type: 'array',
   of: [
     {
       type: 'object',
-      title: 'Typ oferty',
+      title: '🧮 Typ oferty',
       fields: [
         components.stringSymbol(),
-        {
-          name: 'title',
-          title: 'Nagłówek',
-          type: 'string',
-          description: `Krótki tytuł benefit'u, max. ${doubleLine.maxLength} znaków`,
-          validation: Rule =>
-            Rule.required()
-              .max(doubleLine.maxLength)
-              .error(doubleLine.errorMsg),
-        },
+        components.simpleTitle('', '', true),
         {
           name: `text`,
           title: `Opis`,
           type: `text`,
-          description: `Szczegółowy opis na tyle (po obrocie)`,
+          description: `📝Szczegółowy opis na tyle (po obrocie)`,
           rows: 4,
           validation: Rule =>
-            Rule.required().max(265).warning(`Za długi opis. maks 265 znaków.`),
+            Rule.required()
+              .max(265)
+              .warning(`⚠️ Za długi opis. maks 265 znaków.`),
         },
       ],
     },
@@ -191,74 +165,64 @@ export const defaultTurningTilesSet = {
 
 export const defaultGallerySectionSet = [
   components.sectionTitle,
-  {
-    name: 'list',
-    title: `Galeria zdjęć`,
-    type: 'array',
-    of: [
-      {
-        type: 'image',
-      },
-    ],
-  },
+  components.galleryList,
 ];
 
 export const defaultTileFrontSet = {
   name: 'front',
-  title: 'Dane frontu (kafla)',
+  title: '🟪 Dane frontu (kafla)',
   type: 'object',
   fields: [
     {
       name: 'title',
-      title: 'Tytuł',
+      title: '🟨 Tytuł',
       type: 'string',
-      description: `Używaj twardych spacji zamiast zwykłych, żeby tekst się nie łamał nieoczekiwanie.
-      Windows: przytrzymaj Alt i na klawiaturze numerycznej wpisz 0160, puść Alt → wstawi się spacja nierozdzielająca (NBSP).
-      macOS: naciśnij Option + Spacja → wstawi się NBSP.`,
+      description: `☝🏻 Używaj twardych spacji zamiast zwykłych, żeby tekst się nie łamał nieoczekiwanie.
+      🔹Windows: przytrzymaj Alt i na klawiaturze numerycznej wpisz 0160, puść Alt → wstawi się spacja nierozdzielająca (NBSP).
+      🔹macOS: naciśnij Option + Spacja → wstawi się NBSP.`,
       initialValue: document => document.name || '',
       validation: Rule =>
         Rule.required().max(tripleLine.maxLength).error(tripleLine.errorMsg),
     },
     {
       name: 'dates',
-      title: 'Daty (np. 05-10.08)',
+      title: '📅 Daty (np. 05-10.08)',
       type: 'array',
       of: [{ type: 'string' }],
-      description: `Lub inne dane - struktura kafli jest zawsze taka sama`,
+      description: `☝🏻 Lub inne dane - struktura kafli jest zawsze taka sama`,
     },
     {
       name: 'location',
-      title: 'Lokalizacja',
+      title: '📍 Lokalizacja',
       type: 'string',
       validation: Rule =>
         Rule.max(doubleLine.maxLength).error(doubleLine.errorMsg),
-      description: `Lub inne dane - struktura kafli jest zawsze taka sama`,
+      description: `☝🏻 Lub inne dane - struktura kafli jest zawsze taka sama`,
     },
     {
       name: 'desc',
-      title: 'Opis skrócony',
+      title: '📝 Opis skrócony',
       type: 'text',
-      description: `Używaj twardych spacji (Unicode U+00A0) zamiast zwykłych spacji, żeby tekst się nie łamał.
-            Windows: przytrzymaj Alt i na klawiaturze numerycznej wpisz 0160, puść Alt → wstawi się spacja nierozdzielająca (NBSP).
-            macOS: naciśnij Option + Spacja → wstawi się NBSP.`,
+      description: `☝🏻 Używaj twardych spacji (Unicode U+00A0) zamiast zwykłych spacji, żeby tekst się nie łamał.
+            🔹Windows: przytrzymaj Alt i na klawiaturze numerycznej wpisz 0160, puść Alt → wstawi się spacja nierozdzielająca (NBSP).
+            🔹macOS: naciśnij Option + Spacja → wstawi się NBSP.`,
     },
     defaultBtnsSet,
   ],
 };
 
-// ({document}) => !document.modal
 export const defaultTileModalPartiallySet = (hiddenFn = undefined) => {
   return [
     {
       name: 'title',
-      title: 'Tytuł modala/okna',
+      title: '🟨 Tytuł modala/okna',
       type: 'string',
       initialValue: document => document.front?.title || '',
       validation: Rule => {
         if (hiddenFn) {
           Rule.custom((value, context) => {
             if (!value && context.document.modal) {
-              return 'Tytuł okna obowiązkowy';
+              return '⚠️ Tytuł okna obowiązkowy';
             }
             return true;
           });
@@ -267,15 +231,10 @@ export const defaultTileModalPartiallySet = (hiddenFn = undefined) => {
         }
       },
     },
-    {
-      name: 'gallery',
-      title: 'Galeria zdjęć',
-      type: 'array',
-      of: [{ type: 'image', options: { hotspot: true } }],
-    },
+    components.galleryList,
     {
       name: 'glanceTitle',
-      title: 'Tytuł "szybkie info" - bullet-listy',
+      title: '📌 Tytuł "szybkie info" - bullet-listy',
       type: 'string',
       validation: Rule =>
         Rule.max(singleLine.maxLength).error(singleLine.errorMsg),
@@ -283,17 +242,17 @@ export const defaultTileModalPartiallySet = (hiddenFn = undefined) => {
     defaultGlanceSet,
     {
       name: 'fullDescTitle',
-      title: 'Nagłówek opisu',
+      title: '🟨 Nagłówek opisu',
       type: 'string',
     },
     {
       name: 'fullDesc',
-      title: 'Pełny opis',
+      title: '📝 Pełny opis',
       type: 'text',
-      description: `Pełny - nie skrócony.
-          Używaj twardych spacji (Unicode U+00A0) zamiast zwykłych spacji, żeby tekst się nie łamał.
-            Windows: przytrzymaj Alt i na klawiaturze numerycznej wpisz 0160, puść Alt → wstawi się spacja nierozdzielająca (NBSP).
-            macOS: naciśnij Option + Spacja → wstawi się NBSP.`,
+      description: `☝🏻 Pełny - nie skrócony.
+          ☝🏻 Używaj twardych spacji (Unicode U+00A0) zamiast zwykłych spacji, żeby tekst się nie łamał.
+           🔹Windows: przytrzymaj Alt i na klawiaturze numerycznej wpisz 0160, puść Alt → wstawi się spacja nierozdzielająca (NBSP).
+           🔹macOS: naciśnij Option + Spacja → wstawi się NBSP.`,
       validation: Rule => Rule.required(),
     },
   ];
@@ -301,7 +260,7 @@ export const defaultTileModalPartiallySet = (hiddenFn = undefined) => {
 
 export const bulletsListSet = () => ({
   name: 'program',
-  title: 'Program (lista)',
+  title: '✏️ Program (lista)',
   type: 'object',
   fields: [
     components.typesList,
@@ -318,13 +277,13 @@ export const defaultModalSet = (isCamp = false, isHidden = undefined) => {
   if (isCamp) {
     outcomeArr.push({
       name: 'plan',
-      title: 'Plan dnia',
+      title: '📋 Plan dnia',
       type: 'object',
       fields: [
         components.simpleTitle('Slow menu:'),
         {
           name: 'schedule',
-          title: 'Dni i aktywności',
+          title: '🗓️ Dni i aktywności',
           type: 'array',
           of: [
             {
@@ -332,39 +291,39 @@ export const defaultModalSet = (isCamp = false, isHidden = undefined) => {
               fields: [
                 {
                   name: 'day',
-                  title: 'Dzień tygodnia',
+                  title: '🔹 Dzień tygodnia',
                   type: 'string',
                   options: {
                     list: [
-                      { title: 'Poniedziałek', value: 'Poniedziałek:' },
-                      { title: 'Wtorek', value: 'Wtorek:' },
-                      { title: 'Środa', value: 'Środa:' },
-                      { title: 'Czwartek', value: 'Czwartek:' },
-                      { title: 'Piątek', value: 'Piątek:' },
-                      { title: 'Sobota', value: 'Sobota:' },
-                      { title: 'Niedziela', value: 'Niedziela:' },
-                      { title: 'Combo', value: 'combo' },
+                      { title: '🔹Poniedziałek', value: 'Poniedziałek:' },
+                      { title: '🔹Wtorek', value: 'Wtorek:' },
+                      { title: '🔹Środa', value: 'Środa:' },
+                      { title: '🔹Czwartek', value: 'Czwartek:' },
+                      { title: '🔹Piątek', value: 'Piątek:' },
+                      { title: '🔹Sobota', value: 'Sobota:' },
+                      { title: '🔹Niedziela', value: 'Niedziela:' },
+                      { title: '🔸Combo', value: 'combo' },
                     ],
                   },
                   validation: Rule => Rule.required(),
                 },
                 {
                   name: 'comboLabel',
-                  title: 'Zakres dni (np. Piątek-Niedziela)',
+                  title: '✏️ Zakres dni (np. Piątek-Niedziela)',
                   type: 'string',
                   hidden: ({ parent }) => parent.day !== 'combo',
                   validation: Rule =>
                     Rule.custom(value => {
                       // jeśli nie combo, OK
                       if (!value && parent?.day === 'combo') {
-                        return 'Musisz podać zakres dni dla opcji Combo';
+                        return '⚠️ Musisz podać zakres dni dla opcji Combo';
                       }
                       return true;
                     }),
                 },
                 {
                   name: 'entries',
-                  title: 'Godziny i opisy aktywności',
+                  title: '🏄 Godziny i opisy aktywności',
                   type: 'array',
                   of: [
                     {
@@ -372,13 +331,13 @@ export const defaultModalSet = (isCamp = false, isHidden = undefined) => {
                       fields: [
                         {
                           name: 'time',
-                          title: 'Godzina (np. 16:00)',
+                          title: '🕑 Godzina (np. 16:00)',
                           type: 'string',
                           validation: Rule => Rule.required(),
                         },
                         {
                           name: 'activity',
-                          title: 'Opis aktywności',
+                          title: '🚴 Opis aktywności',
                           type: 'string',
                           validation: Rule => Rule.required(),
                         },
@@ -422,19 +381,19 @@ export const defaultModalSet = (isCamp = false, isHidden = undefined) => {
     });
     outcomeArr.push({
       name: 'summary',
-      title: 'Sekcja podsumowania',
+      title: '📈 Sekcja podsumowania',
       description: 'Różnią się tylko emotikonem',
       type: 'object',
       fields: [
         {
           name: 'included',
-          title: 'W cenie (✔️)',
+          title: '✔️ W cenie',
           type: 'object',
           fields: [components.simpleTitle(`W cenie:`), components.stringList()],
         },
         {
           name: 'excluded',
-          title: 'Dodatkowo płatne (👉)',
+          title: '👉🏻 Dodatkowo płatne',
           type: 'object',
           fields: [
             components.simpleTitle('Dodatkowo płatne:'),
@@ -443,7 +402,7 @@ export const defaultModalSet = (isCamp = false, isHidden = undefined) => {
         },
         {
           name: 'optional',
-          title: 'Opcjonalne (➕)',
+          title: '➕ Opcjonalne',
           type: 'object',
           fields: [
             components.simpleTitle('Poszerz swoje menu:'),
@@ -452,13 +411,13 @@ export const defaultModalSet = (isCamp = false, isHidden = undefined) => {
         },
         {
           name: 'freeTime',
-          title: 'W czasie wolnym',
+          title: '🌿 W czasie wolnym',
           type: 'object',
           fields: [
             components.simpleTitle(`W czasie wolnym:`),
             {
               name: 'list',
-              title: 'Lista aktywności',
+              title: '🏄 Lista aktywności',
               type: 'array',
               of: [
                 {
@@ -466,18 +425,18 @@ export const defaultModalSet = (isCamp = false, isHidden = undefined) => {
                   fields: [
                     {
                       name: 'status',
-                      title: 'Status',
+                      title: '🧮 Status',
                       type: 'string',
                       options: {
                         list: [
-                          { title: 'W cenie', value: 'free' },
-                          { title: 'Opcjonalnie', value: 'optional' },
+                          { title: '✔️ W cenie', value: 'free' },
+                          { title: '➕ Opcjonalnie', value: 'optional' },
                         ],
                       },
                     },
                     {
                       name: 'activity',
-                      title: 'Aktywność',
+                      title: '🚴 Aktywność',
                       type: 'string',
                     },
                   ],
@@ -507,7 +466,7 @@ export const defaultModalSet = (isCamp = false, isHidden = undefined) => {
 
   return {
     name: 'modal',
-    title: 'Zawartość modala/okna',
+    title: '🟪 Zawartość modala/okna',
     hidden: isHidden ?? undefined,
     type: 'object',
     fields: outcomeArr,

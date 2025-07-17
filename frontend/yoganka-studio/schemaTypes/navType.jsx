@@ -3,17 +3,17 @@ import { link, stringIcon, stringSymbol } from '../utils/components.jsx';
 
 export default {
   name: 'navs',
-  title: 'MENU - zestawy',
+  title: '🧩 MENU - zestawy',
   type: 'document',
   fields: [
     {
       name: 'mainNav',
-      title: 'Menu Główne',
+      title: '📂 Menu Główne',
       type: 'object',
       fields: [
         {
           name: 'list',
-          title: 'Zakładki',
+          title: '📑 Zakładki',
           type: 'array',
           of: [
             {
@@ -21,14 +21,14 @@ export default {
               fields: [
                 {
                   name: 'label',
-                  title: 'Nazwa zakładki',
+                  title: '🏷️ Nazwa zakładki',
                   type: 'string',
                   validation: Rule =>
                     Rule.required().max(11).error('Maks. 11 znaków'),
                 },
                 {
                   name: 'link',
-                  title: 'Link',
+                  title: '🔗 Link',
                   type: 'string',
                   options: {
                     list: [
@@ -52,7 +52,7 @@ export default {
     },
     {
       name: 'sideNav',
-      title: 'Menu małe',
+      title: '🧾 Menu małe',
       type: 'object',
       fields: [
         {
