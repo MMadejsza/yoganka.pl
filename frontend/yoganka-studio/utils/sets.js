@@ -531,6 +531,20 @@ export const logoGroups = [
     title: 'Napis',
   },
 ];
+export const colorGroups = [
+  {
+    name: 'text',
+    title: 'Teksty',
+  },
+  {
+    name: 'bcg',
+    title: 'Tła',
+  },
+  {
+    name: 'muted',
+    title: 'Wyciszenia',
+  },
+];
 export const productOrdering = [
   {
     title: 'Nadchodzące, od najdalej',
