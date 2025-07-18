@@ -38,6 +38,7 @@ export const date = ({ isRequired = true } = {}) => {
     name: 'date',
     title: '📅 Data wydarzenia/rozpoczęcia',
     type: 'datetime',
+    group: 'generic',
     validation: isRequired ? Rule => Rule.required() : undefined,
   };
 };
@@ -45,6 +46,7 @@ export const slug = {
   name: 'slug',
   title: '🌐 Link (URL)',
   type: 'slug',
+  group: 'generic',
   description:
     '☝🏻Tylko końcówka, bez "/", np. "yoga-piknik-i-malowanie-ceramiki"',
   options: { source: 'name', maxLength: urlMaxLength },
@@ -202,6 +204,7 @@ export const isModal = {
   name: 'isModal',
   title: '⬇️ Czy ma modal?',
   type: 'boolean',
+  group: 'generic',
   initialValue: false,
 };
 export const link = ({

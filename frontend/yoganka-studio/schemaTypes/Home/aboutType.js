@@ -1,12 +1,14 @@
 // schemas/Home/aboutType.js
 
 import { mainImage, simpleTitle } from '../../utils/components.jsx';
+import { aboutGroups } from '../../utils/sets';
 import { singleLine } from '../../utils/validations';
 
 export default {
   name: 'about',
   title: 'GŁÓWNA - 👤 Bio',
   type: 'document',
+  groups: aboutGroups,
   fields: [
     simpleTitle({
       initialValue: 'O mnie',
@@ -17,6 +19,7 @@ export default {
       name: 'image',
       title: '📸 Zdjęcie portretowe',
       type: 'object',
+      group: 'media',
       fields: [
         mainImage,
         {
@@ -63,6 +66,7 @@ export default {
       name: 'bio',
       title: '📖 Biografia',
       type: 'object',
+      group: 'bio',
       fields: [
         simpleTitle({ initialValue: 'Cześć!', required: true }),
         {

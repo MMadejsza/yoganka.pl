@@ -7,38 +7,28 @@ import {
   mainImage,
   slug,
 } from '../utils/components.jsx';
-import { defaultModalSet, defaultTileFrontSet } from '../utils/sets';
+import {
+  defaultModalSet,
+  defaultTileFrontSet,
+  productGroups,
+} from '../utils/sets';
 
 export default {
   name: 'class',
   title: '🛒 ***ZAJĘCIA YOGOWE***',
   type: 'document',
-
+  groups: productGroups,
   initialValue: {
     type: 'class',
     date: null,
     modal: false,
   },
   fields: [
-    {
-      name: 'name',
-      title: '🟥 Nazwa zajęć',
-      type: 'string',
-      description: '☝🏻 np. „Grupowe i Indywidualne” lub „Online”',
-      validation: Rule => Rule.required(),
-    },
     hiddenType({ initialValue: 'class' }),
     slug,
     date({ isRequired: false }),
-    mainImage,
-    // --------------------
-    // Front – kafelek
-    // --------------------
+    { ...mainImage, group: 'generic' },
     defaultTileFrontSet,
-
-    // --------------------
-    // Modal – szczegóły
-    // --------------------
     isModal,
     defaultModalSet(false, ({ document }) => !document.isModal),
   ],

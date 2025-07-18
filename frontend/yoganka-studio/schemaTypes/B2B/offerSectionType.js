@@ -5,7 +5,11 @@ import {
   mainImage,
   sectionTitle,
 } from '../../utils/components';
-import { defaultModalSet, defaultTileFrontSet } from '../../utils/sets';
+import {
+  defaultModalSet,
+  defaultTileFrontSet,
+  productGroups,
+} from '../../utils/sets';
 
 export default {
   name: `b2bOffer`,
@@ -21,9 +25,10 @@ export default {
       of: [
         {
           type: 'object',
+          groups: productGroups,
           fields: [
             hiddenType({ initialValue: 'b2b' }),
-            mainImage,
+            { ...mainImage, group: 'generic' },
             defaultTileFrontSet,
             isModal,
             defaultModalSet(false, ({ parent }) => !parent.isModal),

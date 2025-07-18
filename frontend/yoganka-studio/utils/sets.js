@@ -176,6 +176,7 @@ export const defaultTileFrontSet = {
   name: 'front',
   title: '🟪 Dane frontu (kafla)',
   type: 'object',
+  group: 'front',
   fields: [
     {
       name: 'title',
@@ -221,6 +222,7 @@ export const defaultTileModalPartiallySet = (hiddenFn = undefined) => {
       name: 'title',
       title: '🟨 Tytuł modala/okna',
       type: 'string',
+      // group: 'modal',
       initialValue: document => document.front?.title || '',
       validation: Rule => {
         if (hiddenFn) {
@@ -476,6 +478,68 @@ export const defaultModalSet = (isCamp = false, isHidden = undefined) => {
     title: '🟪 Zawartość modala/okna',
     hidden: isHidden ?? undefined,
     type: 'object',
+    group: 'modal',
     fields: outcomeArr,
   };
 };
+
+export const productGroups = [
+  {
+    name: 'generic',
+    title: 'Ogólne',
+  },
+  {
+    name: 'front',
+    title: 'Front',
+  },
+  {
+    name: 'modal',
+    title: 'Modal',
+  },
+];
+export const aboutGroups = [
+  {
+    name: 'bio',
+    title: 'Bio',
+  },
+  {
+    name: 'media',
+    title: 'Media',
+  },
+];
+export const navGroups = [
+  {
+    name: 'main',
+    title: 'Główne',
+  },
+  {
+    name: 'side',
+    title: 'Poboczne',
+  },
+];
+export const logoGroups = [
+  {
+    name: 'main',
+    title: 'Główne',
+  },
+  {
+    name: 'figure',
+    title: 'Figura',
+  },
+  {
+    name: 'sign',
+    title: 'Napis',
+  },
+];
+export const productOrdering = [
+  {
+    title: 'Nadchodzące, od najdalej',
+    name: 'dateDesc',
+    by: [{ field: 'date', direction: 'desc' }],
+  },
+  {
+    title: 'Nadchodzące, od najwcześniej',
+    name: 'dateAsc',
+    by: [{ field: 'date', direction: 'asc' }],
+  },
+];

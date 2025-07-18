@@ -1,15 +1,18 @@
 // schemas/navType.js
 import { link, stringIcon, stringSymbol } from '../utils/components.jsx';
+import { navGroups } from '../utils/sets.js';
 
 export default {
   name: 'navs',
   title: '🧩 MENU - zestawy',
   type: 'document',
+  groups: navGroups,
   fields: [
     {
       name: 'mainNav',
       title: '📂 Menu Główne',
       type: 'object',
+      group: 'main',
       fields: [
         {
           name: 'list',
@@ -54,6 +57,7 @@ export default {
       name: 'sideNav',
       title: '🧾 Menu małe',
       type: 'object',
+      group: 'side',
       fields: [
         {
           name: 'list',

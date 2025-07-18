@@ -9,7 +9,7 @@ export default {
   fields: [
     {
       name: 'name',
-      title: ' 🔤 Nazwa serwisu',
+      title: ' 🔤 Serwis',
       type: 'string',
       validation: Rule => Rule.required(),
       options: {
@@ -22,17 +22,6 @@ export default {
         ],
       },
     },
-    components.link({
-      description: `W przypadku ☝🏻 maila - podaj adres np."kontakt@yoganka.pl | ☝🏻 Whatsapp z kierunkowym bez '+': 48792891607. |
-          ☝🏻 Telefon z kierunkowym : +48792891607. |  ☝🏻 Zewnętrzny link - pełny link`,
-      isConditionalFnSet: { parentLabel: 'name' },
-    }),
-    components.stringImgTitle(),
-    components.qrImage(),
-    components.qrAlt({
-      hiddenFn: undefined,
-      initialValFn: document => `${document.name} QR Code`,
-    }),
     {
       name: 'order',
       title: '🔢 Kolejność',
@@ -49,5 +38,16 @@ export default {
         ],
       },
     },
+    components.link({
+      description: `W przypadku ☝🏻 maila - podaj adres np."kontakt@yoganka.pl | ☝🏻 Whatsapp z kierunkowym bez '+': 48792891607. |
+          ☝🏻 Telefon z kierunkowym : +48792891607. |  ☝🏻 Zewnętrzny link - pełny link`,
+      isConditionalFnSet: { parentLabel: 'name' },
+    }),
+    components.qrImage(),
+    components.stringImgTitle(),
+    components.qrAlt({
+      hiddenFn: undefined,
+      initialValFn: document => `${document.name} QR Code`,
+    }),
   ],
 };

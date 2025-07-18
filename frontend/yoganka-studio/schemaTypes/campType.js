@@ -1,20 +1,27 @@
 // schemas/campType.js
 
 import { date, hiddenType, mainImage, slug } from '../utils/components.jsx';
-import { defaultModalSet, defaultTileFrontSet } from '../utils/sets';
+import {
+  defaultModalSet,
+  defaultTileFrontSet,
+  productGroups,
+  productOrdering,
+} from '../utils/sets';
 
 export default {
   name: 'camp',
   title: '🛒 ***CAMPY YOGOWE***',
   type: 'document',
+  groups: productGroups,
   fields: [
     hiddenType({ initialValue: 'camp' }),
     slug,
     date(),
-    mainImage,
+    { ...mainImage, group: 'generic' },
     defaultTileFrontSet,
     defaultModalSet('Camp'),
   ],
+  orderings: productOrdering,
   preview: {
     select: {
       title: `front.title`,
