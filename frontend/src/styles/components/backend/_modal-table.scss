@@ -22,7 +22,11 @@
     margin-bottom: 1rem;
     font-size: 1.7rem;
     border-bottom: 2px solid black;
-    background-color: rgba(map.get($colors, nav), 1);
+    background-color: color-mix(
+      in srgb,
+      #{map.get($colors, nav)} 100%,
+      transparent
+    );
     box-shadow: map.get($shadows, box-shadow);
     border-top-left-radius: map.get($sizes, border-radius);
     border-top-right-radius: map.get($sizes, border-radius);
@@ -45,7 +49,11 @@
     transition: map.get($behavior, base-transition);
 
     &:nth-child(2n) {
-      background-color: color.adjust(map.get($colors, nav), $lightness: 15%);
+      background-color: color-mix(
+        in srgb,
+        #{map.get($colors, nav)} 87%,
+        black 13%
+      );
     }
 
     &.active:hover {

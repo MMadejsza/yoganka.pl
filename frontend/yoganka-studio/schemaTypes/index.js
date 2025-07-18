@@ -4,6 +4,7 @@ import eventType from './eventType';
 import logoType from './logoType';
 import navType from './navType.jsx';
 
+import AppearanceType from './appearanceType';
 import B2BBenefitsList from './B2B/benefitsList';
 import B2BIntro from './B2B/intro';
 import B2BOfferSectionType from './B2B/offerSectionType';
@@ -28,6 +29,7 @@ export const schemaTypes = [
   campType,
   eventType,
   classType,
+  AppearanceType,
   navType,
   logoType,
   HomeIntro,

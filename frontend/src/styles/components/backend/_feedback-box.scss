@@ -26,7 +26,11 @@
   }
   &--neutral {
     color: map.get($colors, tile-title);
-    background-color: rgba(map.get($colors, nav), 0.2);
+    background-color: color-mix(
+      in srgb,
+      #{map.get($colors, nav)} 20%,
+      transparent
+    );
   }
   &--small {
     margin-top: 1.5rem;

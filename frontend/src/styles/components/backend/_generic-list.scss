@@ -153,7 +153,7 @@ form.generic-details {
     text-shadow: none;
   }
   &:not(.form-action-btn) {
-    color: rgba(map.get($colors, accent-bcg), 0.5);
+    color: color-mix(in srgb, #{map.get($colors, accent-bcg)} 50%, transparent);
   }
 }
 

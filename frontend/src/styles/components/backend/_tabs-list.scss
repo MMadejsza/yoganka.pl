@@ -17,7 +17,11 @@
   &__item {
     padding: 0.2rem 0.5rem;
     border-radius: map.get($sizes, border-radius);
-    background-color: rgba(map.get($colors, nav), 0.3);
+    background-color: color-mix(
+      in srgb,
+      #{map.get($colors, nav)} 30%,
+      transparent
+    );
     box-shadow: map.get($shadows, tile-shadow);
 
     @include flex(row, center);

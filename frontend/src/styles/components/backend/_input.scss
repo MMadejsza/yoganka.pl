@@ -122,8 +122,13 @@ textarea.generic-details-content {
   justify-content: flex-start !important;
   color: map.get($colors, tile-text) !important;
   border-radius: map.get($sizes, border-radius);
-  background-color: rgba(map.get($colors, base), 1);
-  border: 1px solid rgba(map.get($colors, accent-bcg), 0.2);
+  background-color: color-mix(
+    in srgb,
+    #{map.get($colors, base)} 100%,
+    transparent
+  );
+  border: 1px solid
+    color-mix(in srgb, #{map.get($colors, accent-bcg)} 20%, transparent);
   box-shadow: map.get($shadows, box-shadow);
   transition: map.get($behavior, base-transition);
   outline: none;
@@ -183,7 +188,8 @@ select.generic-details__content--settings {
   background-color: map.get($colors, base);
   color: map.get($colors, tile-text);
   border-radius: map.get($sizes, border-radius);
-  border: 1px solid rgba(map.get($colors, accent-bcg), 0.2);
+  border: 1px solid
+    color-mix(in srgb, #{map.get($colors, accent-bcg)} 20%, transparent);
   box-shadow: map.get($shadows, box-shadow);
   box-sizing: border-box;
   transition: map.get($behavior, base-transition);

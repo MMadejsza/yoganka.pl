@@ -9,6 +9,7 @@
   box-sizing: border-box;
   list-style: none;
 }
+
 #root {
   display: grid;
 }
@@ -117,7 +118,7 @@ span.click-suggestion {
   transform: translateX(-50%);
   bottom: 1%;
   z-index: 2;
-  color: rgba(map.get($colors, tile-title), 0.25);
+  color: color-mix(in srgb, #{map.get($colors, tile-title)} 25%, transparent);
   transition: map.get($behavior, base-transition);
 }
 .stopScroll {

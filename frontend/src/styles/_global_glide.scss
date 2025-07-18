@@ -65,7 +65,11 @@
     bottom: 0.5rem;
     padding: 0.5rem;
     border-radius: 50px;
-    background-color: rgba(map.get($colors, nav), 0.7);
+    background-color: color-mix(
+      in srgb,
+      #{map.get($colors, nav)} 70%,
+      transparent
+    );
   }
   &__bullet {
     width: 1rem;

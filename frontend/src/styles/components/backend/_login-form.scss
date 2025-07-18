@@ -11,7 +11,11 @@
   margin: 8rem 0;
   padding: 2%;
   border-radius: map.get($sizes, border-radius);
-  background-color: rgba(map.get($colors, nav), 0.5);
+  background-color: color-mix(
+    in srgb,
+    #{map.get($colors, nav)} 50%,
+    transparent
+  );
   box-shadow: map.get($shadows, tile-shadow);
 
   @include flex(column, space-evenly, center);

@@ -112,7 +112,7 @@ $shadows: (
     2px 2px 4px rgba(0, 0, 0, 0.3),
   ),
   text-on-background-shadow: (
-    2px 2px 4px rgba(map.get($colors, base), 0.5),
+    2px 2px 4px color-mix(in srgb, #{map.get($colors, base)} 50%, transparent),
   ),
 );
 

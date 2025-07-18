@@ -48,7 +48,11 @@ $heavily-dimmed-color: map.get($colors, nav-muted);
       'square square desc desc desc desc desc desc desc '
       'square square footer footer footer footer footer footer footer';
     line-height: 2rem;
-    background-color: rgba(map.get($colors, tile), 0.8);
+    background-color: color-mix(
+      in srgb,
+      #{map.get($colors, tile)} 80%,
+      transparent
+    );
     border-radius: map.get($sizes, border-radius);
     box-shadow: map.get($shadows, box-shadow);
     transition: map.get($behavior, base-transition);
@@ -65,7 +69,11 @@ $heavily-dimmed-color: map.get($colors, nav-muted);
     }
 
     &:nth-child(2n) {
-      background-color: rgba(map.get($colors, nav), 0.5);
+      background-color: color-mix(
+        in srgb,
+        #{map.get($colors, nav)} 50%,
+        transparent
+      );
     }
 
     &--active {

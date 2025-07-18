@@ -27,7 +27,11 @@
     margin-top: 7rem;
     padding: 1rem;
     text-shadow: map.get($shadows, active-text-icons-shadow);
-    background-color: rgba(map.get($colors, base), 0.75);
+    background-color: color-mix(
+      in srgb,
+      #{map.get($colors, base)} 75%,
+      transparent
+    );
   }
   &__welcome-desc {
     margin-bottom: 8rem;
@@ -37,7 +41,11 @@
     max-width: 100vw;
     white-space: pre-line;
     font-size: 1.7rem;
-    background-color: rgba(map.get($colors, base), 1);
+    background-color: color-mix(
+      in srgb,
+      #{map.get($colors, base)} 100%,
+      transparent
+    );
     box-shadow: map.get($shadows, transitive-box-shadow);
 
     .no-bcg-pic & {

@@ -31,7 +31,11 @@
     color: map.get($colors, accent-text);
 
     border-radius: 50%;
-    background-color: rgba(map.get($colors, accent-bcg), 0.7);
+    background-color: color-mix(
+      in srgb,
+      #{map.get($colors, accent-bcg)} 70%,
+      transparent
+    );
     box-shadow: map.get($shadows, active-text-icons-shadow);
     transition: map.get($behavior, base-transition);
 
@@ -49,7 +53,11 @@
     &--cookies:active .pop-ups__body {
       right: 0%;
       left: auto;
-      background-color: rgba(map.get($colors, accent-bcg), 0.95);
+      background-color: color-mix(
+        in srgb,
+        #{map.get($colors, accent-bcg)} 95%,
+        transparent
+      );
       opacity: 1;
 
       &--left {

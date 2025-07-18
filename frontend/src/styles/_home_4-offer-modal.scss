@@ -41,9 +41,10 @@
     bottom: 0;
     z-index: 1;
 
-    background-color: rgba(
-      color.adjust(map.get($colors, tile), $lightness: -13%),
-      0.5
+    background-color: color-mix(
+      in srgb,
+      color-mix(in srgb, #{map.get($colors, tile)} 87%, black 13%) 50%,
+      transparent 50%
     );
     // to let interact with the element (not pseudo one)
     pointer-events: none;
@@ -157,7 +158,11 @@ section.b2b-benefits.classes-page + section.offer {
   padding: 1.5rem 1rem;
   z-index: 9;
 
-  background-color: rgba(map.get($colors, tile), 0.95);
+  background-color: color-mix(
+    in srgb,
+    #{map.get($colors, tile)} 95%,
+    transparent
+  );
   border: none;
   border-radius: map.get($sizes, border-radius);
   box-shadow: map.get($shadows, active-text-icons-shadow);

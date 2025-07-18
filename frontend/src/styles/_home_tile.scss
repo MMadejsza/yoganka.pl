@@ -44,7 +44,7 @@
     background: linear-gradient(
       to bottom,
       transparent,
-      color.scale(map.get($colors, tile), $lightness: -13%)
+      color-mix(in srgb, #{map.get($colors, tile)} 87%, black 13%)
     );
 
     display: flex;

@@ -55,7 +55,11 @@ body:has(.admin-console) {
       width: 100%;
       padding: 1rem;
       text-shadow: map.get($shadows, active-text-icons-shadow);
-      background-color: rgba(map.get($colors, base), 0.75);
+      background-color: color-mix(
+        in srgb,
+        #{map.get($colors, base)} 75%,
+        transparent
+      );
     }
   }
 

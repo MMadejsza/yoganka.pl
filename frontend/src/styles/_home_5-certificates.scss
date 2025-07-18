@@ -8,7 +8,11 @@
   overflow: hidden;
 
   & .glide__slides {
-    background-color: rgba(map.get($colors, nav), 0.55);
+    background-color: color-mix(
+      in srgb,
+      #{map.get($colors, nav)} 55%,
+      transparent
+    );
   }
 
   &__tile {

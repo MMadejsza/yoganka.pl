@@ -9,7 +9,11 @@
   font-size: 1.7rem;
   color: map.get($colors, tile-text-muted);
 
-  background-color: rgba(map.get($colors, nav), 0.8);
+  background-color: color-mix(
+    in srgb,
+    #{map.get($colors, nav)} 80%,
+    transparent
+  );
   box-shadow: map.get($shadows, tile-shadow);
   border-top-left-radius: map.get($sizes, border-radius);
   border-top-right-radius: map.get($sizes, border-radius);
