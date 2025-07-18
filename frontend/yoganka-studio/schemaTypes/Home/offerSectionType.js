@@ -12,20 +12,20 @@ export default {
       name: 'camps',
       title: '🏕️ Podsekcja wyjazdów',
       type: 'object',
-      fields: [simpleTitle('', '', true)],
+      fields: [simpleTitle({ required: true })],
     },
     {
       name: 'classes',
       title: '🧘 Podsekcja zajęć',
       type: 'object',
-      fields: [simpleTitle('', '', true)],
+      fields: [simpleTitle({ required: true })],
     },
     {
       name: 'events',
       title: '🎉 Podsekcja wydarzeń',
       type: 'object',
       fields: [
-        simpleTitle('', '', true),
+        simpleTitle({ required: true }),
         {
           name: 'limit',
           title: '🔢 Limit kafli',

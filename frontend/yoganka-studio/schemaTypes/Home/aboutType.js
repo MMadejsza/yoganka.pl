@@ -8,7 +8,11 @@ export default {
   title: 'GŁÓWNA - 👤 Bio',
   type: 'document',
   fields: [
-    simpleTitle('O mnie', `Pojawia się tylko w wersji mobile`, true),
+    simpleTitle({
+      initialValue: 'O mnie',
+      description: `Pojawia się tylko w wersji mobile`,
+      required: true,
+    }),
     {
       name: 'image',
       title: '📸 Zdjęcie portretowe',
@@ -60,7 +64,7 @@ export default {
       title: '📖 Biografia',
       type: 'object',
       fields: [
-        simpleTitle('Cześć!', '', true),
+        simpleTitle({ initialValue: 'Cześć!', required: true }),
         {
           name: 'paragraphs',
           title: '✍️ Akapity',

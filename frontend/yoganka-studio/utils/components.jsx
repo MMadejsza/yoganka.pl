@@ -33,12 +33,12 @@ export const qrAlt = ({
   validation: Rule =>
     Rule.required().error('⚠️ Potrzebny tekst alt dla obrazu QR'),
 });
-export const date = (required = true) => {
+export const date = ({ isRequired = true } = {}) => {
   return {
     name: 'date',
     title: '📅 Data wydarzenia/rozpoczęcia',
     type: 'datetime',
-    validation: required ? Rule => Rule.required() : undefined,
+    validation: isRequired ? Rule => Rule.required() : undefined,
   };
 };
 export const slug = {
@@ -61,7 +61,7 @@ export const galleryList = {
   type: 'array',
   of: [{ type: 'image', options: { hotspot: true } }],
 };
-export const textList = (isRequired = false) => ({
+export const textList = ({ isRequired = false } = {}) => ({
   name: 'list',
   title: `✍️ Lista akapitów`,
   description: `🟣 Dodaj akapit osobno - pojawia sie mała przerwa między nimi.`,
@@ -75,7 +75,7 @@ export const textList = (isRequired = false) => ({
     ? Rule => Rule.required().min(1).error('⚠️ Dodaj przynajmniej jeden akapit')
     : undefined,
 });
-export const stringList = (isRequired = false) => ({
+export const stringList = ({ isRequired = false } = {}) => ({
   name: 'list',
   title: `✏️ Lista elementów`,
   type: 'array',
@@ -98,7 +98,7 @@ export const typesList = {
   },
   initialValue: 'included',
 };
-export const hiddenType = initialValue => ({
+export const hiddenType = ({ initialValue = undefined } = {}) => ({
   name: 'type',
   title: 'Typ',
   type: 'string',
@@ -112,7 +112,7 @@ export const sectionTitle = {
   validation: Rule => Rule.max(doubleLine.maxLength).error(doubleLine.errorMsg),
   initialValue: document => document.name || '',
 };
-export const stringImgTitle = (initialValue = '') => ({
+export const stringImgTitle = ({ initialValue = undefined } = {}) => ({
   name: 'title',
   title: '❔ Podpowiedź przy najechaniu (tooltip)',
   type: 'string',
@@ -120,7 +120,11 @@ export const stringImgTitle = (initialValue = '') => ({
   initialValue: initialValue,
   validation: Rule => Rule.required(),
 });
-export const simpleTitle = (initialValue, description, required = false) => {
+export const simpleTitle = ({
+  initialValue = undefined,
+  description = undefined,
+  required = false,
+} = {}) => {
   return {
     name: 'title',
     title: '🟨 Nagłówek',
@@ -133,7 +137,7 @@ export const simpleTitle = (initialValue, description, required = false) => {
         : Rule.max(doubleLine.maxLength).error(doubleLine.errorMsg),
   };
 };
-export const stringSymbol = (hiddenFn = undefined) => ({
+export const stringSymbol = ({ hiddenFn = undefined } = {}) => ({
   name: 'symbol',
   title: '❇️ Symbol (Material Design Symbol)',
   type: 'string',
@@ -187,7 +191,7 @@ export const stringIcon = {
   type: 'string',
   validation: Rule => Rule.required(),
 };
-export const logoImg = (isActive = false) => ({
+export const logoImg = ({ isActive = false } = {}) => ({
   name: !isActive ? 'img' : 'imgActive',
   title: `📷 Plik Logo${!isActive ? ' - wersja aktywna (kolor akcentowy)' : ''}`,
   type: 'image',

@@ -7,7 +7,11 @@ export default {
   name: `b2bPriceListAndCooperation`,
   title: `B2B - 💲 Cennik i współpraca + główne przyciski`,
   type: `document`,
-  fields: [components.sectionTitle, components.textList(true), defaultBtnsSet],
+  fields: [
+    components.sectionTitle,
+    components.textList({ isRequired: true }),
+    defaultBtnsSet,
+  ],
   preview: {
     select: {
       title: `sectionTitle`,

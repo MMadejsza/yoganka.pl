@@ -36,7 +36,9 @@ export const defaultBtnsSet = {
           },
         },
         components.stringImgTitle(),
-        components.stringSymbol(({ parent }) => parent.action !== 'external'),
+        components.stringSymbol({
+          hiddenFn: ({ parent }) => parent.action !== 'external',
+        }),
         {
           name: 'text',
           title: '✏️ Tekst przycisku',
@@ -88,7 +90,9 @@ export const defaultBtnsSet = {
           },
           isHeavilyRequired: false,
         }),
-        components.qrImage(({ parent }) => parent.action !== 'phone'),
+        components.qrImage({
+          hiddenFn: ({ parent }) => parent.action !== 'phone',
+        }),
         components.qrAlt({
           hiddenFn: undefined,
           initialValFn: document => `${document.name} QR Code`,
@@ -146,7 +150,7 @@ export const defaultTurningTilesSet = {
       title: '🧮 Typ oferty',
       fields: [
         components.stringSymbol(),
-        components.simpleTitle('', '', true),
+        components.simpleTitle({ required: true }),
         {
           name: `text`,
           title: `Opis`,
@@ -264,7 +268,7 @@ export const bulletsListSet = () => ({
   type: 'object',
   fields: [
     components.typesList,
-    components.simpleTitle('', '', true),
+    components.simpleTitle({ required: true }),
     components.stringList(),
   ],
 });
@@ -280,7 +284,7 @@ export const defaultModalSet = (isCamp = false, isHidden = undefined) => {
       title: '📋 Plan dnia',
       type: 'object',
       fields: [
-        components.simpleTitle('Slow menu:'),
+        components.simpleTitle({ initialValue: 'Slow menu:' }),
         {
           name: 'schedule',
           title: '🗓️ Dni i aktywności',
@@ -389,14 +393,17 @@ export const defaultModalSet = (isCamp = false, isHidden = undefined) => {
           name: 'included',
           title: '✔️ W cenie',
           type: 'object',
-          fields: [components.simpleTitle(`W cenie:`), components.stringList()],
+          fields: [
+            components.simpleTitle({ initialValue: `W cenie:` }),
+            components.stringList(),
+          ],
         },
         {
           name: 'excluded',
           title: '👉🏻 Dodatkowo płatne',
           type: 'object',
           fields: [
-            components.simpleTitle('Dodatkowo płatne:'),
+            components.simpleTitle({ initialValue: 'Dodatkowo płatne:' }),
             components.stringList(),
           ],
         },
@@ -405,7 +412,7 @@ export const defaultModalSet = (isCamp = false, isHidden = undefined) => {
           title: '➕ Opcjonalne',
           type: 'object',
           fields: [
-            components.simpleTitle('Poszerz swoje menu:'),
+            components.simpleTitle({ initialValue: 'Poszerz swoje menu:' }),
             components.stringList(),
           ],
         },
@@ -414,7 +421,7 @@ export const defaultModalSet = (isCamp = false, isHidden = undefined) => {
           title: '🌿 W czasie wolnym',
           type: 'object',
           fields: [
-            components.simpleTitle(`W czasie wolnym:`),
+            components.simpleTitle({ initialValue: `W czasie wolnym:` }),
             {
               name: 'list',
               title: '🏄 Lista aktywności',

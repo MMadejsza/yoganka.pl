@@ -11,7 +11,7 @@ export default {
       title: '📷 Pełne logo',
       type: 'object',
       fields: [
-        components.stringImgTitle('Yoganka - Logo'),
+        components.stringImgTitle({ initialValue: 'Yoganka - Logo' }),
         components.logoImg(),
       ],
     },
@@ -20,9 +20,9 @@ export default {
       title: '📷 Logo - sam kształt',
       type: 'object',
       fields: [
-        components.stringImgTitle('Yoganka - Logo'),
+        components.stringImgTitle({ initialValue: 'Yoganka - Logo' }),
         components.logoImg(),
-        components.logoImg('active'),
+        components.logoImg({ isActive: 'active' }),
       ],
     },
     {
@@ -30,7 +30,7 @@ export default {
       title: '📷 Logo - sam napis',
       type: 'object',
       fields: [
-        components.stringImgTitle('Yoganka - Logo'),
+        components.stringImgTitle({ initialValue: 'Yoganka - Logo' }),
         components.logoImg(),
       ],
     },

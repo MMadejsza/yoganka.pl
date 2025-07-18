@@ -8,7 +8,7 @@ export default {
   title: '🛒 ***CAMPY YOGOWE***',
   type: 'document',
   fields: [
-    hiddenType('camp'),
+    hiddenType({ initialValue: 'camp' }),
     slug,
     date(),
     mainImage,

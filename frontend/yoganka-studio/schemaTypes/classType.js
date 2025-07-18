@@ -27,9 +27,9 @@ export default {
       description: '☝🏻 np. „Grupowe i Indywidualne” lub „Online”',
       validation: Rule => Rule.required(),
     },
-    hiddenType('class'),
+    hiddenType({ initialValue: 'class' }),
     slug,
-    date(false),
+    date({ isRequired: false }),
     mainImage,
     // --------------------
     // Front – kafelek

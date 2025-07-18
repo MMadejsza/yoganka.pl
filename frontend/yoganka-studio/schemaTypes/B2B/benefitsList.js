@@ -10,7 +10,7 @@ export default {
   name: `b2bBenefits`,
   title: `B2B - ☑️ Benefit'y lista`,
   type: `document`,
-  fields: [sectionTitle, typesList, stringList(true)],
+  fields: [sectionTitle, typesList, stringList({ isRequired: true })],
   preview: {
     select: {
       title: `sectionTitle`,

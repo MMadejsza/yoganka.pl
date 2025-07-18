@@ -22,7 +22,7 @@ export default {
         {
           type: 'object',
           fields: [
-            hiddenType('b2b'),
+            hiddenType({ initialValue: 'b2b' }),
             mainImage,
             defaultTileFrontSet,
             isModal,

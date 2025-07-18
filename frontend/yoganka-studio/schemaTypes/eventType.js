@@ -8,7 +8,7 @@ export default {
   title: '🛒 ***WYDARZENIA YOGOWE***',
   type: 'document',
   fields: [
-    hiddenType('event'),
+    hiddenType({ initialValue: 'event' }),
     slug,
     date(),
     {
