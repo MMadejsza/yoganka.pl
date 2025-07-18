@@ -56,8 +56,45 @@ function EventsPage() {
   return (
     <>
       <Helmet>
-        <title>Yoganka - Wydarzenia</title>
+        <html lang='pl' />
+        <title>Yoganka – Wydarzenia jogowe, warsztaty i webinary</title>
+        <meta
+          name='description'
+          content='Sprawdź najbliższe wydarzenia Yoganka: warsztaty jogi, webinary, spotkania online i stacjonarne. Zarezerwuj swoje miejsce już dziś!'
+        />
+        <meta
+          name='keywords'
+          content='joga wydarzenia, warsztaty jogi, webinary joga, spotkania jogowe, Yoganka wydarzenia'
+        />
+        <meta name='author' content='MMadejsza' />
         <link rel='canonical' href='https://yoganka.pl/wydarzenia' />
+        <meta name='robots' content='index, follow' />
+        {/* Open Graph / Facebook */}
+        <meta property='og:locale' content='pl_PL' />
+        <meta property='og:type' content='website' />
+        <meta
+          property='og:title'
+          content='Yoganka – Wydarzenia jogowe, warsztaty i webinary'
+        />
+        <meta
+          property='og:description'
+          content='Dołącz do najbliższych wydarzeń Yoganka: od intensywnych warsztatów jogi po relaksacyjne webinary. Zainspiruj się i rozwijaj praktykę!'
+        />
+        <meta property='og:url' content='https://yoganka.pl/wydarzenia' />
+        <meta property='og:image' content='/favicon_io/apple-touch-icon.png' />
+        {/* Twitter Card */}
+        <meta name='twitter:card' content='summary_large_image' />
+        <meta name='twitter:site' content='@yoganka_pl' /> // your Twitter
+        handle
+        <meta
+          name='twitter:title'
+          content='Yoganka – Wydarzenia jogowe, warsztaty i webinary'
+        />
+        <meta
+          name='twitter:description'
+          content='Sprawdź najbliższe wydarzenia Yoganka: warsztaty, webinary i spotkania jogowe. Zapisz się już dziś!'
+        />
+        <meta name='twitter:image' content='/favicon_io/apple-touch-icon.png' />
       </Helmet>
       <IntroSection
         modifier={`no-bcg-pic`}

@@ -94,6 +94,7 @@ function B2BPage() {
         <meta name='author' content='MMadejsza' />
         <link rel='canonical' href='https://yoganka.pl/yoga-dla-firm' />
         <meta name='robots' content='index, follow' />
+
         <meta property='og:locale' content='pl_PL' />
         <meta property='og:title' content='Joga dla Firm – Yoganka' />
         <meta
@@ -103,6 +104,19 @@ function B2BPage() {
         <meta property='og:url' content='https://yoganka.pl/yoga-dla-firm' />
         <meta property='og:type' content='website' />
         <meta property='og:image' content='/favicon_io/apple-touch-icon.png' />
+
+        <meta name='twitter:card' content='summary_large_image' />
+        <meta name='twitter:title' content={'Joga dla Firm – Yoganka'} />
+        <meta
+          name='twitter:description'
+          content={
+            'Profesjonalne zajęcia jogi dla pracowników, zespołów i eventów firmowych. Online lub na miejscu.'
+          }
+        />
+        <meta
+          name='twitter:image'
+          content={'/favicon_io/apple-touch-icon.png'}
+        />
       </Helmet>
       {INTRO && (
         <IntroSection

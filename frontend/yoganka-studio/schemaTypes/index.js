@@ -29,9 +29,6 @@ export const schemaTypes = [
   campType,
   eventType,
   classType,
-  AppearanceType,
-  navType,
-  logoType,
   HomeIntro,
   HomeAbout,
   HomeOfferSection,
@@ -51,4 +48,7 @@ export const schemaTypes = [
   B2BPriceListAndCooperation,
   FooterBusinessDataType,
   FooterSocialType,
+  navType,
+  logoType,
+  AppearanceType,
 ];

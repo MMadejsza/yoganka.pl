@@ -1,5 +1,6 @@
 import { createPortal } from 'react-dom';
 import { Helmet } from 'react-helmet';
+import { urlFor } from '../../utils/sanityClient.js';
 import SymbolOrIcon from '../common/SymbolOrIcon';
 import SanityImage from '../frontend/imgsRelated/SanityImage.jsx';
 import Buttons from './Buttons.jsx';
@@ -150,17 +151,23 @@ function Modal({ tile, onClose, isVisible, isClosing }) {
 
     if (isCamp) {
       return {
-        title: `${tile.name} - Kobiecy Wyjazd z jogą`,
-        desc: `Dowiedz się wszystkiego o kobiecym wyjeździe z jogą. Miejsce: ${tile.front.location}.`,
+        title: `${tile.front.title} - Kobiecy Wyjazd z jogą`,
+        desc: `Dowiedz się wszystkiego o kobiecym wyjeździe z jogą.${
+          tile.front.location ? ` Miejsce: ${tile.front.location}` : ''
+        }.`,
         canonicalTag: `https://yoganka.pl/wyjazdy/${tile.link}`,
         link: `https://yoganka.pl/wyjazdy/${tile.link}`,
+        location: `${tile.front.location}`,
       };
     } else {
       return {
-        title: `${tile.name} - Wydarzenie z Yoganką`,
-        desc: `Dowiedz się wszystkiego o wydarzeniu ${tile.name}. Miejsce: ${tile.front.location}.`,
+        title: `${tile.front.title} - Wydarzenie z Yoganką`,
+        desc: `Dowiedz się wszystkiego o wydarzeniu ${tile.front.title}.${
+          tile.front.location ? ` Miejsce: ${tile.front.location}` : ''
+        }.`,
         canonicalTag: `https://yoganka.pl/wydarzenia/${tile.link}`,
         link: `https://yoganka.pl/wydarzenia/${tile.link}`,
+        location: `${tile.front.location}`,
       };
     }
   };
@@ -168,6 +175,13 @@ function Modal({ tile, onClose, isVisible, isClosing }) {
   // const metaImgSpecifier = tile == 'camp' ? 'camps' : 'events';
   // const metaImgUrl = `https://yoganka.pl/imgs/offer/${metaImgSpecifier}/${tile.fileName}/front/480_${tile.fileName}_0.jpg`;
 
+  const socialImageUrl = urlFor(tile.mainImage)
+    .width(480)
+    .height(480)
+    .fit('crop')
+    .auto('format')
+    .quality(60)
+    .url();
   return createPortal(
     <>
       <Helmet>
@@ -178,26 +192,16 @@ function Modal({ tile, onClose, isVisible, isClosing }) {
         <meta property='og:title' content={helmetContent.title} />
         <meta
           property='og:description'
-          content={`Dowiedz się wszystkiego o wyjeździe do: ${tile.front.location}. Kliknij teraz!`}
+          content={`Dowiedz się wszystkiego o wyjeździe do: ${helmetContent.location}. Kliknij teraz!`}
         />
         <meta property='og:url' content={helmetContent.link} />
         <meta property='og:type' content='website' />
-        <meta
-          property='og:image'
-          content={`https://yoganka.pl/imgs/offer/${
-            type === 'camp' ? 'camps' : 'events'
-          }/${fileName}/front/480_${fileName}_0.jpg`}
-        />
+        <meta property='og:image' content={socialImageUrl} />
 
         <meta name='twitter:card' content='summary_large_image' />
         <meta name='twitter:title' content={helmetContent.title} />
         <meta name='twitter:description' content={helmetContent.desc} />
-        <meta
-          name='twitter:image'
-          content={`https://yoganka.pl/imgs/offer/${
-            type === 'camp' ? 'camps' : 'events'
-          }/${fileName}/front/480_${fileName}_0.jpg`}
-        />
+        <meta name='twitter:image' content={socialImageUrl} />
         {/* END For social media links */}
         <link rel='canonical' href={helmetContent.canonicalTag} />
       </Helmet>

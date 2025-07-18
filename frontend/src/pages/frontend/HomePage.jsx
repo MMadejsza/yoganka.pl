@@ -154,6 +154,7 @@ function HomePage() {
         <meta name='author' content='MMadejsza' />
         <link rel='canonical' href='https://yoganka.pl/' />
         <meta name='robots' content='index, follow' />
+
         <meta property='og:locale' content='pl_PL' />
         <meta
           property='og:title'
@@ -166,6 +167,7 @@ function HomePage() {
         <meta property='og:url' content='https://yoganka.pl/' />
         <meta property='og:type' content='website' />
         <meta property='og:image' content='/favicon_io/apple-touch-icon.png' />
+
         <meta name='twitter:card' content='summary_large_image' />
         <meta
           name='twitter:title'
