@@ -20,6 +20,7 @@
 │   │── /yoganka-studio              // Sanity CMS  
 │   ├── .gitignore                   // Ignored files for Git
 │
+│    [...] 
+
 ├── /backend  (in private repo)      // (Node.js/Express)  
-│    [...]                         
 └── README.md                        // Project documentation  
