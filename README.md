@@ -13,6 +13,9 @@
 [Design in Figma](https://www.figma.com/design/J03ewhnJpAB0Ohae4bJclh/Untitled?node-id=1-14&p=f&t=8kjRmwI8KuUSQ46t-0)
 [Design on Miro](https://miro.com/welcomeonboard/T3ZpUGNpamhxemJJMklKdUt6OHpOeXl1UGc4YUpRaVQ1d0xSeWtnaGU3d0FxVlpEakFvZmNLMTVGVm0zcXVRQnwzNDU4NzY0NTk5MDcxMjMzODE3fDI=?share_link_id=883729976940)
 
+## Dissertation - all the reasoning and desing processes explained:
+[File]()
+
 ## Full project files structure:
 /yoganka.pl  
 ├── /frontend                        // Frontend with Vite  
