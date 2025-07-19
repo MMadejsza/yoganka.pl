@@ -15,9 +15,11 @@
 
 ## Full project files structure:
 /yoganka.pl  
-├── /frontend                  // Frontend with Vite  
-│  
-├── /backend  (in private repo)                // (Node.js/Express)  
-│     
-├── .gitignore                 // Ignored files for Git  
-└── README.md                  // Project documentation  
+├── /frontend                        // Frontend with Vite  
+│   │  
+│   │── /yoganka-studio              // Sanity CMS  
+│   ├── .gitignore                   // Ignored files for Git
+│
+├── /backend  (in private repo)      // (Node.js/Express)  
+│    [...]                         
+└── README.md                        // Project documentation  
