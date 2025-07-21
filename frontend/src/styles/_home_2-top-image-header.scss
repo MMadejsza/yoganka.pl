@@ -4,7 +4,7 @@
 .top-image-header {
   grid-area: header;
   height: 100svh;
-  overflow: hidden;
+  // overflow: hidden;
 
   display: grid;
   grid-template-columns: repeat(5, minmax(auto, 1fr));
