@@ -17,6 +17,7 @@ import {
   fetchData,
   fetchStatus,
   mutateOnEdit,
+  mutateOnValidationLink,
   queryClient,
 } from '../../utils/http.js';
 
@@ -176,6 +177,17 @@ function AdminPage() {
     },
   });
 
+  const { mutate: resendValidationLink } = useMutation({
+    mutationFn: formObj => mutateOnValidationLink(status, formObj),
+
+    onSuccess: res => {
+      queryClient.invalidateQueries(['data', query]);
+      console.log('res', res);
+      updateFeedback(res);
+    },
+    onError: err => updateFeedback(err),
+  });
+
   useEffect(() => {
     if (status) {
       setIsMenuSide(status?.user?.UserPrefSetting?.handedness);
@@ -202,6 +214,9 @@ function AdminPage() {
   const handleContact = (type, tableObj) => {
     handleContactCustomer(type, tableObj);
   };
+  const handleReactivation = tableObj => {
+    resendValidationLink(tableObj);
+  };
 
   let table,
     keys,
@@ -223,8 +238,13 @@ function AdminPage() {
           'Zarejestrowano',
           'Uprawnienia',
           'Preferencje',
+          { type: 'symbol', symbol: 'verified_user' },
           'Akcje',
         ];
+        onQuickActions.push({
+          symbol: 'sync_lock',
+          method: tableObj => handleReactivation(tableObj),
+        });
         onQuickActions.push({
           symbol: 'mail',
           method: tableObj => handleContact('mail', tableObj),

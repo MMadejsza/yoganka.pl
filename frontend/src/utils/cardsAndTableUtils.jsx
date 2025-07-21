@@ -98,6 +98,7 @@ export function onRowBtnClick(
       customerId: row.customerId,
       rowId: row.rowId,
       userEmail: row.email || row?.Customer?.User?.email,
+      email: row.email,
       phoneNumber: row.phone || row?.Customer?.phone,
     });
   }
@@ -201,3 +202,4 @@ export const handleContactCustomer = (type, tableObj) => {
     );
   }
 };
+export const resendVerificationLink = tableObj => {};

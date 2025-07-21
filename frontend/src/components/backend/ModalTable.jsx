@@ -5,6 +5,7 @@ import {
   onRowBtnClick,
 } from '../../utils/cardsAndTableUtils.jsx';
 import { hasValidPassFn } from '../../utils/userCustomerUtils';
+import SymbolOrIcon from '../common/SymbolOrIcon.jsx';
 
 function ModalTable({
   headers,
@@ -33,6 +34,21 @@ function ModalTable({
   console.log('ModalTable keys', keys);
   console.log('ModalTable status', status);
 
+  const formattedHeaders = headers?.map((header, index) => {
+    let content = header;
+    if (typeof header == 'object') {
+      if (header.type == 'symbol') {
+        content = <SymbolOrIcon specifier={header.symbol} />;
+      }
+    }
+
+    return (
+      <th className='modal-table__single-header' key={index}>
+        {content}
+      </th>
+    );
+  });
+
   return (
     <table
       className={`modal-table ${
@@ -40,13 +56,7 @@ function ModalTable({
       }`}
     >
       <thead className='modal-table__headers'>
-        <tr>
-          {headers?.map((header, index) => (
-            <th className='modal-table__single-header' key={index}>
-              {header}
-            </th>
-          ))}
-        </tr>
+        <tr>{formattedHeaders}</tr>
       </thead>
       <tbody>
         {content.map((row, rowIndex) => {
@@ -109,6 +119,10 @@ function ModalTable({
                           isCustomer,
                           isAdmin
                         );
+
+                        if (row.isVerified && action.symbol === 'sync_lock') {
+                          return; //don't allow activation link if already verified
+                        }
 
                         // avoid not logic action - frontend validation
                         if (row.bookingId) {
