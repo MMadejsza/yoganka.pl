@@ -12,6 +12,9 @@ import { queryClient } from './utils/http.js';
 
 const AccountPage = lazy(() => import('./pages/backend/AccountPage.jsx'));
 const AdminPage = lazy(() => import('./pages/backend/AdminDashPage.jsx'));
+const AdminSettingsPage = lazy(() =>
+  import('./pages/backend/AdminSettingsPage.jsx')
+);
 const EmailVerifyPage = lazy(() =>
   import('./pages/backend/EmailVerifyPage.jsx')
 );
@@ -190,6 +193,15 @@ const router = createBrowserRouter([
             ],
           },
         ],
+      },
+      {
+        path: 'admin-settings',
+        element: (
+          <RequireAuth>
+            <AdminSettingsPage />
+          </RequireAuth>
+        ),
+        children: [],
       },
       {
         path: 'polityka-firmy',

@@ -63,6 +63,11 @@ const sideNavTabs = [
     link: '/admin-console/show-all-tos-versions',
   },
   {
+    name: `Ustawienia`,
+    symbol: 'settings',
+    link: '/admin-settings',
+  },
+  {
     name: `CMS`,
     symbol: 'language',
     externalLink: 'https://yogankacms.sanity.studio/',
@@ -125,12 +130,7 @@ function AdminPage() {
     cache: 'no-store',
   });
 
-  const {
-    mutate: markAbsent,
-    isPending: markAbsentIsPending,
-    isError: markAbsentIsError,
-    error: markAbsentError,
-  } = useMutation({
+  const { mutate: markAbsent } = useMutation({
     mutationFn: formDataObj => {
       return mutateOnEdit(
         status,
