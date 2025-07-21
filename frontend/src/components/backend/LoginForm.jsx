@@ -26,7 +26,7 @@ import FeedbackBox from './FeedbackBox.jsx';
 import Input from './Input.jsx';
 const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
-function LoginFrom() {
+function LoginForm() {
   const params = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -612,4 +612,4 @@ function LoginFrom() {
   );
 }
 
-export default LoginFrom;
+export default LoginForm;

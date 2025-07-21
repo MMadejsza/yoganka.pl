@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet';
-import LoginFrom from '../../components/backend/LoginForm.jsx';
+import LoginForm from '../../components/backend/LoginForm.jsx';
 function LoginPage() {
   return (
     <>
@@ -8,7 +8,7 @@ function LoginPage() {
         <title>Zaloguj się – Yoganka</title>
         <meta name='robots' content='noindex, nofollow' />
       </Helmet>
-      <LoginFrom />
+      <LoginForm />
     </>
   );
 }
