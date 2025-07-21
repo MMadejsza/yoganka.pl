@@ -146,6 +146,25 @@ export async function mutateOnNewPassword(status, formData, path) {
     });
   });
 }
+export async function mutateOnValidationLink(status, formData) {
+  return fetch(`${API_BASE_URL}/api/login-pass/resend-activation`, {
+    method: 'PUT',
+    credentials: 'include', // include cookies
+    headers: {
+      'Content-Type': 'application/json',
+      'CSRF-Token': status.token,
+    },
+    body: JSON.stringify(formData),
+  }).then(response => {
+    return response.json().then(data => {
+      if (!response.ok) {
+        // reject with backend data
+        return Promise.reject(data);
+      }
+      return data;
+    });
+  });
+}
 export async function mutateOnCreate(status, formData, path) {
   if (logsGloballyOn) console.log(`mutateOnCreate path`, path);
 

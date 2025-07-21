@@ -12,6 +12,7 @@ import { useInput } from '../../hooks/useInput.js';
 import {
   mutateOnLoginOrSignup,
   mutateOnNewPassword,
+  mutateOnValidationLink,
   queryClient,
 } from '../../utils/http.js';
 import * as msgs from '../../utils/resMessagesUtils.js';
@@ -225,17 +226,7 @@ function LoginForm() {
   ]);
 
   const resendActivationMutation = useMutation({
-    mutationFn: () =>
-      fetch(`${API_BASE_URL}/api/login-pass/resend-activation`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          'CSRF-Token': status.token,
-        },
-        body: JSON.stringify({ email: emailValue }),
-      }).then(r => r.json()),
-
+    mutationFn: mutateOnValidationLink(status, { email: emailValue }),
     onSuccess: data => updateFeedback(data),
     onError: err => updateFeedback(err),
   });
