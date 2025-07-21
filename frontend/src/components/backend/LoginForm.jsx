@@ -226,7 +226,8 @@ function LoginForm() {
   ]);
 
   const resendActivationMutation = useMutation({
-    mutationFn: mutateOnValidationLink(status, { email: emailValue }),
+    mutationFn: ({ status, email }) =>
+      mutateOnValidationLink(status, { email }),
     onSuccess: data => updateFeedback(data),
     onError: err => updateFeedback(err),
   });
@@ -318,7 +319,7 @@ function LoginForm() {
 
     //  If it's resend - make resend Activation mutation for activation link
     if (action === 'resend') {
-      resendActivationMutation.mutate({ email: emailValue });
+      resendActivationMutation.mutate({ status, email: emailValue });
       return;
     }
 

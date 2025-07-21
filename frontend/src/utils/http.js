@@ -148,7 +148,7 @@ export async function mutateOnNewPassword(status, formData, path) {
 }
 export async function mutateOnValidationLink(status, formData) {
   return fetch(`${API_BASE_URL}/api/login-pass/resend-activation`, {
-    method: 'PUT',
+    method: 'POST',
     credentials: 'include', // include cookies
     headers: {
       'Content-Type': 'application/json',

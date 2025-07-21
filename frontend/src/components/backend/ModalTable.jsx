@@ -120,7 +120,10 @@ function ModalTable({
                           isAdmin
                         );
 
-                        if (row.isVerified && action.symbol === 'sync_lock') {
+                        if (
+                          (row.isVerified && action.symbol === 'sync_lock') ||
+                          row.isVerified == undefined
+                        ) {
                           return; //don't allow activation link if already verified
                         }
 
