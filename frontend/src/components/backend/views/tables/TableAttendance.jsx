@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useAuthStatus } from '../../../../hooks/useAuthStatus.js';
 import { useFeedback } from '../../../../hooks/useFeedback.js';
 import { handleContactCustomer } from '../../../../utils/cardsAndTableUtils.jsx';
@@ -20,7 +20,6 @@ function TableAttendance({ allBookings, isAdminPage, shouldToggleFrom }) {
   let attendedBookingsArray = allBookings.attendedBookings;
   let cancelledBookingsArray = allBookings.cancelledBookings;
   let params = useParams();
-  let navigate = useNavigate();
 
   const [isFormVisible, setIsFormVisible] = useState();
   const [deleteWarningTriggered, setDeleteWarningTriggered] = useState(false);

@@ -72,10 +72,13 @@ function Input({
       input = (
         <input
           id={id}
-          {...props}
           type='checkbox'
           checked={value}
           className={inputClass}
+          onChange={props.onChange}
+          onFocus={props.onFocus}
+          onBlur={props.onBlur}
+          {...props}
         />
       );
     }
@@ -157,7 +160,17 @@ function Input({
       </div>
     );
   } else {
-    input = <input id={id} {...props} value={value} className={inputClass} />;
+    input = (
+      <input
+        id={id}
+        value={value}
+        onChange={props.onChange}
+        onFocus={props.onFocus}
+        onBlur={props.onBlur}
+        className={inputClass}
+        {...props}
+      />
+    );
   }
 
   // Compute if the field is empty: for array, check length; otherwise, use !value.

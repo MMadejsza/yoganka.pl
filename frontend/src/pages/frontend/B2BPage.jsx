@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
+import IntroSection from '../../components/common/IntroSection.jsx';
 import Loader from '../../components/common/Loader.jsx';
 import Benefits from '../../components/frontend/b2b/B2BBenefits.jsx';
 import B2BOptionsSection from '../../components/frontend/b2b/B2BBenefitsSection.jsx';
 import PriceList from '../../components/frontend/b2b/PriceList.jsx';
-import IntroSection from '../../components/frontend/IntroSection.jsx';
 import OfferSection from '../../components/frontend/OfferSection.jsx';
 import { client } from '../../utils/sanityClient.js';
 

@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { Helmet } from 'react-helmet';
+import IntroSection from '../../components/common/IntroSection.jsx';
 import Loader from '../../components/common/Loader.jsx';
 import SimpleGallery from '../../components/frontend/glide/SimpleGallery.jsx';
-import IntroSection from '../../components/frontend/IntroSection.jsx';
 import OfferSection from '../../components/frontend/OfferSection.jsx';
 import { client } from '../../utils/sanityClient.js';
 

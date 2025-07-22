@@ -1,0 +1,19 @@
+.settings-section {
+  &.main {
+    grid-column: 1/-1;
+  }
+
+  &__header {
+    font-size: 2.4rem;
+    text-align: left;
+
+    &--main {
+      font-size: 3.5rem;
+
+      hr {
+        color: var(--color-tileTitle);
+        opacity: 0.3;
+      }
+    }
+  }
+}

@@ -14,6 +14,7 @@ function Section({ classy, modifier, header, iSpecific, children, ...props }) {
         } section-header ${modifier ? `section-header--${modifier}` : ''}`}
       >
         {header}
+        {props.hr && <hr />}
       </header>
     );
   }
