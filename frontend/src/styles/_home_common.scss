@@ -71,8 +71,14 @@ img {
 picture {
   display: grid;
   grid-column: 1/-1;
+  max-height: 100%;
+  width: 100%;
   align-content: center;
+  place-content: center;
+  overflow: hidden;
+
   .tile & {
+    max-height: 45vh;
     max-width: 80%;
   }
 }
