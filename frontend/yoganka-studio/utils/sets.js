@@ -48,7 +48,8 @@ export const defaultBtnsSet = {
           validation: Rule =>
             Rule.custom((value, context) => {
               if (context.parent.action === 'external') {
-                return value ? true : '⚠️ Wprowadź tekst przycisku';
+                if (!value) return '⚠️ Wprowadź tekst przycisku';
+                if (value && value.length > 24) return singleLine.errorMsg;
               }
               return true;
             }),
