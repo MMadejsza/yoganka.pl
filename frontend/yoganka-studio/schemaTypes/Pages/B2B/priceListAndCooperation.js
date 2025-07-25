@@ -1,7 +1,7 @@
 // schemas/B2B/priceListAndCooperation.js
 
-import * as components from '../../utils/components.jsx';
-import { defaultBtnsSet } from '../../utils/sets';
+import * as components from '../../../utils/components.jsx';
+import { defaultBtnsSet } from '../../../utils/sets';
 
 export default {
   name: `b2bPriceListAndCooperation`,

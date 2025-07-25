@@ -1,7 +1,7 @@
 // schemas/Home/offerSectionType.js
 
-import { simpleTitle } from '../../utils/components.jsx';
-import { singleLine } from '../../utils/validations';
+import { simpleTitle } from '../../../utils/components.jsx';
+import { singleLine } from '../../../utils/validations';
 
 export default {
   name: 'offer',

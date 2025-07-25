@@ -1,6 +1,6 @@
 // schemas/Home/certificateType.js
-import { sectionTitle } from '../../utils/components.jsx';
-import { doubleLine, singleLine } from '../../utils/validations';
+import { sectionTitle } from '../../../utils/components.jsx';
+import { doubleLine, singleLine } from '../../../utils/validations';
 
 export default {
   name: 'certificates',

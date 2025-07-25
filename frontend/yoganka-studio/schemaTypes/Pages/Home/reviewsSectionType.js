@@ -1,6 +1,6 @@
 // schemas/Home/reviewsSectionType.js
 
-import { link, sectionTitle } from '../../utils/components.jsx';
+import { link, sectionTitle } from '../../../utils/components.jsx';
 
 export default {
   name: 'review',

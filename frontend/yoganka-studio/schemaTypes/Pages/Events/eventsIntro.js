@@ -1,7 +1,7 @@
 // schemas/Events/eventsIntro.js
 
-import { defaultIntroPreview } from '../../utils/previews';
-import { defaultIntroSet } from '../../utils/sets';
+import { defaultIntroPreview } from '../../../utils/previews';
+import { defaultIntroSet } from '../../../utils/sets';
 
 export default {
   name: `eventsIntro`,

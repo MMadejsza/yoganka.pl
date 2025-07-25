@@ -6,12 +6,12 @@ import {
   isModal,
   mainImage,
   slug,
-} from '../utils/components.jsx';
+} from '../../utils/components.jsx';
 import {
   defaultModalSet,
   defaultTileFrontSet,
   productGroups,
-} from '../utils/sets';
+} from '../../utils/sets.js';
 
 export default {
   name: 'class',

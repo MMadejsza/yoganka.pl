@@ -1,6 +1,6 @@
 // schemas/Footer/socialType.js
 
-import * as components from '../../utils/components.jsx';
+import * as components from '../../../../utils/components.jsx';
 
 export default {
   name: 'social',

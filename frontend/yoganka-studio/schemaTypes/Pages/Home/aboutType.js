@@ -1,8 +1,8 @@
 // schemas/Home/aboutType.js
 
-import { mainImage, simpleTitle } from '../../utils/components.jsx';
-import { aboutGroups } from '../../utils/sets';
-import { singleLine } from '../../utils/validations';
+import { mainImage, simpleTitle } from '../../../utils/components.jsx';
+import { aboutGroups } from '../../../utils/sets';
+import { singleLine } from '../../../utils/validations';
 
 export default {
   name: 'about',

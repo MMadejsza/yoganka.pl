@@ -1,5 +1,5 @@
 // schemas/Footer/businessDataType.js
-import { doubleLine, tripleLine } from '../../utils/validations';
+import { doubleLine, tripleLine } from '../../../../utils/validations';
 
 export default {
   name: 'footerBusinessData',

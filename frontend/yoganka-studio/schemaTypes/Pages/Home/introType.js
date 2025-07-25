@@ -1,6 +1,6 @@
 // schemas/Home/introType.js
 
-import { singleLine } from '../../utils/validations';
+import { singleLine } from '../../../utils/validations';
 
 export default {
   name: 'intro',

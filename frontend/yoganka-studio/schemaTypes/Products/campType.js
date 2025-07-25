@@ -1,12 +1,12 @@
 // schemas/campType.js
 
-import { date, hiddenType, mainImage, slug } from '../utils/components.jsx';
+import { date, hiddenType, mainImage, slug } from '../../utils/components.jsx';
 import {
   defaultModalSet,
   defaultTileFrontSet,
   productGroups,
   productOrdering,
-} from '../utils/sets';
+} from '../../utils/sets.js';
 
 export default {
   name: 'camp',

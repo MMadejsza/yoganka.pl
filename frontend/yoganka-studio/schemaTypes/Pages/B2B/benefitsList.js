@@ -4,7 +4,7 @@ import {
   sectionTitle,
   stringList,
   typesList,
-} from '../../utils/components.jsx';
+} from '../../../utils/components.jsx';
 
 export default {
   name: `b2bBenefits`,

@@ -4,12 +4,12 @@ import {
   isModal,
   mainImage,
   sectionTitle,
-} from '../../utils/components';
+} from '../../../utils/components';
 import {
   defaultModalSet,
   defaultTileFrontSet,
   productGroups,
-} from '../../utils/sets';
+} from '../../../utils/sets';
 
 export default {
   name: `b2bOffer`,

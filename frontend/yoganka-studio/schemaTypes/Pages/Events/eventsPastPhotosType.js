@@ -1,6 +1,6 @@
 // schemas/Events/eventsPastPhotosType.js
 
-import { defaultGallerySectionSet } from '../../utils/sets';
+import { defaultGallerySectionSet } from '../../../utils/sets';
 
 export default {
   name: 'eventsPhotos',
