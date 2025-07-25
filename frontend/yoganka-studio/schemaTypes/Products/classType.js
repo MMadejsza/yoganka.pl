@@ -11,7 +11,7 @@ import {
   defaultModalSet,
   defaultTileFrontSet,
   productGroups,
-} from '../../utils/sets.js';
+} from '../../utils/sets.jsx';
 
 export default {
   name: 'class',

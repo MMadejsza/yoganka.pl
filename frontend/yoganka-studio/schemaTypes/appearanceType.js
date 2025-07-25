@@ -1,5 +1,5 @@
 // ./schemas/appearanceType.js
-import { colorGroups } from '../utils/sets';
+import { colorGroups } from '../utils/sets.jsx';
 
 export default {
   name: 'appearance',

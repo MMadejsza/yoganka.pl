@@ -1,7 +1,7 @@
 // schemas/B2B/offerTypesSectionType.js
 
 import { sectionTitle } from '../../../utils/components.jsx';
-import { defaultTurningTilesSet } from '../../../utils/sets';
+import { defaultTurningTilesSet } from '../../../utils/sets.jsx';
 
 export default {
   name: `b2bOfferTypes`,

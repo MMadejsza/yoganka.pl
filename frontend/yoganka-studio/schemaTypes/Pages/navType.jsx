@@ -1,6 +1,6 @@
 // schemas/navType.js
 import { link, stringIcon, stringSymbol } from '../../utils/components.jsx';
-import { navGroups } from '../../utils/sets.js';
+import { navGroups } from '../../utils/sets.jsx';
 
 export default {
   name: 'navs',

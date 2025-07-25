@@ -1,5 +1,5 @@
 import * as components from './components.jsx';
-import { doubleLine, singleLine, tripleLine } from './validations';
+import { doubleLine, singleLine, tripleLine } from './validations.js';
 
 export const defaultIntroSet = [
   {
@@ -183,10 +183,18 @@ export const defaultTileFrontSet = {
       name: 'title',
       title: '🟨 Tytuł',
       type: 'string',
-      description: `☝🏻 Używaj twardych spacji zamiast zwykłych, żeby tekst się nie łamał nieoczekiwanie.
-      🔹Windows: przytrzymaj Alt i na klawiaturze numerycznej wpisz 0160, puść Alt → wstawi się spacja nierozdzielająca (NBSP).
-      🔹macOS: naciśnij Option + Spacja → wstawi się NBSP.
-      🔹Twarda spacja do skopiowania - miedzy gwiazdkami: ** **`,
+      description: (
+        <span>
+          ☝🏻 Twarda spacja do skopiowania z{' '}
+          <a
+            href='https://chat.openai.com/?model=gpt-4o&q=Wklej%20dok%C5%82adnie%20jeden%20znak%20twardej%20spacji%20%28Unicode%20U%2B00A0%29%20mi%C4%99dzy%20dwiema%20strza%C5%82kami%20%F0%9F%91%89%20i%20%F0%9F%91%88%2C%20bez%20%C5%BCadnych%252'
+            target='_blank'
+            rel='noopener noreferrer'
+          >
+            ChatGPT
+          </a>
+        </span>
+      ),
       initialValue: document => document.name || '',
       validation: Rule =>
         Rule.required().max(tripleLine.maxLength).error(tripleLine.errorMsg),

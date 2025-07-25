@@ -1,6 +1,6 @@
 // schemas/logoType.js
 import * as components from '../../utils/components.jsx';
-import { logoGroups } from '../../utils/sets.js';
+import { logoGroups } from '../../utils/sets.jsx';
 
 export default {
   name: 'logotypes',

@@ -1,6 +1,6 @@
 // schemas/Camps/campBenefitsType.js
 import { sectionTitle } from '../../../utils/components.jsx';
-import { defaultTurningTilesSet } from '../../../utils/sets';
+import { defaultTurningTilesSet } from '../../../utils/sets.jsx';
 
 export default {
   name: `benefits`,

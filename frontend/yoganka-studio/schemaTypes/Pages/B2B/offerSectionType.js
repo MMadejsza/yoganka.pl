@@ -9,7 +9,7 @@ import {
   defaultModalSet,
   defaultTileFrontSet,
   productGroups,
-} from '../../../utils/sets';
+} from '../../../utils/sets.jsx';
 
 export default {
   name: `b2bOffer`,

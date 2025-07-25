@@ -6,7 +6,7 @@ import {
   defaultTileFrontSet,
   productGroups,
   productOrdering,
-} from '../../utils/sets.js';
+} from '../../utils/sets.jsx';
 
 export default {
   name: 'camp',
