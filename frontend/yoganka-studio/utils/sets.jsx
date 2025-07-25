@@ -218,9 +218,18 @@ export const defaultTileFrontSet = {
       name: 'desc',
       title: '📝 Opis skrócony',
       type: 'text',
-      description: `☝🏻 Używaj twardych spacji (Unicode U+00A0) zamiast zwykłych spacji, żeby tekst się nie łamał.
-            🔹Windows: przytrzymaj Alt i na klawiaturze numerycznej wpisz 0160, puść Alt → wstawi się spacja nierozdzielająca (NBSP).
-            🔹macOS: naciśnij Option + Spacja → wstawi się NBSP.`,
+      description: (
+        <span>
+          ☝🏻 Twarda spacja do skopiowania z{' '}
+          <a
+            href='https://chat.openai.com/?model=gpt-4o&q=Wklej%20dok%C5%82adnie%20jeden%20znak%20twardej%20spacji%20%28Unicode%20U%2B00A0%29%20mi%C4%99dzy%20dwiema%20strza%C5%82kami%20%F0%9F%91%89%20i%20%F0%9F%91%88%2C%20bez%20%C5%BCadnych%252'
+            target='_blank'
+            rel='noopener noreferrer'
+          >
+            ChatGPT
+          </a>
+        </span>
+      ),
     },
     defaultBtnsSet,
   ],
@@ -265,10 +274,18 @@ export const defaultTileModalPartiallySet = (hiddenFn = undefined) => {
       name: 'fullDesc',
       title: '📝 Pełny opis',
       type: 'text',
-      description: `☝🏻 Pełny - nie skrócony.
-          ☝🏻 Używaj twardych spacji (Unicode U+00A0) zamiast zwykłych spacji, żeby tekst się nie łamał.
-           🔹Windows: przytrzymaj Alt i na klawiaturze numerycznej wpisz 0160, puść Alt → wstawi się spacja nierozdzielająca (NBSP).
-           🔹macOS: naciśnij Option + Spacja → wstawi się NBSP.`,
+      description: (
+        <span>
+          ☝🏻 Pełny - nie skrócony. ☝🏻 Twarda spacja do skopiowania z{' '}
+          <a
+            href='https://chat.openai.com/?model=gpt-4o&q=Wklej%20dok%C5%82adnie%20jeden%20znak%20twardej%20spacji%20%28Unicode%20U%2B00A0%29%20mi%C4%99dzy%20dwiema%20strza%C5%82kami%20%F0%9F%91%89%20i%20%F0%9F%91%88%2C%20bez%20%C5%BCadnych%252'
+            target='_blank'
+            rel='noopener noreferrer'
+          >
+            ChatGPT
+          </a>
+        </span>
+      ),
       validation: Rule => Rule.required(),
     },
   ];
