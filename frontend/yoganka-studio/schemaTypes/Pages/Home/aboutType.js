@@ -6,13 +6,13 @@ import { singleLine } from '../../../utils/validations';
 
 export default {
   name: 'about',
-  title: 'GŁÓWNA - 👤 Bio',
+  title: '🏠 GŁÓWNA - 👤 Bio',
   type: 'document',
   groups: aboutGroups,
   fields: [
     simpleTitle({
       initialValue: 'O mnie',
-      description: `Pojawia się tylko w wersji mobile`,
+      description: `Pojawia się tylko w wersji mobile. Twarda spacja do skopiowania - miedzy gwiazdkami: ** **`,
       required: true,
     }),
     {

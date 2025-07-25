@@ -4,7 +4,7 @@ import { link, sectionTitle } from '../../../utils/components.jsx';
 
 export default {
   name: 'partners',
-  title: 'GŁÓWNA - 🤝 Partnerzy',
+  title: '🏠 GŁÓWNA - 🤝 Partnerzy',
   type: 'document',
   fields: [
     sectionTitle,

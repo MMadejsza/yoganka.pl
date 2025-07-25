@@ -4,7 +4,7 @@ import { link, sectionTitle } from '../../../utils/components.jsx';
 
 export default {
   name: 'review',
-  title: 'GŁÓWNA - 🌟 Recenzje',
+  title: '🏠 GŁÓWNA - 🌟 Recenzje',
   type: 'document',
   fields: [
     sectionTitle,

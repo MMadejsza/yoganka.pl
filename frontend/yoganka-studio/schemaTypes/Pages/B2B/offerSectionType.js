@@ -13,7 +13,7 @@ import {
 
 export default {
   name: `b2bOffer`,
-  title: `B2B - 🛒 Oferta`,
+  title: `💼 B2B - 🛒 Oferta`,
   type: `document`,
   fields: [
     sectionTitle,

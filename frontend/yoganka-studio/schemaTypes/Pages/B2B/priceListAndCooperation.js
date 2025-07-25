@@ -5,7 +5,7 @@ import { defaultBtnsSet } from '../../../utils/sets';
 
 export default {
   name: `b2bPriceListAndCooperation`,
-  title: `B2B - 💲 Cennik i współpraca + główne przyciski`,
+  title: `💼 B2B - 💲 Cennik i współpraca + główne przyciski`,
   type: `document`,
   fields: [
     components.sectionTitle,

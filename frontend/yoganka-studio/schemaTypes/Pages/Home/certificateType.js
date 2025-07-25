@@ -4,7 +4,7 @@ import { doubleLine, singleLine } from '../../../utils/validations';
 
 export default {
   name: 'certificates',
-  title: 'GŁÓWNA - 📜 Certyfikaty',
+  title: '🏠 GŁÓWNA - 📜 Certyfikaty',
   type: 'document',
   fields: [
     sectionTitle,

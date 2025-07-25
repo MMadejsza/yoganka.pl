@@ -4,7 +4,7 @@ import { singleLine } from '../../../utils/validations';
 
 export default {
   name: 'intro',
-  title: 'GŁÓWNA - ▶️ Intro',
+  title: '🏠 GŁÓWNA - ▶️ Intro',
   type: 'document',
   fields: [
     {

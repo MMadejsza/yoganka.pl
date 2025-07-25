@@ -7,7 +7,7 @@ import { client } from '../../../utils/sanityClient.js';
 import SymbolOrIcon from '../../common/SymbolOrIcon';
 import Logo from '../../frontend/Logo.jsx';
 
-const logsGloballyOn = true;
+const logsGloballyOn = false;
 
 const menuSideSet = [
   {

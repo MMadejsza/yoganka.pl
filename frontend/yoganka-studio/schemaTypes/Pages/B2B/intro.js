@@ -5,7 +5,7 @@ import { defaultIntroSet } from '../../../utils/sets';
 
 export default {
   name: `b2bIntro`,
-  title: `B2B - ▶️ Intro`,
+  title: `💼 B2B - ▶️ Intro`,
   type: `document`,
   fields: defaultIntroSet,
   preview: defaultIntroPreview,

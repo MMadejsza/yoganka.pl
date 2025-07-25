@@ -185,7 +185,8 @@ export const defaultTileFrontSet = {
       type: 'string',
       description: `☝🏻 Używaj twardych spacji zamiast zwykłych, żeby tekst się nie łamał nieoczekiwanie.
       🔹Windows: przytrzymaj Alt i na klawiaturze numerycznej wpisz 0160, puść Alt → wstawi się spacja nierozdzielająca (NBSP).
-      🔹macOS: naciśnij Option + Spacja → wstawi się NBSP.`,
+      🔹macOS: naciśnij Option + Spacja → wstawi się NBSP.
+      🔹Twarda spacja do skopiowania - miedzy gwiazdkami: ** **`,
       initialValue: document => document.name || '',
       validation: Rule =>
         Rule.required().max(tripleLine.maxLength).error(tripleLine.errorMsg),

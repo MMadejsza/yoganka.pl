@@ -5,7 +5,7 @@ import { defaultIntroSet } from '../../../utils/sets';
 
 export default {
   name: `campsIntro`,
-  title: `CAMPY - ▶️ Intro`,
+  title: `🏕️ CAMPY - ▶️ Intro`,
   type: `document`,
   fields: defaultIntroSet,
   preview: defaultIntroPreview,

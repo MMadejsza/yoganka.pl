@@ -124,7 +124,7 @@ export const stringImgTitle = ({ initialValue = undefined } = {}) => ({
 });
 export const simpleTitle = ({
   initialValue = undefined,
-  description = undefined,
+  description = 'Twarda spacja do skopiowania - miedzy gwiazdkami: ** **',
   required = false,
 } = {}) => {
   return {
