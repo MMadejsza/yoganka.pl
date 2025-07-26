@@ -80,7 +80,7 @@ function CampsPage() {
     content = (
       <>
         <IntroSection
-          modifier={`camps`}
+          modifier={'dummy'}
           className={`intro`}
           data={CAMPS_INTRO_SECTION_DATA[0]}
         />

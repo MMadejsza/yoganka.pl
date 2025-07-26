@@ -43,7 +43,7 @@
     margin-bottom: 8rem;
     padding: 1rem 2rem;
     font-size: 1.7rem;
-    white-space: pre-line;
+    text-align: center;
     background-color: color-mix(
       in srgb,
       #{map.get($colors, base)} 100%,

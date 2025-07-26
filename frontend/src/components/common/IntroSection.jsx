@@ -29,7 +29,7 @@ function IntroSection({ modifier, className, extraClass, data }) {
           }`}
         >
           {data.list.map((p, index) => (
-            <p key={index} className='about__bio--description'>
+            <p key={index} className={`${className}__paragraph`}>
               {p}
             </p>
           ))}
