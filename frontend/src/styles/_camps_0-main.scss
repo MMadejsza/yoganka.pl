@@ -2,35 +2,6 @@
 @use 'sass:color';
 @use './utils/' as *;
 
-.intro.no-bcg-pic + section.offer {
-  grid-area: about;
-  grid-column: 1/-1;
-  margin-top: 2rem;
-  .offer-type {
-    grid-column: 1/-1;
-  }
-}
-
-.section--turning-tiles + section.offer,
-.intro.no-bcg-pic + section.offer {
-  margin-top: 6rem;
-  grid-gap: 0rem;
-  @include flex(row, center, center);
-  flex-wrap: wrap;
-
-  background-color: map.get($colors, base);
-  box-shadow: map.get($shadows, transitive-box-shadow);
-
-  .offer-type {
-    @include flex(row, center);
-    flex-wrap: wrap;
-  }
-  .offer-type__header {
-    flex-basis: 100%;
-    font-size: 4rem;
-  }
-}
-
 .galery {
   overflow: hidden;
   grid-column: 1 /-1;

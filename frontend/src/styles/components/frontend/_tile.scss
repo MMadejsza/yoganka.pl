@@ -199,8 +199,8 @@
   $title-line-height: 1.1;
 
   .tile {
-    .section--turning-tiles + section.offer &,
-    .intro.no-bcg-pic + section.offer & {
+    .section--turning-tiles + .section--offer &,
+    .intro.no-bcg-pic + .section--offer & {
       flex-basis: 45%;
     }
 
@@ -242,8 +242,8 @@
   }
 }
 @include respond-to(mobile-pro) {
-  .section--turning-tiles + section.offer,
-  .intro.no-bcg-pic + section.offer {
+  .section--turning-tiles + .section--offer,
+  .intro.no-bcg-pic + .section--offer {
     .tile {
       flex-basis: 30%;
     }

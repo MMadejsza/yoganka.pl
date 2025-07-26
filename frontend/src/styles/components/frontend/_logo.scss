@@ -1,0 +1,14 @@
+@use 'sass:map';
+@use '../..//utils/' as *;
+
+@include respond-to(mobile-l) {
+  .logo-writing__logo-container {
+    flex-basis: 100%;
+    @include flex(row, center);
+  }
+  .logo-writing__logo {
+    position: static;
+    max-width: 480px;
+    transform: none;
+  }
+}

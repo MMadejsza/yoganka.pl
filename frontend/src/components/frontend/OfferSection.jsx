@@ -6,7 +6,7 @@ const todayRaw = new Date();
 const today = todayRaw.toISOString().split('T')[0]; // "YYYY-MM-DD"
 
 function OfferSection({ products, extraClass }) {
-  const leadingClass = 'offer';
+  const leadingClass = 'section--offer';
   return (
     <Section classy={`${leadingClass} ${extraClass}`}>
       {products.map(product => (

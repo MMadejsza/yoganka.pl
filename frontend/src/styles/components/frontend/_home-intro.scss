@@ -77,6 +77,16 @@
   overflow: visible;
 }
 
+@include respond-to(mobile-xs) {
+  .motto {
+    letter-spacing: 0px;
+  }
+}
+@include respond-to(mobile-s) {
+  .motto {
+    letter-spacing: 1px;
+  }
+}
 @include respond-to(mobile-m) {
   .home-intro {
     &__img {
@@ -93,5 +103,14 @@
     &__img {
       object-position: 0 25%;
     }
+  }
+
+  .motto {
+    font-size: 1.6rem;
+    font-weight: lighter;
+    color: map.get($colors, tile-title);
+
+    box-shadow: none;
+    background-color: transparent;
   }
 }

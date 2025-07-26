@@ -4,10 +4,8 @@
 @use './utils/' as *;
 
 .wrapper--b2b-type {
-  section.offer {
-    margin-bottom: 12rem;
-  }
   #b2b_offer {
+    //offer-type
     grid-column: 1/-1;
     margin-bottom: 7rem;
   }
@@ -89,11 +87,6 @@
     }
   }
 
-  @media (min-width: 480px) {
-    section.offer {
-      margin-bottom: 9rem;
-    }
-  }
   @media (min-width: 768px) {
     .checklist-section {
       .modal-checklist__list {

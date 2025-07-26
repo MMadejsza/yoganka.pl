@@ -8,13 +8,6 @@
     font-size: calc(var(--scale) * 9px);
   }
 
-  .motto {
-    letter-spacing: 0px;
-  }
-  .offer {
-    grid-gap: 5rem 1.5rem;
-  }
-
   .partners__image {
     width: 50vw;
   }
@@ -33,9 +26,6 @@
     font-size: calc(var(--scale) * 12px);
   }
 
-  .motto {
-    letter-spacing: 1px;
-  }
   .footer {
     &__socials {
       gap: 4rem;
@@ -124,13 +114,6 @@
     transform: translateY(-5%) scale(1.05);
   }
 
-  .offer {
-    grid-template-areas:
-      'title title'
-      'wyjazdy wyjazdy'
-      'zajecia zajecia'
-      'wydarzenia wydarzenia';
-  }
   .modal {
     max-width: 95vw;
 
@@ -360,23 +343,6 @@
     font-size: calc(var(--scale) * 10px);
   }
 
-  .logo-writing__logo-container {
-    flex-basis: 100%;
-    @include flex(row, center);
-  }
-  .logo-writing__logo {
-    position: static;
-    max-width: 480px;
-    transform: none;
-  }
-  .motto {
-    font-size: 1.6rem;
-    font-weight: lighter;
-    color: map.get($colors, tile-title);
-
-    box-shadow: none;
-    background-color: transparent;
-  }
   .about {
     margin-top: 11rem;
     margin-bottom: 3rem;
@@ -433,29 +399,6 @@
     }
   }
 
-  .offer {
-    margin-top: -3rem;
-    grid-template-columns: repeat(4, minmax(150px, 1fr));
-    grid-template-areas:
-      'title title title title'
-      'wyjazdy wyjazdy zajecia zajecia'
-      'wydarzenia wydarzenia wydarzenia wydarzenia';
-
-    .offer-type {
-      align-content: flex-start;
-
-      &--events {
-        grid-area: wydarzenia;
-      }
-    }
-  }
-  section.checklist-section.classes-page + section.offer {
-    grid-template-columns:
-      minmax(100px, 150px) minmax(150px, 1fr) minmax(150px, 1fr)
-      minmax(100px, 151px);
-    grid-template-areas: '. zajecia zajecia .';
-    margin-top: 4rem;
-  }
   .modal {
     max-width: 900px;
     padding: 1.5rem 2.5rem;
@@ -547,13 +490,7 @@
       }
     }
   }
-  .offer {
-    grid-gap: 5rem 3rem;
 
-    .offer-type {
-      grid-gap: 2.5rem 3rem;
-    }
-  }
   .modal {
     max-width: 1200px;
     padding: 1.5rem 4rem;

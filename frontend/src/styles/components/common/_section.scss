@@ -1,6 +1,65 @@
 @use 'sass:map';
 @use '../../utils/' as *;
 
+.section--offer {
+  grid-area: offer;
+
+  display: grid;
+  grid-template-columns: repeat(2, minmax(150px, 1fr));
+  grid-template-areas:
+    'title title'
+    'wyjazdy wyjazdy'
+    'zajecia zajecia'
+    'wydarzenia wydarzenia';
+  grid-gap: 5rem 0.5rem;
+
+  overflow: visible;
+
+  &__section-header {
+    grid-area: title;
+    position: relative;
+  }
+
+  .intro.no-bcg-pic + & {
+    grid-area: about;
+    grid-column: 1/-1;
+    margin-top: 2rem;
+
+    .offer-type {
+      grid-column: 1/-1;
+    }
+  }
+
+  section.checklist-section.classes-page + & {
+    grid-template-areas: 'zajecia zajecia';
+    margin-bottom: 2rem;
+  }
+
+  .section--turning-tiles + &,
+  .intro.no-bcg-pic + & {
+    margin-top: 6rem;
+    grid-gap: 0rem;
+    @include flex(row, center, center);
+    flex-wrap: wrap;
+
+    background-color: map.get($colors, base);
+    box-shadow: map.get($shadows, transitive-box-shadow);
+
+    .offer-type {
+      @include flex(row, center);
+      flex-wrap: wrap;
+    }
+    .offer-type__header {
+      flex-basis: 100%;
+      font-size: 4rem;
+    }
+  }
+
+  .wrapper--b2b-type & {
+    margin-bottom: 12rem;
+  }
+}
+
 .section--certificates {
   grid-area: cert;
   position: relative;
@@ -50,6 +109,11 @@
   }
 }
 @include respond-to(mobile-s) {
+  .section--offer {
+    margin-bottom: 9rem;
+    grid-gap: 5rem 1.5rem;
+  }
+
   .section--turning-tiles {
     margin-bottom: 9rem;
   }
@@ -62,6 +126,14 @@
   }
 }
 @include respond-to(mobile-m) {
+  .section--offer {
+    grid-template-areas:
+      'title title'
+      'wyjazdy wyjazdy'
+      'zajecia zajecia'
+      'wydarzenia wydarzenia';
+  }
+
   .section--reviews {
     .glide__track {
       height: 70vh;
@@ -70,9 +142,44 @@
   }
 }
 @include respond-to(mobile-l) {
+  .section--offer {
+    margin-top: -3rem;
+    grid-template-columns: repeat(4, minmax(150px, 1fr));
+    grid-template-areas:
+      'title title title title'
+      'wyjazdy wyjazdy zajecia zajecia'
+      'wydarzenia wydarzenia wydarzenia wydarzenia';
+
+    section.checklist-section.classes-page + & {
+      grid-template-columns:
+        minmax(100px, 150px) minmax(150px, 1fr) minmax(150px, 1fr)
+        minmax(100px, 151px);
+      grid-template-areas: '. zajecia zajecia .';
+      margin-top: 4rem;
+    }
+
+    .offer-type {
+      align-content: flex-start;
+
+      &--events {
+        grid-area: wydarzenia;
+      }
+    }
+  }
+
   .section--turning-tiles {
     .click-suggestion {
       font-size: 2.8rem;
+    }
+  }
+}
+
+@include respond-to(desktop-s) {
+  .section--offer {
+    grid-gap: 5rem 3rem;
+
+    .offer-type {
+      grid-gap: 2.5rem 3rem;
     }
   }
 }
