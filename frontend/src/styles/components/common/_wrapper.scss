@@ -64,13 +64,10 @@
   }
 }
 
-@include respond-to(mobile-xs) {
-}
-@include respond-to(mobile-s) {
-}
-@include respond-to(mobile-m) {
-}
-@include respond-to(mobile-mh) {
+@include respond-to(mobile-sh) {
+  .wrapper > section:not(:first-of-type) {
+    padding: 0 2rem 2rem;
+  }
 }
 @include respond-to(mobile-l) {
   .wrapper {
@@ -85,14 +82,10 @@
     }
   }
 }
-@include respond-to(desktop-xs) {
-}
 @include respond-to(desktop-s) {
   .wrapper {
     max-width: 1200px;
   }
-}
-@include respond-to(desktop-m) {
 }
 @include respond-to(desktop-l) {
   .wrapper {
