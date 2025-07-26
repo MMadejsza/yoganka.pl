@@ -5,10 +5,7 @@ import IntroSection from '../../components/common/IntroSection.jsx';
 function AdminSettingsPage() {
   return (
     <>
-      <IntroSection
-        className={`camps-intro`}
-        data={{ sectionTitle: 'Ustawienia' }}
-      />
+      <IntroSection className={`intro`} data={{ sectionTitle: 'Ustawienia' }} />
       <SettingsSection
         className={`settings-section`}
         extraClass={'main'}

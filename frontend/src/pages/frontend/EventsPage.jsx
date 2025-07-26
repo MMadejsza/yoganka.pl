@@ -98,7 +98,7 @@ function EventsPage() {
       </Helmet>
       <IntroSection
         modifier={`no-bcg-pic`}
-        className={`camps-intro`}
+        className={`intro`}
         data={EVENTS_INTRO_SECTION_DATA[0]}
       />
       {contentLoaded && (

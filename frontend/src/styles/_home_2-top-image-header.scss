@@ -51,7 +51,7 @@
     pointer-events: none;
   }
 
-  .camps-intro &__img {
+  .intro &__img {
     object-position: unset;
   }
 }
@@ -62,6 +62,7 @@
   max-width: 60vw;
   transform: translateX(-50%);
 }
+
 .motto {
   grid-area: motto;
   font-size: 1.7rem;

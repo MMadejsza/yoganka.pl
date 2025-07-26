@@ -558,7 +558,7 @@ function AdminPage() {
       <div className='admin-console'>
         {status.user?.role === 'ADMIN' && (
           <>
-            <Section classy='admin-intro' header={`Admin Panel`}></Section>
+            <Section classy='intro--admin' header={`Admin Panel`}></Section>
             <SideNav menuSet={sideNavTabs} />
             {adminTabs}
             <h1 className='modal__title modal__title--view'>{title}</h1>

@@ -2,7 +2,7 @@ import Section from '../../frontend/Section.jsx';
 import GlideContainer from '../glide/GlideContainer.jsx';
 
 function ReviewsSection({ placement, data }) {
-  const leadingClass = 'reviews';
+  const leadingClass = 'section--reviews';
 
   return (
     <>

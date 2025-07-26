@@ -1,6 +1,6 @@
 function ReviewSlide({ slideData }) {
   const { img, name, productName, review } = slideData;
-  const leadingClass = 'reviews';
+
   const capReview = review => {
     if (review.length >= 289) {
       // cut length
@@ -14,29 +14,27 @@ function ReviewSlide({ slideData }) {
       return newRevWords.join(' ');
     } else return review;
   };
+
   capReview(review);
+
   return (
     <li className='glide__slide'>
-      <div className={`tile ${leadingClass}__tile`}>
+      <div className={`tile tile--m`}>
         {img && (
           <img
-            className={`${leadingClass}__img tile__img`}
+            className={`tile--m tile__img`}
             src={img}
             alt={`${name} profile photo`}
           />
         )}
         {name && (
-          <h3>
-            <strong className={`${leadingClass}__name`}>{name}</strong>
+          <h3 className={`tile__title`}>
+            <strong>{name}</strong>
           </h3>
         )}
-        {productName && (
-          <p className={`${leadingClass}__productName`}>{productName}</p>
-        )}
+        {productName && <p className={`tile__date`}>{productName}</p>}
         {review && (
-          <p
-            className={`${leadingClass}__review`}
-          >{`"${capReview(review)}"`}</p>
+          <p className={`tile__desc italic`}>{`"${capReview(review)}"`}</p>
         )}
       </div>
     </li>

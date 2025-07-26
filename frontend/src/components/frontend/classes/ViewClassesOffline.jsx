@@ -34,7 +34,7 @@
 //         <meta property='og:type' content='website' />
 //         <meta property='og:image' content='/favicon_io/apple-touch-icon.png' />
 //       </Helmet>
-//       {/* <Section classy='admin-intro' header={'Stacjonarnie w '} /> */}
+//       {/* <Section classy='intro--admin' header={'Stacjonarnie w '} /> */}
 //       <PriceList
 //         id={'tabs-content'}
 //         title={`Znajdziesz mnie tutaj:`}

@@ -22,7 +22,7 @@
 //       </Helmet>
 //       <Section
 //         id={'tabs-content'}
-//         classy='admin-intro'
+//         classy='intro--admin'
 //         header={'Studio online'}
 //       />
 //       <B2BOptionsSection list={BENEFITS_TILES} title={'Dlaczego warto?'} />

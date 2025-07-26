@@ -1,62 +1,8 @@
 @use 'sass:map';
 @use 'sass:color';
-@use 'sass:math';
 @use './utils/' as *;
 
-.camps-intro {
-  position: relative;
-  grid-area: header;
-  // min-height: 1150px;
-
-  @include flex(column, space-between);
-  flex-wrap: wrap;
-  gap: 30vh; //!
-
-  overflow: hidden;
-  @supports (-webkit-touch-callout: none) and (not (hover: hover)) {
-    //for ios
-    background-attachment: scroll;
-  }
-
-  &.no-bcg-pic {
-    gap: 5rem;
-  }
-
-  &__header {
-    width: 100%;
-    margin-top: 7rem;
-    padding: 1rem;
-    text-shadow: map.get($shadows, active-text-icons-shadow);
-    background-color: color-mix(
-      in srgb,
-      #{map.get($colors, base)} 75%,
-      transparent
-    );
-  }
-  &__welcome-desc {
-    margin-bottom: 8rem;
-    padding: 1rem 2rem;
-    height: min-content;
-    width: 100vw;
-    max-width: 100vw;
-    white-space: pre-line;
-    font-size: 1.7rem;
-    background-color: color-mix(
-      in srgb,
-      #{map.get($colors, base)} 100%,
-      transparent
-    );
-    box-shadow: map.get($shadows, transitive-box-shadow);
-
-    .no-bcg-pic & {
-      margin-bottom: 0rem;
-    }
-  }
-  .about__bio--description {
-    text-align: center;
-  }
-}
-.camps-intro.no-bcg-pic + section.offer {
+.intro.no-bcg-pic + section.offer {
   grid-area: about;
   grid-column: 1/-1;
   margin-top: 2rem;
@@ -66,7 +12,7 @@
 }
 
 .section--turning-tiles + section.offer,
-.camps-intro.no-bcg-pic + section.offer {
+.intro.no-bcg-pic + section.offer {
   margin-top: 6rem;
   grid-gap: 0rem;
   @include flex(row, center, center);
@@ -85,44 +31,6 @@
   }
 }
 
-.reviews {
-  grid-area: cert;
-  overflow: hidden;
-
-  &.homepage {
-    grid-area: reviews;
-  }
-  .glide__track {
-    height: 70vh;
-    max-height: 450px;
-  }
-  .glide__slide {
-    height: min-content;
-  }
-  &__img {
-    max-width: 100px;
-    max-width: 100px;
-  }
-  &__tile {
-    // height: 65vh;
-    width: 80vw;
-    max-height: 450px;
-    max-width: 300px;
-    justify-content: flex-start;
-  }
-  &__name {
-    text-shadow: map.get($shadows, active-text-icons-shadow);
-    font-size: 2.2rem;
-  }
-  &__productName {
-    font-size: 2rem;
-  }
-  &__review {
-    font-style: italic;
-    font-size: 1.9rem;
-  }
-}
-
 .galery {
   overflow: hidden;
   grid-column: 1 /-1;
@@ -132,116 +40,14 @@ main {
   grid-column: 1/-1;
 }
 
-@media (min-width: 360px) {
-  .camps-intro {
-    &__welcome-desc {
-      font-size: 2rem;
-    }
-  }
-
-  .reviews {
-    .glide__track {
-      max-height: 450px;
-    }
-    &__img {
-      max-width: 150px;
-      max-width: 150px;
-    }
-    &__tile {
-      max-height: 425px;
-    }
-    &__name {
-      font-size: 2.4rem;
-    }
-    &__productName {
-      font-size: 2.2rem;
-    }
-    &__review {
-      font-size: 2.1rem;
-    }
-  }
-}
-@media (min-width: 480px) {
-  .reviews {
-    .glide__track {
-      height: 70vh;
-      max-height: 500px;
-    }
-    &__tile {
-      max-height: 475px;
-      max-width: 450px;
-    }
-  }
-}
 @media (min-width: 768px) {
-  .camps-intro {
-    background-position: 50% 25%;
-    &__welcome-desc {
-      padding: 2rem;
-    }
-  }
-
-  .section--turning-tiles + section.offer,
-  .camps-intro.no-bcg-pic + section.offer {
-    .tile {
-      flex-basis: 45%;
-    }
-  }
-
-  .reviews {
-    .glide__track {
-      height: 70vh;
-      max-height: 500px;
-    }
-    &__tile {
-      max-height: 475px;
-      max-width: 450px;
-    }
-  }
-
   .galery {
     grid-column: 1/-1;
     overflow: visible;
   }
 }
 
-@media (min-width: 1024px) {
-  .camps-intro {
-    &__welcome-desc {
-      font-size: 2.4rem;
-    }
-  }
-
-  .section--turning-tiles + section.offer,
-  .camps-intro.no-bcg-pic + section.offer {
-    .tile {
-      flex-basis: 30%;
-    }
-  }
-}
-
 @media (min-width: 1025px) {
-  .camps-intro {
-    grid-column: 1 / -1;
-    margin-top: 7rem;
-    @include flex(row, center);
-    flex-wrap: wrap;
-    background-size: 1000px;
-    background-position: 50% 25%;
-
-    &__header {
-      flex-basis: 100%;
-    }
-
-    &__welcome-desc {
-      white-space: pre-line;
-    }
-
-    .top-image-header__img {
-      object-position: 0 25%;
-    }
-  }
-
   .galery__container {
     position: relative;
     margin-top: 5rem;
@@ -257,17 +63,5 @@ main {
       font-size: 1.2em;
       position: relative;
     }
-  }
-}
-
-@media (min-width: 1280px) {
-  .camps-intro {
-    background-position: center 20%;
-    background-size: 1200px;
-  }
-}
-@media (min-width: 1920px) {
-  .camps-intro {
-    background-position: center 22%;
   }
 }

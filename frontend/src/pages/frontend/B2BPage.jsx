@@ -111,7 +111,7 @@ function B2BPage() {
       {INTRO && (
         <IntroSection
           modifier={`b2b`}
-          className={`camps-intro`}
+          className={`intro`}
           extraClass={'b2b-intro'}
           data={INTRO}
         />

@@ -81,7 +81,7 @@ function CampsPage() {
       <>
         <IntroSection
           modifier={`camps`}
-          className={`camps-intro`}
+          className={`intro`}
           data={CAMPS_INTRO_SECTION_DATA[0]}
         />
         <TurningTilesSection data={CAMPS_BENEFITS_SECTION_DATA} />

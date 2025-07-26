@@ -175,7 +175,7 @@ function AccountPage() {
       </Helmet>
 
       <div className='admin-console'>
-        <Section classy='admin-intro' header={name} />
+        <Section classy='intro--admin' header={name} />
         {userTabs}
         {content}
       </div>

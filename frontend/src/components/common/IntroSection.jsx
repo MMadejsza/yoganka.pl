@@ -24,7 +24,7 @@ function IntroSection({ modifier, className, extraClass, data }) {
       )}
       {data.list?.length > 0 && (
         <article
-          className={`about__bio--content ${className}__welcome-desc${
+          className={`${className}__welcome-desc${
             extraClass ? ` ${extraClass}` : ''
           }`}
         >

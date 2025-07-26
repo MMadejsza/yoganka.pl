@@ -14,9 +14,11 @@
   .modal-table {
     table-layout: auto;
     max-width: 100%;
+
     td {
       max-width: 700px;
     }
+
     .cell-content-wrapper {
       max-height: 200px;
       max-width: 100%;
@@ -30,31 +32,5 @@ body:has(.admin-console) {
     width: 98vw;
     max-width: 1200px;
     overflow: auto;
-  }
-}
-
-.admin-intro {
-  margin-top: 8rem;
-}
-
-@media (min-width: 1025px) or (min-width: 1400px) {
-  .admin-intro {
-    margin-top: 11rem;
-
-    &__header {
-      width: 100%;
-      padding: 1rem;
-      text-shadow: map.get($shadows, active-text-icons-shadow);
-      background-color: color-mix(
-        in srgb,
-        #{map.get($colors, base)} 75%,
-        transparent
-      );
-    }
-  }
-
-  %hover {
-    color: map.get($colors, accent-bcg);
-    text-shadow: map.get($shadows, active-text-icons-shadow);
   }
 }

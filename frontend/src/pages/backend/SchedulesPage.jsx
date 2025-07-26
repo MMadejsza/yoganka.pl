@@ -323,7 +323,7 @@ function SchedulePage() {
         <div className='admin-console'>
           <IntroSection
             modifier={`no-bcg-pic`}
-            className={`admin-intro`}
+            className={`intro--admin`}
             data={INTRO}
           />
           <TabsList

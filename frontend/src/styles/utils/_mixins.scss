@@ -39,6 +39,10 @@
     @media (min-width: 960px) {
       @content;
     }
+  } @else if $breakpoint == mobile-pro {
+    @media (min-width: 1024px) {
+      @content;
+    }
   } @else if $breakpoint == mobile-l {
     @media (min-width: 1025px) {
       @content;

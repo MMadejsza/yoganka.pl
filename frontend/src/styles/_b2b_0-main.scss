@@ -4,17 +4,6 @@
 @use './utils/' as *;
 
 .wrapper--b2b-type {
-  .camps-intro {
-    @supports (-webkit-touch-callout: none) and (not (hover: hover)) {
-      //for ios
-      background-attachment: scroll;
-    }
-    &__welcome-desc {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-    }
-  }
-
   section.offer {
     margin-bottom: 12rem;
   }
@@ -100,31 +89,12 @@
     }
   }
 
-  @media (min-width: 360px) {
-    .camps-intro {
-      &__welcome-desc {
-        font-size: 2.2rem;
-      }
-    }
-  }
-
   @media (min-width: 480px) {
-    .camps-intro {
-      &__welcome-desc {
-        font-size: 2.2rem;
-      }
-    }
     section.offer {
       margin-bottom: 9rem;
     }
   }
   @media (min-width: 768px) {
-    .camps-intro {
-      &__welcome-desc {
-        font-size: 2.2rem;
-      }
-    }
-
     .checklist-section {
       .modal-checklist__list {
         &:not(.modal-checklist__list--classes-page) {
@@ -135,12 +105,6 @@
     }
   }
   @media (min-width: 1024px) {
-    .camps-intro {
-      &__welcome-desc {
-        font-size: 2.4rem;
-      }
-    }
-
     .b2b-price {
       &__content {
         font-size: 2.4rem;
@@ -165,12 +129,6 @@
     }
   }
   @media (min-width: 1280px) {
-    .camps-intro {
-      &__welcome-desc {
-        font-size: 2.4rem;
-      }
-    }
-
     .checklist-section {
       .modal-checklist__list:not(.modal-checklist__list--classes-page) {
         width: 100%;
