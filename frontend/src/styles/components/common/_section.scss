@@ -1,0 +1,40 @@
+@use 'sass:map';
+@use '../../utils/' as *;
+
+.section--certificates {
+  grid-area: cert;
+  position: relative;
+  overflow: hidden;
+
+  & .glide__slides {
+    background-color: color-mix(
+      in srgb,
+      #{map.get($colors, nav)} 55%,
+      transparent
+    );
+  }
+}
+
+.section--turning-tiles {
+  grid-area: about;
+  background-color: map.get($colors, nav);
+  box-shadow: map.get($shadows, transitive-box-shadow-nav);
+  z-index: 2;
+
+  .wrapper--b2b-type & {
+    margin-bottom: 12rem;
+  }
+}
+
+@include respond-to(mobile-s) {
+  .section--turning-tiles {
+    margin-bottom: 9rem;
+  }
+}
+@include respond-to(mobile-l) {
+  .section--turning-tiles {
+    .click-suggestion {
+      font-size: 2.8rem;
+    }
+  }
+}

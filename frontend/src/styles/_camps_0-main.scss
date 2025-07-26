@@ -64,143 +64,8 @@
     grid-column: 1/-1;
   }
 }
-.camps-benefits {
-  $padding: 1rem;
-  $target-scale: 1.1;
-  $target-rotation: 180deg;
-  $rotation-timing: 0.8s;
-  $opacity-timing: math.div($rotation-timing, 2);
-  $opacity-delay-init: $opacity-timing;
-  $opacity-delay-end: $opacity-timing * 0;
 
-  grid-area: about;
-  background-color: map.get($colors, nav);
-  box-shadow: map.get($shadows, transitive-box-shadow-nav);
-  z-index: 2;
-
-  &__header {
-    margin-bottom: 3rem;
-  }
-  &__bullets-container {
-    @include flex(row, center);
-    flex-wrap: wrap;
-    gap: 2rem;
-    cursor: pointer;
-  }
-  &__bullet-container {
-    flex-basis: 90%;
-    position: relative;
-    z-index: 1;
-    border-radius: map.get($sizes, border-radius);
-    &:hover,
-    &:focus {
-      span.click-suggestion {
-        opacity: 0;
-      }
-    }
-  }
-  &__bullet-container:hover &__bullet,
-  &__bullet-container:focus &__bullet {
-    box-shadow: map.get($shadows, tile-shadow-reverse);
-    transform: scale($target-scale) rotateX($target-rotation);
-  }
-
-  &__bullet {
-    position: relative;
-    min-height: 140px;
-
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
-    grid-template-rows: repeat(auto-fit, minmax(0, 1fr));
-    align-items: center;
-    justify-items: center;
-    gap: 0.5rem 0;
-    grid-template-areas:
-      ' s  s'
-      ' h  h';
-    padding: $padding;
-    background-color: map.get($colors, base);
-    border-radius: map.get($sizes, border-radius);
-    box-shadow: map.get($shadows, tile-shadow);
-    transition: transform $rotation-timing ease-in-out,
-      box-shadow $rotation-timing ease-in-out,
-      opacity $opacity-timing ease-in-out;
-
-    text-align: left;
-
-    &:nth-child(even) {
-      text-align: left;
-
-      grid-template-areas:
-        ' s  s'
-        ' h  h';
-
-      & .camps-benefits__bullet-header,
-      & .camps-benefits__bullet-p {
-        padding: 0 1rem 1rem $padding;
-      }
-    }
-  }
-  &__bullet-header {
-    grid-area: h;
-    width: 100%;
-    padding: 0 0 0 $padding;
-    font-size: 1.9rem;
-    font-weight: bold;
-    text-align: center;
-    opacity: 1;
-    transition: opacity $opacity-timing ease-in-out;
-    transition-delay: $opacity-delay-init;
-  }
-  &__bullet-container:hover &__bullet-header,
-  &__bullet-container:focus &__bullet-header {
-    transition-delay: $opacity-delay-end;
-    opacity: 0;
-  }
-  &__bullet-container:hover &__symbol-container,
-  &__bullet-container:focus &__symbol-container {
-    transition-delay: $opacity-delay-end;
-    opacity: 0;
-  }
-
-  &__bullet-p {
-    position: absolute;
-    width: 100%;
-    top: 50%;
-    left: 50%;
-    padding: 2rem;
-    text-align: center;
-    opacity: 0;
-    transition: transform $rotation-timing ease-in-out,
-      opacity $opacity-timing ease-in-out;
-    transition-delay: $opacity-delay-end;
-
-    transform: translate(-50%, -50%) rotateX($target-rotation);
-    font-size: 1.7rem;
-  }
-  &__bullet-container:hover &__bullet-p,
-  &__bullet-container:focus &__bullet-p {
-    opacity: 1;
-    transition-delay: $opacity-delay-init;
-  }
-
-  &__symbol-container {
-    grid-area: s;
-    color: map.get($colors, tile-title);
-    text-shadow: map.get($shadows, active-text-icons-shadow);
-    border-radius: 50%;
-    display: grid;
-    opacity: 1;
-    transition: opacity $opacity-timing ease-in-out;
-    transition-delay: $opacity-delay-init;
-  }
-  &__symbol {
-    place-self: center;
-    font-size: 5rem;
-  }
-}
-
-.camps-benefits + section.offer,
+.section--turning-tiles + section.offer,
 .camps-intro.no-bcg-pic + section.offer {
   margin-top: 6rem;
   grid-gap: 0rem;
@@ -210,9 +75,6 @@
   background-color: map.get($colors, base);
   box-shadow: map.get($shadows, transitive-box-shadow);
 
-  #wyjazdy {
-    // grid-column: 1/-1;
-  }
   .offer-type {
     @include flex(row, center);
     flex-wrap: wrap;
@@ -270,13 +132,6 @@ main {
   grid-column: 1/-1;
 }
 
-main .turning-tiles {
-  // zaje are not in grid but in mail - difference in outcome
-  > header {
-    margin-top: 10rem;
-  }
-}
-
 @media (min-width: 360px) {
   .camps-intro {
     &__welcome-desc {
@@ -284,24 +139,6 @@ main .turning-tiles {
     }
   }
 
-  .camps-benefits {
-    &__bullets-container {
-      gap: 2.5rem;
-    }
-    $padding: 1.5rem;
-    &__bullet {
-      gap: 0 0;
-    }
-    &__bullet-header {
-      font-size: 2.1rem;
-    }
-    &__bullet-p {
-      font-size: 1.9rem;
-    }
-    &__symbol {
-      font-size: 7rem;
-    }
-  }
   .reviews {
     .glide__track {
       max-height: 450px;
@@ -324,14 +161,7 @@ main .turning-tiles {
     }
   }
 }
-
 @media (min-width: 480px) {
-  .camps-benefits {
-    &__bullet {
-      min-height: 200px;
-      // max-height: 255px;
-    }
-  }
   .reviews {
     .glide__track {
       height: 70vh;
@@ -343,7 +173,6 @@ main .turning-tiles {
     }
   }
 }
-
 @media (min-width: 768px) {
   .camps-intro {
     background-position: 50% 25%;
@@ -351,31 +180,14 @@ main .turning-tiles {
       padding: 2rem;
     }
   }
-  .camps-benefits {
-    &__bullets-container {
-      @include flex(row);
 
-      gap: 4rem;
-    }
-
-    &__bullet-container {
-      flex-basis: 45%;
-    }
-
-    &__bullet {
-      min-height: 250px;
-    }
-
-    .click-suggestion {
-      font-size: 2.2rem;
-    }
-  }
-  .camps-benefits + section.offer,
+  .section--turning-tiles + section.offer,
   .camps-intro.no-bcg-pic + section.offer {
     .tile {
       flex-basis: 45%;
     }
   }
+
   .reviews {
     .glide__track {
       height: 70vh;
@@ -386,6 +198,7 @@ main .turning-tiles {
       max-width: 450px;
     }
   }
+
   .galery {
     grid-column: 1/-1;
     overflow: visible;
@@ -398,12 +211,8 @@ main .turning-tiles {
       font-size: 2.4rem;
     }
   }
-  .camps-benefits {
-    .click-suggestion {
-      font-size: 2.8rem;
-    }
-  }
-  .camps-benefits + section.offer,
+
+  .section--turning-tiles + section.offer,
   .camps-intro.no-bcg-pic + section.offer {
     .tile {
       flex-basis: 30%;
@@ -419,42 +228,20 @@ main .turning-tiles {
     flex-wrap: wrap;
     background-size: 1000px;
     background-position: 50% 25%;
+
     &__header {
       flex-basis: 100%;
     }
+
     &__welcome-desc {
       white-space: pre-line;
     }
+
     .top-image-header__img {
       object-position: 0 25%;
     }
   }
-  .camps-benefits {
-    &__bullet {
-      grid-template-columns: 1fr 2fr;
-      grid-template-areas:
-        ' s  h'
-        ' s  h';
 
-      &:nth-child(even) {
-        grid-template-columns: 1fr 2fr;
-
-        grid-template-areas:
-          ' s  h'
-          ' s  h';
-      }
-    }
-    &__bullet-header {
-      font-size: 2.5rem;
-      text-align: left;
-    }
-    &__bullet-p {
-      font-size: 2.2rem;
-    }
-    &__symbol {
-      font-size: 10rem;
-    }
-  }
   .galery__container {
     position: relative;
     margin-top: 5rem;
@@ -472,24 +259,11 @@ main .turning-tiles {
     }
   }
 }
+
 @media (min-width: 1280px) {
   .camps-intro {
     background-position: center 20%;
     background-size: 1200px;
-  }
-  .camps-benefits {
-    &__bullet-container {
-      flex-basis: 30%;
-    }
-    &__bullet-header {
-      font-size: 2.2rem;
-    }
-    &__bullet-p {
-      font-size: 2rem;
-    }
-    &__symbol {
-      font-size: 8rem;
-    }
   }
 }
 @media (min-width: 1920px) {

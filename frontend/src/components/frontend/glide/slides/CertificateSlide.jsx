@@ -1,20 +1,17 @@
 function CertificateSlide({ slideData }) {
   const { name, instructor, duration, themes } = slideData;
-  const leadingClass = 'certificates';
   return (
     <li className='glide__slide'>
-      <div className={`tile ${leadingClass}__tile`}>
+      <div className={`tile tile--xs`}>
         {name && (
           <h3>
-            <strong className={`${leadingClass}__name`}>{name}</strong>
+            <strong className={`tile__date`}>{name}</strong>
           </h3>
         )}
-        {instructor && (
-          <p className={`${leadingClass}__school`}>{instructor}</p>
-        )}
-        {duration && <p className={`${leadingClass}__duration`}>{duration}</p>}
+        {instructor && <p className={`tile__desc`}>{instructor}</p>}
+        {duration && <p className={`tile__desc`}>{duration}</p>}
         {themes?.length > 0 && (
-          <p className={`${leadingClass}__type`}>
+          <p className={`tile__desc`}>
             <strong>{themes.join(' | ')}</strong>
           </p>
         )}

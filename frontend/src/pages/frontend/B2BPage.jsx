@@ -4,9 +4,9 @@ import { Helmet } from 'react-helmet';
 import IntroSection from '../../components/common/IntroSection.jsx';
 import Loader from '../../components/common/Loader.jsx';
 import Benefits from '../../components/frontend/b2b/B2BBenefits.jsx';
-import B2BOptionsSection from '../../components/frontend/b2b/B2BBenefitsSection.jsx';
 import PriceList from '../../components/frontend/b2b/PriceList.jsx';
 import OfferSection from '../../components/frontend/OfferSection.jsx';
+import TurningTilesSection from '../../components/frontend/TurningTilesSection.jsx';
 import { client } from '../../utils/sanityClient.js';
 import { assignPageCSSModifier } from '../../utils/utils.jsx';
 
@@ -27,7 +27,7 @@ function B2BPage() {
   });
   const { data: TYPES, isLoading: typesLoading } = useQuery({
     queryKey: ['b2bOfferTypes'],
-    queryFn: () => client.fetch(`*[_type == "b2bOfferTypes"][0]`),
+    queryFn: () => client.fetch(`*[_type == "b2bOfferTypes"]`),
     ...cacheConfig,
   });
   const { data: BENEFITS, isLoading: benefitsLoading } = useQuery({
@@ -116,7 +116,7 @@ function B2BPage() {
           data={INTRO}
         />
       )}
-      {TYPES && <B2BOptionsSection content={TYPES} />}
+      {TYPES && <TurningTilesSection tilesModifier={'wide'} data={TYPES} />}
       {OFFER && <OfferSection products={products} />}
       {BENEFITS && <Benefits content={BENEFITS} />}
       {PRICE_LIST && (

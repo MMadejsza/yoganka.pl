@@ -4,11 +4,12 @@
 @forward '_global_glide';
 @forward './components/common/wrapper';
 @forward '_home_common';
-@forward '_home_tile';
+@forward './components/frontend/_tile';
+@forward './components/frontend/_turning-tile';
 @forward '_home_2-top-image-header';
 @forward '_home_3-about';
 @forward '_home_4-offer-modal';
-@forward '_home_5-certificates';
+@forward './components/common/_section';
 @forward '_home_6-partners';
 @forward '_home_7-footer';
 @forward './components/common/_floating-btns';

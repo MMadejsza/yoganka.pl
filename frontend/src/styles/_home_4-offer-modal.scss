@@ -31,25 +31,6 @@
   }
 }
 
-.past {
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 1;
-
-    background-color: color-mix(
-      in srgb,
-      color-mix(in srgb, #{map.get($colors, tile)} 87%, black 13%) 50%,
-      transparent 50%
-    );
-    // to let interact with the element (not pseudo one)
-    pointer-events: none;
-  }
-}
 section.checklist-section.classes-page + section.offer {
   grid-template-areas: 'zajecia zajecia';
   margin-bottom: 2rem;
@@ -91,10 +72,6 @@ section.checklist-section.classes-page + section.offer {
       grid-area: wydarzenia;
     }
 
-    // Zagnieżdżenie dla wyjazdy i zajęcia
-    .tile {
-      flex-basis: 100%;
-    }
     &#wyjazdy {
       grid-area: wyjazdy;
     }
@@ -117,12 +94,6 @@ section.checklist-section.classes-page + section.offer {
       );
       border-radius: 25px;
       box-shadow: map.get($shadows, box-shadow);
-      // box-shadow: map.get($shadows, tile-shadow);
-      // box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
-      //   rgba(0, 0, 0, 0.22) 0px 15px 12px,
-      //   rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
-      //   rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
-      //   rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
       font-size: 2.5rem;
       font-size: 2.2rem;
       font-weight: 500;

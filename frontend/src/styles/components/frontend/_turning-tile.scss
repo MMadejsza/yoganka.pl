@@ -1,0 +1,232 @@
+@use 'sass:map';
+@use 'sass:math';
+@use 'sass:color';
+@use '../../utils/' as *;
+
+$padding: 1rem;
+$target-scale: 1.1;
+$target-rotation: 180deg;
+$rotation-timing: 0.8s;
+$opacity-timing: math.div($rotation-timing, 2);
+$opacity-delay-init: $opacity-timing;
+$opacity-delay-end: $opacity-timing * 0;
+
+.turning-tiles__container {
+  @include flex(row, center);
+  flex-wrap: wrap;
+  gap: 2rem;
+  cursor: pointer;
+}
+
+.turning-tile {
+  position: relative;
+  min-height: 140px;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  grid-template-rows: repeat(auto-fit, minmax(0, 1fr));
+  align-items: center;
+  justify-items: center;
+  gap: 0.5rem 0;
+  grid-template-areas:
+    ' s  s'
+    ' h  h';
+  padding: $padding;
+  background-color: map.get($colors, base);
+  border-radius: map.get($sizes, border-radius);
+  box-shadow: map.get($shadows, tile-shadow);
+  transition: transform $rotation-timing ease-in-out,
+    box-shadow $rotation-timing ease-in-out, opacity $opacity-timing ease-in-out;
+
+  text-align: left;
+
+  &:nth-child(even) {
+    text-align: left;
+
+    grid-template-areas:
+      ' s  s'
+      ' h  h';
+
+    & .turning-tile__-header,
+    & .turning-tile__-p {
+      padding: 0 1rem 1rem $padding;
+    }
+  }
+
+  &__container {
+    flex-basis: 90%;
+    position: relative;
+    z-index: 1;
+    border-radius: map.get($sizes, border-radius);
+    &:hover,
+    &:focus {
+      span.click-suggestion {
+        opacity: 0;
+      }
+    }
+  }
+  &__container:hover &,
+  &__container:focus & {
+    box-shadow: map.get($shadows, tile-shadow-reverse);
+    transform: scale($target-scale) rotateX($target-rotation);
+  }
+
+  &__header {
+    grid-area: h;
+    width: 100%;
+    margin-bottom: 3rem;
+    padding: 0 0 0 $padding;
+    font-size: 1.9rem;
+    font-weight: bold;
+    text-align: center;
+    opacity: 1;
+    transition: opacity $opacity-timing ease-in-out;
+    transition-delay: $opacity-delay-init;
+  }
+  &__container:hover &__header,
+  &__container:focus &__header {
+    transition-delay: $opacity-delay-end;
+    opacity: 0;
+  }
+
+  &__container:hover &__symbol-container,
+  &__container:focus &__symbol-container {
+    transition-delay: $opacity-delay-end;
+    opacity: 0;
+  }
+
+  &__p {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    left: 50%;
+    padding: 2rem;
+    text-align: center;
+    opacity: 0;
+    transition: transform $rotation-timing ease-in-out,
+      opacity $opacity-timing ease-in-out;
+    transition-delay: $opacity-delay-end;
+
+    transform: translate(-50%, -50%) rotateX($target-rotation);
+    font-size: 1.7rem;
+  }
+  &__container:hover &__p,
+  &__container:focus &__p {
+    opacity: 1;
+    transition-delay: $opacity-delay-init;
+  }
+
+  &__symbol-container {
+    grid-area: s;
+    color: map.get($colors, tile-title);
+    text-shadow: map.get($shadows, active-text-icons-shadow);
+    border-radius: 50%;
+    display: grid;
+    opacity: 1;
+    transition: opacity $opacity-timing ease-in-out;
+    transition-delay: $opacity-delay-init;
+  }
+  &__symbol {
+    place-self: center;
+    font-size: 5rem;
+  }
+}
+
+@include respond-to(mobile-xs) {
+  .turning-tiles__container {
+    gap: 2.5rem;
+  }
+
+  $padding: 1.5rem;
+  .turning-tile {
+    min-height: 190px;
+    gap: 0 0;
+
+    &__header {
+      font-size: 2.1rem;
+    }
+
+    &__p {
+      font-size: 1.9rem;
+    }
+
+    &__symbol {
+      font-size: 7rem;
+    }
+  }
+}
+@include respond-to(mobile-s) {
+  .turning-tiles__container--wide {
+    flex-basis: 45%;
+  }
+
+  .turning-tile {
+    min-height: 200px;
+  }
+}
+@include respond-to(mobile-m) {
+  .turning-tiles__container {
+    @include flex(row);
+    gap: 4rem;
+  }
+
+  .turning-tile {
+    min-height: 250px;
+
+    &__container {
+      flex-basis: 45%;
+    }
+
+    &__p {
+      font-size: 1.8rem;
+    }
+
+    .click-suggestion {
+      font-size: 2.2rem;
+    }
+  }
+}
+@include respond-to(mobile-l) {
+  .turning-tile {
+    grid-template-columns: 1fr 2fr;
+    grid-template-areas:
+      ' s  h'
+      ' s  h';
+
+    &:nth-child(even) {
+      grid-template-columns: 1fr 2fr;
+      grid-template-areas:
+        ' s  h'
+        ' s  h';
+    }
+
+    &__header {
+      font-size: 2.5rem;
+      text-align: left;
+    }
+
+    &__p {
+      font-size: 2rem;
+    }
+
+    &__symbol {
+      font-size: 10rem;
+    }
+  }
+}
+@include respond-to(desktop-s) {
+  .turning-tile {
+    &__container:not(.turning-tile__container.turning-tile__container--wide) {
+      flex-basis: 30%;
+    }
+    &__header {
+      font-size: 2.2rem;
+    }
+    &__p {
+      font-size: 2.2rem;
+    }
+    &__symbol {
+      font-size: 8rem;
+    }
+  }
+}

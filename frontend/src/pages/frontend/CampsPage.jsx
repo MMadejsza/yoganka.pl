@@ -2,10 +2,10 @@ import { useQuery } from '@tanstack/react-query';
 import { Helmet } from 'react-helmet';
 import IntroSection from '../../components/common/IntroSection.jsx';
 import Loader from '../../components/common/Loader.jsx';
-import CampsBenefitsSection from '../../components/frontend/camps/CampsBenefitsSection.jsx';
 import ReviewsSection from '../../components/frontend/camps/ReviewsSection.jsx';
 import SimpleGallery from '../../components/frontend/glide/SimpleGallery.jsx';
 import OfferSection from '../../components/frontend/OfferSection.jsx';
+import TurningTilesSection from '../../components/frontend/TurningTilesSection.jsx';
 import { client } from '../../utils/sanityClient.js';
 
 function CampsPage() {
@@ -84,7 +84,7 @@ function CampsPage() {
           className={`camps-intro`}
           data={CAMPS_INTRO_SECTION_DATA[0]}
         />
-        <CampsBenefitsSection data={CAMPS_BENEFITS_SECTION_DATA} />
+        <TurningTilesSection data={CAMPS_BENEFITS_SECTION_DATA} />
         <OfferSection products={products} />
         <ReviewsSection data={REVIEWS_SECTION_DATA} />
         <SimpleGallery

@@ -10,7 +10,7 @@ function Tile({ data, today, clickable }) {
     'tile',
     clickable ? 'clickable' : null,
     classes ? 'tile--classes' : null,
-    isPast ? 'past' : null,
+    isPast ? 'tile--past' : null,
     data.extraClass ? `tile--${data.extraClass}` : null,
   ]
     .join(' ')

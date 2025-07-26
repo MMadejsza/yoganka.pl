@@ -2,7 +2,7 @@ import GlideContainer from './glide/GlideContainer.jsx';
 import Section from './Section.jsx';
 
 function Certificates({ data }) {
-  const leadingClass = 'certificates';
+  const leadingClass = 'section--certificates';
 
   return (
     <>
@@ -19,7 +19,6 @@ function Certificates({ data }) {
           }}
           type='tile'
           slides={data[0].list}
-          leadingClass={leadingClass}
         />
       </Section>
     </>

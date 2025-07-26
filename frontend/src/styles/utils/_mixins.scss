@@ -102,16 +102,14 @@
   }
 
   50% {
-    box-shadow:
-      map.get($colors, accent-bcg) -30px 0px 40px,
+    box-shadow: map.get($colors, accent-bcg) -30px 0px 40px,
       rgba(0, 0, 0, 0.22) 0px 15px 12px,
       rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
       rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
       rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
   }
   55% {
-    box-shadow:
-      map.get($colors, accent-bcg) -30px 0px 40px,
+    box-shadow: map.get($colors, accent-bcg) -30px 0px 40px,
       rgba(0, 0, 0, 0.22) 0px 15px 12px,
       rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
       rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
@@ -144,9 +142,7 @@
     @warn "Font name unknown: #{$name}. No path.";
   } @else {
     @font-face {
-      font-family:
-        #{$name},
-        serif;
+      font-family: #{$name}, serif;
       src: url(#{$path}) format('#{$format}');
     }
 

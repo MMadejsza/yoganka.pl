@@ -1,6 +1,6 @@
 @use 'sass:map';
 @use 'sass:color';
-@use './utils/' as *;
+@use '../../utils/' as *;
 
 %action-btn {
   @include flex(row, center, center);
@@ -26,8 +26,8 @@
 }
 
 .clickable {
-  box-shadow: map.get($shadows, tile-shadow);
   position: relative;
+  box-shadow: map.get($shadows, tile-shadow);
 
   &:not(.offer-type__more.clickable):after {
     content: ' ';
@@ -52,25 +52,9 @@
     align-items: flex-end;
   }
 }
-//! TILE
-.offer-type {
-  .tile {
-    min-height: 472px;
 
-    &--classes {
-      min-height: 272px;
-    }
-  }
-}
 .tile {
   position: relative;
-  display: flex;
-
-  flex-direction: column;
-  align-items: center;
-  flex-basis: 90%;
-  gap: 2rem;
-
   padding: 2.5rem 1rem;
   background-color: map.get($colors, tile);
   border-radius: map.get($sizes, border-radius);
@@ -78,15 +62,57 @@
   overflow: hidden;
   transition: map.get($behavior, base-transition);
 
+  display: flex;
+  flex-direction: column;
+  flex-basis: 90%;
+  align-items: center;
+  gap: 2rem;
+
+  .offer-type & {
+    min-height: 472px;
+    flex-basis: 100%;
+
+    &--classes {
+      min-height: 272px;
+    }
+  }
+
   &.clickable {
     box-shadow: map.get($shadows, tile-shadow);
+  }
+
+  &--xs {
+    min-width: 175px;
+    margin: 1.5rem 0;
+    padding: 1.5rem 1rem;
+
+    @include flex(column, center, center);
+  }
+
+  &--past {
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 1;
+
+      background-color: color-mix(
+        in srgb,
+        color-mix(in srgb, #{map.get($colors, tile)} 87%, black 13%) 50%,
+        transparent 50%
+      );
+      // to let interact with the element (not pseudo one)
+      pointer-events: none;
+    }
   }
 
   &__img {
     width: 100%;
     height: 100%;
     place-self: center;
-    // margin-bottom: 1.5rem;
     border-radius: map.get($sizes, border-radius);
     object-fit: cover;
 
@@ -104,6 +130,7 @@
   &__title {
     min-height: 6rem;
   }
+
   &__title,
   &__date {
     font-size: 2.2rem;
@@ -136,7 +163,58 @@
     @extend %action-btn;
   }
 }
-//! TILE END
+
+@include respond-to(mobile-xs) {
+  .tile {
+    flex-basis: 80%;
+  }
+}
+@include respond-to(mobile-m) {
+  $title-font-size: 2.2rem;
+  $title-line-height: 1.1;
+
+  .tile {
+    .offer-type & {
+      flex-basis: 46%;
+    }
+
+    .offer-type--events & {
+      max-width: 500px;
+      flex-basis: 31%;
+    }
+
+    &__img--event-modal {
+      grid-column: 1 / -1;
+    }
+
+    #wyjazdy &__title {
+      height: $title-font-size * 3 + 2.5 * $title-line-height;
+    }
+
+    &--event {
+      $height: $title-font-size * 2 + 1.8 * $title-line-height;
+
+      .tile__title {
+        height: $height;
+      }
+
+      .tile__date,
+      .tile__location {
+        word-wrap: break-word;
+        height: $height;
+      }
+    }
+  }
+}
+@include respond-to(mobile-l) {
+  .offer-type#zajecia {
+    .tile {
+      height: -webkit-fill-available;
+      max-height: 87%;
+    }
+  }
+}
+
 @supports (-webkit-grid: auto) {
   .tile {
     /* flex layout inside each tile to equalise height */

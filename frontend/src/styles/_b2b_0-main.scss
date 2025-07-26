@@ -15,7 +15,6 @@
     }
   }
 
-  section.camps-benefits,
   section.offer {
     margin-bottom: 12rem;
   }
@@ -28,7 +27,7 @@
     margin: 0 auto;
   }
 
-  .camps-benefits + .checklist-section {
+  .section--turning-tiles + .checklist-section {
     &.classes-page {
       margin-top: 16rem;
     }
@@ -107,9 +106,6 @@
         font-size: 2.2rem;
       }
     }
-    .camps-benefits__bullet {
-      min-height: 190px;
-    }
   }
 
   @media (min-width: 480px) {
@@ -118,12 +114,8 @@
         font-size: 2.2rem;
       }
     }
-    section.offer,
-    section.camps-benefits {
+    section.offer {
       margin-bottom: 9rem;
-    }
-    .types__bullet-container {
-      flex-basis: 45%;
     }
   }
   @media (min-width: 768px) {
@@ -132,9 +124,7 @@
         font-size: 2.2rem;
       }
     }
-    .camps-benefits__bullet-p {
-      font-size: 1.5rem;
-    }
+
     .checklist-section {
       .modal-checklist__list {
         &:not(.modal-checklist__list--classes-page) {
@@ -143,9 +133,6 @@
         }
       }
     }
-    .camps-benefits__bullet {
-      min-height: 245px;
-    }
   }
   @media (min-width: 1024px) {
     .camps-intro {
@@ -153,9 +140,7 @@
         font-size: 2.4rem;
       }
     }
-    .camps-benefits__bullet-p {
-      font-size: 1.7rem;
-    }
+
     .b2b-price {
       &__content {
         font-size: 2.4rem;
@@ -185,9 +170,7 @@
         font-size: 2.4rem;
       }
     }
-    .camps-benefits__bullet-p {
-      font-size: 2rem;
-    }
+
     .checklist-section {
       .modal-checklist__list:not(.modal-checklist__list--classes-page) {
         width: 100%;

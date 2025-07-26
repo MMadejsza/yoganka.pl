@@ -2,20 +2,20 @@ import SymbolOrIcon from '../../common/SymbolOrIcon.jsx';
 import Section from '../Section.jsx';
 
 function B2BBenefitsSection({ content }) {
-  const classy = 'camps-benefits__';
+  const classy = 'turning-tile';
   const mediaQuery = window.matchMedia('(max-width: 1025px)');
   const isMobile = mediaQuery.matches;
   return (
     <Section
-      classy='turning-tiles camps-benefits'
+      classy={`section--turning-tiles`}
       header={content.sectionTitle}
       iSpecific={true}
     >
-      <main className='camps-benefits__bullets-container b2b-types'>
+      <main className={`${classy}s__container b2b-types`}>
         {content.list.map((benefit, index) => {
           return (
             <div
-              className={`${classy}bullet-container types__bullet-container`}
+              className={`${classy}__container ${classy}__container--wide`}
               tabIndex='0'
               key={`${content._id}-${index}`}
             >
@@ -25,17 +25,15 @@ function B2BBenefitsSection({ content }) {
                   extraClass={`click-suggestion`}
                 />
               )}
-              <article key={benefit.title} className={`${classy}bullet`}>
-                <aside className={`${classy}symbol-container`}>
+              <article key={benefit.title} className={`${classy}`}>
+                <aside className={`${classy}__symbol-container`}>
                   <SymbolOrIcon
                     specifier={benefit.symbol}
-                    extraClass={`${classy}symbol`}
+                    extraClass={`${classy}__symbol`}
                   />
                 </aside>
-                <header className={`${classy}bullet-header`}>
-                  {benefit.title}
-                </header>
-                <p className={`${classy}bullet-p`}>{benefit.text}</p>
+                <header className={`${classy}__header`}>{benefit.title}</header>
+                <p className={`${classy}__p`}>{benefit.text}</p>
               </article>
             </div>
           );

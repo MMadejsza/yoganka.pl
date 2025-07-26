@@ -14,9 +14,7 @@
   .offer {
     grid-gap: 5rem 1.5rem;
   }
-  .tile {
-    flex-basis: 80%;
-  }
+
   .partners__image {
     width: 50vw;
   }
@@ -55,10 +53,6 @@
 
   footer {
     padding: 0 2rem 2rem;
-  }
-
-  .about__certificates {
-    // min-width: 65%;
   }
 
   .modal {
@@ -139,48 +133,13 @@
     box-shadow: map.get($shadows, tile-shadow);
     transform: translateY(-5%) scale(1.05);
   }
-  .tile {
-    &__img--event-modal {
-      grid-column: 1 / -1;
-    }
 
-    $title-font-size: 2.2rem;
-    $title-line-height: 1.1;
-    #wyjazdy &__title {
-      height: $title-font-size * 3 + 2.5 * $title-line-height;
-    }
-
-    &--event {
-      $height: $title-font-size * 2 + 1.8 * $title-line-height;
-      .tile__title {
-        height: $height;
-      }
-      .tile__date,
-      .tile__location {
-        word-wrap: break-word;
-        height: $height;
-      }
-    }
-  }
   .offer {
     grid-template-areas:
       'title title'
       'wyjazdy wyjazdy'
       'zajecia zajecia'
       'wydarzenia wydarzenia';
-
-    .offer-type {
-      .tile {
-        flex-basis: 46%;
-      }
-
-      &--events {
-        & .tile {
-          max-width: 500px;
-          flex-basis: 31%;
-        }
-      }
-    }
   }
   .modal {
     max-width: 95vw;
@@ -494,12 +453,7 @@
 
     .offer-type {
       align-content: flex-start;
-      &#zajecia {
-        .tile {
-          height: -webkit-fill-available;
-          max-height: 87%;
-        }
-      }
+
       &--events {
         grid-area: wydarzenia;
       }
