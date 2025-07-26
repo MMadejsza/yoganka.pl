@@ -14,8 +14,10 @@ function Logo({ type, data, placement, media, isActive }) {
     <SanityImage
       image={file}
       variant={type || 'logo'}
-      className={`${placement}__logo`}
-      containerClassName={`${placement}__logo-container`}
+      className={`logo${placement ? ` logo--${placement}` : ''}`}
+      containerClassName={`logo-container${
+        placement ? ` logo-container--${placement}` : ''
+      }`}
       alt='Yoganka - Logo'
     />
   );

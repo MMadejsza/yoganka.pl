@@ -127,19 +127,6 @@
     }
   }
 
-  &__logo-container {
-    display: flex;
-    justify-content: center;
-  }
-
-  &__logo {
-    display: block;
-    min-width: 145px;
-    width: 25vw;
-    margin-top: 1.5rem;
-    padding: 1rem;
-  }
-
   button {
     font-family: 'EB Garamond', serif;
   }
@@ -263,20 +250,6 @@
       order: 2;
       @include flex(row, center, center);
       gap: 2.5rem;
-    }
-
-    &__logo-container {
-      height: 6rem;
-    }
-
-    &__logo {
-      margin-top: 0;
-      padding: 0;
-      min-width: auto; //reset
-      max-height: 100%;
-      max-width: 100%;
-      width: auto; //reset
-      object-fit: contain;
     }
 
     .nav__icon {

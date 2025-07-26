@@ -20,12 +20,6 @@
 
   @include flex(column, space-evenly, center, 1rem);
 
-  &__logo {
-    width: 45vw;
-    max-width: 280px;
-    margin: 2rem 0;
-  }
-
   &__credits--sub,
   &__credits {
     height: auto;

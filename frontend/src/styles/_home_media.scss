@@ -429,11 +429,6 @@
     @include flex($justify: space-evenly, $align: center);
     row-gap: 1rem;
 
-    &__logo-container {
-      grid-area: logo;
-      display: grid;
-      place-items: center;
-    }
     &__company-details {
       grid-area: details;
       width: 215px;
