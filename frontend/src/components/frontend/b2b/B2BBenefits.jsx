@@ -41,7 +41,7 @@ function B2BBenefits({ content, modifier }) {
 
   return (
     <Section
-      classy={'b2b-benefits'}
+      classy={'checklist-section'}
       header={content.sectionTitle}
       modifier={modifier}
     >

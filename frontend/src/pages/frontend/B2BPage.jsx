@@ -8,20 +8,10 @@ import B2BOptionsSection from '../../components/frontend/b2b/B2BBenefitsSection.
 import PriceList from '../../components/frontend/b2b/PriceList.jsx';
 import OfferSection from '../../components/frontend/OfferSection.jsx';
 import { client } from '../../utils/sanityClient.js';
+import { assignPageCSSModifier } from '../../utils/utils.jsx';
 
 function B2BPage() {
-  useEffect(() => {
-    const wrapper = document.body.querySelector('.wrapper');
-    if (wrapper) {
-      wrapper.classList.add('b2b');
-    }
-    return () => {
-      // deleting on unmount
-      if (wrapper) {
-        wrapper.classList.remove('b2b');
-      }
-    };
-  }, []);
+  useEffect(() => assignPageCSSModifier('b2b-type'), []);
 
   const cacheConfig = { staleTime: 1000 * 60 * 10, cacheTime: 1000 * 60 * 15 };
 

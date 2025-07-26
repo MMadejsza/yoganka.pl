@@ -12,6 +12,7 @@
 
 #root {
   display: grid;
+  place-content: center;
 }
 html {
   --scale: 1; // Initial scale to be changed by user
@@ -31,31 +32,9 @@ body {
   min-height: 100vh;
   display: grid;
 }
-.wrapper {
-  position: relative;
-  display: grid;
-  min-height: 100vh;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  grid-template-rows: auto auto auto auto auto 1fr auto;
-  grid-template-areas:
-    'header header header header header '
-    'about about about about about'
-    'offer offer offer offer offer'
-    'reviews reviews reviews reviews reviews'
-    'cert cert cert cert cert'
-    'partners partners partners partners partners'
-    'space space space space space'
-    'footer footer footer footer footer';
-  justify-content: center;
-  // gap: 5rem 0;
-  -webkit-overflow-scrolling: touch;
-}
+
 .space {
   grid-area: space;
-}
-
-.wrapper > *:last-child {
-  margin-bottom: 0;
 }
 
 ul {
@@ -130,11 +109,7 @@ span.click-suggestion {
 .stopScroll {
   overflow: hidden;
 }
-.wrapper > section:not(.partners):not(:first-of-type) {
-  margin-bottom: 5rem;
-}
-.wrapper > section:not(:first-of-type),
-.wrapper > main > section:not(:first-of-type),
+
 .modal__modal-body > section:not(:first-of-type),
 footer {
   padding: 0 var(--section-padding-y) 2rem;
@@ -155,19 +130,4 @@ section.classes-page ~ .galery {
 }
 section > .modal-checklist__list--classes-page {
   padding: 0 2rem;
-}
-
-//! COMMON BLOCKS END
-@supports (-webkit-grid: auto) {
-  .wrapper {
-    /* Safari-only fixes for grid and tiles */
-    align-items: stretch; /* ensure tiles in a row have equal height */
-    grid-auto-rows: minmax(250px, auto); /* set row min height */
-    grid-template-columns: repeat(
-      auto-fill,
-      minmax(300px, 1fr)
-    ); /* use auto-fill instead of auto-fit */
-    grid-template-rows: repeat(5, auto) minmax(0, 1fr) auto; /* auto rows, flexible space, auto */
-    gap: 0.5rem; /* space between tiles */
-  }
 }

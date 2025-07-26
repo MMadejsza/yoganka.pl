@@ -410,21 +410,6 @@
   html {
     font-size: calc(var(--scale) * 10px);
   }
-  .wrapper {
-    max-width: 1000px;
-    margin: 0 auto;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    grid-template-rows: repeat(5, auto) 1fr auto;
-    grid-template-areas:
-      'header header header header header'
-      'about about about about about'
-      'offer offer offer offer offer'
-      'reviews reviews reviews reviews reviews'
-      'cert cert cert cert cert'
-      'partners partners partners partners partners'
-      'space space space space space'
-      'footer footer footer footer footer';
-  }
 
   .logo-writing__logo-container {
     flex-basis: 100%;
@@ -520,7 +505,7 @@
       }
     }
   }
-  section.b2b-benefits.classes-page + section.offer {
+  section.checklist-section.classes-page + section.offer {
     grid-template-columns:
       minmax(100px, 150px) minmax(150px, 1fr) minmax(150px, 1fr)
       minmax(100px, 151px);
@@ -547,16 +532,6 @@
 
     &--event {
       max-width: 75%;
-    }
-  }
-
-  .wrapper.b2b {
-    & > .b2b-benefits.classes-page {
-      justify-content: center;
-
-      & > .modal-checklist__list--classes-page {
-        width: max-content !important;
-      }
     }
   }
 
@@ -604,7 +579,6 @@
     font-size: calc(var(--scale) * 11px);
   }
 
-  .wrapper,
   .about {
     max-width: 1200px;
   }
@@ -675,18 +649,5 @@
   // big landscape tablets, laptops, and desktops
   html {
     font-size: calc(var(--scale) * 12px);
-  }
-}
-
-@supports (-webkit-grid: auto) {
-  @media (min-width: 1024px) {
-    .wrapper {
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    }
-  }
-  @media (max-width: 768px) {
-    .wrapper {
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    }
   }
 }

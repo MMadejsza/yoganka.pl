@@ -8,6 +8,7 @@ import TabsList from '../../components/backend/TabsList.jsx';
 import Loader from '../../components/common/Loader.jsx';
 import { useFeedback } from '../../hooks/useFeedback.js';
 import { fetchItem } from '../../utils/http.js';
+import { assignPageCSSModifier } from '../../utils/utils.jsx';
 
 const menuSet = [
   {
@@ -33,6 +34,8 @@ function TOSPage() {
   useEffect(() => {
     setIsChosenContent(accountTab);
   }, [accountTab]);
+
+  useEffect(() => assignPageCSSModifier('doc-type'), []);
 
   const cacheConfig = { staleTime: 1000 * 60 * 10, cacheTime: 1000 * 60 * 15 };
 

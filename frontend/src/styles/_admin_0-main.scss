@@ -3,16 +3,6 @@
 @use 'sass:math';
 @use './utils/' as *;
 
-.wrapper:has(.admin-console) {
-  grid-template-rows: auto auto 1fr auto;
-  grid-template-areas:
-    'table table table table table'
-    'table table table table table'
-    'space space space space space'
-    'footer footer footer footer footer';
-  // overflow: hidden;
-}
-
 .admin-console {
   grid-area: table;
   grid-column: 1 /-1;

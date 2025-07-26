@@ -2,6 +2,7 @@
 @use 'sass:map';
 
 @forward '_global_glide';
+@forward './components/common/wrapper';
 @forward '_home_common';
 @forward '_home_tile';
 @forward '_home_2-top-image-header';

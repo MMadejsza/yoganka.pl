@@ -3,16 +3,7 @@
 @use 'sass:math';
 @use './utils/' as *;
 
-.wrapper.b2b {
-  grid-template-areas:
-    'header header header header header'
-    'offer offer offer offer offer'
-    'about about about about about'
-    'cert cert cert cert cert'
-    'partners partners partners partners partners'
-    'space space space space space'
-    'footer footer footer footer footer';
-
+.wrapper--b2b-type {
   .camps-intro {
     @supports (-webkit-touch-callout: none) and (not (hover: hover)) {
       //for ios
@@ -30,19 +21,20 @@
   }
   #b2b_offer {
     grid-column: 1/-1;
+    margin-bottom: 7rem;
   }
   .modal-checklist {
     grid-area: cert;
     margin: 0 auto;
   }
 
-  .camps-benefits + .b2b-benefits {
+  .camps-benefits + .checklist-section {
     &.classes-page {
       margin-top: 16rem;
     }
   }
-  .b2b-benefits {
-    margin-top: 2rem;
+  .checklist-section {
+    margin-top: 8rem;
     margin-bottom: 0rem;
     grid-column: 1/-1;
 
@@ -143,7 +135,7 @@
     .camps-benefits__bullet-p {
       font-size: 1.5rem;
     }
-    .b2b-benefits {
+    .checklist-section {
       .modal-checklist__list {
         &:not(.modal-checklist__list--classes-page) {
           width: 85%;
@@ -196,7 +188,7 @@
     .camps-benefits__bullet-p {
       font-size: 2rem;
     }
-    .b2b-benefits {
+    .checklist-section {
       .modal-checklist__list:not(.modal-checklist__list--classes-page) {
         width: 100%;
       }

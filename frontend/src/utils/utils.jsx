@@ -72,3 +72,17 @@ export const renderGivenGalery = (givenGalleryData, isMobile) => {
     )
   );
 };
+export const assignPageCSSModifier = modifier => {
+  const wrapper = document.body.querySelector('.wrapper');
+  const newClass = `wrapper--${modifier}`;
+
+  if (wrapper) {
+    wrapper.classList.add(newClass);
+  }
+  return () => {
+    // deleting on unmount
+    if (wrapper) {
+      wrapper.classList.remove(newClass);
+    }
+  };
+};
