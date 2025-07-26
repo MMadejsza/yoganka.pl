@@ -1,4 +1,4 @@
-import Motto from './HeaderMotto.jsx';
+import Motto from './Motto.jsx';
 
 function Bio({ placement, data, motto, isMobile }) {
   const prefix = placement;

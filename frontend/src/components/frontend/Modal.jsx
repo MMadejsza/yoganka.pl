@@ -172,8 +172,6 @@ function Modal({ tile, onClose, isVisible, isClosing }) {
     }
   };
   const helmetContent = metaContent();
-  // const metaImgSpecifier = tile == 'camp' ? 'camps' : 'events';
-  // const metaImgUrl = `https://yoganka.pl/imgs/offer/${metaImgSpecifier}/${tile.fileName}/front/480_${tile.fileName}_0.jpg`;
 
   const socialImageUrl = urlFor(tile.mainImage)
     .width(480)

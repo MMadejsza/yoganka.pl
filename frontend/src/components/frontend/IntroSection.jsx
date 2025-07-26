@@ -1,11 +1,11 @@
 import { useLocation } from 'react-router-dom';
-import Section from '../frontend/Section.jsx';
-import SanityImage from '../frontend/imgsRelated/SanityImage.jsx';
+import Section from './Section.jsx';
+import SanityImage from './imgsRelated/SanityImage.jsx';
 
 function IntroSection({ modifier, className, extraClass, data }) {
   const location = useLocation();
   const bgImg = data?.backgroundImage;
-  const prefix = 'top-image-header';
+  const prefix = 'home-intro';
 
   return (
     <Section

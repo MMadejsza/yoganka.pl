@@ -122,10 +122,6 @@
     &__welcome-desc {
       white-space: pre-line;
     }
-
-    .top-image-header__img {
-      object-position: 0 25%;
-    }
   }
 }
 @include respond-to(desktop-s) {

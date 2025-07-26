@@ -1,10 +1,10 @@
-import Motto from './HeaderMotto.jsx';
 import Logo from './Logo.jsx';
+import Motto from './Motto.jsx';
 import Section from './Section.jsx';
 import SanityImage from './imgsRelated/SanityImage.jsx';
 
-function HeaderMain({ data, logo }) {
-  const prefix = 'top-image-header';
+function HomeIntro({ data, logo }) {
+  const prefix = 'home-intro';
   const bgImg = data[0]?.bcgImage;
 
   return (
@@ -27,4 +27,4 @@ function HeaderMain({ data, logo }) {
   );
 }
 
-export default HeaderMain;
+export default HomeIntro;

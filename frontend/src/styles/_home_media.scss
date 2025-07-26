@@ -81,11 +81,6 @@
       grid-column: 1 /-1;
     }
   }
-  // .modal-checklist {
-  //   &__list {
-  //     align-self: self-start;
-  //   }
-  // }
   .partners {
     &__gallery-slide {
       &::before {
@@ -102,12 +97,7 @@
   .glide-slides {
     min-height: 30vh;
   }
-  .top-image-header__img {
-    object-position: top;
-  }
-  .motto {
-    font-size: 2.5rem;
-  }
+
   .about {
     gap: 2.5rem 1.5rem;
 

@@ -1,10 +1,9 @@
 @use 'sass:map';
-@use './utils/' as *;
+@use '../..//utils/' as *;
 
-.top-image-header {
+.home-intro {
   grid-area: header;
   height: 100svh;
-  // overflow: hidden;
 
   display: grid;
   grid-template-columns: repeat(5, minmax(auto, 1fr));
@@ -76,4 +75,23 @@
   background-color: map.get($colors, base);
   box-shadow: map.get($shadows, transitive-box-shadow);
   overflow: visible;
+}
+
+@include respond-to(mobile-m) {
+  .home-intro {
+    &__img {
+      object-position: top;
+    }
+  }
+
+  .motto {
+    font-size: 2.5rem;
+  }
+}
+@include respond-to(mobile-l) {
+  .home-intro {
+    &__img {
+      object-position: 0 25%;
+    }
+  }
 }

@@ -4,7 +4,7 @@ import Loader from '../../components/common/Loader.jsx';
 import About from '../../components/frontend/About.jsx';
 import ReviewsSection from '../../components/frontend/camps/ReviewsSection.jsx';
 import Certificates from '../../components/frontend/Certificates.jsx';
-import HeaderMain from '../../components/frontend/HeaderMain.jsx';
+import HomeIntro from '../../components/frontend/HomeIntro.jsx';
 import OfferSection from '../../components/frontend/OfferSection.jsx';
 import Partners from '../../components/frontend/Partners.jsx';
 import { client } from '../../utils/sanityClient.js';
@@ -181,7 +181,7 @@ function HomePage() {
       </Helmet>
 
       {isMobile ? (
-        <HeaderMain data={INTRO_SECTION_DATA} logo={LOGO_DATA[0]} />
+        <HomeIntro data={INTRO_SECTION_DATA} logo={LOGO_DATA[0]} />
       ) : null}
       <About
         isMobile={isMobile}
