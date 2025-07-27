@@ -72,7 +72,7 @@
 @include respond-to(mobile-l) {
   .wrapper {
     &--b2b-type {
-      & > .checklist-section.classes-page {
+      & > .section--checklist.classes-page {
         justify-content: center;
 
         & > .modal-checklist__list--classes-page {

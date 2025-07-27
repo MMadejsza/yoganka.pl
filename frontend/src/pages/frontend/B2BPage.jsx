@@ -2,9 +2,9 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import Loader from '../../components/common/Loader.jsx';
-import Benefits from '../../components/frontend/b2b/B2BBenefits.jsx';
-import PriceList from '../../components/frontend/b2b/PriceList.jsx';
+import Buttons from '../../components/frontend/Buttons.jsx';
 import IntroSection from '../../components/frontend/IntroSection.jsx';
+import ModalCheckList from '../../components/frontend/ModalCheckList.jsx';
 import OfferType from '../../components/frontend/OfferType.jsx';
 import Section from '../../components/frontend/Section.jsx';
 import TurningTilesSection from '../../components/frontend/TurningTilesSection.jsx';
@@ -41,6 +41,7 @@ function B2BPage() {
     queryFn: () => client.fetch(`*[_type == "b2bPriceListAndCooperation"][0]`),
     ...cacheConfig,
   });
+  const arePriceListBtns = Object.entries(PRICE_LIST.btnsContent).length > 0;
 
   // console.log(TYPES);
   console.log(OFFER);
@@ -61,7 +62,7 @@ function B2BPage() {
   if (OFFER) {
     products = [
       {
-        id: 'b2b_offer',
+        specifier: 'b2b-offer',
         header: OFFER.sectionTitle,
         data: OFFER.list,
         limit: 0,
@@ -137,10 +138,34 @@ function B2BPage() {
         </Section>
       )}
 
-      {BENEFITS && <Benefits content={BENEFITS} />}
+      {BENEFITS && (
+        <Section
+          classy={'section--checklist'}
+          header={BENEFITS.sectionTitle}
+          modifier={''}
+        >
+          <ModalCheckList content={BENEFITS} modifier={''} />
+        </Section>
+      )}
 
       {PRICE_LIST && (
-        <PriceList content={PRICE_LIST} modifier={'classes-page'} />
+        <Section classy='section--b2b-price' header={PRICE_LIST.sectionTitle}>
+          <article className='b2b-price__content'>
+            {PRICE_LIST.list.map((pContent, index) => (
+              <p key={index} className='b2b-price__p'>
+                {pContent}
+              </p>
+            ))}
+
+            {arePriceListBtns && (
+              <footer
+                className={`modal__user-action modal__user-action--classes-page`}
+              >
+                <Buttons list={PRICE_LIST.btnsContent} />
+              </footer>
+            )}
+          </article>
+        </Section>
       )}
     </>
   );

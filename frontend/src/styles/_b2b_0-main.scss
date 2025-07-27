@@ -4,32 +4,12 @@
 @use './utils/' as *;
 
 .wrapper--b2b-type {
-  #b2b_offer {
-    //offer-type
-    grid-column: 1/-1;
-    margin-bottom: 7rem;
-  }
   .modal-checklist {
     grid-area: cert;
     margin: 0 auto;
   }
 
-  .section--turning-tiles + .checklist-section {
-    &.classes-page {
-      margin-top: 16rem;
-    }
-  }
-  .checklist-section {
-    margin-top: 8rem;
-    margin-bottom: 0rem;
-    grid-column: 1/-1;
-
-    @include flex(column, center, center);
-
-    &__header {
-      margin-bottom: 2rem;
-    }
-
+  .section--checklist {
     .modal-checklist {
       @include flex(column, center, center);
       &--classes-page {
@@ -63,17 +43,8 @@
       text-align: center;
     }
   }
-  .b2b-price {
-    grid-column: 1/-1;
-    &__content {
-      margin-top: 2rem;
-      font-size: 2.2rem;
-      text-align: center;
 
-      @include flex(row, center, center);
-      flex-wrap: wrap;
-      gap: 2rem;
-    }
+  .section--b2b-price {
     .modal__btn {
       margin-top: 2rem;
 
@@ -88,7 +59,7 @@
   }
 
   @media (min-width: 768px) {
-    .checklist-section {
+    .section--checklist {
       .modal-checklist__list {
         &:not(.modal-checklist__list--classes-page) {
           width: 85%;
@@ -98,18 +69,15 @@
     }
   }
   @media (min-width: 1024px) {
-    .b2b-price {
-      &__content {
-        font-size: 2.4rem;
-      }
+    .section--b2b-price {
       .modal__btn {
+        margin-top: 2.5rem;
         line-height: 4.5rem;
         font-size: 2rem;
 
         &:first-of-type {
           margin-top: 4.5rem;
         }
-        margin-top: 2.5rem;
       }
 
       .modal__user-action--classes-page .modal__btn {
@@ -122,7 +90,7 @@
     }
   }
   @media (min-width: 1280px) {
-    .checklist-section {
+    .section--checklist {
       .modal-checklist__list:not(.modal-checklist__list--classes-page) {
         width: 100%;
       }

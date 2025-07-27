@@ -1,7 +1,6 @@
-import SymbolOrIcon from '../../common/SymbolOrIcon';
-import Section from '../../frontend/Section.jsx';
+import SymbolOrIcon from '../common/SymbolOrIcon';
 
-function B2BBenefits({ content, modifier }) {
+function ModalCheckList({ content, modifier }) {
   const rawContent = content.list;
   let symbol = null;
   let type = null;
@@ -35,21 +34,11 @@ function B2BBenefits({ content, modifier }) {
     );
   });
 
-  const dynamicClass = `modal-checklist__list ${
-    modifier ? `modal-checklist__list--${modifier}` : ''
+  const dynamicClass = `modal-checklist__list${
+    modifier ? ` modal-checklist__list--${modifier}` : ''
   }`;
 
-  return (
-    <Section
-      classy={'checklist-section'}
-      header={content.sectionTitle}
-      modifier={modifier}
-    >
-      {/* <section className={dynamicClass}> */}
-      <ul className={dynamicClass}>{formattedContent}</ul>
-      {/* </section> */}
-    </Section>
-  );
+  return <ul className={dynamicClass}>{formattedContent}</ul>;
 }
 
-export default B2BBenefits;
+export default ModalCheckList;
