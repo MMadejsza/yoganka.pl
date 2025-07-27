@@ -1,103 +1,124 @@
 @use 'sass:map';
 @use '../../utils/' as *;
 
-.section--offer {
-  grid-area: offer;
+.section {
+  @include flex(column, center, center, $gap: 3rem);
 
-  display: grid;
-  grid-template-columns: repeat(2, minmax(150px, 1fr));
-  grid-template-areas:
-    'title title'
-    'wyjazdy wyjazdy'
-    'zajecia zajecia'
-    'wydarzenia wydarzenia';
-  grid-gap: 5rem 0.5rem;
-
-  overflow: visible;
-
-  &__section-header {
-    grid-area: title;
-    position: relative;
-  }
-
-  .intro.no-bcg-pic + & {
-    grid-area: about;
+  &.book-classes {
     grid-column: 1/-1;
-    margin-top: 2rem;
+  }
 
-    .offer-type {
+  &__header {
+    grid: 1 / -1;
+    padding: 1rem 0.5rem;
+
+    font-size: 4rem;
+    line-height: 6rem;
+    text-transform: uppercase;
+    color: map.get($colors, tile-title);
+    max-width: 100%;
+    overflow: hidden;
+    word-wrap: break-word;
+  }
+
+  &--offer {
+    grid-area: offer;
+
+    display: grid;
+    grid-template-columns: repeat(2, minmax(150px, 1fr));
+    grid-template-areas:
+      'title title'
+      'wyjazdy wyjazdy'
+      'zajecia zajecia'
+      'wydarzenia wydarzenia';
+    grid-gap: 5rem 0.5rem;
+
+    overflow: visible;
+
+    &__section-header {
+      grid-area: title;
+      position: relative;
+    }
+
+    .intro.no-bcg-pic + & {
+      grid-area: about;
       grid-column: 1/-1;
+      margin-top: 2rem;
+
+      .offer-type {
+        grid-column: 1/-1;
+      }
     }
-  }
 
-  section.checklist-section.classes-page + & {
-    grid-template-areas: 'zajecia zajecia';
-    margin-bottom: 2rem;
-  }
+    section.checklist-section.classes-page + & {
+      grid-template-areas: 'zajecia zajecia';
+      margin-bottom: 2rem;
+    }
 
-  .section--turning-tiles + &,
-  .intro.no-bcg-pic + & {
-    margin-top: 6rem;
-    grid-gap: 0rem;
-    @include flex(row, center, center);
-    flex-wrap: wrap;
-
-    background-color: map.get($colors, base);
-    box-shadow: map.get($shadows, transitive-box-shadow);
-
-    .offer-type {
-      @include flex(row, center);
+    .section--turning-tiles + &,
+    .intro.no-bcg-pic + & {
+      margin-top: 6rem;
+      grid-gap: 0rem;
+      @include flex(row, center, center);
       flex-wrap: wrap;
+
+      background-color: map.get($colors, base);
+      box-shadow: map.get($shadows, transitive-box-shadow);
+
+      .offer-type {
+        @include flex(row, center);
+        flex-wrap: wrap;
+      }
+      .offer-type__header {
+        flex-basis: 100%;
+        font-size: 4rem;
+      }
     }
-    .offer-type__header {
-      flex-basis: 100%;
-      font-size: 4rem;
+
+    .wrapper--b2b-type & {
+      margin-bottom: 12rem;
     }
   }
 
-  .wrapper--b2b-type & {
-    margin-bottom: 12rem;
+  &--certificates {
+    grid-area: cert;
+    position: relative;
+    overflow: hidden;
+
+    & .glide__slides {
+      background-color: color-mix(
+        in srgb,
+        #{map.get($colors, nav)} 55%,
+        transparent
+      );
+    }
   }
-}
 
-.section--certificates {
-  grid-area: cert;
-  position: relative;
-  overflow: hidden;
+  &--turning-tiles {
+    grid-area: about;
+    background-color: map.get($colors, nav);
+    box-shadow: map.get($shadows, transitive-box-shadow-nav);
+    z-index: 2;
 
-  & .glide__slides {
-    background-color: color-mix(
-      in srgb,
-      #{map.get($colors, nav)} 55%,
-      transparent
-    );
+    .wrapper--b2b-type & {
+      margin-bottom: 12rem;
+    }
   }
-}
 
-.section--turning-tiles {
-  grid-area: about;
-  background-color: map.get($colors, nav);
-  box-shadow: map.get($shadows, transitive-box-shadow-nav);
-  z-index: 2;
+  &--reviews {
+    grid-area: cert;
+    // overflow: hidden;
 
-  .wrapper--b2b-type & {
-    margin-bottom: 12rem;
-  }
-}
-
-.section--reviews {
-  grid-area: cert;
-  overflow: hidden;
-
-  &.homepage {
-    grid-area: reviews;
-  }
-  .glide__track {
-    height: 70vh;
-    max-height: 450px;
-  }
-  .glide__slide {
-    height: min-content;
+    &.homepage {
+      grid-area: reviews;
+    }
+    .glide__track {
+      // height: 70vh;
+      max-height: 450px;
+    }
+    .glide__slide {
+      height: min-content;
+    }
   }
 }
 
@@ -120,7 +141,7 @@
 
   .section--reviews {
     .glide__track {
-      height: 70vh;
+      // height: 70vh;
       max-height: 500px;
     }
   }
@@ -136,7 +157,7 @@
 
   .section--reviews {
     .glide__track {
-      height: 70vh;
+      // height: 70vh;
       max-height: 500px;
     }
   }

@@ -80,25 +80,8 @@ button {
   backdrop-filter: blur(10px);
 }
 
-section.book-classes {
-  grid-column: 1/-1;
-}
-
 .italic {
   font-style: italic;
-}
-
-.section-header {
-  grid: 1 / -1;
-  padding: 1rem 0.5rem;
-
-  font-size: 4rem;
-  line-height: 6rem;
-  text-transform: uppercase;
-  color: map.get($colors, tile-title);
-  max-width: 100%;
-  overflow: hidden;
-  word-wrap: break-word;
 }
 
 span.click-suggestion {
@@ -114,11 +97,6 @@ span.click-suggestion {
   overflow: hidden;
 }
 
-.modal__modal-body > section:not(:first-of-type) {
-  padding: 0 var(--section-padding-y) 2rem;
-  box-shadow: map.get($shadows, section-shadow);
-}
-
 // page
 .error {
   grid-area: space;
@@ -130,7 +108,4 @@ span.click-suggestion {
 section.classes-page ~ .galery {
   grid-area: offer;
   margin-top: 4rem;
-}
-section > .modal-checklist__list--classes-page {
-  padding: 0 2rem;
 }

@@ -189,6 +189,11 @@
         );
       }
     }
+
+    & > section:not(:first-of-type) {
+      padding: 0 var(--section-padding-y) 2rem;
+      box-shadow: map.get($shadows, section-shadow);
+    }
   }
 
   & .glide {
@@ -346,8 +351,13 @@
   &--event {
     grid-column: 1 / -1;
   }
+
   &__list {
     @extend .modal__list;
+
+    section > &--classes-page {
+      padding: 0 2rem;
+    }
   }
 
   &__li {

@@ -3,7 +3,7 @@
 
 //! FOOTER
 
-footer {
+.wrapper > footer {
   grid-area: footer;
   place-self: center;
   width: 100vw;
@@ -32,14 +32,17 @@ footer {
     height: auto;
     font-size: 1.5rem;
   }
+
   & a {
     text-decoration: underline;
   }
+
   // no & for specificity
   .footer__social-link {
     position: relative;
     color: map.get($colors, accent-bcg);
   }
+
   &__social-icon {
     font-size: 3.5rem;
   }
@@ -96,6 +99,7 @@ footer {
     &__socials {
       gap: 4rem;
     }
+
     &__social-link {
       font-size: 3rem;
     }
@@ -118,10 +122,12 @@ footer {
       transform: scale(1.05) translateY(0.5rem);
       text-shadow: map.get($shadows, active-text-icons-shadow);
     }
+
     &__legal,
     &__credit {
       flex-basis: 100%;
     }
+
     &__credit a {
       line-height: 100%;
     }
@@ -130,6 +136,7 @@ footer {
       left: 50%;
       transform: translateX(-50%);
     }
+
     &__social-link {
       &:hover {
         transform: scale(1.05) translateY(0.5rem);
@@ -164,13 +171,16 @@ footer {
       grid-area: details;
       width: 215px;
     }
+
     &__company-details a {
       font-size: 2.2rem;
       color: map.get($colors, tile-title);
     }
+
     &__legal {
       grid-area: legal;
     }
+
     &__socials {
       grid-area: socials;
       order: -1;
@@ -179,6 +189,7 @@ footer {
       text-shadow: none;
       overflow: visible;
     }
+
     &__credit {
       grid-area: credit;
     }

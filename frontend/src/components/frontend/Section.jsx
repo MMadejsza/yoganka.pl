@@ -11,7 +11,7 @@ function Section({ classy, modifier, header, iSpecific, children, ...props }) {
       <header
         className={`${classy}__header ${
           modifier ? `${classy}__header--${modifier}` : ''
-        } section-header ${modifier ? `section-header--${modifier}` : ''}`}
+        } section__header ${modifier ? `section__header--${modifier}` : ''}`}
       >
         {header}
         {props.hr && <hr />}
@@ -21,7 +21,7 @@ function Section({ classy, modifier, header, iSpecific, children, ...props }) {
 
   return (
     <section
-      className={`${classy} ${modifier ?? ''}`}
+      className={`section ${classy} ${modifier ?? ''}`}
       style={iSpecific && iClass}
       {...props}
     >
