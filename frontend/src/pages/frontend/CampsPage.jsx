@@ -75,7 +75,7 @@ function CampsPage() {
     }));
 
     products = [
-      { id: 'wyjazdy', header: `Wybierz swój wyjazd`, data: camps, limit: 0 },
+      { id: 'camps', header: `Wybierz swój wyjazd`, data: camps, limit: 0 },
     ];
 
     content = (

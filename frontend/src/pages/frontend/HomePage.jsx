@@ -138,6 +138,20 @@ function HomePage() {
       },
     ];
   }
+
+  const commonGlideConfig = {
+    type: 'carousel',
+    focusAt: 'center',
+    gap: 20,
+    animationDuration: 800,
+  };
+  const commonGlideBreakpoints = {
+    // <=
+    360: { perView: 1 },
+    480: { perView: 1 },
+    1024: { perView: 1 },
+  };
+
   return (
     <>
       <Helmet>
@@ -214,21 +228,8 @@ function HomePage() {
         modifier={`homepage`}
       >
         <GlideContainer
-          glideConfig={{
-            type: 'carousel',
-            // startAt: 0,
-            perView: 2,
-            focusAt: 'center',
-            gap: 20,
-            autoplay: 2200,
-            animationDuration: 800,
-          }}
-          glideBreakpoints={{
-            // <=
-            360: { perView: 1 },
-            480: { perView: 1 },
-            1024: { perView: 1 },
-          }}
+          glideConfig={{ perView: 2, ...commonGlideConfig }}
+          glideBreakpoints={commonGlideBreakpoints}
           type='review'
           slides={REVIEWS_SECTION_DATA[0].list}
         />
@@ -239,15 +240,7 @@ function HomePage() {
         header={CERTIFICATES_SECTION_DATA[0].sectionTitle}
       >
         <GlideContainer
-          glideConfig={{
-            type: 'carousel',
-            // startAt: 0,
-            perView: 5,
-            focusAt: 'center',
-            gap: 20,
-            autoplay: 2200,
-            animationDuration: 800,
-          }}
+          glideConfig={{ perView: 5, ...commonGlideConfig }}
           type='tile'
           slides={CERTIFICATES_SECTION_DATA[0].list}
         />
@@ -258,15 +251,7 @@ function HomePage() {
         header={PARTNERS_SECTION_DATA[0].sectionTitle}
       >
         <GlideContainer
-          glideConfig={{
-            type: 'carousel',
-            // startAt: 0,
-            perView: 5,
-            focusAt: 'center',
-            gap: 30,
-            // autoplay: 2200,
-            animationDuration: 800,
-          }}
+          glideConfig={{ perView: 5, ...commonGlideConfig }}
           type='partner'
           slides={PARTNERS_SECTION_DATA[0].list}
         />
