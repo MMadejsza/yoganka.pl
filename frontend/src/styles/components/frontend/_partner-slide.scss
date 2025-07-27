@@ -1,0 +1,53 @@
+@use 'sass:map';
+@use '../../utils/' as *;
+
+.partners {
+  &__link {
+    width: 55vw;
+    aspect-ratio: 1/1;
+    max-width: 225px;
+    max-height: 225px;
+    padding: 0;
+
+    border-radius: map.get($sizes, border-radius);
+
+    @include flex($justify: center, $align: center);
+
+    &:last-child {
+      margin-right: 2.5rem;
+    }
+  }
+
+  &__image {
+    display: block;
+    max-width: 100%;
+    object-fit: contain;
+
+    filter: grayscale(1);
+    transition: map.get($behavior, base-transition);
+  }
+
+  .glide__bullets {
+    bottom: 20%;
+  }
+}
+
+@include respond-to(mobile-xs) {
+  .partners__image {
+    width: 50vw;
+  }
+}
+@include respond-to(mobile-m) {
+  .partners {
+    &__link {
+      max-width: 225px;
+      max-height: 225px;
+
+      &:hover {
+        cursor: pointer;
+        transform: translateY(-18%) scale(1.1);
+        box-shadow: map.get($shadows, tile-shadow);
+      }
+    }
+  }
+}

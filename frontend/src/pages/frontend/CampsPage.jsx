@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { Helmet } from 'react-helmet';
 import Loader from '../../components/common/Loader.jsx';
-import ReviewsSection from '../../components/frontend/camps/ReviewsSection.jsx';
+import GlideContainer from '../../components/frontend/glide/GlideContainer.jsx';
 import SimpleGallery from '../../components/frontend/glide/SimpleGallery.jsx';
 import IntroSection from '../../components/frontend/IntroSection.jsx';
 import OfferType from '../../components/frontend/OfferType.jsx';
@@ -102,7 +102,30 @@ function CampsPage() {
           ))}
         </Section>
 
-        <ReviewsSection data={REVIEWS_SECTION_DATA} />
+        <Section
+          classy={`section--reviews`}
+          header={REVIEWS_SECTION_DATA[0].sectionTitle}
+        >
+          <GlideContainer
+            glideConfig={{
+              type: 'carousel',
+              // startAt: 0,
+              perView: 2,
+              focusAt: 'center',
+              gap: 20,
+              autoplay: 2200,
+              animationDuration: 800,
+            }}
+            glideBreakpoints={{
+              // <=
+              360: { perView: 1 },
+              480: { perView: 1 },
+              1024: { perView: 1 },
+            }}
+            type='review'
+            slides={REVIEWS_SECTION_DATA[0].list}
+          />
+        </Section>
 
         <SimpleGallery
           givenGallery={CAMPS_PAST_GALLERY_SECTION_DATA[0].gallery}

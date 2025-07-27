@@ -124,6 +124,15 @@
     }
   }
 
+  &--partners {
+    grid-area: partners;
+
+    .glide__track {
+      height: 40vh;
+      max-height: 350px;
+    }
+  }
+
   &--turning-tiles {
     grid-area: about;
     background-color: map.get($colors, nav);

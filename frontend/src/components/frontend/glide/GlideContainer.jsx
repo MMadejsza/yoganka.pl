@@ -2,8 +2,8 @@ import Glide from '@glidejs/glide';
 import '@glidejs/glide/dist/css/glide.core.min.css';
 import '@glidejs/glide/dist/css/glide.theme.min.css';
 import { useEffect, useRef } from 'react';
-import SanityImage from '../imgsRelated/SanityImage.jsx';
 import CertificateSlide from './slides/CertificateSlide.jsx';
+import PartnerSlide from './slides/PartnerSlide.jsx';
 import PhotoSlide from './slides/PhotoSlide.jsx';
 import ReviewSlide from './slides/ReviewSlide.jsx';
 
@@ -60,18 +60,7 @@ function GlideContainer({
       ));
     } else {
       return slides.map((partner, index) => (
-        <a
-          key={index}
-          href={partner.link}
-          target='_blank'
-          className={`partners__link`}
-        >
-          <SanityImage
-            image={partner.logo}
-            variant='partner'
-            className='partners__image'
-          />
-        </a>
+        <PartnerSlide key={index} partnerData={partner} />
       ));
     }
   };

@@ -2,11 +2,9 @@ import { useQuery } from '@tanstack/react-query';
 import { Helmet } from 'react-helmet';
 import Loader from '../../components/common/Loader.jsx';
 import About from '../../components/frontend/About.jsx';
-import ReviewsSection from '../../components/frontend/camps/ReviewsSection.jsx';
-import Certificates from '../../components/frontend/Certificates.jsx';
+import GlideContainer from '../../components/frontend/glide/GlideContainer.jsx';
 import HomeIntro from '../../components/frontend/HomeIntro.jsx';
 import OfferType from '../../components/frontend/OfferType.jsx';
-import Partners from '../../components/frontend/Partners.jsx';
 import Section from '../../components/frontend/Section.jsx';
 import { client } from '../../utils/sanityClient.js';
 
@@ -137,7 +135,6 @@ function HomePage() {
         data: events,
         limit: OFFER_SECTION_DATA[0].events.limit,
         moreLink: '/wydarzenia',
-        specifier: 'events',
       },
     ];
   }
@@ -198,9 +195,9 @@ function HomePage() {
       />
 
       <Section classy={`section--offer`}>
-        {products.map(product => (
+        {products.map((product, index) => (
           <OfferType
-            key={product.id}
+            key={index}
             id={product.id}
             header={product.header}
             data={product.data}
@@ -211,11 +208,69 @@ function HomePage() {
         ))}
       </Section>
 
-      <ReviewsSection placement='homepage' data={REVIEWS_SECTION_DATA} />
+      <Section
+        classy={`section--reviews`}
+        header={REVIEWS_SECTION_DATA[0].sectionTitle}
+        modifier={`homepage`}
+      >
+        <GlideContainer
+          glideConfig={{
+            type: 'carousel',
+            // startAt: 0,
+            perView: 2,
+            focusAt: 'center',
+            gap: 20,
+            autoplay: 2200,
+            animationDuration: 800,
+          }}
+          glideBreakpoints={{
+            // <=
+            360: { perView: 1 },
+            480: { perView: 1 },
+            1024: { perView: 1 },
+          }}
+          type='review'
+          slides={REVIEWS_SECTION_DATA[0].list}
+        />
+      </Section>
 
-      <Certificates data={CERTIFICATES_SECTION_DATA} />
+      <Section
+        classy={'section--certificates'}
+        header={CERTIFICATES_SECTION_DATA[0].sectionTitle}
+      >
+        <GlideContainer
+          glideConfig={{
+            type: 'carousel',
+            // startAt: 0,
+            perView: 5,
+            focusAt: 'center',
+            gap: 20,
+            autoplay: 2200,
+            animationDuration: 800,
+          }}
+          type='tile'
+          slides={CERTIFICATES_SECTION_DATA[0].list}
+        />
+      </Section>
 
-      <Partners data={PARTNERS_SECTION_DATA} />
+      <Section
+        classy={'section--partners'}
+        header={PARTNERS_SECTION_DATA[0].sectionTitle}
+      >
+        <GlideContainer
+          glideConfig={{
+            type: 'carousel',
+            // startAt: 0,
+            perView: 5,
+            focusAt: 'center',
+            gap: 30,
+            // autoplay: 2200,
+            animationDuration: 800,
+          }}
+          type='partner'
+          slides={PARTNERS_SECTION_DATA[0].list}
+        />
+      </Section>
     </>
   );
 }
