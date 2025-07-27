@@ -43,12 +43,6 @@ function B2BPage() {
   });
   const arePriceListBtns = Object.entries(PRICE_LIST.btnsContent).length > 0;
 
-  // console.log(TYPES);
-  console.log(OFFER);
-  // console.log(BENEFITS);
-  // console.log(PRICE_LIST);
-  let products = null;
-
   if (
     introLoading ||
     offerLoading ||
@@ -59,6 +53,7 @@ function B2BPage() {
     return <Loader label={'Ładowanie'} />;
   }
 
+  let products = null;
   if (OFFER) {
     products = [
       {

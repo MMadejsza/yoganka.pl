@@ -142,6 +142,9 @@
     }
   }
 
+  &--gallery {
+    grid-column: 1 /-1;
+  }
   &.book-classes {
     grid-column: 1/-1;
   }

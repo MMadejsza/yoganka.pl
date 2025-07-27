@@ -6,14 +6,17 @@ if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
 
 function Section({ classy, modifier, header, iSpecific, children, ...props }) {
   let headerContent;
+  let headerConditionalClass = `${classy}__header${
+    modifier ? ` ${classy}__header--${modifier}` : ''
+  } section__header${modifier ? ` section__header--${modifier}` : ''}`;
+
+  let sectionConditionalClass = `section${classy ? ` ${classy}` : ''}${
+    modifier ? `  ${modifier}` : ''
+  }`;
 
   if (header) {
     headerContent = (
-      <header
-        className={`${classy}__header ${
-          modifier ? `${classy}__header--${modifier}` : ''
-        } section__header ${modifier ? `section__header--${modifier}` : ''}`}
-      >
+      <header className={headerConditionalClass}>
         {header}
         {props.hr && <hr />}
       </header>
@@ -22,7 +25,7 @@ function Section({ classy, modifier, header, iSpecific, children, ...props }) {
 
   return (
     <section
-      className={`section ${classy} ${modifier ?? ''}`}
+      className={sectionConditionalClass}
       style={iSpecific && iClass}
       {...props}
     >

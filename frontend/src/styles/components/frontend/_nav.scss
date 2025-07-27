@@ -313,6 +313,14 @@
     }
   }
 }
+@include respond-to(desktop-s) {
+  .main-nav-container {
+    .nav__list {
+      margin-left: 4rem;
+      gap: 4rem;
+    }
+  }
+}
 @include respond-to(desktop-m) {
   .main-nav-container {
     .nav__list {

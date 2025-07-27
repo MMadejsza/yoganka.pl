@@ -7,17 +7,14 @@ function SimpleGallery({
   glideBreakpoints,
   title,
 }) {
-  const leadingClass = 'galery';
-
   return (
     <>
-      <Section classy={leadingClass} header={title}>
+      <Section classy={`section--gallery`} header={title}>
         <GlideContainer
           glideConfig={glideConfig}
           glideBreakpoints={glideBreakpoints}
           type='allPhotos'
           slides={givenGallery}
-          leadingClass={leadingClass}
         />
       </Section>
     </>

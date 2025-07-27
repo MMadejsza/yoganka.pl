@@ -134,6 +134,15 @@
       right: 1rem;
     }
   }
+
+  .modal & {
+    &::before {
+      @include slider-shade-wing('left', map.get($colors, tile));
+    }
+    &::after {
+      @include slider-shade-wing('right', map.get($colors, tile));
+    }
+  }
 }
 
 @include respond-to(mobile-s) {

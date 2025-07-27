@@ -102,7 +102,39 @@ span.click-suggestion {
   text-align: center;
 }
 
-section.classes-page ~ .galery {
+section.classes-page ~ .gallery {
   grid-area: offer;
   margin-top: 4rem;
+}
+
+@include respond-to(mobile-xs) {
+  html {
+    --section-padding-y: 2rem;
+    font-size: calc(var(--scale) * 9px);
+  }
+}
+@include respond-to(mobile-s) {
+  html {
+    font-size: calc(var(--scale) * 12px);
+  }
+}
+@include respond-to(mobile-sh) {
+  html {
+    font-size: calc(var(--scale) * 13px);
+  }
+}
+@include respond-to(mobile-l) {
+  html {
+    font-size: calc(var(--scale) * 10px);
+  }
+}
+@include respond-to(desktop-s) {
+  html {
+    font-size: calc(var(--scale) * 11px);
+  }
+}
+@include respond-to(desktop-l) {
+  html {
+    font-size: calc(var(--scale) * 12px);
+  }
 }
