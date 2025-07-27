@@ -1,7 +1,6 @@
 @use 'sass:map';
 @use './utils/' as *;
 
-//! ABOUT
 .about {
   grid-area: about;
   font-size: 2rem;
@@ -109,4 +108,3 @@
     font-size: 3rem;
   }
 }
-//! ABOUT  END

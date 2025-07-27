@@ -5,15 +5,17 @@ import About from '../../components/frontend/About.jsx';
 import ReviewsSection from '../../components/frontend/camps/ReviewsSection.jsx';
 import Certificates from '../../components/frontend/Certificates.jsx';
 import HomeIntro from '../../components/frontend/HomeIntro.jsx';
-import OfferSection from '../../components/frontend/OfferSection.jsx';
+import OfferType from '../../components/frontend/OfferType.jsx';
 import Partners from '../../components/frontend/Partners.jsx';
+import Section from '../../components/frontend/Section.jsx';
 import { client } from '../../utils/sanityClient.js';
 
 function HomePage() {
   const mediaQuery = window.matchMedia('(max-width: 1024px)');
   const isMobile = mediaQuery.matches;
-
   const cacheConfig = { staleTime: 1000 * 60 * 10, cacheTime: 1000 * 60 * 15 };
+
+  //#region
   const { data: INTRO_SECTION_DATA, isLoading: introLoading } = useQuery({
     queryKey: ['introData'],
     queryFn: () => client.fetch(`*[_type == "intro"]`),
@@ -67,6 +69,7 @@ function HomePage() {
     queryFn: () => client.fetch(`*[_type == "partners"]`),
     ...cacheConfig,
   });
+  //#endregion
 
   if (
     introLoading ||
@@ -117,19 +120,19 @@ function HomePage() {
 
     products = [
       {
-        id: 'wyjazdy',
+        specifier: 'camps',
         header: OFFER_SECTION_DATA[0].camps.title,
         data: camps,
         limit: 2,
         moreLink: '/wyjazdy',
       },
       {
-        id: 'zajecia',
+        specifier: 'classes',
         header: OFFER_SECTION_DATA[0].classes.title,
         data: classes,
       },
       {
-        id: 'wydarzenia',
+        specifier: 'events',
         header: OFFER_SECTION_DATA[0].events.title,
         data: events,
         limit: OFFER_SECTION_DATA[0].events.limit,
@@ -183,6 +186,7 @@ function HomePage() {
       {isMobile ? (
         <HomeIntro data={INTRO_SECTION_DATA} logo={LOGO_DATA[0]} />
       ) : null}
+
       <About
         isMobile={isMobile}
         data={{
@@ -192,9 +196,25 @@ function HomePage() {
         }}
         logo={LOGO_DATA[0]}
       />
-      <OfferSection products={products} />
+
+      <Section classy={`section--offer`}>
+        {products.map(product => (
+          <OfferType
+            key={product.id}
+            id={product.id}
+            header={product.header}
+            data={product.data}
+            limit={product.limit}
+            specifier={product.specifier}
+            moreLink={product.moreLink ? product.moreLink : null}
+          />
+        ))}
+      </Section>
+
       <ReviewsSection placement='homepage' data={REVIEWS_SECTION_DATA} />
+
       <Certificates data={CERTIFICATES_SECTION_DATA} />
+
       <Partners data={PARTNERS_SECTION_DATA} />
     </>
   );

@@ -4,7 +4,8 @@ import Loader from '../../components/common/Loader.jsx';
 import ReviewsSection from '../../components/frontend/camps/ReviewsSection.jsx';
 import SimpleGallery from '../../components/frontend/glide/SimpleGallery.jsx';
 import IntroSection from '../../components/frontend/IntroSection.jsx';
-import OfferSection from '../../components/frontend/OfferSection.jsx';
+import OfferType from '../../components/frontend/OfferType.jsx';
+import Section from '../../components/frontend/Section.jsx';
 import TurningTilesSection from '../../components/frontend/TurningTilesSection.jsx';
 import { client } from '../../utils/sanityClient.js';
 
@@ -84,9 +85,25 @@ function CampsPage() {
           className={`intro`}
           data={CAMPS_INTRO_SECTION_DATA[0]}
         />
+
         <TurningTilesSection data={CAMPS_BENEFITS_SECTION_DATA} />
-        <OfferSection products={products} />
+
+        <Section classy={`section--offer`}>
+          {products.map(product => (
+            <OfferType
+              key={product.id}
+              id={product.id}
+              header={product.header}
+              data={product.data}
+              limit={product.limit}
+              specifier={product.specifier}
+              moreLink={product.moreLink ? product.moreLink : null}
+            />
+          ))}
+        </Section>
+
         <ReviewsSection data={REVIEWS_SECTION_DATA} />
+
         <SimpleGallery
           givenGallery={CAMPS_PAST_GALLERY_SECTION_DATA[0].gallery}
           glideConfig={{

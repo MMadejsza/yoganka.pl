@@ -6,6 +6,7 @@ if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
 
 function Section({ classy, modifier, header, iSpecific, children, ...props }) {
   let headerContent;
+
   if (header) {
     headerContent = (
       <header

@@ -5,7 +5,8 @@ import Loader from '../../components/common/Loader.jsx';
 import Benefits from '../../components/frontend/b2b/B2BBenefits.jsx';
 import PriceList from '../../components/frontend/b2b/PriceList.jsx';
 import IntroSection from '../../components/frontend/IntroSection.jsx';
-import OfferSection from '../../components/frontend/OfferSection.jsx';
+import OfferType from '../../components/frontend/OfferType.jsx';
+import Section from '../../components/frontend/Section.jsx';
 import TurningTilesSection from '../../components/frontend/TurningTilesSection.jsx';
 import { client } from '../../utils/sanityClient.js';
 import { assignPageCSSModifier } from '../../utils/utils.jsx';
@@ -108,6 +109,7 @@ function B2BPage() {
           content={'/favicon_io/apple-touch-icon.png'}
         />
       </Helmet>
+
       {INTRO && (
         <IntroSection
           modifier={`b2b`}
@@ -116,9 +118,27 @@ function B2BPage() {
           data={INTRO}
         />
       )}
+
       {TYPES && <TurningTilesSection tilesModifier={'wide'} data={TYPES} />}
-      {OFFER && <OfferSection products={products} />}
+
+      {OFFER && (
+        <Section classy={`section--offer`}>
+          {products.map(product => (
+            <OfferType
+              key={product.id}
+              id={product.id}
+              header={product.header}
+              data={product.data}
+              limit={product.limit}
+              specifier={product.specifier}
+              moreLink={product.moreLink ? product.moreLink : null}
+            />
+          ))}
+        </Section>
+      )}
+
       {BENEFITS && <Benefits content={BENEFITS} />}
+
       {PRICE_LIST && (
         <PriceList content={PRICE_LIST} modifier={'classes-page'} />
       )}

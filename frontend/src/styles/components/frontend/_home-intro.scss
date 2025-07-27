@@ -2,26 +2,28 @@
 @use '../..//utils/' as *;
 
 .home-intro {
-  grid-area: header;
-  height: 100svh;
+  &.section {
+    grid-area: header;
+    height: 100svh;
 
-  display: grid;
-  grid-template-columns: repeat(5, minmax(auto, 1fr));
-  grid-template-rows: 6rem repeat(8, 1fr) 8rem;
-  grid-template-areas:
-    '. . . . .'
-    'title title title title title'
-    '. . logo logo logo'
-    '. . logo logo logo'
-    '. . . . .'
-    '. . . . .'
-    '. . . . .'
-    '. . . . .'
-    '. . . . .'
-    '. . . . .'
-    '. . . . .'
-    'motto motto motto motto motto';
-  transition: map.get($behavior, base-transition);
+    display: grid;
+    grid-template-columns: repeat(5, minmax(auto, 1fr));
+    grid-template-rows: 6rem repeat(8, 1fr) 8rem;
+    grid-template-areas:
+      '. . . . .'
+      'title title title title title'
+      '. . logo logo logo'
+      '. . logo logo logo'
+      '. . . . .'
+      '. . . . .'
+      '. . . . .'
+      '. . . . .'
+      '. . . . .'
+      '. . . . .'
+      '. . . . .'
+      'motto motto motto motto motto';
+    transition: map.get($behavior, base-transition);
+  }
 
   @supports (-webkit-touch-callout: none) and (not (hover: hover)) {
     //for ios

@@ -555,7 +555,7 @@ function AdminPage() {
         <meta name='robots' content='noindex, nofollow' />
       </Helmet>
 
-      <div className='admin-console'>
+      <div className='backend-content-wrapper'>
         {status.user?.role === 'ADMIN' && (
           <>
             <Section classy='intro--admin' header={`Admin Panel`}></Section>

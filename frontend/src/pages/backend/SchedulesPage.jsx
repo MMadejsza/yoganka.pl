@@ -320,7 +320,7 @@ function SchedulePage() {
           />
         </Helmet>
 
-        <div className='admin-console'>
+        <div className='backend-content-wrapper'>
           <IntroSection
             modifier={`no-bcg-pic`}
             className={`intro--admin`}

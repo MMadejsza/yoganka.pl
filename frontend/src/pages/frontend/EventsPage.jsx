@@ -3,7 +3,8 @@ import { Helmet } from 'react-helmet';
 import Loader from '../../components/common/Loader.jsx';
 import SimpleGallery from '../../components/frontend/glide/SimpleGallery.jsx';
 import IntroSection from '../../components/frontend/IntroSection.jsx';
-import OfferSection from '../../components/frontend/OfferSection.jsx';
+import OfferType from '../../components/frontend/OfferType.jsx';
+import Section from '../../components/frontend/Section.jsx';
 import { client } from '../../utils/sanityClient.js';
 
 function EventsPage() {
@@ -96,14 +97,29 @@ function EventsPage() {
         />
         <meta name='twitter:image' content='/favicon_io/apple-touch-icon.png' />
       </Helmet>
+
       <IntroSection
         modifier={`no-bcg-pic`}
         className={`intro`}
         data={EVENTS_INTRO_SECTION_DATA[0]}
       />
+
       {contentLoaded && (
-        <OfferSection products={products} extraClass={'events'} />
+        <Section classy={`section--offer`} modifier={`events`}>
+          {products.map(product => (
+            <OfferType
+              key={product.id}
+              id={product.id}
+              header={product.header}
+              data={product.data}
+              limit={product.limit}
+              specifier={product.specifier}
+              moreLink={product.moreLink ? product.moreLink : null}
+            />
+          ))}
+        </Section>
       )}
+
       <SimpleGallery
         givenGallery={EVENTS_PAST_GALLERY_SECTION_DATA[0].gallery}
         glideConfig={{

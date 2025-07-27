@@ -1,9 +1,9 @@
 @use 'sass:map';
 @use 'sass:color';
 @use 'sass:math';
-@use './utils/' as *;
+@use '../../utils/' as *;
 
-.admin-console {
+.backend-content-wrapper {
   grid-area: table;
   grid-column: 1 /-1;
   max-height: 100%;
@@ -27,7 +27,7 @@
   }
 }
 
-body:has(.admin-console) {
+body:has(.backend-content-wrapper) {
   .modal.visible {
     width: 98vw;
     max-width: 1200px;

@@ -2,11 +2,14 @@ import { Link } from 'react-router-dom';
 import { campsSort, classesSort, eventsSort } from '../../utils/sorting.js';
 import Tile from './Tile.jsx';
 
-function Offer({ id, specifier, header, data, today, limit, moreLink }) {
-  // console.log('Offer data', data);
+function OfferType({ id, specifier, header, data, limit, moreLink }) {
+  // console.log('OfferType data', data);
 
-  let classy = 'offer-type';
-  const modifier = specifier ? `offer-type--${specifier}` : '';
+  const todayRaw = new Date();
+  const today = todayRaw.toISOString().split('T')[0];
+
+  const modifier = specifier ? ` section--${specifier}` : '';
+
   let sortedData;
   switch (data[0].type) {
     case 'camp':
@@ -22,12 +25,16 @@ function Offer({ id, specifier, header, data, today, limit, moreLink }) {
     default:
       sortedData = data;
   }
+
   const products = limit ? sortedData.slice(0, limit) : sortedData;
   const nonClickableTypes = ['b2b', 'class'];
 
   return (
-    <article id={id} className={`${classy} ${modifier}`}>
-      <header className={`${classy}__header`}>{header}</header>
+    <article id={id} className={`section${modifier} section--sub`}>
+      <header className={`section__header section__header--sub`}>
+        {header}
+      </header>
+
       {products.map((tileData, index) => (
         <Tile
           data={tileData}
@@ -36,9 +43,10 @@ function Offer({ id, specifier, header, data, today, limit, moreLink }) {
           clickable={nonClickableTypes.includes(tileData.type) ? false : true}
         />
       ))}
+
       {moreLink ? (
         <Link
-          className={`${classy}__more clickable`}
+          className={`section__more clickable`}
           onClick={() => {
             window.scrollTo(0, 0);
           }}
@@ -51,4 +59,4 @@ function Offer({ id, specifier, header, data, today, limit, moreLink }) {
   );
 }
 
-export default Offer;
+export default OfferType;

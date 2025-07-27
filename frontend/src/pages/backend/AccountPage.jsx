@@ -174,7 +174,7 @@ function AccountPage() {
         <meta name='robots' content='noindex, nofollow' />
       </Helmet>
 
-      <div className='admin-console'>
+      <div className='backend-content-wrapper'>
         <Section classy='intro--admin' header={name} />
         {userTabs}
         {content}

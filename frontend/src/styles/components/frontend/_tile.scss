@@ -26,10 +26,10 @@
 }
 
 .clickable {
-  position: relative;
   box-shadow: map.get($shadows, tile-shadow);
+  position: relative;
 
-  &:not(.offer-type__more.clickable):after {
+  &:not(.section__more.clickable):after {
     content: ' ';
     position: absolute;
     bottom: 0;
@@ -65,7 +65,7 @@
   @include flex(column, $align: center, $gap: 2rem);
   flex-basis: 90%;
 
-  .offer-type & {
+  .section > & {
     min-height: 472px;
     flex-basis: 100%;
 
@@ -204,11 +204,11 @@
       flex-basis: 45%;
     }
 
-    .offer-type & {
+    .section > & {
       flex-basis: 46%;
     }
 
-    .offer-type--events & {
+    .section--events > & {
       max-width: 500px;
       flex-basis: 31%;
     }
@@ -217,7 +217,7 @@
       grid-column: 1 / -1;
     }
 
-    #wyjazdy &__title {
+    .section--events &__title {
       height: $title-font-size * 3 + 2.5 * $title-line-height;
     }
 
