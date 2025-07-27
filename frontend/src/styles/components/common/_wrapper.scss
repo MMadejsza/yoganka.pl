@@ -3,9 +3,9 @@
 @use '../../utils/' as *;
 
 .wrapper {
-  position: relative;
-  display: grid;
+  // position: relative;
   min-height: 100vh;
+  display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-template-rows: auto auto auto auto auto 1fr auto;
   grid-template-areas:

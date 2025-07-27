@@ -30,7 +30,13 @@
     transform: translateX(-50%);
   }
 }
-
+@include respond-to(mobile-m) {
+  .logo-container {
+    &--footer {
+      flex-basis: content;
+    }
+  }
+}
 @include respond-to(mobile-l) {
   .logo-container {
     &--logo-writing {

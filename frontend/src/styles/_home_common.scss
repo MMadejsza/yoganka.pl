@@ -114,8 +114,7 @@ span.click-suggestion {
   overflow: hidden;
 }
 
-.modal__modal-body > section:not(:first-of-type),
-footer {
+.modal__modal-body > section:not(:first-of-type) {
   padding: 0 var(--section-padding-y) 2rem;
   box-shadow: map.get($shadows, section-shadow);
 }

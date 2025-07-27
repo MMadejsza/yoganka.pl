@@ -11,38 +11,16 @@
   .partners__image {
     width: 50vw;
   }
-  .footer {
-    &__legal {
-      font-size: 1.8rem;
-    }
-
-    &__social-link {
-      font-size: 4rem;
-    }
-  }
 }
 @media (min-width: 480px) {
   html {
     font-size: calc(var(--scale) * 12px);
-  }
-
-  .footer {
-    &__socials {
-      gap: 4rem;
-    }
-    &__social-link {
-      font-size: 3rem;
-    }
   }
 }
 @media (min-width: 640px) {
   // portrait tablets, portrait iPad, e-readers (Nook/Kindle), landscape 800x480 phones (Android)
   html {
     font-size: calc(var(--scale) * 13px);
-  }
-
-  footer {
-    padding: 0 2rem 2rem;
   }
 
   .modal {
@@ -255,50 +233,6 @@
     transform: translateY(-18%) scale(1.1);
     box-shadow: map.get($shadows, tile-shadow);
   }
-  .footer {
-    flex-flow: row wrap;
-    align-content: space-evenly;
-    justify-content: center;
-    row-gap: 2rem;
-
-    &__company-details a:hover {
-      font-size: 2.2rem;
-      transform: scale(1.05) translateY(0.5rem);
-      text-shadow: map.get($shadows, active-text-icons-shadow);
-    }
-    &__legal,
-    &__credit {
-      flex-basis: 100%;
-    }
-    &__credit a {
-      line-height: 100%;
-    }
-
-    &__qr {
-      left: 50%;
-      transform: translateX(-50%);
-    }
-    &__social-link {
-      &:hover {
-        transform: scale(1.05) translateY(0.5rem);
-
-        text-shadow: map.get($shadows, active-text-icons-shadow);
-      }
-
-      &:hover .footer__qr {
-        display: block;
-        width: 160px;
-        top: -185px;
-
-        opacity: 1;
-        transition: map.get($behavior, base-transition);
-      }
-
-      &:hover .footer__qr-image {
-        box-shadow: $active-box-shadow;
-      }
-    }
-  }
 }
 
 @media (min-width: 960px) {
@@ -421,37 +355,6 @@
       max-width: 75%;
     }
   }
-
-  .footer {
-    padding: 0 2rem 3rem;
-    font-size: 1.9rem;
-
-    @include flex($justify: space-evenly, $align: center);
-    row-gap: 1rem;
-
-    &__company-details {
-      grid-area: details;
-      width: 215px;
-    }
-    &__company-details a {
-      font-size: 2.2rem;
-      color: map.get($colors, tile-title);
-    }
-    &__legal {
-      grid-area: legal;
-    }
-    &__socials {
-      grid-area: socials;
-      order: -1;
-      width: 215px;
-
-      text-shadow: none;
-      overflow: visible;
-    }
-    &__credit {
-      grid-area: credit;
-    }
-  }
 }
 
 @media (min-width: 1280px) {
@@ -512,11 +415,6 @@
       &::after {
         width: 5vw;
       }
-    }
-  }
-  .footer {
-    .footer__social-link {
-      font-size: 4rem;
     }
   }
 }

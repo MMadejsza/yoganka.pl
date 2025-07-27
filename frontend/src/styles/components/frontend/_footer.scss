@@ -1,0 +1,195 @@
+@use 'sass:map';
+@use '../../utils/' as *;
+
+//! FOOTER
+
+footer {
+  grid-area: footer;
+  place-self: center;
+  width: 100vw;
+  background-color: color-mix(
+    in srgb,
+    #{map.get($colors, nav)} 80%,
+    transparent
+  );
+  box-shadow: map.get($shadows, tile-shadow);
+  border-top-left-radius: map.get($sizes, border-radius);
+  border-top-right-radius: map.get($sizes, border-radius);
+
+  @include flex(row, center);
+}
+
+.footer {
+  margin-top: 3rem;
+  padding: 0rem 1rem 2rem 1rem;
+  font-size: 1.7rem;
+  color: map.get($colors, tile-text-muted);
+
+  @include flex(column, space-evenly, center, $gap: 2rem);
+
+  &__credits--sub,
+  &__credits {
+    height: auto;
+    font-size: 1.5rem;
+  }
+  & a {
+    text-decoration: underline;
+  }
+  // no & for specificity
+  .footer__social-link {
+    position: relative;
+    color: map.get($colors, accent-bcg);
+  }
+  &__social-icon {
+    font-size: 3.5rem;
+  }
+
+  &__company-details {
+    @include flex(column, space-evenly, $gap: 1rem);
+
+    & a {
+      // font-size: 2.2rem;
+      line-height: 150%;
+    }
+  }
+
+  &__socials {
+    @include flex(row, center, center, 3rem);
+    margin: 2rem 0;
+  }
+
+  &__qr {
+    position: absolute;
+    width: 0;
+    top: 25px;
+    right: 0;
+    opacity: 0;
+    transition: map.get($behavior, base-transition);
+  }
+
+  &__qr-image {
+    transition: map.get($behavior, base-transition);
+    border-radius: map.get($sizes, border-radius);
+  }
+
+  &__legal {
+    margin: 1rem 0;
+  }
+
+  &__credit-link {
+    opacity: 0.75;
+  }
+}
+@include respond-to(mobile-xs) {
+  .footer {
+    &__legal {
+      font-size: 1.8rem;
+    }
+
+    &__social-link {
+      font-size: 4rem;
+    }
+  }
+}
+@include respond-to(mobile-s) {
+  .footer {
+    &__socials {
+      gap: 4rem;
+    }
+    &__social-link {
+      font-size: 3rem;
+    }
+  }
+}
+@include respond-to(mobile-sh) {
+  .footer {
+    padding: 0 2rem 2rem;
+  }
+}
+@include respond-to(mobile-m) {
+  .footer {
+    flex-flow: row wrap;
+    align-content: space-evenly;
+    justify-content: center;
+    row-gap: 2rem;
+
+    &__company-details a:hover {
+      font-size: 2.2rem;
+      transform: scale(1.05) translateY(0.5rem);
+      text-shadow: map.get($shadows, active-text-icons-shadow);
+    }
+    &__legal,
+    &__credit {
+      flex-basis: 100%;
+    }
+    &__credit a {
+      line-height: 100%;
+    }
+
+    &__qr {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    &__social-link {
+      &:hover {
+        transform: scale(1.05) translateY(0.5rem);
+
+        text-shadow: map.get($shadows, active-text-icons-shadow);
+      }
+
+      &:hover .footer__qr {
+        display: block;
+        width: 160px;
+        top: -185px;
+
+        opacity: 1;
+        transition: map.get($behavior, base-transition);
+      }
+
+      &:hover .footer__qr-image {
+        box-shadow: $active-box-shadow;
+      }
+    }
+  }
+}
+@include respond-to(mobile-mh) {
+  .footer {
+    padding: 0 2rem 3rem;
+    font-size: 1.9rem;
+
+    @include flex($justify: space-evenly, $align: center);
+    row-gap: 1rem;
+
+    &__company-details {
+      grid-area: details;
+      width: 215px;
+    }
+    &__company-details a {
+      font-size: 2.2rem;
+      color: map.get($colors, tile-title);
+    }
+    &__legal {
+      grid-area: legal;
+    }
+    &__socials {
+      grid-area: socials;
+      order: -1;
+      width: 215px;
+
+      text-shadow: none;
+      overflow: visible;
+    }
+    &__credit {
+      grid-area: credit;
+    }
+  }
+}
+@include respond-to(desktop-s) {
+  .footer {
+    max-width: 1200px;
+
+    .footer__social-link {
+      font-size: 4rem;
+    }
+  }
+}
