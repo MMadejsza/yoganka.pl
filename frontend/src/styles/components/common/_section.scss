@@ -2,7 +2,7 @@
 @use '../../utils/' as *;
 
 .section {
-  @include flex(column, center, center, $gap: 3rem);
+  @include flex(column, $justify: center, $gap: 3rem);
 
   &.book-classes {
     grid-column: 1/-1;
