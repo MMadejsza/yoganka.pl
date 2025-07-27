@@ -22,6 +22,9 @@
   &--sub {
     align-content: flex-start;
   }
+  &--partners {
+    grid-area: partners;
+  }
 
   &__more {
     flex-basis: 100%;
@@ -114,23 +117,6 @@
     grid-area: cert;
     position: relative;
     overflow: hidden;
-
-    & .glide__slides {
-      background-color: color-mix(
-        in srgb,
-        #{map.get($colors, nav)} 55%,
-        transparent
-      );
-    }
-  }
-
-  &--partners {
-    grid-area: partners;
-
-    .glide__track {
-      height: 40vh;
-      max-height: 350px;
-    }
   }
 
   &--turning-tiles {
@@ -146,17 +132,9 @@
 
   &--reviews {
     grid-area: cert;
-    // overflow: hidden;
 
     &.homepage {
       grid-area: reviews;
-    }
-    .glide__track {
-      // height: 70vh;
-      max-height: 450px;
-    }
-    .glide__slide {
-      height: min-content;
     }
   }
 }
@@ -169,13 +147,6 @@
 
   .section--turning-tiles {
     margin-bottom: 9rem;
-  }
-
-  .section--reviews {
-    .glide__track {
-      // height: 70vh;
-      max-height: 500px;
-    }
   }
 }
 @include respond-to(mobile-m) {

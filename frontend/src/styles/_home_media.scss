@@ -47,11 +47,6 @@
   }
 }
 @media (min-width: 768px) {
-  // tablet, landscape iPad, lo-res laptops ands desktops
-  .glide-slides {
-    min-height: 30vh;
-  }
-
   .about {
     gap: 2.5rem 1.5rem;
 
@@ -310,8 +305,6 @@
 }
 
 @media (min-width: 1280px) {
-  // hi-res laptops and desktops
-  // about is absolute at this stage
   html {
     font-size: calc(var(--scale) * 11px);
   }
