@@ -12,7 +12,7 @@ $opacity-delay-init: $opacity-timing;
 $opacity-delay-end: $opacity-timing * 0;
 
 .turning-tiles__container {
-  @include flex(row, center);
+  @include flex(row, center, center);
   flex-wrap: wrap;
   gap: 2rem;
   cursor: pointer;
@@ -21,32 +21,18 @@ $opacity-delay-end: $opacity-timing * 0;
 .turning-tile {
   position: relative;
   min-height: 140px;
-
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
-  grid-template-rows: repeat(auto-fit, minmax(0, 1fr));
-  align-items: center;
-  justify-items: center;
-  gap: 0.5rem 0;
-  grid-template-areas:
-    ' s  s'
-    ' h  h';
   padding: $padding;
   background-color: map.get($colors, base);
   border-radius: map.get($sizes, border-radius);
   box-shadow: map.get($shadows, tile-shadow);
   transition: transform $rotation-timing ease-in-out,
     box-shadow $rotation-timing ease-in-out, opacity $opacity-timing ease-in-out;
-
   text-align: left;
 
+  @include flex(row, $align: center, $gap: 1rem);
+  flex-grow: 1;
+
   &:nth-child(even) {
-    text-align: left;
-
-    grid-template-areas:
-      ' s  s'
-      ' h  h';
-
     & .turning-tile__-header,
     & .turning-tile__-p {
       padding: 0 1rem 1rem $padding;
@@ -54,10 +40,11 @@ $opacity-delay-end: $opacity-timing * 0;
   }
 
   &__container {
-    flex-basis: 90%;
     position: relative;
-    z-index: 1;
+    flex-basis: 90%;
     border-radius: map.get($sizes, border-radius);
+    z-index: 1;
+
     &:hover,
     &:focus {
       span.click-suggestion {
@@ -65,6 +52,7 @@ $opacity-delay-end: $opacity-timing * 0;
       }
     }
   }
+
   &__container:hover &,
   &__container:focus & {
     box-shadow: map.get($shadows, tile-shadow-reverse);
@@ -72,17 +60,14 @@ $opacity-delay-end: $opacity-timing * 0;
   }
 
   &__header {
-    grid-area: h;
-    width: 100%;
-    margin-bottom: 3rem;
     padding: 0 0 0 $padding;
     font-size: 1.9rem;
     font-weight: bold;
-    text-align: center;
     opacity: 1;
     transition: opacity $opacity-timing ease-in-out;
     transition-delay: $opacity-delay-init;
   }
+
   &__container:hover &__header,
   &__container:focus &__header {
     transition-delay: $opacity-delay-end;
@@ -117,15 +102,15 @@ $opacity-delay-end: $opacity-timing * 0;
   }
 
   &__symbol-container {
-    grid-area: s;
     color: map.get($colors, tile-title);
     text-shadow: map.get($shadows, active-text-icons-shadow);
     border-radius: 50%;
-    display: grid;
-    opacity: 1;
     transition: opacity $opacity-timing ease-in-out;
     transition-delay: $opacity-delay-init;
+    opacity: 1;
+    display: grid;
   }
+
   &__symbol {
     place-self: center;
     font-size: 5rem;
@@ -140,7 +125,6 @@ $opacity-delay-end: $opacity-timing * 0;
   $padding: 1.5rem;
   .turning-tile {
     min-height: 190px;
-    gap: 0 0;
 
     &__header {
       font-size: 2.1rem;
@@ -188,18 +172,6 @@ $opacity-delay-end: $opacity-timing * 0;
 }
 @include respond-to(mobile-l) {
   .turning-tile {
-    grid-template-columns: 1fr 2fr;
-    grid-template-areas:
-      ' s  h'
-      ' s  h';
-
-    &:nth-child(even) {
-      grid-template-columns: 1fr 2fr;
-      grid-template-areas:
-        ' s  h'
-        ' s  h';
-    }
-
     &__header {
       font-size: 2.5rem;
       text-align: left;
