@@ -126,10 +126,6 @@
       text-shadow: map.get($shadows, active-text-icons-shadow);
     }
   }
-
-  button {
-    font-family: 'EB Garamond', serif;
-  }
 }
 .nav.highlighted {
   animation: 3s highlights ease-in-out;

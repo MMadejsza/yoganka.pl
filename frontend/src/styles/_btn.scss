@@ -7,6 +7,15 @@ button {
   border: none;
 }
 
+$btn-horizontal-padding: 2rem;
+
+$danger-soft: rgba(color.adjust(red, $lightness: -13%), 0.45);
+
+%hover-lift {
+  transform: scale(1.05) translateY(0.5rem);
+  box-shadow: $active-box-shadow;
+}
+
 %action-btn {
   @include flex(row, center, center);
   font-family: 'EB Garamond', serif;
@@ -14,7 +23,7 @@ button {
   gap: 1rem;
   width: 95%;
   min-height: 48px;
-  padding: 0rem 2rem;
+  padding: 0rem $btn-horizontal-padding;
 
   font-size: 1.8rem;
   line-height: 48px;
@@ -31,8 +40,7 @@ button {
   transition: map.get($behavior, base-transition);
 
   &:hover {
-    transform: translate(1%, 5%) scale(1.01);
-    box-shadow: map.get($shadows, active-box-shadow);
+    @extend %hover-lift;
   }
 }
 
@@ -54,9 +62,8 @@ button {
     text-shadow: map.get($shadows, active-text-icons-shadow);
 
     &:hover {
-      transform: scale(1.05) translateY(0.5rem);
       color: map.get($colors, accent-bcg);
-      text-shadow: $active-box-shadow;
+      @extend %hover-lift;
     }
   }
 }
@@ -73,7 +80,7 @@ button {
   }
 
   .generic-details .modal__user-action & {
-    padding: 0.2rem 2rem;
+    padding: 0.2rem $btn-horizontal-padding;
 
     &--small,
     &--secondary {
@@ -82,11 +89,10 @@ button {
     }
   }
 
-  $generic-list-vertical-padding: 2rem;
   .generic-component-wrapper,
   .generic-outer-wrapper {
     .btn {
-      padding: 0 $generic-list-vertical-padding;
+      padding: 0 $btn-horizontal-padding;
     }
   }
 
@@ -111,13 +117,13 @@ button {
       background-color: rgba(yellow, 0.1);
     }
     &-danger {
-      background-color: rgba(color.adjust(red, $lightness: -13%), 0.45);
+      background-color: $danger-soft;
     }
   }
 
   &--secondary {
-    min-height: auto;
     height: 2.5rem;
+    min-height: auto;
     line-height: 2.5rem;
     font-size: 1.2rem;
     color: map.get($colors, tile-text-muted);
@@ -127,7 +133,7 @@ button {
   }
 
   &--cancel {
-    background-color: rgba(color.adjust(red, $lightness: -13%), 0.45);
+    background-color: $danger-soft;
   }
 
   &.disabled {
@@ -138,8 +144,7 @@ button {
 
 @include respond-to(mobile-m) {
   .btn:hover:not(.disabled) {
-    transform: scale(1.05) translateY(0.5rem);
-    box-shadow: $active-box-shadow;
+    @extend %hover-lift;
   }
 }
 @include respond-to(mobile-pro) {
