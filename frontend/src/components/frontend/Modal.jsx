@@ -205,7 +205,7 @@ function Modal({ tile, onClose, isVisible, isClosing }) {
       </Helmet>
 
       <div
-        className={`modal__overlay ${isVisible ? 'visible' : ''}`}
+        className={`overlay ${isVisible ? 'visible' : ''}`}
         onClick={handleClose}
       />
 
@@ -215,8 +215,8 @@ function Modal({ tile, onClose, isVisible, isClosing }) {
         }`}
         onClick={e => e.stopPropagation()}
       >
-        <div className='modal__x-btn'>
-          <a className='modal__close-btn' onClick={handleClose}>
+        <div className='close-btn__container'>
+          <a className='close-btn__btn' onClick={handleClose}>
             <SymbolOrIcon
               specifier={'fa-solid fa-xmark'}
               type='ICON'
@@ -225,27 +225,21 @@ function Modal({ tile, onClose, isVisible, isClosing }) {
           </a>
         </div>
 
-        <div
-          className='modal__modal-body modal__modal-body--offer '
-          onClick={e => e.stopPropagation()}
-        >
-          {modal.title && <h3 className='modal__main-title '>{modal.title}</h3>}
+        {modal.title && <h3 className='modal__main-title '>{modal.title}</h3>}
 
-          {galleryContent}
-          {/* ${modal.fullDesc.length > 375 ? 'modal__full-desc--long-text' : ''} */}
+        {galleryContent}
 
-          {fullDescription}
+        {fullDescription}
 
-          {campOnlyContent}
+        {campOnlyContent}
 
-          {eventOnlyContent}
+        {eventOnlyContent}
 
-          {isUpToDate && modal.note && (
-            <h2 className='modal__attention-note'>{modal.note}</h2>
-          )}
+        {isUpToDate && modal.note && (
+          <h2 className='modal__attention-note'>{modal.note}</h2>
+        )}
 
-          {renderFooter()}
-        </div>
+        {renderFooter()}
       </div>
     </>,
     document.getElementById('modal')

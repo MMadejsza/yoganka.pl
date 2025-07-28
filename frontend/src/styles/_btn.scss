@@ -1,0 +1,53 @@
+@use 'sass:map';
+@use 'sass:color';
+@use './utils/' as *;
+
+%action-btn {
+  @include flex(row, center, center);
+  font-family: 'EB Garamond', serif;
+
+  gap: 1rem;
+  width: 95%;
+  min-height: 48px;
+  padding: 0rem 2rem;
+
+  font-size: 1.8rem;
+  line-height: 48px;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: map.get($colors, accent-text);
+
+  cursor: pointer;
+  background-color: map.get($colors, accent-bcg);
+  border-radius: map.get($sizes, border-radius);
+  box-shadow: map.get($shadows, active-text-icons-shadow);
+  overflow: hidden;
+  transition: map.get($behavior, base-transition);
+
+  &:hover {
+    transform: translate(1%, 5%) scale(1.01);
+    box-shadow: map.get($shadows, active-box-shadow);
+  }
+}
+
+.close-btn {
+  &__container {
+    position: absolute;
+    top: 3rem;
+    right: 0rem;
+    transform: translate(-50%, -50%);
+    z-index: 9;
+  }
+
+  &__btn {
+    font-size: 48px;
+    text-shadow: map.get($shadows, active-text-icons-shadow);
+
+    &:hover {
+      transform: scale(1.05) translateY(0.5rem);
+      color: map.get($colors, accent-bcg);
+      text-shadow: $active-box-shadow;
+    }
+  }
+}

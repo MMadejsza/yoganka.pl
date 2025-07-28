@@ -68,11 +68,6 @@
       margin-top: 2rem;
     }
 
-    section.section--checklist.classes-page + & {
-      grid-template-areas: 'zajecia zajecia';
-      margin-bottom: 2rem;
-    }
-
     .section--turning-tiles + &,
     .intro.no-bcg-pic + & {
       margin-top: 6rem;
@@ -135,18 +130,6 @@
     margin-bottom: 0rem;
     grid-column: 1/-1;
   }
-  //! do poprawy bo modal nie ma klasy section na razie
-  .modal__modal-body > &:not(:first-of-type) {
-    padding: 0 var(--section-padding-y) 2rem;
-    box-shadow: map.get($shadows, section-shadow);
-  }
-  .modal__modal-body--offer > &:nth-child(even) {
-    background: radial-gradient(
-      circle at center,
-      rgba(0, 0, 0, 0.06) 70%,
-      rgba(0, 0, 0, 0) 100%
-    );
-  }
 
   &--gallery {
     grid-column: 1 /-1;
@@ -174,6 +157,18 @@
     margin-bottom: 7rem;
   }
 }
+//! do poprawy bo modal nie ma klasy section na razie
+.modal > section:not(:first-of-type) {
+  padding: 0 var(--section-padding-y) 2rem;
+  box-shadow: map.get($shadows, section-shadow);
+}
+// .modal > section:nth-child(even) {
+//   background: radial-gradient(
+//     circle at center,
+//     rgba(0, 0, 0, 0.06) 70%,
+//     rgba(0, 0, 0, 0) 100%
+//   );
+// }
 
 @include respond-to(mobile-s) {
   .section--offer {
@@ -202,14 +197,6 @@
       'title title title title'
       'wyjazdy wyjazdy zajecia zajecia'
       'wydarzenia wydarzenia wydarzenia wydarzenia';
-
-    section.section--checklist.classes-page + & {
-      grid-template-columns:
-        minmax(100px, 150px) minmax(150px, 1fr) minmax(150px, 1fr)
-        minmax(100px, 151px);
-      grid-template-areas: '. zajecia zajecia .';
-      margin-top: 4rem;
-    }
   }
 
   .section--turning-tiles {

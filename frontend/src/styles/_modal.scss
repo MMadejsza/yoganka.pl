@@ -31,8 +31,7 @@
   }
 }
 
-//@ MODAL
-.modal__overlay {
+.overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -49,7 +48,6 @@
   }
 }
 .modal {
-  display: block;
   position: fixed;
   top: 50dvh;
   left: 50dvw;
@@ -65,8 +63,13 @@
   border: none;
   border-radius: map.get($sizes, border-radius);
   box-shadow: map.get($shadows, active-text-icons-shadow);
-  opacity: 0;
   transition: map.get($behavior, base-transition);
+  opacity: 0;
+
+  @include flex(row, center, center, $gap: 3rem);
+  flex-wrap: wrap;
+  overflow-y: auto;
+  overflow-x: hidden;
 
   &::backdrop {
     backdrop-filter: blur(10px);
@@ -74,7 +77,6 @@
   &.visible {
     opacity: 1;
     width: 95vw;
-    // min-height: max-content;
     max-height: 92vh;
     transform: translate(-50%, -50%) scale(1);
     transition: map.get($behavior, base-transition);
@@ -99,61 +101,16 @@
     color: map.get($colors, accent-bcg);
   }
 
-  &__x-btn {
-    position: absolute;
-    top: 3rem;
-    right: 0rem;
-    transform: translate(-50%, -50%);
-    z-index: 9;
-  }
-
-  &__close-btn {
-    font-size: 48px;
-    text-shadow: map.get($shadows, active-text-icons-shadow);
-
-    &:hover {
-      transform: scale(1.05) translateY(0.5rem);
-      color: map.get($colors, accent-bcg);
-      text-shadow: $active-box-shadow;
-    }
-  }
-
-  &__modal-body {
-    display: grid;
-    width: 100%;
-    grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
-    grid-gap: 2.5rem;
-    justify-items: center;
-
-    border-radius: map.get($sizes, border-radius);
-
-    &--offer {
-      max-height: 89dvh;
-      padding-bottom: 1rem;
-
-      overflow-y: auto;
-      overflow-x: hidden;
-    }
-  }
-
   &__header {
+    flex-basis: 100%;
     padding: 0 1rem;
 
-    @include flex(column, center, $gap: 1rem);
-  }
-
-  &__desc {
-    &--classes-page {
-      margin-top: 5rem;
-      width: 100%;
-    }
+    @include flex(column, $align: center, $gap: 1rem);
   }
 
   &__full-desc {
-    grid-column: 1 / -1;
     padding: 2rem 0;
     font-size: 2.2rem;
-    white-space: pre-line;
 
     &--event,
     &--content {
@@ -164,6 +121,7 @@
   &__title,
   &__main-title,
   &__attention-note {
+    flex-basis: 100%;
     margin-bottom: 1.5rem;
     font-size: 2.5rem;
 
@@ -193,9 +151,8 @@
   }
 
   &__main-title {
-    grid-column: 1/-1;
     margin-top: 3rem;
-    white-space: pre-line;
+    line-height: 6rem;
   }
 
   &__user-action {
@@ -254,29 +211,8 @@
 
 @include respond-to(mobile-sh) {
   .modal {
-    &__modal-body {
-      gap: 2rem 1.5rem;
-    }
-    &__modal-body--event {
-      grid-template-columns: auto;
-    }
     & .tile__img {
-      grid-column: 1 / -1;
       margin: 0;
-    }
-    &__header {
-      grid-column: 1 / -1;
-      align-items: center;
-      width: 100%;
-    }
-    &__desc {
-      grid-column: 1 /-1;
-    }
-    &__attention-note {
-      grid-column: 1 / -1;
-    }
-    &__user-action {
-      grid-column: 1 /-1;
     }
   }
 }
@@ -287,12 +223,6 @@
     &__btn:hover:not(.disabled) {
       transform: scale(1.05) translateY(0.5rem);
       box-shadow: $active-box-shadow;
-    }
-
-    &__modal-body {
-      grid-template-columns: repeat(6, minmax(65px, 1fr));
-      gap: 3rem 1.5rem;
-      padding-bottom: 3.5rem;
     }
 
     &__full-desc {
@@ -332,10 +262,6 @@
         'd5p d5p';
     }
 
-    &__paragraph {
-      grid-column: 1 /-1;
-    }
-
     &__title {
       grid-area: h;
 
@@ -366,27 +292,23 @@
 }
 @include respond-to(mobile-mh) {
   .modal {
-    &__modal-body {
-      grid-template-columns: repeat(6, minmax(125px, 1fr));
+    &__desc {
+      grid-template-columns: repeat(2, minmax(300px, 1fr));
+    }
+  }
+}
+@include respond-to(mobile-pro) {
+  .modal {
+    &__main-title {
+      order: -3;
+    }
+
+    .glide {
+      order: -2;
     }
 
     &__header {
-      place-self: center;
-      grid-column: 1 / 4;
-      grid-row: 3;
-    }
-
-    &__full-desc {
-      grid-column: -1 / -4;
-      place-self: center;
-      &--event,
-      &--long-text {
-        grid-column: 1 / -1;
-      }
-    }
-
-    &__desc {
-      grid-template-columns: repeat(2, minmax(300px, 1fr));
+      order: -1;
     }
   }
 }
@@ -394,6 +316,7 @@
   .modal {
     max-width: 900px;
     padding: 1.5rem 2.5rem;
+
     &__btn {
       width: max-content;
 
@@ -449,11 +372,6 @@
         'd1p d2p d3p d4p'
         'd5 d5 d5 d5'
         'd5p d5p d5p d5p ';
-    }
-    &__title--classes-page-day {
-      &:nth-of-type(5) {
-        margin-top: 3rem;
-      }
     }
   }
 }

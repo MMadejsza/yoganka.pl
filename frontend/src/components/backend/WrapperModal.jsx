@@ -61,7 +61,7 @@ function WrapperModal({
   return createPortal(
     <>
       <div
-        className={`modal__overlay ${isVisible ? 'visible' : ''}`}
+        className={`overlay ${isVisible ? 'visible' : ''}`}
         onClick={handleClose}
       />
       <div
@@ -70,8 +70,8 @@ function WrapperModal({
         }`}
         onClick={e => e.stopPropagation()}
       >
-        <div className='modal__x-btn'>
-          <a className='modal__close-btn' onClick={handleClose}>
+        <div className='close-btn__container'>
+          <a className='close-btn__btn' onClick={handleClose}>
             <SymbolOrIcon
               type='ICON'
               specifier={'fa-solid fa-xmark modal__icon'}
