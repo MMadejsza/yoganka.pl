@@ -151,6 +151,10 @@
   }
   &--partners {
     grid-area: partners;
+
+    &__header {
+      margin-bottom: -5rem;
+    }
   }
   &--b2b-offer {
     grid-column: 1/-1;

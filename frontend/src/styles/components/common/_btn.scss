@@ -1,6 +1,6 @@
 @use 'sass:map';
 @use 'sass:color';
-@use './utils/' as *;
+@use '../../utils/' as *;
 
 button {
   background-color: transparent;
@@ -44,10 +44,10 @@ button {
 .close-btn {
   &__container {
     position: sticky;
-    top: 3rem;
-    right: 2rem;
+    top: 1rem;
+    right: 0rem;
     margin-left: auto;
-    margin-bottom: -3rem;
+    margin-bottom: -8rem;
     align-self: flex-end;
     order: -10;
     transform: translate(-50%, -50%);
@@ -143,6 +143,12 @@ button {
   .btn:hover:not(.disabled) {
     @include hover-lift;
   }
+
+  .close-btn {
+    &__container {
+      margin-bottom: -7rem;
+    }
+  }
 }
 @include respond-to(mobile-pro) {
   .section--b2b-price {
@@ -163,6 +169,7 @@ button {
 
     height: 4.5rem;
     line-height: 4.5rem;
+    padding: 2.5rem $btn-horizontal-padding;
 
     .generic-details .modal__user-action--login-page & {
       &--small,
@@ -199,6 +206,13 @@ button {
         color: #2e7d32;
         background-color: rgba(76, 175, 80, 0.25);
       }
+    }
+  }
+}
+@include respond-to(desktop-xs) {
+  .close-btn {
+    &__container {
+      margin-bottom: -9rem;
     }
   }
 }

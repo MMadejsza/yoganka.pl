@@ -1,4 +1,4 @@
-@use './utils/' as *;
+@use '../../utils/' as *;
 @use 'sass:map';
 
 .icon {
@@ -169,10 +169,6 @@
     &--side {
       font-size: 3.5rem;
     }
-  }
-
-  i.icon {
-    font-size: 3rem;
   }
 
   .tabs-list__icon {

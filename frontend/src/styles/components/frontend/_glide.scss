@@ -156,4 +156,10 @@
   .glide .glide-slides {
     min-height: 30vh;
   }
+
+  .glide__track {
+    .section--partners & {
+      min-height: 40vh;
+    }
+  }
 }

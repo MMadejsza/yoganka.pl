@@ -1,17 +1,16 @@
 @forward './utils/_fonts';
-
+@forward '_common';
 @forward './components/frontend/_glide';
 @forward './components/common/wrapper';
-@forward '_common';
 @forward './components/frontend/_tile';
 @forward './components/frontend/_turning-tile';
 @forward './components/frontend/_home-intro';
 @forward './components/frontend/_logo';
 @forward '_home_3-about';
-@forward '_checklist';
-@forward '_modal';
-@forward '_btn';
-@forward '_symbol-or-icon';
+@forward './components/common/_checklist';
+@forward './components/common/_modal';
+@forward './components/common/_btn';
+@forward './components/common/_symbol-or-icon';
 @forward './components/common/_section';
 @forward './components/frontend/_partner-slide';
 @forward './components/frontend/_footer';
@@ -30,6 +29,5 @@
 @forward './components/backend/_card';
 @forward './components/backend/_side-nav';
 @forward './components/backend/_settings-section';
-
 @forward './components/backend/backend-content-wrapper';
 @forward '_legal';

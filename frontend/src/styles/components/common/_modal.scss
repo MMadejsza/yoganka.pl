@@ -1,6 +1,6 @@
 @use 'sass:map';
 @use 'sass:color';
-@use './utils/' as *;
+@use '../../utils/' as *;
 
 .overlay {
   position: fixed;
