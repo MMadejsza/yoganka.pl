@@ -6,7 +6,7 @@ import CardsList from '../../components/backend/cards/CardsList.jsx';
 import ModalTable from '../../components/backend/ModalTable.jsx';
 import TabsList from '../../components/backend/TabsList.jsx';
 import ViewsController from '../../components/backend/ViewsController.jsx';
-import IntroSection from '../../components/common/IntroSection.jsx';
+import IntroSection from '../../components/frontend/IntroSection.jsx';
 import { useHandleStripeRedirect } from '../../hooks/useHandleStripeRedirect.js';
 import { formatAllowedTypes } from '../../utils/cardsAndTableUtils.jsx';
 import { formatIsoDateTime } from '../../utils/dateTime.js';

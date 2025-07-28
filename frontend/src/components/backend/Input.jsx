@@ -41,7 +41,7 @@ function Input({
                       classModifier
                         ? `generic-details__item--${classModifier}`
                         : ''
-                    } modal-checklist__li`
+                    } checklist__li`
                   : 'input-pair'
               } ${props.type === 'tel' ? 'phone' : ''}`}
             >
@@ -127,7 +127,7 @@ function Input({
                     classModifier
                       ? `generic-details__item--${classModifier}`
                       : ''
-                  } modal-checklist__li`
+                  } checklist__li`
                 : 'input-pair'
             } ${props.type == 'tel' ? 'phone' : ''}`}
           >
@@ -182,7 +182,7 @@ function Input({
         embedded
           ? `generic-details__item ${
               classModifier ? `generic-details__item--${classModifier}` : ''
-            } modal-checklist__li`
+            } checklist__li`
           : `input-pair ${classModifier ? `input-pair--${classModifier}` : ''}`
       } ${props.type == 'tel' ? 'phone' : ''}`}
     >

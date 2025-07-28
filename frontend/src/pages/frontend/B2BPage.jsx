@@ -41,7 +41,6 @@ function B2BPage() {
     queryFn: () => client.fetch(`*[_type == "b2bPriceListAndCooperation"][0]`),
     ...cacheConfig,
   });
-  const arePriceListBtns = Object.entries(PRICE_LIST.btnsContent).length > 0;
 
   if (
     introLoading ||
@@ -64,7 +63,7 @@ function B2BPage() {
       },
     ];
   }
-
+  const arePriceListBtns = Object.entries(PRICE_LIST.btnsContent).length > 0;
   return (
     <>
       <Helmet>

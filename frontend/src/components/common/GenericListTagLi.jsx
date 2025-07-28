@@ -9,9 +9,7 @@ function GenericListTagLi({ extraClass, objectPair, classModifier, isNotes }) {
     <li
       className={`generic-details__item ${
         classModifier ? `generic-details__item--${classModifier}` : ''
-      } modal-checklist__li ${status === 0 ? 'dimmed' : ''} ${
-        extraClass ?? ''
-      }`}
+      } checklist__li ${status === 0 ? 'dimmed' : ''} ${extraClass ?? ''}`}
     >
       {symbol && <SymbolOrIcon specifier={symbol} />}
       {label && (

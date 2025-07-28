@@ -102,11 +102,6 @@ span.click-suggestion {
   text-align: center;
 }
 
-section.classes-page ~ .gallery {
-  grid-area: offer;
-  margin-top: 4rem;
-}
-
 @include respond-to(mobile-xs) {
   html {
     --section-padding-y: 2rem;

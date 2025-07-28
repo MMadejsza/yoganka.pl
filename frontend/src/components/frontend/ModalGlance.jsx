@@ -13,7 +13,7 @@ function CampGlance({ glance }) {
     return Object.entries(data)
       .filter(([key, text]) => key != 'title' && text)
       .map(([key, text], index) => (
-        <li key={index} className='modal__li modal__li--at-glance'>
+        <li key={index} className='checklist__li checklist__li--at-glance'>
           <SymbolOrIcon specifier={symbols[key]} extraClass={'modal__icon'} />
           {text}
         </li>
@@ -23,7 +23,7 @@ function CampGlance({ glance }) {
   return (
     <>
       {glance.title && <h3 className='modal__title'>{glance.title}</h3>}
-      <ul className='modal__list modal__list--at-glance'>
+      <ul className='checklist__list checklist__list--at-glance'>
         {renderItemsList(glance)}
       </ul>
     </>

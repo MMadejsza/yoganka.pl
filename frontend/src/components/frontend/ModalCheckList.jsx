@@ -22,11 +22,11 @@ function ModalCheckList({ content, modifier }) {
   const formattedContent = rawContent.map((item, index) => {
     // if simple list -> item == string otherwise list of objects from freeTime
     return (
-      <li key={index} className='modal-checklist__li'>
+      <li key={index} className='checklist__li'>
         <SymbolOrIcon
           type={type}
           specifier={symbol}
-          extraClass={'modal-checklist__icon modal__icon modal-checklist__icon'}
+          extraClass={'checklist__icon modal__icon checklist__icon'}
           aria-hidden='true'
         />
         {item}
@@ -34,8 +34,8 @@ function ModalCheckList({ content, modifier }) {
     );
   });
 
-  const dynamicClass = `modal-checklist__list${
-    modifier ? ` modal-checklist__list--${modifier}` : ''
+  const dynamicClass = `checklist__list${
+    modifier ? ` checklist__list--${modifier}` : ''
   }`;
 
   return <ul className={dynamicClass}>{formattedContent}</ul>;

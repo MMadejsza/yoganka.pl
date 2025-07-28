@@ -24,10 +24,10 @@ function WrapperForm({
   const fieldsClass = isTableRowLike
     ? `generic-details__list generic-details__list--table-form  ${
         classModifier ? `generic-details__list--${classModifier}` : ''
-      } modal-checklist__list`
+      } checklist__list`
     : `generic-details__list  ${
         classModifier ? `generic-details__list--${classModifier}` : ''
-      } modal-checklist__list`;
+      } checklist__list`;
   const btnsClass = isTableRowLike
     ? 'action-btns'
     : `modal__user-action ${

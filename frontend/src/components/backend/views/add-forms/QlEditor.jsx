@@ -73,7 +73,7 @@ import 'react-quill/dist/quill.snow.css';
 
 //   return (
 //     <div
-//       className={`generic-details__item modal-checklist__li ${
+//       className={`generic-details__item checklist__li ${
 //         didEdit && validationResults.length ? 'has-error' : ''
 //       }`}
 //     >

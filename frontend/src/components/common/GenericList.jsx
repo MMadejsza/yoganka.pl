@@ -21,7 +21,7 @@ function GenericList({ title, details, classModifier = '' }) {
         <ul
           className={`generic-details__list  ${
             classModifier ? `generic-details__list--${classModifier}` : ''
-          } modal-checklist__list`}
+          } checklist__list`}
         >
           {details.map((item, index) => (
             <GenericListTagLi

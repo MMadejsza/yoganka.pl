@@ -25,11 +25,11 @@ function ModalList({ extraClass, listType, data }) {
       typeof item === 'string' ? icons[listType] : pickIconClass(item);
 
     return (
-      <li key={index} className='modal-checklist__li'>
+      <li key={index} className='checklist__li'>
         <SymbolOrIcon
           specifier={iconClass}
           type='ICON'
-          extraClass={'modal__icon modal-checklist__icon'}
+          extraClass={'modal__icon checklist__icon'}
           aria-hidden='true'
         />
         {activity}
@@ -37,15 +37,15 @@ function ModalList({ extraClass, listType, data }) {
     );
   });
 
-  const dynamicClass = `modal-checklist modal-checklist--${
+  const dynamicClass = `checklist__container checklist__container--${
     listType == 'freeTime' ? 'free-time' : listType
-  } ${extraClass ? `modal-checklist--${extraClass}` : ''}`;
+  }${extraClass ? ` checklist__container--${extraClass}` : ''}`;
 
   return (
     <>
       <section className={dynamicClass}>
-        <h3 className='modal-checklist__title'>{data.title}</h3>
-        <ul className='modal-checklist__list'>{content}</ul>
+        <h3 className='checklist__title'>{data.title}</h3>
+        <ul className='checklist__list'>{content}</ul>
       </section>
     </>
   );

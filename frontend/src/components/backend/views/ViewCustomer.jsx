@@ -84,7 +84,7 @@ function ViewCustomer({ data }) {
       <div
         className={`user-container__${
           noInvoices ? 'side' : 'main'
-        }-details user-container__side-details--schedules schedules modal-checklist`}
+        }-details user-container__side-details--schedules schedules checklist`}
       >
         <TableCustomerInvoices
           invoicesArray={customerStats.invoices}

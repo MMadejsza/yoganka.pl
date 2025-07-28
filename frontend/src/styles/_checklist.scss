@@ -1,0 +1,120 @@
+@use 'sass:map';
+@use 'sass:color';
+@use './utils/' as *;
+
+.checklist {
+  &__container {
+    @include flex(column, start, center);
+    flex-wrap: wrap;
+
+    font-size: 2rem;
+    line-height: 3.5rem;
+    text-align: left;
+
+    &--event {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .wrapper--b2b-type & {
+    grid-area: cert;
+    margin: 0 auto;
+  }
+
+  &--at-glance {
+    gap: 1rem;
+  }
+
+  &__title {
+    margin-bottom: 1.5rem;
+    font-size: 2.5rem;
+  }
+
+  &__list {
+    font-size: 2rem;
+    line-height: 3.5rem;
+
+    @include flex(column, start, start);
+    flex-wrap: wrap;
+
+    &--at-glance {
+      gap: 1rem;
+    }
+
+    .section--checklist & {
+      width: 95%;
+      align-items: center;
+      gap: 3rem;
+    }
+  }
+
+  &__li {
+    @include flex($gap: 2rem);
+
+    &--at-glance {
+      font-size: 2.5rem;
+    }
+
+    .section--checklist & {
+      font-size: 2.5rem;
+      font-weight: 500;
+      color: map.get($colors, tile-title);
+    }
+  }
+
+  &__icon {
+    font-size: 2.2rem !important; //temporally
+  }
+}
+
+@include respond-to(mobile-m) {
+  .checklist {
+    flex-basis: 45%;
+
+    &--event {
+      max-width: 90%;
+    }
+
+    &__list {
+      &:nth-of-type(1) {
+        grid-area: d1p;
+      }
+      &:nth-of-type(2) {
+        grid-area: d2p;
+      }
+      &:nth-of-type(3) {
+        grid-area: d3p;
+      }
+      &:nth-of-type(4) {
+        grid-area: d4p;
+      }
+      &:nth-of-type(5) {
+        grid-area: d5p;
+        place-self: center;
+      }
+
+      .section--checklist & {
+        width: 85%;
+        align-self: auto;
+      }
+    }
+  }
+}
+@include respond-to(mobile-l) {
+  .checklist {
+    padding: 0 1rem;
+    flex-basis: auto;
+
+    &--event {
+      max-width: 75%;
+    }
+  }
+}
+
+@include respond-to(desktop-s) {
+  .section--checklist {
+    .checklist__list {
+      width: 100%;
+    }
+  }
+}
