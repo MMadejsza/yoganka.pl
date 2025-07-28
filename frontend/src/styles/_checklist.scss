@@ -5,7 +5,6 @@
 .checklist {
   &__container {
     @include flex(column, start, center);
-    flex-wrap: wrap;
 
     font-size: 2rem;
     line-height: 3.5rem;
