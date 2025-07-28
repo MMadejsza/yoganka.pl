@@ -11,7 +11,7 @@ $btn-horizontal-padding: 2rem;
 
 $danger-soft: rgba(color.adjust(red, $lightness: -13%), 0.45);
 
-%hover-lift {
+@mixin hover-lift {
   transform: scale(1.05) translateY(0.5rem);
   box-shadow: $active-box-shadow;
 }
@@ -40,7 +40,7 @@ $danger-soft: rgba(color.adjust(red, $lightness: -13%), 0.45);
   transition: map.get($behavior, base-transition);
 
   &:hover {
-    @extend %hover-lift;
+    @include hover-lift;
   }
 }
 
@@ -63,7 +63,7 @@ $danger-soft: rgba(color.adjust(red, $lightness: -13%), 0.45);
 
     &:hover {
       color: map.get($colors, accent-bcg);
-      @extend %hover-lift;
+      @include hover-lift;
     }
   }
 }
@@ -144,7 +144,7 @@ $danger-soft: rgba(color.adjust(red, $lightness: -13%), 0.45);
 
 @include respond-to(mobile-m) {
   .btn:hover:not(.disabled) {
-    @extend %hover-lift;
+    @include hover-lift;
   }
 }
 @include respond-to(mobile-pro) {
