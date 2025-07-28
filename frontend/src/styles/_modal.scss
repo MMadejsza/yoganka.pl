@@ -122,7 +122,7 @@
   }
 
   &__main-title {
-    margin-top: 3rem;
+    // margin-top: 3rem;
     line-height: 6rem;
   }
 
@@ -154,6 +154,7 @@
     max-width: 95vw;
 
     &__full-desc {
+      flex-basis: 100%;
       padding-left: 1rem;
       padding-right: 1rem;
     }
@@ -231,7 +232,8 @@
       order: -3;
     }
 
-    .glide {
+    .glide,
+    picture {
       order: -2;
     }
 

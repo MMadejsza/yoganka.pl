@@ -4,14 +4,6 @@
 .about {
   grid-area: about;
   font-size: 2rem;
-
-  display: grid;
-  grid-template-columns: minmax(300px, 1fr);
-  grid-template-areas:
-    'header'
-    'portrait'
-    'content';
-  place-items: center;
   gap: 2rem;
 
   &.classes-page {
@@ -137,13 +129,11 @@
     margin-bottom: 3rem;
     max-width: 1000px;
 
-    &.classes-page {
-      justify-content: center;
-      gap: 3rem 4rem;
+    &.section {
+      @include flex(row, space-around, center);
+      flex-wrap: wrap;
     }
 
-    @include flex(row, space-around, center);
-    flex-wrap: wrap;
     &__header {
       display: none;
 

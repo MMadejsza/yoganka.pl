@@ -2,13 +2,16 @@
 @use 'sass:color';
 @use './utils/' as *;
 
+%li-size {
+  font-size: 2rem;
+  line-height: 3.5rem;
+}
+
 .checklist {
   &__container {
-    @include flex(column, start, center);
-
-    font-size: 2rem;
-    line-height: 3.5rem;
+    @extend %li-size;
     text-align: left;
+    @include flex(column, start, center);
 
     &--event {
       grid-column: 1 / -1;
@@ -30,9 +33,7 @@
   }
 
   &__list {
-    font-size: 2rem;
-    line-height: 3.5rem;
-
+    @extend %li-size;
     @include flex(column, start, start);
     flex-wrap: wrap;
 
@@ -49,6 +50,7 @@
 
   &__li {
     @include flex($gap: 2rem);
+    text-align: left;
 
     &--at-glance {
       font-size: 2.5rem;

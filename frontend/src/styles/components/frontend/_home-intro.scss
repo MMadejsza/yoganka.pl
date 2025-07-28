@@ -2,27 +2,14 @@
 @use '../..//utils/' as *;
 
 .home-intro {
+  margin-bottom: 3rem;
+
   &.section {
     grid-area: header;
     height: 100svh;
-
-    display: grid;
-    grid-template-columns: repeat(5, minmax(auto, 1fr));
-    grid-template-rows: 6rem repeat(8, 1fr) 8rem;
-    grid-template-areas:
-      '. . . . .'
-      'title title title title title'
-      '. . logo logo logo'
-      '. . logo logo logo'
-      '. . . . .'
-      '. . . . .'
-      '. . . . .'
-      '. . . . .'
-      '. . . . .'
-      '. . . . .'
-      '. . . . .'
-      'motto motto motto motto motto';
     transition: map.get($behavior, base-transition);
+
+    @include flex(row, center);
   }
 
   @supports (-webkit-touch-callout: none) and (not (hover: hover)) {
@@ -30,9 +17,14 @@
     background-attachment: scroll;
   }
 
+  picture {
+    flex-grow: 3;
+  }
+
   &__header {
-    grid-area: title;
     position: relative;
+    margin-top: 12%;
+    flex-basis: 100%;
     min-height: 145px;
     padding: 0.5rem 1rem;
     text-align: center;
@@ -59,7 +51,9 @@
 }
 
 .motto {
-  grid-area: motto;
+  align-self: flex-end;
+  flex-basis: 100%;
+  width: 100%;
   font-size: 1.7rem;
   letter-spacing: 1px;
   font-weight: 400;
@@ -105,7 +99,6 @@
     font-size: 1.6rem;
     font-weight: lighter;
     color: map.get($colors, tile-title);
-
     box-shadow: none;
     background-color: transparent;
   }

@@ -52,6 +52,9 @@ picture {
   align-content: center;
   place-content: center;
   overflow: hidden;
+  .about__certificates & {
+    width: auto;
+  }
 
   .tile & {
     max-height: 45vh;

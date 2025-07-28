@@ -8,7 +8,7 @@
   right: 1rem;
   left: auto;
   z-index: 15;
-  @include flex(column, center, center, 1.5rem);
+  @include flex(column, center, center, 2.5rem);
 
   transition: map.get($behavior, base-transition);
 
@@ -127,7 +127,6 @@
   .pop-ups {
     bottom: 1.5rem;
     right: 1.5rem;
-    gap: 1rem;
 
     &--left {
       right: auto;
@@ -138,8 +137,6 @@
 
 @include respond-to(mobile-m) {
   .pop-ups {
-    gap: 1.5rem;
-
     &__single {
       width: 6.6rem;
       height: 6.6rem;
@@ -155,7 +152,6 @@
 @include respond-to(mobile-mh) {
   .pop-ups {
     right: 2rem;
-    gap: 1.8rem;
 
     &--left {
       right: auto;
