@@ -49,9 +49,7 @@ function Buttons({ list }) {
             window.scrollTo(0, 0);
           }}
           title={btn.title}
-          className={`tile__btn${
-            modifier ? ` tile__btn--${modifier}` : ''
-          } modal__btn`}
+          className={`btn${modifier ? ` btn--${modifier}` : ''} btn`}
         >
           <SymbolOrIcon
             type={btn.icon ? 'ICON' : 'SYMBOL'}
@@ -69,9 +67,7 @@ function Buttons({ list }) {
           target='_blank'
           href={formattedLink}
           title={btn.title}
-          className={`tile__btn${
-            modifier ? ` tile__btn--${modifier}` : ''
-          } modal__btn`}
+          className={`btn${modifier ? ` btn--${modifier}` : ''} btn`}
         >
           <SymbolOrIcon
             type={btn.icon ? 'ICON' : 'SYMBOL'}

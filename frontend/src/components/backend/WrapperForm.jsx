@@ -34,13 +34,13 @@ function WrapperForm({
         classModifier ? `modal__user-action--${classModifier}` : ''
       }`;
   const resetClass = isTableRowLike
-    ? 'form-switch-btn modal__btn--secondary form-switch-btn--table-form symbol-only-btn'
+    ? 'form-switch-btn btn--secondary form-switch-btn--table-form symbol-only-btn'
     : classModifier == 'login-page'
-    ? 'form-switch-btn modal__btn  modal__btn--secondary'
-    : 'form-switch-btn modal__btn--secondary modal__btn modal__btn--small';
+    ? 'form-switch-btn btn  btn--secondary'
+    : 'form-switch-btn btn--secondary btn btn--small';
   const submitClass = isTableRowLike
     ? `form-action-btn form-action-btn--table-form  symbol-only-btn symbol-only-btn--submit`
-    : `form-action-btn modal__btn ${classModifier == 'login-page' ? '' : ''}`;
+    : `form-action-btn btn ${classModifier == 'login-page' ? '' : ''}`;
   return (
     <>
       <form onSubmit={onSubmit} className={mainClass}>

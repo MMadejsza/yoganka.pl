@@ -255,7 +255,7 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
             : handleBooking
           : null
       }
-      className={`book modal__btn ${
+      className={`book btn ${
         (shouldDisableBookBtn || createPaymentIntent.isLoading) && 'disabled'
       }`}
     >
@@ -290,7 +290,7 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
     // dynamic redirection back to schedule when logged in, in Login form useFeedback
     <button
       onClick={() => navigate(`/login?redirect=/grafik/${schedule.scheduleId}`)}
-      className='book modal__btn'
+      className='book btn'
     >
       <SymbolOrIcon specifier={'login'} />
       Zaloguj się
@@ -485,10 +485,7 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
           feedback.status != 1 &&
           prePaymentForm}
         {shouldShowCancelBtn && (
-          <button
-            onClick={handleCancellation}
-            className='book modal__btn modal__btn--cancel'
-          >
+          <button onClick={handleCancellation} className='book btn btn--cancel'>
             <SymbolOrIcon specifier={'sentiment_dissatisfied'} />
             Rezygnuję...
           </button>

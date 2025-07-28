@@ -2,6 +2,11 @@
 @use 'sass:color';
 @use './utils/' as *;
 
+button {
+  background-color: transparent;
+  border: none;
+}
+
 %action-btn {
   @include flex(row, center, center);
   font-family: 'EB Garamond', serif;
@@ -48,6 +53,146 @@
       transform: scale(1.05) translateY(0.5rem);
       color: map.get($colors, accent-bcg);
       text-shadow: $active-box-shadow;
+    }
+  }
+}
+
+.btn {
+  @extend %action-btn;
+
+  .section--b2b-price & {
+    margin-top: 2rem;
+
+    &:first-of-type {
+      margin-top: 3.5rem;
+    }
+  }
+
+  .generic-details .modal__user-action & {
+    padding: 0.2rem 2rem;
+
+    &--small,
+    &--secondary {
+      height: auto;
+      line-height: 150%;
+    }
+  }
+
+  $generic-list-vertical-padding: 2rem;
+  .generic-component-wrapper,
+  .generic-outer-wrapper {
+    .btn {
+      padding: 0 $generic-list-vertical-padding;
+    }
+  }
+
+  .generic-details .modal__user-action--login-page & {
+    height: 4.4rem;
+    width: 100%;
+
+    &--small,
+    &--secondary {
+      height: 3.5rem;
+      min-height: 3rem;
+    }
+  }
+
+  &--small {
+    height: 2.5rem;
+    min-height: auto;
+    line-height: 150%;
+    font-size: 1.4rem;
+
+    &-warning {
+      background-color: rgba(yellow, 0.1);
+    }
+    &-danger {
+      background-color: rgba(color.adjust(red, $lightness: -13%), 0.45);
+    }
+  }
+
+  &--secondary {
+    min-height: auto;
+    height: 2.5rem;
+    line-height: 2.5rem;
+    font-size: 1.2rem;
+    color: map.get($colors, tile-text-muted);
+    background-color: transparent;
+    border: 1px solid map.get($colors, accent-bcg);
+    opacity: 0.6;
+  }
+
+  &--cancel {
+    background-color: rgba(color.adjust(red, $lightness: -13%), 0.45);
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+@include respond-to(mobile-m) {
+  .btn:hover:not(.disabled) {
+    transform: scale(1.05) translateY(0.5rem);
+    box-shadow: $active-box-shadow;
+  }
+}
+@include respond-to(mobile-pro) {
+  .section--b2b-price {
+    .btn {
+      margin-top: 2.5rem;
+      line-height: 4.5rem;
+      font-size: 2rem;
+
+      &:first-of-type {
+        margin-top: 4.5rem;
+      }
+    }
+  }
+}
+@include respond-to(mobile-l) {
+  .btn {
+    width: max-content;
+
+    height: 4.5rem;
+    line-height: 4.5rem;
+
+    .generic-details .modal__user-action--login-page & {
+      &--small,
+      &--secondary {
+        flex-basis: 100%;
+        font-size: 1.5rem;
+      }
+
+      &[type='submit'] {
+        flex-basis: 100%;
+        font-size: 2rem;
+      }
+    }
+
+    &--small {
+      width: max-content;
+      flex-basis: auto;
+      height: 3rem;
+      min-height: auto;
+      line-height: 150%;
+      font-size: 1.4rem;
+
+      &-warning {
+        color: #333;
+        background-color: rgba(255, 235, 59, 0.3);
+      }
+
+      &-danger {
+        color: #c62828;
+        background-color: rgba(244, 67, 54, 0.25);
+      }
+
+      &-success {
+        color: #2e7d32;
+        background-color: rgba(76, 175, 80, 0.25);
+      }
     }
   }
 }

@@ -356,10 +356,7 @@ function ViewsController({
     const content = type == 'danger' ? `Usuń ${deleteTitle}` : 'Wróć';
 
     return (
-      <button
-        onClick={onClick}
-        className={`modal__btn modal__btn--small modal__btn--small-${type}`}
-      >
+      <button onClick={onClick} className={`btn btn--small btn--small-${type}`}>
         <SymbolOrIcon specifier={symbol} />
         {content}
       </button>

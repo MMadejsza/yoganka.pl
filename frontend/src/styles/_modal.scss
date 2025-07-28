@@ -2,35 +2,6 @@
 @use 'sass:color';
 @use './utils/' as *;
 
-%action-btn {
-  @include flex(row, center, center);
-  font-family: 'EB Garamond', serif;
-
-  gap: 1rem;
-  width: 95%;
-  min-height: 48px;
-  padding: 0rem 2rem;
-
-  font-size: 1.8rem;
-  line-height: 48px;
-  font-weight: bold;
-  text-transform: uppercase;
-  text-decoration: none;
-  color: map.get($colors, accent-text);
-
-  cursor: pointer;
-  background-color: map.get($colors, accent-bcg);
-  border-radius: map.get($sizes, border-radius);
-  box-shadow: map.get($shadows, active-text-icons-shadow);
-  overflow: hidden;
-  transition: map.get($behavior, base-transition);
-
-  &:hover {
-    transform: translate(1%, 5%) scale(1.01);
-    box-shadow: map.get($shadows, active-box-shadow);
-  }
-}
-
 .overlay {
   position: fixed;
   top: 0;
@@ -164,44 +135,6 @@
     flex-flow: row wrap;
   }
 
-  &__btn {
-    @extend %action-btn;
-
-    &--small {
-      height: 2.5rem;
-      min-height: auto;
-      line-height: 150%;
-      font-size: 1.4rem;
-
-      &-warning {
-        background-color: rgba(yellow, 0.1);
-      }
-      &-danger {
-        background-color: rgba(color.adjust(red, $lightness: -13%), 0.45);
-      }
-    }
-
-    &--secondary {
-      min-height: auto;
-      height: 2.5rem;
-      line-height: 2.5rem;
-      font-size: 1.2rem;
-      color: map.get($colors, tile-text-muted);
-      background-color: transparent;
-      border: 1px solid map.get($colors, accent-bcg);
-      opacity: 0.6;
-    }
-
-    &--cancel {
-      background-color: rgba(color.adjust(red, $lightness: -13%), 0.45);
-    }
-
-    &.disabled {
-      cursor: not-allowed;
-      opacity: 0.5;
-    }
-  }
-
   &__summary {
     grid-column: 1 /-1;
     @include flex(row, center, flex-start, 2rem);
@@ -219,11 +152,6 @@
 @include respond-to(mobile-m) {
   .modal {
     max-width: 95vw;
-
-    &__btn:hover:not(.disabled) {
-      transform: scale(1.05) translateY(0.5rem);
-      box-shadow: $active-box-shadow;
-    }
 
     &__full-desc {
       padding-left: 1rem;
@@ -316,37 +244,6 @@
   .modal {
     max-width: 900px;
     padding: 1.5rem 2.5rem;
-
-    &__btn {
-      width: max-content;
-
-      height: 4.5rem;
-      line-height: 4.5rem;
-
-      &--small {
-        width: max-content;
-        flex-basis: auto;
-        height: 3rem;
-        min-height: auto;
-        line-height: 150%;
-        font-size: 1.4rem;
-
-        &-warning {
-          color: #333;
-          background-color: rgba(255, 235, 59, 0.3);
-        }
-
-        &-danger {
-          color: #c62828;
-          background-color: rgba(244, 67, 54, 0.25);
-        }
-
-        &-success {
-          color: #2e7d32;
-          background-color: rgba(76, 175, 80, 0.25);
-        }
-      }
-    }
 
     &:not(.generic-component-wrapper) {
       flex-basis: 35%;

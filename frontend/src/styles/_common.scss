@@ -57,6 +57,11 @@ picture {
     max-height: 45vh;
     max-width: 80%;
   }
+
+  .footer__social & {
+    overflow: visible;
+    max-height: unset;
+  }
 }
 a {
   color: inherit;
@@ -69,10 +74,7 @@ i {
   --fa-animation-delay: 0.8s;
   // --fa-animation-timing: ease-in;
 }
-button {
-  background-color: transparent;
-  border: none;
-}
+
 .blur {
   backdrop-filter: blur(10px);
 }

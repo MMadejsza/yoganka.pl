@@ -8,7 +8,7 @@ function ToggleEditButton({
 }) {
   return (
     <button
-      className='modal__btn'
+      className='btn'
       onClick={() => (isEditing ? onCloseEditing() : onStartEditing())}
     >
       <SymbolOrIcon specifier={isEditing ? 'undo' : 'edit'} />

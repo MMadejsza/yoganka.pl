@@ -95,30 +95,9 @@ form.generic-details {
     @include flex($justify: center, $gap: 2rem);
     flex-flow: row wrap;
 
-    .modal__btn {
-      padding: 0.2rem 2rem;
-
-      &--small,
-      &--secondary {
-        height: auto;
-        line-height: 150%;
-      }
-    }
-
     &--login-page {
       padding: 0;
       gap: 2rem;
-
-      .modal__btn {
-        height: 4.4rem;
-        width: 100%;
-
-        &--small,
-        &--secondary {
-          height: 3.5rem;
-          min-height: 3rem;
-        }
-      }
     }
   }
 }
@@ -134,13 +113,8 @@ form.generic-details {
   .modal__user-action {
     gap: 3rem;
   }
-
-  .modal__btn {
-    // margin: 0 $generic-list-vertical-padding;
-    padding: 0 $generic-list-vertical-padding;
-    // flex-basis: auto;
-  }
 }
+
 .generic-component-wrapper {
   @include flex(column, flex-start, center);
   align-content: center;
@@ -292,21 +266,6 @@ form.generic-details {
     &__list--product-view {
       width: 100%;
     }
-
-    & .modal__user-action--login-page {
-      .modal__btn {
-        &--small,
-        &--secondary {
-          flex-basis: 100%;
-          font-size: 1.5rem;
-        }
-
-        &[type='submit'] {
-          flex-basis: 100%;
-          font-size: 2rem;
-        }
-      }
-    }
   }
 }
 
@@ -331,7 +290,4 @@ form.generic-details {
       }
     }
   }
-}
-
-@include respond-to(desktop-m) {
 }

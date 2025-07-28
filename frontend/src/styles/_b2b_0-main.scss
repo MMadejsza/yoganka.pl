@@ -15,36 +15,4 @@
       text-align: center;
     }
   }
-
-  .section--b2b-price {
-    .modal__btn {
-      margin-top: 2rem;
-
-      &:first-of-type {
-        margin-top: 3.5rem;
-      }
-    }
-
-    .modal__user-action--classes-page .modal__btn {
-      margin: 0;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .section--b2b-price {
-      .modal__btn {
-        margin-top: 2.5rem;
-        line-height: 4.5rem;
-        font-size: 2rem;
-
-        &:first-of-type {
-          margin-top: 4.5rem;
-        }
-      }
-
-      .modal__user-action--classes-page .modal__btn {
-        margin: 0;
-      }
-    }
-  }
 }

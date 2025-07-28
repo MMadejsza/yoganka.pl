@@ -168,7 +168,7 @@ function ViewPassDefinition({
             : handlePayment
           : null
       }
-      className={`book modal__btn ${
+      className={`book btn ${
         (shouldDisableBookBtn || createPaymentIntent.isLoading) && 'disabled'
       }`}
     >
@@ -199,7 +199,7 @@ function ViewPassDefinition({
       onClick={() =>
         navigate(`/login?redirect=/grafik/karnety/${passDefinition.passDefId}`)
       }
-      className='book modal__btn'
+      className='book btn'
     >
       <SymbolOrIcon specifier={'login'} />
       Zaloguj się

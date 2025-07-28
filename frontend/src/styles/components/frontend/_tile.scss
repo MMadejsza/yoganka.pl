@@ -2,55 +2,33 @@
 @use 'sass:color';
 @use '../../utils/' as *;
 
-%action-btn {
-  @include flex(row, center, center);
-  flex-wrap: wrap;
-  gap: 1rem;
-  width: 95%;
-  min-height: 48px;
-  padding: 0rem 1rem;
-
-  font-size: 1.8rem;
-  line-height: 48px;
-  font-weight: bold;
-  text-transform: uppercase;
-  text-decoration: none;
-  color: map.get($colors, accent-text);
-
-  cursor: pointer;
-  background-color: map.get($colors, accent-bcg);
-  border-radius: map.get($sizes, border-radius);
-  box-shadow: map.get($shadows, active-text-icons-shadow);
-  overflow: hidden;
-  transition: map.get($behavior, base-transition);
-}
-
 .clickable {
   box-shadow: map.get($shadows, tile-shadow);
   position: relative;
 
-  &:not(.section__more.clickable):after {
-    content: ' ';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 10%;
-    padding-bottom: 0.5rem;
+  //# bottom gradient suggesting more content:
+  // &:not(.section__more.clickable):after {
+  //   content: ' ';
+  //   position: absolute;
+  //   bottom: 0;
+  //   left: 0;
+  //   width: 100%;
+  //   height: 10%;
+  //   padding-bottom: 0.5rem;
 
-    font-size: 1rem;
-    letter-spacing: 1px;
-    color: map.get($colors, tile-text-muted);
-    background: linear-gradient(
-      to bottom,
-      transparent,
-      color-mix(in srgb, #{map.get($colors, tile)} 87%, black 13%)
-    );
+  //   font-size: 1rem;
+  //   letter-spacing: 1px;
+  //   color: map.get($colors, tile-text-muted);
+  //   background: linear-gradient(
+  //     to bottom,
+  //     transparent,
+  //     color-mix(in srgb, #{map.get($colors, tile)} 87%, black 13%)
+  //   );
 
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-  }
+  //   display: flex;
+  //   justify-content: center;
+  //   align-items: flex-end;
+  // }
 }
 
 .tile {
@@ -59,7 +37,7 @@
   background-color: map.get($colors, tile);
   border-radius: map.get($sizes, border-radius);
   box-shadow: map.get($shadows, box-shadow);
-  overflow: hidden;
+  // overflow: hidden;
   transition: map.get($behavior, base-transition);
 
   @include flex(column, $align: center, $gap: 2rem);
@@ -112,6 +90,7 @@
         color-mix(in srgb, #{map.get($colors, tile)} 87%, black 13%) 50%,
         transparent 50%
       );
+      border-radius: map.get($sizes, border-radius);
       // to let interact with the element (not pseudo one)
       pointer-events: none;
     }
@@ -165,10 +144,6 @@
     white-space: pre-line;
     color: map.get($colors, tile-text-muted);
     flex-grow: 2;
-  }
-
-  &__btn {
-    @extend %action-btn;
   }
 }
 

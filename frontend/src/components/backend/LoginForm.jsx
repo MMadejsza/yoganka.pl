@@ -403,7 +403,7 @@ function LoginForm() {
       key={1}
       type='button'
       onClick={switchToResetPassword}
-      className='form-switch-btn modal__btn modal__btn--secondary'
+      className='form-switch-btn btn btn--secondary'
     >
       {resetPassTitle}
     </button>
@@ -415,14 +415,14 @@ function LoginForm() {
     <button
       key={`1-${switchTitle}`}
       type='button'
-      className='modal__btn modal__btn--secondary'
+      className='btn btn--secondary'
       onClick={switchToSignupOrLogin}
     >
       {switchTitle}
     </button>,
     <button
       key={`2-${switchTitle}`}
-      className='modal__btn modal__btn--small modal__btn--secondary'
+      className='btn btn--small btn--secondary'
       name='action'
       value='resend'
       disabled={resendActivationMutation.isLoading}
