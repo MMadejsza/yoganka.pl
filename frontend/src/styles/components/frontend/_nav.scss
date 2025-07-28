@@ -88,40 +88,12 @@
       color: map.get($colors, nav-muted);
     }
 
-    .nav__icon {
-      min-width: 28.5px;
-      left: map.get($sizes, icon-position);
-      margin-right: 1rem;
-      color: map.get($colors, accent-bcg);
-      font-size: 3.5rem;
-      transition: map.get($behavior, base-transition);
-
-      &::before {
-        margin: 0;
-        padding: 0;
-      }
-
-      &--side {
-        font-size: 3rem;
-        color: map.get($colors, nav-muted);
-      }
-
-      &--in-title {
-        color: map.get($colors, accent-bcg);
-      }
-    }
-
-    i.nav__icon {
-      font-size: 2.6rem;
-    }
-
     &.active:first-child .nav__logo {
       box-shadow: map.get($shadows, active-logo-shadow);
       transition: map.get($behavior, base-transition);
     }
 
-    &.active,
-    &.active .nav__icon {
+    &.active {
       color: map.get($colors, accent-bcg);
       text-shadow: map.get($shadows, active-text-icons-shadow);
     }
@@ -142,18 +114,6 @@
     &__link {
       &--side {
         font-size: 2.2rem;
-      }
-
-      .nav__icon {
-        font-size: 3.5rem;
-
-        &--side {
-          font-size: 3.5rem;
-        }
-      }
-
-      i.nav__icon {
-        font-size: 3rem;
       }
     }
   }
@@ -211,12 +171,6 @@
       &--side {
         font-size: 2.5rem;
       }
-
-      .nav__icon {
-        &--side {
-          font-size: 3.8rem;
-        }
-      }
     }
   }
 }
@@ -248,12 +202,6 @@
       gap: 2.5rem;
     }
 
-    .nav__icon {
-      display: inline-flex;
-      justify-content: center;
-      width: min-content;
-    }
-
     &__list {
       width: max-content;
       margin: 0;
@@ -283,18 +231,6 @@
         color: map.get($colors, nav-muted);
         font-size: 1.5rem;
         line-height: 150%;
-      }
-
-      .nav__icon {
-        color: map.get($colors, tile-title);
-
-        &--side {
-          color: map.get($colors, nav-muted);
-          font-size: 2.8rem;
-        }
-      }
-      i.nav__icon {
-        font-size: 2.3rem;
       }
     }
   }

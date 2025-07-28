@@ -40,6 +40,14 @@ function Buttons({ list }) {
         break;
     }
 
+    const icon = (
+      <SymbolOrIcon
+        type={btn.icon ? 'ICON' : 'SYMBOL'}
+        specifier={btn.icon ?? btn.symbol}
+        extraClass={'icon--cta'}
+      />
+    );
+
     if (internalLink) {
       return (
         <Link
@@ -51,10 +59,7 @@ function Buttons({ list }) {
           title={btn.title}
           className={`btn${modifier ? ` btn--${modifier}` : ''} btn`}
         >
-          <SymbolOrIcon
-            type={btn.icon ? 'ICON' : 'SYMBOL'}
-            specifier={btn.icon ?? btn.symbol}
-          />
+          {icon}
           {btn.text}
         </Link>
       );
@@ -69,10 +74,7 @@ function Buttons({ list }) {
           title={btn.title}
           className={`btn${modifier ? ` btn--${modifier}` : ''} btn`}
         >
-          <SymbolOrIcon
-            type={btn.icon ? 'ICON' : 'SYMBOL'}
-            specifier={btn.icon || btn.symbol}
-          />
+          {icon}
           {btn.text}
         </a>
       );

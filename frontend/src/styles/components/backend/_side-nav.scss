@@ -21,8 +21,6 @@
 
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
-      // border-top-right-radius: map.get($sizes, border-radius);
-      // border-bottom-right-radius: map.get($sizes, border-radius);
       background-color: transparent;
       box-shadow: none;
 
@@ -48,16 +46,7 @@
         .nav__list {
           @include flex(column, $align: flex-start);
         }
-        .nav__icon {
-          order: -1;
-          margin: 0rem 1.5rem 0 1rem;
-        }
       }
-
-      $icon-size: 3rem;
-      $icon-left-m: 1rem;
-      $icon-right-m: 1rem;
-      $icons-nav-size: calc($icon-size + $icon-left-m + $icon-right-m);
 
       &__list {
         @include flex(column, $align: flex-start);
@@ -71,9 +60,6 @@
         box-shadow: map.get($shadows, tile-shadow);
 
         &:hover {
-          &:not(.nav__list--bottom) {
-            // border-radius: 0;
-          }
           .nav__list--bottom {
             left: calc(100% - 1.3 * $icons-nav-size);
           }
@@ -97,15 +83,7 @@
           margin-left: calc(0.7 * $icons-nav-size);
         }
 
-        .nav__icon {
-          min-width: 33px;
-          margin: 0rem $icon-right-m 0 $icon-left-m;
-          font-size: $icon-size;
-          line-height: 4.5rem;
-        }
-
-        &.active,
-        &.active .nav__icon {
+        &.active {
           color: map.get($colors, accent-bcg);
           text-shadow: map.get($shadows, active-text-icons-shadow);
         }

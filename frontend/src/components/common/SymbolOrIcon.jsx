@@ -9,8 +9,8 @@ function SymbolOrIcon({
 }) {
   const icon = (
     <i
-      className={`${specifier} nav__icon ${
-        classModifier ? `nav__icon--${classModifier}` : ''
+      className={`${specifier} icon ${
+        classModifier ? `icon--${classModifier}` : ''
       }${extraClass ? ` ${extraClass}` : ''}`}
       aria-hidden='true'
       {...rest}
@@ -18,8 +18,8 @@ function SymbolOrIcon({
   );
   const symbol = (
     <span
-      className={`account material-symbols-rounded nav__icon notranslate ${
-        classModifier ? `nav__icon--${classModifier}` : ''
+      className={`account material-symbols-rounded icon notranslate ${
+        classModifier ? `icon--${classModifier}` : ''
       } ${extraClass ? ` ${extraClass}` : ''}`}
       translate='no'
       {...rest}

@@ -35,11 +35,6 @@
   &__link {
     line-height: 3.5rem;
     font-size: 2.2rem;
-
-    .tabs-list__icon {
-      margin-right: 0.1rem;
-      font-size: 2.5rem;
-    }
   }
 }
 
@@ -52,11 +47,6 @@
         //bumps up specialty over nav__link
         line-height: 5rem;
         font-size: 3rem;
-
-        .tabs-list__icon {
-          margin-right: 0.7rem;
-          font-size: 3.5rem;
-        }
       }
     }
 
@@ -67,7 +57,6 @@
     }
   }
 }
-
 @include respond-to(mobile-m) {
   .tabs-list {
     margin: 3rem 1rem;
@@ -78,41 +67,14 @@
         flex-basis: auto;
       }
     }
-
-    &__link {
-      .tabs-list__icon {
-        margin-right: 0.8rem;
-      }
-    }
-
-    &--classes-page {
-      gap: 2rem 3.5rem;
-
-      .tabs-list__item {
-        border-radius: 4rem;
-      }
-
-      .tabs-list__link {
-        line-height: 6rem;
-        font-size: 3rem;
-      }
-    }
   }
 }
-
 @include respond-to(mobile-mh) {
   .tabs-list {
     margin: 3rem 1.2rem 7rem;
     gap: 2.5rem 2.5rem;
-
-    &__link {
-      .tabs-list__icon {
-        margin-right: 1.2rem;
-      }
-    }
   }
 }
-
 @include respond-to(mobile-l) {
   .tabs-list {
     margin: 3rem 0rem 6rem;
@@ -127,7 +89,6 @@
     }
   }
 }
-
 @include respond-to(desktop-xs) {
   .tabs-list {
     &__link {
@@ -135,7 +96,6 @@
     }
   }
 }
-
 @include respond-to(desktop-s) {
   .tabs-list {
     &--admin {
@@ -143,7 +103,6 @@
     }
   }
 }
-
 @include respond-to(desktop-m) {
   .tabs-list {
     margin: 3.5rem 0rem 7.5rem;

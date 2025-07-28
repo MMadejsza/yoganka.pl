@@ -56,9 +56,6 @@ $heavily-dimmed-color: map.get($colors, nav-muted);
     border-radius: map.get($sizes, border-radius);
     box-shadow: map.get($shadows, box-shadow);
     transition: map.get($behavior, base-transition);
-    // overflow: visible;
-
-    // place-self: center;
 
     > * {
       @include flex(row, flex-start, center);
@@ -86,26 +83,15 @@ $heavily-dimmed-color: map.get($colors, nav-muted);
       }
     }
 
-    .nav__icon {
-      color: map.get($colors, accent-bcg);
-      font-size: var(--card-icon);
-
-      &--secondary {
-        color: map.get($colors, nav-muted);
-      }
-    }
-
     &__single-content {
       &--secondary {
         font-size: var(--font-secondary);
         color: $heavily-dimmed-color;
-        // width: min-content;
       }
     }
 
     &__square {
       grid-area: square;
-      // width: $card-width;
       min-width: 120px;
       height: 100%;
       font-weight: 500;
@@ -127,9 +113,6 @@ $heavily-dimmed-color: map.get($colors, nav-muted);
       &--middle {
         font-size: calc(2 * var(--font-title));
         color: map.get($colors, accent-bcg);
-        .nav__icon {
-          font-size: calc(2 * var(--font-title));
-        }
       }
 
       &--bottom {
@@ -175,17 +158,8 @@ $heavily-dimmed-color: map.get($colors, nav-muted);
 
       transition: map.get($behavior, base-transition);
 
-      .nav__icon {
-        font-size: var(--card-action-btn-icon);
-        text-shadow: none;
-      }
-
       &--active {
         box-shadow: map.get($shadows, box-shadow);
-
-        .nav__icon {
-          text-shadow: map.get($shadows, text-shadow);
-        }
 
         &:hover {
           box-shadow: map.get($shadows, tile-shadow);
@@ -196,17 +170,12 @@ $heavily-dimmed-color: map.get($colors, nav-muted);
 
     &__desc,
     &__footer {
-      // align-items: flex-start;
       grid-area: desc;
       text-align: left;
       font-size: var(--font-desc);
       color: $dimmed-color;
 
       flex-wrap: nowrap;
-
-      .nav__icon {
-        align-self: flex-start;
-      }
 
       .card__single-content {
         display: flex;
@@ -220,15 +189,6 @@ $heavily-dimmed-color: map.get($colors, nav-muted);
     &__footer {
       grid-area: footer;
       margin-top: $title-margin;
-      // color: map.get($colors, $dimmed-color);
-      // font-size: var(--font-secondary);
-
-      // flex-wrap: nowrap;
-
-      .card__single-content {
-        // flex-basis: 100%;
-        // text-align: left;
-      }
     }
 
     &:last-child {

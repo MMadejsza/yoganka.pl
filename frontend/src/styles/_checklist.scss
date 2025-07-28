@@ -62,10 +62,6 @@
       color: map.get($colors, tile-title);
     }
   }
-
-  &__icon {
-    font-size: 2.2rem !important; //temporally
-  }
 }
 
 @include respond-to(mobile-m) {

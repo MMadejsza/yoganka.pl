@@ -7,40 +7,37 @@ button {
   border: none;
 }
 
-$btn-horizontal-padding: 2rem;
-
-$danger-soft: rgba(color.adjust(red, $lightness: -13%), 0.45);
-
-@mixin hover-lift {
-  transform: scale(1.05) translateY(0.5rem);
-  box-shadow: $active-box-shadow;
-}
-
-%action-btn {
+.symbol-only-btn {
   @include flex(row, center, center);
-  font-family: 'EB Garamond', serif;
-
-  gap: 1rem;
-  width: 95%;
-  min-height: 48px;
-  padding: 0rem $btn-horizontal-padding;
-
-  font-size: 1.8rem;
-  line-height: 48px;
-  font-weight: bold;
-  text-transform: uppercase;
-  text-decoration: none;
-  color: map.get($colors, accent-text);
-
   cursor: pointer;
-  background-color: map.get($colors, accent-bcg);
-  border-radius: map.get($sizes, border-radius);
-  box-shadow: map.get($shadows, active-text-icons-shadow);
-  overflow: hidden;
+  height: 3rem;
+  width: min-content;
+  border: none;
   transition: map.get($behavior, base-transition);
 
   &:hover {
-    @include hover-lift;
+    text-shadow: map.get($shadows, active-text-icons-shadow);
+  }
+
+  &--submit:not(:has(.black)) {
+    color: map.get($colors, accent-bcg);
+  }
+
+  // THIS ONE IS IN FLOATING BTNS COMPONENT (TO BE MOVED)
+  &--floating {
+    height: auto;
+    color: map.get($colors, accent-bcg);
+    border-radius: 50%;
+    background-color: color-mix(
+      in srgb,
+      #{map.get($colors, nav)} 50%,
+      transparent
+    );
+    box-shadow: map.get($shadows, tile-shadow);
+
+    &:hover {
+      transform: scale(1.1);
+    }
   }
 }
 

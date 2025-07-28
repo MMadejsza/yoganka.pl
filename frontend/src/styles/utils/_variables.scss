@@ -1,4 +1,5 @@
 @use 'sass:map';
+@use 'sass:color';
 
 @font-face {
   font-family: 'yoganka2';
@@ -76,7 +77,7 @@ $shadows: (
     rgba(10, 37, 64, 0.2) 0px -2px 6px 0px inset,
     // rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
     // rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
-    // rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+    // rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
   ),
   tile-shadow-reverse: (
     // $active-box-shadow-reverse,
@@ -85,7 +86,7 @@ $shadows: (
     rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset,
     // rgba(50, 50, 93, 0.25) 0px -50px 100px -20px,
     // rgba(0, 0, 0, 0.3) 0px -30px 60px -30px,
-    // rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+    // rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
   ),
   box-shadow: (
     2px 8px 10px rgba(149, 157, 165, 0.2),
@@ -118,15 +119,30 @@ $typo: (
   ),
 );
 
-%action-btn {
-  display: block;
-  min-width: 125px;
-  padding: 0.5rem 1rem;
+$btn-horizontal-padding: 2rem;
+$danger-soft: rgba(color.adjust(red, $lightness: -13%), 0.45);
+@mixin hover-lift {
+  transform: scale(1.05) translateY(0.5rem);
+  box-shadow: $active-box-shadow;
+}
 
-  font-size: 1.5rem;
-  line-height: 2.5rem;
+%action-btn {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-family: 'EB Garamond', serif;
+
+  gap: 1rem;
+  width: 95%;
+  min-height: 48px;
+  padding: 0rem $btn-horizontal-padding;
+
+  font-size: 1.8rem;
+  line-height: 48px;
   font-weight: bold;
   text-transform: uppercase;
+  text-decoration: none;
   color: map.get($colors, accent-text);
 
   cursor: pointer;
@@ -135,7 +151,12 @@ $typo: (
   box-shadow: map.get($shadows, active-text-icons-shadow);
   overflow: hidden;
   transition: map.get($behavior, base-transition);
+
+  &:hover {
+    @include hover-lift;
+  }
 }
+
 %slider-shade-overlay {
   position: absolute;
   top: 0;
@@ -144,3 +165,8 @@ $typo: (
   content: '';
   z-index: 2;
 }
+
+$icon-size: 3rem;
+$icon-left-m: 1rem;
+$icon-right-m: 1rem;
+$icons-nav-size: calc($icon-size + $icon-left-m + $icon-right-m);

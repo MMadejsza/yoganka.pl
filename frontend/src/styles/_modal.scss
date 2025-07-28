@@ -60,17 +60,6 @@
     transition: map.get($behavior, base-transition);
   }
   // full name for specificity required by i in font awesome
-  .modal__icon {
-    $size: 3.5rem;
-
-    min-width: $size;
-    height: $size;
-    margin: 0;
-    font-size: $size;
-    line-height: $size;
-    text-align: center;
-    color: map.get($colors, accent-bcg);
-  }
 
   &__header {
     flex-basis: 100%;
