@@ -11,7 +11,10 @@ function ToggleEditButton({
       className='btn'
       onClick={() => (isEditing ? onCloseEditing() : onStartEditing())}
     >
-      <SymbolOrIcon specifier={isEditing ? 'undo' : 'edit'} />
+      <SymbolOrIcon
+        specifier={isEditing ? 'undo' : 'edit'}
+        extraClass={'icon--cta'}
+      />
       {isEditing && !isJustSymbol ? 'Wróć' : 'Edytuj'}
     </button>
   );

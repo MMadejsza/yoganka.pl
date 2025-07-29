@@ -271,6 +271,7 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
             ? 'cycle'
             : 'shopping_bag'
         }
+        extraClass={'icon--cta'}
       />
       {shouldDisableBookBtn
         ? isFillingTheForm
@@ -292,7 +293,7 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
       onClick={() => navigate(`/login?redirect=/grafik/${schedule.scheduleId}`)}
       className='book btn'
     >
-      <SymbolOrIcon specifier={'login'} />
+      <SymbolOrIcon specifier={'login'} extraClass={'icon--cta'} />
       Zaloguj się
     </button>
   );
@@ -486,7 +487,10 @@ function ViewSchedule({ data, paymentOps, onClose, isAdminPanel }) {
           prePaymentForm}
         {shouldShowCancelBtn && (
           <button onClick={handleCancellation} className='book btn btn--cancel'>
-            <SymbolOrIcon specifier={'sentiment_dissatisfied'} />
+            <SymbolOrIcon
+              specifier={'sentiment_dissatisfied'}
+              extraClass={'icon--cta'}
+            />
             Rezygnuję...
           </button>
         )}

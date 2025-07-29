@@ -11,7 +11,7 @@ function ToggleAddButton({ isEditing, onToggle }) {
     >
       <SymbolOrIcon
         specifier={!isEditing ? 'add_circle' : 'undo'}
-        classModifier={'side'}
+        // classModifier={'side'}
       />
     </button>
   );

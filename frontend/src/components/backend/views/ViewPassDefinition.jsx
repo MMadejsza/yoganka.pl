@@ -182,6 +182,7 @@ function ViewPassDefinition({
             ? 'cycle'
             : 'shopping_bag'
         }
+        extraClass={'icon--cta'}
       />
       {shouldDisableBookBtn
         ? isFillingTheForm
@@ -201,7 +202,7 @@ function ViewPassDefinition({
       }
       className='book btn'
     >
-      <SymbolOrIcon specifier={'login'} />
+      <SymbolOrIcon specifier={'login'} extraClass={'icon--cta'} />
       Zaloguj się
     </button>
   );

@@ -3,7 +3,6 @@
 @use '../../utils/' as *;
 
 .wrapper {
-  // position: relative;
   min-height: 100vh;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -18,7 +17,6 @@
     'space space space space space'
     'footer footer footer footer footer';
   justify-content: center;
-  // justify-items: center;
   -webkit-overflow-scrolling: touch;
 
   & > *:last-child {
@@ -35,7 +33,7 @@
     box-shadow: map.get($shadows, section-shadow);
   }
 
-  &:has(.admin-console) {
+  &:has(.backend-content-wrapper) {
     grid-template-rows: auto auto 1fr auto;
     grid-template-areas:
       'table table table table table'

@@ -5,6 +5,7 @@
 button {
   background-color: transparent;
   border: none;
+  font-family: 'EB Garamond', serif;
 }
 
 .symbol-only-btn {
@@ -58,9 +59,9 @@ button {
     font-size: 48px;
     text-shadow: map.get($shadows, active-text-icons-shadow);
 
-    &:hover {
+    &:hover i {
       color: map.get($colors, accent-bcg);
-      @include hover-lift;
+      @include hover-lift('text');
     }
   }
 }

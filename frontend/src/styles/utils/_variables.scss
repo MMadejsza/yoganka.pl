@@ -77,7 +77,7 @@ $shadows: (
     rgba(10, 37, 64, 0.2) 0px -2px 6px 0px inset,
     // rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
     // rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
-    // rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+    // rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
   ),
   tile-shadow-reverse: (
     // $active-box-shadow-reverse,
@@ -86,7 +86,7 @@ $shadows: (
     rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset,
     // rgba(50, 50, 93, 0.25) 0px -50px 100px -20px,
     // rgba(0, 0, 0, 0.3) 0px -30px 60px -30px,
-    // rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+    // rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
   ),
   box-shadow: (
     2px 8px 10px rgba(149, 157, 165, 0.2),
@@ -121,9 +121,19 @@ $typo: (
 
 $btn-horizontal-padding: 2rem;
 $danger-soft: rgba(color.adjust(red, $lightness: -13%), 0.45);
-@mixin hover-lift {
+@mixin hover-lift($type: 'box') {
   transform: scale(1.05) translateY(0.5rem);
-  box-shadow: $active-box-shadow;
+
+  @if $type== 'text' {
+    text-shadow: map.get($shadows, active-text-icons-shadow);
+  }
+  @if $type== 'box' {
+    box-shadow: $active-box-shadow;
+  }
+  @if $type== 'both' {
+    text-shadow: map.get($shadows, active-text-icons-shadow);
+    box-shadow: $active-box-shadow;
+  }
 }
 
 %action-btn {
@@ -131,7 +141,7 @@ $danger-soft: rgba(color.adjust(red, $lightness: -13%), 0.45);
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  font-family: 'EB Garamond', serif;
+  // font-family: 'EB Garamond', serif;
 
   gap: 1rem;
   width: 95%;

@@ -34,7 +34,7 @@ function WrapperForm({
         classModifier ? `modal__user-action--${classModifier}` : ''
       }`;
   const resetClass = isTableRowLike
-    ? 'form-switch-btn btn--secondary form-switch-btn--table-form symbol-only-btn'
+    ? 'form-switch-btn form-switch-btn--table-form symbol-only-btn'
     : classModifier == 'login-page'
     ? 'form-switch-btn btn  btn--secondary'
     : 'form-switch-btn btn--secondary btn btn--small';
@@ -80,7 +80,10 @@ function WrapperForm({
             {resetLabel}
           </button>
           <button type='submit' className={submitClass}>
-            <SymbolOrIcon specifier={'check'} />
+            <SymbolOrIcon
+              specifier={'check'}
+              extraClass={!isTableRowLike && 'icon--cta'}
+            />
             {submitLabel}
           </button>
         </footer>
