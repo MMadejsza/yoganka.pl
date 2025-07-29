@@ -49,34 +49,34 @@
   &--offer {
     grid-area: offer;
 
-    display: grid;
-    grid-template-columns: repeat(2, minmax(150px, 1fr));
-    grid-template-areas:
-      'title title'
-      'wyjazdy wyjazdy'
-      'zajecia zajecia'
-      'wydarzenia wydarzenia';
-    grid-gap: 5rem 0.5rem;
+    @include flex(row, $justify: center);
+    flex-wrap: wrap;
+    gap: 5rem 0.5rem;
 
     &__section-header {
-      grid-area: title;
+      flex-basis: 100%;
     }
 
     .intro.no-bcg-pic + & {
       grid-area: about;
-      grid-column: 1/-1;
       margin-top: 2rem;
+
+      .section {
+        flex-basis: 100%;
+      }
     }
 
     .section--turning-tiles + &,
     .intro.no-bcg-pic + & {
       margin-top: 6rem;
-      grid-gap: 0rem;
-      @include flex(row, center, center);
-      flex-wrap: wrap;
+      gap: 0rem;
 
       background-color: map.get($colors, base);
       box-shadow: map.get($shadows, transitive-box-shadow);
+
+      .section {
+        flex-basis: 100%;
+      }
 
       .section__header--sub {
         font-size: 4rem;
@@ -137,15 +137,6 @@
   &.book-classes {
     grid-column: 1/-1;
   }
-  &--camps {
-    grid-area: wyjazdy;
-  }
-  &--classes {
-    grid-area: zajecia;
-  }
-  &--events {
-    grid-area: wydarzenia;
-  }
   &--sub {
     align-content: flex-start;
   }
@@ -157,7 +148,6 @@
     }
   }
   &--b2b-offer {
-    grid-column: 1/-1;
     margin-bottom: 7rem;
   }
 }
@@ -177,30 +167,28 @@
 @include respond-to(mobile-s) {
   .section--offer {
     margin-bottom: 9rem;
-    grid-gap: 5rem 1.5rem;
+    gap: 5rem 1.5rem;
   }
 
   .section--turning-tiles {
     margin-bottom: 9rem;
   }
 }
-@include respond-to(mobile-m) {
-  .section--offer {
-    grid-template-areas:
-      'title title'
-      'wyjazdy wyjazdy'
-      'zajecia zajecia'
-      'wydarzenia wydarzenia';
-  }
-}
 @include respond-to(mobile-l) {
   .section--offer {
     margin-top: -3rem;
-    grid-template-columns: repeat(4, minmax(150px, 1fr));
-    grid-template-areas:
-      'title title title title'
-      'wyjazdy wyjazdy zajecia zajecia'
-      'wydarzenia wydarzenia wydarzenia wydarzenia';
+
+    .section:nth-of-type(1),
+    .section:nth-of-type(2) {
+      flex-basis: 45%;
+    }
+
+    .section--turning-tiles + &,
+    .intro.no-bcg-pic + & {
+      .section {
+        flex-basis: 100%;
+      }
+    }
   }
 
   .section--turning-tiles {
@@ -218,10 +206,10 @@
 }
 @include respond-to(desktop-s) {
   .section--offer {
-    grid-gap: 5rem 3rem;
+    gap: 5rem 3rem;
   }
 
   .section--sub {
-    grid-gap: 2.5rem 3rem;
+    gap: 2.5rem 3rem;
   }
 }

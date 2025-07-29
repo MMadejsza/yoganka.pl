@@ -80,7 +80,11 @@
     height: min-content;
     border-radius: map.get($sizes, border-radius);
 
-    @include flex(row, $justify: center);
+    display: grid;
+
+    > * {
+      place-self: center;
+    }
   }
 
   img {

@@ -12,10 +12,6 @@
     border-radius: map.get($sizes, border-radius);
 
     @include flex($justify: center, $align: center);
-
-    &:last-child {
-      margin-right: 2.5rem;
-    }
   }
 
   &__image {

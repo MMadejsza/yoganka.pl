@@ -2,6 +2,7 @@
 @use './utils/' as *;
 
 .about {
+  justify-self: center;
   grid-area: about;
   font-size: 2rem;
   gap: 2rem;
