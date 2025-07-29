@@ -5,7 +5,7 @@
 .wrapper {
   width: 100vw;
   min-height: 100vh;
-  @include flex(column, flex-start);
+  @include flex(column, space-between);
   gap: 8rem;
   -webkit-overflow-scrolling: touch;
 
