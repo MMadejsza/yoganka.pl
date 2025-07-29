@@ -122,7 +122,6 @@
   &__date {
     font-size: 2.2rem;
     font-weight: 500;
-    white-space: pre-line;
     letter-spacing: 1px;
     color: map.get($colors, tile-title);
   }
@@ -134,14 +133,12 @@
   &__location {
     font-size: 1.9rem;
     font-weight: 400;
-    white-space: pre-line;
     color: map.get($colors, tile-text-muted);
     flex-grow: 2;
   }
 
   &__desc {
     font-size: 1.9rem;
-    white-space: pre-line;
     color: map.get($colors, tile-text-muted);
     flex-grow: 2;
   }
