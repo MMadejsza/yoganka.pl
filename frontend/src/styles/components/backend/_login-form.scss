@@ -8,7 +8,7 @@
   min-width: 300px;
   max-width: 550px;
   min-height: 400px;
-  margin: 8rem 0;
+  margin-top: -3rem;
   padding: 2%;
   border-radius: map.get($sizes, border-radius);
   background-color: color-mix(
@@ -42,6 +42,6 @@
 
 @include respond-to(mobile-l) {
   .login-box {
-    margin: 15rem 0;
+    // margin: 15rem 0;
   }
 }

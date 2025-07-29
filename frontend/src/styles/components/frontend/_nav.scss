@@ -207,18 +207,6 @@
     & .main-nav-container.sticky + .nav__list--side {
       display: none;
     }
-    &:has(.main-nav-container.sticky) {
-      position: fixed;
-
-      & + .section,
-      & + div {
-        margin-top: 7.5rem;
-
-        &.about {
-          margin-top: 12.5rem;
-        }
-      }
-    }
 
     &__list {
       width: max-content;

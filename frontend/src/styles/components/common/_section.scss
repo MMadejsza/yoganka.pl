@@ -150,6 +150,23 @@
     }
   }
 }
+@include respond-to(mobile-l) {
+  .nav:has(.main-nav-container.sticky) {
+    position: fixed;
+
+    & + .section,
+    & + div {
+      margin-top: 7.5rem;
+
+      &.about {
+        margin-top: 12.5rem;
+      }
+    }
+    & + .login-box {
+      margin-top: 14.5rem;
+    }
+  }
+}
 @include respond-to(desktop-s) {
   .section--offer {
     gap: 5rem 3rem;
