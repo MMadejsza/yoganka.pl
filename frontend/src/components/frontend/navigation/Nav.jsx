@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useSwipe } from '../../../hooks/useSwipe';
 import { mutateOnLoginOrSignup, queryClient } from '../../../utils/http.js';
@@ -78,29 +78,71 @@ function Nav({ side, status, setIsNavOpen }) {
   });
 
   const [isMobile, setIsMobile] = useState(false);
+  const [isSticky, setIsSticky] = useState(false);
+  const containerRef = useRef(null);
 
   const closeDrawer = () => {
     if (isMobile) setIsNavOpen(false);
   };
 
-  // Limiting touch effectiveness only for mobile devices
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(max-width: 1024px)');
+    const onResize = () => setIsMobile(window.innerWidth < 1025);
+    onResize();
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
 
-    // Function updating based on media query
-    const handleMediaChange = e => {
-      setIsMobile(e.matches);
+  // only on desktop: nasłuchuj scrolla i ustawiaj isSticky na podstawie window.scrollY
+  // useEffect(() => {
+  //   if (isMobile) return; // skip on mobile
+
+  //   // oblicz trigger raz przy montażu
+  //   let triggerPos = 0;
+  //   if (containerRef.current) {
+  //     const rect = containerRef.current.getBoundingClientRect();
+  //     triggerPos = rect.top + window.scrollY;
+  //   }
+
+  //   const handleScroll = () => {
+  //     // jak przewiniemy poniżej triggerPos, włącz sticky
+  //     setIsSticky(window.scrollY >= triggerPos);
+  //   };
+
+  //   window.addEventListener('scroll', handleScroll);
+
+  //   return () => window.removeEventListener('scroll', handleScroll);
+  // }, [isMobile]);
+  useEffect(() => {
+    if (isMobile) return;
+
+    let triggerPos = 0;
+    // compute absolute offsetTop of containerRef
+    const computeTrigger = () => {
+      let el = containerRef.current;
+      let top = 0;
+      while (el) {
+        top += el.offsetTop;
+        el = el.offsetParent;
+      }
+      triggerPos = top;
     };
 
-    // Initial setup
-    handleMediaChange(mediaQuery);
+    // initial compute and re-compute on resize
+    computeTrigger();
+    window.addEventListener('resize', computeTrigger);
 
-    // Add Listening
-    mediaQuery.addEventListener('change', handleMediaChange);
+    // scroll listener compares window.scrollY to that fixed triggerPos
+    const handleScroll = () => {
+      setIsSticky(window.scrollY >= triggerPos);
+      setIsSticky(!(window.scrollY < triggerPos || window.scrollY == 0));
+    };
+    window.addEventListener('scroll', handleScroll);
 
-    // Remove on umount
-    return () => mediaQuery.removeEventListener('change', handleMediaChange);
-  }, []);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', computeTrigger);
+    };
+  }, [isMobile]);
 
   const handleLogout = () => {
     logoutMutation.mutate();
@@ -182,74 +224,81 @@ function Nav({ side, status, setIsNavOpen }) {
 
   return (
     <nav className={`nav ${side ? 'nav--left' : ''}`}>
-      <div className='main-nav-container'>
-        <NavLink
-          to={'/'}
-          onClick={e => {
-            closeDrawer();
-            window.scrollTo(0, 0);
-          }}
-          className={({ isActive }) =>
-            isActive ? 'nav__link active' : 'nav__link'
-          }
+      <div className='wrapper'>
+        <div
+          ref={containerRef}
+          className={`main-nav-container${
+            !isMobile && isSticky ? ' sticky' : ''
+          }`}
         >
-          {({ isActive }) => (
-            <Logo
-              data={LOGO_DATA[0]}
-              media={isMobile ? 'mobile' : null}
-              placement={`nav`}
-              isActive={isActive}
-            />
-          )}
-        </NavLink>
-        <ul className='nav__list'>
-          {NAV_DATA[0].mainNav.list.map(li => (
-            <li key={li.label} className='nav__item'>
-              {li.action ? (
-                <a
-                  onClick={e => {
-                    li.action(e, navigate, location);
-                    closeDrawer();
-                  }}
-                  href={li.link}
-                  className='nav__link'
-                  data-scroll={li.scroll}
-                >
-                  <SymbolOrIcon
-                    type={li.icon ? 'ICON' : 'SYMBOL'}
-                    specifier={li.icon || li.symbol}
-                  />
-                  {li.label}
-                </a>
-              ) : (
-                <NavLink
-                  to={li.link}
-                  onClick={() => {
-                    closeDrawer();
-                    window.scrollTo(0, 0);
-                  }}
-                  className={({ isActive }) =>
-                    isActive ? 'nav__link active' : 'nav__link'
-                  }
-                >
-                  {({ isActive }) => (
-                    <>
-                      <SymbolOrIcon
-                        specifier={li.symbol}
-                        extraClass={isActive ? 'active' : ''}
-                      />
-                      {li.label}
-                    </>
-                  )}
-                </NavLink>
-              )}
-            </li>
-          ))}
+          <NavLink
+            to={'/'}
+            onClick={e => {
+              closeDrawer();
+              window.scrollTo(0, 0);
+            }}
+            className={({ isActive }) =>
+              isActive ? 'nav__link active' : 'nav__link'
+            }
+          >
+            {({ isActive }) => (
+              <Logo
+                data={LOGO_DATA[0]}
+                media={isMobile ? 'mobile' : null}
+                placement={`nav`}
+                isActive={isActive}
+              />
+            )}
+          </NavLink>
+          <ul className='nav__list'>
+            {NAV_DATA[0].mainNav.list.map(li => (
+              <li key={li.label} className='nav__item'>
+                {li.action ? (
+                  <a
+                    onClick={e => {
+                      li.action(e, navigate, location);
+                      closeDrawer();
+                    }}
+                    href={li.link}
+                    className='nav__link'
+                    data-scroll={li.scroll}
+                  >
+                    <SymbolOrIcon
+                      type={li.icon ? 'ICON' : 'SYMBOL'}
+                      specifier={li.icon || li.symbol}
+                    />
+                    {li.label}
+                  </a>
+                ) : (
+                  <NavLink
+                    to={li.link}
+                    onClick={() => {
+                      closeDrawer();
+                      window.scrollTo(0, 0);
+                    }}
+                    className={({ isActive }) =>
+                      isActive ? 'nav__link active' : 'nav__link'
+                    }
+                  >
+                    {({ isActive }) => (
+                      <>
+                        <SymbolOrIcon
+                          specifier={li.symbol}
+                          extraClass={isActive ? 'active' : ''}
+                        />
+                        {li.label}
+                      </>
+                    )}
+                  </NavLink>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <ul className='nav__list nav__list--side'>
+          {sideNavItems.map(li => liContent(li))}
         </ul>
       </div>
-      <ul className='nav__list nav__list--side'>
-        {sideNavItems.map(li => liContent(li))}
-      </ul>
     </nav>
   );
 }

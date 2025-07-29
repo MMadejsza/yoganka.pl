@@ -177,16 +177,19 @@
 
 @include respond-to(mobile-l) {
   .nav {
+    position: relative;
     top: 0;
-    left: 0;
+    left: 50%;
     right: 0;
+    transform: translateX(calc(-50%));
     width: 100vw;
-    height: auto;
+    height: min-content;
     padding: 0.5rem;
 
     border-radius: 0;
     border-bottom-left-radius: map.get($sizes, border-radius);
     border-bottom-right-radius: map.get($sizes, border-radius);
+    // box-shadow: map.get($shadows, tile-shadow);
 
     &.nav--left {
       left: 0;
@@ -200,6 +203,21 @@
       order: 2;
       @include flex(row, center, center);
       gap: 2.5rem;
+    }
+    & .main-nav-container.sticky + .nav__list--side {
+      display: none;
+    }
+    &:has(.main-nav-container.sticky) {
+      position: fixed;
+
+      & + .section,
+      & + div {
+        margin-top: 7.5rem;
+
+        &.about {
+          margin-top: 12.5rem;
+        }
+      }
     }
 
     &__list {

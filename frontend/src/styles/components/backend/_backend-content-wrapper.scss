@@ -35,6 +35,6 @@ body:has(.backend-content-wrapper) {
 
 @include respond-to(mobile-l) {
   .backend-content-wrapper {
-    margin-top: 10rem;
+    margin-top: -8rem;
   }
 }

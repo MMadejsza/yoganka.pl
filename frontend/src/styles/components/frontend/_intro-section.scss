@@ -67,11 +67,6 @@
     }
   }
 }
-@include respond-to(mobile-m) {
-  .intro {
-    background-position: 50% 25%;
-  }
-}
 @include respond-to(mobile-pro) {
   .intro {
     &__welcome-desc {
@@ -81,9 +76,8 @@
 }
 @include respond-to(mobile-l) {
   .intro {
-    margin-top: 10rem;
+    margin-top: -8rem;
     background-size: 1000px;
-    background-position: 50% 25%;
     @include flex(row, center);
     flex-wrap: wrap;
 
@@ -107,12 +101,6 @@
 }
 @include respond-to(desktop-s) {
   .intro {
-    background-position: center 20%;
     background-size: 1200px;
-  }
-}
-@include respond-to(desktop-l) {
-  .intro {
-    background-position: center 22%;
   }
 }
