@@ -28,14 +28,22 @@
     padding: 0 2rem 2rem;
   }
 }
-@include respond-to(desktop-s) {
-  .wrapper {
-    max-width: 1200px;
-  }
-}
-@include respond-to(desktop-l) {
+@include respond-to(desktop-xs) {
   .wrapper {
     max-width: 1000px;
+
+    .nav & {
+      max-width: 1000px;
+    }
+  }
+}
+@include respond-to(desktop-m) {
+  .wrapper {
+    max-width: 1200px;
+
+    .nav & {
+      max-width: 1200px;
+    }
   }
 }
 
