@@ -114,8 +114,6 @@ function B2BPage() {
         />
       )}
 
-      {TYPES && <TurningTilesSection tilesModifier={'wide'} data={TYPES} />}
-
       {OFFER && (
         <Section classy={`section--offer`}>
           {products.map(product => (
@@ -131,6 +129,8 @@ function B2BPage() {
           ))}
         </Section>
       )}
+
+      {TYPES && <TurningTilesSection tilesModifier={'wide'} data={TYPES} />}
 
       {BENEFITS && (
         <Section

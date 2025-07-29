@@ -125,7 +125,6 @@
   }
 
   &__summary {
-    grid-column: 1 /-1;
     @include flex(row, center, flex-start, 2rem);
     flex-wrap: wrap;
   }

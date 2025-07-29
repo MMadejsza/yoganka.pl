@@ -126,7 +126,7 @@ function TOSPage() {
       </Helmet>
       <header className='docs-header'>
         <h2 className='section__header'>Witaj w Yogance!</h2>
-        <article className='camps-intro__welcome-desc b2b-intro'>
+        <article className='intro__welcome-desc'>
           Niniejsze dokumenty określają zasady korzystania z naszego serwisu
           oraz przetwarzania danych.
         </article>

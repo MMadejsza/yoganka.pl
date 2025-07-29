@@ -4,7 +4,6 @@
 
 .intro {
   position: relative;
-  grid-area: header;
   overflow: hidden;
 
   @include flex(column, space-between);
@@ -40,7 +39,6 @@
     height: min-content;
     width: 100vw;
     max-width: 100vw;
-    margin-bottom: 8rem;
     padding: 1rem 2rem;
     font-size: 1.7rem;
     text-align: center;
@@ -52,16 +50,6 @@
     box-shadow: map.get($shadows, transitive-box-shadow);
 
     @include flex(column, center, $gap: 2rem);
-
-    .no-bcg-pic & {
-      margin-bottom: 0rem;
-    }
-  }
-
-  &.b2b {
-    .intro__welcome-desc {
-      margin-bottom: 2rem;
-    }
   }
 }
 
@@ -93,16 +81,13 @@
 }
 @include respond-to(mobile-l) {
   .intro {
-    grid-column: 1 / -1;
-    margin-top: 7rem;
-    @include flex(row, center);
-    flex-wrap: wrap;
+    margin-top: 10rem;
     background-size: 1000px;
     background-position: 50% 25%;
+    @include flex(row, center);
+    flex-wrap: wrap;
 
     &--admin {
-      margin-top: 11rem;
-
       &__header {
         width: 100%;
         padding: 1rem;
@@ -117,10 +102,6 @@
 
     &__header {
       flex-basis: 100%;
-    }
-
-    &__welcome-desc {
-      white-space: pre-line;
     }
   }
 }

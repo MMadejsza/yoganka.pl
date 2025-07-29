@@ -3,24 +3,10 @@
 
 .about {
   justify-self: center;
-  grid-area: about;
   font-size: 2rem;
   gap: 2rem;
 
-  &.classes-page {
-    grid-area: header;
-  }
-
-  &__header {
-    grid-area: header;
-
-    &--classes-page {
-      margin-top: 8rem;
-    }
-  }
-
   &__img-container {
-    grid-area: portrait;
     position: relative;
     width: 90%;
     max-width: 70%;
@@ -41,7 +27,6 @@
     bottom: 0;
     right: 0;
     max-width: 70%;
-    // max-height: 12%;
     padding: 0 0.5rem;
 
     background-color: map.get($colors, base);
@@ -63,34 +48,16 @@
     }
   }
 
-  &__bio--description {
-    grid-area: article;
-  }
-
-  &__bio--description,
-  &__bio--content,
-  &__bio--heading,
-  &__bio--signature {
-    white-space: pre-line;
-  }
-
   &__bio--content {
-    grid-area: content;
     padding: 1rem;
 
     @include flex(column, center, center, 1.5rem);
   }
 
   &__bio--heading {
-    grid-area: h2;
     font-size: 4rem;
     font-weight: 500;
     text-transform: uppercase;
-
-    &--classes-page {
-      font-size: 2.8rem;
-      color: map.get($colors, tile-title);
-    }
   }
 
   &__bio--signature {
@@ -137,19 +104,10 @@
 
     &__header {
       display: none;
-
-      &--classes-page {
-        display: block;
-        flex-basis: 100%;
-      }
     }
 
     &__bio--content {
       max-width: 50%;
-
-      &--classes-page {
-        max-width: 30%;
-      }
     }
 
     &__bio--heading,
@@ -165,12 +123,6 @@
       width: 35%;
       min-height: 525px;
 
-      &--classes-page {
-        order: 0;
-        width: 20%;
-        min-height: 300px;
-      }
-
       .about__certificates {
         img {
           max-height: 5rem;
@@ -183,16 +135,8 @@
   .about {
     max-width: 1200px;
 
-    &.classes-page {
-      margin-bottom: 6rem;
-    }
-
     &__img-container {
       width: 31%;
-
-      &--classes-page {
-        width: 20%;
-      }
     }
   }
 }

@@ -4,12 +4,10 @@
 @use '../../utils/' as *;
 
 .backend-content-wrapper {
-  grid-area: table;
-  grid-column: 1 /-1;
   max-height: 100%;
 
-  grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
-  grid-template-rows: auto auto auto auto auto 1fr auto;
+  // grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+  // grid-template-rows: auto auto auto auto auto 1fr auto;
 
   .modal-table {
     table-layout: auto;
@@ -32,5 +30,11 @@ body:has(.backend-content-wrapper) {
     width: 98vw;
     max-width: 1200px;
     overflow: auto;
+  }
+}
+
+@include respond-to(mobile-l) {
+  .backend-content-wrapper {
+    margin-top: 10rem;
   }
 }

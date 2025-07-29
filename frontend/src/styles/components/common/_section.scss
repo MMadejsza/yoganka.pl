@@ -24,8 +24,6 @@
   }
 
   &__header {
-    grid: 1 / -1;
-
     width: 100%;
     height: min-content;
     padding: 1rem 0.5rem;
@@ -39,16 +37,10 @@
 
     &--sub {
       font-size: 3rem;
-
-      .intro.no-bcg-pic + & {
-        grid-column: 1/-1;
-      }
     }
   }
 
   &--offer {
-    grid-area: offer;
-
     @include flex(row, $justify: center);
     flex-wrap: wrap;
     gap: 5rem 0.5rem;
@@ -58,9 +50,6 @@
     }
 
     .intro.no-bcg-pic + & {
-      grid-area: about;
-      margin-top: 2rem;
-
       .section {
         flex-basis: 100%;
       }
@@ -68,7 +57,6 @@
 
     .section--turning-tiles + &,
     .intro.no-bcg-pic + & {
-      margin-top: 6rem;
       gap: 0rem;
 
       background-color: map.get($colors, base);
@@ -82,40 +70,21 @@
         font-size: 4rem;
       }
     }
-
-    .wrapper--b2b-type & {
-      margin-bottom: 12rem;
-    }
   }
 
   &--certificates {
-    grid-area: cert;
     position: relative;
     overflow: hidden;
   }
 
   &--turning-tiles {
-    grid-area: about;
+    margin: 8rem auto;
     background-color: map.get($colors, nav);
     box-shadow: map.get($shadows, transitive-box-shadow-nav);
     z-index: 2;
-
-    .wrapper--b2b-type & {
-      margin-bottom: 12rem;
-    }
-  }
-
-  &--reviews {
-    grid-area: cert;
-
-    &.homepage {
-      grid-area: reviews;
-    }
   }
 
   &--b2b-price {
-    grid-column: 1/-1;
-
     .b2b-price__content {
       font-size: 2.2rem;
 
@@ -125,30 +94,14 @@
     }
   }
 
-  &--checklist {
-    margin-top: 8rem;
-    margin-bottom: 0rem;
-    grid-column: 1/-1;
-  }
-
-  &--gallery {
-    grid-column: 1 /-1;
-  }
-  &.book-classes {
-    grid-column: 1/-1;
-  }
   &--sub {
     align-content: flex-start;
   }
-  &--partners {
-    grid-area: partners;
 
+  &--partners {
     &__header {
       margin-bottom: -5rem;
     }
-  }
-  &--b2b-offer {
-    margin-bottom: 7rem;
   }
 }
 //! do poprawy bo modal nie ma klasy section na razie
@@ -166,23 +119,11 @@
 
 @include respond-to(mobile-s) {
   .section--offer {
-    margin-bottom: 9rem;
     gap: 5rem 1.5rem;
-  }
-
-  .section--turning-tiles {
-    margin-bottom: 9rem;
   }
 }
 @include respond-to(mobile-l) {
   .section--offer {
-    margin-top: -3rem;
-
-    .section:nth-of-type(1),
-    .section:nth-of-type(2) {
-      flex-basis: 45%;
-    }
-
     .section--turning-tiles + &,
     .intro.no-bcg-pic + & {
       .section {
@@ -191,6 +132,12 @@
     }
   }
 
+  .section {
+    &--camps,
+    &--classes {
+      flex-basis: 45%;
+    }
+  }
   .section--turning-tiles {
     .click-suggestion {
       font-size: 2.8rem;

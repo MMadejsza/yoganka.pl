@@ -3,82 +3,22 @@
 @use '../../utils/' as *;
 
 .wrapper {
+  width: 100vw;
   min-height: 100vh;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  grid-template-rows: auto auto auto auto auto 1fr auto;
-  grid-template-areas:
-    'header header header header header '
-    'about about about about about'
-    'offer offer offer offer offer'
-    'reviews reviews reviews reviews reviews'
-    'cert cert cert cert cert'
-    'partners partners partners partners partners'
-    'space space space space space'
-    'footer footer footer footer footer';
-  justify-content: center;
+  @include flex(column, flex-start);
+  gap: 8rem;
   -webkit-overflow-scrolling: touch;
-
-  & > *:last-child {
-    margin-bottom: 0;
-  }
-
-  & > section:not(.partners):not(:first-of-type) {
-    margin-bottom: 5rem;
-  }
 
   & > section:not(:first-of-type),
   & > main > section:not(:first-of-type) {
     padding: 0 var(--section-padding-y) 2rem;
     box-shadow: map.get($shadows, section-shadow);
   }
-
-  &:has(.backend-content-wrapper) {
-    grid-template-rows: auto auto 1fr auto;
-    grid-template-areas:
-      'table table table table table'
-      'table table table table table'
-      'space space space space space'
-      'footer footer footer footer footer';
-  }
-
-  &--doc-type {
-    grid-template-rows: auto auto 1fr auto;
-    grid-template-areas:
-      'header header header header header'
-      'docPage docPage docPage docPage docPage'
-      'space space space space space'
-      'footer footer footer footer footer';
-  }
-
-  &--b2b-type {
-    grid-template-areas:
-      'header header header header header'
-      'offer offer offer offer offer'
-      'about about about about about'
-      'cert cert cert cert cert'
-      'partners partners partners partners partners'
-      'space space space space space'
-      'footer footer footer footer footer';
-  }
 }
 
 @include respond-to(mobile-sh) {
   .wrapper > section:not(:first-of-type) {
     padding: 0 2rem 2rem;
-  }
-}
-@include respond-to(mobile-l) {
-  .wrapper {
-    &--b2b-type {
-      & > .section--checklist.classes-page {
-        justify-content: center;
-
-        & > .checklist__list--classes-page {
-          width: max-content !important;
-        }
-      }
-    }
   }
 }
 @include respond-to(desktop-s) {
@@ -89,18 +29,6 @@
 @include respond-to(desktop-l) {
   .wrapper {
     max-width: 1000px;
-    margin: 0 auto;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    grid-template-rows: repeat(5, auto) 1fr auto;
-    grid-template-areas:
-      'header header header header header'
-      'about about about about about'
-      'offer offer offer offer offer'
-      'reviews reviews reviews reviews reviews'
-      'cert cert cert cert cert'
-      'partners partners partners partners partners'
-      'space space space space space'
-      'footer footer footer footer footer';
   }
 }
 
@@ -108,23 +36,6 @@
   .wrapper {
     /* Safari-only fixes for grid and tiles */
     align-items: stretch; /* ensure tiles in a row have equal height */
-    grid-auto-rows: minmax(250px, auto); /* set row min height */
-    grid-template-columns: repeat(
-      auto-fill,
-      minmax(300px, 1fr)
-    ); /* use auto-fill instead of auto-fit */
-    grid-template-rows: repeat(5, auto) minmax(0, 1fr) auto; /* auto rows, flexible space, auto */
     gap: 0.5rem; /* space between tiles */
-  }
-
-  @include respond-to(mobile-m) {
-    .wrapper {
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    }
-  }
-  @include respond-to(desktop-l) {
-    .wrapper {
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    }
   }
 }

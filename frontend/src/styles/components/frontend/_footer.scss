@@ -4,7 +4,6 @@
 //! FOOTER
 
 .wrapper > footer {
-  grid-area: footer;
   place-self: center;
   width: 100vw;
   background-color: color-mix(
@@ -164,7 +163,6 @@
     row-gap: 1rem;
 
     &__company-details {
-      grid-area: details;
       width: 215px;
     }
 
@@ -173,21 +171,12 @@
       color: map.get($colors, tile-title);
     }
 
-    &__legal {
-      grid-area: legal;
-    }
-
     &__socials {
-      grid-area: socials;
       order: -1;
       width: 215px;
 
       text-shadow: none;
       overflow: visible;
-    }
-
-    &__credit {
-      grid-area: credit;
     }
   }
 }

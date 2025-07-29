@@ -194,10 +194,6 @@
       flex-basis: 31%;
     }
 
-    &__img--event-modal {
-      grid-column: 1 / -1;
-    }
-
     .section--events &__title {
       height: $title-font-size * 3 + 2.5 * $title-line-height;
     }
@@ -224,7 +220,8 @@
 }
 @include respond-to(mobile-pro) {
   .section--turning-tiles + .section--offer,
-  .intro.no-bcg-pic + .section--offer {
+  .intro.no-bcg-pic + .section--offer,
+  .section--b2b-offer {
     .tile {
       flex-basis: 30%;
     }

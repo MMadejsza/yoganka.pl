@@ -13,7 +13,6 @@
 }
 
 .glide {
-  grid-column: 1 / -1;
   padding: 2rem 0 3rem;
   overflow: visible;
   overflow-x: hidden;
@@ -29,7 +28,6 @@
   }
 
   &-container {
-    grid-column: 1 / -1;
     min-width: 100%;
 
     display: grid;
@@ -130,11 +128,11 @@
     color: map.get($colors, accent-bcg) !important;
     border-radius: map.get($sizes, border-radius);
 
-    &--left {
+    .glide &--left {
       left: 1rem;
     }
 
-    &--right {
+    .glide &--right {
       right: 1rem;
     }
   }

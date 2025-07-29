@@ -76,13 +76,12 @@ function ViewAccountPayments({ data }) {
   return (
     <>
       {table}
-      (
+
       <ViewsController
         modifier='payment'
         onClose={handleCloseModal}
         userAccountPage={true}
       />
-      )
     </>
   );
 }

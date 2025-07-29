@@ -12,14 +12,9 @@
     @extend %li-size;
     text-align: left;
     @include flex(column, start, center);
-
-    &--event {
-      grid-column: 1 / -1;
-    }
   }
 
   .wrapper--b2b-type & {
-    grid-area: cert;
     margin: 0 auto;
   }
 
