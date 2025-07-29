@@ -92,26 +92,6 @@ function Nav({ side, status, setIsNavOpen }) {
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
-  // only on desktop: nasłuchuj scrolla i ustawiaj isSticky na podstawie window.scrollY
-  // useEffect(() => {
-  //   if (isMobile) return; // skip on mobile
-
-  //   // oblicz trigger raz przy montażu
-  //   let triggerPos = 0;
-  //   if (containerRef.current) {
-  //     const rect = containerRef.current.getBoundingClientRect();
-  //     triggerPos = rect.top + window.scrollY;
-  //   }
-
-  //   const handleScroll = () => {
-  //     // jak przewiniemy poniżej triggerPos, włącz sticky
-  //     setIsSticky(window.scrollY >= triggerPos);
-  //   };
-
-  //   window.addEventListener('scroll', handleScroll);
-
-  //   return () => window.removeEventListener('scroll', handleScroll);
-  // }, [isMobile]);
   useEffect(() => {
     if (isMobile) return;
 
