@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { formatDuration, getWeekDay } from '../../../../utils/dateTime.js';
+import { protectWordBreaks } from '../../../../utils/validation.js';
 import ToggleEditButton from '../../../backend/ToggleEditButton.jsx';
 import GenericList from '../../../common/GenericList.jsx';
 import DetailsFormSchedule from './edit-forms/DetailsFormSchedule.jsx';
@@ -65,7 +66,7 @@ function DetailsListSchedule({ data, placement, isAdminPanel }) {
     },
     { label: 'Godzina:', content: schedule.startTime.slice(0, 5) },
     { label: 'Długość:', content: formattedDuration },
-    { label: 'Miejsce:', content: schedule.location },
+    { label: 'Miejsce:', content: protectWordBreaks(schedule.location) },
   ];
 
   let content = isEditing ? (

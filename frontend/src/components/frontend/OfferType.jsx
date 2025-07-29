@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { campsSort, classesSort, eventsSort } from '../../utils/sorting.js';
+import { protectWordBreaks } from '../../utils/validation';
 import Tile from './Tile.jsx';
 
 function OfferType({ id, specifier, header, data, limit, moreLink }) {
@@ -32,7 +33,7 @@ function OfferType({ id, specifier, header, data, limit, moreLink }) {
   return (
     <article id={id} className={`section${modifier} section--sub`}>
       <header className={`section__header section__header--sub`}>
-        {header}
+        {protectWordBreaks(header)}
       </header>
 
       {products.map((tileData, index) => (

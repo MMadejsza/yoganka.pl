@@ -1,3 +1,5 @@
+import { protectWordBreaks } from '../../utils/validation';
+
 function WrapperModalTable({
   content,
   title,
@@ -12,7 +14,7 @@ function WrapperModalTable({
   return (
     <>
       <h2 className='generic-details__title admin-action modal-table__title'>
-        {`${title} ${
+        {`${protectWordBreaks(title)} ${
           content && content.length > 0 ? `(${content.length})` : ''
         }`}
         {toggleBtn}

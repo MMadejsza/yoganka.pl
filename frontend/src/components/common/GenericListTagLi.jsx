@@ -1,3 +1,4 @@
+import { protectWordBreaks } from '../../utils/validation';
 import SymbolOrIcon from './SymbolOrIcon.jsx';
 
 function GenericListTagLi({ extraClass, objectPair, classModifier, isNotes }) {
@@ -18,7 +19,7 @@ function GenericListTagLi({ extraClass, objectPair, classModifier, isNotes }) {
             classModifier ? `generic-details__label--${classModifier}` : ''
           } ${extraClass ?? ''}`}
         >
-          {label}
+          {protectWordBreaks(label)}
         </p>
       )}
       <p
@@ -28,7 +29,7 @@ function GenericListTagLi({ extraClass, objectPair, classModifier, isNotes }) {
           objectPair.status === 0 ? 'dimmed' : ''
         } ${extraClass ?? ''}`}
       >
-        {liContent}
+        {protectWordBreaks(liContent)}
       </p>
     </li>
   ) : null;

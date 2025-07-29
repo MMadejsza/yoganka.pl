@@ -1,6 +1,7 @@
 import { useLocation } from 'react-router-dom';
-import Section from './Section.jsx';
+import { protectWordBreaks } from '../../utils/validation.js';
 import SanityImage from './imgsRelated/SanityImage.jsx';
+import Section from './Section.jsx';
 
 function IntroSection({ modifier, className, extraClass, data }) {
   const location = useLocation();
@@ -30,7 +31,7 @@ function IntroSection({ modifier, className, extraClass, data }) {
         >
           {data.list.map((p, index) => (
             <p key={index} className={`${className}__paragraph`}>
-              {p}
+              {protectWordBreaks(p)}
             </p>
           ))}
         </article>

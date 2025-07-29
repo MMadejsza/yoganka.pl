@@ -1,4 +1,5 @@
 import { memo, useEffect, useState } from 'react';
+import { protectWordBreaks } from '../../utils/validation';
 import Loader from '../common/Loader.jsx';
 import SymbolOrIcon from '../common/SymbolOrIcon';
 const logsGloballyOn = true;
@@ -114,7 +115,7 @@ function FeedbackBox({
         </span>
         <SymbolOrIcon specifier={`close`} extraClass={'feedback-box__x'} />
       </button>
-      {statusMsg}
+      {protectWordBreaks(statusMsg)}
     </div>
   );
 }

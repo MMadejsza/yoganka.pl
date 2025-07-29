@@ -1,4 +1,5 @@
 import ReactQuill from 'react-quill';
+import { protectWordBreaks } from '../../utils/validation';
 
 function LegalDocument({ title, doc }) {
   return (
@@ -7,7 +8,7 @@ function LegalDocument({ title, doc }) {
         <h1
           className={`doc__title generic-details__title admin-action modal-table__title`}
         >
-          {title}
+          {protectWordBreaks(title)}
         </h1>
         <h3 className={`doc__subtitle modal-table__no-table-note dimmed`}>
           Wersja: {doc.version}

@@ -1,4 +1,5 @@
 import SymbolOrIcon from '../../../components/common/SymbolOrIcon.jsx';
+import { protectWordBreaks } from '../../../utils/validation';
 import GenericListTagLi from '../../common/GenericListTagLi.jsx';
 import DetailsListCustomer from './lists/DetailsListCustomer.jsx';
 import DetailsListCustomerPass from './lists/DetailsListCustomerPass.jsx';
@@ -26,7 +27,9 @@ function ViewBooking({ data }) {
     <>
       <h1 className='modal__title modal__title--view'>{`Rezerwacja (Id:${booking.bookingId})`}</h1>
 
-      <h2 className='modal__title modal__title--status'>{`${product.name}`}</h2>
+      <h2 className='modal__title modal__title--status'>{`${protectWordBreaks(
+        product.name
+      )}`}</h2>
 
       <h3 className='modal__title modal__title--status'>
         <GenericListTagLi

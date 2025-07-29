@@ -1,3 +1,5 @@
+import { protectWordBreaks } from '../../utils/validation.js';
+
 function TurningTile({ content, tilesModifier }) {
   const classy = 'turning-tile';
 
@@ -22,8 +24,10 @@ function TurningTile({ content, tilesModifier }) {
             {content.symbol}
           </span>
         </aside>
-        <header className={`${classy}__header`}>{content.title}</header>
-        <p className={`${classy}__p`}>{content.text}</p>
+        <header className={`${classy}__header`}>
+          {protectWordBreaks(content.title)}
+        </header>
+        <p className={`${classy}__p`}>{protectWordBreaks(content.text)}</p>
       </article>
     </div>
   );

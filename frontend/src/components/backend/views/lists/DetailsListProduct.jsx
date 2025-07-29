@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { formatDuration, getWeekDay } from '../../../../utils/dateTime.js';
+import { protectWordBreaks } from '../../../../utils/validation.js';
 import ToggleEditButton from '../../../backend/ToggleEditButton.jsx';
 import GenericList from '../../../common/GenericList.jsx';
 import DetailsFormProduct from './edit-forms/DetailsFormProduct.jsx';
@@ -22,14 +23,14 @@ function DetailsListProduct({ data, placement, userAccessed, classModifier }) {
 
   const details = [{ label: 'Typ:', content: `${product.type}` }];
   if (placement === 'scheduleView' && !userAccessed) {
-    details.push({ label: 'Nazwa:', content: product.name });
+    details.push({ label: 'Nazwa:', content: protectWordBreaks(product.name) });
   } else if (placement != 'scheduleView') {
     details.push(
       {
         label: isCamp || isEvent ? 'Data:' : 'Wdrożono:',
         content: `${product.startDate} (${getWeekDay(product.startDate)})`,
       },
-      { label: 'Lokacja:', content: product.location },
+      { label: 'Lokacja:', content: protectWordBreaks(product.location) },
       { label: 'Czas trwania:', content: formattedDuration }
     );
   }

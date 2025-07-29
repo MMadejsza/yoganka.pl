@@ -1,6 +1,5 @@
 import { formatIsoDateTime } from '../../../utils/dateTime.js';
 import CardsList from '../../backend/cards/CardsList.jsx';
-import ModalTable from '../ModalTable.jsx';
 import WrapperModalTable from '../WrapperModalTable.jsx';
 
 function ViewAccountBookings({ data }) {
@@ -30,28 +29,28 @@ function ViewAccountBookings({ data }) {
   // console.log(`✅ keys: `, keys);
   // console.log(`✅ customerStats: `, customerStats);
 
-  const tableInside = (
-    <ModalTable
-      headers={[
-        'Obecność',
-        'Id',
-        'Termin (Nr)',
-        'Płatność (Nr)',
-        'Utworzono',
-        'Ostatnia zmiana',
-      ]}
-      keys={[
-        'attendance',
-        'bookingId',
-        'scheduleDetails',
-        'payment',
-        'createdAt',
-        'timestamp',
-      ]}
-      content={formattedContent}
-      active={false}
-    />
-  );
+  // const tableInside = (
+  //   <ModalTable
+  //     headers={[
+  //       'Obecność',
+  //       'Id',
+  //       'Termin (Nr)',
+  //       'Płatność (Nr)',
+  //       'Utworzono',
+  //       'Ostatnia zmiana',
+  //     ]}
+  //     keys={[
+  //       'attendance',
+  //       'bookingId',
+  //       'scheduleDetails',
+  //       'payment',
+  //       'createdAt',
+  //       'timestamp',
+  //     ]}
+  //     content={formattedContent}
+  //     active={false}
+  //   />
+  // );
 
   const cards = (
     <CardsList

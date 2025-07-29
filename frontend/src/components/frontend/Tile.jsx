@@ -1,4 +1,5 @@
 import { useModalByURL } from '../../hooks/useModalByURL.js';
+import { protectWordBreaks } from '../../utils/validation.js';
 import Buttons from './Buttons.jsx';
 import SanityImage from './imgsRelated/SanityImage.jsx';
 import Modal from './Modal.jsx';
@@ -53,7 +54,7 @@ function Tile({ data, today, clickable }) {
   // Dates rendering definition
   const renderDates = data.front.dates?.map((date, index) => (
     <h3 className='tile__date' key={index}>
-      {date}
+      {protectWordBreaks(date)}
     </h3>
   ));
 
@@ -69,12 +70,14 @@ function Tile({ data, today, clickable }) {
     >
       {renderSingleImg}
 
-      <h3 className='tile__title'>{data.front.title}</h3>
+      <h3 className='tile__title'>{protectWordBreaks(data.front.title)}</h3>
 
       {data.front.dates?.length > 0 && renderDates}
 
       {data.front.location && (
-        <h4 className='tile__location'>{data.front.location}</h4>
+        <h4 className='tile__location'>
+          {protectWordBreaks(data.front.location)}
+        </h4>
       )}
 
       {clickable ? (
@@ -85,7 +88,7 @@ function Tile({ data, today, clickable }) {
           </span>
         </p>
       ) : (
-        <p className='tile__desc'>{data.front.desc}</p>
+        <p className='tile__desc'>{protectWordBreaks(data.front.desc)}</p>
       )}
 
       {data.front.btnsContent?.length > 0 && renderBtns}

@@ -1,5 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import { getWeekDay } from '../../../utils/dateTime.js';
+import { protectWordBreaks } from '../../../utils/validation';
 import DetailsListCustomer from './lists/DetailsListCustomer.jsx';
 import DetailsListPayment from './lists/DetailsListPayment.jsx';
 import TableCustomerPasses from './tables/TableCustomerPasses.jsx';
@@ -23,10 +24,12 @@ function ViewPayment({ data, isUserAccountPage }) {
   const schedules = payment.Bookings.map(booking => {
     return {
       ...booking.ScheduleRecord,
-      productName: `${booking.ScheduleRecord.Product.name} (sId: ${booking.ScheduleRecord.scheduleId})`,
+      productName: `${protectWordBreaks(
+        booking.ScheduleRecord.Product.name
+      )} (sId: ${booking.ScheduleRecord.scheduleId})`,
       productPrice: booking.ScheduleRecord.Product.price,
       day: getWeekDay(booking.ScheduleRecord.date),
-      location: booking.ScheduleRecord.location,
+      location: protectWordBreaks(booking.ScheduleRecord.location),
     };
   });
   console.log(`ViewPayment schedules`, schedules);

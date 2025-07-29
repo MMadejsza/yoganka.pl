@@ -1,3 +1,4 @@
+import { protectWordBreaks } from '../../utils/validation';
 import Motto from './Motto.jsx';
 
 function Bio({ placement, data, motto, isMobile }) {
@@ -7,10 +8,12 @@ function Bio({ placement, data, motto, isMobile }) {
   return (
     // <article className={`${prefix}__bio--content`}>
     <article className={`${prefix}__bio--content`}>
-      <h2 className={`${prefix}__bio--heading`}>{data.title}</h2>
+      <h2 className={`${prefix}__bio--heading`}>
+        {protectWordBreaks(data.title)}
+      </h2>
       {data.paragraphs.map((pr, index) => (
         <p className={pClass} key={index}>
-          {pr}
+          {protectWordBreaks(pr)}
         </p>
       ))}
 

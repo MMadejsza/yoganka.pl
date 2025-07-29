@@ -1,3 +1,4 @@
+import { protectWordBreaks } from '../../utils/validation.js';
 import SymbolOrIcon from '../common/SymbolOrIcon';
 
 function ModalCheckList({ content, modifier }) {
@@ -29,7 +30,7 @@ function ModalCheckList({ content, modifier }) {
           extraClass={'checklist__icon modal__icon checklist__icon'}
           aria-hidden='true'
         />
-        {item}
+        {protectWordBreaks(item)}
       </li>
     );
   });

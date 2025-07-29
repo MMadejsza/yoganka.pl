@@ -3,7 +3,6 @@ import { useMemo } from 'react';
 import { Helmet } from 'react-helmet';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import CardsList from '../../components/backend/cards/CardsList.jsx';
-import ModalTable from '../../components/backend/ModalTable.jsx';
 import TabsList from '../../components/backend/TabsList.jsx';
 import ViewsController from '../../components/backend/ViewsController.jsx';
 import IntroSection from '../../components/frontend/IntroSection.jsx';
@@ -202,16 +201,16 @@ function SchedulePage() {
           link: '/grafik',
         },
       ];
-      table = (
-        <ModalTable
-          headers={headers}
-          keys={keys}
-          content={formattedContent}
-          active={true}
-          status={status}
-          onOpen={handleOpenModal}
-        />
-      );
+      // table = (
+      //   <ModalTable
+      //     headers={headers}
+      //     keys={keys}
+      //     content={formattedContent}
+      //     active={true}
+      //     status={status}
+      //     onOpen={handleOpenModal}
+      //   />
+      // );
       cardsList = (
         <CardsList
           content={formattedContent}
@@ -232,17 +231,17 @@ function SchedulePage() {
         { name: 'Karnety', symbol: 'card_membership', link: '/grafik/karnety' },
       ];
 
-      table = (
-        <ModalTable
-          headers={headers}
-          keys={keys}
-          content={formattedContent}
-          active={true}
-          status={status}
-          onOpen={handleOpenModal}
-          onQuickAction={[{ symbol: 'shopping_bag_speed', method: book }]}
-        />
-      );
+      // table = (
+      //   <ModalTable
+      //     headers={headers}
+      //     keys={keys}
+      //     content={formattedContent}
+      //     active={true}
+      //     status={status}
+      //     onOpen={handleOpenModal}
+      //     onQuickAction={[{ symbol: 'shopping_bag_speed', method: book }]}
+      //   />
+      // );
 
       cardsList = (
         <CardsList

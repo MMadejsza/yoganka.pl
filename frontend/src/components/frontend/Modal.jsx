@@ -1,6 +1,7 @@
 import { createPortal } from 'react-dom';
 import { Helmet } from 'react-helmet';
 import { urlFor } from '../../utils/sanityClient.js';
+import { protectWordBreaks } from '../../utils/validation.js';
 import SymbolOrIcon from '../common/SymbolOrIcon';
 import SanityImage from '../frontend/imgsRelated/SanityImage.jsx';
 import Buttons from './Buttons.jsx';
@@ -70,11 +71,13 @@ function Modal({ tile, onClose, isVisible, isClosing }) {
       )} modal__full-desc--long-text`}
     >
       {modal?.fullDescTitle && (
-        <h3 className='modal__title'>{modal.fullDescTitle}</h3>
+        <h3 className='modal__title'>
+          {protectWordBreaks(modal.fullDescTitle)}
+        </h3>
       )}
 
       <p className=' modal__full-desc modal__full-desc--content'>
-        {modal.fullDesc}
+        {protectWordBreaks(modal.fullDesc)}
       </p>
     </section>
   );
@@ -225,7 +228,11 @@ function Modal({ tile, onClose, isVisible, isClosing }) {
           </a>
         </div>
 
-        {modal.title && <h3 className='modal__main-title '>{modal.title}</h3>}
+        {modal.title && (
+          <h3 className='modal__main-title '>
+            {protectWordBreaks(modal.title)}
+          </h3>
+        )}
 
         {galleryContent}
 
@@ -236,7 +243,9 @@ function Modal({ tile, onClose, isVisible, isClosing }) {
         {eventOnlyContent}
 
         {isUpToDate && modal.note && (
-          <h2 className='modal__attention-note'>{modal.note}</h2>
+          <h2 className='modal__attention-note'>
+            {protectWordBreaks(modal.note)}
+          </h2>
         )}
 
         {renderFooter()}

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { protectWordBreaks } from '../../utils/validation.js';
 import SymbolOrIcon from '../common/SymbolOrIcon';
 
 function Buttons({ list }) {
@@ -60,7 +61,7 @@ function Buttons({ list }) {
           className={`btn${modifier ? ` btn--${modifier}` : ''} btn`}
         >
           {icon}
-          {btn.text}
+          {protectWordBreaks(btn.text)}
         </Link>
       );
       // } else if (isNotMobile && btn.symbol == 'phone') {
@@ -75,7 +76,7 @@ function Buttons({ list }) {
           className={`btn${modifier ? ` btn--${modifier}` : ''} btn`}
         >
           {icon}
-          {btn.text}
+          {protectWordBreaks(btn.text)}
         </a>
       );
     }

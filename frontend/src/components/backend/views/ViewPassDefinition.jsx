@@ -7,7 +7,10 @@ import { useAuthStatus } from '../../../hooks/useAuthStatus.js';
 import { useFeedback } from '../../../hooks/useFeedback.js';
 import { useInput } from '../../../hooks/useInput.js';
 import { mutateOnCreate } from '../../../utils/http.js';
-import { passStartDateValidations } from '../../../utils/validation.js';
+import {
+  passStartDateValidations,
+  protectWordBreaks,
+} from '../../../utils/validation.js';
 import Input from '../../backend/Input.jsx';
 import GenericListTagLi from '../../common/GenericListTagLi.jsx';
 import FeedbackBox from '../FeedbackBox.jsx';
@@ -328,7 +331,9 @@ function ViewPassDefinition({
         <meta name='twitter:image' content='/favicon_io/apple-touch-icon.png' />
       </Helmet>
 
-      <h1 className='modal__title modal__title--view'>{`${passDefinition.name}`}</h1>
+      <h1 className='modal__title modal__title--view'>{`${protectWordBreaks(
+        passDefinition.name
+      )}`}</h1>
       {isAdminViewEligible && (
         <>
           <h2 className='modal__title modal__title--status'>{`Karnet (Id:${passDefinition.passDefId})`}</h2>

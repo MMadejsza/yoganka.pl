@@ -1,3 +1,5 @@
+import { protectWordBreaks } from '../../utils/validation';
+
 function Input({
   formType,
   embedded,
@@ -47,7 +49,7 @@ function Input({
             >
               {/* Label for the checkbox */}
               <label htmlFor={`${id}_${index}`} className='checkbox-label'>
-                {option.label}
+                {protectWordBreaks(option.label)}
               </label>
               {/* Checkbox input */}
               <input
@@ -85,7 +87,7 @@ function Input({
   } else if (props.type == 'select') {
     const optionsArr = options.map((option, index) => (
       <option key={index} value={option.value}>
-        {option.label}
+        {protectWordBreaks(option.label)}
       </option>
     ));
     input = (
@@ -154,7 +156,7 @@ function Input({
               onFocus={props.onFocus}
               onBlur={props.onBlur}
             />
-            {option.label}
+            {protectWordBreaks(option.label)}
           </div>
         ))}
       </div>
@@ -196,7 +198,7 @@ function Input({
             : ''
         }`}
       >
-        {label}
+        {protectWordBreaks(label)}
       </label>
 
       {input}
@@ -235,7 +237,7 @@ function Input({
                             ? 'check_circle'
                             : 'error'}
                         </span>
-                        {result.message}
+                        {protectWordBreaks(result.message)}
                       </>
                     }
                   </li>

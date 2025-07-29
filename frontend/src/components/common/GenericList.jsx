@@ -1,3 +1,4 @@
+import { protectWordBreaks } from '../../utils/validation';
 import GenericListTagLi from './GenericListTagLi.jsx';
 
 // add orientation prop and map to css class schedule__summary
@@ -15,7 +16,7 @@ function GenericList({ title, details, classModifier = '' }) {
               classModifier ? `generic-details__title--${classModifier}` : ''
             } modal__title--day`}
           >
-            {title}
+            {protectWordBreaks(title)}
           </h2>
         )}
         <ul

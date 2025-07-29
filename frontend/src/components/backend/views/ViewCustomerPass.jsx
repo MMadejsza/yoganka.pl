@@ -1,5 +1,6 @@
 import SymbolOrIcon from '../../../components/common/SymbolOrIcon.jsx';
 import { useHandleStripeRedirect } from '../../../hooks/useHandleStripeRedirect.js';
+import { protectWordBreaks } from '../../../utils/validation';
 import GenericListTagLi from '../../common/GenericListTagLi.jsx';
 import DetailsListCustomerPass from './lists/DetailsListCustomerPass.jsx';
 import DetailsListPassDefinition from './lists/DetailsListPassDefinition.jsx';
@@ -14,7 +15,9 @@ function ViewCustomerPass({ data, userAccountPage }) {
 
   return (
     <>
-      <h1 className='modal__title modal__title--view'>{passName}</h1>
+      <h1 className='modal__title modal__title--view'>
+        {protectWordBreaks(passName)}
+      </h1>
       <h3 className='modal__title modal__title--status'>
         <GenericListTagLi
           objectPair={{

@@ -1,7 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import { statsCalculatorForCustomer } from '../../../utils/statistics/statsCalculatorForCustomer.js';
 import CardsList from '../../backend/cards/CardsList.jsx';
-import ModalTable from '../ModalTable.jsx';
 import WrapperModalTable from '../WrapperModalTable.jsx';
 import DetailsListCustomerStats from './lists/DetailsListCustomerStats.jsx';
 
@@ -45,15 +44,6 @@ function ViewAccountSchedulesHistory({ data }) {
     'Zajęcia',
     'Miejsce',
   ];
-  const tableInside = (
-    <ModalTable
-      headers={headers}
-      keys={customerStats?.recordsKeys || []}
-      content={content}
-      active={false}
-      notToArchive={location.pathname.includes(`konto/zajecia`)}
-    />
-  );
 
   const cards = (
     <CardsList content={content} active={false} notToArchive={true} />

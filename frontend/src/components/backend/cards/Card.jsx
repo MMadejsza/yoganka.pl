@@ -3,7 +3,9 @@ import {
   formatPaymentStatus,
   onRowBtnClick,
 } from '../../../utils/cardsAndTableUtils.jsx';
+import { protectWordBreaks } from '../../../utils/validation';
 import SymbolOrIcon from '../../common/SymbolOrIcon.jsx';
+
 // Presentational component: renders a card based on props.content and flags.
 export default function Card({
   content,
@@ -107,11 +109,15 @@ export default function Card({
             squareMiddle
           )}
         </div>
-        <div className='card__square--bottom'>{squareBottom}</div>
+        <div className='card__square--bottom'>
+          {protectWordBreaks(squareBottom)}
+        </div>
       </div>
       <div className='card__modifier'>
         <SymbolOrIcon specifier={typeIcon} classModifier='secondary' />
-        <span className='card__single-content'>{cardTypeModifier}</span>
+        <span className='card__single-content'>
+          {protectWordBreaks(cardTypeModifier)}
+        </span>
       </div>
       <div className='card__id'>
         <SymbolOrIcon specifier='badge' classModifier='secondary' />
@@ -119,14 +125,16 @@ export default function Card({
       </div>
       <div className='card__title'>
         <SymbolOrIcon specifier={titleIcon || typeIcon} />
-        <span className='card__single-content'>{cardTitle}</span>
+        <span className='card__single-content'>
+          {protectWordBreaks(cardTitle)}
+        </span>
       </div>
       <div className='card__desc'>
         {descriptionIcon && <SymbolOrIcon specifier={descriptionIcon} />}
         <span className='card__single-content'>
-          {description}
+          {protectWordBreaks(description)}
           <span className='card__single-content--secondary'>
-            {dimmedDescription}
+            {protectWordBreaks(dimmedDescription)}
           </span>
         </span>
       </div>
@@ -136,9 +144,9 @@ export default function Card({
       <div className='card__footer'>
         {footerIcon && <SymbolOrIcon specifier={footerIcon} />}
         <span className='card__single-content'>
-          {cardFooter}
+          {protectWordBreaks(cardFooter)}
           <span className='card__single-content--secondary'>
-            {dimmedCardFooter}
+            {protectWordBreaks(dimmedCardFooter)}
           </span>
         </span>
       </div>

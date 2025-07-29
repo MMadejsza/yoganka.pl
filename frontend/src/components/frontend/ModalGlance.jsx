@@ -1,3 +1,4 @@
+import { protectWordBreaks } from '../../utils/validation.js';
 import SymbolOrIcon from '../common/SymbolOrIcon';
 
 function CampGlance({ glance }) {
@@ -15,7 +16,7 @@ function CampGlance({ glance }) {
       .map(([key, text], index) => (
         <li key={index} className='checklist__li checklist__li--at-glance'>
           <SymbolOrIcon specifier={symbols[key]} extraClass={'modal__icon'} />
-          {text}
+          {protectWordBreaks(text)}
         </li>
       ));
   };

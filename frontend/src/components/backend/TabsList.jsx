@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import SymbolOrIcon from '../../components/common/SymbolOrIcon.jsx';
+import { protectWordBreaks } from '../../utils/validation';
 
 function TabsList({
   menuSet,
@@ -56,7 +57,7 @@ function TabsList({
                   classModifier={classModifier}
                   extraClass={elementMainClass('icon')}
                 />
-                {tab.name ?? null}
+                {protectWordBreaks(tab.name) ?? null}
               </NavLink>
             </li>
           );

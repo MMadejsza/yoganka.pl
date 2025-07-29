@@ -1,7 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { statsCalculatorForCustomer } from '../../../utils/statistics/statsCalculatorForCustomer.js';
 import CardsList from '../../backend/cards/CardsList.jsx';
-import ModalTable from '../ModalTable.jsx';
 import ViewsController from '../ViewsController.jsx';
 import WrapperModalTable from '../WrapperModalTable.jsx';
 
@@ -79,24 +78,24 @@ function ViewAccountDashboard({ data, queryStatus }) {
       explicitType={'schedule'}
     />
   );
-  const tableInside = (
-    <ModalTable
-      headers={headers}
-      keys={[
-        'scheduleId',
-        'date',
-        'day',
-        'startTime',
-        'productType',
-        'productName',
-        'location',
-      ]}
-      content={contentUpcoming}
-      active={true}
-      onOpen={handleOpenScheduleModal}
-      classModifier={'user-account'}
-    />
-  );
+  // const tableInside = (
+  //   <ModalTable
+  //     headers={headers}
+  //     keys={[
+  //       'scheduleId',
+  //       'date',
+  //       'day',
+  //       'startTime',
+  //       'productType',
+  //       'productName',
+  //       'location',
+  //     ]}
+  //     content={contentUpcoming}
+  //     active={true}
+  //     onOpen={handleOpenScheduleModal}
+  //     classModifier={'user-account'}
+  //   />
+  // );
 
   const table = (
     <WrapperModalTable

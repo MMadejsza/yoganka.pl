@@ -3,6 +3,7 @@ let iClass;
 if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
   iClass = { backgroundAttachment: 'scroll' };
 }
+import { protectWordBreaks } from '../../utils/validation';
 
 function Section({ classy, modifier, header, iSpecific, children, ...props }) {
   let headerContent;
@@ -17,7 +18,7 @@ function Section({ classy, modifier, header, iSpecific, children, ...props }) {
   if (header) {
     headerContent = (
       <header className={headerConditionalClass}>
-        {header}
+        {typeof header == 'string' ? protectWordBreaks(header) : header}
         {props.hr && <hr />}
       </header>
     );

@@ -1,3 +1,5 @@
+import { protectWordBreaks } from './validation.js';
+
 export function durationToSeconds(durationStrInMinutes = 0) {
   // const [hours, minutes, seconds] = durationStr.split(':').map(Number);
   // return hours * 3600 + minutes * 60 + seconds;
@@ -136,5 +138,5 @@ export const formatDuration = product => {
     areHours ? splitDuration.hours + ' h' : ''
   } ${areMinutes ? splitDuration.minutes + ' m' : ''}`;
 
-  return formattedDuration;
+  return protectWordBreaks(formattedDuration);
 };

@@ -10,6 +10,7 @@ import Section from '../../components/frontend/Section.jsx';
 import TurningTilesSection from '../../components/frontend/TurningTilesSection.jsx';
 import { client } from '../../utils/sanityClient.js';
 import { assignPageCSSModifier } from '../../utils/utils.jsx';
+import { protectWordBreaks } from '../../utils/validation.js';
 
 function B2BPage() {
   useEffect(() => assignPageCSSModifier('b2b-type'), []);
@@ -147,7 +148,7 @@ function B2BPage() {
           <article className='b2b-price__content'>
             {PRICE_LIST.list.map((pContent, index) => (
               <p key={index} className='b2b-price__p'>
-                {pContent}
+                {protectWordBreaks(pContent)}
               </p>
             ))}
 

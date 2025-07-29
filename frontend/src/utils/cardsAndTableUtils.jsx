@@ -1,5 +1,6 @@
 import SymbolOrIcon from '../components/common/SymbolOrIcon.jsx';
 import { hasValidPassFn } from './userCustomerUtils';
+import { protectWordBreaks } from './validation';
 
 // Format JSON list of allowed product types into a human-readable string.
 export function formatAllowedTypes(rawStr, noUpperCase, leaveAsArr) {
@@ -48,6 +49,9 @@ export function formatValue(value, keyClass) {
         classModifier={keyClass}
       />
     );
+  }
+  if (typeof value === 'string') {
+    return protectWordBreaks(value);
   }
   return value;
 }

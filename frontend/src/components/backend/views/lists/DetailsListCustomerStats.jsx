@@ -1,4 +1,5 @@
 import GenericList from '../../../common/GenericList.jsx';
+
 function DetailsListCustomerStats({
   customerStats,
   altTitle,

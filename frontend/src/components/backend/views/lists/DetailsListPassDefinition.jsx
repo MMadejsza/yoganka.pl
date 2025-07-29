@@ -1,4 +1,5 @@
-import { formatAllowedTypes } from '../../../../utils//cardsAndTableUtils.jsx';
+import { formatAllowedTypes } from '../../../../utils/cardsAndTableUtils.jsx';
+import { protectWordBreaks } from '../../../../utils/validation.js';
 import GenericList from '../../../common/GenericList.jsx';
 
 function DetailsListPassDefinition({
@@ -33,7 +34,7 @@ function DetailsListPassDefinition({
   ];
   if (!isPassPurchaseView)
     details.push(
-      { label: 'Nazwa:', content: passDefinition.name },
+      { label: 'Nazwa:', content: protectWordBreaks(passDefinition.name) },
       {
         label: 'Status:',
         content: statusMap[passStatus] || 'NIEZNANY',
@@ -66,7 +67,10 @@ function DetailsListPassDefinition({
       content: passDefinition.usesTotal,
     });
   }
-  details.push({ label: 'Opis:', content: passDefinition.description });
+  details.push({
+    label: 'Opis:',
+    content: protectWordBreaks(passDefinition.description),
+  });
 
   return (
     <GenericList

@@ -1,3 +1,5 @@
+import { protectWordBreaks } from '../../../../utils/validation';
+
 function ReviewSlide({ slideData }) {
   const { img, name, productName, review } = slideData;
 
@@ -15,8 +17,6 @@ function ReviewSlide({ slideData }) {
     } else return review;
   };
 
-  capReview(review);
-
   return (
     <li className='glide__slide'>
       <div className={`tile tile--m`}>
@@ -29,12 +29,14 @@ function ReviewSlide({ slideData }) {
         )}
         {name && (
           <h3 className={`tile__title`}>
-            <strong>{name}</strong>
+            <strong>{protectWordBreaks(name)}</strong>
           </h3>
         )}
         {productName && <p className={`tile__date`}>{productName}</p>}
         {review && (
-          <p className={`tile__desc italic`}>{`"${capReview(review)}"`}</p>
+          <p className={`tile__desc italic`}>{`"${protectWordBreaks(
+            capReview(review)
+          )}"`}</p>
         )}
       </div>
     </li>
