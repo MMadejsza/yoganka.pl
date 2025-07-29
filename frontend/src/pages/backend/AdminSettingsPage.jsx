@@ -1,6 +1,6 @@
 import TableSMTP from '../../components/backend//views/tables/TableSMTP.jsx';
 import SettingsSection from '../../components/backend/SettingsSection.jsx';
-import IntroSection from '../../components/common/IntroSection.jsx';
+import IntroSection from '../../components/frontend/IntroSection.jsx';
 
 function AdminSettingsPage() {
   return (
