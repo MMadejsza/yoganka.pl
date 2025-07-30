@@ -124,18 +124,7 @@ export const stringImgTitle = ({ initialValue = undefined } = {}) => ({
 });
 export const simpleTitle = ({
   initialValue = undefined,
-  description = (
-    <span>
-      ☝🏻 Twarda spacja do skopiowania z{' '}
-      <a
-        href='https://chat.openai.com/?model=gpt-4o&q=Wklej%20dok%C5%82adnie%20jeden%20znak%20twardej%20spacji%20%28Unicode%20U%2B00A0%29%20mi%C4%99dzy%20dwiema%20strza%C5%82kami%20%F0%9F%91%89%20i%20%F0%9F%91%88%2C%20bez%20%C5%BCadnych%252'
-        target='_blank'
-        rel='noopener noreferrer'
-      >
-        ChatGPT
-      </a>
-    </span>
-  ),
+  description = <span>🧘🏻‍♀️</span>,
   required = false,
 } = {}) => {
   return {

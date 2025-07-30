@@ -12,7 +12,7 @@ export default {
   fields: [
     simpleTitle({
       initialValue: 'O mnie',
-      description: `Pojawia się tylko w wersji mobile. Twarda spacja do skopiowania - miedzy gwiazdkami: ** **`,
+      description: `Pojawia się tylko w wersji mobile.`,
       required: true,
     }),
     {
