@@ -442,7 +442,7 @@ export const noBreakWords = [
   'św.',
 ];
 export const protectWordBreaks = text => {
-  if (typeof text != 'string') return;
+  if (typeof text != 'string') return text;
 
   const NBSP = '\u00A0';
   const words = text.split(' '); // we divide the text into words after spaces

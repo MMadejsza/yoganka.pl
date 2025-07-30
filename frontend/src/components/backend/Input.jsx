@@ -47,11 +47,10 @@ function Input({
                   : 'input-pair'
               } ${props.type === 'tel' ? 'phone' : ''}`}
             >
-              {/* Label for the checkbox */}
               <label htmlFor={`${id}_${index}`} className='checkbox-label'>
                 {protectWordBreaks(option.label)}
               </label>
-              {/* Checkbox input */}
+
               <input
                 type='checkbox'
                 id={`${id}_${index}`}
