@@ -1,7 +1,7 @@
 import { protectWordBreaks } from '../../utils/validation.js';
 import SymbolOrIcon from '../common/SymbolOrIcon';
 
-function ModalList({ extraClass, listType, data }) {
+function ModalList({ extraClass, listType, title, list }) {
   const icons = {
     included: 'fa-solid fa-check',
     excluded: 'fa-regular fa-hand-point-right',
@@ -19,7 +19,7 @@ function ModalList({ extraClass, listType, data }) {
     return icons[listType] || icons.included;
   };
 
-  const content = data.list?.map((item, index) => {
+  const content = list?.map((item, index) => {
     // if simple list -> item == string otherwise list of objects from freeTime
     const activity =
       typeof item === 'string' ? protectWordBreaks(item) : item.activity;
@@ -46,7 +46,7 @@ function ModalList({ extraClass, listType, data }) {
   return (
     <>
       <section className={dynamicClass}>
-        <h3 className='checklist__title'>{protectWordBreaks(data.title)}</h3>
+        <h3 className='checklist__title'>{protectWordBreaks(title)}</h3>
         <ul className='checklist__list'>{content}</ul>
       </section>
     </>

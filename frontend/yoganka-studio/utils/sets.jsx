@@ -1,4 +1,5 @@
 import * as components from './components.jsx';
+import { defaultModalSummaryPreview } from './previews.js';
 import { doubleLine, singleLine, tripleLine } from './validations.js';
 
 export const defaultIntroSet = [
@@ -415,26 +416,17 @@ export const defaultModalSet = (isCamp = false, isHidden = undefined) => {
     outcomeArr.push({
       name: 'summary',
       title: '📈 Sekcja podsumowania',
-      description: 'Różnią się tylko emotikonem',
-      type: 'object',
-      fields: [
+      type: 'array',
+      of: [
         {
           name: 'included',
+          type: 'object',
           title: '✔️ W cenie',
-          type: 'object',
           fields: [
-            components.simpleTitle({ initialValue: `W cenie:` }),
+            components.simpleTitle({ initialValue: 'W cenie:' }),
             components.stringList(),
           ],
-        },
-        {
-          name: 'excluded',
-          title: '👉🏻 Dodatkowo płatne',
-          type: 'object',
-          fields: [
-            components.simpleTitle({ initialValue: 'Dodatkowo płatne:' }),
-            components.stringList(),
-          ],
+          preview: defaultModalSummaryPreview('included'),
         },
         {
           name: 'optional',
@@ -444,13 +436,24 @@ export const defaultModalSet = (isCamp = false, isHidden = undefined) => {
             components.simpleTitle({ initialValue: 'Poszerz swoje menu:' }),
             components.stringList(),
           ],
+          preview: defaultModalSummaryPreview('optional'),
+        },
+        {
+          name: 'excluded',
+          type: 'object',
+          title: '👉🏻 Dodatkowo płatne',
+          fields: [
+            components.simpleTitle({ initialValue: 'Poza pakietem:' }),
+            components.stringList(),
+          ],
+          preview: defaultModalSummaryPreview('excluded'),
         },
         {
           name: 'freeTime',
-          title: '🌿 W czasie wolnym',
           type: 'object',
+          title: '🌿 W czasie wolnym',
           fields: [
-            components.simpleTitle({ initialValue: `W czasie wolnym:` }),
+            components.simpleTitle({ initialValue: 'W czasie wolnym:' }),
             {
               name: 'list',
               title: '🏄 Lista aktywności',
@@ -465,8 +468,10 @@ export const defaultModalSet = (isCamp = false, isHidden = undefined) => {
                       type: 'string',
                       options: {
                         list: [
-                          { title: '✔️ W cenie', value: 'free' },
+                          { title: '✔️ W cenie', value: 'included' },
+                          { title: '🌿 Czas wolny', value: 'free' },
                           { title: '➕ Opcjonalnie', value: 'optional' },
+                          { title: '👉🏻 Dodatkowo płatne', value: 'excluded' },
                         ],
                       },
                     },
@@ -482,9 +487,14 @@ export const defaultModalSet = (isCamp = false, isHidden = undefined) => {
                       activity: 'activity',
                     },
                     prepare({ status, activity }) {
-                      const icon = status === 'optional' ? '💰' : '✅';
+                      const icons = {
+                        included: '✔️',
+                        excluded: '👉🏻',
+                        optional: '➕',
+                        free: '🌿',
+                      };
                       return {
-                        title: `${icon} ${activity || '(brak)'}`,
+                        title: `${icons[status]} ${activity || '(brak)'}`,
                       };
                     },
                   },
@@ -492,6 +502,7 @@ export const defaultModalSet = (isCamp = false, isHidden = undefined) => {
               ],
             },
           ],
+          preview: defaultModalSummaryPreview('freeTime'),
         },
       ],
     });

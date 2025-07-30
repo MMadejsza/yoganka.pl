@@ -82,13 +82,21 @@ function Modal({ tile, onClose, isVisible, isClosing }) {
     </section>
   );
 
-  const renderSummaryLists = () => (
-    <section className='modal__summary'>
-      {Object.entries(modal.summary).map(([listType, content], index) => {
-        return <ModalList key={index} listType={listType} data={content} />;
-      })}
-    </section>
-  );
+  const renderSummaryLists = () => {
+    console.log(modal.summary);
+    return (
+      <section className='modal__summary'>
+        {modal.summary.map(obj => (
+          <ModalList
+            key={obj._key}
+            listType={obj._type}
+            list={obj.list}
+            title={obj.title}
+          />
+        ))}
+      </section>
+    );
+  };
 
   const eventOnlyContent = isEvent && (
     <>
@@ -121,7 +129,9 @@ function Modal({ tile, onClose, isVisible, isClosing }) {
             `${daysNumber > 3 ? 'long' : ''}`
           )}
         >
-          <h3 className='modal__title'>{modal.plan.title}</h3>
+          <h3 className='modal__title'>
+            {protectWordBreaks(modal.plan.title)}
+          </h3>
 
           {schedule.map((day, index) => (
             <CampDay key={index} dayData={day} />
