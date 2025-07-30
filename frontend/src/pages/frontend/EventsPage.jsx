@@ -17,6 +17,14 @@ function EventsPage() {
       queryFn: () => client.fetch(`*[_type == "eventsIntro"]`),
       ...cacheConfig,
     });
+  const {
+    data: EVENTS_OFFER_SECTION_DATA,
+    isLoading: eventsOfferSectionLoading,
+  } = useQuery({
+    queryKey: ['eventsOfferData'],
+    queryFn: () => client.fetch(`*[_type == "eventsOffer"]`),
+    ...cacheConfig,
+  });
   const { data: EVENTS_DATA, isLoading: eventsLoading } = useQuery({
     queryKey: ['eventsData'],
     queryFn: () => client.fetch(`*[_type == "event"]`),
@@ -31,7 +39,12 @@ function EventsPage() {
     ...cacheConfig,
   });
 
-  if (eventsLoading || eventsIntroLoading || eventsPhotosLoading) {
+  if (
+    eventsLoading ||
+    eventsOfferSectionLoading ||
+    eventsIntroLoading ||
+    eventsPhotosLoading
+  ) {
     return <Loader label={'Ładowanie'} />;
   }
 
@@ -48,7 +61,7 @@ function EventsPage() {
     products = [
       {
         id: 'wydarzenia',
-        header: `Nadchodzące wydarzenia:`,
+        header: EVENTS_OFFER_SECTION_DATA[0].title,
         data: events,
         limit: 0,
       },

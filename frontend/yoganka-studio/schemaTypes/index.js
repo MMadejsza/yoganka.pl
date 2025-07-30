@@ -13,8 +13,10 @@ import B2BPriceListAndCooperation from './Pages/B2B/priceListAndCooperation';
 import CampBenefitsType from './Pages/Camps/campBenefitsType';
 import CampsIntro from './Pages/Camps/campsIntro';
 import CampsPastPhotosType from './Pages/Camps/campsPastPhotosType';
+import CampsOfferSectionType from './Pages/Camps/offerSectionType';
 import EventsIntro from './Pages/Events/eventsIntro';
 import EventsPastPhotosType from './Pages/Events/eventsPastPhotosType';
+import EventsOfferSectionType from './Pages/Events/offerSectionType';
 import HomeAbout from './Pages/Home/aboutType';
 import HomeCertificateType from './Pages/Home/certificateType';
 import FooterBusinessDataType from './Pages/Home/Footer/businessDataType';
@@ -36,9 +38,11 @@ export const schemaTypes = [
   HomeCertificateType,
   HomePartnerType,
   CampsIntro,
+  CampsOfferSectionType,
   CampBenefitsType,
   CampsPastPhotosType,
   EventsIntro,
+  EventsOfferSectionType,
   EventsPastPhotosType,
   ScheduleIntro,
   B2BIntro,

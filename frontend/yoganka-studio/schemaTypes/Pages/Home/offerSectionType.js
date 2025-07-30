@@ -5,7 +5,7 @@ import { singleLine } from '../../../utils/validations';
 
 export default {
   name: 'offer',
-  title: '🏠 GŁÓWNA - 🛒 Oferta',
+  title: '🏠 GŁÓWNA - 🛒 Tytuły Oferty',
   type: 'document',
   fields: [
     {

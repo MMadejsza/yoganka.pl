@@ -20,6 +20,14 @@ function CampsPage() {
       queryFn: () => client.fetch(`*[_type == "campsIntro"]`),
       ...cacheConfig,
     });
+  const {
+    data: CAMPS_OFFER_SECTION_DATA,
+    isLoading: campsOfferSectionLoading,
+  } = useQuery({
+    queryKey: ['campsOfferData'],
+    queryFn: () => client.fetch(`*[_type == "campsOffer"]`),
+    ...cacheConfig,
+  });
   const { data: CAMPS_DATA, isLoading: campsLoading } = useQuery({
     queryKey: ['campsData'],
     queryFn: () => client.fetch(`*[_type == "camp"]`),
@@ -47,6 +55,7 @@ function CampsPage() {
 
   if (
     campsIntroLoading ||
+    campsOfferSectionLoading ||
     campsLoading ||
     campsBenefitsLoading ||
     reviewsLoading ||
@@ -59,6 +68,7 @@ function CampsPage() {
   let products = null;
   const dataSets = [
     CAMPS_INTRO_SECTION_DATA,
+    CAMPS_OFFER_SECTION_DATA,
     CAMPS_DATA,
     CAMPS_BENEFITS_SECTION_DATA,
     CAMPS_PAST_GALLERY_SECTION_DATA,
@@ -75,7 +85,12 @@ function CampsPage() {
     }));
 
     products = [
-      { id: 'camps', header: `Wybierz swój wyjazd`, data: camps, limit: 0 },
+      {
+        id: 'camps',
+        header: CAMPS_OFFER_SECTION_DATA[0].title,
+        data: camps,
+        limit: 0,
+      },
     ];
 
     content = (
