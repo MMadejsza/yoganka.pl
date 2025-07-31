@@ -19,6 +19,7 @@ function Logo({ type, data, placement, media, isActive }) {
         placement ? ` logo-container--${placement}` : ''
       }`}
       alt='Yoganka - Logo'
+      title='Yoganka - Logo'
     />
   );
 }

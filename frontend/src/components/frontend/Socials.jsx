@@ -1,13 +1,6 @@
+import { btnsMap } from '../../utils/utils';
 import SymbolOrIcon from '../common/SymbolOrIcon';
 import SanityImage from '../frontend/imgsRelated/SanityImage';
-
-const iconMap = {
-  instagram: { type: 'ICON', content: 'fa-brands fa-instagram' },
-  facebook: { type: 'ICON', content: 'fa-brands fa-square-facebook' },
-  whatsapp: { type: 'ICON', content: 'fab fa-whatsapp' },
-  phone: { type: 'ICON', content: 'fa-solid fa-phone' },
-  mail: { type: 'ICON', content: 'fa-solid fa-envelope' },
-};
 
 function Socials({ leadingClass, items }) {
   console.log(items);
@@ -18,14 +11,9 @@ function Socials({ leadingClass, items }) {
       {items
         .sort((a, b) => a.order - b.order)
         .map(social => {
-          const formattedLink =
-            social.name === 'whatsapp'
-              ? `https://wa.me/${social.link}`
-              : social.name === 'mail'
-              ? `mailto:${social.link}`
-              : social.name === 'phone'
-              ? `tel:${social.link}`
-              : social.link;
+          const formattedLink = `${btnsMap[social.name]?.linkPrefix}${
+            social.link
+          }`;
 
           return (
             <a
@@ -33,12 +21,12 @@ function Socials({ leadingClass, items }) {
               className={`${leadingClass}__social-link`}
               href={formattedLink}
               target='_blank'
-              title={social.title}
+              title={btnsMap[social.name].title}
             >
               <div className={`${leadingClass}__social`}>
                 <SymbolOrIcon
-                  specifier={iconMap[social.name]?.content || ''}
-                  type={iconMap[social.name].type}
+                  type={btnsMap[social.name].type}
+                  specifier={btnsMap[social.name]?.content || ''}
                   extraClass={`${leadingClass}__social-icon`}
                 />
                 {isNotMobile && (
@@ -47,7 +35,8 @@ function Socials({ leadingClass, items }) {
                     variant='qr' //! dodaj ten wariant
                     className={`${leadingClass}__qr-image`}
                     containerClassName={`${leadingClass}__qr`}
-                    alt={social.qrAlt}
+                    alt={btnsMap[social.name]?.qrAlt}
+                    title={btnsMap[social.name]?.qrTitle}
                   />
                 )}
               </div>

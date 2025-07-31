@@ -8,7 +8,8 @@
     "preview:demo": "vite preview --mode demo",
     "preview:prod": "vite preview --mode prod",
     "demo": "npm run build:demo && npm run preview:demo",
-    "prod": "npm run build:prod && npm run preview:prod"
+    "prod": "npm run build:prod && npm run preview:prod",
+    "sitemap": "node --experimental-modules --no-warnings sitemap-generator.js"
   },
   "dependencies": {
     "@glidejs/glide": "^3.6.2",

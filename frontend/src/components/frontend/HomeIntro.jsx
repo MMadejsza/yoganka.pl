@@ -5,7 +5,7 @@ import SanityImage from './imgsRelated/SanityImage.jsx';
 
 function HomeIntro({ data, logo }) {
   const prefix = 'home-intro';
-  const bgImg = data[0]?.bcgImage;
+  const bgImg = data?.bcgImage;
 
   return (
     <>
@@ -21,7 +21,7 @@ function HomeIntro({ data, logo }) {
           variant='headerBackground'
           className={`${prefix}__img`}
         />
-        <Motto content={data[0].motto} />
+        <Motto content={data.motto} />
       </Section>
     </>
   );

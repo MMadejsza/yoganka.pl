@@ -6,6 +6,18 @@ import GlideContainer from '../../components/frontend/glide/GlideContainer.jsx';
 import HomeIntro from '../../components/frontend/HomeIntro.jsx';
 import OfferType from '../../components/frontend/OfferType.jsx';
 import Section from '../../components/frontend/Section.jsx';
+import {
+  aboutGroQ,
+  campGroQ,
+  certificatesGroQ,
+  classGroQ,
+  eventGroQ,
+  homeIntroGroQ,
+  homeOfferGroQ,
+  logosGroQ,
+  partnersGroQ,
+  reviewsGroQ,
+} from '../../utils/httpGroq.js';
 import { client } from '../../utils/sanityClient.js';
 
 function HomePage() {
@@ -16,55 +28,55 @@ function HomePage() {
   //#region
   const { data: INTRO_SECTION_DATA, isLoading: introLoading } = useQuery({
     queryKey: ['introData'],
-    queryFn: () => client.fetch(`*[_type == "intro"]`),
+    queryFn: () => client.fetch(homeIntroGroQ),
     ...cacheConfig,
   });
   const { data: LOGO_DATA, isLoading: logoLoading } = useQuery({
     queryKey: ['logotypesData'],
-    queryFn: () => client.fetch(`*[_type == "logotypes"]`),
+    queryFn: () => client.fetch(logosGroQ),
     ...cacheConfig,
   });
   const { data: ABOUT_SECTION_DATA, isLoading: aboutLoading } = useQuery({
     queryKey: ['aboutData'],
-    queryFn: () => client.fetch(`*[_type == "about"]`),
+    queryFn: () => client.fetch(aboutGroQ),
     ...cacheConfig,
   });
   const { data: CAMPS_DATA, isLoading: campsLoading } = useQuery({
     queryKey: ['campsData'],
-    queryFn: () => client.fetch(`*[_type == "camp"]`),
+    queryFn: () => client.fetch(campGroQ),
     ...cacheConfig,
   });
   const { data: CLASSES_DATA, isLoading: classesLoading } = useQuery({
     queryKey: ['classesData'],
-    queryFn: () => client.fetch(`*[_type == "class"]`),
+    queryFn: () => client.fetch(classGroQ),
     ...cacheConfig,
   });
   const { data: EVENTS_DATA, isLoading: eventsLoading } = useQuery({
     queryKey: ['eventsData'],
-    queryFn: () => client.fetch(`*[_type == "event"]`),
+    queryFn: () => client.fetch(eventGroQ),
     ...cacheConfig,
   });
   const { data: OFFER_SECTION_DATA, isLoading: offerSectionLoading } = useQuery(
     {
       queryKey: ['offerSectionData'],
-      queryFn: () => client.fetch(`*[_type == "offer"]`),
+      queryFn: () => client.fetch(homeOfferGroQ),
       ...cacheConfig,
     }
   );
   const { data: REVIEWS_SECTION_DATA, isLoading: reviewsLoading } = useQuery({
     queryKey: ['reviewData'],
-    queryFn: () => client.fetch(`*[_type == "review"]`),
+    queryFn: () => client.fetch(reviewsGroQ),
     ...cacheConfig,
   });
   const { data: CERTIFICATES_SECTION_DATA, isLoading: certificatesLoading } =
     useQuery({
       queryKey: ['certificatesData'],
-      queryFn: () => client.fetch(`*[_type == "certificates"]`),
+      queryFn: () => client.fetch(certificatesGroQ),
       ...cacheConfig,
     });
   const { data: PARTNERS_SECTION_DATA, isLoading: partnersLoading } = useQuery({
     queryKey: ['partnersData'],
-    queryFn: () => client.fetch(`*[_type == "partners"]`),
+    queryFn: () => client.fetch(partnersGroQ),
     ...cacheConfig,
   });
   //#endregion
@@ -119,21 +131,21 @@ function HomePage() {
     products = [
       {
         specifier: 'camps',
-        header: OFFER_SECTION_DATA[0].camps.title,
+        header: OFFER_SECTION_DATA.camps.title,
         data: camps,
         limit: 2,
         moreLink: '/wyjazdy',
       },
       {
         specifier: 'classes',
-        header: OFFER_SECTION_DATA[0].classes.title,
+        header: OFFER_SECTION_DATA.classes.title,
         data: classes,
       },
       {
         specifier: 'events',
-        header: OFFER_SECTION_DATA[0].events.title,
+        header: OFFER_SECTION_DATA.events.title,
         data: events,
-        limit: OFFER_SECTION_DATA[0].events.limit,
+        limit: OFFER_SECTION_DATA.events.limit,
         moreLink: '/wydarzenia',
       },
     ];
@@ -195,7 +207,7 @@ function HomePage() {
       </Helmet>
 
       {isMobile ? (
-        <HomeIntro data={INTRO_SECTION_DATA} logo={LOGO_DATA[0]} />
+        <HomeIntro data={INTRO_SECTION_DATA} logo={LOGO_DATA} />
       ) : null}
 
       <About
@@ -203,9 +215,9 @@ function HomePage() {
         data={{
           intro: INTRO_SECTION_DATA,
           about: ABOUT_SECTION_DATA,
-          motto: INTRO_SECTION_DATA[0].motto,
+          motto: INTRO_SECTION_DATA.motto,
         }}
-        logo={LOGO_DATA[0]}
+        logo={LOGO_DATA}
       />
 
       <Section classy={`section--offer`}>
@@ -224,36 +236,36 @@ function HomePage() {
 
       <Section
         classy={`section--reviews`}
-        header={REVIEWS_SECTION_DATA[0].sectionTitle}
+        header={REVIEWS_SECTION_DATA.sectionTitle}
         modifier={`homepage`}
       >
         <GlideContainer
           glideConfig={{ perView: 2, ...commonGlideConfig }}
           glideBreakpoints={commonGlideBreakpoints}
           type='review'
-          slides={REVIEWS_SECTION_DATA[0].list}
+          slides={REVIEWS_SECTION_DATA.list}
         />
       </Section>
 
       <Section
         classy={'section--certificates'}
-        header={CERTIFICATES_SECTION_DATA[0].sectionTitle}
+        header={CERTIFICATES_SECTION_DATA.sectionTitle}
       >
         <GlideContainer
           glideConfig={{ perView: 5, ...commonGlideConfig }}
           type='tile'
-          slides={CERTIFICATES_SECTION_DATA[0].list}
+          slides={CERTIFICATES_SECTION_DATA.list}
         />
       </Section>
 
       <Section
         classy={'section--partners'}
-        header={PARTNERS_SECTION_DATA[0].sectionTitle}
+        header={PARTNERS_SECTION_DATA.sectionTitle}
       >
         <GlideContainer
           glideConfig={{ perView: 5, ...commonGlideConfig }}
           type='partner'
-          slides={PARTNERS_SECTION_DATA[0].list}
+          slides={PARTNERS_SECTION_DATA.list}
         />
       </Section>
     </>

@@ -7,6 +7,14 @@ import IntroSection from '../../components/frontend/IntroSection.jsx';
 import OfferType from '../../components/frontend/OfferType.jsx';
 import Section from '../../components/frontend/Section.jsx';
 import TurningTilesSection from '../../components/frontend/TurningTilesSection.jsx';
+import {
+  campGroQ,
+  campsBenefitsGroQ,
+  campsIntroGroQ,
+  campsOfferGroQ,
+  campsPastPhotosGroQ,
+  reviewsGroQ,
+} from '../../utils/httpGroq.js';
 import { client } from '../../utils/sanityClient.js';
 
 function CampsPage() {
@@ -17,7 +25,7 @@ function CampsPage() {
   const { data: CAMPS_INTRO_SECTION_DATA, isLoading: campsIntroLoading } =
     useQuery({
       queryKey: ['campsIntroData'],
-      queryFn: () => client.fetch(`*[_type == "campsIntro"]`),
+      queryFn: () => client.fetch(campsIntroGroQ),
       ...cacheConfig,
     });
   const {
@@ -25,18 +33,18 @@ function CampsPage() {
     isLoading: campsOfferSectionLoading,
   } = useQuery({
     queryKey: ['campsOfferData'],
-    queryFn: () => client.fetch(`*[_type == "campsOffer"]`),
+    queryFn: () => client.fetch(campsOfferGroQ),
     ...cacheConfig,
   });
   const { data: CAMPS_DATA, isLoading: campsLoading } = useQuery({
     queryKey: ['campsData'],
-    queryFn: () => client.fetch(`*[_type == "camp"]`),
+    queryFn: () => client.fetch(campGroQ),
     ...cacheConfig,
   });
   const { data: CAMPS_BENEFITS_SECTION_DATA, isLoading: campsBenefitsLoading } =
     useQuery({
       queryKey: ['campsBenefitsData'],
-      queryFn: () => client.fetch(`*[_type == "benefits"]`),
+      queryFn: () => client.fetch(campsBenefitsGroQ),
       ...cacheConfig,
     });
   const {
@@ -44,12 +52,12 @@ function CampsPage() {
     isLoading: campsPhotosLoading,
   } = useQuery({
     queryKey: ['campsPhotosData'],
-    queryFn: () => client.fetch(`*[_type == "campsPhotos"]`),
+    queryFn: () => client.fetch(campsPastPhotosGroQ),
     ...cacheConfig,
   });
   const { data: REVIEWS_SECTION_DATA, isLoading: reviewsLoading } = useQuery({
     queryKey: ['reviewData'],
-    queryFn: () => client.fetch(`*[_type == "review"]`),
+    queryFn: () => client.fetch(reviewsGroQ),
     ...cacheConfig,
   });
 
@@ -87,7 +95,7 @@ function CampsPage() {
     products = [
       {
         id: 'camps',
-        header: CAMPS_OFFER_SECTION_DATA[0].title,
+        header: CAMPS_OFFER_SECTION_DATA.title,
         data: camps,
         limit: 0,
       },
@@ -98,7 +106,7 @@ function CampsPage() {
         <IntroSection
           modifier={'dummy'}
           className={`intro`}
-          data={CAMPS_INTRO_SECTION_DATA[0]}
+          data={CAMPS_INTRO_SECTION_DATA}
         />
 
         <TurningTilesSection data={CAMPS_BENEFITS_SECTION_DATA} />
@@ -119,7 +127,7 @@ function CampsPage() {
 
         <Section
           classy={`section--reviews`}
-          header={REVIEWS_SECTION_DATA[0].sectionTitle}
+          header={REVIEWS_SECTION_DATA.sectionTitle}
         >
           <GlideContainer
             glideConfig={{
@@ -138,12 +146,12 @@ function CampsPage() {
               1024: { perView: 1 },
             }}
             type='review'
-            slides={REVIEWS_SECTION_DATA[0].list}
+            slides={REVIEWS_SECTION_DATA.list}
           />
         </Section>
 
         <SimpleGallery
-          givenGallery={CAMPS_PAST_GALLERY_SECTION_DATA[0].gallery}
+          givenGallery={CAMPS_PAST_GALLERY_SECTION_DATA.gallery}
           glideConfig={{
             type: 'carousel',
             perView: 2,
@@ -155,7 +163,7 @@ function CampsPage() {
           glideBreakpoints={{
             1024: { perView: 1 },
           }}
-          title={CAMPS_PAST_GALLERY_SECTION_DATA[0].sectionTitle}
+          title={CAMPS_PAST_GALLERY_SECTION_DATA.sectionTitle}
         />
       </>
     );

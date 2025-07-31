@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useSwipe } from '../../../hooks/useSwipe';
 import { mutateOnLoginOrSignup, queryClient } from '../../../utils/http.js';
+import { logosGroQ, navsGroQ } from '../../../utils/httpGroq.js';
 import { client } from '../../../utils/sanityClient.js';
 import SymbolOrIcon from '../../common/SymbolOrIcon';
 import Logo from '../../frontend/Logo.jsx';
@@ -49,12 +50,12 @@ function Nav({ side, status, setIsNavOpen }) {
   const cacheConfig = { staleTime: 1000 * 60 * 10, cacheTime: 1000 * 60 * 15 };
   const { data: LOGO_DATA, isLoading: logoLoading } = useQuery({
     queryKey: ['logotypesData'],
-    queryFn: () => client.fetch(`*[_type == "logotypes"]`),
+    queryFn: () => client.fetch(logosGroQ),
     ...cacheConfig,
   });
   const { data: NAV_DATA, isLoading: navTabsLoading } = useQuery({
     queryKey: ['navsTabsData'],
-    queryFn: () => client.fetch(`*[_type == "navs"]`),
+    queryFn: () => client.fetch(navsGroQ),
     ...cacheConfig,
   });
 
@@ -223,7 +224,7 @@ function Nav({ side, status, setIsNavOpen }) {
           >
             {({ isActive }) => (
               <Logo
-                data={LOGO_DATA[0]}
+                data={LOGO_DATA}
                 media={isMobile ? 'mobile' : null}
                 placement={`nav`}
                 isActive={isActive}

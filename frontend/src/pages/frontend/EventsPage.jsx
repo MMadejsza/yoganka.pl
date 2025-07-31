@@ -5,6 +5,12 @@ import SimpleGallery from '../../components/frontend/glide/SimpleGallery.jsx';
 import IntroSection from '../../components/frontend/IntroSection.jsx';
 import OfferType from '../../components/frontend/OfferType.jsx';
 import Section from '../../components/frontend/Section.jsx';
+import {
+  eventGroQ,
+  eventsIntroGroQ,
+  eventsOfferGroQ,
+  eventsPastPhotosGroQ,
+} from '../../utils/httpGroq.js';
 import { client } from '../../utils/sanityClient.js';
 
 function EventsPage() {
@@ -14,7 +20,7 @@ function EventsPage() {
   const { data: EVENTS_INTRO_SECTION_DATA, isLoading: eventsIntroLoading } =
     useQuery({
       queryKey: ['eventsIntroData'],
-      queryFn: () => client.fetch(`*[_type == "eventsIntro"]`),
+      queryFn: () => client.fetch(eventsIntroGroQ),
       ...cacheConfig,
     });
   const {
@@ -22,12 +28,12 @@ function EventsPage() {
     isLoading: eventsOfferSectionLoading,
   } = useQuery({
     queryKey: ['eventsOfferData'],
-    queryFn: () => client.fetch(`*[_type == "eventsOffer"]`),
+    queryFn: () => client.fetch(eventsOfferGroQ),
     ...cacheConfig,
   });
   const { data: EVENTS_DATA, isLoading: eventsLoading } = useQuery({
     queryKey: ['eventsData'],
-    queryFn: () => client.fetch(`*[_type == "event"]`),
+    queryFn: () => client.fetch(eventGroQ),
     ...cacheConfig,
   });
   const {
@@ -35,7 +41,7 @@ function EventsPage() {
     isLoading: eventsPhotosLoading,
   } = useQuery({
     queryKey: ['eventsPhotosData'],
-    queryFn: () => client.fetch(`*[_type == "eventsPhotos"]`),
+    queryFn: () => client.fetch(eventsPastPhotosGroQ),
     ...cacheConfig,
   });
 
@@ -61,7 +67,7 @@ function EventsPage() {
     products = [
       {
         id: 'wydarzenia',
-        header: EVENTS_OFFER_SECTION_DATA[0].title,
+        header: EVENTS_OFFER_SECTION_DATA.title,
         data: events,
         limit: 0,
       },
@@ -114,7 +120,7 @@ function EventsPage() {
       <IntroSection
         modifier={`no-bcg-pic`}
         className={`intro`}
-        data={EVENTS_INTRO_SECTION_DATA[0]}
+        data={EVENTS_INTRO_SECTION_DATA}
       />
 
       {contentLoaded && (
@@ -134,7 +140,7 @@ function EventsPage() {
       )}
 
       <SimpleGallery
-        givenGallery={EVENTS_PAST_GALLERY_SECTION_DATA[0].gallery}
+        givenGallery={EVENTS_PAST_GALLERY_SECTION_DATA.gallery}
         glideConfig={{
           type: 'carousel',
           perView: 2,
@@ -146,7 +152,7 @@ function EventsPage() {
         glideBreakpoints={{
           1024: { perView: 1 },
         }}
-        title={EVENTS_PAST_GALLERY_SECTION_DATA[0].sectionTitle}
+        title={EVENTS_PAST_GALLERY_SECTION_DATA.sectionTitle}
       />
     </>
   );

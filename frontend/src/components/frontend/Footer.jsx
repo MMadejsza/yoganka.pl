@@ -1,5 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
+import {
+  footerBusinessDataGroQ,
+  footerSocialsGroQ,
+  logosGroQ,
+} from '../../utils/httpGroq.js';
 import { client } from '../../utils/sanityClient.js';
 import BusinessDetails from './BusinessDetails.jsx';
 import DevDetails from './DevDetails.jsx';
@@ -12,17 +17,17 @@ function Footer() {
   const cacheConfig = { staleTime: 1000 * 60 * 10, cacheTime: 1000 * 60 * 15 };
   const { data: LOGO_DATA, isLoading: logoLoading } = useQuery({
     queryKey: ['logotypesData'],
-    queryFn: () => client.fetch(`*[_type == "logotypes"]`),
+    queryFn: () => client.fetch(logosGroQ),
     ...cacheConfig,
   });
   const { data: BUSINESS_DATA, isLoading: businessDataLoading } = useQuery({
     queryKey: ['footerBusinessData'],
-    queryFn: () => client.fetch(`*[_type == "footerBusinessData"]`),
+    queryFn: () => client.fetch(footerBusinessDataGroQ),
     ...cacheConfig,
   });
   const { data: SOCIALS_DATA, isLoading: socialsDataLoading } = useQuery({
     queryKey: ['socialsData'],
-    queryFn: () => client.fetch(`*[_type == "social"]`),
+    queryFn: () => client.fetch(footerSocialsGroQ),
     ...cacheConfig,
   });
 
@@ -36,8 +41,8 @@ function Footer() {
   if (!anyEmpty) {
     content = (
       <>
-        <Logo type='justBody' data={LOGO_DATA[0]} placement={leadingClass} />
-        <BusinessDetails data={BUSINESS_DATA[0]} leadingClass={leadingClass} />
+        <Logo type='justBody' data={LOGO_DATA} placement={leadingClass} />
+        <BusinessDetails data={BUSINESS_DATA} leadingClass={leadingClass} />
         <Socials leadingClass={leadingClass} items={SOCIALS_DATA} />
       </>
     );

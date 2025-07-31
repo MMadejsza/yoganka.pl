@@ -46,7 +46,7 @@ function Tile({ data, today, clickable }) {
     <SanityImage
       image={data.mainImage}
       variant='front'
-      alt={data.front.title}
+      alt={`${data.front.title} - zdjęcie profilowe`}
       className='tile__img'
     />
   );

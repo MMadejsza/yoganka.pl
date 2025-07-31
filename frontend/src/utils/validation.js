@@ -448,7 +448,7 @@ export const protectWordBreaks = text => {
   const words = text.split(' '); // we divide the text into words after spaces
   const newWords = words.map((word, index) => {
     // if the word is in the list and it is not the last word
-    if (noBreakWords.includes(word) && index < words.length - 1) {
+    if (noBreakWords.includes(word.toLowerCase()) && index < words.length - 1) {
       return word + NBSP;
     } else {
       return word + ' ';

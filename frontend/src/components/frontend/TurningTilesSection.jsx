@@ -4,9 +4,9 @@ import TurningTile from './TurningTile.jsx';
 function TurningTilesSection({ tilesModifier, data }) {
   const classy = 'turning-tile';
   return (
-    <Section classy={`section--${classy}s`} header={data[0].sectionTitle}>
+    <Section classy={`section--${classy}s`} header={data.sectionTitle}>
       <main className={`${classy}s__container`}>
-        {data[0].list.map((turningTile, index) => (
+        {data.list.map((turningTile, index) => (
           <TurningTile
             key={index}
             tilesModifier={tilesModifier}

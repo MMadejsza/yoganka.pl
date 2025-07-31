@@ -8,6 +8,9 @@
   font-size: 3.5rem;
   color: map.get($colors, accent-bcg);
   transition: map.get($behavior, base-transition);
+  display: grid;
+  align-items: center;
+  align-content: center;
 
   &--cta {
     color: map.get($colors, accent-text) !important;

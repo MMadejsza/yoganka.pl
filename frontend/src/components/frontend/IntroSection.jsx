@@ -5,8 +5,9 @@ import Section from './Section.jsx';
 
 function IntroSection({ modifier, className, extraClass, data }) {
   const location = useLocation();
-  const bgImg = data?.backgroundImage;
+  const bcgImg = data?.backgroundImage;
   const prefix = 'home-intro';
+  console.log(bcgImg);
 
   return (
     <Section
@@ -16,9 +17,9 @@ function IntroSection({ modifier, className, extraClass, data }) {
       iSpecific={true}
       key={location.pathname}
     >
-      {bgImg && (
+      {bcgImg && (
         <SanityImage
-          image={bgImg}
+          image={bcgImg}
           variant='headerBackground'
           className={`${prefix}__img`}
         />

@@ -4,7 +4,7 @@ import * as components from '../../../../utils/components.jsx';
 
 export default {
   name: 'social',
-  title: 'STOPKA - 📱 Social media',
+  title: '🏢 STOPKA - 📱 Social media',
   type: 'document',
   fields: [
     {
@@ -44,10 +44,5 @@ export default {
       isConditionalFnSet: { parentLabel: 'name' },
     }),
     components.qrImage(),
-    components.stringImgTitle(),
-    components.qrAlt({
-      hiddenFn: undefined,
-      initialValFn: document => `${document.name} QR Code`,
-    }),
   ],
 };

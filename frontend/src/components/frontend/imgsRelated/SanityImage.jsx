@@ -15,30 +15,33 @@ const imgQuality = 60;
 function SanityImage({
   image,
   variant,
-  alt = '',
   className = '',
   containerClassName = '',
+  title,
+  alt,
 }) {
-  if (!image || !image.asset?._ref) return null;
+  if (!image?.asset?._id) {
+    console.log('zdjęcie nie wygenerowane- brak asset');
+    return null;
+  }
 
   const builder = urlFor(image);
   const galleryBuilder = urlFor(image).ignoreImageParams();
 
-  const filename = image.asset.originalFilename || '';
-  const ref = image.asset._ref.toLowerCase();
+  const filename = image.asset.originalFilename;
+  const ref = image.asset._id?.toLowerCase?.() ?? '';
+
+  const imgProps = {
+    alt: alt ?? filename,
+    title: title ?? filename,
+    className: className,
+    loading: 'lazy',
+  };
 
   //   squares
   if (variant === 'front' || variant === 'partner') {
     if (variant === 'partner' && ref.endsWith('-svg')) {
-      return (
-        <img
-          src={builder.url()}
-          alt={alt || filename}
-          title={filename}
-          className={className}
-          loading='lazy'
-        />
-      );
+      return <img src={builder.url()} {...imgProps} />;
     }
     // WebP srcSet
     const webpSrcSet = frontSizes
@@ -94,10 +97,7 @@ function SanityImage({
             .url()}
           srcSet={jpgSrcSet}
           // sizes={givenSizes}
-          alt={alt || filename}
-          title={filename}
-          className={className}
-          loading='lazy'
+          {...imgProps}
         />
       </picture>
     );
@@ -117,15 +117,7 @@ function SanityImage({
         : stampsSizes;
     // if svg
     if (ref.endsWith('-svg')) {
-      return (
-        <img
-          src={builder.url()}
-          alt={alt || filename}
-          title={filename}
-          className={className}
-          loading='lazy'
-        />
-      );
+      return <img src={builder.url()} {...imgProps} />;
     }
     // WebP srcSet
     const webpSrcSet = pickedSet
@@ -175,10 +167,7 @@ function SanityImage({
             .url()}
           srcSet={jpgSrcSet}
           // sizes={givenSizes}
-          alt={alt || filename}
-          title={filename}
-          className={className}
-          loading='lazy'
+          {...imgProps}
         />
       </picture>
     );
@@ -203,10 +192,7 @@ function SanityImage({
         <img
           src={builder.width(headerWidths[0]).url()}
           srcSet={jpgSrcSet}
-          alt={alt || filename}
-          title={filename}
-          className={className}
-          loading='lazy'
+          {...imgProps}
         />
       </picture>
     );
@@ -256,10 +242,7 @@ function SanityImage({
             .url()}
           srcSet={jpgSrcSet}
           sizes={sizesAttr}
-          alt={alt || filename}
-          title={filename}
-          loading='lazy'
-          className={className}
+          {...imgProps}
         />
       </picture>
     );

@@ -36,7 +36,6 @@ export const defaultBtnsSet = {
             ],
           },
         },
-        components.stringImgTitle(),
         components.stringSymbol({
           hiddenFn: ({ parent }) => parent.action !== 'external',
         }),
@@ -94,10 +93,6 @@ export const defaultBtnsSet = {
         }),
         components.qrImage({
           hiddenFn: ({ parent }) => parent.action !== 'phone',
-        }),
-        components.qrAlt({
-          hiddenFn: undefined,
-          initialValFn: document => `${document.name} QR Code`,
         }),
       ],
       preview: {

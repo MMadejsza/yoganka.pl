@@ -3,7 +3,7 @@ import { doubleLine, tripleLine } from '../../../../utils/validations';
 
 export default {
   name: 'footerBusinessData',
-  title: 'STOPKA - 🏢 Dane kontaktowe',
+  title: '🏢 STOPKA - 🏢 Dane kontaktowe',
   type: 'document',
   fields: [
     {
@@ -51,7 +51,7 @@ export default {
       type: 'string',
       validation: Rule =>
         Rule.custom(value => {
-          if (/^\d{10}$/.test(value)) return true;
+          if (/^\d{10}$/.test(value) || !value) return true;
           return '⚠️ Wprowadź poprawny NIP';
         }),
     },

@@ -1,0 +1,11 @@
+User-agent: *
+Disallow: /admin-console/
+Disallow: /konto/
+Disallow: /login/
+Disallow: /verify/
+Disallow: /admin-settings/
+
+# Allow the rest
+Allow: /
+
+Sitemap: https://yoganka.pl/sitemap.xml

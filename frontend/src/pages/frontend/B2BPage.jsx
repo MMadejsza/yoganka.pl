@@ -8,6 +8,13 @@ import ModalCheckList from '../../components/frontend/ModalCheckList.jsx';
 import OfferType from '../../components/frontend/OfferType.jsx';
 import Section from '../../components/frontend/Section.jsx';
 import TurningTilesSection from '../../components/frontend/TurningTilesSection.jsx';
+import {
+  b2bBenefitsGroQ,
+  b2bIntroGroQ,
+  b2bOfferGroQ,
+  b2bOfferTypesGroQ,
+  b2bPriceListGroQ,
+} from '../../utils/httpGroq.js';
 import { client } from '../../utils/sanityClient.js';
 import { assignPageCSSModifier } from '../../utils/utils.jsx';
 import { protectWordBreaks } from '../../utils/validation.js';
@@ -19,27 +26,27 @@ function B2BPage() {
 
   const { data: INTRO, isLoading: introLoading } = useQuery({
     queryKey: ['b2bIntro'],
-    queryFn: () => client.fetch(`*[_type == "b2bIntro"][0]`),
+    queryFn: () => client.fetch(b2bIntroGroQ),
     ...cacheConfig,
   });
   const { data: OFFER, isLoading: offerLoading } = useQuery({
     queryKey: ['b2bOffer'],
-    queryFn: () => client.fetch(`*[_type == "b2bOffer"][0]`),
+    queryFn: () => client.fetch(b2bOfferGroQ),
     ...cacheConfig,
   });
   const { data: TYPES, isLoading: typesLoading } = useQuery({
     queryKey: ['b2bOfferTypes'],
-    queryFn: () => client.fetch(`*[_type == "b2bOfferTypes"]`),
+    queryFn: () => client.fetch(b2bOfferTypesGroQ),
     ...cacheConfig,
   });
   const { data: BENEFITS, isLoading: benefitsLoading } = useQuery({
     queryKey: ['b2bBenefits'],
-    queryFn: () => client.fetch(`*[_type == "b2bBenefits"][0]`),
+    queryFn: () => client.fetch(b2bBenefitsGroQ),
     ...cacheConfig,
   });
   const { data: PRICE_LIST, isLoading: priceListLoading } = useQuery({
     queryKey: ['b2bPriceList'],
-    queryFn: () => client.fetch(`*[_type == "b2bPriceListAndCooperation"][0]`),
+    queryFn: () => client.fetch(b2bPriceListGroQ),
     ...cacheConfig,
   });
 
@@ -117,9 +124,9 @@ function B2BPage() {
 
       {OFFER && (
         <Section classy={`section--offer`}>
-          {products.map(product => (
+          {products.map((product, index) => (
             <OfferType
-              key={product.id}
+              key={index}
               id={product.id}
               header={product.header}
               data={product.data}

@@ -110,7 +110,8 @@ function Modal({ tile, onClose, isVisible, isClosing }) {
         <ModalList
           extraClass='event'
           listType={modal.program?.listType}
-          data={modal.program}
+          list={modal.program?.list}
+          title={modal.program.title}
         />
       )}
     </>

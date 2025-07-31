@@ -214,7 +214,7 @@ export const link = ({
 } = {}) => {
   if (isConditionalFnSet.fn) {
     description = `☝🏻 W przypadku maila - podaj adres np."kontakt@yoganka.pl | ☝🏻 Whatsapp z kierunkowym bez '+': 48792891607. |
-          ☝🏻 Telefon z kierunkowym : +48792891607. |  ☝🏻 Zewnętrzny link - pełny link`;
+          ☝🏻 Telefon z kierunkowym : +48792891607. |  ☝🏻 Zewnętrzny link - pełny link z https itp`;
   }
 
   return {
