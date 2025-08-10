@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import { Helmet } from 'react-helmet';
 import Loader from '../../components/common/Loader.jsx';
 import GlideContainer from '../../components/frontend/glide/GlideContainer.jsx';
 import SimpleGallery from '../../components/frontend/glide/SimpleGallery.jsx';
 import IntroSection from '../../components/frontend/IntroSection.jsx';
 import OfferType from '../../components/frontend/OfferType.jsx';
 import Section from '../../components/frontend/Section.jsx';
+import Seo from '../../components/frontend/Seo.jsx';
 import TurningTilesSection from '../../components/frontend/TurningTilesSection.jsx';
 import {
   campGroQ,
@@ -171,30 +171,12 @@ function CampsPage() {
 
   return (
     <>
-      <Helmet>
-        <html lang='pl' />
-        <title>Wyjazdy Joga – Polska i zagranica | Yoganka</title>
-        <meta
-          name='description'
-          content='Wyjazdy jogowe w Polsce - praktyka jogi, medytacja i regeneracja. Sprawdź ofertę najbliższych wyjazdów z Yoganką.'
-        />
-        <meta
-          name='keywords'
-          content='wyjazdy z jogą, joga w naturze, retreat jogowy, wyjazd weekendowy joga'
-        />
-        <meta name='author' content='MMadejsza' />
-        <link rel='canonical' href='https://yoganka.pl/wyjazdy' />
-        <meta name='robots' content='index, follow' />
-        <meta property='og:locale' content='pl_PL' />
-        <meta property='og:title' content='Wyjazdy z Jogą – Yoganka' />
-        <meta
-          property='og:description'
-          content='Weekendowe i tygodniowe wyjazdy z jogą, zdrową kuchnią i mindfulness. Sprawdź terminy i zapisz się!'
-        />
-        <meta property='og:url' content='https://yoganka.pl/wyjazdy' />
-        <meta property='og:type' content='website' />
-        <meta property='og:image' content='/favicon_io/apple-touch-icon.png' />
-      </Helmet>
+      <Seo
+        title='Wyjazdy Joga – Polska i zagranica | Yoganka'
+        description='Wyjazdy jogowe w Polsce - praktyka jogi, medytacja i regeneracja. Sprawdź ofertę najbliższych wyjazdów z Yoganką.'
+        keywords='wyjazdy z jogą, joga w naturze, retreat jogowy, wyjazd weekendowy joga'
+        canonical='https://yoganka.pl/wyjazdy'
+      />
       {content}
     </>
   );

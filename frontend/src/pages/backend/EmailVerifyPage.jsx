@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { Helmet } from 'react-helmet';
 import { useNavigate, useParams } from 'react-router-dom';
+import Seo from '../../components/frontend/Seo.jsx';
 const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
 function EmailVerifyPage() {
@@ -25,9 +25,12 @@ function EmailVerifyPage() {
   // Msg for the meanwhile before redirection
   return (
     <>
-      <Helmet>
-        <meta name='robots' content='noindex, nofollow' />
-      </Helmet>
+      <Seo
+        title='Weryfikacja konta – Yoganka'
+        description={null}
+        canonical={null}
+        robots='noindex, nofollow'
+      />
 
       <main className='login-box'>
         <section className={'login'}>

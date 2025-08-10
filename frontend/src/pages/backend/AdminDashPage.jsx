@@ -1,6 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet';
 import { useLocation, useNavigate } from 'react-router-dom';
 import FloatingBtnAddItem from '../../components/backend/FloatingBtnAddItem.jsx';
 import FloatingBtns from '../../components/backend/FloatingBtns.jsx';
@@ -11,6 +10,7 @@ import TableCustomerPasses from '../../components/backend/views/tables/TableCust
 import ViewsController from '../../components/backend/ViewsController.jsx';
 import WrapperModalTable from '../../components/backend/WrapperModalTable.jsx';
 import Section from '../../components/frontend/Section.jsx';
+import Seo from '../../components/frontend/Seo.jsx';
 import { handleContactCustomer } from '../../utils/cardsAndTableUtils.jsx';
 import { formatDuration, formatIsoDateTime } from '../../utils/dateTime.js';
 import {
@@ -551,9 +551,12 @@ function AdminPage() {
 
   return (
     <>
-      <Helmet>
-        <meta name='robots' content='noindex, nofollow' />
-      </Helmet>
+      <Seo
+        title='Admin Panel - Yoganka'
+        description={null}
+        canonical={null}
+        robots='noindex, nofollow'
+      />
 
       <div className='backend-content-wrapper'>
         {status.user?.role === 'ADMIN' && (

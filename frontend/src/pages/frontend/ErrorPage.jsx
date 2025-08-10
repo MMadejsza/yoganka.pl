@@ -1,17 +1,18 @@
-import { Helmet } from 'react-helmet';
 import FloatingBtns from '../../components/backend/FloatingBtns.jsx';
 import Footer from '../../components/frontend/Footer.jsx';
 import Burger from '../../components/frontend/navigation/Burger.jsx';
 import Nav from '../../components/frontend/navigation/Nav.jsx';
+import Seo from '../../components/frontend/Seo.jsx';
 
 function ErrorPage() {
   return (
     <>
-      <Helmet>
-        <html lang='pl' />
-        <title>Błąd - Strona nie została znaleziona</title>
-        <meta name='robots' content='noindex, nofollow' />
-      </Helmet>
+      <Seo
+        title='Błąd - Strona nie została znaleziona'
+        description={null}
+        canonical={null}
+        robots='noindex, nofollow'
+      />
 
       <div className='wrapper'>
         <Burger />

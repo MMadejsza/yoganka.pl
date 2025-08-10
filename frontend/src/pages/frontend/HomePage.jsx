@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import { Helmet } from 'react-helmet';
 import Loader from '../../components/common/Loader.jsx';
 import About from '../../components/frontend/About.jsx';
 import GlideContainer from '../../components/frontend/glide/GlideContainer.jsx';
 import HomeIntro from '../../components/frontend/HomeIntro.jsx';
 import OfferType from '../../components/frontend/OfferType.jsx';
 import Section from '../../components/frontend/Section.jsx';
+import Seo from '../../components/frontend/Seo.jsx';
 import {
   aboutGroQ,
   campGroQ,
@@ -166,45 +166,14 @@ function HomePage() {
 
   return (
     <>
-      <Helmet>
-        <html lang='pl' />
-        <title>Yoganka – Joga Trójmiasto i Online</title>
-        <meta
-          name='description'
-          content='Profesjonalna instruktorka jogi oferująca wyjątkowe zajęcia w Trójmieście, wyjazdy z jogą oraz warsztaty jogi dzięki certyfikatom zdobytym na Bali. Specjalizuje się również w jodze na supie oraz sesjach mindfulness.'
-        />
-        <meta
-          name='keywords'
-          content='joga Trójmiasto, joga Gdańsk, joga na SUPie, wyjazdy jogowe, joga online, joga z gongami, mindfulness'
-        />
-        <meta name='author' content='MMadejsza' />
-        <link rel='canonical' href='https://yoganka.pl/' />
-        <meta name='robots' content='index, follow' />
-
-        <meta property='og:locale' content='pl_PL' />
-        <meta
-          property='og:title'
-          content='Yoganka – Joga Trójmiasto i Online'
-        />
-        <meta
-          property='og:description'
-          content='Zajęcia w Trójmieście, joga na SUPie, warsztaty i wyjazdy jogowe. Certyfikowana nauczycielka z doświadczeniem z Bali.'
-        />
-        <meta property='og:url' content='https://yoganka.pl/' />
-        <meta property='og:type' content='website' />
-        <meta property='og:image' content='/favicon_io/apple-touch-icon.png' />
-
-        <meta name='twitter:card' content='summary_large_image' />
-        <meta
-          name='twitter:title'
-          content='Yoganka – Joga Trójmiasto i Online'
-        />
-        <meta
-          name='twitter:description'
-          content='Zajęcia w Trójmieście, joga na SUPie, warsztaty i wyjazdy jogowe.'
-        />
-        <meta name='twitter:image' content='/favicon_io/apple-touch-icon.png' />
-      </Helmet>
+      <Seo
+        title='Yoganka – Joga Trójmiasto i Online'
+        description='Profesjonalna instruktorka jogi oferująca wyjątkowe zajęcia w Trójmieście, wyjazdy z jogą oraz warsztaty jogi dzięki certyfikatom zdobytym na Bali. Specjalizuje się również w jodze na supie oraz sesjach mindfulness.'
+        keywords={
+          'joga Trójmiasto, joga Gdańsk, joga na SUPie, wyjazdy jogowe, joga online, joga z gongami, mindfulness'
+        }
+        canonical='https://yoganka.pl/'
+      />
 
       {isMobile ? (
         <HomeIntro data={INTRO_SECTION_DATA} logo={LOGO_DATA} />

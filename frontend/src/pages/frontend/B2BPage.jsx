@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
-import { Helmet } from 'react-helmet';
 import Loader from '../../components/common/Loader.jsx';
 import Buttons from '../../components/frontend/Buttons.jsx';
 import IntroSection from '../../components/frontend/IntroSection.jsx';
 import ModalCheckList from '../../components/frontend/ModalCheckList.jsx';
 import OfferType from '../../components/frontend/OfferType.jsx';
 import Section from '../../components/frontend/Section.jsx';
+import Seo from '../../components/frontend/Seo.jsx';
 import TurningTilesSection from '../../components/frontend/TurningTilesSection.jsx';
 import {
   b2bBenefitsGroQ,
@@ -74,44 +74,14 @@ function B2BPage() {
   const arePriceListBtns = Object.entries(PRICE_LIST.btnsContent).length > 0;
   return (
     <>
-      <Helmet>
-        <html lang='pl' />
-        <title>Joga dla Firm - Treningi i Wellbeing | Yoganka</title>
-        <meta
-          name='description'
-          content='Zadbaj o zdrowie psychiczne i fizyczne pracowników. Zajęcia jogi dla firm w całej Polsce - online i stacjonarnie.'
-        />
-        <meta
-          name='keywords'
-          content='joga dla firm, wellbeing, joga w pracy, benefit dla pracowników'
-        />
-        <meta name='author' content='MMadejsza' />
-        <link rel='canonical' href='https://yoganka.pl/yoga-dla-firm' />
-        <meta name='robots' content='index, follow' />
-
-        <meta property='og:locale' content='pl_PL' />
-        <meta property='og:title' content='Joga dla Firm – Yoganka' />
-        <meta
-          property='og:description'
-          content='Profesjonalne zajęcia jogi dla pracowników, zespołów i eventów firmowych. Online lub na miejscu.'
-        />
-        <meta property='og:url' content='https://yoganka.pl/yoga-dla-firm' />
-        <meta property='og:type' content='website' />
-        <meta property='og:image' content='/favicon_io/apple-touch-icon.png' />
-
-        <meta name='twitter:card' content='summary_large_image' />
-        <meta name='twitter:title' content={'Joga dla Firm – Yoganka'} />
-        <meta
-          name='twitter:description'
-          content={
-            'Profesjonalne zajęcia jogi dla pracowników, zespołów i eventów firmowych. Online lub na miejscu.'
-          }
-        />
-        <meta
-          name='twitter:image'
-          content={'/favicon_io/apple-touch-icon.png'}
-        />
-      </Helmet>
+      <Seo
+        title='Joga dla Firm - Treningi i Wellbeing | Yoganka'
+        description='Zadbaj o zdrowie psychiczne i fizyczne pracowników. Zajęcia jogi dla firm w całej Polsce - online i stacjonarnie.'
+        keywords={
+          'joga dla firm, wellbeing, joga w pracy, benefit dla pracowników'
+        }
+        canonical='https://yoganka.pl/yoga-dla-firm'
+      />
 
       {INTRO && (
         <IntroSection

@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { Suspense, useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet';
 import { useLocation } from 'react-router-dom';
 import FeedbackBox from '../../components/backend/FeedbackBox.jsx';
 import LegalDocument from '../../components/backend/LegalDocument.jsx';
 import TabsList from '../../components/backend/TabsList.jsx';
 import Loader from '../../components/common/Loader.jsx';
+import Seo from '../../components/frontend/Seo.jsx';
 import { useFeedback } from '../../hooks/useFeedback.js';
 import { fetchItem } from '../../utils/http.js';
 import { assignPageCSSModifier } from '../../utils/utils.jsx';
@@ -97,33 +97,25 @@ function TOSPage() {
 
   return (
     <>
-      <Helmet>
-        <html lang='pl' />
-        <title>
-          {isGdprSubpage
+      <Seo
+        title={
+          isGdprSubpage
             ? 'Polityka Prywatności (RODO) – Yoganka'
-            : 'Regulamin – Yoganka'}
-        </title>
-        <meta
-          name='description'
-          content={
-            isGdprSubpage
-              ? 'Dowiedz się, jak Yoganka przetwarza dane osobowe zgodnie z RODO.'
-              : 'Poznaj zasady korzystania z serwisu Yoganka – pełen regulamin dostępny online.'
-          }
-        />
-        <link
-          rel='canonical'
-          href={
-            isGdprSubpage
-              ? 'https://yoganka.pl/polityka-firmy/rodo'
-              : 'https://yoganka.pl/polityka-firmy/regulamin'
-          }
-        />
-        <meta name='robots' content='index, follow' />
-        <meta property='og:type' content='article' />
-        <meta property='og:image' content='/favicon_io/apple-touch-icon.png' />
-      </Helmet>
+            : 'Regulamin – Yoganka'
+        }
+        description={
+          isGdprSubpage
+            ? 'Dowiedz się, jak Yoganka przetwarza dane osobowe zgodnie z RODO.'
+            : 'Poznaj zasady korzystania z serwisu Yoganka – pełen regulamin dostępny online.'
+        }
+        canonical={
+          isGdprSubpage
+            ? 'https://yoganka.pl/polityka-firmy/rodo'
+            : 'https://yoganka.pl/polityka-firmy/regulamin'
+        }
+        type='article'
+      />
+
       <header className='docs-header'>
         <h2 className='section__header'>Witaj w Yogance!</h2>
         <article className='intro__welcome-desc'>
@@ -132,6 +124,7 @@ function TOSPage() {
         </article>
         {userTabs}
       </header>
+
       <main className='doc'>
         {latestLegalDoc ? (
           content

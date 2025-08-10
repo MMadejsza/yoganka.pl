@@ -1,13 +1,15 @@
-import { Helmet } from 'react-helmet';
 import LoginForm from '../../components/backend/LoginForm.jsx';
+import Seo from '../../components/frontend/Seo.jsx';
+
 function LoginPage() {
   return (
     <>
-      <Helmet>
-        <html lang='pl' />
-        <title>Zaloguj się – Yoganka</title>
-        <meta name='robots' content='noindex, nofollow' />
-      </Helmet>
+      <Seo
+        title='Zaloguj się – Yoganka'
+        description={null}
+        canonical={null}
+        robots='noindex, nofollow'
+      />
       <LoginForm />
     </>
   );

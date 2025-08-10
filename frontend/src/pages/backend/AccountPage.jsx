@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { Suspense, lazy, useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet';
 import { useLocation } from 'react-router-dom';
 import TabsList from '../../components/backend/TabsList.jsx';
 import Loader from '../../components/common/Loader.jsx';
 import Section from '../../components/frontend/Section.jsx';
+import Seo from '../../components/frontend/Seo.jsx';
 import { fetchItem, queryClient } from '../../utils/http.js';
 const ViewAccountBookings = lazy(() =>
   import('../../components/backend/views/ViewAccountBookings.jsx')
@@ -168,11 +168,12 @@ function AccountPage() {
 
   return (
     <>
-      <Helmet>
-        <html lang='pl' />
-        <title>Panel użytkownika - Yoganka</title>
-        <meta name='robots' content='noindex, nofollow' />
-      </Helmet>
+      <Seo
+        title='Panel użytkownika - Yoganka'
+        description={null}
+        canonical={null}
+        robots='noindex, nofollow'
+      />
 
       <div className='backend-content-wrapper'>
         <Section classy='intro--admin' header={name} />

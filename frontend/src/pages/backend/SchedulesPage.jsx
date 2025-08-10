@@ -1,11 +1,11 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
-import { Helmet } from 'react-helmet';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import CardsList from '../../components/backend/cards/CardsList.jsx';
 import TabsList from '../../components/backend/TabsList.jsx';
 import ViewsController from '../../components/backend/ViewsController.jsx';
 import IntroSection from '../../components/frontend/IntroSection.jsx';
+import Seo from '../../components/frontend/Seo.jsx';
 import { useHandleStripeRedirect } from '../../hooks/useHandleStripeRedirect.js';
 import { formatAllowedTypes } from '../../utils/cardsAndTableUtils.jsx';
 import { formatIsoDateTime } from '../../utils/dateTime.js';
@@ -276,48 +276,21 @@ function SchedulePage() {
 
     return (
       <>
-        <Helmet>
-          <html lang='pl' />
-          <title>
-            {isPassDefinitions ? 'Karnety Yoganka' : 'Grafik zajęć - Yoganka'}
-          </title>
-          <meta
-            name='description'
-            content={
-              isPassDefinitions
-                ? 'Wybierz odpowiedni karnet jogi dla siebie - dostępne opcje wejść jednorazowych, pakietów oraz online.'
-                : 'Aktualny grafik zajęć jogi prowadzonych przez Yogankę. Zarezerwuj swoje miejsce na zajęcia stacjonarne lub online.'
-            }
-          />
-          <link
-            rel='canonical'
-            href={
-              isPassDefinitions
-                ? 'https://yoganka.pl/grafik/karnety'
-                : 'https://yoganka.pl/grafik'
-            }
-          />
-          <meta name='robots' content='index, follow' />
-          <meta
-            property='og:title'
-            content={
-              isPassDefinitions ? 'Karnety - Yoganka' : 'Grafik jogi - Yoganka'
-            }
-          />
-          <meta
-            property='og:description'
-            content={
-              isPassDefinitions
-                ? 'Sprawdź dostępne karnety na zajęcia jogi Yoganka - różne typy, ceny i liczba wejść.'
-                : 'Sprawdź aktualne terminy zajęć jogi i zarezerwuj online.'
-            }
-          />
-          <meta property='og:type' content='website' />
-          <meta
-            property='og:image'
-            content='/favicon_io/apple-touch-icon.png'
-          />
-        </Helmet>
+        <Seo
+          title={
+            isPassDefinitions ? 'Karnety Yoganka' : 'Grafik zajęć - Yoganka'
+          }
+          description={
+            isPassDefinitions
+              ? 'Wybierz odpowiedni karnet jogi dla siebie - dostępne opcje wejść jednorazowych, pakietów oraz online.'
+              : 'Aktualny grafik zajęć jogi prowadzonych przez Yogankę. Zarezerwuj swoje miejsce na zajęcia stacjonarne lub online.'
+          }
+          canonical={
+            isPassDefinitions
+              ? 'https://yoganka.pl/grafik/karnety'
+              : 'https://yoganka.pl/grafik'
+          }
+        />
 
         <div className='backend-content-wrapper'>
           <IntroSection

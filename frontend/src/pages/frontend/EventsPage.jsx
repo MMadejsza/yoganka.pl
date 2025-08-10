@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import { Helmet } from 'react-helmet';
 import Loader from '../../components/common/Loader.jsx';
 import SimpleGallery from '../../components/frontend/glide/SimpleGallery.jsx';
 import IntroSection from '../../components/frontend/IntroSection.jsx';
 import OfferType from '../../components/frontend/OfferType.jsx';
 import Section from '../../components/frontend/Section.jsx';
+import Seo from '../../components/frontend/Seo.jsx';
 import {
   eventGroQ,
   eventsIntroGroQ,
@@ -75,47 +75,14 @@ function EventsPage() {
   }
   return (
     <>
-      <Helmet>
-        <html lang='pl' />
-        <title>Yoganka – Wydarzenia jogowe, warsztaty i webinary</title>
-        <meta
-          name='description'
-          content='Sprawdź najbliższe wydarzenia Yoganka: warsztaty jogi, webinary, spotkania online i stacjonarne. Zarezerwuj swoje miejsce już dziś!'
-        />
-        <meta
-          name='keywords'
-          content='joga wydarzenia, warsztaty jogi, webinary joga, spotkania jogowe, Yoganka wydarzenia'
-        />
-        <meta name='author' content='MMadejsza' />
-        <link rel='canonical' href='https://yoganka.pl/wydarzenia' />
-        <meta name='robots' content='index, follow' />
-        {/* Open Graph / Facebook */}
-        <meta property='og:locale' content='pl_PL' />
-        <meta property='og:type' content='website' />
-        <meta
-          property='og:title'
-          content='Yoganka – Wydarzenia jogowe, warsztaty i webinary'
-        />
-        <meta
-          property='og:description'
-          content='Dołącz do najbliższych wydarzeń Yoganka: od intensywnych warsztatów jogi po relaksacyjne webinary. Zainspiruj się i rozwijaj praktykę!'
-        />
-        <meta property='og:url' content='https://yoganka.pl/wydarzenia' />
-        <meta property='og:image' content='/favicon_io/apple-touch-icon.png' />
-        {/* Twitter Card */}
-        <meta name='twitter:card' content='summary_large_image' />
-        <meta name='twitter:site' content='@yoganka_pl' /> // your Twitter
-        handle
-        <meta
-          name='twitter:title'
-          content='Yoganka – Wydarzenia jogowe, warsztaty i webinary'
-        />
-        <meta
-          name='twitter:description'
-          content='Sprawdź najbliższe wydarzenia Yoganka: warsztaty, webinary i spotkania jogowe. Zapisz się już dziś!'
-        />
-        <meta name='twitter:image' content='/favicon_io/apple-touch-icon.png' />
-      </Helmet>
+      <Seo
+        title='Yoganka – Wydarzenia jogowe, warsztaty i webinary'
+        description='Sprawdź najbliższe wydarzenia Yoganka: warsztaty jogi, webinary, spotkania online i stacjonarne. Zarezerwuj swoje miejsce już dziś!'
+        keywords={
+          'joga wydarzenia, warsztaty jogi, webinary joga, spotkania jogowe, Yoganka wydarzenia'
+        }
+        canonical='https://yoganka.pl/wydarzenia'
+      />
 
       <IntroSection
         modifier={`no-bcg-pic`}
