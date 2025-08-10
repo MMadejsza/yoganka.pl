@@ -1,5 +1,9 @@
-import { doubleLine, urlMaxLength } from './validations';
-
+import {
+  doubleLine,
+  seoMetaDescription,
+  seoMetaTitle,
+  urlMaxLength,
+} from './validations';
 export const note = {
   name: 'note',
   title: '📃 Notatka',
@@ -269,4 +273,40 @@ export const btnsLinksOptions = {
   schedule: { title: '📅 Grafik', value: 'schedule' },
   mail: { title: '📧 Mail', value: 'mail' },
   external: { title: '🔗 Zewnętrzny link', value: 'external' },
+};
+export const seoTitle = {
+  name: 'seoTitle',
+  title: 'Meta tag title',
+  group: 'seo',
+  description: (
+    <span>
+      ☝🏻 GPT:{' '}
+      <a
+        href='https://chat.openai.com/?q=Podaj%20wytyczne%20dla%20meta%20tagu%20%3Ctitle%3E%20pod%20k%C4%85tem%20SEO%20i%20social%2C%20w%20tym%20optymaln%C4%85%20d%C5%82ugo%C5%9B%C4%87%20w%20znakach%20i%20pikselach%2C%20struktur%C4%99%20%28fraza%20kluczowa%2C%20kontekst%2Foferta%2C%20brand%29%2C%20zasady%20unikalno%C5%9Bci%2C%20unikania%20powt%C3%B3rze%C5%84%2C%20przyk%C5%82ad%20oraz%20wskaz%C3%B3wki%20dla%20PWA
+'
+        target='_blank'
+        rel='noopener noreferrer'
+      >
+        prompt
+      </a>
+    </span>
+  ),
+  type: 'string',
+  validation: Rule => Rule.custom(value => seoMetaTitle(value)),
+};
+export const seoDesc = {
+  name: 'seoDescription',
+  title: 'Meta description tag',
+  group: 'seo',
+  description:
+    'Np. Weekendowy wyjazd z jogą, zdrową kuchnią i mindfulness w sercu natury. Zrelaksuj się i zyskaj nową energię – zapisz się już dziś! (GPT)',
+  type: 'text',
+  validation: Rule => Rule.custom(value => seoMetaDescription(value)),
+};
+export const seoKeywords = {
+  name: 'seoKeywords',
+  title: 'Meta tag keywords',
+  group: 'seo',
+  description: `Treść żywcem przeklajna do tagu. Maks. 10–15 fraz, oddzielonych przecinkami. Google od 2009 r. nie wykorzystuje keywords w rankingu, ale inne wyszukiwarki mogą. Dlatego warto je dodać.`,
+  type: 'text',
 };

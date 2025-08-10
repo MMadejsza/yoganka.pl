@@ -86,7 +86,7 @@
 
         &.active {
           color: map.get($colors, accent-bcg);
-          text-shadow: map.get($shadows, active-text-icons-shadow);
+          // text-shadow: map.get($shadows, active-text-icons-shadow);
         }
       }
 

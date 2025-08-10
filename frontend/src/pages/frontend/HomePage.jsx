@@ -14,6 +14,7 @@ import {
   eventGroQ,
   homeIntroGroQ,
   homeOfferGroQ,
+  homeSeoGroQ,
   logosGroQ,
   partnersGroQ,
   reviewsGroQ,
@@ -26,6 +27,11 @@ function HomePage() {
   const cacheConfig = { staleTime: 1000 * 60 * 10, cacheTime: 1000 * 60 * 15 };
 
   //#region
+  const { data: HOME_SEO_DATA, isLoading: homeSeoDataLoading } = useQuery({
+    queryKey: ['homeSeoData'],
+    queryFn: () => client.fetch(homeSeoGroQ),
+    ...cacheConfig,
+  });
   const { data: INTRO_SECTION_DATA, isLoading: introLoading } = useQuery({
     queryKey: ['introData'],
     queryFn: () => client.fetch(homeIntroGroQ),
@@ -82,6 +88,7 @@ function HomePage() {
   //#endregion
 
   if (
+    homeSeoDataLoading ||
     introLoading ||
     logoLoading ||
     aboutLoading ||
@@ -167,11 +174,9 @@ function HomePage() {
   return (
     <>
       <Seo
-        title='Yoganka – Joga Trójmiasto i Online'
-        description='Profesjonalna instruktorka jogi oferująca wyjątkowe zajęcia w Trójmieście, wyjazdy z jogą oraz warsztaty jogi dzięki certyfikatom zdobytym na Bali. Specjalizuje się również w jodze na supie oraz sesjach mindfulness.'
-        keywords={
-          'joga Trójmiasto, joga Gdańsk, joga na SUPie, wyjazdy jogowe, joga online, joga z gongami, mindfulness'
-        }
+        title={HOME_SEO_DATA.seoTitle}
+        description={HOME_SEO_DATA.seoDescription}
+        keywords={HOME_SEO_DATA.seoKeywords}
         canonical='https://yoganka.pl/'
       />
 

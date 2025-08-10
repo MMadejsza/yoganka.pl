@@ -8,8 +8,8 @@ import Loader from '../../components/common/Loader.jsx';
 import Seo from '../../components/frontend/Seo.jsx';
 import { useFeedback } from '../../hooks/useFeedback.js';
 import { fetchItem } from '../../utils/http.js';
+import { tosSeoGroQ } from '../../utils/httpGroq.js';
 import { assignPageCSSModifier } from '../../utils/utils.jsx';
-
 const menuSet = [
   {
     name: 'Regulamin',
@@ -39,6 +39,11 @@ function TOSPage() {
 
   const cacheConfig = { staleTime: 1000 * 60 * 10, cacheTime: 1000 * 60 * 15 };
 
+  const { data: TOS_SEO_DATA, isLoading: seoLoading } = useQuery({
+    queryKey: ['tosSeoData'],
+    queryFn: () => client.fetch(tosSeoGroQ),
+    ...cacheConfig,
+  });
   const {
     data: latestLegalDoc,
     isLoading: isLegalDocLoading,
@@ -99,19 +104,22 @@ function TOSPage() {
     <>
       <Seo
         title={
-          isGdprSubpage
-            ? 'Polityka Prywatności (RODO) – Yoganka'
-            : 'Regulamin – Yoganka'
+          isGdprSubpage ? TOS_SEO_DATA?.seoTitleGdpr : TOS_SEO_DATA?.seoTitle
         }
         description={
           isGdprSubpage
-            ? 'Dowiedz się, jak Yoganka przetwarza dane osobowe zgodnie z RODO.'
-            : 'Poznaj zasady korzystania z serwisu Yoganka – pełen regulamin dostępny online.'
+            ? TOS_SEO_DATA?.seoDescriptionGdpr
+            : TOS_SEO_DATA?.seoDescription
         }
         canonical={
           isGdprSubpage
             ? 'https://yoganka.pl/polityka-firmy/rodo'
             : 'https://yoganka.pl/polityka-firmy/regulamin'
+        }
+        keywords={
+          isGdprSubpage
+            ? TOS_SEO_DATA?.seoKeywordsGdpr || null
+            : TOS_SEO_DATA?.seoKeywords || null
         }
         type='article'
       />

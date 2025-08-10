@@ -17,7 +17,7 @@ button {
   transition: map.get($behavior, base-transition);
 
   &:hover {
-    text-shadow: map.get($shadows, active-text-icons-shadow);
+    // text-shadow: map.get($shadows, active-text-icons-shadow);
   }
 
   &--submit:not(:has(.black)) {

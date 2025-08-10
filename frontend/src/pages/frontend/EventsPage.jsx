@@ -10,6 +10,7 @@ import {
   eventsIntroGroQ,
   eventsOfferGroQ,
   eventsPastPhotosGroQ,
+  eventsSeoGroQ,
 } from '../../utils/httpGroq.js';
 import { client } from '../../utils/sanityClient.js';
 
@@ -17,6 +18,12 @@ function EventsPage() {
   let events;
 
   const cacheConfig = { staleTime: 1000 * 60 * 10, cacheTime: 1000 * 60 * 15 };
+
+  const { data: EVENTS_SEO_DATA, isLoading: eventsSeoDataLoading } = useQuery({
+    queryKey: ['eventsSeoData'],
+    queryFn: () => client.fetch(eventsSeoGroQ),
+    ...cacheConfig,
+  });
   const { data: EVENTS_INTRO_SECTION_DATA, isLoading: eventsIntroLoading } =
     useQuery({
       queryKey: ['eventsIntroData'],
@@ -46,6 +53,7 @@ function EventsPage() {
   });
 
   if (
+    eventsSeoDataLoading ||
     eventsLoading ||
     eventsOfferSectionLoading ||
     eventsIntroLoading ||
@@ -76,11 +84,9 @@ function EventsPage() {
   return (
     <>
       <Seo
-        title='Yoganka – Wydarzenia jogowe, warsztaty i webinary'
-        description='Sprawdź najbliższe wydarzenia Yoganka: warsztaty jogi, webinary, spotkania online i stacjonarne. Zarezerwuj swoje miejsce już dziś!'
-        keywords={
-          'joga wydarzenia, warsztaty jogi, webinary joga, spotkania jogowe, Yoganka wydarzenia'
-        }
+        title={EVENTS_SEO_DATA.seoTitle}
+        description={EVENTS_SEO_DATA.seoDescription}
+        keywords={EVENTS_SEO_DATA.seoKeywords}
         canonical='https://yoganka.pl/wydarzenia'
       />
 

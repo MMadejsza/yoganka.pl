@@ -35,6 +35,7 @@ function Footer() {
     return;
   }
 
+  console.log(SOCIALS_DATA);
   const dataSets = [LOGO_DATA, BUSINESS_DATA, SOCIALS_DATA];
   const anyEmpty = dataSets.some(data => !data || data.length === 0);
   let content;

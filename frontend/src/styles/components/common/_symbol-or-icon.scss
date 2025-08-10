@@ -32,7 +32,7 @@
 
   .nav__link.active & {
     color: map.get($colors, accent-bcg);
-    text-shadow: map.get($shadows, active-text-icons-shadow);
+    // text-shadow: map.get($shadows, active-text-icons-shadow);
   }
 }
 
@@ -53,7 +53,7 @@
 
     &--active {
       .icon {
-        text-shadow: map.get($shadows, text-shadow);
+        // text-shadow: map.get($shadows, text-shadow);
       }
     }
   }
@@ -145,7 +145,7 @@
 .wrapper--b2b-type {
   .section--checklist {
     .checklist__icon {
-      color: #1c7993;
+      color: map.get($colors, accent-bcg);
       font-size: 2.5rem;
       height: 3.5rem;
       line-height: 3.5rem;
@@ -253,7 +253,7 @@
 
         &.active .icon {
           color: map.get($colors, accent-bcg);
-          text-shadow: map.get($shadows, active-text-icons-shadow);
+          // text-shadow: map.get($shadows, active-text-icons-shadow);
         }
       }
     }

@@ -14,6 +14,7 @@ import {
   b2bOfferGroQ,
   b2bOfferTypesGroQ,
   b2bPriceListGroQ,
+  b2bSeoGroQ,
 } from '../../utils/httpGroq.js';
 import { client } from '../../utils/sanityClient.js';
 import { assignPageCSSModifier } from '../../utils/utils.jsx';
@@ -24,6 +25,11 @@ function B2BPage() {
 
   const cacheConfig = { staleTime: 1000 * 60 * 10, cacheTime: 1000 * 60 * 15 };
 
+  const { data: SEO, isLoading: seoLoading } = useQuery({
+    queryKey: ['b2bSeo'],
+    queryFn: () => client.fetch(b2bSeoGroQ),
+    ...cacheConfig,
+  });
   const { data: INTRO, isLoading: introLoading } = useQuery({
     queryKey: ['b2bIntro'],
     queryFn: () => client.fetch(b2bIntroGroQ),
@@ -75,11 +81,9 @@ function B2BPage() {
   return (
     <>
       <Seo
-        title='Joga dla Firm - Treningi i Wellbeing | Yoganka'
-        description='Zadbaj o zdrowie psychiczne i fizyczne pracowników. Zajęcia jogi dla firm w całej Polsce - online i stacjonarnie.'
-        keywords={
-          'joga dla firm, wellbeing, joga w pracy, benefit dla pracowników'
-        }
+        title={SEO.seoTitle}
+        description={SEO.seoDescription}
+        keywords={SEO.seoKeywords}
         canonical='https://yoganka.pl/yoga-dla-firm'
       />
 

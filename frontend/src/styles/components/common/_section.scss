@@ -155,7 +155,8 @@
     position: fixed;
 
     & + .section,
-    & + div {
+    & + div,
+    & + header {
       margin-top: 7.5rem;
 
       &.about {

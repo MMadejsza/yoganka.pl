@@ -136,7 +136,7 @@
       &:hover {
         transform: scale(1.05) translateY(0.5rem);
 
-        text-shadow: map.get($shadows, active-text-icons-shadow);
+        // text-shadow: map.get($shadows, active-text-icons-shadow);
       }
 
       &:hover .footer__qr {

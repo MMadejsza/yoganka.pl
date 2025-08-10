@@ -6,6 +6,7 @@ import {
   defaultTileFrontSet,
   productGroups,
   productOrdering,
+  seoSet,
 } from '../../utils/sets.jsx';
 
 export default {
@@ -20,6 +21,7 @@ export default {
     { ...mainImage, group: 'generic' },
     defaultTileFrontSet,
     defaultModalSet('Camp'),
+    ...seoSet,
   ],
   orderings: productOrdering,
   preview: {

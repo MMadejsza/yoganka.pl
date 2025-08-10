@@ -10,7 +10,9 @@ import { useHandleStripeRedirect } from '../../hooks/useHandleStripeRedirect.js'
 import { formatAllowedTypes } from '../../utils/cardsAndTableUtils.jsx';
 import { formatIsoDateTime } from '../../utils/dateTime.js';
 import { fetchData, mutateOnCreate, queryClient } from '../../utils/http.js';
+import { scheduleIntroGroQ, scheduleSeoGroQ } from '../../utils/httpGroq.js';
 import { client } from '../../utils/sanityClient.js';
+
 const logsGloballyOn = false;
 
 function SchedulePage() {
@@ -25,9 +27,14 @@ function SchedulePage() {
   const status = useHandleStripeRedirect();
 
   const cacheConfig = { staleTime: 1000 * 60 * 10, cacheTime: 1000 * 60 * 15 };
+  const { data: SCHEDULE_SEO_DATA, isLoading: seoLoading } = useQuery({
+    queryKey: ['scheduleSeoData'],
+    queryFn: () => client.fetch(scheduleSeoGroQ),
+    ...cacheConfig,
+  });
   const { data: INTRO, isLoading: introLoading } = useQuery({
     queryKey: ['scheduleIntroData'],
-    queryFn: () => client.fetch(`*[_type == "scheduleIntro"][0]`),
+    queryFn: () => client.fetch(scheduleIntroGroQ),
     ...cacheConfig,
   });
 
@@ -278,17 +285,24 @@ function SchedulePage() {
       <>
         <Seo
           title={
-            isPassDefinitions ? 'Karnety Yoganka' : 'Grafik zajęć - Yoganka'
+            isPassDefinitions
+              ? SCHEDULE_SEO_DATA.seoTitlePass
+              : SCHEDULE_SEO_DATA.seoTitle
           }
           description={
             isPassDefinitions
-              ? 'Wybierz odpowiedni karnet jogi dla siebie - dostępne opcje wejść jednorazowych, pakietów oraz online.'
-              : 'Aktualny grafik zajęć jogi prowadzonych przez Yogankę. Zarezerwuj swoje miejsce na zajęcia stacjonarne lub online.'
+              ? SCHEDULE_SEO_DATA.seoDescriptionPass
+              : SCHEDULE_SEO_DATA.seoDescription
           }
           canonical={
             isPassDefinitions
               ? 'https://yoganka.pl/grafik/karnety'
               : 'https://yoganka.pl/grafik'
+          }
+          keywords={
+            isPassDefinitions
+              ? SCHEDULE_SEO_DATA.seoKeywordsPass
+              : SCHEDULE_SEO_DATA.seoKeywords
           }
         />
 

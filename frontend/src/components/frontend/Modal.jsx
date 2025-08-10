@@ -159,34 +159,6 @@ function Modal({ tile, onClose, isVisible, isClosing }) {
     );
   };
 
-  // Content for helmet - each modal has different data for social media and searchEngine
-  const metaContent = () => {
-    const isCamp = tile.type == 'camp';
-
-    if (isCamp) {
-      return {
-        title: `${tile.front.title} - Kobiecy Wyjazd z jogą`,
-        desc: `Dowiedz się wszystkiego o kobiecym wyjeździe z jogą.${
-          tile.front.location ? ` Miejsce: ${tile.front.location}` : ''
-        }.`,
-        canonicalTag: `https://yoganka.pl/wyjazdy/${tile.link}`,
-        link: `https://yoganka.pl/wyjazdy/${tile.link}`,
-        location: `${tile.front.location}`,
-      };
-    } else {
-      return {
-        title: `${tile.front.title} - Wydarzenie z Yoganką`,
-        desc: `Dowiedz się wszystkiego o wydarzeniu ${tile.front.title}.${
-          tile.front.location ? ` Miejsce: ${tile.front.location}` : ''
-        }.`,
-        canonicalTag: `https://yoganka.pl/wydarzenia/${tile.link}`,
-        link: `https://yoganka.pl/wydarzenia/${tile.link}`,
-        location: `${tile.front.location}`,
-      };
-    }
-  };
-  const helmetContent = metaContent();
-
   const socialImageUrl = urlFor(tile.mainImage)
     .width(480)
     .height(480)
@@ -197,9 +169,13 @@ function Modal({ tile, onClose, isVisible, isClosing }) {
   return createPortal(
     <>
       <Seo
-        title={helmetContent.title}
-        description={helmetContent.desc}
-        canonical={helmetContent.link}
+        title={tile.seoTitle || tile.front.title}
+        description={
+          tile.seoDescription || `Dowiedz się wszystkiego o ${tile.front.title}`
+        }
+        canonical={`https://yoganka.pl/${isCamp ? 'wyjazdy' : 'wydarzenia'}/${
+          tile.link
+        }`}
         image={socialImageUrl}
       />
 

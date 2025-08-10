@@ -13,6 +13,7 @@ import {
   campsIntroGroQ,
   campsOfferGroQ,
   campsPastPhotosGroQ,
+  campsSeoGroQ,
   reviewsGroQ,
 } from '../../utils/httpGroq.js';
 import { client } from '../../utils/sanityClient.js';
@@ -22,6 +23,11 @@ function CampsPage() {
 
   const cacheConfig = { staleTime: 1000 * 60 * 10, cacheTime: 1000 * 60 * 15 };
 
+  const { data: CAMPS_SEO_DATA, isLoading: campsSeoDataLoading } = useQuery({
+    queryKey: ['campsSeoData'],
+    queryFn: () => client.fetch(campsSeoGroQ),
+    ...cacheConfig,
+  });
   const { data: CAMPS_INTRO_SECTION_DATA, isLoading: campsIntroLoading } =
     useQuery({
       queryKey: ['campsIntroData'],
@@ -62,6 +68,7 @@ function CampsPage() {
   });
 
   if (
+    campsSeoDataLoading ||
     campsIntroLoading ||
     campsOfferSectionLoading ||
     campsLoading ||
@@ -172,9 +179,9 @@ function CampsPage() {
   return (
     <>
       <Seo
-        title='Wyjazdy Joga – Polska i zagranica | Yoganka'
-        description='Wyjazdy jogowe w Polsce - praktyka jogi, medytacja i regeneracja. Sprawdź ofertę najbliższych wyjazdów z Yoganką.'
-        keywords='wyjazdy z jogą, joga w naturze, retreat jogowy, wyjazd weekendowy joga'
+        title={CAMPS_SEO_DATA.seoTitle}
+        description={CAMPS_SEO_DATA.seoDescription}
+        keywords={CAMPS_SEO_DATA.seoKeywords}
         canonical='https://yoganka.pl/wyjazdy'
       />
       {content}

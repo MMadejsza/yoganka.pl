@@ -11,6 +11,7 @@ import {
   defaultModalSet,
   defaultTileFrontSet,
   productGroups,
+  seoSet,
 } from '../../utils/sets.jsx';
 
 export default {
@@ -31,6 +32,7 @@ export default {
     defaultTileFrontSet,
     isModal,
     defaultModalSet(false, ({ document }) => !document.isModal),
+    ...seoSet,
   ],
   preview: {
     select: {
