@@ -1,5 +1,5 @@
 import { createPortal } from 'react-dom';
-import { Helmet } from 'react-helmet';
+import Seo from '../../components/frontend/Seo.jsx';
 import { urlFor } from '../../utils/sanityClient.js';
 import { protectWordBreaks } from '../../utils/validation.js';
 import SymbolOrIcon from '../common/SymbolOrIcon';
@@ -196,27 +196,12 @@ function Modal({ tile, onClose, isVisible, isClosing }) {
     .url();
   return createPortal(
     <>
-      <Helmet>
-        <title>{helmetContent.title}</title>
-        <meta name='description' content={helmetContent.desc} />
-        <meta name='robots' content='index, follow' />
-        {/* START For social media links */}
-        <meta property='og:title' content={helmetContent.title} />
-        <meta
-          property='og:description'
-          content={`Dowiedz się wszystkiego o wyjeździe do: ${helmetContent.location}. Kliknij teraz!`}
-        />
-        <meta property='og:url' content={helmetContent.link} />
-        <meta property='og:type' content='website' />
-        <meta property='og:image' content={socialImageUrl} />
-
-        <meta name='twitter:card' content='summary_large_image' />
-        <meta name='twitter:title' content={helmetContent.title} />
-        <meta name='twitter:description' content={helmetContent.desc} />
-        <meta name='twitter:image' content={socialImageUrl} />
-        {/* END For social media links */}
-        <link rel='canonical' href={helmetContent.canonicalTag} />
-      </Helmet>
+      <Seo
+        title={helmetContent.title}
+        description={helmetContent.desc}
+        canonical={helmetContent.link}
+        image={socialImageUrl}
+      />
 
       <div
         className={`overlay ${isVisible ? 'visible' : ''}`}
