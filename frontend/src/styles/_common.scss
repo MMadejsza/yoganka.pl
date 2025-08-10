@@ -19,7 +19,7 @@ html {
   --section-padding-y: #{map.get($sizes, section-padding-y)};
 
   scroll-behavior: smooth;
-  font-family: 'EB Garamond', serif;
+  font-family: $mainFont;
   font-weight: 400;
   font-size: calc(var(--scale) * 8.5px);
   text-align: center;
