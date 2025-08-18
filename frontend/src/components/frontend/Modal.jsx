@@ -160,8 +160,8 @@ function Modal({ tile, onClose, isVisible, isClosing }) {
   };
 
   const socialImageUrl = urlFor(tile.mainImage)
-    .width(480)
-    .height(480)
+    .width(1200)
+    .height(630)
     .fit('crop')
     .auto('format')
     .quality(60)
@@ -177,6 +177,9 @@ function Modal({ tile, onClose, isVisible, isClosing }) {
           tile.link
         }`}
         image={socialImageUrl}
+        imageWidth={1200}
+        imageHeight={630}
+        imageAlt={tile.front.title}
       />
 
       <div

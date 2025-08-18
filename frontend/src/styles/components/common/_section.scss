@@ -155,15 +155,15 @@
     position: fixed;
 
     & + .section,
-    & + div,
-    & + header {
+    & + div {
       margin-top: 7.5rem;
 
       &.about {
         margin-top: 12.5rem;
       }
     }
-    & + .login-box {
+    & + .login-box,
+    & + header {
       margin-top: 14.5rem;
     }
   }

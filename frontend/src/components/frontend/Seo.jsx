@@ -9,7 +9,11 @@ function Seo({
   robots = 'index, follow',
   type = 'website',
   twitterSite,
+  imageWidth,
+  imageHeight,
+  imageAlt,
 }) {
+  console.log(title, image);
   return (
     <Helmet>
       <title>{title}</title>
@@ -25,6 +29,13 @@ function Seo({
       {description && <meta property='og:description' content={description} />}
       {canonical && <meta property='og:url' content={canonical} />}
       {image && <meta property='og:image' content={image} />}
+      {imageWidth && (
+        <meta property='og:image:width' content={String(imageWidth)} />
+      )}
+      {imageHeight && (
+        <meta property='og:image:height' content={String(imageHeight)} />
+      )}
+      {imageAlt && <meta property='og:image:alt' content={imageAlt} />}
 
       {/* Apple */}
       <meta name='apple-mobile-web-app-title' content={title} />
